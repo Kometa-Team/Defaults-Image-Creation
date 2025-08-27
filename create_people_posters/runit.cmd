@@ -1,33 +1,17 @@
-REM This will grab the missing posters to populate the assets and then check for exif overlay data
-REM and finally rename the files using truncate_names.py 
-
-
 REM python -m venv venv
 REM venv\Scripts\activate
 REM pip install -r requirements.txt
 REM python -m pip install --upgrade pip
 
-REM D:
-REM cd D:\bullmoose20\pyprogs\get_people_posters
-.\venv\Scripts\python .\name_checker_dir.py --input_directory C:\Users\nickz\Downloads\
+.\venv\Scripts\python .\name_checker_dir.py --input_directory C:\Users\bullmoose20\Downloads\
 REM pause
-.\venv\Scripts\python .\get_missing_people.py --input_directory C:\Users\nickz\Downloads\
-REM pause
-REM This is for the Convert Warnings and to run the PAD flow: 2-Convert Warning: No TVDb ID Found for TMDb ID:
-REM echo This is for the Convert Warnings and to run the PAD flow: 2-Convert Warning: No TVDb ID Found for TMDb ID:
-REM echo copy convert_warning.log T:\
-REM copy convert_warning.log T:\
-
-REM Now to try and get the people found without a direct link to tmdb
-REM copy people_scanned_but_not_found_online_in_kometateam_repo.txt D:\bullmoose20\pyprogs\tmdb_people\people_list.txt
-REM cd D:\bullmoose20\pyprogs\tmdb_people
+.\venv\Scripts\python .\get_missing_people.py --input_directory C:\Users\bullmoose20\Downloads\
 REM pause
 
 .\venv\Scripts\python .\tmdb-people.py
 REM pause
 .\venv\Scripts\python .\truncate_tmdb_people_names.py 
 REM pause
-REM cd D:\bullmoose20\pyprogs\get_people_posters
 .\venv\Scripts\python .\get_missing_people_dir.py --input_directory .\config\posters
 pause
 REM del .\config\posters\*.* /Q
