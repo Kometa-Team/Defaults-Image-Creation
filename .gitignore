@@ -1,0 +1,26 @@
+# Ignore compiled Python files
+*.pyc
+
+# Ignore Python virtual environments
+venv/
+env/
+
+# Ignore environment variables file
+.env
+
+# Ignore IDE files
+.idea/
+
+# Ignore direnv venv files
+.direnv/
+
+# Ignore logs
+logs/
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore these directories
+uploads/
+.vscode/
+config/
