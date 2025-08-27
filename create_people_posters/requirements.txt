@@ -1,0 +1,10 @@
+# Common requirements for your scripts
+requests
+Pillow
+selenium
+python-dotenv
+alive-progress
+tmdbapis
+
+# Optional (nice to have, not strictly required by your code):
+# webdriver-manager    # auto-manages ChromeDriver for Selenium
