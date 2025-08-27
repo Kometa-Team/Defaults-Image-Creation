@@ -1,5 +1,5 @@
 WIP
 
-need to move the defaults people poster creation here
+create_people_posters (7 styles)
 
-need to move the defaults collections and pverlays creation here 
+create_defaults (collections and overlays)
