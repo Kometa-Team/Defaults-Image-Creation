@@ -13,26 +13,27 @@ REM pause
 .\venv\Scripts\python .\truncate_tmdb_people_names.py 
 REM pause
 .\venv\Scripts\python .\get_missing_people_dir.py --input_directory .\config\posters
-pause
-REM del .\config\posters\*.* /Q
-REM move .\config\Downloads\color\*.* D:\bullmoose20\people\Downloads2\
-REM del .\config\Downloads\color\*.* /Q
-REM move .\config\Downloads\other\*.* D:\bullmoose20\people\Downloads2\
-REM del .\config\Downloads\other\*.* /Q
+REM pause
+del .\config\posters\*.* /Q
+move .\config\Downloads\color\*.* D:\bullmoose20\people\Downloads\
+del .\config\Downloads\color\*.* /Q
+move .\config\Downloads\other\*.* D:\bullmoose20\people\Downloads\
+del .\config\Downloads\other\*.* /Q
 REM pause
 
 REM Now selenium flow twice as second time will get any stragglers
-D:
-cd D:\bullmoose20\pyprogs\sel_remove_bg
+REM D:
+REM cd D:\bullmoose20\pyprogs\sel_remove_bg
 .\venv\Scripts\python .\sel_remove_bg.py
 .\venv\Scripts\python .\sel_remove_bg.py
-pause
+REM pause
 
 REM Now run pad flow(well actually PAD flow was replaced but this is what creates the posters now as PAD flow within ps1 is disabled as of aug 25,2025)
 D:
-cd D:\bullmoose20\people
-"C:\Program Files\PowerShell\7\pwsh.exe" -ExecutionPolicy Bypass -File "D:\bullmoose20\people\create_people_poster.ps1" d:\ "remove backgrounds chrome-en windows-en"
-REM pause
+cd D:\Defaults-Image-Creation\create_people_posters
+REM "C:\Program Files\PowerShell\7\pwsh.exe" -ExecutionPolicy Bypass -File ".\create_people_poster.ps1" d:\ "remove backgrounds chrome-en windows-en"
+"C:\Program Files\PowerShell\7\pwsh.exe" -ExecutionPolicy Bypass -File ".\create_people_poster.ps1" x:\
+pause
 
 D:
 cd D:\bullmoose20\people
