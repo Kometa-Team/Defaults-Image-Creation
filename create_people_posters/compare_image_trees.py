@@ -3,16 +3,48 @@
 # Compares file names (without extensions) across 7 directories (with subfolders).
 # Six folders are .jpg; one folder is .png (except explicit .jpg whitelist).
 # Only .jpg/.png are considered; all other file types are ignored (not flagged).
-# Validates that every .jpg/.png is exactly REQUIRED_WIDTH x REQUIRED_HEIGHT.
-# Outputs console summary + presence matrix CSV (compare_image_trees.csv)
-# and a dimension issues CSV (image_dimension_issues.csv).
+# Optional: validate that every .jpg/.png is exactly REQUIRED_WIDTH x REQUIRED_HEIGHT.
+# Outputs console summary + presence matrix CSV and, if enabled, a dimension issues CSV,
+# all saved under ./config/.
 #
 # Usage (Windows):  py compare_image_trees.py
 
-from pathlib import Path
+import sys
 import csv
+import logging
+from pathlib import Path
+from timeit import default_timer as timer
 from typing import Optional, List, Tuple
-from PIL import Image  # pip install pillow
+
+from dotenv import load_dotenv
+from alive_progress import alive_bar
+
+# ========= PATHS & LOGGING =========
+SCRIPT_PATH = Path(__file__).resolve()
+SCRIPT_DIR = SCRIPT_PATH.parent
+CONFIG_DIR = SCRIPT_DIR / "config"
+LOGS_DIR = CONFIG_DIR / "logs"
+for d in (CONFIG_DIR, LOGS_DIR):
+    d.mkdir(parents=True, exist_ok=True)
+
+def setup_logging(level=logging.INFO, console=True):
+    log_file = LOGS_DIR / f"{SCRIPT_PATH.stem}.log"
+    handlers = [logging.FileHandler(log_file, encoding="utf-8", mode="w")]
+    if console:
+        handlers.append(logging.StreamHandler(sys.stdout))
+    logging.basicConfig(
+        level=level,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        handlers=handlers,
+        force=True,
+    )
+    logging.info("Logging → %s", log_file)
+    return log_file
+
+setup_logging()
+
+# Also pick up process env if .env missing
+load_dotenv(SCRIPT_DIR / ".env")
 
 # ========= CONFIG =========
 DIRS = [
@@ -35,18 +67,18 @@ JPG_WHITELIST = {"grid"}
 # Case sensitivity for comparing stems (relative path without extension)
 CASE_SENSITIVE = True
 
-# Required image dimensions
+# ---- Dimension checking (expensive) ----
+CHECK_DIMENSIONS = False          # <- Toggle here
 REQUIRED_WIDTH = 2000
 REQUIRED_HEIGHT = 3000
+# ---------------------------------------
 
-# CSV output paths (written in current working directory)
-OUTPUT_CSV = Path.cwd() / "compare_image_trees.csv"
-DIM_ISSUES_CSV = Path.cwd() / "image_dimension_issues.csv"
+# CSV outputs go under ./config/
+OUTPUT_CSV = CONFIG_DIR / "compare_image_trees.csv"
+DIM_ISSUES_CSV = CONFIG_DIR / "image_dimension_issues.csv"
 
 # How many lines to print in each section (None for unlimited)
 PRINT_LIMIT = 100
-
-
 # ========= END CONFIG =====
 
 
@@ -69,65 +101,92 @@ def normalize_stem(rel_path: Path, case_sensitive: bool) -> str:
     return normalize_case(as_posix, case_sensitive)
 
 
-def check_image_dimensions(path: Path) -> Tuple[Optional[int], Optional[int], Optional[str]]:
+def check_image_dimensions_lazy():
     """
-    Return (width, height, error) for the image at path.
-    If unreadable, returns (None, None, str(error_message)).
+    Return a function check(path)->(w,h,err) depending on CHECK_DIMENSIONS.
+    - If disabled: returns (None, None, None) quickly without importing Pillow.
+    - If enabled: imports Pillow lazily and performs real checks.
     """
+    if not CHECK_DIMENSIONS:
+        def _noop(_path: Path):
+            return None, None, None
+        return _noop
+
     try:
-        # Pillow usually reads size without decoding full image
-        with Image.open(path) as im:
-            return im.width, im.height, None
+        from PIL import Image  # lazy import only when enabled
     except Exception as e:
-        return None, None, str(e)
+        logging.warning("Dimension checking enabled but Pillow is unavailable: %s", e)
+        logging.warning("Install with: pip install pillow")
+        def _fail(_path: Path):
+            return None, None, "Pillow not installed"
+        return _fail
+
+    def _check(path: Path):
+        try:
+            # Pillow usually reads size without decoding full image
+            with Image.open(path) as im:
+                return im.width, im.height, None
+        except Exception as e:
+            return None, None, str(e)
+
+    return _check
+
+
+def iter_image_files(base_dir: Path):
+    """Yield jpg/png file Paths under base_dir (recursive)."""
+    if not base_dir.exists():
+        return
+    for p in base_dir.rglob("*"):
+        if p.is_file():
+            ext = p.suffix.lower()
+            if ext in {".jpg", ".png"}:
+                yield p
 
 
 def gather_stems_and_exts(
-        base_dir: Path,
-        allowed_exts: set[str],
-        case_sensitive: bool,
-        jpg_whitelist: Optional[set[str]] = None,
-        treat_png_folder: bool = False,
+    base_dir: Path,
+    allowed_exts: set[str],
+    case_sensitive: bool,
+    jpg_whitelist: Optional[set[str]] = None,
+    treat_png_folder: bool = False,
+    dim_checker=None,
+    progress=None,
 ):
     """
     Walk base_dir recursively and collect:
       - stems: set of relative stems (without extension) that pass the rules
       - ext_mismatches: list of jpg/png files present but disallowed by the folder rules
       - whitelist_hits: list of .jpg files accepted due to whitelist in PNG folder
-      - dim_issues: list of (rel_path, width, height, error) where image is not REQUIRED_WxH
+      - dim_issues: list of (rel_path, width, height, error) if enabled and not REQUIRED_WxH
                     or failed to open (error != None)
 
     Only .jpg/.png are considered; all other extensions are ignored silently.
     """
     stems = set()
-    ext_mismatches: List[Tuple[str, str]] = []  # (rel_path, reason)
-    whitelist_hits: List[str] = []  # (rel_path)
+    ext_mismatches: List[Tuple[str, str]] = []   # (rel_path, reason)
+    whitelist_hits: List[str] = []               # (rel_path)
     dim_issues: List[Tuple[str, Optional[int], Optional[int], Optional[str]]] = []
 
     if not base_dir.exists():
-        print(f"WARNING: directory does not exist: {base_dir}")
+        logging.warning("Directory does not exist: %s", base_dir)
         return stems, ext_mismatches, whitelist_hits, dim_issues
 
-    # Prepare once for comparisons
     wl_cmp = {normalize_case(x, case_sensitive) for x in (jpg_whitelist or set())}
 
-    for p in base_dir.rglob("*"):
-        if not p.is_file():
-            continue
+    for p in iter_image_files(base_dir):
+        if progress:
+            progress.text = f"-> scanning: {base_dir.name}/{p.relative_to(base_dir).as_posix()}"
 
         rel = p.relative_to(base_dir)
         rel_posix = rel.as_posix()
-        ext_actual = p.suffix  # keep original case
-        ext_cmp = ext_actual.lower()  # extension comparison is case-insensitive
+        ext_actual = p.suffix           # keep original case
+        ext_cmp = ext_actual.lower()    # extension comparison is case-insensitive
 
-        # Ignore non-image files entirely
-        if ext_cmp not in {".jpg", ".png"}:
-            continue
-
-        # Validate dimensions for any jpg/png encountered (regardless of folder rule)
-        w, h, err = check_image_dimensions(p)
-        if err is not None or w != REQUIRED_WIDTH or h != REQUIRED_HEIGHT:
-            dim_issues.append((rel_posix, w, h, err))
+        # Validate dimensions (if enabled)
+        if dim_checker is not None and CHECK_DIMENSIONS:
+            w, h, err = dim_checker(p)
+            if err is not None or w != REQUIRED_WIDTH or h != REQUIRED_HEIGHT:
+                dim_issues.append((rel_posix, w, h, err))
 
         basename = rel.stem
         basename_cmp = normalize_case(basename, case_sensitive)
@@ -150,10 +209,15 @@ def gather_stems_and_exts(
             reason = "Unexpected .png in JPG folder" if ext_cmp == ".png" else "Unexpected .jpg in PNG folder"
             ext_mismatches.append((rel_posix, reason))
 
+        if progress:
+            progress()  # tick
+
     return stems, ext_mismatches, whitelist_hits, dim_issues
 
 
 def main():
+    start = timer()
+
     if len(DIRS) != 7:
         raise SystemExit(f"Expected 7 directories in DIRS, found {len(DIRS)}")
 
@@ -169,25 +233,42 @@ def main():
         per_dir_is_png.append(is_png_folder)
         per_dir_allowed_exts.append({".png"} if is_png_folder else {".jpg"})
 
-    # Collect sets + issues
+    # Prepare dimension checker (lazy/no-op if disabled)
+    dim_checker = check_image_dimensions_lazy()
+
+    # --- Pre-count files for a nice progress bar ---
+    totals = []
+    grand_total = 0
+    for d in DIRS:
+        base = Path(d)
+        count = sum(1 for _ in iter_image_files(base))
+        totals.append(count)
+        grand_total += count
+    logging.info("Planned scan: %d image files across 7 directories", grand_total)
+    print(f"Planned scan: {grand_total} image files across 7 directories")
+
+    # Collect sets + issues with progress bar
     dir_to_stems: dict[str, set[str]] = {}
     dir_to_mismatches: dict[str, List[Tuple[str, str]]] = {}
     dir_to_wl_hits: dict[str, List[str]] = {}
     dir_to_dim_issues: dict[str, List[Tuple[str, Optional[int], Optional[int], Optional[str]]]] = {}
 
-    for i, d in enumerate(DIRS):
-        base = Path(d)
-        stems, mismatches, wl_hits, dim_issues = gather_stems_and_exts(
-            base_dir=base,
-            allowed_exts=per_dir_allowed_exts[i],
-            case_sensitive=CASE_SENSITIVE,
-            jpg_whitelist=JPG_WHITELIST if per_dir_is_png[i] else None,
-            treat_png_folder=per_dir_is_png[i],
-        )
-        dir_to_stems[d] = stems
-        dir_to_mismatches[d] = mismatches
-        dir_to_wl_hits[d] = wl_hits
-        dir_to_dim_issues[d] = dim_issues
+    with alive_bar(grand_total or 1, dual_line=True, title="Scanning images") as bar:
+        for i, d in enumerate(DIRS):
+            base = Path(d)
+            stems, mismatches, wl_hits, dim_issues = gather_stems_and_exts(
+                base_dir=base,
+                allowed_exts=per_dir_allowed_exts[i],
+                case_sensitive=CASE_SENSITIVE,
+                jpg_whitelist=JPG_WHITELIST if per_dir_is_png[i] else None,
+                treat_png_folder=per_dir_is_png[i],
+                dim_checker=dim_checker,
+                progress=bar,
+            )
+            dir_to_stems[d] = stems
+            dir_to_mismatches[d] = mismatches
+            dir_to_wl_hits[d] = wl_hits
+            dir_to_dim_issues[d] = dim_issues
 
     # Union of all stems
     all_stems = set().union(*dir_to_stems.values()) if dir_to_stems else set()
@@ -197,7 +278,8 @@ def main():
     print(f"PNG directory index: {png_idx} -> {DIRS[png_idx]}")
     print(f"CASE_SENSITIVE: {CASE_SENSITIVE}")
     print(f"PNG-folder JPG whitelist: {sorted(JPG_WHITELIST) if JPG_WHITELIST else '(none)'}")
-    print(f"Required dimensions: {REQUIRED_WIDTH}x{REQUIRED_HEIGHT}")
+    print(f"Check dimensions: {CHECK_DIMENSIONS} (required {REQUIRED_WIDTH}x{REQUIRED_HEIGHT})")
+    print(f"Outputs: {OUTPUT_CSV} and {DIM_ISSUES_CSV if CHECK_DIMENSIONS else '(dimension CSV skipped)'}")
 
     print("\n=== Directory Stats (included .jpg/.png files only) ===")
     for d in DIRS:
@@ -219,7 +301,7 @@ def main():
         for s in to_show:
             print("  " + s)
         if PRINT_LIMIT is not None and len(only_in_d) > PRINT_LIMIT:
-            print(f"  ... (+{len(only_in_d) - PRINT_LIMIT} more)")
+            print(f"  ... (+{len(only_in_d)-PRINT_LIMIT} more)")
 
     # Stems missing in any directory
     print("\n=== Stems missing in at least one directory ===")
@@ -233,7 +315,7 @@ def main():
     for stem, md in to_show:
         print(f"- {stem} :: missing in {', '.join(md)}")
     if PRINT_LIMIT is not None and len(missing_any) > PRINT_LIMIT:
-        print(f"... (+{len(missing_any) - PRINT_LIMIT} more)")
+        print(f"... (+{len(missing_any)-PRINT_LIMIT} more)")
 
     # Extension mismatches (jpg/png in the wrong place only)
     print("\n=== Extension mismatches by directory (jpg/png present but disallowed) ===")
@@ -246,7 +328,7 @@ def main():
         for rel, reason in to_show:
             print(f"  {rel}  ->  {reason}")
         if PRINT_LIMIT is not None and len(mismatches) > PRINT_LIMIT:
-            print(f"  ... (+{len(mismatches) - PRINT_LIMIT} more)")
+            print(f"  ... (+{len(mismatches)-PRINT_LIMIT} more)")
     print(f"\nTotal mismatches: {total_mismatch}")
 
     # Whitelist hits
@@ -262,27 +344,9 @@ def main():
         for rel in to_show:
             print(f"  {rel}")
         if PRINT_LIMIT is not None and len(hits) > PRINT_LIMIT:
-            print(f"  ... (+{len(hits) - PRINT_LIMIT} more)")
+            print(f"  ... (+{len(hits)-PRINT_LIMIT} more)")
     if wl_total == 0:
         print("(none)")
-
-    # --- Dimension issues ---
-    print("\n=== Dimension issues (any .jpg/.png not "
-          f"{REQUIRED_WIDTH}x{REQUIRED_HEIGHT} or unreadable) ===")
-    dim_total = 0
-    for d in DIRS:
-        issues = dir_to_dim_issues[d]
-        dim_total += len(issues)
-        print(f"\n[{Path(d).name}] dimension issues: {len(issues)}")
-        to_show = issues if PRINT_LIMIT is None else issues[:PRINT_LIMIT]
-        for rel, w, h, err in to_show:
-            if err:
-                print(f"  {rel}  ->  ERROR: {err}")
-            else:
-                print(f"  {rel}  ->  {w}x{h}")
-        if PRINT_LIMIT is not None and len(issues) > PRINT_LIMIT:
-            print(f"  ... (+{len(issues) - PRINT_LIMIT} more)")
-    print(f"\nTotal dimension issues: {dim_total}")
 
     # --- CSV Matrix ---
     header = ["stem"] + [Path(d).name for d in DIRS]
@@ -300,26 +364,46 @@ def main():
 
     print(f"\nCSV written: {OUTPUT_CSV.resolve()}")
 
-    # --- Dimension Issues CSV ---
-    if dim_total > 0:
-        with DIM_ISSUES_CSV.open("w", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(
-                f,
-                fieldnames=["directory", "relative_path", "width", "height", "error"]
-            )
-            writer.writeheader()
-            for d in DIRS:
-                for rel, w, h, err in dir_to_dim_issues[d]:
-                    writer.writerow({
-                        "directory": str(d),
-                        "relative_path": rel,
-                        "width": w if w is not None else "",
-                        "height": h if h is not None else "",
-                        "error": err if err else "",
-                    })
-        print(f"Dimension issues CSV written: {DIM_ISSUES_CSV.resolve()}")
-    else:
-        print("No dimension issues found.")
+    # --- Dimension Issues CSV (only if enabled) ---
+    if CHECK_DIMENSIONS:
+        dim_total = sum(len(v) for v in dir_to_dim_issues.values())
+        print("\n=== Dimension issues ===")
+        for d in DIRS:
+            issues = dir_to_dim_issues[d]
+            print(f"[{Path(d).name}] dimension issues: {len(issues)}")
+            to_show = issues if PRINT_LIMIT is None else issues[:PRINT_LIMIT]
+            for rel, w, h, err in to_show:
+                if err:
+                    print(f"  {rel}  ->  ERROR: {err}")
+                else:
+                    print(f"  {rel}  ->  {w}x{h}")
+            if PRINT_LIMIT is not None and len(issues) > PRINT_LIMIT:
+                print(f"  ... (+{len(issues)-PRINT_LIMIT} more)")
+        print(f"Total dimension issues: {dim_total}")
+
+        if dim_total > 0:
+            with DIM_ISSUES_CSV.open("w", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(
+                    f,
+                    fieldnames=["directory", "relative_path", "width", "height", "error"]
+                )
+                writer.writeheader()
+                for d in DIRS:
+                    for rel, w, h, err in dir_to_dim_issues[d]:
+                        writer.writerow({
+                            "directory": str(d),
+                            "relative_path": rel,
+                            "width": w if w is not None else "",
+                            "height": h if h is not None else "",
+                            "error": err if err else "",
+                        })
+            print(f"Dimension issues CSV written: {DIM_ISSUES_CSV.resolve()}")
+        else:
+            print("No dimension issues found.")
+
+    elapsed = timer() - start
+    logging.info("Done in %.2fs", elapsed)
+    print(f"\nDone in {elapsed:.2f}s")
 
 
 if __name__ == "__main__":
