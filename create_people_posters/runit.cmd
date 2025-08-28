@@ -32,7 +32,7 @@ REM Now run pad flow(well actually PAD flow was replaced but this is what create
 D:
 cd D:\Defaults-Image-Creation\create_people_posters
 REM "C:\Program Files\PowerShell\7\pwsh.exe" -ExecutionPolicy Bypass -File ".\create_people_poster.ps1" d:\ "remove backgrounds chrome-en windows-en"
-"C:\Program Files\PowerShell\7\pwsh.exe" -ExecutionPolicy Bypass -File ".\create_people_poster.ps1" x:\
+"C:\Program Files\PowerShell\7\pwsh.exe" -ExecutionPolicy Bypass -File ".\create_people_poster.ps1" d:\ "remove backgrounds chrome-en windows-en"
 pause
 
 D:
