@@ -39,13 +39,13 @@ pause
 
 D:
 cd D:\bullmoose20\people
-robocopy D:\bullmoose20\people\bw\ D:\bullmoose20\Kometa-People-Images\bw\ /E /COPY:DAT /DCOPY:T /XO
-robocopy D:\bullmoose20\people\diiivoy\ D:\bullmoose20\Kometa-People-Images\diiivoy\ /E /COPY:DAT /DCOPY:T /XO
-robocopy D:\bullmoose20\people\diiivoycolor\ D:\bullmoose20\Kometa-People-Images\diiivoycolor\ /E /COPY:DAT /DCOPY:T /XO
-robocopy D:\bullmoose20\people\original\ D:\bullmoose20\Kometa-People-Images\original\ /E /COPY:DAT /DCOPY:T /XO
-robocopy D:\bullmoose20\people\signature\ D:\bullmoose20\Kometa-People-Images\signature\ /E /COPY:DAT /DCOPY:T /XO
-robocopy D:\bullmoose20\people\rainier\ D:\bullmoose20\Kometa-People-Images\rainier\ /E /COPY:DAT /DCOPY:T /XO
-robocopy D:\bullmoose20\people\transparent\ D:\bullmoose20\Kometa-People-Images\transparent\ /E /COPY:DAT /DCOPY:T /XO
+robocopy .\config\people_dirs\bw\ D:\bullmoose20\Kometa-People-Images\bw\ /E /COPY:DAT /DCOPY:T /XO
+robocopy .\config\people_dirs\diiivoy\ D:\bullmoose20\Kometa-People-Images\diiivoy\ /E /COPY:DAT /DCOPY:T /XO
+robocopy .\config\people_dirs\diiivoycolor\ D:\bullmoose20\Kometa-People-Images\diiivoycolor\ /E /COPY:DAT /DCOPY:T /XO
+robocopy .\config\people_dirs\original\ D:\bullmoose20\Kometa-People-Images\original\ /E /COPY:DAT /DCOPY:T /XO
+robocopy .\config\people_dirs\signature\ D:\bullmoose20\Kometa-People-Images\signature\ /E /COPY:DAT /DCOPY:T /XO
+robocopy .\config\people_dirs\rainier\ D:\bullmoose20\Kometa-People-Images\rainier\ /E /COPY:DAT /DCOPY:T /XO
+robocopy .\config\people_dirs\transparent\ D:\bullmoose20\Kometa-People-Images\transparent\ /E /COPY:DAT /DCOPY:T /XO
 
 D:
 cd D:\bullmoose20\pyprogs\get_people_posters
