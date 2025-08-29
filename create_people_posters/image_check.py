@@ -23,24 +23,24 @@ for d in (CONFIG_DIR, LOGS_DIR):
 
 
 def setup_logging():
-    """
-    File-only logger (no console handler). We capture DEBUG+ to file so
-    warnings and summary always land in the log. Console stays clean.
-    """
     log_file = LOGS_DIR / f"{SCRIPT_PATH.stem}.log"
-    handlers = [logging.FileHandler(log_file, encoding="utf-8", mode="w")]
+    fh = logging.FileHandler(log_file, encoding="utf-8", mode="w")
+    fh.setLevel(logging.INFO)
     logging.basicConfig(
-        level=logging.DEBUG,  # capture everything to file
+        level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
-        handlers=handlers,
-        force=True,  # reset any prior config
+        handlers=[fh],
+        force=True,
     )
     logging.info("Logging → %s", log_file)
     return log_file
 
 
 LOG_FILE = setup_logging()
-load_dotenv(SCRIPT_DIR / ".env")  # harmless if missing
+load_dotenv(SCRIPT_DIR / ".env")
+
+logging.getLogger("PIL").setLevel(logging.ERROR)
+logging.getLogger("PIL.PngImagePlugin").setLevel(logging.ERROR)
 
 # ========= CONFIG =========
 # (kept identical to your PowerShell checks)
@@ -184,10 +184,10 @@ def iter_png_files(root: Path):
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="Recursive PNG image anomaly scanner (quiet console)")
-    parser.add_argument("--images-location", required=True, help="Root folder (recursive, PNG only)")
+    parser.add_argument("--input_directory", required=True, help="Root folder (recursive, PNG only)")
     args = parser.parse_args()
 
-    root = Path(args.images_location)
+    root = Path(args.input_directory)
     if not root.exists():
         print(f"Images location >{root}< not found. Exiting now...")
         sys.exit(1)
@@ -195,7 +195,7 @@ def main():
     # START metadata in log (not spammy per-file info)
     logging.info("#### START ####")
     logging.info("scriptName                   : %s", SCRIPT_PATH.name)
-    logging.info("images_location              : %s", root)
+    logging.info("input_directory              : %s", root)
     logging.info("script_path                  : %s", SCRIPT_DIR)
     logging.info("scriptLog                    : %s", LOG_FILE)
 
