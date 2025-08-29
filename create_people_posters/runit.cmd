@@ -14,11 +14,14 @@ REM pause
 REM pause
 .\venv\Scripts\python .\get_missing_people_dir.py --input_directory .\config\posters
 REM pause
-del .\config\posters\*.* /Q
-move .\config\Downloads\color\*.* D:\bullmoose20\people\Downloads\
-del .\config\Downloads\color\*.* /Q
-move .\config\Downloads\other\*.* D:\bullmoose20\people\Downloads\
-del .\config\Downloads\other\*.* /Q
+REM mkdir .\config\people_dirs
+REM mkdir .\config\people_dirs\Downloads
+REM del .\config\posters\*.* /Q
+REM move .\config\Downloads\color\*.* .\config\people_dirs\Downloads
+REM del .\config\Downloads\color\*.* /Q
+REM move .\config\Downloads\other\*.* .\config\people_dirs\Downloads
+REM del .\config\Downloads\other\*.* /Q
+.\venv\Scripts\python .\prep_people_dirs.py
 REM pause
 
 REM Now selenium flow twice as second time will get any stragglers
@@ -29,10 +32,9 @@ REM cd D:\bullmoose20\pyprogs\sel_remove_bg
 REM pause
 
 REM Now run pad flow(well actually PAD flow was replaced but this is what creates the posters now as PAD flow within ps1 is disabled as of aug 25,2025)
-D:
-cd D:\Defaults-Image-Creation\create_people_posters
-REM "C:\Program Files\PowerShell\7\pwsh.exe" -ExecutionPolicy Bypass -File ".\create_people_poster.ps1" d:\ "remove backgrounds chrome-en windows-en"
-"C:\Program Files\PowerShell\7\pwsh.exe" -ExecutionPolicy Bypass -File ".\create_people_poster.ps1" d:\ "remove backgrounds chrome-en windows-en"
+REM D:
+REM cd D:\Defaults-Image-Creation\create_people_posters
+"C:\Program Files\PowerShell\7\pwsh.exe" -ExecutionPolicy Bypass -File ".\create_people_poster.ps1"
 pause
 
 D:
