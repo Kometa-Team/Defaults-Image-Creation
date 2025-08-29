@@ -4,6 +4,8 @@ from pathlib import Path
 from dataclasses import dataclass, field
 from typing import Optional, List, Tuple
 
+from alive_progress import alive_bar
+
 from PIL import Image
 import tempfile
 
@@ -21,18 +23,23 @@ from dotenv import load_dotenv
 # ===============================
 load_dotenv()
 
-URL = os.getenv("SEL_URL", "https://new.express.adobe.com/tools/remove-background")
+URL = os.getenv("SEL_TOOL_URL", "https://new.express.adobe.com/tools/remove-background")
 
 # Chrome profile (keeps you signed in)
 USER_DATA_DIR = os.getenv("SEL_USER_DATA_DIR", str(Path.cwd() / "chrome-profile"))
 PROFILE_DIR = os.getenv("SEL_PROFILE_DIR", "Profile 1")
 
-# Where JPGs live / originals go
-SRC_DIR = Path(os.getenv("SEL_SRC_DIR", str(Path.cwd())))
-ORIG_DIR = Path(os.getenv("SEL_ORIG_DIR", str(Path.cwd() / "original")))
+# --- Config & logs dirs (cross-platform) ---
+SCRIPT_DIR = Path(__file__).resolve().parent
+CONFIG_DIR = SCRIPT_DIR / "config"
+LOGS_DIR = CONFIG_DIR / "logs"
+for d in (CONFIG_DIR, LOGS_DIR):
+    d.mkdir(parents=True, exist_ok=True)
 
-# Temp download dir (Chrome writes files here)
-DOWNLOAD_DIR = os.getenv("SEL_DOWNLOAD_DIR", str((Path.cwd() / "sel_downloads").resolve()))
+# Normalize to absolute paths even if .env uses relative paths
+SRC_DIR = Path(os.getenv("SEL_SRC_DIR", str(Path.cwd()))).resolve()
+ORIG_DIR = Path(os.getenv("SEL_ORIG_DIR", str(Path.cwd() / "original"))).resolve()
+DOWNLOAD_DIR = Path(os.getenv("SEL_DOWNLOAD_DIR", str(Path.cwd() / "sel_downloads"))).resolve()
 
 # Flow & patience knobs
 MAX_WAIT_READY_SEC = int(os.getenv("SEL_MAX_WAIT_READY_SEC", "120"))
@@ -58,8 +65,17 @@ def now_ts() -> str:
     return time.strftime("%H:%M:%S")
 
 
+LOG_FILE = LOGS_DIR / "sel_remove_bg.log"
+
+
 def log(msg: str) -> None:
-    print(f"[{now_ts()}] {msg}")
+    line = f"[{now_ts()}] {msg}"
+    print(line)
+    try:
+        with LOG_FILE.open("a", encoding="utf-8") as f:
+            f.write(line + "\n")
+    except Exception:
+        pass
 
 
 class StepTimer:
@@ -102,7 +118,7 @@ def build_driver():
     opts.add_argument("--start-maximized")
     opts.add_experimental_option("excludeSwitches", ["enable-logging", "enable-automation"])
     opts.add_experimental_option("prefs", {
-        "download.default_directory": DOWNLOAD_DIR,
+        "download.default_directory": str(DOWNLOAD_DIR),
         "download.prompt_for_download": False,
         "download.directory_upgrade": True,
         "safebrowsing.enabled": True,
@@ -119,7 +135,7 @@ def build_driver():
     try:
         driver.execute_cdp_cmd("Page.setDownloadBehavior", {
             "behavior": "allow",
-            "downloadPath": DOWNLOAD_DIR
+            "downloadPath": str(DOWNLOAD_DIR)
         })
     except Exception:
         pass
@@ -704,130 +720,140 @@ def main():
             return
 
         log(f"Found {len(files)} .jpg file(s) in {SRC_DIR}")
-        for idx, jpg in enumerate(files, 1):
-            per_t0 = time.perf_counter()
-            log(f"[proc {idx}/{len(files)}] {jpg}")
-            fr = FileResult(name=jpg.name, status="")
-            tmpfile = None
 
-            # Navigate / get ready
-            if RELOAD_EACH_FILE or idx == 1:
-                driver.get(URL)
-                pin_tool_route(driver)
-                remove_promos(driver)
-                hide_onetrust(driver)
-                wait_until_ready(driver)
+        with alive_bar(len(files), dual_line=True, title="Remove BG") as bar:
+            for idx, jpg in enumerate(files, 1):
+                per_t0 = time.perf_counter()
+                fr = FileResult(name=jpg.name, status="")
+                tmpfile = None
+                bar.text = f"→ {jpg.name}"
+                log(f"[proc {idx}/{len(files)}] {jpg}")
 
-            # --- Size enforcement (pre-upload) ---
-            upload_path = str(jpg)  # default
-            if ENFORCE_SIZE and (EXPECT_W > 0 and EXPECT_H > 0):
-                try:
-                    with Image.open(jpg) as im:
-                        w, h = im.size
-                        if (w, h) != (EXPECT_W, EXPECT_H):
-                            log(f"[resize] {jpg.name} is {w}x{h}, resizing to {EXPECT_W}x{EXPECT_H}")
-                            tmpfile = Path(tempfile.gettempdir()) / f"{jpg.stem}_{EXPECT_W}x{EXPECT_H}{jpg.suffix}"
-                            resized = im.resize((EXPECT_W, EXPECT_H), Image.LANCZOS)
-                            resized.save(tmpfile)
-                            upload_path = str(tmpfile)
-                except Exception as e:
-                    fr.status = "SKIPPED"
-                    fr.detail = f"size check failed: {e}"
+                # Navigate / get ready
+                if RELOAD_EACH_FILE or idx == 1:
+                    bar.text = f"→ {jpg.name} : opening tool"
+                    driver.get(URL)
+                    pin_tool_route(driver)
+                    remove_promos(driver)
+                    hide_onetrust(driver)
+                    wait_until_ready(driver)
+
+                # --- Size enforcement (pre-upload) ---
+                upload_path = str(jpg)  # default
+                if ENFORCE_SIZE and (EXPECT_W > 0 and EXPECT_H > 0):
+                    try:
+                        with Image.open(jpg) as im:
+                            w, h = im.size
+                            if (w, h) != (EXPECT_W, EXPECT_H):
+                                log(f"[resize] {jpg.name} is {w}x{h}, resizing to {EXPECT_W}x{EXPECT_H}")
+                                tmpfile = Path(tempfile.gettempdir()) / f"{jpg.stem}_{EXPECT_W}x{EXPECT_H}{jpg.suffix}"
+                                resized = im.resize((EXPECT_W, EXPECT_H), Image.LANCZOS)
+                                resized.save(tmpfile)
+                                upload_path = str(tmpfile)
+                    except Exception as e:
+                        fr.status = "SKIPPED"
+                        fr.detail = f"size check failed: {e}"
+                        fr.sec_total = time.perf_counter() - per_t0
+                        results.append(fr)
+                        log(f"[skip] {jpg.name} – {fr.detail}")
+                        bar()  # advance even on skip
+                        continue
+
+                # Upload
+                bar.text = f"→ {jpg.name} : upload"
+                t_up = StepTimer("upload")
+                upload_file(driver, upload_path)
+                fr.sec_upload = t_up.done()
+
+                # Wait for controls
+                bar.text = f"→ {jpg.name} : processing"
+                t_proc = StepTimer("processing")
+                ok = wait_until_processed_controls(driver, timeout=PROC_TIMEOUT)
+                fr.sec_process = t_proc.done()
+                if not ok:
+                    fr.status = "ERROR"
+                    fr.detail = "Processing did not expose controls in time"
                     fr.sec_total = time.perf_counter() - per_t0
                     results.append(fr)
-                    log(f"[skip] {jpg.name} – {fr.detail}")
+                    log(f"[error] {jpg.name} – {fr.detail}")
+                    if tmpfile and tmpfile.exists():
+                        try:
+                            tmpfile.unlink()
+                        except Exception:
+                            pass
+                    bar()  # advance on error
                     continue
 
-            # Upload
-            t_up = StepTimer("upload")
-            upload_file(driver, upload_path)
-            fr.sec_upload = t_up.done()
+                # Small pause before first download attempt
+                time.sleep(2.5)
 
-            # Wait for controls
-            t_proc = StepTimer("processing")
-            ok = wait_until_processed_controls(driver, timeout=PROC_TIMEOUT)
-            fr.sec_process = t_proc.done()
-            if not ok:
-                fr.status = "ERROR"
-                fr.detail = "Processing did not expose controls in time"
+                # Download
+                bar.text = f"→ {jpg.name} : download"
+                t_dl = StepTimer("download")
+                wait_new = wait_for_new_download()
+                new_file = click_js_then_native(driver, wait_new)
+
+                # One quick JS host click as fallback (no canvas fallback)
+                if not new_file:
+                    log("[dl] native click produced no file; retrying once with JS host click")
+                    try:
+                        host, inner, _ = _find_download_button_with_frames(driver, timeout=6)
+                        if host:
+                            js(driver, "arguments[0].scrollIntoView({block:'center'}); arguments[0].click();", host)
+                            new_file = wait_new()
+                    except Exception:
+                        pass
+
+                if not new_file:
+                    fr.status = "ERROR"
+                    fr.detail = "No file downloaded (timed out)"
+                    fr.sec_download = t_dl.done("TIMEOUT")
+                    fr.sec_total = time.perf_counter() - per_t0
+                    results.append(fr)
+                    log(f"[error] No file downloaded for: {jpg.name} (timed out)")
+                    if tmpfile and tmpfile.exists():
+                        try:
+                            tmpfile.unlink()
+                        except Exception:
+                            pass
+                    bar()  # advance on error
+                    continue
+
+                fr.sec_download = t_dl.done()
+
+                # Place final & move original
+                target = SRC_DIR / f"{jpg.stem}.png"
+                if target.exists():
+                    target.unlink()
+                shutil.move(str(new_file), str(target))
+
+                dest_jpg = ORIG_DIR / jpg.name
+                if dest_jpg.exists():
+                    dest_jpg.unlink()
+                shutil.move(str(jpg), str(dest_jpg))
+
+                fr.status = "OK"
+                fr.detail = f"{target.name}"
                 fr.sec_total = time.perf_counter() - per_t0
                 results.append(fr)
-                log(f"[error] {jpg.name} – {fr.detail}")
-                # cleanup temp resized file if any
+                log(f"[done] {jpg.name} -> {target.name}")
+
                 if tmpfile and tmpfile.exists():
                     try:
                         tmpfile.unlink()
                     except Exception:
                         pass
-                continue
 
-            # --- NEW: small pause before first download attempt ---
-            time.sleep(2.5)
+                # Re-assert tool for next file
+                if RELOAD_EACH_FILE and idx < len(files):
+                    bar.text = f"→ {jpg.name} : resetting tool"
+                    driver.get(URL)
+                    pin_tool_route(driver)
+                    remove_promos(driver)
+                    hide_onetrust(driver)
+                    wait_until_ready(driver)
 
-            # Download
-            t_dl = StepTimer("download")
-            wait_new = wait_for_new_download()
-            new_file = click_js_then_native(driver, wait_new)
-
-            # One quick JS host click as fallback (no canvas fallback)
-            if not new_file:
-                log("[dl] native click produced no file; retrying once with JS host click")
-                try:
-                    host, inner, _ = _find_download_button_with_frames(driver, timeout=6)
-                    if host:
-                        js(driver, "arguments[0].scrollIntoView({block:'center'}); arguments[0].click();", host)
-                        new_file = wait_new()
-                except Exception:
-                    pass
-
-            if not new_file:
-                fr.status = "ERROR"
-                fr.detail = "No file downloaded (timed out)"
-                fr.sec_download = t_dl.done("TIMEOUT")
-                fr.sec_total = time.perf_counter() - per_t0
-                results.append(fr)
-                log(f"[error] No file downloaded for: {jpg.name} (timed out)")
-                # cleanup temp resized file if any
-                if tmpfile and tmpfile.exists():
-                    try:
-                        tmpfile.unlink()
-                    except Exception:
-                        pass
-                continue
-
-            fr.sec_download = t_dl.done()
-
-            # Place final & move original
-            target = SRC_DIR / f"{jpg.stem}.png"
-            if target.exists():
-                target.unlink()
-            shutil.move(str(new_file), str(target))
-
-            dest_jpg = ORIG_DIR / jpg.name
-            if dest_jpg.exists():
-                dest_jpg.unlink()
-            shutil.move(str(jpg), str(dest_jpg))
-
-            fr.status = "OK"
-            fr.detail = f"{target.name}"
-            fr.sec_total = time.perf_counter() - per_t0
-            results.append(fr)
-            log(f"[done] {jpg.name} -> {target.name}")
-
-            # cleanup temp resized file if any
-            if tmpfile and tmpfile.exists():
-                try:
-                    tmpfile.unlink()
-                except Exception:
-                    pass
-
-            # Re-assert tool for next file
-            if RELOAD_EACH_FILE and idx < len(files):
-                driver.get(URL)
-                pin_tool_route(driver)
-                remove_promos(driver)
-                hide_onetrust(driver)
-                wait_until_ready(driver)
+                bar()  # advance after finishing the file
 
         log("All done.")
     finally:
