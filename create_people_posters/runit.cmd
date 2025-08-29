@@ -37,15 +37,18 @@ REM cd D:\Defaults-Image-Creation\create_people_posters
 "C:\Program Files\PowerShell\7\pwsh.exe" -ExecutionPolicy Bypass -File ".\create_people_poster.ps1"
 pause
 
-D:
-cd D:\bullmoose20\people
-robocopy .\config\people_dirs\bw\ D:\bullmoose20\Kometa-People-Images\bw\ /E /COPY:DAT /DCOPY:T /XO
-robocopy .\config\people_dirs\diiivoy\ D:\bullmoose20\Kometa-People-Images\diiivoy\ /E /COPY:DAT /DCOPY:T /XO
-robocopy .\config\people_dirs\diiivoycolor\ D:\bullmoose20\Kometa-People-Images\diiivoycolor\ /E /COPY:DAT /DCOPY:T /XO
-robocopy .\config\people_dirs\original\ D:\bullmoose20\Kometa-People-Images\original\ /E /COPY:DAT /DCOPY:T /XO
-robocopy .\config\people_dirs\signature\ D:\bullmoose20\Kometa-People-Images\signature\ /E /COPY:DAT /DCOPY:T /XO
-robocopy .\config\people_dirs\rainier\ D:\bullmoose20\Kometa-People-Images\rainier\ /E /COPY:DAT /DCOPY:T /XO
-robocopy .\config\people_dirs\transparent\ D:\bullmoose20\Kometa-People-Images\transparent\ /E /COPY:DAT /DCOPY:T /XO
+REM D:
+REM cd D:\bullmoose20\people
+REM robocopy .\config\people_dirs\bw\ D:\bullmoose20\Kometa-People-Images\bw\ /E /COPY:DAT /DCOPY:T /XO
+REM robocopy .\config\people_dirs\diiivoy\ D:\bullmoose20\Kometa-People-Images\diiivoy\ /E /COPY:DAT /DCOPY:T /XO
+REM robocopy .\config\people_dirs\diiivoycolor\ D:\bullmoose20\Kometa-People-Images\diiivoycolor\ /E /COPY:DAT /DCOPY:T /XO
+REM robocopy .\config\people_dirs\original\ D:\bullmoose20\Kometa-People-Images\original\ /E /COPY:DAT /DCOPY:T /XO
+REM robocopy .\config\people_dirs\signature\ D:\bullmoose20\Kometa-People-Images\signature\ /E /COPY:DAT /DCOPY:T /XO
+REM robocopy .\config\people_dirs\rainier\ D:\bullmoose20\Kometa-People-Images\rainier\ /E /COPY:DAT /DCOPY:T /XO
+REM robocopy .\config\people_dirs\transparent\ D:\bullmoose20\Kometa-People-Images\transparent\ /E /COPY:DAT /DCOPY:T /XO
+
+.\venv\Scripts\python sync_people_images.py --dest_root "D:/bullmoose20/Kometa-People-Images"
+pause
 
 D:
 cd D:\bullmoose20\pyprogs\get_people_posters
