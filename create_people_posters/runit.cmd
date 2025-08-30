@@ -5,22 +5,19 @@ REM python -m pip install --upgrade pip
 
 .\venv\Scripts\python .\name_checker_dir.py --input_directory C:\Users\bullmoose20\Downloads\
 REM pause
+
 .\venv\Scripts\python .\get_missing_people.py --input_directory C:\Users\bullmoose20\Downloads\
 REM pause
 
 .\venv\Scripts\python .\tmdb-people.py
 REM pause
+
 .\venv\Scripts\python .\truncate_tmdb_people_names.py 
 REM pause
+
 .\venv\Scripts\python .\get_missing_people_dir.py --input_directory .\config\posters
 REM pause
-REM mkdir .\config\people_dirs
-REM mkdir .\config\people_dirs\Downloads
-REM del .\config\posters\*.* /Q
-REM move .\config\Downloads\color\*.* .\config\people_dirs\Downloads
-REM del .\config\Downloads\color\*.* /Q
-REM move .\config\Downloads\other\*.* .\config\people_dirs\Downloads
-REM del .\config\Downloads\other\*.* /Q
+
 .\venv\Scripts\python .\prep_people_dirs.py
 REM pause
 
@@ -29,44 +26,27 @@ REM D:
 REM cd D:\bullmoose20\pyprogs\sel_remove_bg
 .\venv\Scripts\python .\sel_remove_bg.py
 .\venv\Scripts\python .\sel_remove_bg.py
-REM pause
+pause
 
 REM Now run pad flow(well actually PAD flow was replaced but this is what creates the posters now as PAD flow within ps1 is disabled as of aug 25,2025)
 REM D:
 REM cd D:\Defaults-Image-Creation\create_people_posters
 "C:\Program Files\PowerShell\7\pwsh.exe" -ExecutionPolicy Bypass -File ".\create_people_poster.ps1"
-pause
-
-REM D:
-REM cd D:\bullmoose20\people
-REM robocopy .\config\people_dirs\bw\ D:\bullmoose20\Kometa-People-Images\bw\ /E /COPY:DAT /DCOPY:T /XO
-REM robocopy .\config\people_dirs\diiivoy\ D:\bullmoose20\Kometa-People-Images\diiivoy\ /E /COPY:DAT /DCOPY:T /XO
-REM robocopy .\config\people_dirs\diiivoycolor\ D:\bullmoose20\Kometa-People-Images\diiivoycolor\ /E /COPY:DAT /DCOPY:T /XO
-REM robocopy .\config\people_dirs\original\ D:\bullmoose20\Kometa-People-Images\original\ /E /COPY:DAT /DCOPY:T /XO
-REM robocopy .\config\people_dirs\signature\ D:\bullmoose20\Kometa-People-Images\signature\ /E /COPY:DAT /DCOPY:T /XO
-REM robocopy .\config\people_dirs\rainier\ D:\bullmoose20\Kometa-People-Images\rainier\ /E /COPY:DAT /DCOPY:T /XO
-REM robocopy .\config\people_dirs\transparent\ D:\bullmoose20\Kometa-People-Images\transparent\ /E /COPY:DAT /DCOPY:T /XO
+REM pause
 
 .\venv\Scripts\python sync_people_images.py --dest_root "D:/bullmoose20/Kometa-People-Images"
-pause
+REM pause
 
-D:
-cd D:\bullmoose20\pyprogs\get_people_posters
-call .\@people_git_readme_merge.cmd
+.\venv\Scripts\python update_people_repos.py --repo-root "D:/bullmoose20/Kometa-People-Images" --branch master
+REM pause
 
 echo Debugging: Starting python auto_readme.py -s transparent
 D:
 cd D:\bullmoose20\Kometa-People-Images
-REM python auto_readme.py
-REM python auto_readme.py -s bw
-REM python auto_readme.py -s diivoy
-REM python auto_readme.py -s diivoycolor
-REM python auto_readme.py -s rainier
-REM python auto_readme.py -s signature
 python auto_readme.py -s transparent
+pause
 
-echo Debugging: Starting robocopy of transparent
-
+echo Debugging: Starting robocopy of transparent *.md
 robocopy D:\bullmoose20\Kometa-People-Images\transparent\ D:\bullmoose20\people\transparent\ *.md /E /COPY:DAT /DCOPY:T /XO
 
 echo Debugging: Ending robocopy of transparent

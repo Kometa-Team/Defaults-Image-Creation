@@ -1,20 +1,17 @@
 # sel_remove_bg.py
 import os, time, shutil, subprocess
 from pathlib import Path
-from dataclasses import dataclass, field
-from typing import Optional, List, Tuple
+from dataclasses import dataclass
+from typing import List
 
 from alive_progress import alive_bar
 
-from PIL import Image
-import tempfile
+from PIL import Image, ImageOps
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC  # noqa: F401 (kept for future use)
 
 from dotenv import load_dotenv
 
@@ -631,7 +628,7 @@ def click_download_NATIVE(driver, post_click_wait_secs=1.2) -> bool:
                 ActionChains(driver).move_to_element(target).pause(0.05).click().perform()
                 time.sleep(post_click_wait_secs)
                 return True
-            except Exception as e:
+            except Exception:
                 # Try a direct element.click as a second swing this attempt
                 try:
                     target.click()
@@ -705,6 +702,29 @@ def wait_for_new_download():
     return wait_new
 
 
+def resize_in_place(jpg_path: Path, expect_w: int, expect_h: int) -> bool:
+    """
+    Resize the JPG at jpg_path to expect_w x expect_h *in place* (same filename).
+    Returns True if resized, False if already the right size.
+    Uses a short-lived .tmp.jpg in the same folder for safe replacement.
+    """
+    jpg_path = Path(jpg_path)
+    with Image.open(jpg_path) as im:
+        im = ImageOps.exif_transpose(im)  # honor EXIF orientation
+        w, h = im.size
+        if (w, h) == (expect_w, expect_h):
+            return False
+        if im.mode not in ("RGB", "L"):
+            im = im.convert("RGB")
+        resized = im.resize((expect_w, expect_h), Image.LANCZOS)
+
+    tmp_path = jpg_path.with_suffix(".tmp.jpg")
+    # good quality, no chroma subsampling; tweak if you prefer smaller files
+    resized.save(tmp_path, format="JPEG", quality=95, subsampling=0, optimize=True)
+    tmp_path.replace(jpg_path)  # atomic-ish on the same volume
+    return True
+
+
 # ===============================
 # Main
 # ===============================
@@ -725,7 +745,6 @@ def main():
             for idx, jpg in enumerate(files, 1):
                 per_t0 = time.perf_counter()
                 fr = FileResult(name=jpg.name, status="")
-                tmpfile = None
                 bar.text = f"→ {jpg.name}"
                 log(f"[proc {idx}/{len(files)}] {jpg}")
 
@@ -739,20 +758,15 @@ def main():
                     wait_until_ready(driver)
 
                 # --- Size enforcement (pre-upload) ---
-                upload_path = str(jpg)  # default
+                upload_path = str(jpg)  # stays the same (no temp filename to upload)
                 if ENFORCE_SIZE and (EXPECT_W > 0 and EXPECT_H > 0):
                     try:
-                        with Image.open(jpg) as im:
-                            w, h = im.size
-                            if (w, h) != (EXPECT_W, EXPECT_H):
-                                log(f"[resize] {jpg.name} is {w}x{h}, resizing to {EXPECT_W}x{EXPECT_H}")
-                                tmpfile = Path(tempfile.gettempdir()) / f"{jpg.stem}_{EXPECT_W}x{EXPECT_H}{jpg.suffix}"
-                                resized = im.resize((EXPECT_W, EXPECT_H), Image.LANCZOS)
-                                resized.save(tmpfile)
-                                upload_path = str(tmpfile)
+                        t_rs = StepTimer("resize_in_place")
+                        changed = resize_in_place(jpg, EXPECT_W, EXPECT_H)
+                        t_rs.done("resized" if changed else "already 2000x3000")
                     except Exception as e:
                         fr.status = "SKIPPED"
-                        fr.detail = f"size check failed: {e}"
+                        fr.detail = f"size check/resize failed: {e}"
                         fr.sec_total = time.perf_counter() - per_t0
                         results.append(fr)
                         log(f"[skip] {jpg.name} – {fr.detail}")
@@ -776,11 +790,6 @@ def main():
                     fr.sec_total = time.perf_counter() - per_t0
                     results.append(fr)
                     log(f"[error] {jpg.name} – {fr.detail}")
-                    if tmpfile and tmpfile.exists():
-                        try:
-                            tmpfile.unlink()
-                        except Exception:
-                            pass
                     bar()  # advance on error
                     continue
 
@@ -811,11 +820,6 @@ def main():
                     fr.sec_total = time.perf_counter() - per_t0
                     results.append(fr)
                     log(f"[error] No file downloaded for: {jpg.name} (timed out)")
-                    if tmpfile and tmpfile.exists():
-                        try:
-                            tmpfile.unlink()
-                        except Exception:
-                            pass
                     bar()  # advance on error
                     continue
 
@@ -837,12 +841,6 @@ def main():
                 fr.sec_total = time.perf_counter() - per_t0
                 results.append(fr)
                 log(f"[done] {jpg.name} -> {target.name}")
-
-                if tmpfile and tmpfile.exists():
-                    try:
-                        tmpfile.unlink()
-                    except Exception:
-                        pass
 
                 # Re-assert tool for next file
                 if RELOAD_EACH_FILE and idx < len(files):
