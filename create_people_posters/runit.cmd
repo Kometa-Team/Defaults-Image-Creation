@@ -45,6 +45,9 @@ REM cd D:\Defaults-Image-Creation\create_people_posters
 "C:\Program Files\PowerShell\7\pwsh.exe" -ExecutionPolicy Bypass -File ".\create_people_poster.ps1"
 REM pause
 
+REM Validate that the repo structure is here and if not, we should stop processing and post error message to user
+.\venv\Scripts\python ensure_people_repo.py
+
 REM Move the images to the repo folders
 .\venv\Scripts\python sync_people_images.py --dest_root "D:/bullmoose20/Kometa-People-Images"
 REM pause
@@ -55,17 +58,11 @@ REM pause
 
 REM Now we need to create the README.md for transparent locally instead of with GitActions
 REM because it takes too long for the transparent folder
-echo Debugging: Starting python auto_readme.py -s transparent
-D:
-cd D:\bullmoose20\Kometa-People-Images
-python auto_readme.py -s transparent
-pause
+.\venv\Scripts\python auto_readme.py -s transparent -d D:/bullmoose20/Kometa-People-Images/transparent
+REM pause
 
 REM Copy the *.md files in the transparent folder back to the source for consistency
-echo Debugging: Starting robocopy of transparent *.md
-robocopy D:\bullmoose20\Kometa-People-Images\transparent\ D:\bullmoose20\people\transparent\ *.md /E /COPY:DAT /DCOPY:T /XO
-
-echo Debugging: Ending robocopy of transparent
+.\venv\Scripts\python sync_md.py --src "D:\bullmoose20\Kometa-People-Images\transparent" --dst "./config/people_dirs/transparent"
 
 echo Debugging: ALL DONE!!!!
 
