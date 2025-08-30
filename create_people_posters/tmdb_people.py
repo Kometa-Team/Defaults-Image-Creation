@@ -38,7 +38,7 @@ def setup_logging(level=logging.INFO, console=True):
 setup_logging()
 
 # ---------- env + config ----------
-load_dotenv(SCRIPT_DIR / ".env")  # also picks up process env if .env missing
+load_dotenv(CONFIG_DIR / ".env")
 TMDB_KEY = os.getenv("TMDB_KEY")
 if not TMDB_KEY:
     logging.error("TMDB_KEY is required (set it in environment or .env).")

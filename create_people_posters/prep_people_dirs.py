@@ -35,7 +35,7 @@ def setup_logging(level=logging.INFO, console=True):
 setup_logging()
 
 # ---------- env (optional, kept for parity with template) ----------
-load_dotenv(SCRIPT_DIR / ".env")
+load_dotenv(CONFIG_DIR / ".env")
 
 
 # ---------- helpers ----------

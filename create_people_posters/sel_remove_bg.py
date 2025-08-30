@@ -1,5 +1,5 @@
 # sel_remove_bg.py
-import os, time, shutil, subprocess
+import os, time, shutil, subprocess, sys
 from pathlib import Path
 from dataclasses import dataclass
 from typing import List
@@ -18,20 +18,54 @@ from dotenv import load_dotenv
 # ===============================
 # Load env + constants
 # ===============================
-load_dotenv()
-
-URL = os.getenv("SEL_TOOL_URL", "https://new.express.adobe.com/tools/remove-background")
-
-# Chrome profile (keeps you signed in)
-USER_DATA_DIR = os.getenv("SEL_USER_DATA_DIR", str(Path.cwd() / "chrome-profile"))
-PROFILE_DIR = os.getenv("SEL_PROFILE_DIR", "Profile 1")
-
-# --- Config & logs dirs (cross-platform) ---
+# --- Resolve script + config dirs first ---
 SCRIPT_DIR = Path(__file__).resolve().parent
 CONFIG_DIR = SCRIPT_DIR / "config"
-LOGS_DIR = CONFIG_DIR / "logs"
+LOGS_DIR   = CONFIG_DIR / "logs"
 for d in (CONFIG_DIR, LOGS_DIR):
     d.mkdir(parents=True, exist_ok=True)
+
+# --- Bootstrap .env in ./config if missing, then exit with instructions ---
+ENV_FILE = CONFIG_DIR / ".env"
+if not ENV_FILE.exists():
+    # Try to copy a template .env.example (repo root or next to script)
+    candidates = [
+        SCRIPT_DIR / ".env.example",
+        SCRIPT_DIR.parent / ".env.example",
+    ]
+    copied = False
+    for ex in candidates:
+        if ex.is_file():
+            shutil.copy2(ex, ENV_FILE)
+            copied = True
+            break
+    if not copied:
+        # Create a minimal stub if no example is present
+        ENV_FILE.write_text(
+            "TMDB_KEY=\n"
+            "# Add any other settings here. This file lives in ./config/.env\n",
+            encoding="utf-8",
+        )
+
+    msg = (
+        f"Missing ./config/.env — created one at: {ENV_FILE}\n"
+        "Please open it and set at least TMDB_KEY before re-running."
+    )
+    # Print to stderr and also drop a line in a log file, if desired
+    print(msg, file=sys.stderr)
+    try:
+        (LOGS_DIR / f"{Path(__file__).stem}.log").write_text(msg + "\n", encoding="utf-8")
+    except Exception:
+        pass
+    sys.exit(1)
+
+# --- Only load from ./config/.env (no fallback to CWD) ---
+load_dotenv(ENV_FILE)
+
+# Chrome profile (keeps you signed in)
+URL = os.getenv("SEL_TOOL_URL", "https://new.express.adobe.com/tools/remove-background")
+USER_DATA_DIR = os.getenv("SEL_USER_DATA_DIR", str(Path.cwd() / "chrome-profile"))
+PROFILE_DIR = os.getenv("SEL_PROFILE_DIR", "Profile 1")
 
 # Normalize to absolute paths even if .env uses relative paths
 SRC_DIR = Path(os.getenv("SEL_SRC_DIR", str(Path.cwd()))).resolve()

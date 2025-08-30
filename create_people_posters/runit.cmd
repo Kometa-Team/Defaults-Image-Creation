@@ -13,7 +13,7 @@ REM pause
 
 REM using the .env tmdb-people section, this will download the images from tmdb and place them into 
 REM ./config/posters
-.\venv\Scripts\python .\tmdb-people.py
+.\venv\Scripts\python .\tmdb_people.py
 REM pause
 
 REM This will remove the -##### extension on all the file names and remove the Duplicates by placing the duplicates into

@@ -46,7 +46,7 @@ def setup_logging(level=logging.INFO, console=True):
 setup_logging()
 
 # Also pick up process env if .env missing
-load_dotenv(SCRIPT_DIR / ".env")
+load_dotenv(CONFIG_DIR / ".env")
 
 # ========= CONFIG =========
 DIRS = [

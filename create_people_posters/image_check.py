@@ -37,7 +37,7 @@ def setup_logging():
 
 
 LOG_FILE = setup_logging()
-load_dotenv(SCRIPT_DIR / ".env")
+load_dotenv(CONFIG_DIR / ".env")
 
 logging.getLogger("PIL").setLevel(logging.ERROR)
 logging.getLogger("PIL.PngImagePlugin").setLevel(logging.ERROR)

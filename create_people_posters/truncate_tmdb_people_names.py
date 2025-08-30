@@ -11,7 +11,7 @@ SCRIPT_PATH = Path(__file__).resolve()
 SCRIPT_DIR = SCRIPT_PATH.parent
 CONFIG_DIR = SCRIPT_DIR / "config"
 LOGS_DIR = CONFIG_DIR / "logs"
-DEFAULT_SRC = CONFIG_DIR / "posters"  # where tmdb-people.py wrote files
+DEFAULT_SRC = CONFIG_DIR / "posters"  # where tmdb_people.py wrote files
 DEFAULT_DST = DEFAULT_SRC  # keep-in-place by default (you can override)
 
 for d in (CONFIG_DIR, LOGS_DIR, DEFAULT_SRC):
