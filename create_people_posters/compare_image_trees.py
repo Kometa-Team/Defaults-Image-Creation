@@ -7,10 +7,17 @@
 # Outputs console summary + presence matrix CSV and, if enabled, a dimension issues CSV,
 # all saved under ./config/. All messages are logged to ./config/logs/<script>.log
 #
-# Usage (Windows):  py compare_image_trees.py
+# Usage (examples):
+#   py compare_image_trees.py
+#   py compare_image_trees.py --repo-root "D:/Kometa-People-Images"
+#   py compare_image_trees.py --dirs "/data/PI/bw" "/data/PI/diiivoy" "/data/PI/diiivoycolor" "/data/PI/rainier" "/data/PI/original" "/data/PI/signature" "/data/PI/transparent"
+#   py compare_image_trees.py --no-dimensions --case-insensitive
+#   py compare_image_trees.py --required-size 2000x3000 --jpg-whitelist grid,poster-grid
 
+import os
 import sys
 import csv
+import argparse
 import logging
 from pathlib import Path
 from timeit import default_timer as timer
@@ -48,42 +55,33 @@ setup_logging()
 # Also pick up process env if .env missing
 load_dotenv(CONFIG_DIR / ".env")
 
-# ========= CONFIG =========
-DIRS = [
-    r"D:\bullmoose20\Kometa-People-Images\bw",
-    r"D:\bullmoose20\Kometa-People-Images\diiivoy",
-    r"D:\bullmoose20\Kometa-People-Images\diiivoycolor",
-    r"D:\bullmoose20\Kometa-People-Images\rainier",
-    r"D:\bullmoose20\Kometa-People-Images\original",
-    r"D:\bullmoose20\Kometa-People-Images\signature",
-    r"D:\bullmoose20\Kometa-People-Images\transparent",
+# ========= DEFAULTS =========
+DEFAULT_CATEGORIES = [
+    "bw",
+    "diiivoy",
+    "diiivoycolor",
+    "rainier",
+    "original",
+    "signature",
+    "transparent",
 ]
 
-# Auto-detect PNG folder by name containing "transparent"; or force an index 0..6
-PNG_DIR_INDEX: Optional[int] = None
 
-# In the PNG folder, allow .jpg ONLY for these basenames (stems). (grid.jpg etc.)
-# Case-insensitive unless CASE_SENSITIVE=True.
-JPG_WHITELIST = {"grid"}
-
-# Case sensitivity for comparing stems (relative path without extension)
-CASE_SENSITIVE = True
-
-# ---- Dimension checking (expensive) ----
-CHECK_DIMENSIONS = True  # <- Toggle here
-REQUIRED_WIDTH = 2000
-REQUIRED_HEIGHT = 3000
-# ---------------------------------------
-
-# CSV outputs go under ./config/
-OUTPUT_CSV = CONFIG_DIR / "compare_image_trees.csv"
-DIM_ISSUES_CSV = CONFIG_DIR / "image_dimension_issues.csv"
-
-# How many lines to show in each section (None for unlimited)
-PRINT_LIMIT = 100
+def parse_bool_env(key: str, default: bool) -> bool:
+    val = os.getenv(key)
+    if val is None:
+        return default
+    return str(val).strip().lower() in {"1", "true", "yes", "y", "on"}
 
 
-# ========= END CONFIG =====
+def parse_required_size(s: Optional[str], default_w: int, default_h: int) -> tuple[int, int]:
+    if not s:
+        return default_w, default_h
+    s = s.lower().replace(" ", "")
+    if "x" not in s:
+        raise ValueError(f"--required-size must look like 2000x3000, got: {s}")
+    w, h = s.split("x", 1)
+    return int(w), int(h)
 
 
 def detect_png_dir_index(dirs) -> Optional[int]:
@@ -105,7 +103,7 @@ def normalize_stem(rel_path: Path, case_sensitive: bool) -> str:
     return normalize_case(as_posix, case_sensitive)
 
 
-def check_image_dimensions_lazy():
+def check_image_dimensions_lazy(CHECK_DIMENSIONS: bool):
     """
     Return a function check(path)->(w,h,err) depending on CHECK_DIMENSIONS.
     - If disabled: returns (None, None, None) quickly without importing Pillow.
@@ -153,13 +151,16 @@ def rel_clean(rel: Path) -> str:
 
 
 def gather_stems_and_exts(
-        base_dir: Path,
-        allowed_exts: set[str],
-        case_sensitive: bool,
-        jpg_whitelist: Optional[set[str]] = None,
-        treat_png_folder: bool = False,
-        dim_checker=None,
-        progress=None,
+    base_dir: Path,
+    allowed_exts: set[str],
+    case_sensitive: bool,
+    jpg_whitelist: Optional[set[str]] = None,
+    treat_png_folder: bool = False,
+    dim_checker=None,
+    required_w: int = 2000,
+    required_h: int = 3000,
+    check_dimensions: bool = True,
+    progress=None,
 ):
     """
     Walk base_dir recursively and collect:
@@ -192,7 +193,7 @@ def gather_stems_and_exts(
         basename_cmp = normalize_case(rel.stem, case_sensitive)
 
         # --- Dimension check (with whitelist exemption in PNG folder) ---
-        if dim_checker is not None and CHECK_DIMENSIONS:
+        if dim_checker is not None and check_dimensions:
             skip_dim = False
             if treat_png_folder and ext_cmp == ".jpg":
                 # If this is a whitelist JPG in the PNG folder, skip dimension checking
@@ -200,7 +201,7 @@ def gather_stems_and_exts(
                     skip_dim = True
             if not skip_dim:
                 w, h, err = dim_checker(p)
-                if err is not None or w != REQUIRED_WIDTH or h != REQUIRED_HEIGHT:
+                if err is not None or w != required_w or h != required_h:
                     dim_issues.append((rel_posix, w, h, err))
 
         # --- Presence/mismatch logic ---
@@ -227,13 +228,90 @@ def gather_stems_and_exts(
     return stems, ext_mismatches, whitelist_hits, dim_issues
 
 
+def build_dirs_from_args_env(args: argparse.Namespace) -> list[Path]:
+    """
+    Priority:
+      1) --dirs (7 explicit directories)
+      2) --repo-root (+ optional --categories)
+      3) PEOPLE_IMAGES_DIR env (+ COMPARE_CATEGORIES env or defaults)
+    """
+    if args.dirs:
+        dirs = [Path(d).expanduser().resolve() for d in args.dirs]
+    else:
+        repo_root = Path(
+            (args.repo_root or os.getenv("PEOPLE_IMAGES_DIR", "./Kometa-People-Images"))
+        ).expanduser().resolve()
+
+        cats = args.categories
+        if not cats:
+            env_cats = os.getenv("COMPARE_CATEGORIES")
+            cats = [c.strip() for c in env_cats.split(",")] if env_cats else DEFAULT_CATEGORIES
+
+        dirs = [repo_root / c for c in cats]
+
+    return dirs
+
+
 def main():
     start = timer()
 
-    if len(DIRS) != 7:
-        raise SystemExit(f"Expected 7 directories in DIRS, found {len(DIRS)}")
+    parser = argparse.ArgumentParser(description="Compare image stems across 7 style directories")
+    parser.add_argument("--repo-root", help="Root of Kometa-People-Images (fallback: PEOPLE_IMAGES_DIR env)")
+    parser.add_argument(
+        "--categories",
+        nargs="+",
+        help="7 style folders under repo-root (default: bw diiivoy diiivoycolor rainier original signature transparent)",
+    )
+    parser.add_argument(
+        "--dirs",
+        nargs="+",
+        help="Explicit 7 absolute/relative directories (bypasses repo-root/categories)",
+    )
+    parser.add_argument("--png-dir-index", type=int, help="Index (0..6) of the PNG folder; default: auto-detect by name contains 'transparent'")
+    parser.add_argument("--case-insensitive", dest="case_sensitive", action="store_false", help="Case-insensitive stem comparison")
+    parser.add_argument("--case-sensitive", dest="case_sensitive", action="store_true", help="Case-sensitive stem comparison")
+    parser.set_defaults(case_sensitive=parse_bool_env("COMPTREE_CASE_SENSITIVE", True))
 
-    png_idx = PNG_DIR_INDEX if PNG_DIR_INDEX is not None else detect_png_dir_index(DIRS)
+    parser.add_argument("--no-dimensions", dest="check_dimensions", action="store_false", help="Disable dimension checks")
+    parser.add_argument("--dimensions", dest="check_dimensions", action="store_true", help="Enable dimension checks")
+    parser.set_defaults(check_dimensions=parse_bool_env("COMPTREE_CHECK_DIMENSIONS", True))
+
+    parser.add_argument("--required-size", help="WxH e.g. 2000x3000 (env: COMPTREE_REQUIRED_SIZE)")
+    parser.add_argument("--jpg-whitelist", help="Comma list of basenames allowed as .jpg in PNG folder (env: COMPTREE_JPG_WHITELIST; default: grid)")
+
+    args = parser.parse_args()
+
+    # Required size
+    req_size_env = os.getenv("COMPTREE_REQUIRED_SIZE")
+    REQUIRED_WIDTH, REQUIRED_HEIGHT = parse_required_size(
+        args.required_size or req_size_env, default_w=2000, default_h=3000
+    )
+
+    # Whitelist (defaults to "grid")
+    if args.jpg_whitelist is not None:
+        JPG_WHITELIST = {x.strip() for x in args.jpg_whitelist.split(",") if x.strip()}
+    else:
+        wl_env = os.getenv("COMPTREE_JPG_WHITELIST", "grid")
+        JPG_WHITELIST = {x.strip() for x in wl_env.split(",") if x.strip()}
+
+    # Build DIRS
+    DIRS = [str(p) for p in build_dirs_from_args_env(args)]
+    if len(DIRS) != 7:
+        raise SystemExit(f"Expected 7 directories, got {len(DIRS)}. Use --dirs or --categories to provide exactly seven.")
+
+    # PNG index
+    png_idx_env = os.getenv("COMPTREE_PNG_INDEX")
+    png_idx = None
+    if args.png_dir_index is not None:
+        png_idx = args.png_dir_index
+    elif png_idx_env is not None and png_idx_env.strip() != "":
+        try:
+            png_idx = int(png_idx_env)
+        except ValueError:
+            raise SystemExit(f"Invalid COMPTREE_PNG_INDEX: {png_idx_env}")
+
+    if png_idx is None:
+        png_idx = detect_png_dir_index(DIRS)
     if png_idx is None:
         png_idx = 6  # fallback: last directory
 
@@ -246,7 +324,17 @@ def main():
         per_dir_allowed_exts.append({".png"} if is_png_folder else {".jpg"})
 
     # Prepare dimension checker (lazy/no-op if disabled)
-    dim_checker = check_image_dimensions_lazy()
+    dim_checker = check_image_dimensions_lazy(args.check_dimensions)
+
+    # CSV outputs go under ./config/
+    OUTPUT_CSV = CONFIG_DIR / "compare_image_trees.csv"
+    DIM_ISSUES_CSV = CONFIG_DIR / "image_dimension_issues.csv"
+
+    # How many lines to show in each section (None for unlimited)
+    PRINT_LIMIT = 100
+
+    # Case sensitivity
+    CASE_SENSITIVE = args.case_sensitive
 
     # --- Pre-count files for a nice progress bar ---
     totals = []
@@ -274,6 +362,9 @@ def main():
                 jpg_whitelist=JPG_WHITELIST if per_dir_is_png[i] else None,
                 treat_png_folder=per_dir_is_png[i],
                 dim_checker=dim_checker,
+                required_w=REQUIRED_WIDTH,
+                required_h=REQUIRED_HEIGHT,
+                check_dimensions=args.check_dimensions,
                 progress=bar,
             )
             dir_to_stems[d] = stems
@@ -289,8 +380,8 @@ def main():
     logging.info("PNG directory index: %d -> %s", png_idx, DIRS[png_idx])
     logging.info("CASE_SENSITIVE: %s", CASE_SENSITIVE)
     logging.info("PNG-folder JPG whitelist: %s", sorted(JPG_WHITELIST) if JPG_WHITELIST else "(none)")
-    logging.info("Check dimensions: %s (required %dx%d)", CHECK_DIMENSIONS, REQUIRED_WIDTH, REQUIRED_HEIGHT)
-    logging.info("Outputs: %s and %s", OUTPUT_CSV, (DIM_ISSUES_CSV if CHECK_DIMENSIONS else "(dimension CSV skipped)"))
+    logging.info("Check dimensions: %s (required %dx%d)", args.check_dimensions, REQUIRED_WIDTH, REQUIRED_HEIGHT)
+    logging.info("Outputs: %s and %s", OUTPUT_CSV, (DIM_ISSUES_CSV if args.check_dimensions else "(dimension CSV skipped)"))
 
     logging.info("=== Directory Stats (included .jpg/.png files only) ===")
     for d in DIRS:
@@ -346,7 +437,8 @@ def main():
     logging.info("=== Whitelist hits in PNG folder (accepted .jpg) ===")
     wl_total = 0
     for i, d in enumerate(DIRS):
-        if not per_dir_is_png[i]:
+        is_png = (i == png_idx)
+        if not is_png:
             continue
         hits = dir_to_wl_hits[d]
         wl_total += len(hits)
@@ -368,6 +460,7 @@ def main():
             row[Path(d).name] = "Y" if stem in dir_to_stems[d] else ""
         rows.append(row)
 
+    OUTPUT_CSV.parent.mkdir(parents=True, exist_ok=True)
     with OUTPUT_CSV.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=header)
         writer.writeheader()
@@ -375,7 +468,7 @@ def main():
     logging.info("CSV written: %s", OUTPUT_CSV.resolve())
 
     # --- Dimension Issues CSV (only if enabled) ---
-    if CHECK_DIMENSIONS:
+    if args.check_dimensions:
         dim_total = sum(len(v) for v in dir_to_dim_issues.values())
         logging.info("=== Dimension issues ===")
         for d in DIRS:
@@ -390,6 +483,7 @@ def main():
             if PRINT_LIMIT is not None and len(issues) > PRINT_LIMIT:
                 logging.info("  ... (+%d more)", len(issues) - PRINT_LIMIT)
 
+        DIM_ISSUES_CSV.parent.mkdir(parents=True, exist_ok=True)
         if dim_total > 0:
             with DIM_ISSUES_CSV.open("w", newline="", encoding="utf-8") as f:
                 writer = csv.DictWriter(
