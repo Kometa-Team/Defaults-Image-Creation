@@ -23,12 +23,14 @@ logs/
 # Ignore these files
 playback.txt
 magick_fonts.txt
+defaults-en_list.txt
 OptimalPointSizeCache.db
 
 # Ignore these directories
 uploads/
 .vscode/
 config/
+defaults-en/
 tmp/
 magick/
 output/
