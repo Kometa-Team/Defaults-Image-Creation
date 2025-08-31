@@ -20,7 +20,18 @@ logs/
 # Ignore macOS system files
 .DS_Store
 
+# Ignore these files
+playback.txt
+magick_fonts.txt
+OptimalPointSizeCache.db
+
 # Ignore these directories
 uploads/
 .vscode/
 config/
+tmp/
+magick/
+output/
+output-orig/
+temp/
+@translations/
