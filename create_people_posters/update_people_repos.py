@@ -1,220 +1,222 @@
+#!/usr/bin/env python3
 """
-Update each category repo inside the Kometa-People-Images root, like:
+update_people_repos.py — update OR push all category repos under PEOPLE_IMAGES_DIR
 
-  cd <root>/<cat>
-  git checkout <branch>
-  git -c fetch.parallel=0 -c submodule.fetchJobs=0 fetch --progress --all
-  git merge origin/<branch>
+Categories: bw, diiivoy, diiivoycolor, rainier, original, signature, transparent
 
-Cross-platform, with logging + progress.
+Ops:
+  --op update   (default)  → make local exactly match remote:
+      git fetch origin
+      git switch <branch> (auto-create tracking if needed)
+      git reset --hard origin/<branch>
+      git clean -fd        (add -x when --clean-ignored)
+      (optional LFS pull when --lfs=auto/on and repo uses LFS)
+      If anything fails, you can extend with a reclone fallback.
 
-Usage:
-  python update_people_repos.py --repo-root "D:/bullmoose20/Kometa-People-Images" --branch master
+  --op push               → stage, commit (if changes), and push:
+      git add -A
+      if changes: git commit -m "<message>"
+      git push origin HEAD
 
-Env overrides:
-  PEOPLE_IMAGES_DIR   -> repo root path (default: ./Kometa-People-Images next to this script)
-  PEOPLE_BRANCH       -> branch to use (default: master)
+Usage examples:
+  # Update only (remote always wins)
+  python update_people_repos.py --op update --repo-root "/path/to/Kometa-People-Images" --mode hardreset --clean-ignored
+
+  # Push only (after sync/images/readme/md)
+  python update_people_repos.py --op push --repo-root "/path/to/Kometa-People-Images" --message "chore: sync"
+
+Common options:
+  --repo-root PATH
+  --branch BRANCH            (auto-detect remote HEAD if omitted)
+  --mode {hardreset,ffonly}  (only for --op update; default: hardreset)
+  --clean-ignored            (only for --op update; adds -x to git clean)
+  --lfs {auto,on,off}        (default: auto; only used by --op update)
+  --message MSG              (only for --op push; default auto message)
+  --git-user-name NAME       (optional: set user.name before committing)
+  --git-user-email EMAIL     (optional: set user.email before committing)
+  --dry-run
+
+Environment:
+  PEOPLE_IMAGES_DIR, PEOPLE_BRANCH
+  UPDATE_MODE=hardreset|ffonly
+  UPDATE_CLEAN_IGNORED=true|false
+  UPDATE_LFS=auto|on|off
 """
 
 import os
 import sys
-import argparse
-import logging
 import subprocess
+from datetime import datetime
 from pathlib import Path
-from timeit import default_timer as timer
+from typing import Optional, Tuple
 
-from dotenv import load_dotenv
-from alive_progress import alive_bar
-
-# ---------- paths + logging (same template you shared) ----------
-SCRIPT_PATH = Path(__file__).resolve()
-SCRIPT_DIR = SCRIPT_PATH.parent
-CONFIG_DIR = SCRIPT_DIR / "config"
-LOGS_DIR = CONFIG_DIR / "logs"
-for d in (CONFIG_DIR, LOGS_DIR):
-    d.mkdir(parents=True, exist_ok=True)
+CATEGORIES = ["bw", "diiivoy", "diiivoycolor", "rainier", "original", "signature", "transparent"]
 
 
-def setup_logging(level=logging.INFO, console=True):
-    log_file = LOGS_DIR / f"{SCRIPT_PATH.stem}.log"
-    handlers = [logging.FileHandler(log_file, encoding="utf-8", mode="w")]
-    if console:
-        handlers.append(logging.StreamHandler(sys.stdout))
-    logging.basicConfig(
-        level=level,
-        format="%(asctime)s [%(levelname)s] %(message)s",
-        handlers=handlers,
-        force=True,
-    )
-    logging.info("Logging → %s", log_file)
-    return log_file
+def run(cmd, cwd: Path, dry: bool, capture=False) -> Tuple[int, str, str]:
+    print("→", " ".join(cmd), f"(cwd={cwd})")
+    if dry:
+        return 0, "", ""
+    cp = subprocess.run(cmd, cwd=str(cwd), text=True, capture_output=capture)
+    return cp.returncode, (cp.stdout or ""), (cp.stderr or "")
 
 
-setup_logging()
-load_dotenv(CONFIG_DIR / ".env")
-
-# ---------- categories ----------
-CATEGORIES = [
-    "bw",
-    "diiivoy",
-    "diiivoycolor",
-    "original",
-    "rainier",
-    "signature",
-    "transparent",
-]
+def run_ok(cmd, cwd: Path, dry: bool) -> bool:
+    rc, _, _ = run(cmd, cwd, dry)
+    return rc == 0
 
 
-# ---------- helpers ----------
-def run(cmd, cwd: Path) -> subprocess.CompletedProcess:
-    """Run a command, return CompletedProcess, log output."""
-    logging.debug("RUN (%s): %s", cwd, " ".join(cmd))
-    cp = subprocess.run(
-        cmd,
-        cwd=str(cwd),
-        text=True,
-        capture_output=True,
-        shell=False,
-        check=False,
-    )
-    if cp.stdout:
-        logging.debug("STDOUT:\n%s", cp.stdout.strip())
-    if cp.stderr:
-        # git prints progress to stderr; keep it at INFO
-        logging.info("STDERR:\n%s", cp.stderr.strip())
-    return cp
+def run_cap(cmd, cwd: Path, dry: bool) -> Tuple[bool, str]:
+    rc, out, _ = run(cmd, cwd, dry, capture=True)
+    return rc == 0, out.strip()
 
 
-def ensure_git_available():
+def detect_remote_head_branch(repo: Path, dry: bool) -> str:
+    ok, out = run_cap(["git", "remote", "show", "origin"], repo, dry)
+    if ok:
+        for line in out.splitlines():
+            if line.lower().startswith("head branch:"):
+                return line.split(":", 1)[1].strip()
+    for b in ("main", "master"):
+        rc, _, _ = run(["git", "rev-parse", "--verify", f"origin/{b}"], repo, dry)
+        if rc == 0:
+            return b
+    ok, out = run_cap(["git", "rev-parse", "--abbrev-ref", "HEAD"], repo, dry)
+    return out or "master"
+
+
+def repo_uses_lfs(repo: Path, dry: bool) -> bool:
+    gattr = repo / ".gitattributes"
+    if not gattr.exists():
+        return False
     try:
-        cp = subprocess.run(["git", "--version"], text=True, capture_output=True)
-        if cp.returncode != 0:
-            raise RuntimeError(cp.stderr.strip() or "git not found")
-        logging.info(cp.stdout.strip())
-    except Exception as e:
-        logging.error("Git is required but not available: %s", e)
-        sys.exit(1)
+        txt = gattr.read_text(encoding="utf-8", errors="ignore")
+    except Exception:
+        return False
+    return "filter=lfs" in txt
 
 
-def is_git_repo(path: Path) -> bool:
-    return (path / ".git").is_dir()
+def git_lfs_available(cwd: Path, dry: bool) -> bool:
+    rc, _, _ = run(["git", "lfs", "version"], cwd, dry)
+    return rc == 0
 
 
-def checkout_branch(repo_dir: Path, branch: str) -> bool:
-    """
-    Try to checkout <branch>. If it doesn't exist locally but exists on origin,
-    create it tracking origin/<branch>.
-    """
-    # Does local branch exist?
-    has_local = run(["git", "show-ref", "--verify", f"refs/heads/{branch}"], repo_dir).returncode == 0
-    if has_local:
-        cp = run(["git", "checkout", branch], repo_dir)
-        return cp.returncode == 0
+def ensure_remote_match(repo: Path, branch: str, mode: str, clean_ignored: bool, lfs_mode: str, dry: bool) -> bool:
+    # fetch
+    if not run_ok(["git", "fetch", "origin"], repo, dry):
+        return False
 
-    # Try checkout tracking remote if it exists
-    has_remote = run(["git", "ls-remote", "--heads", "origin", branch], repo_dir)
-    if has_remote.returncode == 0 and has_remote.stdout.strip():
-        cp = run(["git", "checkout", "-B", branch, f"origin/{branch}"], repo_dir)
-        return cp.returncode == 0
+    # switch (create tracking if needed)
+    if not run_ok(["git", "switch", branch], repo, dry):
+        run_ok(["git", "switch", "-c", branch, "--track", f"origin/{branch}"], repo, dry)
 
-    # Fallback: try simple checkout anyway
-    cp = run(["git", "checkout", branch], repo_dir)
-    return cp.returncode == 0
+    if mode == "hardreset":
+        if not run_ok(["git", "reset", "--hard", f"origin/{branch}"], repo, dry):
+            return False
+        clean_args = ["git", "clean", "-fd"]
+        if clean_ignored:
+            clean_args.append("-x")
+        if not run_ok(clean_args, repo, dry):
+            return False
+    else:
+        if not run_ok(["git", "merge", "--ff-only", f"origin/{branch}"], repo, dry):
+            return False
 
+    # LFS pull if applicable
+    if lfs_mode in ("on", "auto") and repo_uses_lfs(repo, dry) and git_lfs_available(repo, dry):
+        run_ok(["git", "lfs", "pull"], repo, dry)
 
-def fetch_all(repo_dir: Path) -> bool:
-    cp = run(["git", "-c", "fetch.parallel=0", "-c", "submodule.fetchJobs=0",
-              "fetch", "--progress", "--all"], repo_dir)
-    return cp.returncode == 0
-
-
-def merge_origin(repo_dir: Path, branch: str) -> bool:
-    cp = run(["git", "merge", f"origin/{branch}"], repo_dir)
-    # Non-zero may indicate conflicts; we still report outcome
-    return cp.returncode == 0
+    return True
 
 
-# ---------- main ----------
+def commit_and_push(repo: Path, branch: Optional[str], message: str,
+                    user_name: str, user_email: str, dry: bool) -> int:
+    # set author config if provided
+    if user_name:
+        run_ok(["git", "config", "user.name", user_name], repo, dry)
+    if user_email:
+        run_ok(["git", "config", "user.email", user_email], repo, dry)
+
+    # stage everything
+    if not run_ok(["git", "add", "-A"], repo, dry):
+        return 1
+
+    # any changes?
+    ok, status = run_cap(["git", "status", "--porcelain"], repo, dry)
+    if not ok:
+        return 1
+    if not status.strip():
+        print("  (no changes to commit)")
+        return 0
+
+    # commit
+    if not run_ok(["git", "commit", "-m", message], repo, dry):
+        return 1
+
+    # ensure branch value
+    if not branch:
+        ok, cur = run_cap(["git", "rev-parse", "--abbrev-ref", "HEAD"], repo, dry)
+        branch = cur if ok and cur else "master"
+
+    # push
+    if not run_ok(["git", "push", "origin", "HEAD"], repo, dry):
+        # fallback to named branch push
+        return 0 if run_ok(["git", "push", "origin", branch], repo, dry) else 1
+    return 0
+
+
 def main():
-    parser = argparse.ArgumentParser(description="Update per-category repos (checkout/fetch/merge).")
-    parser.add_argument(
-        "--repo-root",
-        type=Path,
-        default=Path(os.getenv("PEOPLE_IMAGES_DIR") or (SCRIPT_DIR / "Kometa-People-Images")),
-        help="Path to Kometa-People-Images root (default: PEOPLE_IMAGES_DIR or ./Kometa-People-Images)",
-    )
-    parser.add_argument(
-        "--branch",
-        default=os.getenv("PEOPLE_BRANCH", "master"),
-        help="Branch to update (default: env PEOPLE_BRANCH or 'master')",
-    )
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Update or push category repos")
+    parser.add_argument("--op", choices=["update", "push"], default="update")
+    parser.add_argument("--repo-root", help="Root folder for category repos (env PEOPLE_IMAGES_DIR)")
+    parser.add_argument("--branch", help="Branch to track/push (env PEOPLE_BRANCH; auto-detect if omitted)")
+    parser.add_argument("--mode", choices=["hardreset", "ffonly"],
+                        default=os.getenv("UPDATE_MODE", "hardreset").lower(),
+                        help="Only used with --op update")
+    parser.add_argument("--clean-ignored", action="store_true",
+                        help="With --op update and hardreset, also remove ignored files (-x)")
+    parser.add_argument("--lfs", choices=["auto", "on", "off"],
+                        default=os.getenv("UPDATE_LFS", "auto").lower(),
+                        help="Only used with --op update; pull LFS files when repo uses LFS")
+    parser.add_argument("--message", help="Commit message (only used with --op push)")
+    parser.add_argument("--git-user-name", help="Set git user.name locally before commit (push op)")
+    parser.add_argument("--git-user-email", help="Set git user.email locally before commit (push op)")
+    parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
-    ensure_git_available()
+    repo_root = Path(args.repo_root or os.getenv("PEOPLE_IMAGES_DIR", "")).expanduser().resolve()
+    if not repo_root.exists():
+        print(f"[ERROR] Repo root not found: {repo_root}")
+        sys.exit(2)
 
-    start = timer()
-    repo_root = args.repo_root
-    branch = args.branch
+    branch_arg = args.branch or os.getenv("PEOPLE_BRANCH")
 
-    logging.info("Repo root : %s", repo_root)
-    logging.info("Branch    : %s", branch)
+    rc_total = 0
+    for cat in CATEGORIES:
+        repo = repo_root / cat
+        if not repo.exists():
+            print(f"[WARN] Skipping missing category folder: {repo}")
+            continue
 
-    total = len(CATEGORIES)
-    updated_ok = 0
-    skipped = 0
-    failed = 0
+        if args.op == "update":
+            # determine branch per-repo if not provided
+            branch = branch_arg or detect_remote_head_branch(repo, args.dry_run)
+            print(f"=== UPDATE {cat} (branch: {branch}, mode: {args.mode}) ===")
+            ok = ensure_remote_match(repo, branch, args.mode, args.clean_ignored, args.lfs, args.dry_run)
+            rc_total |= (not ok)
+        else:
+            # push op
+            # for push, default to current branch if not specified
+            push_branch = branch_arg
+            now = datetime.now().strftime("%Y-%m-%d %H:%M")
+            msg = args.message or f"chore: sync posters & docs — {now}"
+            print(f"=== PUSH {cat} ===")
+            rc = commit_and_push(repo, push_branch, msg, args.git_user_name or "", args.git_user_email or "", args.dry_run)
+            rc_total |= (rc != 0)
 
-    with alive_bar(total, dual_line=True, title="git update") as bar:
-        for cat in CATEGORIES:
-            subdir = repo_root / cat
-            bar.text = f"-> opening: {subdir}"
-            logging.info("------ %s ------", cat)
-
-            if not subdir.exists():
-                logging.warning("Missing: %s (skip)", subdir)
-                skipped += 1
-                bar()
-                continue
-            if not is_git_repo(subdir):
-                logging.warning("Not a git repo: %s (skip)", subdir)
-                skipped += 1
-                bar()
-                continue
-
-            ok = True
-
-            bar.text = f"-> checkout {branch} @ {cat}"
-            if not checkout_branch(subdir, branch):
-                logging.error("[%s] checkout %s failed", cat, branch)
-                ok = False
-
-            if ok:
-                bar.text = f"-> fetch --all @ {cat}"
-                if not fetch_all(subdir):
-                    logging.error("[%s] fetch failed", cat)
-                    ok = False
-
-            if ok:
-                bar.text = f"-> merge origin/{branch} @ {cat}"
-                if not merge_origin(subdir, branch):
-                    # Merge conflicts or non-ff merge returns non-zero.
-                    logging.error("[%s] merge origin/%s had issues (check logs)", cat, branch)
-                    # still count as failed; you can choose to count this separately
-                    ok = False
-
-            if ok:
-                updated_ok += 1
-                logging.info("[%s] OK", cat)
-            else:
-                failed += 1
-
-            bar()
-
-    elapsed = timer() - start
-    logging.info("Summary: ok=%d, skipped=%d, failed=%d", updated_ok, skipped, failed)
-    logging.info("Done in %.2fs", elapsed)
-    print(f"Done in {elapsed:.2f}s (ok={updated_ok}, skipped={skipped}, failed={failed})")
+    sys.exit(0 if rc_total == 0 else 1)
 
 
 if __name__ == "__main__":

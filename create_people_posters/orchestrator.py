@@ -12,10 +12,11 @@ Default steps (in order):
   3) get_missing_people.py         — download missing people text lists
   4) tmdb_people.py                — pull posters via TMDB API
   5) sel_remove_bg.py              — send posters through Adobe Express (Selenium)
-  6) sync_people_images.py         — copy images from ./config/people_dirs/* → repo
-  7) update_people_repos.py        — git fetch/merge each category repo
+  6) update_people_repos.py        — pull latest (git fetch/reset) for each category repo
+  7) sync_people_images.py         — copy images from ./config/people_dirs/* → repo
   8) auto_readme.py                — generate README grid for chosen style
   9) sync_md.py                    — copy *.md back to ./config/people_dirs/<style>
+ 10) push (via update_people_repos.py --op push) — commit & push changes upstream
 
 Examples:
   python orchestrator.py --all
@@ -24,14 +25,18 @@ Examples:
 
 Env (from ./config/.env or process environment):
   ORCH_LOGS_DIR       — default logs folder for steps 2–3
-  PEOPLE_IMAGES_DIR   — repo root for steps 1 & 6–9
-  PEOPLE_BRANCH       — git branch for step 7 (default: master)
+  PEOPLE_IMAGES_DIR   — repo root for steps 1 & 6–10
+  PEOPLE_BRANCH       — git branch for updates (default: auto-detect per repo)
   ORCH_STYLE          — style for step 8 & 9 (default: transparent)
+  ORCH_COMMIT_MESSAGE — optional commit message template for push
+  ORCH_GIT_USER_NAME  — optional git author.name override for push
+  ORCH_GIT_USER_EMAIL — optional git author.email override for push
 """
 import os
 import sys
 import shlex
 import subprocess
+from datetime import datetime
 from pathlib import Path
 from typing import List
 
@@ -93,7 +98,7 @@ def main():
     parser.add_argument("--steps", help="Comma list of steps to run (overrides --all).")
     parser.add_argument("--logs-dir", help="Kometa logs folder for steps 2–3 (env ORCH_LOGS_DIR otherwise).")
     parser.add_argument("--repo-root", help="Kometa-People-Images repository root (env PEOPLE_IMAGES_DIR otherwise).")
-    parser.add_argument("--branch", help="Git branch for update step (env PEOPLE_BRANCH or 'master').")
+    parser.add_argument("--branch", help="Git branch for update step (env PEOPLE_BRANCH or auto-detect).")
     parser.add_argument("--style", help="People-Images style for README & MD sync (env ORCH_STYLE or 'transparent').")
     parser.add_argument("--dry-run", action="store_true", help="Print commands without executing.")
     args = parser.parse_args()
@@ -101,9 +106,9 @@ def main():
     # Determine which steps to run (by key) before resolving env, so we can validate inputs early.
     VALID_KEYS = [
         "ensure_repo", "name_check", "missing", "tmdb",
-        "remove_bg", "sync_images", "update", "readme", "sync_md"
+        "remove_bg", "update", "sync_images", "readme", "sync_md", "push"
     ]
-    REPO_REQUIRED = {"ensure_repo", "sync_images", "update", "readme", "sync_md"}
+    REPO_REQUIRED = {"ensure_repo", "update", "sync_images", "readme", "sync_md", "push"}
 
     if args.steps:
         selected_keys = [s.strip() for s in args.steps.split(",") if s.strip()]
@@ -116,14 +121,17 @@ def main():
         selected_keys = VALID_KEYS[:]  # all steps in default order
     else:
         parser.print_help()
-        print("\nTip: run with --all or select with --steps ensure_repo,name_check,tmdb …")
+        print("\nTip: run with --all or select with --steps ensure_repo,update,sync_images,readme,sync_md,push …")
         return
 
     # Resolve env/args
     logs_dir = Path(args.logs_dir).expanduser().resolve() if args.logs_dir else env_path("ORCH_LOGS_DIR")
     repo_root = Path(args.repo_root).expanduser().resolve() if args.repo_root else env_path("PEOPLE_IMAGES_DIR")
-    branch = args.branch or os.getenv("PEOPLE_BRANCH", "master")
+    branch = args.branch or os.getenv("PEOPLE_BRANCH", "")
     style = args.style or os.getenv("ORCH_STYLE", "transparent")
+    commit_template = os.getenv("ORCH_COMMIT_MESSAGE", "")
+    git_user_name = os.getenv("ORCH_GIT_USER_NAME", "")
+    git_user_email = os.getenv("ORCH_GIT_USER_EMAIL", "")
 
     # Fail fast if any selected step requires the repo
     if any(k in REPO_REQUIRED for k in selected_keys):
@@ -162,17 +170,19 @@ def main():
         args2 = ["--repo-root", str(repo_root)] if repo_root else []
         return [py, "ensure_people_repo.py"] + args2
 
-    def _sync_images():
-        args2 = ["--dest_root", str(repo_root)] if repo_root else []
-        return [py, "sync_people_images.py"] + args2
-
     def _update_repos():
+        # Remote-always-wins defaults: hard reset + clean ignored
         args2 = []
         if repo_root:
             args2 += ["--repo-root", str(repo_root)]
         if branch:
             args2 += ["--branch", branch]
+        args2 += ["--op", "update", "--mode", "hardreset", "--clean-ignored"]
         return [py, "update_people_repos.py"] + args2
+
+    def _sync_images():
+        args2 = ["--dest_root", str(repo_root)] if repo_root else []
+        return [py, "sync_people_images.py"] + args2
 
     def _auto_readme():
         args2 = ["--style", style]
@@ -188,17 +198,35 @@ def main():
         dst = str((CONFIG_DIR / "people_dirs" / style).resolve())
         return [py, "sync_md.py", "--src", src, "--dst", dst, "--pattern", "*.md"]
 
-    # Default execution order (ensure_repo first)
+    def _push_repos():
+        # Build a default commit message if none provided
+        now = datetime.now().strftime("%Y-%m-%d %H:%M")
+        auto_msg = f"chore: sync posters & docs [{style}] — {now}"
+        msg = commit_template.strip() or auto_msg
+        args2 = []
+        if repo_root:
+            args2 += ["--repo-root", str(repo_root)]
+        if branch:
+            args2 += ["--branch", branch]
+        args2 += ["--op", "push", "--message", msg]
+        if git_user_name:
+            args2 += ["--git-user-name", git_user_name]
+        if git_user_email:
+            args2 += ["--git-user-email", git_user_email]
+        return [py, "update_people_repos.py"] + args2
+
+    # Default execution order: ensure -> (build discovery assets) -> update -> sync -> readme -> md -> push
     steps_order = [
         ("ensure_repo", "Validate People-Images repo",       _ensure_repo),
         ("name_check",  "Scan Kometa logs for missing names", _name_check),
         ("missing",     "Build missing-people lists",        _missing),
         ("tmdb",        "Download posters via TMDB",         _tmdb),
         ("remove_bg",   "Remove backgrounds (Selenium)",     _remove_bg),
+        ("update",      "git fetch/reset category repos",    _update_repos),
         ("sync_images", "Sync images to repo folders",       _sync_images),
-        ("update",      "git fetch/merge category repos",    _update_repos),
         ("readme",      "Generate README grid",              _auto_readme),
         ("sync_md",     "Mirror *.md back to config",        _sync_md),
+        ("push",        "Commit & push changes upstream",    _push_repos),
     ]
 
     # Build the selected step tuples in the right order
