@@ -22,8 +22,8 @@ Core steps (order is enforced; do not reorder):
   9) poster_ps1       -> create_people_poster.ps1           (checkpointed; requires PowerShell/pwsh)
  10) update           -> update_people_repos.py --op update (ALWAYS runs when reached)
  11) sync_images      -> sync_people_images.py              (checkpointed)
- 12) readme           -> auto_readme.py                     (checkpointed)
- 13) sync_md          -> sync_md.py                         (checkpointed)
+ 12) readme           -> auto_readme.py                     (checkpointed; supports multiple styles)
+ 13) sync_md          -> sync_md.py                         (checkpointed; supports multiple styles)
  14) push             -> update_people_repos.py --op push   (ALWAYS runs when reached)
 
 Fail-fast points
@@ -32,17 +32,46 @@ Fail-fast points
 - Exit 2 if TMDB_KEY is missing before tmdb.
 - Exit 2 if ORCH_REQUIRE_POWERSHELL=true and no PowerShell is available.
 - Exit 2 if ORCH_REQUIRE_BG_OUTPUT=true and SEL_DOWNLOAD_DIR is unknown.
-- Exit 0 if sync_people_images reported copied=0 (skip readme/sync_md/push).
+- Exit 0 if sync_images copied 0 files (skip readme/sync_md/push).
 - Exit 0 when confidently detected:
   name_check=0, missing=0, tmdb=0, missing_dir=0, prep_dirs=0, remove_bg=0.
 
-CLI usage
----------
+Styles
+------
+- Single style from CLI: --style transparent
+- Multiple styles from CLI: --styles transparent,diiivoycolor
+- From env:
+    ORCH_STYLE=transparent
+    ORCH_STYLES=transparent,diiivoycolor
+  Precedence: --styles > ORCH_STYLES > --style > ORCH_STYLE.
+
+Common CLI usage
+----------------
   python orchestrator.py              # resume from the first incomplete step
   python orchestrator.py --from tmdb  # start at a given step (still in fixed order)
   python orchestrator.py --force      # ignore checkpoints and run all steps
   python orchestrator.py --list       # show step status & which step would run next
   python orchestrator.py --redo readme  # re-run from "readme": clears its checkpoint and those after
+
+Environment (./config/.env or process environment)
+--------------------------------------------------
+  ORCH_LOGS_DIR         — Kometa logs folder for steps 2–3 (optional)
+  PEOPLE_IMAGES_DIR     — repo root for steps needing the People-Images repo
+  PEOPLE_BRANCH         — git branch for update/push (optional)
+  ORCH_STYLE            — style for README & MD sync (default: transparent)
+  ORCH_STYLES           — comma list of styles for README & MD sync (optional)
+  ORCH_COMMIT_MESSAGE   — optional commit message for push (overrides auto)
+  ORCH_GIT_USER_NAME    — optional git author.name override for push
+  ORCH_GIT_USER_EMAIL   — optional git author.email override for push
+
+  # Background-removal verification
+  SEL_DOWNLOAD_DIR      — folder where sel_remove_bg.py writes processed files
+  ORCH_BG_EXTS          — extensions to count as processed (e.g. "png" or "png,jpg") [default: "png"]
+  ORCH_CONTINUE_IF_EMPTY — if "true", continue even when zero BG files were produced [default: false]
+
+  # Hard requirements (not optional once set to true)
+  ORCH_REQUIRE_POWERSHELL=true        — fail if PowerShell isn't available
+  ORCH_REQUIRE_BG_OUTPUT=true         — fail if SEL_DOWNLOAD_DIR isn't set/visible
 """
 import os
 import sys
@@ -53,7 +82,7 @@ import subprocess
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 try:
     from dotenv import load_dotenv
@@ -119,12 +148,7 @@ def ps_exe() -> Optional[str]:
     return None
 
 
-# ---------- helpers: paths, run, markers, fs/log counting, lock ----------
-def log_path_for(script_filename: str) -> Path:
-    """Return the expected log file path under ./config/logs for a given script filename."""
-    return CONFIG_DIR / "logs" / f"{Path(script_filename).stem}.log"
-
-
+# ---------- helpers: run, markers, fs/log counting, lock ----------
 def write_marker(marker: Path, meta: dict) -> None:
     marker.parent.mkdir(parents=True, exist_ok=True)
     tmp = marker.with_suffix(marker.suffix + ".tmp")
@@ -151,7 +175,7 @@ def marker_exists(marker: Optional[Path]) -> bool:
     return bool(marker and marker.exists())
 
 
-def run_cmd(title: str, argv: List[str], capture: bool = False):
+def run_cmd(title: str, argv: List[str], capture: bool = False) -> Tuple[int, Optional[str], Optional[str]]:
     """Run a subprocess; return (rc, stdout, stderr) if capture else (rc, None, None)."""
     print(f"\n=== {title} ===")
     print("→", " ".join(shlex.quote(a) for a in argv))
@@ -198,6 +222,7 @@ def count_recent_files(paths: list[Path], since_ts: float, suffixes: set[str] | 
             if suffixes and p.suffix.lower().lstrip(".") not in suffixes:
                 continue
             try:
+                # Some copy routines preserve mtime; don't rely solely on this for critical steps.
                 if p.stat().st_mtime >= (since_ts - 1.0):
                     total += 1
             except OSError:
@@ -213,14 +238,19 @@ def parse_zero_from_log(logfile: Path) -> Optional[bool]:
         text = logfile.read_text(encoding="utf-8", errors="ignore")
     except Exception:
         return None
+    # Look for simple signals
     zero_patterns = [
         r"\b0\s+(?:items|people|names|downloads|moved|copied)\b",
         r"\bno\s+(?:items|people|names|downloads|changes|work)\b",
         r"\bnothing\s+(?:to\s+do|moved|copied|processed)\b",
+        r"\bSummary:\s*processed\s*=\s*0\b",
+        r"\bFiles processed:\s*0\b",
     ]
     nonzero_patterns = [
         r"\b([1-9]\d*)\s+(?:items|people|names|downloads|moved|copied)\b",
         r"\b(total|processed|moved|copied)\s*:\s*([1-9]\d*)\b",
+        r"\bSummary:\s*processed\s*=\s*([1-9]\d*)\b",
+        r"\bFiles processed:\s*([1-9]\d*)\b",
     ]
     for rgx in nonzero_patterns:
         if re.search(rgx, text, flags=re.I):
@@ -231,40 +261,56 @@ def parse_zero_from_log(logfile: Path) -> Optional[bool]:
     return None
 
 
-def parse_sync_copied(logfile: Path) -> Optional[int]:
-    """Return total copied files from sync_people_images.log, or None if unknown."""
+def sum_copied_from_sync_log(logfile: Path) -> Optional[int]:
+    """Parse sync_people_images.log and sum 'copied=N' across categories. Return None if not parseable."""
     if not logfile.exists():
         return None
     try:
         text = logfile.read_text(encoding="utf-8", errors="ignore")
     except Exception:
         return None
-    matches = re.findall(r"\bcopied=(\d+)\b", text)
-    if not matches:
-        return None
-    return sum(int(x) for x in matches)
+    copied_values = [int(m) for m in re.findall(r"copied\s*=\s*(\d+)", text)]
+    return sum(copied_values) if copied_values else 0 if "copied=0" in text else None
 
 
-def parse_remove_bg_ok(logfile: Path) -> Optional[int]:
-    """Return OK count from sel_remove_bg.log, or None if not found."""
+def parsed_processed_from_missing_dir(logfile: Path) -> Optional[int]:
+    """Parse get_missing_people_dir.py log for 'Summary: processed=N'."""
     if not logfile.exists():
         return None
     try:
         text = logfile.read_text(encoding="utf-8", errors="ignore")
     except Exception:
         return None
-    m = re.search(r"Files processed:\s*(\d+)\s*\(OK:\s*(\d+)\s+Skipped:\s*(\d+)\s+Errors:\s*(\d+)\)", text)
-    if not m:
-        # Fallback: count '[done]' lines
-        done = re.findall(r"^\[.*\]\s*\[done\]\s", text, flags=re.M)
-        return len(done) if done else None
-    ok = int(m.group(2))
-    return ok
+    m = re.search(r"Summary:\s*processed\s*=\s*(\d+)", text, flags=re.I)
+    if m:
+        return int(m.group(1))
+    # fallback tokens
+    m2 = re.search(r"\bprocessed\s*=\s*(\d+)", text, flags=re.I)
+    return int(m2.group(1)) if m2 else None
+
+
+def parsed_files_processed_from_remove_bg(logfile: Path) -> Optional[int]:
+    """Parse sel_remove_bg.py log for 'Files processed: N'."""
+    if not logfile.exists():
+        return None
+    try:
+        text = logfile.read_text(encoding="utf-8", errors="ignore")
+    except Exception:
+        return None
+    m = re.search(r"Files processed:\s*(\d+)", text, flags=re.I)
+    return int(m.group(1)) if m else None
 
 
 # ---------------------- Step registry & helpers ----------------------
 class Step:
     def __init__(self, key: str, title: str, builder, marker: Optional[str], always_run: bool = False):
+        """
+        key: stable identifier (used in CLI and checkpoint filenames)
+        title: friendly name
+        builder: callable () -> List[str] | None  (argv for subprocess, or None to skip)
+        marker: filename under STATE_DIR to mark success (None => never checkpoint)
+        always_run: ignore checkpoint (used for cheap validation or volatile ops like git)
+        """
         self.key = key
         self.title = title
         self.builder = builder
@@ -288,19 +334,30 @@ def main():
     parser.add_argument("--logs-dir", help="Kometa logs folder for steps name_check/missing (env ORCH_LOGS_DIR otherwise).")
     parser.add_argument("--repo-root", help="Kometa-People-Images repository root (env PEOPLE_IMAGES_DIR otherwise).")
     parser.add_argument("--branch", help="Git branch for update/push (env PEOPLE_BRANCH or auto-detect).")
-    parser.add_argument("--style", help="People-Images style for README & MD sync (env ORCH_STYLE or 'transparent').")
+    parser.add_argument("--style", help="Default style for README/MD if no multi-style is set (env ORCH_STYLE or 'transparent').")
+    parser.add_argument("--styles", help="Comma list of styles for README/MD (overrides ORCH_STYLES).")
+    # BG verification / early-exit controls
     parser.add_argument("--bg-output-dir", help="Where sel_remove_bg downloads go (env SEL_DOWNLOAD_DIR).")
     parser.add_argument("--bg-exts", default=os.getenv("ORCH_BG_EXTS", "png"),
                         help="Comma list of extensions to count as processed (default: png)")
     parser.add_argument("--continue-if-empty", action="store_true",
                         help="Don't stop even if sel_remove_bg produced nothing (env ORCH_CONTINUE_IF_EMPTY)")
+
     args = parser.parse_args()
 
     # Resolve env/args
     logs_dir = Path(args.logs_dir).expanduser().resolve() if args.logs_dir else env_path("ORCH_LOGS_DIR")
     repo_root = Path(args.repo_root).expanduser().resolve() if args.repo_root else env_path("PEOPLE_IMAGES_DIR")
     branch = args.branch or os.getenv("PEOPLE_BRANCH", "")
-    style = args.style or os.getenv("ORCH_STYLE", "transparent")
+    default_style = args.style or os.getenv("ORCH_STYLE", "transparent")
+    styles_env = os.getenv("ORCH_STYLES", "")
+    if args.styles:
+        styles = [s.strip() for s in args.styles.split(",") if s.strip()]
+    elif styles_env:
+        styles = [s.strip() for s in styles_env.split(",") if s.strip()]
+    else:
+        styles = [default_style]
+
     commit_template = os.getenv("ORCH_COMMIT_MESSAGE", "")
     git_user_name = os.getenv("ORCH_GIT_USER_NAME", "")
     git_user_email = os.getenv("ORCH_GIT_USER_EMAIL", "")
@@ -312,7 +369,7 @@ def main():
     REQUIRE_POWERSHELL = _bool_env("ORCH_REQUIRE_POWERSHELL", False)
     REQUIRE_BG_OUTPUT = _bool_env("ORCH_REQUIRE_BG_OUTPUT", False)
 
-    # Builders
+    # Build step builders
     py = sys.executable
 
     def _require_repo_or_die():
@@ -321,6 +378,7 @@ def main():
             sys.exit(2)
 
     def _ensure_repo():
+        # Let ensure_people_repo.py figure things out (clone/validate)
         args2 = ["--repo-root", str(repo_root)] if repo_root else []
         return [py, "ensure_people_repo.py"] + args2
 
@@ -352,6 +410,7 @@ def main():
         return [py, "prep_people_dirs.py"]
 
     def _remove_bg():
+        # If caller requires output verification but we cannot locate output dir — fail now.
         if REQUIRE_BG_OUTPUT and not bg_output_dir:
             print("[ERROR] ORCH_REQUIRE_BG_OUTPUT is true but SEL_DOWNLOAD_DIR is not set.", file=sys.stderr)
             sys.exit(2)
@@ -380,11 +439,12 @@ def main():
         _require_repo_or_die()
         return [py, "sync_people_images.py", "--dest_root", str(repo_root)]
 
-    def _auto_readme():
+    # Per-style builders (used during the run loop)
+    def _auto_readme_for(style: str):
         _require_repo_or_die()
         return [py, "auto_readme.py", "--style", style, "--directory", str((repo_root / style).resolve())]
 
-    def _sync_md():
+    def _sync_md_for(style: str):
         _require_repo_or_die()
         src = str((repo_root / style).resolve())
         dst = str((CONFIG_DIR / "people_dirs" / style).resolve())
@@ -393,8 +453,8 @@ def main():
     def _push_repos():
         _require_repo_or_die()
         now = datetime.now().strftime("%Y-%m-%d %H:%M")
-        msg = (os.getenv("ORCH_COMMIT_MESSAGE", "") or
-               f"chore: sync posters & docs [{style}] — {now}").strip()
+        styles_tag = ",".join(styles)
+        msg = (commit_template or f"chore: sync posters & docs [{styles_tag}] — {now}").strip()
         args2 = ["--repo-root", str(repo_root)]
         if branch:
             args2 += ["--branch", branch]
@@ -418,8 +478,8 @@ def main():
         Step("poster_ps1",  "Generate posters via PowerShell",      _poster_ps1,    marker="poster_ps1.done.json"),
         Step("update",      "git fetch/reset category repos",       _update_repos,  marker=None,              always_run=True),
         Step("sync_images", "Sync images to repo folders",          _sync_images,   marker="sync_images.done.json"),
-        Step("readme",      "Generate README grid",                 _auto_readme,   marker="readme.done.json"),
-        Step("sync_md",     "Mirror *.md back to config",           _sync_md,       marker="sync_md.done.json"),
+        Step("readme",      "Generate README grid(s)",              None,           marker="readme.done.json"),
+        Step("sync_md",     "Mirror *.md back to config (per style)", None,         marker="sync_md.done.json"),
         Step("push",        "Commit & push changes upstream",       _push_repos,    marker=None,              always_run=True),
     ]
 
@@ -469,28 +529,68 @@ def main():
         step_started_at: dict[str, float] = {}
         for s in steps[start_i:]:
             step_started_at[s.key] = time.time()
-            argv = s.builder()
+
+            # Special multi-style steps handle inside the loop
+            if s.key == "readme":
+                # generate README for each style
+                for st in styles:
+                    argv = _auto_readme_for(st)
+                    rc, _, _ = run_cmd(f"Generate README grid [{st}]", argv)
+                    if rc != 0:
+                        print(f"[FAIL] readme ({st}) exited with code {rc}. Stopping.", file=sys.stderr)
+                        sys.exit(rc)
+                # checkpoint once for the whole batch
+                if s.marker_path:
+                    write_marker(s.marker_path, {"at": time.time(), "styles": styles})
+                continue
+
+            if s.key == "sync_md":
+                # sync md for each style
+                for st in styles:
+                    argv = _sync_md_for(st)
+                    rc, _, _ = run_cmd(f"Mirror *.md back to config [{st}]", argv)
+                    if rc != 0:
+                        print(f"[FAIL] sync_md ({st}) exited with code {rc}. Stopping.", file=sys.stderr)
+                        sys.exit(rc)
+                if s.marker_path:
+                    write_marker(s.marker_path, {"at": time.time(), "styles": styles})
+                continue
+
+            # Normal steps
+            builder = s.builder
+            if builder is None:
+                print(f"[ERROR] Step {s.key} has no builder.", file=sys.stderr)
+                sys.exit(2)
+            argv = builder()
             if argv is None:
+                # Only allowed skip is poster_ps1 when pwsh missing & not required
                 if s.key == "poster_ps1":
                     if s.marker_path:
                         write_marker(s.marker_path, {"skipped": True, "at": time.time()})
                     continue
+                # Any other None means something critical was missing; die
                 print(f"[ERROR] Step {s.key} could not build its command.", file=sys.stderr)
                 sys.exit(2)
 
+            # ensure_repo must exist AND return success; also sanity-check the repo root afterward
             capture_output = (s.key in {"name_check", "missing"})
             rc, out, _ = run_cmd(s.title, argv, capture=capture_output)
             if rc != 0:
                 print(f"[FAIL] {s.key} exited with code {rc}. Stopping.", file=sys.stderr)
                 sys.exit(rc)
 
+            # Post-step fail-fast checks (confident zeros -> exit 0; hard requirements -> exit 2)
             started = step_started_at[s.key]
 
-            # 1) ensure_repo sanity
+            def log_path_for(script_filename: str) -> Path:
+                return CONFIG_DIR / "logs" / f"{Path(script_filename).stem}.log"
+
+            # 1) ensure_repo extra sanity
             if s.key == "ensure_repo":
                 if not repo_root or not repo_root.exists():
                     print("[ERROR] ensure_repo finished but PEOPLE_IMAGES_DIR is not set/valid.", file=sys.stderr)
                     sys.exit(2)
+                # require at least one expected category dir present
                 present = [d for d in CATEGORY_DIRS if (repo_root / d).exists()]
                 if not present:
                     print("[ERROR] ensure_repo did not yield expected category folders under repo root.", file=sys.stderr)
@@ -510,65 +610,53 @@ def main():
                     print("[INFO] missing produced 0 items — stopping.")
                     sys.exit(0)
 
-            # tmdb: check poster output
+            # tmdb: if no new posters created, stop
             elif s.key == "tmdb":
-                poster_dir = env_path("POSTER_DIR") or (CONFIG_DIR / "posters")
-                created = count_recent_files([poster_dir], started, {"jpg", "jpeg", "png"})
+                created = count_recent_files([CONFIG_DIR], started, {"jpg", "jpeg", "png"})
                 if created == 0:
                     print("[INFO] tmdb downloaded 0 posters — stopping.")
                     sys.exit(0)
 
-            # missing_dir: check Downloads/color|other
+            # missing_dir: if processed 0, stop (parse its log rather than filesystem)
             elif s.key == "missing_dir":
-                downloads = CONFIG_DIR / "Downloads"
-                moved = count_recent_files([downloads], started, {"jpg", "jpeg", "png"})
-                if moved == 0:
-                    print("[INFO] get_missing_people_dir moved 0 items — stopping.")
+                md_count = parsed_processed_from_missing_dir(log_path_for("get_missing_people_dir.py"))
+                if md_count is not None and md_count == 0:
+                    print("[INFO] missing_dir sorted/moved 0 items — stopping.")
                     sys.exit(0)
 
-            # prep_dirs: check people_dirs for changes
+            # prep_dirs: if established/moved 0 artifacts, stop (use fs heuristic as fallback)
             elif s.key == "prep_dirs":
                 pd = CONFIG_DIR / "people_dirs"
                 changed = count_recent_files([pd], started, {"jpg", "jpeg", "png", "md"})
                 if changed == 0:
-                    print("[INFO] prep_people_dirs moved 0 items — stopping.")
-                    sys.exit(0)
+                    zero = parse_zero_from_log(log_path_for("prep_people_dirs.py"))
+                    if zero is True:
+                        print("[INFO] prep_dirs moved 0 items — stopping.")
+                        sys.exit(0)
 
-            # remove_bg: prefer log-derived OK count; fallback to filesystem
+            # remove_bg: verify outputs and possibly stop
             elif s.key == "remove_bg":
-                if _bool_env("ORCH_REQUIRE_BG_OUTPUT", False) and not env_path("SEL_DOWNLOAD_DIR"):
+                if REQUIRE_BG_OUTPUT and not bg_output_dir:
                     print("[ERROR] ORCH_REQUIRE_BG_OUTPUT=true but SEL_DOWNLOAD_DIR is unknown.", file=sys.stderr)
                     sys.exit(2)
-
-                bg_log = log_path_for("sel_remove_bg.py")
-                ok_from_log = parse_remove_bg_ok(bg_log)
-                if ok_from_log is not None:
-                    if ok_from_log == 0 and not continue_if_empty:
-                        print("[INFO] sel_remove_bg OK=0 according to log — stopping.")
-                        sys.exit(0)
-                else:
-                    processed = count_recent_files([bg_output_dir] if bg_output_dir else [], started, bg_exts)
-                    if processed == 0 and not continue_if_empty:
+                processed = count_recent_files([bg_output_dir] if bg_output_dir else [], started, bg_exts)
+                if processed == 0 and not continue_if_empty:
+                    # If fs says 0, but the tool log shows >0, continue (saves you from dir mismatch).
+                    rb_log = log_path_for("sel_remove_bg.py")
+                    log_n = parsed_files_processed_from_remove_bg(rb_log)
+                    if (log_n is None) or (log_n == 0):
                         print(f"[INFO] sel_remove_bg produced 0 files in {bg_output_dir} — stopping.")
                         sys.exit(0)
 
-            # sync_images: prefer reading the sync log for copied count
+            # sync_images: if copied nothing, stop before readme/sync_md/push (parse its log)
             elif s.key == "sync_images":
                 sync_log = log_path_for("sync_people_images.py")
-                copied_from_log = parse_sync_copied(sync_log)
-                if copied_from_log is not None:
-                    if copied_from_log == 0:
-                        print("[INFO] sync_people_images reported copied=0 — stopping before readme/sync_md/push.")
-                        sys.exit(0)
-                else:
-                    targets = [repo_root / d for d in CATEGORY_DIRS if repo_root]
-                    copied = count_recent_files(targets, started, {"jpg", "jpeg", "png"})
-                    if copied == 0:
-                        print("[INFO] sync_images observed no new file mtimes — stopping before readme/sync_md/push.")
-                        print("      (This can be a false negative if copy preserves timestamps; log parsing preferred.)")
-                        sys.exit(0)
+                copied_sum = sum_copied_from_sync_log(sync_log)
+                if copied_sum is not None and copied_sum == 0:
+                    print("[INFO] sync_images copied 0 files — stopping before readme/sync_md/push.")
+                    sys.exit(0)
 
-            # checkpoint
+            # Write checkpoint if applicable (and not always_run)
             if s.marker_path and not s.always_run:
                 write_marker(s.marker_path, {"at": time.time(), "argv": argv})
 
