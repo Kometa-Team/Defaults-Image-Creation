@@ -26,23 +26,23 @@ Core steps (order is enforced; do not reorder):
  13) sync_md          -> sync_md.py                         (checkpointed)
  14) push             -> update_people_repos.py --op push   (ALWAYS runs when reached)
 
-Common CLI usage
+Fail-fast points
 ----------------
+- Exit 2 if any repo-required step runs without a valid repo path.
+- Exit 2 if TMDB_KEY is missing before tmdb.
+- Exit 2 if ORCH_REQUIRE_POWERSHELL=true and no PowerShell is available.
+- Exit 2 if ORCH_REQUIRE_BG_OUTPUT=true and SEL_DOWNLOAD_DIR is unknown.
+- Exit 0 if sync_people_images reported copied=0 (skip readme/sync_md/push).
+- Exit 0 when confidently detected:
+  name_check=0, missing=0, tmdb=0, missing_dir=0, prep_dirs=0, remove_bg=0.
+
+CLI usage
+---------
   python orchestrator.py              # resume from the first incomplete step
   python orchestrator.py --from tmdb  # start at a given step (still in fixed order)
   python orchestrator.py --force      # ignore checkpoints and run all steps
   python orchestrator.py --list       # show step status & which step would run next
   python orchestrator.py --redo readme  # re-run from "readme": clears its checkpoint and those after
-
-Environment (./config/.env or process environment)
---------------------------------------------------
-  ORCH_LOGS_DIR       — Kometa logs folder for steps 2–3 (optional)
-  PEOPLE_IMAGES_DIR   — repo root for steps needing the People-Images repo
-  PEOPLE_BRANCH       — git branch for update/push (optional)
-  ORCH_STYLE          — style for README & MD sync (default: transparent)
-  ORCH_COMMIT_MESSAGE — optional commit message template for push
-  ORCH_GIT_USER_NAME  — optional git author.name override for push
-  ORCH_GIT_USER_EMAIL — optional git author.email override for push
 """
 import os
 import sys
@@ -50,6 +50,7 @@ import shlex
 import json
 import time
 import subprocess
+import re
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
@@ -62,12 +63,22 @@ except Exception:
 SCRIPT_DIR = Path(__file__).resolve().parent
 CONFIG_DIR = SCRIPT_DIR / "config"
 STATE_DIR = CONFIG_DIR / ".orch"           # checkpoint folder
-LOCK_FILE = STATE_DIR / "run.lock"         # crude run lock to prevent concurrent runs
+LOCK_FILE = STATE_DIR / "run.lock"         # run lock to prevent concurrent runs
+
+# For basic repo sanity after ensure_repo
+CATEGORY_DIRS = ["bw", "diiivoy", "diiivoycolor", "rainier", "original", "signature", "transparent"]
 
 
 def env_path(key: str, default: str | None = None) -> Optional[Path]:
     value = os.getenv(key, default if default is not None else "")
     return Path(value).expanduser().resolve() if value else None
+
+
+def _bool_env(key: str, default: bool = False) -> bool:
+    v = os.getenv(key)
+    if v is None:
+        return default
+    return str(v).strip().lower() in {"1", "true", "yes", "y", "on"}
 
 
 def load_env_or_bootstrap() -> None:
@@ -108,25 +119,10 @@ def ps_exe() -> Optional[str]:
     return None
 
 
-# ---------------------- Step registry & helpers ----------------------
-class Step:
-    def __init__(self, key: str, title: str, builder, marker: Optional[str], always_run: bool = False):
-        """
-        key: stable identifier (used in CLI and checkpoint filenames)
-        title: friendly name
-        builder: callable () -> List[str] | None  (argv for subprocess, or None to skip)
-        marker: filename under STATE_DIR to mark success (None => never checkpoint)
-        always_run: ignore checkpoint (used for cheap validation or volatile ops like git)
-        """
-        self.key = key
-        self.title = title
-        self.builder = builder
-        self.marker = marker
-        self.always_run = always_run
-
-    @property
-    def marker_path(self) -> Optional[Path]:
-        return (STATE_DIR / self.marker) if self.marker else None
+# ---------- helpers: paths, run, markers, fs/log counting, lock ----------
+def log_path_for(script_filename: str) -> Path:
+    """Return the expected log file path under ./config/logs for a given script filename."""
+    return CONFIG_DIR / "logs" / f"{Path(script_filename).stem}.log"
 
 
 def write_marker(marker: Path, meta: dict) -> None:
@@ -155,18 +151,23 @@ def marker_exists(marker: Optional[Path]) -> bool:
     return bool(marker and marker.exists())
 
 
-def run_cmd(title: str, argv: List[str]) -> int:
+def run_cmd(title: str, argv: List[str], capture: bool = False):
+    """Run a subprocess; return (rc, stdout, stderr) if capture else (rc, None, None)."""
     print(f"\n=== {title} ===")
     print("→", " ".join(shlex.quote(a) for a in argv))
     try:
-        cp = subprocess.run(argv, cwd=str(SCRIPT_DIR))
-        return cp.returncode
+        if capture:
+            cp = subprocess.run(argv, cwd=str(SCRIPT_DIR), text=True, capture_output=True)
+            return cp.returncode, (cp.stdout or ""), (cp.stderr or "")
+        else:
+            cp = subprocess.run(argv, cwd=str(SCRIPT_DIR))
+            return cp.returncode, None, None
     except FileNotFoundError as e:
         print(f"[ERROR] {title}: {e}", file=sys.stderr)
-        return 127
+        return 127, None, None
     except Exception as e:
         print(f"[ERROR] {title}: {e}", file=sys.stderr)
-        return 1
+        return 1, None, None
 
 
 def acquire_lock() -> None:
@@ -186,6 +187,95 @@ def release_lock() -> None:
         pass
 
 
+def count_recent_files(paths: list[Path], since_ts: float, suffixes: set[str] | None = None) -> int:
+    total = 0
+    for base in paths:
+        if not base or not base.exists():
+            continue
+        for p in base.rglob("*"):
+            if not p.is_file():
+                continue
+            if suffixes and p.suffix.lower().lstrip(".") not in suffixes:
+                continue
+            try:
+                if p.stat().st_mtime >= (since_ts - 1.0):
+                    total += 1
+            except OSError:
+                pass
+    return total
+
+
+def parse_zero_from_log(logfile: Path) -> Optional[bool]:
+    """Return True if log strongly indicates zero work; False if >0; None if unknown."""
+    if not logfile.exists():
+        return None
+    try:
+        text = logfile.read_text(encoding="utf-8", errors="ignore")
+    except Exception:
+        return None
+    zero_patterns = [
+        r"\b0\s+(?:items|people|names|downloads|moved|copied)\b",
+        r"\bno\s+(?:items|people|names|downloads|changes|work)\b",
+        r"\bnothing\s+(?:to\s+do|moved|copied|processed)\b",
+    ]
+    nonzero_patterns = [
+        r"\b([1-9]\d*)\s+(?:items|people|names|downloads|moved|copied)\b",
+        r"\b(total|processed|moved|copied)\s*:\s*([1-9]\d*)\b",
+    ]
+    for rgx in nonzero_patterns:
+        if re.search(rgx, text, flags=re.I):
+            return False
+    for rgx in zero_patterns:
+        if re.search(rgx, text, flags=re.I):
+            return True
+    return None
+
+
+def parse_sync_copied(logfile: Path) -> Optional[int]:
+    """Return total copied files from sync_people_images.log, or None if unknown."""
+    if not logfile.exists():
+        return None
+    try:
+        text = logfile.read_text(encoding="utf-8", errors="ignore")
+    except Exception:
+        return None
+    matches = re.findall(r"\bcopied=(\d+)\b", text)
+    if not matches:
+        return None
+    return sum(int(x) for x in matches)
+
+
+def parse_remove_bg_ok(logfile: Path) -> Optional[int]:
+    """Return OK count from sel_remove_bg.log, or None if not found."""
+    if not logfile.exists():
+        return None
+    try:
+        text = logfile.read_text(encoding="utf-8", errors="ignore")
+    except Exception:
+        return None
+    m = re.search(r"Files processed:\s*(\d+)\s*\(OK:\s*(\d+)\s+Skipped:\s*(\d+)\s+Errors:\s*(\d+)\)", text)
+    if not m:
+        # Fallback: count '[done]' lines
+        done = re.findall(r"^\[.*\]\s*\[done\]\s", text, flags=re.M)
+        return len(done) if done else None
+    ok = int(m.group(2))
+    return ok
+
+
+# ---------------------- Step registry & helpers ----------------------
+class Step:
+    def __init__(self, key: str, title: str, builder, marker: Optional[str], always_run: bool = False):
+        self.key = key
+        self.title = title
+        self.builder = builder
+        self.marker = marker
+        self.always_run = always_run
+
+    @property
+    def marker_path(self) -> Optional[Path]:
+        return (STATE_DIR / self.marker) if self.marker else None
+
+
 def main():
     import argparse
     load_env_or_bootstrap()
@@ -199,6 +289,11 @@ def main():
     parser.add_argument("--repo-root", help="Kometa-People-Images repository root (env PEOPLE_IMAGES_DIR otherwise).")
     parser.add_argument("--branch", help="Git branch for update/push (env PEOPLE_BRANCH or auto-detect).")
     parser.add_argument("--style", help="People-Images style for README & MD sync (env ORCH_STYLE or 'transparent').")
+    parser.add_argument("--bg-output-dir", help="Where sel_remove_bg downloads go (env SEL_DOWNLOAD_DIR).")
+    parser.add_argument("--bg-exts", default=os.getenv("ORCH_BG_EXTS", "png"),
+                        help="Comma list of extensions to count as processed (default: png)")
+    parser.add_argument("--continue-if-empty", action="store_true",
+                        help="Don't stop even if sel_remove_bg produced nothing (env ORCH_CONTINUE_IF_EMPTY)")
     args = parser.parse_args()
 
     # Resolve env/args
@@ -210,8 +305,20 @@ def main():
     git_user_name = os.getenv("ORCH_GIT_USER_NAME", "")
     git_user_email = os.getenv("ORCH_GIT_USER_EMAIL", "")
 
-    # Build step builders
+    bg_output_dir = Path(args.bg_output_dir).expanduser().resolve() if args.bg_output_dir else env_path("SEL_DOWNLOAD_DIR")
+    bg_exts = {e.strip().lower().lstrip(".") for e in (args.bg_exts or "png").split(",") if e.strip()}
+    continue_if_empty = args.continue_if_empty or _bool_env("ORCH_CONTINUE_IF_EMPTY", False)
+
+    REQUIRE_POWERSHELL = _bool_env("ORCH_REQUIRE_POWERSHELL", False)
+    REQUIRE_BG_OUTPUT = _bool_env("ORCH_REQUIRE_BG_OUTPUT", False)
+
+    # Builders
     py = sys.executable
+
+    def _require_repo_or_die():
+        if not repo_root or not repo_root.exists():
+            print("[ERROR] PEOPLE_IMAGES_DIR not set or invalid; required for this step.", file=sys.stderr)
+            sys.exit(2)
 
     def _ensure_repo():
         args2 = ["--repo-root", str(repo_root)] if repo_root else []
@@ -220,16 +327,19 @@ def main():
     def _name_check():
         if not logs_dir or not logs_dir.exists():
             print("[ERROR] ORCH_LOGS_DIR not set or missing. Use --logs-dir.", file=sys.stderr)
-            return None
+            sys.exit(2)
         return [py, "name_checker_dir.py", "--input_directory", str(logs_dir)]
 
     def _missing():
         if not logs_dir or not logs_dir.exists():
             print("[ERROR] ORCH_LOGS_DIR not set or missing. Use --logs-dir.", file=sys.stderr)
-            return None
+            sys.exit(2)
         return [py, "get_missing_people.py", "--input_directory", str(logs_dir)]
 
     def _tmdb():
+        if not os.getenv("TMDB_KEY"):
+            print("[ERROR] TMDB_KEY not set in ./config/.env; cannot run tmdb step.", file=sys.stderr)
+            sys.exit(2)
         return [py, "tmdb_people.py"]
 
     def _truncate():
@@ -242,53 +352,49 @@ def main():
         return [py, "prep_people_dirs.py"]
 
     def _remove_bg():
+        if REQUIRE_BG_OUTPUT and not bg_output_dir:
+            print("[ERROR] ORCH_REQUIRE_BG_OUTPUT is true but SEL_DOWNLOAD_DIR is not set.", file=sys.stderr)
+            sys.exit(2)
         return [py, "sel_remove_bg.py"]
 
     def _poster_ps1():
         ps = ps_exe()
         if not ps:
+            if REQUIRE_POWERSHELL:
+                print("[ERROR] ORCH_REQUIRE_POWERSHELL=true but PowerShell (pwsh) not found.", file=sys.stderr)
+                sys.exit(2)
             print("[WARN] PowerShell (pwsh) not found — skipping create_people_poster.ps1", file=sys.stderr)
             return None
         ps1 = str((SCRIPT_DIR / "create_people_poster.ps1").resolve())
         return [ps, "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ps1]
 
     def _update_repos():
-        args2 = []
-        if not repo_root or not repo_root.exists():
-            print("[ERROR] PEOPLE_IMAGES_DIR not set or invalid; required by update/push.", file=sys.stderr)
-            return None
-        args2 += ["--repo-root", str(repo_root)]
+        _require_repo_or_die()
+        args2 = ["--repo-root", str(repo_root)]
         if branch:
             args2 += ["--branch", branch]
         args2 += ["--op", "update", "--mode", "hardreset", "--clean-ignored"]
         return [py, "update_people_repos.py"] + args2
 
     def _sync_images():
-        if not repo_root or not repo_root.exists():
-            print("[ERROR] PEOPLE_IMAGES_DIR not set or invalid; required by sync_images.", file=sys.stderr)
-            return None
+        _require_repo_or_die()
         return [py, "sync_people_images.py", "--dest_root", str(repo_root)]
 
     def _auto_readme():
-        if not repo_root or not repo_root.exists():
-            print("[ERROR] PEOPLE_IMAGES_DIR not set or invalid; required by readme.", file=sys.stderr)
-            return None
+        _require_repo_or_die()
         return [py, "auto_readme.py", "--style", style, "--directory", str((repo_root / style).resolve())]
 
     def _sync_md():
-        if not repo_root or not repo_root.exists():
-            print("[ERROR] PEOPLE_IMAGES_DIR not set or invalid; required by sync_md.", file=sys.stderr)
-            return None
+        _require_repo_or_die()
         src = str((repo_root / style).resolve())
         dst = str((CONFIG_DIR / "people_dirs" / style).resolve())
         return [py, "sync_md.py", "--src", src, "--dst", dst, "--pattern", "*.md"]
 
     def _push_repos():
-        if not repo_root or not repo_root.exists():
-            print("[ERROR] PEOPLE_IMAGES_DIR not set or invalid; required by push.", file=sys.stderr)
-            return None
+        _require_repo_or_die()
         now = datetime.now().strftime("%Y-%m-%d %H:%M")
-        msg = (os.getenv("ORCH_COMMIT_MESSAGE", "") or f"chore: sync posters & docs [{style}] — {now}").strip()
+        msg = (os.getenv("ORCH_COMMIT_MESSAGE", "") or
+               f"chore: sync posters & docs [{style}] — {now}").strip()
         args2 = ["--repo-root", str(repo_root)]
         if branch:
             args2 += ["--branch", branch]
@@ -326,7 +432,6 @@ def main():
         for s in steps:
             status = "ALWAYS" if s.always_run else ("DONE" if marker_exists(s.marker_path) else "PENDING")
             print(f" - {s.key:12} : {status}")
-        # Show next runnable
         for s in steps:
             if s.always_run or not marker_exists(s.marker_path):
                 print(f"\nNext step would be: {s.key} — {s.title}")
@@ -344,7 +449,6 @@ def main():
     # Compute start index
     start_i = 0
     if args.force:
-        # Ignore checkpoints: start from 0 and run through
         start_i = 0
     elif args.from_key:
         if args.from_key not in step_index:
@@ -353,36 +457,120 @@ def main():
             sys.exit(2)
         start_i = step_index[args.from_key]
     else:
-        # Resume: find first step that must run
         for i, s in enumerate(steps):
             if s.always_run or not marker_exists(s.marker_path):
                 start_i = i
                 break
 
-    # Acquire lock; ensure state dir exists
+    # Run
     acquire_lock()
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     try:
-        # Execute in order from start_i
+        step_started_at: dict[str, float] = {}
         for s in steps[start_i:]:
+            step_started_at[s.key] = time.time()
             argv = s.builder()
             if argv is None:
-                # Skipped step (e.g., missing pwsh); treat as completed to not block progress
-                if s.marker_path:
-                    write_marker(s.marker_path, {"skipped": True, "at": time.time()})
-                continue
+                if s.key == "poster_ps1":
+                    if s.marker_path:
+                        write_marker(s.marker_path, {"skipped": True, "at": time.time()})
+                    continue
+                print(f"[ERROR] Step {s.key} could not build its command.", file=sys.stderr)
+                sys.exit(2)
 
-            rc = run_cmd(s.title, argv)
+            capture_output = (s.key in {"name_check", "missing"})
+            rc, out, _ = run_cmd(s.title, argv, capture=capture_output)
             if rc != 0:
                 print(f"[FAIL] {s.key} exited with code {rc}. Stopping.", file=sys.stderr)
                 sys.exit(rc)
 
-            # Write checkpoint if applicable (and not always_run)
+            started = step_started_at[s.key]
+
+            # 1) ensure_repo sanity
+            if s.key == "ensure_repo":
+                if not repo_root or not repo_root.exists():
+                    print("[ERROR] ensure_repo finished but PEOPLE_IMAGES_DIR is not set/valid.", file=sys.stderr)
+                    sys.exit(2)
+                present = [d for d in CATEGORY_DIRS if (repo_root / d).exists()]
+                if not present:
+                    print("[ERROR] ensure_repo did not yield expected category folders under repo root.", file=sys.stderr)
+                    sys.exit(2)
+
+            # name_check: if clearly zero, stop
+            elif s.key == "name_check":
+                zero = parse_zero_from_log(log_path_for("name_checker_dir.py"))
+                if zero is True:
+                    print("[INFO] name_check found 0 items — stopping.")
+                    sys.exit(0)
+
+            # missing: if clearly zero, stop
+            elif s.key == "missing":
+                zero = parse_zero_from_log(log_path_for("get_missing_people.py"))
+                if zero is True:
+                    print("[INFO] missing produced 0 items — stopping.")
+                    sys.exit(0)
+
+            # tmdb: check poster output
+            elif s.key == "tmdb":
+                poster_dir = env_path("POSTER_DIR") or (CONFIG_DIR / "posters")
+                created = count_recent_files([poster_dir], started, {"jpg", "jpeg", "png"})
+                if created == 0:
+                    print("[INFO] tmdb downloaded 0 posters — stopping.")
+                    sys.exit(0)
+
+            # missing_dir: check Downloads/color|other
+            elif s.key == "missing_dir":
+                downloads = CONFIG_DIR / "Downloads"
+                moved = count_recent_files([downloads], started, {"jpg", "jpeg", "png"})
+                if moved == 0:
+                    print("[INFO] get_missing_people_dir moved 0 items — stopping.")
+                    sys.exit(0)
+
+            # prep_dirs: check people_dirs for changes
+            elif s.key == "prep_dirs":
+                pd = CONFIG_DIR / "people_dirs"
+                changed = count_recent_files([pd], started, {"jpg", "jpeg", "png", "md"})
+                if changed == 0:
+                    print("[INFO] prep_people_dirs moved 0 items — stopping.")
+                    sys.exit(0)
+
+            # remove_bg: prefer log-derived OK count; fallback to filesystem
+            elif s.key == "remove_bg":
+                if _bool_env("ORCH_REQUIRE_BG_OUTPUT", False) and not env_path("SEL_DOWNLOAD_DIR"):
+                    print("[ERROR] ORCH_REQUIRE_BG_OUTPUT=true but SEL_DOWNLOAD_DIR is unknown.", file=sys.stderr)
+                    sys.exit(2)
+
+                bg_log = log_path_for("sel_remove_bg.py")
+                ok_from_log = parse_remove_bg_ok(bg_log)
+                if ok_from_log is not None:
+                    if ok_from_log == 0 and not continue_if_empty:
+                        print("[INFO] sel_remove_bg OK=0 according to log — stopping.")
+                        sys.exit(0)
+                else:
+                    processed = count_recent_files([bg_output_dir] if bg_output_dir else [], started, bg_exts)
+                    if processed == 0 and not continue_if_empty:
+                        print(f"[INFO] sel_remove_bg produced 0 files in {bg_output_dir} — stopping.")
+                        sys.exit(0)
+
+            # sync_images: prefer reading the sync log for copied count
+            elif s.key == "sync_images":
+                sync_log = log_path_for("sync_people_images.py")
+                copied_from_log = parse_sync_copied(sync_log)
+                if copied_from_log is not None:
+                    if copied_from_log == 0:
+                        print("[INFO] sync_people_images reported copied=0 — stopping before readme/sync_md/push.")
+                        sys.exit(0)
+                else:
+                    targets = [repo_root / d for d in CATEGORY_DIRS if repo_root]
+                    copied = count_recent_files(targets, started, {"jpg", "jpeg", "png"})
+                    if copied == 0:
+                        print("[INFO] sync_images observed no new file mtimes — stopping before readme/sync_md/push.")
+                        print("      (This can be a false negative if copy preserves timestamps; log parsing preferred.)")
+                        sys.exit(0)
+
+            # checkpoint
             if s.marker_path and not s.always_run:
-                write_marker(s.marker_path, {
-                    "at": time.time(),
-                    "argv": argv,
-                })
+                write_marker(s.marker_path, {"at": time.time(), "argv": argv})
 
         print("\nAll steps completed.")
     finally:
