@@ -44,6 +44,54 @@ from typing import List, Tuple, Dict, Set
 import requests
 from PIL import Image
 
+# ======== NEW: print unbuffered + resilient requests (minimal behavioral change) ========
+# make stdout line-buffered so prints show immediately (prevents “frozen” look under wrappers/venv)
+try:
+    sys.stdout.reconfigure(line_buffering=True)  # py3.7+
+except Exception:
+    pass
+
+# retrying requests session with sensible timeouts; we monkey-patch requests.get so the rest of the script is unchanged
+_DEFAULT_TIMEOUT = (10, 30)  # (connect, read) seconds
+try:
+    from requests.adapters import HTTPAdapter
+    from urllib3.util.retry import Retry
+
+    _retry = Retry(
+        total=5,
+        backoff_factor=0.6,  # 0.6s, 1.2s, 2.4s, ...
+        status_forcelist=(429, 500, 502, 503, 504),
+        allowed_methods=("GET", "HEAD"),
+        raise_on_status=False,
+    )
+    _sess = requests.Session()
+    _sess.mount("http://", HTTPAdapter(max_retries=_retry))
+    _sess.mount("https://", HTTPAdapter(max_retries=_retry))
+
+    _orig_get = requests.get
+    def _get_with_defaults(*args, **kwargs):
+        kwargs.setdefault("timeout", _DEFAULT_TIMEOUT)
+        return _sess.get(*args, **kwargs)
+    requests.get = _get_with_defaults  # type: ignore[assignment]
+except Exception:
+    # fallback: at least enforce timeout even if urllib3 Retry isn't available
+    _orig_get = requests.get
+    def _get_with_timeout(*args, **kwargs):
+        kwargs.setdefault("timeout", _DEFAULT_TIMEOUT)
+        return _orig_get(*args, **kwargs)
+    requests.get = _get_with_timeout  # type: ignore[assignment]
+
+# simple heartbeat so long loops always show life
+_last_beat = 0.0
+def heartbeat(label: str, every_sec: float = 1.0) -> None:
+    global _last_beat
+    now = datetime.datetime.now().timestamp()
+    if now - _last_beat >= every_sec:
+        print(label, flush=True)
+        _last_beat = now
+# ========================================================================================
+
+
 # ---------------- paths + logging ----------------
 SCRIPT_PATH = Path(__file__).resolve()
 SCRIPT_DIR = SCRIPT_PATH.parent
@@ -106,7 +154,7 @@ def is_text_file(p: Path) -> bool:
 
 def download_file(url: str, destination: Path) -> bool:
     try:
-        r = requests.get(url, timeout=30)
+        r = requests.get(url)  # timeout + retries injected above
         r.raise_for_status()
     except requests.RequestException as e:
         write_to_log_file(f"Failed to download {url} → {e}")
@@ -203,6 +251,9 @@ def fetch_online_names(styles: List[str], branch: str = "master") -> Set[str]:
     """
     online: Set[str] = set()
     tried = set()
+    total_checks = len(styles) * 2  # branch + fallback
+    done = 0
+
     for style in styles:
         for b in (branch, "main" if branch != "main" else "master"):
             url = f"https://raw.githubusercontent.com/Kometa-Team/People-Images-{style}/{b}/README.md"
@@ -211,10 +262,14 @@ def fetch_online_names(styles: List[str], branch: str = "master") -> Set[str]:
                 continue
             tried.add(key)
             try:
-                r = requests.get(url, timeout=20)
+                r = requests.get(url)  # timeout + retries injected above
             except requests.RequestException:
+                done += 1
+                heartbeat(f"Checking online names… {done}/{total_checks}")
                 continue
             if r.status_code != 200:
+                done += 1
+                heartbeat(f"Checking online names… {done}/{total_checks}")
                 continue
             for line in r.text.splitlines():
                 if "](https://raw.githubusercontent.com/Kometa-Team/People-Images" not in line:
@@ -225,6 +280,8 @@ def fetch_online_names(styles: List[str], branch: str = "master") -> Set[str]:
                     online.add(_normalize_name(html.unescape(name)))
                 except Exception:
                     continue
+            done += 1
+            heartbeat(f"Checking online names… {done}/{total_checks}")
             break
     write_to_log_file(f"Online presence checked across styles={styles} → {len(online)} names")
     return online
@@ -270,9 +327,14 @@ def main():
     name_to_url: Dict[str, str] = {}
     names_from_warnings: Set[str] = set()
 
-    for item in input_files:
+    for i, item in enumerate(input_files, 1):
         write_to_log_file(f"Working on: {item.name}")
+        print(f"Reading {item.name} ({i}/{len(input_files)}) …", flush=True)
         content = item.read_text(encoding="utf-8", errors="replace")
+
+        # heartbeat while parsing (useful on very large logs)
+        heartbeat(f"Parsing {item.name} …")
+
         all_convert_warns.extend(extract_convert_warning(content.splitlines()))
 
         # Gather URLs from both patterns (update + found/not-updated)
@@ -337,7 +399,8 @@ def main():
     # Optional downloads (non-RGB => other/)
     new_downloads = 0
     if DO_DOWNLOADS and missing_with_urls:
-        for n, url in missing_with_urls:
+        for idx, (n, url) in enumerate(missing_with_urls, 1):
+            heartbeat(f"Downloading {idx}/{len(missing_with_urls)} …")
             ext = Path(url).suffix or ".jpg"
             safe_name = n  # already normalized
             temp_path = DOWNLOADS_DIR / f"{safe_name}{ext}"

@@ -8,6 +8,11 @@ from pathlib import Path
 from urllib.parse import unquote
 import requests
 
+import time
+import io
+import gzip
+import zipfile
+
 
 # --- one place to define where "config" lives (next to the script) ---
 def ensure_config_dir(script_file: str | Path) -> Path:
@@ -48,41 +53,143 @@ def extract_filename_from_url(url):
     return unquote(os.path.splitext(os.path.basename(url))[0])
 
 
+HEARTBEAT_SECS = 1.0  # print a tiny heartbeat while scanning large files
+
+
+def _human_mb(n_bytes: float) -> str:
+    return f"{n_bytes / 1_000_000:.1f}MB"
+
+
+def _safe_getsize(path: Path) -> int | None:
+    try:
+        return os.path.getsize(path)
+    except Exception:
+        return None
+
+
+def _is_acceptable_file(name: str, file_name_regex: re.Pattern, acceptable_extensions: list[str]) -> bool:
+    return bool(file_name_regex.search(name) and any(name.lower().endswith(ext) for ext in acceptable_extensions))
+
+
+def _process_stream_line_by_line(fobj: io.TextIOBase, warning_regex: re.Pattern, *, progress_label: str,
+                                 size_bytes: int | None, hits: dict) -> int:
+    """
+    Stream the file line-by-line (low memory), emit a heartbeat, and tally matches.
+    Returns total matches found in this stream.
+    """
+    last_print = time.time()
+    bytes_read = 0
+    matches_count = 0
+
+    for line in fobj:
+        bytes_read += len(line)
+
+        for m in warning_regex.findall(line):
+            decoded_filename = extract_filename_from_url(m)
+            hits[decoded_filename] = hits.get(decoded_filename, 0) + 1
+            matches_count += 1
+
+        now = time.time()
+        if now - last_print >= HEARTBEAT_SECS:
+            if size_bytes and size_bytes > 0:
+                pct = min(100, int((bytes_read / size_bytes) * 100))
+                print(f"{progress_label}: {_human_mb(bytes_read)} / {_human_mb(size_bytes)} ({pct}%) ...")
+            else:
+                print(f"{progress_label}: processed ~{_human_mb(bytes_read)} ...")
+            last_print = now
+
+    return matches_count
+
+
 def scan_text_files(folder_path):
     hits = {}
     online_names = set()
 
-    # Get the list of acceptable extensions
-    acceptable_extensions = ['.txt', '.log', '.1', '.2', '.3', '.4', '.5', '.6', '.7', '.8', '.9']
+    acceptable_extensions = ['.txt', '.log', '.1', '.2', '.3', '.4', '.5', '.6', '.7', '.8', '.9', '.gz', '.zip']
 
-    # Regular expression to check if the file contains "meta" or "mess" in its name
+    # File name must contain meta|mess
     file_name_regex = re.compile(r'(meta|mess)', re.IGNORECASE)
 
-    # Function to check if the file matches the file name regex and acceptable extensions
+    # Selection function
     def is_acceptable_file(file):
-        return file_name_regex.search(file) and any(file.lower().endswith(ext) for ext in acceptable_extensions)
+        return _is_acceptable_file(file, file_name_regex, acceptable_extensions)
 
-    # Regular expression to find lines with "Collection Warning: No Poster Found at"
-    # warning_regex = r'Collection Warning: No Poster Found at https://raw\.githubusercontent\.com/meisnate12/Plex-Meta-Manager-People(.+?)\s+'
-    warning_regex = r'Collection Warning: No Poster Found at https://raw\.githubusercontent\.com/Kometa-Team/People-Images(.+?)\s+'
+    # Warning regex
+    warning_regex = re.compile(
+        r'Collection Warning: No Poster Found at https://raw\.githubusercontent\.com/Kometa-Team/People-Images(.+?)\s+'
+    )
 
     for root, _, files in os.walk(folder_path):
         for file in files:
-            file_path = os.path.join(root, file)
-            if is_acceptable_file(file):
-                logging.info(f"Scanning {file_path}")
-                print(f"Scanning {file_path}")
+            file_path = Path(root) / file
+
+            # Only consider files that match your original (name + extension) rule
+            if not is_acceptable_file(file):
+                continue
+
+            logging.info(f"Scanning {file_path}")
+            print(f"Scanning {file_path}")
+
+            suffix = file_path.suffix.lower()
+
+            # --- .gz support (decompress-on-the-fly) ---
+            if suffix == ".gz":
+                size_bytes = _safe_getsize(file_path)  # compressed size; good enough for a rough progress bar
+                try:
+                    with gzip.open(file_path, 'rt', encoding='utf-8', errors='replace') as f:
+                        count = _process_stream_line_by_line(
+                            f, warning_regex, progress_label=f"Reading {file_path}", size_bytes=size_bytes, hits=hits
+                        )
+                    logging.info(f"Processed {file_path}, found {count} hits.")
+                    print(f"Processed {file_path}, found {count} hits.")
+                except Exception as e:
+                    logging.exception("Failed to read gzip: %s", file_path)
+                    print(f"!! Failed to read gzip: {file_path} ({e})", file=sys.stderr)
+                continue
+
+            # --- .zip support (scan inner entries that ALSO match your rule) ---
+            if suffix == ".zip":
+                try:
+                    with zipfile.ZipFile(file_path) as zf:
+                        for zi in zf.infolist():
+                            inner = zi.filename
+                            # skip directories
+                            if inner.endswith('/'):
+                                continue
+                            # enforce the SAME selection rule on inner names to avoid regressions
+                            if not is_acceptable_file(os.path.basename(inner)):
+                                continue
+                            # open as text safely
+                            try:
+                                with zf.open(zi, 'r') as raw, io.TextIOWrapper(raw, encoding='utf-8',
+                                                                               errors='replace') as f:
+                                    # we can use zi.file_size as a rough byte target for progress
+                                    count = _process_stream_line_by_line(
+                                        f, warning_regex, progress_label=f"Reading {file_path}::{inner}",
+                                        size_bytes=zi.file_size, hits=hits
+                                    )
+                                logging.info(f"Processed {file_path}::{inner}, found {count} hits.")
+                                print(f"Processed {file_path}::{inner}, found {count} hits.")
+                            except Exception as e:
+                                logging.exception("Failed to read zip entry: %s::%s", file_path, inner)
+                                print(f"!! Failed to read zip entry: {file_path}::{inner} ({e})", file=sys.stderr)
+                except Exception as e:
+                    logging.exception("Failed to open zip: %s", file_path)
+                    print(f"!! Failed to open zip: {file_path} ({e})", file=sys.stderr)
+                continue
+
+            # --- Plain text (streaming, with heartbeat) ---
+            try:
+                size_bytes = _safe_getsize(file_path)
                 with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
-                    content = f.read()
-                    # with open(file_path, 'r', encoding='utf-8-sig') as f:
-                    #     content = f.read()
-                    matches = re.findall(warning_regex, content)
-                    if matches:
-                        for match in matches:
-                            decoded_filename = extract_filename_from_url(match)
-                            hits[decoded_filename] = hits.get(decoded_filename, 0) + 1
-                        logging.info(f"Processed {file_path}, found {len(matches)} hits.")
-                        print(f"Processed {file_path}, found {len(matches)} hits.")
+                    count = _process_stream_line_by_line(
+                        f, warning_regex, progress_label=f"Reading {file_path}", size_bytes=size_bytes, hits=hits
+                    )
+                logging.info(f"Processed {file_path}, found {count} hits.")
+                print(f"Processed {file_path}, found {count} hits.")
+            except Exception as e:
+                logging.exception("Failed to read file: %s", file_path)
+                print(f"!! Failed to read file: {file_path} ({e})", file=sys.stderr)
 
     sorted_hits = sorted(hits.items(), key=lambda x: x[0])
 
@@ -94,7 +201,8 @@ def scan_text_files(folder_path):
 
     # Fetch the online content once
     online_content = requests.get(
-        "https://raw.githubusercontent.com/Kometa-Team/People-Images-rainier/master/README.md").text
+        "https://raw.githubusercontent.com/Kometa-Team/People-Images-rainier/master/README.md"
+    ).text
     not_found_names = set(name for name in online_names if name not in online_content)
 
     not_found_path = CONFIG_DIR / "people_list.txt"
