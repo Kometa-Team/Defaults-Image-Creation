@@ -11,20 +11,20 @@ Key behavior
 - Uses sys.executable so it works the same on Windows/macOS/Linux.
 
 Core steps (order is enforced; do not reorder):
-  1) ensure_repo      -> ensure_people_repo.py              (always runs: cheap sanity check)
-  2) scan_kometa_logs -> scan_kometa_logs.py                (checkpointed)
-  3) missing          -> get_missing_people.py              (checkpointed)
-  4) tmdb             -> tmdb_people.py                     (checkpointed)
-  5) truncate         -> truncate_tmdb_people_names.py      (checkpointed)
-  6) missing_dir      -> get_missing_people_dir.py          (checkpointed)
-  7) prep_dirs        -> prep_people_dirs.py                (checkpointed)
-  8) remove_bg        -> sel_remove_bg.py                   (checkpointed)
-  9) poster_ps1       -> create_people_poster.ps1           (checkpointed; requires PowerShell/pwsh)
- 10) update           -> update_people_repos.py --op update (ALWAYS runs when reached)
- 11) sync_images      -> sync_people_images.py              (checkpointed)
- 12) readme           -> auto_readme.py                     (checkpointed; supports multiple styles)
- 13) sync_md          -> sync_md.py                         (checkpointed; supports multiple styles)
- 14) push             -> update_people_repos.py --op push   (ALWAYS runs when reached)
+  1) ensure_repo               -> ensure_people_repo.py               (always runs: cheap sanity check)
+  2) scan_kometa_logs          -> scan_kometa_logs.py                 (checkpointed)
+  3) find_and_download_missing -> find_and_download_missing_people.py (checkpointed)
+  4) tmdb                      -> tmdb_people.py                      (checkpointed)
+  5) truncate                  -> truncate_tmdb_people_names.py       (checkpointed)
+  6) missing_dir               -> get_missing_people_dir.py           (checkpointed)
+  7) prep_dirs                 -> prep_people_dirs.py                 (checkpointed)
+  8) remove_bg                 -> sel_remove_bg.py                    (checkpointed)
+  9) poster_ps1                -> create_people_poster.ps1            (checkpointed; requires PowerShell/pwsh)
+ 10) update                    -> update_people_repos.py --op update  (ALWAYS runs when reached)
+ 11) sync_images               -> sync_people_images.py               (checkpointed)
+ 12) readme                    -> auto_readme.py                      (checkpointed; supports multiple styles)
+ 13) sync_md                   -> sync_md.py                          (checkpointed; supports multiple styles)
+ 14) push                      -> update_people_repos.py --op push    (ALWAYS runs when reached)
 
 Fail-fast points
 ----------------
@@ -34,7 +34,7 @@ Fail-fast points
 - Exit 2 if ORCH_REQUIRE_BG_OUTPUT=true and SEL_DOWNLOAD_DIR is unknown.
 - Exit 0 if sync_images copied 0 files (skip readme/sync_md/push).
 - Exit 0 when confidently detected:
-  scan_kometa_logs=0, missing=0, tmdb=0, missing_dir=0, prep_dirs=0, remove_bg=0.
+  scan_kometa_logs=0, find_and_download_missing=0, tmdb=0, missing_dir=0, prep_dirs=0, remove_bg=0.
 
 Styles
 ------
@@ -388,11 +388,11 @@ def main():
             sys.exit(2)
         return [py, "scan_kometa_logs.py", "--input_directory", str(logs_dir)]
 
-    def _missing():
+    def _find_and_download_missing():
         if not logs_dir or not logs_dir.exists():
             print("[ERROR] ORCH_LOGS_DIR not set or missing. Use --logs-dir.", file=sys.stderr)
             sys.exit(2)
-        return [py, "get_missing_people.py", "--input_directory", str(logs_dir)]
+        return [py, "find_and_download_missing_people.py", "--input_directory", str(logs_dir)]
 
     def _tmdb():
         if not os.getenv("TMDB_KEY"):
@@ -467,20 +467,20 @@ def main():
 
     # Fixed, enforced order
     steps: List[Step] = [
-        Step("ensure_repo", "Validate People-Images repo",          _ensure_repo,   marker=None,              always_run=True),
-        Step("scan_kometa_logs",  "Scan Kometa logs for missing names",   _scan_kometa_logs,    marker="scan_kometa_logs.done.json"),
-        Step("missing",     "Build missing-people lists",           _missing,       marker="missing.done.json"),
-        Step("tmdb",        "Download posters via TMDB",            _tmdb,          marker="tmdb.done.json"),
-        Step("truncate",    "Truncate TMDB person names",           _truncate,      marker="truncate.done.json"),
-        Step("missing_dir", "Dir-based missing discovery",          _missing_dir,   marker="missing_dir.done.json"),
-        Step("prep_dirs",   "Ensure local people_dirs scaffolds",   _prep_dirs,     marker="prep_dirs.done.json"),
-        Step("remove_bg",   "Remove backgrounds (Selenium)",        _remove_bg,     marker="remove_bg.done.json"),
-        Step("poster_ps1",  "Generate posters via PowerShell",      _poster_ps1,    marker="poster_ps1.done.json"),
-        Step("update",      "git fetch/reset category repos",       _update_repos,  marker=None,              always_run=True),
-        Step("sync_images", "Sync images to repo folders",          _sync_images,   marker="sync_images.done.json"),
-        Step("readme",      "Generate README grid(s)",              None,           marker="readme.done.json"),
-        Step("sync_md",     "Mirror *.md back to config (per style)", None,         marker="sync_md.done.json"),
-        Step("push",        "Commit & push changes upstream",       _push_repos,    marker=None,              always_run=True),
+        Step("ensure_repo",               "Validate People-Images repo",                _ensure_repo,               marker=None,              always_run=True),
+        Step("scan_kometa_logs",          "Scan Kometa logs for missing names",         _scan_kometa_logs,          marker="scan_kometa_logs.done.json"),
+        Step("find_and_download_missing", "Build missing-people lists",                 _find_and_download_missing, marker="find_and_download_missing.done.json"),
+        Step("tmdb",                      "Download posters via TMDB",                  _tmdb,                      marker="tmdb.done.json"),
+        Step("truncate",                  "Truncate TMDB person names",                 _truncate,                  marker="truncate.done.json"),
+        Step("missing_dir",               "Dir-based missing discovery",                _missing_dir,               marker="missing_dir.done.json"),
+        Step("prep_dirs",                 "Ensure local people_dirs scaffolds",         _prep_dirs,                 marker="prep_dirs.done.json"),
+        Step("remove_bg",                 "Remove backgrounds (Selenium)",              _remove_bg,                 marker="remove_bg.done.json"),
+        Step("poster_ps1",                "Generate posters via PowerShell",            _poster_ps1,                marker="poster_ps1.done.json"),
+        Step("update",                    "git fetch/reset category repos",             _update_repos,              marker=None,              always_run=True),
+        Step("sync_images",               "Sync images to repo folders",                _sync_images,               marker="sync_images.done.json"),
+        Step("readme",                    "Generate README grid(s)",                    None,                       marker="readme.done.json"),
+        Step("sync_md",                   "Mirror *.md back to config (per style)",     None,                       marker="sync_md.done.json"),
+        Step("push",                      "Commit & push changes upstream",             _push_repos,                marker=None,              always_run=True),
     ]
 
     step_index = {s.key: i for i, s in enumerate(steps)}
@@ -605,7 +605,7 @@ def main():
 
             # missing: if clearly zero, stop
             elif s.key == "missing":
-                zero = parse_zero_from_log(log_path_for("get_missing_people.py"))
+                zero = parse_zero_from_log(log_path_for("find_and_download_missing_people.py"))
                 if zero is True:
                     print("[INFO] missing produced 0 items — stopping.")
                     sys.exit(0)

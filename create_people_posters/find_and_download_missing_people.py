@@ -16,12 +16,12 @@ What it does
 5) Downloads any missing-with-URL posters to ./config/Downloads/{color,other}
 
 Logs under ./config/logs/:
-   - get_missing_people.log
-   - get_missing_people_downloads.log
+   - find_and_download_missing_people.log
+   - find_and_download_missing_people_downloads.log
 
 CLI
 ---
-python get_missing_people.py --input_directory "/path/to/kometa/logs"
+python find_and_download_missing_people.py --input_directory "/path/to/kometa/logs"
   [--styles rainier,transparent] [--branch master] [--no-downloads]
 
 Env (optional)

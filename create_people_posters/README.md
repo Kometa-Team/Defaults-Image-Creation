@@ -104,7 +104,7 @@ The orchestrator enforces the single correct order and writes checkpoints so you
 
 1. **ensure_repo** → `ensure_people_repo.py` — validate Kometa‑People‑Images repo directory (always runs)  
 2. **scan_kometa_logs** → `scan_kometa_logs.py` — scan Kometa logs for missing names  
-3. **missing** → `get_missing_people.py` — build missing‑people lists from logs  
+3. **find_and_download_missing** → `find_and_download_missing_people.py` — build missing‑people lists from logs  
 4. **tmdb** → `tmdb_people.py` — download posters via TMDB API  
 5. **truncate** → `truncate_tmdb_people_names.py` — normalize/shorten person names  
 6. **missing_dir** → `get_missing_people_dir.py` — directory‑based discovery to catch stragglers  
@@ -207,7 +207,7 @@ create_people_posters/
 ├─ orchestrator.py
 ├─ ensure_people_repo.py
 ├─ scan_kometa_logs.py
-├─ get_missing_people.py
+├─ find_and_download_missing_people.py
 ├─ tmdb_people.py
 ├─ truncate_tmdb_people_names.py
 ├─ get_missing_people_dir.py
