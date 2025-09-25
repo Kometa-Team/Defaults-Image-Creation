@@ -12,7 +12,7 @@ Key behavior
 
 Core steps (order is enforced; do not reorder):
   1) ensure_repo      -> ensure_people_repo.py              (always runs: cheap sanity check)
-  2) name_check       -> name_checker_dir.py                (checkpointed)
+  2) scan_kometa_logs -> scan_kometa_logs.py                (checkpointed)
   3) missing          -> get_missing_people.py              (checkpointed)
   4) tmdb             -> tmdb_people.py                     (checkpointed)
   5) truncate         -> truncate_tmdb_people_names.py      (checkpointed)
@@ -34,7 +34,7 @@ Fail-fast points
 - Exit 2 if ORCH_REQUIRE_BG_OUTPUT=true and SEL_DOWNLOAD_DIR is unknown.
 - Exit 0 if sync_images copied 0 files (skip readme/sync_md/push).
 - Exit 0 when confidently detected:
-  name_check=0, missing=0, tmdb=0, missing_dir=0, prep_dirs=0, remove_bg=0.
+  scan_kometa_logs=0, missing=0, tmdb=0, missing_dir=0, prep_dirs=0, remove_bg=0.
 
 Styles
 ------
@@ -331,7 +331,7 @@ def main():
     parser.add_argument("--force", action="store_true", help="Ignore checkpoints and run all steps from the beginning.")
     parser.add_argument("--redo", help="Clear checkpoint for this step (and downstream) then run from it.")
     parser.add_argument("--list", action="store_true", help="List step status and exit.")
-    parser.add_argument("--logs-dir", help="Kometa logs folder for steps name_check/missing (env ORCH_LOGS_DIR otherwise).")
+    parser.add_argument("--logs-dir", help="Kometa logs folder for steps scan_kometa_logs/missing (env ORCH_LOGS_DIR otherwise).")
     parser.add_argument("--repo-root", help="Kometa-People-Images repository root (env PEOPLE_IMAGES_DIR otherwise).")
     parser.add_argument("--branch", help="Git branch for update/push (env PEOPLE_BRANCH or auto-detect).")
     parser.add_argument("--style", help="Default style for README/MD if no multi-style is set (env ORCH_STYLE or 'transparent').")
@@ -382,11 +382,11 @@ def main():
         args2 = ["--repo-root", str(repo_root)] if repo_root else []
         return [py, "ensure_people_repo.py"] + args2
 
-    def _name_check():
+    def _scan_kometa_logs():
         if not logs_dir or not logs_dir.exists():
             print("[ERROR] ORCH_LOGS_DIR not set or missing. Use --logs-dir.", file=sys.stderr)
             sys.exit(2)
-        return [py, "name_checker_dir.py", "--input_directory", str(logs_dir)]
+        return [py, "scan_kometa_logs.py", "--input_directory", str(logs_dir)]
 
     def _missing():
         if not logs_dir or not logs_dir.exists():
@@ -468,7 +468,7 @@ def main():
     # Fixed, enforced order
     steps: List[Step] = [
         Step("ensure_repo", "Validate People-Images repo",          _ensure_repo,   marker=None,              always_run=True),
-        Step("name_check",  "Scan Kometa logs for missing names",   _name_check,    marker="name_check.done.json"),
+        Step("scan_kometa_logs",  "Scan Kometa logs for missing names",   _scan_kometa_logs,    marker="scan_kometa_logs.done.json"),
         Step("missing",     "Build missing-people lists",           _missing,       marker="missing.done.json"),
         Step("tmdb",        "Download posters via TMDB",            _tmdb,          marker="tmdb.done.json"),
         Step("truncate",    "Truncate TMDB person names",           _truncate,      marker="truncate.done.json"),
@@ -573,7 +573,7 @@ def main():
                 sys.exit(2)
 
             # ensure_repo must exist AND return success; also sanity-check the repo root afterward
-            capture_output = (s.key in {"name_check", "missing"})
+            capture_output = (s.key in {"scan_kometa_logs", "missing"})
             rc, out, _ = run_cmd(s.title, argv, capture=capture_output)
             if rc != 0:
                 print(f"[FAIL] {s.key} exited with code {rc}. Stopping.", file=sys.stderr)
@@ -596,11 +596,11 @@ def main():
                     print("[ERROR] ensure_repo did not yield expected category folders under repo root.", file=sys.stderr)
                     sys.exit(2)
 
-            # name_check: if clearly zero, stop
-            elif s.key == "name_check":
-                zero = parse_zero_from_log(log_path_for("name_checker_dir.py"))
+            # scan_kometa_logs: if clearly zero, stop
+            elif s.key == "scan_kometa_logs":
+                zero = parse_zero_from_log(log_path_for("scan_kometa_logs.py"))
                 if zero is True:
-                    print("[INFO] name_check found 0 items — stopping.")
+                    print("[INFO] scan_kometa_logs found 0 items — stopping.")
                     sys.exit(0)
 
             # missing: if clearly zero, stop

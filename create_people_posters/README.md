@@ -103,7 +103,7 @@ SEL_RELOAD_EACH_FILE=0
 The orchestrator enforces the single correct order and writes checkpoints so you can resume later:
 
 1. **ensure_repo** → `ensure_people_repo.py` — validate Kometa‑People‑Images repo directory (always runs)  
-2. **name_check** → `name_checker_dir.py` — scan Kometa logs for missing names  
+2. **scan_kometa_logs** → `scan_kometa_logs.py` — scan Kometa logs for missing names  
 3. **missing** → `get_missing_people.py` — build missing‑people lists from logs  
 4. **tmdb** → `tmdb_people.py` — download posters via TMDB API  
 5. **truncate** → `truncate_tmdb_people_names.py` — normalize/shorten person names  
@@ -206,7 +206,7 @@ python compare_image_trees.py
 create_people_posters/
 ├─ orchestrator.py
 ├─ ensure_people_repo.py
-├─ name_checker_dir.py
+├─ scan_kometa_logs.py
 ├─ get_missing_people.py
 ├─ tmdb_people.py
 ├─ truncate_tmdb_people_names.py
