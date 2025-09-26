@@ -16,7 +16,7 @@ Core steps (order is enforced; do not reorder):
   3) find_and_download_missing -> find_and_download_missing_people.py (checkpointed)
   4) tmdb                      -> tmdb_people.py                      (checkpointed)
   5) truncate                  -> truncate_tmdb_people_names.py       (checkpointed)
-  6) missing_dir               -> get_missing_people_dir.py           (checkpointed)
+  6) audit_people_images       -> audit_people_images.py           (checkpointed)
   7) prep_dirs                 -> prep_people_dirs.py                 (checkpointed)
   8) remove_bg                 -> sel_remove_bg.py                    (checkpointed)
   9) poster_ps1                -> create_people_poster.ps1            (checkpointed; requires PowerShell/pwsh)
@@ -34,7 +34,7 @@ Fail-fast points
 - Exit 2 if ORCH_REQUIRE_BG_OUTPUT=true and SEL_DOWNLOAD_DIR is unknown.
 - Exit 0 if sync_images copied 0 files (skip readme/sync_md/push).
 - Exit 0 when confidently detected:
-  scan_kometa_logs=0, find_and_download_missing=0, tmdb=0, missing_dir=0, prep_dirs=0, remove_bg=0.
+  scan_kometa_logs=0, find_and_download_missing=0, tmdb=0, audit_people_images=0, prep_dirs=0, remove_bg=0.
 
 Styles
 ------
@@ -273,8 +273,8 @@ def sum_copied_from_sync_log(logfile: Path) -> Optional[int]:
     return sum(copied_values) if copied_values else 0 if "copied=0" in text else None
 
 
-def parsed_processed_from_missing_dir(logfile: Path) -> Optional[int]:
-    """Parse get_missing_people_dir.py log for 'Summary: processed=N'."""
+def parsed_processed_from_audit_people_images(logfile: Path) -> Optional[int]:
+    """Parse audit_people_images.py log for 'Summary: processed=N'."""
     if not logfile.exists():
         return None
     try:
@@ -403,8 +403,8 @@ def main():
     def _truncate():
         return [py, "truncate_tmdb_people_names.py"]
 
-    def _missing_dir():
-        return [py, "get_missing_people_dir.py"]
+    def _audit_people_images():
+        return [py, "audit_people_images.py"]
 
     def _prep_dirs():
         return [py, "prep_people_dirs.py"]
@@ -472,7 +472,7 @@ def main():
         Step("find_and_download_missing", "Build missing-people lists",                 _find_and_download_missing, marker="find_and_download_missing.done.json"),
         Step("tmdb",                      "Download posters via TMDB",                  _tmdb,                      marker="tmdb.done.json"),
         Step("truncate",                  "Truncate TMDB person names",                 _truncate,                  marker="truncate.done.json"),
-        Step("missing_dir",               "Dir-based missing discovery",                _missing_dir,               marker="missing_dir.done.json"),
+        Step("audit_people_images",       "Dir-based missing discovery",                _audit_people_images,       marker="audit_people_images.done.json"),
         Step("prep_dirs",                 "Ensure local people_dirs scaffolds",         _prep_dirs,                 marker="prep_dirs.done.json"),
         Step("remove_bg",                 "Remove backgrounds (Selenium)",              _remove_bg,                 marker="remove_bg.done.json"),
         Step("poster_ps1",                "Generate posters via PowerShell",            _poster_ps1,                marker="poster_ps1.done.json"),
@@ -617,11 +617,11 @@ def main():
                     print("[INFO] tmdb downloaded 0 posters — stopping.")
                     sys.exit(0)
 
-            # missing_dir: if processed 0, stop (parse its log rather than filesystem)
-            elif s.key == "missing_dir":
-                md_count = parsed_processed_from_missing_dir(log_path_for("get_missing_people_dir.py"))
+            # audit_people_images: if processed 0, stop (parse its log rather than filesystem)
+            elif s.key == "audit_people_images":
+                md_count = parsed_processed_from_audit_people_images(log_path_for("audit_people_images.py"))
                 if md_count is not None and md_count == 0:
-                    print("[INFO] missing_dir sorted/moved 0 items — stopping.")
+                    print("[INFO] audit_people_images sorted/moved 0 items — stopping.")
                     sys.exit(0)
 
             # prep_dirs: if established/moved 0 artifacts, stop (use fs heuristic as fallback)

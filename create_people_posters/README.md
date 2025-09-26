@@ -107,7 +107,7 @@ The orchestrator enforces the single correct order and writes checkpoints so you
 3. **find_and_download_missing** → `find_and_download_missing_people.py` — build missing‑people lists from logs  
 4. **tmdb** → `tmdb_people.py` — download posters via TMDB API  
 5. **truncate** → `truncate_tmdb_people_names.py` — normalize/shorten person names  
-6. **missing_dir** → `get_missing_people_dir.py` — directory‑based discovery to catch stragglers  
+6. **audit_people_images** → `audit_people_images.py` — directory‑based discovery to catch stragglers  
 7. **prep_dirs** → `prep_people_dirs.py` — ensure local `./config/people_dirs` scaffolds exist  
 8. **remove_bg** → `sel_remove_bg.py` — background removal via Selenium (Adobe Express)  
 9. **poster_ps1** → `create_people_poster.ps1` — poster generation step (PowerShell)  
@@ -210,7 +210,7 @@ create_people_posters/
 ├─ find_and_download_missing_people.py
 ├─ tmdb_people.py
 ├─ truncate_tmdb_people_names.py
-├─ get_missing_people_dir.py
+├─ audit_people_images.py
 ├─ prep_people_dirs.py
 ├─ sel_remove_bg.py
 ├─ create_people_poster.ps1
