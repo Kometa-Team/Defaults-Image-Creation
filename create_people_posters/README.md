@@ -29,20 +29,34 @@ It’s designed to be **cross‑platform**, **fixed‑order**, and **resumable**
 ## Install (base environment)
 
 ```bash
+# Windows:
 # 1) Clone your repo and cd into it
 git clone https://github.com/Kometa-Team/Defaults-Image-Creation Defaults-Image-Creation
 cd Defaults-Image-Creation
 cd create_people_posters
 
 # 2) Create and activate a virtualenv
-python -m venv .venv
-# Windows:
-.venv\Scripts\activate
-# macOS/Linux:
-source .venv/bin/activate
+python -m venv venv
+venv\Scripts\activate
 
 # 3) Upgrade pip and install base requirements
 python -m pip install -U pip wheel
+pip install -r requirements.txt
+```
+
+```bash
+# macOS/Linux:
+# 1) Clone your repo and cd into it
+git clone https://github.com/Kometa-Team/Defaults-Image-Creation Defaults-Image-Creation
+cd Defaults-Image-Creation
+cd create_people_posters
+
+# 2) Create and activate a virtualenv
+python3 -m venv venv
+source .venv/bin/activate
+
+# 3) Upgrade pip and install base requirements
+python3 -m pip install -U pip wheel
 pip install -r requirements.txt
 ```
 
