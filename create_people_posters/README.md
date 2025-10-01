@@ -30,7 +30,8 @@ It’s designed to be **cross‑platform**, **fixed‑order**, and **resumable**
 
 ```bash
 # 1) Clone your repo and cd into it
-git clone <your-fork-or-repo-url> create_people_posters
+git clone https://github.com/Kometa-Team/Defaults-Image-Creation Defaults-Image-Creation
+cd Defaults-Image-Creation
 cd create_people_posters
 
 # 2) Create and activate a virtualenv
