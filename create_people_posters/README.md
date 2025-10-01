@@ -140,11 +140,10 @@ We recommend a **dedicated venv** (Python **3.10**) for this step.
 ## Install (base environment)
 
 ```bash
+# Windows:
 # 1) Create & activate a dedicated venv
 python -m venv .venv-colorize
 .venv-colorize\Scripts\activate
-# macOS/Linux:
-source .venv-colorize/bin/activate
 
 # 2) Upgrade pip and install base requirements
 python -m pip install -U pip wheel
@@ -152,6 +151,20 @@ pip install -r requirements-colorize.txt
 
 # 3) Tell orchestrator where that Python lives (add to .env)
 # COLORIZE_PYTHON=C:\path\to\create_people_posters\.venv-colorize\Scripts\python.exe
+```
+
+```bash
+# macOS/Linux:
+# 1) Create & activate a dedicated venv
+python3 -m venv .venv-colorize
+source .venv-colorize/bin/activate
+
+# 2) Upgrade pip and install base requirements
+python3 -m pip install -U pip wheel
+pip install -r requirements-colorize.txt
+
+# 3) Tell orchestrator where that Python lives (add to .env)
+# COLORIZE_PYTHON=/path/to/create_people_posters/.venv-colorize/Scripts/python3
 ```
 
 > The colorizer will auto‑vendor DeOldify source and auto‑download the `ColorizeArtistic_gen.pth` weights on first run.
