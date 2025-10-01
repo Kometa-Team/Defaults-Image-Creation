@@ -53,7 +53,7 @@ cd create_people_posters
 
 # 2) Create and activate a virtualenv
 python3 -m venv venv
-source .venv/bin/activate
+source venv/bin/activate
 
 # 3) Upgrade pip and install base requirements
 python3 -m pip install -U pip wheel
