@@ -9,25 +9,41 @@ colorize_noncolor.py — Colorize non-color images placed in "other" and output 
 - Writes to:   ./config/Downloads/color
 - Keeps original filenames (NO suffix), outputs JPG.
 
-Requires (in a dedicated venv, e.g. Python 3.10):
-  pip install --extra-index-url https://download.pytorch.org/whl/cpu "torch==1.13.1+cpu" "torchvision==0.14.1+cpu"
-  pip install fastai==1.0.61 pillow opencv-python-headless requests
-
-Env (optional):
-  COLORIZE_INPUT_OTHER   = ./config/Downloads/other
-  COLORIZE_OUTPUT_COLOR  = ./config/Downloads/color
-  COLORIZE_MODELS_DIR    = ./config/models/deoldify
-  COLORIZE_VENDOR_DIR    = ./config/vendor
+Run in a dedicated venv (Python 3.10 recommended) with requirements-colorize.txt installed.
 """
 
-import os, sys, io, zipfile, shutil, logging, time, urllib.request
+import os, sys, io, zipfile, shutil, logging, warnings, time, urllib.request
 from logging import FileHandler, StreamHandler
 from pathlib import Path
 from typing import Optional
 
 # ---------- paths + logging ----------
+# Put PyTorch model cache under ./config/models/torch-cache instead of user home
 SCRIPT_DIR = Path(__file__).resolve().parent
 CONFIG_DIR = SCRIPT_DIR / "config"
+os.environ.setdefault("TORCH_HOME", str((CONFIG_DIR / "models" / "torch-cache").resolve()))
+
+# NumExpr: avoid the “defaulting to 8 threads” banner
+os.environ.setdefault("NUMEXPR_VERBOSE", "0")
+os.environ.setdefault("NUMEXPR_MAX_THREADS", str(os.cpu_count() or 8))
+os.environ.setdefault("NUMEXPR_NUM_THREADS", str(os.cpu_count() or 8))
+
+# Fastai dummy-dataset warnings
+warnings.filterwarnings("ignore", category=UserWarning, module=r"fastai\.data_block")
+warnings.filterwarnings("ignore", message=r"Your training set is empty\.")
+warnings.filterwarnings("ignore", message=r"Your validation set is empty\.")
+
+# Torchvision deprecation noise
+warnings.filterwarnings("ignore", category=UserWarning, module=r"torchvision\.models\._utils")
+warnings.filterwarnings("ignore", message=r"Using 'weights' as positional parameter")
+warnings.filterwarnings("ignore", message=r"Arguments other than a weight enum or `None` for 'weights'")
+
+# Quiet chatty libs
+logging.getLogger("PIL").setLevel(logging.ERROR)
+logging.getLogger("matplotlib").setLevel(logging.ERROR)
+logging.getLogger("matplotlib.font_manager").setLevel(logging.ERROR)
+logging.getLogger("numexpr").setLevel(logging.WARNING)
+
 LOGS_DIR = CONFIG_DIR / "logs"
 VENDOR_DIR = Path(os.getenv("COLORIZE_VENDOR_DIR", CONFIG_DIR / "vendor"))
 MODELS_DIR = Path(os.getenv("COLORIZE_MODELS_DIR", CONFIG_DIR / "models" / "deoldify"))
@@ -36,6 +52,9 @@ OUT_COLOR = Path(os.getenv("COLORIZE_OUTPUT_COLOR", CONFIG_DIR / "Downloads" / "
 
 for d in (CONFIG_DIR, LOGS_DIR, VENDOR_DIR, MODELS_DIR, OUT_COLOR):
     d.mkdir(parents=True, exist_ok=True)
+
+# after creating LOGS_DIR, VENDOR_DIR, MODELS_DIR, OUT_COLOR
+(CONFIG_DIR / "dummy").mkdir(parents=True, exist_ok=True)
 
 LOG_FILE = LOGS_DIR / "colorize_noncolor.log"
 logging.basicConfig(
@@ -47,14 +66,31 @@ logging.basicConfig(
 log = logging.getLogger("colorize")
 
 
+# ---------- sanity: numpy version (fastai 1.x expects NumPy < 2) ----------
+def require_numpy_v1():
+    try:
+        import numpy as np
+        ver = tuple(int(x) for x in np.__version__.split(".", 2)[:2])
+        if ver >= (2, 0):
+            log.error("NumPy %s detected — DeOldify (fastai 1.x) requires NumPy < 2.\n"
+                      "Fix in this venv:\n  pip uninstall -y numpy\n  pip install 'numpy<2'",
+                      np.__version__)
+            sys.exit(2)
+    except Exception:
+        pass
+
+
+require_numpy_v1()
+
+
 # ---------- tiny http helpers ----------
-def http_get(url: str, timeout: int = 60) -> bytes:
+def http_get(url: str, timeout: int = 90) -> bytes:
     req = urllib.request.Request(url, headers={"User-Agent": "curl/8.0"})
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return r.read()
 
 
-def http_get_to_file(url: str, dst: Path, timeout: int = 300) -> None:
+def http_get_to_file(url: str, dst: Path, timeout: int = 600) -> None:
     data = http_get(url, timeout=timeout)
     dst.parent.mkdir(parents=True, exist_ok=True)
     with dst.open("wb") as f:
@@ -65,43 +101,27 @@ def http_get_to_file(url: str, dst: Path, timeout: int = 300) -> None:
 def ensure_deoldify_on_path() -> None:
     """
     Ensures we can `import deoldify` by:
-    - downloading DeOldify zip (master/main) if missing
-    - extracting ONLY the 'deoldify' package under ./config/vendor/deoldify
-    - adding ./config/vendor (the PARENT) to sys.path
+    - adding ./config/vendor to sys.path
+    - downloading DeOldify zip (master/main) and extracting ONLY the 'deoldify' package under ./config/vendor/deoldify
     """
-    # if it imports already, nothing to do
+    if str(VENDOR_DIR) not in sys.path:
+        sys.path.insert(0, str(VENDOR_DIR))
+
     try:
         import deoldify  # noqa: F401
         return
     except Exception:
         pass
 
-    # make sure parent of the package is on sys.path (this is the fix)
-    parent = VENDOR_DIR
-    if str(parent) not in sys.path:
-        sys.path.insert(0, str(parent))
-
-    # try import again in case user already placed it there
-    try:
-        import deoldify  # noqa: F401
-        return
-    except Exception:
-        pass
-
-    # fetch + extract
     urls = [
-        # master first (most repos still default to master)
         "https://codeload.github.com/jantic/DeOldify/zip/refs/heads/master",
-        # fallback to main if the default changed
         "https://codeload.github.com/jantic/DeOldify/zip/refs/heads/main",
     ]
-    ok = False
     for u in urls:
         try:
             log.info("DeOldify not found — downloading source ZIP …")
-            data = http_get(u, timeout=120)
+            data = http_get(u, timeout=180)
             with zipfile.ZipFile(io.BytesIO(data)) as zf:
-                # find top folder (DeOldify-<hash>/) and its inner "deoldify/" package
                 top = None
                 for n in zf.namelist():
                     if n.endswith("/") and n.lower().startswith("deoldify-") and n.count("/") == 1:
@@ -110,11 +130,9 @@ def ensure_deoldify_on_path() -> None:
                 if not top:
                     continue
                 pkg_prefix = top + "deoldify/"
-                # clear any old vendor copy
                 target_pkg = VENDOR_DIR / "deoldify"
                 if target_pkg.exists():
                     shutil.rmtree(target_pkg, ignore_errors=True)
-                # extract only package files
                 extracted = 0
                 for n in zf.namelist():
                     if n.startswith(pkg_prefix) and not n.endswith("/"):
@@ -125,19 +143,17 @@ def ensure_deoldify_on_path() -> None:
                             out.write(src.read())
                         extracted += 1
                 log.info("DeOldify vendored into: %s (%d files)", target_pkg, extracted)
-                ok = extracted > 0
                 break
         except Exception as e:
             log.warning("Vendor attempt failed: %s", e)
 
-    if not ok:
-        raise RuntimeError("Unable to vendor DeOldify package.")
-
-    # final import check
     try:
         import deoldify  # noqa: F401
     except Exception as e:
-        raise RuntimeError(f"DeOldify import failed after vendoring: {e}")
+        log.error("DeOldify import failed: %s", e)
+        log.error("Ensure this venv has: fastai==1.0.61, torch 1.13.1+cpu, torchvision 0.14.1+cpu,\n"
+                  "and python packages: yt-dlp, ffmpeg-python, imageio, imageio-ffmpeg.")
+        sys.exit(2)
 
 
 # ---------- weights ----------
@@ -151,9 +167,7 @@ def ensure_weights() -> Path:
         return dst
 
     mirrors = [
-        # Common stable mirror
         "https://data.deepai.org/deoldify/ColorizeArtistic_gen.pth",
-        # HF mirror (query param ok)
         "https://huggingface.co/spaces/jantic/DeOldify/resolve/main/models/ColorizeArtistic_gen.pth?download=true",
     ]
     last_err: Optional[Exception] = None
@@ -167,27 +181,26 @@ def ensure_weights() -> Path:
             last_err = e
             log.warning("Weights attempt failed: %s", e)
 
-    raise RuntimeError(f"Failed to fetch ColorizeArtistic weights: {last_err}")
+    log.error("Failed to fetch ColorizeArtistic weights: %s", last_err)
+    sys.exit(2)
 
 
 # ---------- colorize one ----------
 def colorize_one(src: Path, dst: Path, render_factor: int = 35) -> bool:
-    """
-    Returns True on success.
-    """
-    # Make sure deoldify can import (vendor + sys.path fix)
+
     ensure_deoldify_on_path()
 
-    # Import stack (FastAI v1 + DeOldify)
+    # DeOldify imports (fastai v1)
     try:
         from deoldify import device
         from deoldify.device_id import DeviceId
         from deoldify.visualize import get_image_colorizer
+        import ffmpeg  # just to ensure python-ffmpeg is present
+        import yt_dlp  # required by visualize even for stills
     except Exception as e:
         log.error("DeOldify import failed: %s", e)
-        log.error("If fastai/torch are missing, install them in this env.")
-        log.error(
-            'Example:\n  pip install --extra-index-url https://download.pytorch.org/whl/cpu "torch==1.13.1+cpu" "torchvision==0.14.1+cpu"\n  pip install fastai==1.0.61 pillow opencv-python-headless')
+        log.error("Missing deps? Install inside this venv:\n"
+                  "  pip install -r requirements-colorize.txt")
         return False
 
     # Force CPU
@@ -196,32 +209,27 @@ def colorize_one(src: Path, dst: Path, render_factor: int = 35) -> bool:
     except Exception:
         pass
 
-    # Ensure weights, and ensure cwd contains a "models" dir DeOldify expects
+    # Weights + expected ./models path for DeOldify
     weights = ensure_weights()
-    models_cwd = MODELS_DIR.parent  # ./config/models
-    models_cwd.mkdir(parents=True, exist_ok=True)
-    # DeOldify looks for ./models/ColorizeArtistic_gen.pth by default
-    link_target = models_cwd / "models" / "ColorizeArtistic_gen.pth"
-    link_target.parent.mkdir(parents=True, exist_ok=True)
-    if not link_target.exists():
-        try:
-            # hard copy (works everywhere, avoids symlink perms)
-            shutil.copy2(weights, link_target)
-        except Exception:
-            pass
 
-    # Some DeOldify utilities resolve relative to CWD; run from CONFIG_DIR to be safe
+    # DeOldify expects ./models/ColorizeArtistic_gen.pth under the current working dir (CONFIG_DIR)
+    models_root = CONFIG_DIR / "models"
+    models_root.mkdir(parents=True, exist_ok=True)
+    link_target = models_root / "ColorizeArtistic_gen.pth"
+
+    if not link_target.exists():
+        shutil.copy2(weights, link_target)
+
+    # Some DeOldify utils assume CWD context
     cwd_save = Path.cwd()
     try:
         os.chdir(CONFIG_DIR)
         colorizer = get_image_colorizer(artistic=True)
-        # get PIL image without plotting
         result = colorizer.get_transformed_image(
             path=str(src),
             render_factor=render_factor,
             watermarked=False
         )
-        # Save as high-quality JPG with original basename
         dst.parent.mkdir(parents=True, exist_ok=True)
         result.save(dst, format="JPEG", quality=95, optimize=True)
         return True
@@ -238,8 +246,8 @@ def main() -> None:
         log.info("Input folder does not exist: %s — nothing to do.", IN_OTHER)
         sys.exit(0)
 
-    candidates = [p for p in IN_OTHER.iterdir() if
-                  p.is_file() and p.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tif", ".tiff"}]
+    exts = {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tif", ".tiff"}
+    candidates = [p for p in IN_OTHER.iterdir() if p.is_file() and p.suffix.lower() in exts]
     if not candidates:
         log.info("No candidate images found in %s — nothing to do.", IN_OTHER)
         sys.exit(0)

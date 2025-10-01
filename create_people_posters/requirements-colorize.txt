@@ -1,7 +1,23 @@
+# CPU PyTorch (works cross-platform; no GPU/CUDA required)
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch==1.13.1+cpu
 torchvision==0.14.1+cpu
+
+# DeOldify stack
 fastai==1.0.61
-pillow
-requests
-opencv-python-headless
+
+# Runtime deps (image I/O & DeOldify imports)
+Pillow>=10.0.0
+opencv-python-headless>=4.8.0
+requests>=2.32.0
+yt-dlp>=2023.3.4
+ffmpeg-python>=0.2.0
+imageio>=2.34.0
+imageio-ffmpeg>=0.4.9
+
+# IMPORTANT: fastai 1.x ecosystem expects NumPy 1.x
+numpy<2
+numexpr<2.9
+
+ipython<9
+matplotlib<3.9

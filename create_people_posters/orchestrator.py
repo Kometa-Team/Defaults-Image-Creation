@@ -16,15 +16,16 @@ Core steps (order is enforced; do not reorder):
   3) find_and_download_missing -> find_and_download_missing_people.py (checkpointed)
   4) tmdb                      -> tmdb_people.py                      (checkpointed)
   5) truncate                  -> truncate_tmdb_people_names.py       (checkpointed)
-  6) audit_people_images       -> audit_people_images.py           (checkpointed)
-  7) prep_dirs                 -> prep_people_dirs.py                 (checkpointed)
-  8) remove_bg                 -> sel_remove_bg.py                    (checkpointed)
-  9) poster_ps1                -> create_people_poster.ps1            (checkpointed; requires PowerShell/pwsh)
- 10) update                    -> update_people_repos.py --op update  (ALWAYS runs when reached)
- 11) sync_images               -> sync_people_images.py               (checkpointed)
- 12) readme                    -> auto_readme.py                      (checkpointed; supports multiple styles)
- 13) sync_md                   -> sync_md.py                          (checkpointed; supports multiple styles)
- 14) push                      -> update_people_repos.py --op push    (ALWAYS runs when reached)
+  6) audit_people_images       -> audit_people_images.py              (checkpointed)
+  7) colorize_noncolor         -> colorize_noncolor.py                (checkpointed)
+  8) prep_dirs                 -> prep_people_dirs.py                 (checkpointed)
+  9) remove_bg                 -> sel_remove_bg.py                    (checkpointed)
+ 10) poster_ps1                -> create_people_poster.ps1            (checkpointed; requires PowerShell/pwsh)
+ 11) update                    -> update_people_repos.py --op update  (ALWAYS runs when reached)
+ 12) sync_images               -> sync_people_images.py               (checkpointed)
+ 13) readme                    -> auto_readme.py                      (checkpointed; supports multiple styles)
+ 14) sync_md                   -> sync_md.py                          (checkpointed; supports multiple styles)
+ 15) push                      -> update_people_repos.py --op push    (ALWAYS runs when reached)
 
 Fail-fast points
 ----------------
@@ -331,7 +332,7 @@ def main():
     parser.add_argument("--force", action="store_true", help="Ignore checkpoints and run all steps from the beginning.")
     parser.add_argument("--redo", help="Clear checkpoint for this step (and downstream) then run from it.")
     parser.add_argument("--list", action="store_true", help="List step status and exit.")
-    parser.add_argument("--logs-dir", help="Kometa logs folder for steps scan_kometa_logs/missing (env ORCH_LOGS_DIR otherwise).")
+    parser.add_argument("--logs-dir", help="Kometa logs folder for steps scan_kometa_logs/find_and_download_missing (env ORCH_LOGS_DIR otherwise).")
     parser.add_argument("--repo-root", help="Kometa-People-Images repository root (env PEOPLE_IMAGES_DIR otherwise).")
     parser.add_argument("--branch", help="Git branch for update/push (env PEOPLE_BRANCH or auto-detect).")
     parser.add_argument("--style", help="Default style for README/MD if no multi-style is set (env ORCH_STYLE or 'transparent').")
@@ -371,6 +372,11 @@ def main():
 
     # Build step builders
     py = sys.executable
+
+    def _colorize():
+        # allow a separate venv for DeOldify if provided
+        py_color = os.getenv("COLORIZE_PYTHON") or py
+        return [py_color, "colorize_noncolor.py"]
 
     def _require_repo_or_die():
         if not repo_root or not repo_root.exists():
@@ -473,6 +479,7 @@ def main():
         Step("tmdb",                      "Download posters via TMDB",                  _tmdb,                      marker="tmdb.done.json"),
         Step("truncate",                  "Truncate TMDB person names",                 _truncate,                  marker="truncate.done.json"),
         Step("audit_people_images",       "Dir-based missing discovery",                _audit_people_images,       marker="audit_people_images.done.json"),
+        Step("colorize",                  "Colorize non-color images",                  _colorize,                  marker="colorize_noncolor.done.json"),
         Step("prep_dirs",                 "Ensure local people_dirs scaffolds",         _prep_dirs,                 marker="prep_dirs.done.json"),
         Step("remove_bg",                 "Remove backgrounds (Selenium)",              _remove_bg,                 marker="remove_bg.done.json"),
         Step("poster_ps1",                "Generate posters via PowerShell",            _poster_ps1,                marker="poster_ps1.done.json"),
@@ -573,7 +580,7 @@ def main():
                 sys.exit(2)
 
             # ensure_repo must exist AND return success; also sanity-check the repo root afterward
-            capture_output = (s.key in {"scan_kometa_logs", "missing"})
+            capture_output = (s.key in {"scan_kometa_logs", "find_and_download_missing"})
             rc, out, _ = run_cmd(s.title, argv, capture=capture_output)
             if rc != 0:
                 print(f"[FAIL] {s.key} exited with code {rc}. Stopping.", file=sys.stderr)
@@ -603,11 +610,11 @@ def main():
                     print("[INFO] scan_kometa_logs found 0 items — stopping.")
                     sys.exit(0)
 
-            # missing: if clearly zero, stop
-            elif s.key == "missing":
+            # find_and_download_missing: if clearly zero, stop
+            elif s.key == "find_and_download_missing":
                 zero = parse_zero_from_log(log_path_for("find_and_download_missing_people.py"))
                 if zero is True:
-                    print("[INFO] missing produced 0 items — stopping.")
+                    print("[INFO] find_and_download_missing produced 0 items — stopping.")
                     sys.exit(0)
 
             # tmdb: if no new posters created, stop
@@ -623,6 +630,10 @@ def main():
                 if md_count is not None and md_count == 0:
                     print("[INFO] audit_people_images sorted/moved 0 items — stopping.")
                     sys.exit(0)
+
+            elif s.key == "colorize":
+                colored = count_recent_files([CONFIG_DIR / "Downloads" / "color"], started, {"jpg", "jpeg", "png"})
+                print(f"[INFO] colorize produced {colored} file(s).")
 
             # prep_dirs: if established/moved 0 artifacts, stop (use fs heuristic as fallback)
             elif s.key == "prep_dirs":
