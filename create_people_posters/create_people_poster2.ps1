@@ -226,21 +226,44 @@ Function GetBaseFileName([string] $fileName) {
 }
 
 #################################
-# Get-Width function
+# Get-Width function (portable)
 #################################
 Function Get-Width($theName, $theFont, $thePointsize) {
   WriteToLogFile "theName is                   : $theName"
   WriteToLogFile "theFont is                   : $theFont"
   WriteToLogFile "thePointsize is              : $thePointsize"
 
-  $string = (& $script:IM.Convert -debug annotate xc: -font $theFont -pointsize $thePointsize -annotate 0 $theName null:) 2>&1 |
-            Select-String -Pattern 'Metrics:' -CaseSensitive -SimpleMatch
-  $theArray = $string -split ';'
-  $arrWidth = $theArray[1].Split(' ')
-  $theWidth = [int]$arrWidth[2]
-  WriteToLogFile "Name Width is                : $theWidth"
-  $theWidth
+  # Try to read width from the debug "Metrics:" line (IM6/IM7)
+  $args   = @('-debug','annotate','xc:','-font',"$theFont",'-pointsize',"$thePointsize",'-annotate','0',"$theName",'null:')
+  $out    = (& $script:IM.Convert @args 2>&1)
+  $line   = $out | Select-String -Pattern 'Metrics:' | Select-Object -First 1 -ExpandProperty Line
+
+  $width = $null
+  if ($line) {
+    # Covers formats like: "... Metrics: text:'X' width: 123 height: ..."
+    if ($line -match 'width[:= ]+([0-9]+(?:\.[0-9]+)?)') {
+      $width = [int][double]$Matches[1]
+    }
+    # Some builds print geometry instead
+    elseif ($line -match 'Geometry: *([0-9]+)x([0-9]+)') {
+      $width = [int]$Matches[1]
+    }
+  }
+
+  if ($null -ne $width) {
+    WriteToLogFile "Name Width is                : $width"
+    return $width
+  }
+
+  # Fallback: render a label and ask ImageMagick for its width
+  # (portable across IM6/IM7; no temp files created)
+  $w = & $script:IM.Convert -background none -font "$theFont" -pointsize "$thePointsize" `
+         "label:$theName" -trim -format "%w" info:
+  $w = [int]$w
+  WriteToLogFile "Name Width (fallback)        : $w"
+  return $w
 }
+
 
 #################################
 # Convert-BinaryToText function
