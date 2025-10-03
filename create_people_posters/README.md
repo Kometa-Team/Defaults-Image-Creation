@@ -369,6 +369,20 @@ sudo apt-get install -y powershell
 # 3) Verify
 pwsh --version
 ```
+Install Powershell 7+ (`pwsh`) in macOS:
+```bash
+# If you don't have Homebrew yet (Apple Silicon default path shown):
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Install PowerShell 7
+brew update
+brew install --cask powershell
+
+# Verify
+pwsh --version
+```
 
 **Interrupted run** (CTRL‑C/crash)  
 Just run `python orchestrator.py` again. It resumes where it left off.
