@@ -200,10 +200,8 @@ PEOPLE_IMAGES_DIR=/ABSOLUTE/PATH/TO/Kometa-People-Images  # or ~/Kometa-People-I
 
 ## macOS / Linux (bash/zsh)
 ```bash
-# Default PEOPLE_IMAGES_DIR if not set
-export PEOPLE_IMAGES_DIR="${PEOPLE_IMAGES_DIR:-$HOME/Kometa-People-Images}"
-
-ROOT="${PEOPLE_IMAGES_DIR%/}"  # trim trailing slash
+# assumes you've cd'ed into the parent directory where you want the folder created
+ROOT="$PWD/Kometa-People-Images"
 mkdir -p "$ROOT"
 
 git clone https://github.com/Kometa-Team/People-Images.git               "$ROOT/original"
@@ -217,12 +215,8 @@ git clone https://github.com/Kometa-Team/People-Images-transparent.git   "$ROOT/
 
 ## Windows (PowerShell)
 ```powershell
-# Default PEOPLE_IMAGES_DIR if not set (session-scoped)
-if (-not $env:PEOPLE_IMAGES_DIR) {
-  $env:PEOPLE_IMAGES_DIR = Join-Path $env:USERPROFILE 'Kometa-People-Images'
-}
-
-$ROOT = $env:PEOPLE_IMAGES_DIR.TrimEnd('\','/')
+# assumes you've Set-Location into the parent directory where you want the folder created
+$ROOT = Join-Path (Get-Location) 'Kometa-People-Images'
 New-Item -ItemType Directory -Force -Path $ROOT | Out-Null
 
 git clone https://github.com/Kometa-Team/People-Images.git               (Join-Path $ROOT 'original')
