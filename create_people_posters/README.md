@@ -100,6 +100,7 @@ ORCH_REQUIRE_BG_OUTPUT=false
 
 # Colorizer (optional)
 # If you keep a separate venv just for DeOldify, point to its python here:
+COLORIZE_PYTHON=D:/Defaults-Image-Creation/create_people_posters/.venv-colorize/Scripts/python.exe
 COLORIZE_PYTHON=/absolute/path/to/.venv-colorize/bin/python
 ```
 
@@ -142,11 +143,11 @@ We recommend a **dedicated venv** (Python **3.10**) for this step.
 ```bash
 # Windows:
 # 1) Create & activate a dedicated venv
-python -m venv .venv-colorize
-.venv-colorize\Scripts\activate
+py -3.10 -m venv .venv-colorize
+.\.venv-colorize\Scripts\Activate.ps1   # or Activate.bat
 
 # 2) Upgrade pip and install base requirements
-python -m pip install -U pip wheel
+pip install -U pip setuptools wheel
 pip install -r requirements-colorize.txt
 
 # 3) Tell orchestrator where that Python lives (add to .env)
@@ -155,12 +156,18 @@ pip install -r requirements-colorize.txt
 
 ```bash
 # macOS/Linux:
-# 1) Create & activate a dedicated venv
-python3 -m venv .venv-colorize
+# Install Python 3.10 (on 22.04 it’s in the archive; on 24.04 use deadsnakes)
+sudo add-apt-repository ppa:deadsnakes/ppa -y
+sudo apt update
+sudo apt install -y python3.10 python3.10-venv
+
+# New venv *with 3.10*
+cd Defaults-Image-Creation/create_people_posters
+python3.10 -m venv .venv-colorize
 source .venv-colorize/bin/activate
 
-# 2) Upgrade pip and install base requirements
-python3 -m pip install -U pip wheel
+# Upgrade tooling and install the pinned reqs
+pip install -U pip setuptools wheel
 pip install -r requirements-colorize.txt
 
 # 3) Tell orchestrator where that Python lives (add to .env)
