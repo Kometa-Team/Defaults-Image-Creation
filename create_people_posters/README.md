@@ -352,6 +352,23 @@ Install PowerShell 7+ (`pwsh`) or run on Windows. Then rerun just that step:
 ```bash
 python orchestrator.py --redo poster_ps1
 ```
+Install PowerShell 7+ (`pwsh`) in Linux:
+```bash
+# 1) Add Microsoft’s repo
+sudo apt-get update
+sudo apt-get install -y wget apt-transport-https software-properties-common
+. /etc/os-release
+wget -q https://packages.microsoft.com/config/ubuntu/$VERSION_ID/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+rm packages-microsoft-prod.deb
+
+# 2) Install PowerShell 7
+sudo apt-get update
+sudo apt-get install -y powershell
+
+# 3) Verify
+pwsh --version
+```
 
 **Interrupted run** (CTRL‑C/crash)  
 Just run `python orchestrator.py` again. It resumes where it left off.
