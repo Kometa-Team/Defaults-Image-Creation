@@ -192,23 +192,18 @@ Function SortFiles ($folder) {
   $sortBase = $folder
   WriteToLogFile "Sorting Folder               : $sortBase"
 
-  # Find PNG/JPG in the folder (non-recursive, files only)
-  $files = Get-ChildItem -Path (Join-Path $sortBase '*') -File -Include *.png, *.jpg
+  # PNG/JPG only, files only
+  $files = Get-ChildItem -Path (Join-Path $sortBase '*') -File -Include *.png,*.jpg
 
   foreach ($file in $files) {
-    # Build destination: basePath/<FirstLetter>/Images
-    $firstLetter = $file.BaseName.Substring(0, 1).ToUpper()
-    $destRoot = Join-Path $basePath $firstLetter
+    $firstLetter = $file.BaseName.Substring(0,1).ToUpper()
+    $destRoot   = Join-Path $sortBase $firstLetter
     $destImages = Join-Path $destRoot  'Images'
+    New-Item -ItemType Directory -Force -Path $destImages | Out-Null
 
-    # Ensure destination exists
-    if (!(Test-Path $destRoot  -ErrorAction SilentlyContinue)) { New-Item -ItemType Directory -Path $destRoot  -Force | Out-Null }
-    if (!(Test-Path $destImages -ErrorAction SilentlyContinue)) { New-Item -ItemType Directory -Path $destImages -Force | Out-Null }
-
-    # Move the file
     $destFile = Join-Path $destImages $file.Name
     WriteToLogFile "Sorting File                 : Moving: $($file.FullName) -> $destFile"
-    Move-Item -Path $file.FullName -Destination $destFile -Force
+    Move-Item -LiteralPath $file.FullName -Destination $destFile -Force
   }
 }
 
