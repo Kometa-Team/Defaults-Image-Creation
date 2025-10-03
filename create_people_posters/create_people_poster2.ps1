@@ -63,21 +63,23 @@ $global:Counter6 = 0
 $global:Counter7 = 0
 $global:magick = $null
 
-# ========= Cross-platform ImageMagick shim (NEW) =========
-function Get-ImageMagick {
+#################################
+# ImageMagick shim (cross-platform, relocatable)
+#################################
+
+Function Get-ImageMagick {
   $identify = $null; $convert = $null; $root = $null
 
   if (Get-Command magick -ErrorAction SilentlyContinue) {
-    $root = "magick"
-    $identify = { param([Parameter(ValueFromRemainingArguments = $true)] $args) & magick identify @args }
-    $convert = { param([Parameter(ValueFromRemainingArguments = $true)] $args) & magick convert  @args }
-  }
-  else {
+    $root     = "magick"
+    $identify = { param([Parameter(ValueFromRemainingArguments=$true)] $rest) & magick identify @rest }
+    $convert  = { param([Parameter(ValueFromRemainingArguments=$true)] $rest) & magick convert  @rest }
+  } else {
     if (Get-Command identify -ErrorAction SilentlyContinue) {
-      $identify = { param([Parameter(ValueFromRemainingArguments = $true)] $rest) & identify @rest }
+      $identify = { param([Parameter(ValueFromRemainingArguments=$true)] $rest) & identify @rest }
     }
     if (Get-Command convert -ErrorAction SilentlyContinue) {
-      $convert = { param([Parameter(ValueFromRemainingArguments = $true)] $rest) & convert  @rest }
+      $convert  = { param([Parameter(ValueFromRemainingArguments=$true)] $rest) & convert  @rest }
     }
   }
 
@@ -91,6 +93,7 @@ function Get-ImageMagick {
     Convert  = $convert
   }
 }
+
 # Global IM handle
 $script:IM = $null
 # =========================================================
@@ -231,8 +234,9 @@ Function Get-Width($theName, $theFont, $thePointsize) {
   WriteToLogFile "thePointsize is              : $thePointsize"
 
   $string = (& $script:IM.Convert -debug annotate xc: -font $theFont -pointsize $thePointsize -annotate 0 $theName null:) 2>&1 |
-  Select-String -Pattern 'Metrics:' -CaseSensitive -SimpleMatch  $theArray = $string -Split ";"
-  $arrWidth = $theArray[1].Split(" ")
+            Select-String -Pattern 'Metrics:' -CaseSensitive -SimpleMatch
+  $theArray = $string -split ';'
+  $arrWidth = $theArray[1].Split(' ')
   $theWidth = [int]$arrWidth[2]
   WriteToLogFile "Name Width is                : $theWidth"
   $theWidth

@@ -171,6 +171,69 @@ pip install -r requirements-colorize.txt
 
 ---
 
+# People Images: One-Time Repository Setup
+
+The orchestrator expects **seven** repos under one root folder (the path is read from `PEOPLE_IMAGES_DIR`). Clone them as follows.
+
+```
+<PEOPLE_IMAGES_DIR>/
+  original/
+  bw/
+  diiivoy/
+  diiivoycolor/
+  rainier/
+  signature/
+  transparent/
+```
+
+Add the root path to your `.env`:
+```dotenv
+# .env
+PEOPLE_IMAGES_DIR=/ABSOLUTE/PATH/TO/Kometa-People-Images  # or ~/Kometa-People-Images
+```
+
+> **Notes**
+> - You can use an absolute path, `~`, or a relative path; the pipeline normalizes it.
+> - On Windows PowerShell and macOS/Linux, forward slashes are OK in paths.
+
+---
+
+## macOS / Linux (bash/zsh)
+```bash
+# Use the configured root, or default to ~/Kometa-People-Images
+ROOT="${PEOPLE_IMAGES_DIR:-$HOME/Kometa-People-Images}"
+mkdir -p "$ROOT"
+
+git clone https://github.com/Kometa-Team/People-Images.git               "$ROOT/original"
+git clone https://github.com/Kometa-Team/People-Images-bw.git            "$ROOT/bw"
+git clone https://github.com/Kometa-Team/People-Images-diiivoy.git       "$ROOT/diiivoy"
+git clone https://github.com/Kometa-Team/People-Images-diiivoycolor.git  "$ROOT/diiivoycolor"
+git clone https://github.com/Kometa-Team/People-Images-rainier.git       "$ROOT/rainier"
+git clone https://github.com/Kometa-Team/People-Images-signature.git     "$ROOT/signature"
+git clone https://github.com/Kometa-Team/People-Images-transparent.git   "$ROOT/transparent"
+```
+
+## Windows (PowerShell)
+```powershell
+$ROOT = $env:PEOPLE_IMAGES_DIR
+if (-not $ROOT) { $ROOT = Join-Path $env:USERPROFILE 'Kometa-People-Images' }
+New-Item -ItemType Directory -Force -Path $ROOT | Out-Null
+
+git clone https://github.com/Kometa-Team/People-Images.git               (Join-Path $ROOT 'original')
+git clone https://github.com/Kometa-Team/People-Images-bw.git            (Join-Path $ROOT 'bw')
+git clone https://github.com/Kometa-Team/People-Images-diiivoy.git       (Join-Path $ROOT 'diiivoy')
+git clone https://github.com/Kometa-Team/People-Images-diiivoycolor.git  (Join-Path $ROOT 'diiivoycolor')
+git clone https://github.com/Kometa-Team/People-Images-rainier.git       (Join-Path $ROOT 'rainier')
+git clone https://github.com/Kometa-Team/People-Images-signature.git     (Join-Path $ROOT 'signature')
+git clone https://github.com/Kometa-Team/People-Images-transparent.git   (Join-Path $ROOT 'transparent')
+```
+
+### Quick check
+```bash
+ls -1 "$PEOPLE_IMAGES_DIR"
+# Expect: original/ bw/ diiivoy/ diiivoycolor/ rainier/ signature/ transparent/
+```
+
 ## How it works (fixed order)
 
 The orchestrator enforces the single correct order and writes checkpoints so you can resume later:
