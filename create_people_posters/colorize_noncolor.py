@@ -252,7 +252,7 @@ def main() -> None:
         log.info("No candidate images found in %s — nothing to do.", IN_OTHER)
         sys.exit(0)
 
-    processed = skipped = failed = 0
+    processed = skipped = failed = removed = 0  # <- added "removed"
     for src in sorted(candidates):
         dst = OUT_COLOR / (src.stem + ".jpg")  # ALWAYS JPG, same basename
         if dst.exists():
@@ -263,10 +263,21 @@ def main() -> None:
         if ok:
             log.info("Colorized: %s -> %s", src.name, dst.name)
             processed += 1
+            # --- minimal change: remove original B/W on success ---
+            try:
+                if dst.exists() and dst.stat().st_size > 0:
+                    src.unlink()
+                    removed += 1
+                    log.info("Removed original B/W: %s", src.name)
+                else:
+                    log.warning("Output missing/zero-size; keeping original: %s", src.name)
+            except Exception as e:
+                log.warning("Colorized but could not remove original '%s': %s", src.name, e)
         else:
             failed += 1
 
-    log.info("Summary: processed=%d, skipped=%d, failed=%d", processed, skipped, failed)
+    log.info("Summary: processed=%d, skipped=%d, failed=%d, removed=%d",
+             processed, skipped, failed, removed)
     sys.exit(0)
 
 
