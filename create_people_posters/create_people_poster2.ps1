@@ -655,6 +655,7 @@ Function Push-Down ([bool]$b) {
   if ($b) {
     # Starting from the top of the image, find the first pixel that is not transparent which will determine where to place the image on top of the faded grey background (https://legacy.imagemagick.org/discourse-server/viewtopic.php?t=36219) 
     # write-host $file
+	write-host $script:IM.Convert $file -format "%@" info:
     $string = & $script:IM.Convert $file -format "%@" info:
     $theArray = $string.Split("+")
     $theAmt = [int]$theArray[2]
