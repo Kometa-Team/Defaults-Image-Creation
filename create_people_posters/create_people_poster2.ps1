@@ -305,6 +305,8 @@ Function Invoke-kometa-bw-style {
   if ($myWidth -le 1900) {
     WriteToLogFile "Words                        : 1111111111111111111111111111111111111"
     WriteToLogFile "Width-check                  : $postertitle is <= 1900px"
+    # $__prefix = if ($script:IM.Root) { "$($script:IM.Root) convert" } else { "convert" }
+    # Write-Host "$__prefix $bps@zbase-People.jpg $tpps$noextension`"_pushed.png`" -colorspace gray -gravity center -background None -layers Flatten ``( -font Comfortaa-medium -pointsize 183 -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 ``) -gravity north -geometry +0+0 -quality 100% -composite $outFilename"
     & $script:IM.Convert $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -pointsize 183 -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
   }
   else {
@@ -653,18 +655,25 @@ Function Test-Image {
 Function Push-Down ([bool]$b) {
 
   if ($b) {
-    # Starting from the top of the image, find the first pixel that is not transparent which will determine where to place the image on top of the faded grey background (https://legacy.imagemagick.org/discourse-server/viewtopic.php?t=36219) 
-    # write-host $file
-	write-host $script:IM.Convert $file -format "%@" info:
+	# Starting from the top of the image, find the first pixel that is not transparent which will determine where to place the image on top of the faded grey background (https://legacy.imagemagick.org/discourse-server/viewtopic.php?t=36219)
+    $cmdName = if ($script:IM -and $script:IM.Root) { "$($script:IM.Root) convert" } else { "convert" }
+
+    # Show the identify-equivalent command
+    # Write-Host ("{0} `"{1}`" -format ""%@"" info:" -f $cmdName, $file)
     $string = & $script:IM.Convert $file -format "%@" info:
+
     $theArray = $string.Split("+")
     $theAmt = [int]$theArray[2]
     WriteToLogFile "Vertical_Offset              : $theAmt"
+
     if ($theAmt -lt 500) {
       $theAmt = 500 - $theAmt
       WriteToLogFile "Pushing down                 : $noextension by $theAmt px"
-      & $script:IM.Convert $file -page +0+$theAmt -background none -flatten $tpps$noextension"_pushed.png"
-    }
+
+      $outPushed = "$tpps$noextension" + "_pushed.png"
+      & $script:IM.Convert $file -background none -gravity north -splice "0x$theAmt" -gravity north -extent 2000x3000 $tpps$noextension"_pushed.png"
+	}
+
     WriteToLogFile "Moving and Copying           : $noextension to: $tpps"
     Move-Item -Path $file -Destination $tpps -Force
     if (Test-Path $tpps$noextension"_pushed.png") {
@@ -673,9 +682,7 @@ Function Push-Down ([bool]$b) {
       Copy-Item -Path $file -Destination $tpps$noextension"_pushed.png" -Force
     }
   }
-    
 }
-
 
 #################### MAIN ###########################
 

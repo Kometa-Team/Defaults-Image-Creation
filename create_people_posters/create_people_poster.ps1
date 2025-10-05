@@ -171,8 +171,8 @@ Function SortFiles ($folder) {
     }
 
     # Move the file to the sub folder
-    WriteToLogFile "Sorting File                 : Moving: $file to subfolder: $sub "
-    Move-Item $file.FullName -Destination $sub -Force
+	WriteToLogFile "Sorting File                 : Moving: $($file.FullName) -> $(Join-Path (Join-Path $sortBase $sub) $file.Name)"
+	Move-Item $file.FullName -Destination $sub -Force
   }
   Set-Location $script_path
 }
@@ -251,6 +251,7 @@ Function Invoke-kometa-bw-style {
   if ($myWidth -le 1900) {
     WriteToLogFile "Words                        : 1111111111111111111111111111111111111"
     WriteToLogFile "Width-check                  : $postertitle is <= 1900px"
+	# Write-Host "magick $bps@zbase-People.jpg $tpps$noextension`"_pushed.png`" -colorspace gray -gravity center -background None -layers Flatten ``( -font Comfortaa-medium -pointsize 183 -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 ``) -gravity north -geometry +0+0 -quality 100% -composite $outFilename"
     magick $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -pointsize 183 -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
   }
   else {
@@ -604,17 +605,25 @@ Function Test-Image {
 Function Push-Down ([bool]$b) {
 
   if ($b) {
-    # Starting from the top of the image, find the first pixel that is not transparent which will determine where to place the image on top of the faded grey background (https://legacy.imagemagick.org/discourse-server/viewtopic.php?t=36219) 
-    # write-host $file
+    # Starting from the top of the image, find the first pixel that is not transparent…
+    # Show the identify command we're about to run:
+    # Write-Host ("magick `"{0}`" -format ""%@"" info:" -f $file)
     $string = magick $file -format "%@" info:
     $theArray = $string.Split("+")
     $theAmt = [int]$theArray[2]
     WriteToLogFile "Vertical_Offset              : $theAmt"
+
     if ($theAmt -lt 500) {
       $theAmt = 500 - $theAmt
       WriteToLogFile "Pushing down                 : $noextension by $theAmt px"
-      magick $file -page +0+$theAmt -background none -flatten $tpps$noextension"_pushed.png"
+
+      $outPushed = "$tpps$noextension" + "_pushed.png"
+      # Show the composite command we're about to run:
+      # Write-Host ("magick `"{0}`" -page +0+{1} -background none -flatten `"{2}`"" -f $file, $theAmt, $outPushed)
+
+	  magick $file -page +0+$theAmt -background none -flatten $tpps$noextension"_pushed.png"
     }
+
     WriteToLogFile "Moving and Copying           : $noextension to: $tpps"
     Move-Item -Path $file -Destination $tpps -Force
     if (Test-Path $tpps$noextension"_pushed.png") {
@@ -623,9 +632,7 @@ Function Push-Down ([bool]$b) {
       Copy-Item -Path $file -Destination $tpps$noextension"_pushed.png" -Force
     }
   }
-    
 }
-
 
 #################### MAIN ###########################
 
