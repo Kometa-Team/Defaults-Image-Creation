@@ -1,6 +1,7 @@
 # Common requirements for your scripts
 requests
 Pillow
+numpy
 selenium
 python-dotenv
 alive-progress

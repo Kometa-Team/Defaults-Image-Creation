@@ -389,6 +389,15 @@ Just run `python orchestrator.py` again. It resumes where it left off.
 
 ---
 
+**Push to repositories not working** 
+```bash
+# 1) (Unix) Install and sign in (device login in a browser)
+sudo apt-get update && sudo apt-get install -y gh
+gh auth login           # GitHub.com → HTTPS → “Login with a web browser”
+gh auth setup-git       # configure git to use gh’s token
+gh auth status
+```
+
 ## Optional QA tools
 After syncing images to the repo (step 11), you can run:
 
