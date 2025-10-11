@@ -32,6 +32,7 @@ from typing import Iterable, Tuple
 from timeit import default_timer as timer
 
 from PIL import Image, ImageChops
+import numpy as np
 from alive_progress import alive_bar
 
 # ---------- paths & logging ----------
@@ -122,10 +123,14 @@ def main() -> None:
     parser.add_argument("--move", action="store_true", help="Move instead of copy")
     parser.add_argument("--overwrite", action="store_true", help="Overwrite files that already exist in dest")
     parser.add_argument("--exts", default="jpg,jpeg,png,webp,bmp,tif,tiff", help="Comma list of extensions to scan")
-    parser.add_argument("--method", choices=("exact", "sat"), default="exact",
+    parser.add_argument("--method", choices=("exact","sat","satq","colorfulness","auto"), default="exact",
                         help="Detection method: exact (RGB equality) or sat (low-saturation heuristic)")
-    parser.add_argument("--sat-threshold", type=int, default=8, help="Saturation threshold (0-255) for --method sat")
-    args = parser.parse_args()
+    parser.add_argument("--sat-threshold", type=int, default=8, help="Saturation threshold (0-255) 
+parser.add_argument("--sat-quantile", type=float, default=0.95, help="Quantile for satq (0<q<=1).")
+for --method sat")
+    
+parser.add_argument("--colorfulness-cutoff", type=float, default=12.0, help="Cutoff for colorfulness (lower is stricter).")
+args = parser.parse_args()
 
     src_root = Path(args.src).expanduser().resolve()
     dest_dir = Path(args.dest_other).expanduser().resolve()
@@ -167,6 +172,21 @@ def main() -> None:
                     img.load()  # ensure it actually decodes
                     if args.method == "exact":
                         is_nc = is_grayscale_exact(img)
+
+        if args.method in ("satq", "colorfulness", "auto"):
+            try:
+                if args.method == "satq":
+                    is_nc = is_near_grayscale_sat_quantile(img, args.sat_threshold, args.sat_quantile)
+                elif args.method == "colorfulness":
+                    is_nc = is_near_grayscale_colorfulness(img, args.colorfulness_cutoff)
+                else:  # auto
+                    if is_grayscale_exact(img):
+                        is_nc = True
+                    else:
+                        is_nc = (is_near_grayscale_sat_quantile(img, max(getattr(args, "sat_threshold", 35), 35), args.sat_quantile)
+                                 or is_near_grayscale_colorfulness(img, args.colorfulness_cutoff))
+            except Exception:
+                pass
                     else:
                         is_nc = is_low_saturation(img, args.sat_threshold)
                 if is_nc:
@@ -201,5 +221,34 @@ def main() -> None:
     print(f"Details in log → {LOG_FILE}")
 
 
+
+def is_near_grayscale_sat_quantile(img, sat_threshold: int = 35, q: float = 0.95) -> bool:
+    """
+    Robust near-grayscale test: image is non-color if the q-quantile of HSV S is <= threshold.
+    sat_threshold: 0..255, q in (0,1] (e.g., 0.95 = 95th percentile)
+    """
+    if not (0 < q <= 1):
+        raise ValueError("sat quantile q must be in (0,1].")
+    s = np.asarray(img.convert("HSV"))[..., 1].astype(np.uint8)  # 0..255
+    return np.quantile(s, q) <= sat_threshold
+
+
+def _colorfulness_score(img) -> float:
+    """
+    Hasler–Süsstrunk colorfulness score.
+    Grayscale/near-grayscale images are typically < ~10–15.
+    """
+    arr = np.asarray(img.convert("RGB"), dtype=np.float32)
+    R, G, B = arr[..., 0], arr[..., 1], arr[..., 2]
+    rg = R - G
+    yb = 0.5 * (R + G) - B
+    std_rg, std_yb = rg.std(), yb.std()
+    mean_rg, mean_yb = np.abs(rg).mean(), np.abs(yb).mean()
+    return float(np.hypot(std_rg, std_yb) + 0.3 * np.hypot(mean_rg, mean_yb))
+
+
+def is_near_grayscale_colorfulness(img, cutoff: float = 12.0) -> bool:
+    """Scene-level check: image is non-color if colorfulness < cutoff."""
+    return _colorfulness_score(img) < cutoff
 if __name__ == "__main__":
     main()
