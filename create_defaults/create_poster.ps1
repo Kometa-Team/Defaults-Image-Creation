@@ -306,7 +306,14 @@ function SetMagickLocation {
   Elseif ($global:OSType -eq "Win32NT") {
     $Url = "https://imagemagick.org/archive/binaries/?C=M;O=D"
     $result = Invoke-WebRequest -Uri $Url
-    $LatestImagemagickversion = ($result.links.href | Where-Object { $_ -like '*portable-Q16-HDRI-x64.zip' } | Sort-Object -Descending)[0].Replace('-portable-Q16-HDRI-x64.zip', '').Replace('ImageMagick-', '')
+    # FIX: allow optional -HDRI and optional ".7z" before ".zip"
+    $imFile = ($result.links.href |
+      Where-Object { $_ -match 'ImageMagick-.*-portable-Q16(?:-HDRI)?-x64(?:\.7z)?\.zip$' } |
+      Sort-Object -Descending |
+      Select-Object -First 1)
+    $LatestImagemagickversion = $imFile `
+      -replace '^.*ImageMagick-','' `
+      -replace '-portable-Q16(?:-HDRI)?-x64(?:\.7z)?\.zip$',''
   }
   Else {
     $LatestImagemagickversion = (Invoke-RestMethod -Uri "https://api.github.com/repos/ImageMagick/ImageMagick/releases/latest" -Method Get).tag_name
@@ -337,7 +344,11 @@ function SetMagickLocation {
     else {
       Write-Host "Downloading the latest Imagemagick portable version for you..."
       $result = Invoke-WebRequest "https://imagemagick.org/archive/binaries/?C=M;O=D"
-      $LatestRelease = ($result.links.href | Where-Object { $_ -like '*portable-Q16-HDRI-x64.zip' } | Sort-Object -Descending)[0]
+      # FIX: allow optional -HDRI and optional ".7z" before ".zip"
+      $LatestRelease = ($result.links.href |
+        Where-Object { $_ -match 'ImageMagick-.*-portable-Q16(?:-HDRI)?-x64(?:\.7z)?\.zip$' } |
+        Sort-Object -Descending |
+        Select-Object -First 1)
       $DownloadPath = Join-Path -Path $global:ScriptRoot -ChildPath (Join-Path -Path 'temp' -ChildPath $LatestRelease)
       Invoke-WebRequest "https://imagemagick.org/archive/binaries/$LatestRelease" -OutFile $DownloadPath
       Expand-Archive -Path $DownloadPath -DestinationPath $magickinstalllocation -Force
