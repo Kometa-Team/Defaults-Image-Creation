@@ -64,6 +64,41 @@ $global:Counter7 = 0
 $global:magick = $null
 
 #################################
+# ImageMagick shim (cross-platform, relocatable)
+#################################
+
+Function Get-ImageMagick {
+  $identify = $null; $convert = $null; $root = $null
+
+  if (Get-Command magick -ErrorAction SilentlyContinue) {
+    $root     = "magick"
+    $identify = { param([Parameter(ValueFromRemainingArguments=$true)] $rest) & magick identify @rest }
+    $convert  = { param([Parameter(ValueFromRemainingArguments=$true)] $rest) & magick convert  @rest }
+  } else {
+    if (Get-Command identify -ErrorAction SilentlyContinue) {
+      $identify = { param([Parameter(ValueFromRemainingArguments=$true)] $rest) & identify @rest }
+    }
+    if (Get-Command convert -ErrorAction SilentlyContinue) {
+      $convert  = { param([Parameter(ValueFromRemainingArguments=$true)] $rest) & convert  @rest }
+    }
+  }
+
+  if (-not $identify -or -not $convert) {
+    throw "ImageMagick not found on PATH. Install it and try again."
+  }
+
+  [pscustomobject]@{
+    Root     = $root
+    Identify = $identify
+    Convert  = $convert
+  }
+}
+
+# Global IM handle
+$script:IM = $null
+# =========================================================
+
+#################################
 # collect paths (cross-platform, relocatable)
 #################################
 
@@ -71,41 +106,41 @@ $global:magick = $null
 $script_path = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Path $MyInvocation.MyCommand.Path -Parent }
 
 # Names
-$scriptName      = $MyInvocation.MyCommand.Name
-$scriptBaseName  = [IO.Path]::GetFileNameWithoutExtension($scriptName)
+$scriptName = $MyInvocation.MyCommand.Name
+$scriptBaseName = [IO.Path]::GetFileNameWithoutExtension($scriptName)
 
 # ── Config roots ────────────────────────────────────────────────────────────────
-$cfgRoot     = Join-Path $script_path 'config'
-$logsDir     = Join-Path $cfgRoot 'logs'
-$peopleRoot  = Join-Path $cfgRoot 'people_dirs'   # <- NEW: all “other” dirs live here
+$cfgRoot = Join-Path $script_path 'config'
+$logsDir = Join-Path $cfgRoot 'logs'
+$peopleRoot = Join-Path $cfgRoot 'people_dirs'   # <- NEW: all “other” dirs live here
 
 # Logs (.\config\logs\create_people_poster.log)
 New-Item -ItemType Directory -Path $logsDir -Force | Out-Null
 $scriptLog = Join-Path $logsDir "$scriptBaseName.log"
 
 # ── People/output working tree under .\config\people_dirs ─────────────────────
-$download_dir         = Join-Path $peopleRoot 'Downloads'
-$targetPath_bw    = Join-Path $peopleRoot 'bw'
-$targetPath_diiivoy   = Join-Path $peopleRoot 'diiivoy'
+$download_dir = Join-Path $peopleRoot 'Downloads'
+$targetPath_bw = Join-Path $peopleRoot 'bw'
+$targetPath_diiivoy = Join-Path $peopleRoot 'diiivoy'
 $targetPath_diiivoycolor = Join-Path $peopleRoot 'diiivoycolor'
-$targetPath_rainier   = Join-Path $peopleRoot 'rainier'
-$targetPath_orig      = Join-Path $peopleRoot 'original'
+$targetPath_rainier = Join-Path $peopleRoot 'rainier'
+$targetPath_orig = Join-Path $peopleRoot 'original'
 $targetPath_signature = Join-Path $peopleRoot 'signature'
-$nobackPathColor      = Join-Path $peopleRoot 'transparent'
-$tmpPeoplePath        = Join-Path $peopleRoot 'tmppeople'
-$basePath             = Join-Path $peopleRoot 'base'
+$nobackPathColor = Join-Path $peopleRoot 'transparent'
+$tmpPeoplePath = Join-Path $peopleRoot 'tmppeople'
+$basePath = Join-Path $peopleRoot 'base'
 
 # Trailing-slash helpers (keep as-is)
-$dds    = Join-Path $download_dir ''
+$dds = Join-Path $download_dir ''
 $tppbws = Join-Path $targetPath_bw ''
-$tpds   = Join-Path $targetPath_diiivoy ''
-$tpdcs  = Join-Path $targetPath_diiivoycolor ''
-$tprs   = Join-Path $targetPath_rainier ''
-$tpos   = Join-Path $targetPath_orig ''
-$tpss   = Join-Path $targetPath_signature ''
-$nbpcs  = Join-Path $nobackPathColor ''
-$tpps   = Join-Path $tmpPeoplePath ''
-$bps    = Join-Path $basePath ''
+$tpds = Join-Path $targetPath_diiivoy ''
+$tpdcs = Join-Path $targetPath_diiivoycolor ''
+$tprs = Join-Path $targetPath_rainier ''
+$tpos = Join-Path $targetPath_orig ''
+$tpss = Join-Path $targetPath_signature ''
+$nbpcs = Join-Path $nobackPathColor ''
+$tpps = Join-Path $tmpPeoplePath ''
+$bps = Join-Path $basePath ''
 
 #################################
 # Create dirs
@@ -139,42 +174,37 @@ function Write-Log {
 # check ImageMagick function
 #################################
 Function Test-ImageMagick {
-  $global:magick = $global:magick
-  $global:magick = magick -version | select-string "Version:"
+  try {
+    if (-not $script:IM) { $script:IM = Get-ImageMagick }
+    # Keep your original $global:magick logging style:
+    $ver = (& $script:IM.Identify -version) | Select-String "Version:"
+    $global:magick = $ver
+  }
+  catch {
+    $global:magick = $null
+  }
 }
 
 #################################
 # SortFiles function
 #################################
 Function SortFiles ($folder) {
-  Set-Location $script_path
   $sortBase = $folder
   WriteToLogFile "Sorting Folder               : $sortBase"
-  Set-Location $sortBase
-  $files = Get-ChildItem $sortBase\* -Include *.png, *.jpg | Where-Object { -not $_.PSIsContainer }
 
-  # Starts iterating through each file
+  # PNG/JPG only, files only
+  $files = Get-ChildItem -Path (Join-Path $sortBase '*') -File -Include *.png,*.jpg
+
   foreach ($file in $files) {
-    # The root folder name
-    $root = "$basePath\"
-    # The first letter as the sub folder name
-    $sub = $file.BaseName.Substring(0, 1).ToUpper() + "\Images"
+    $firstLetter = $file.BaseName.Substring(0,1).ToUpper()
+    $destRoot   = Join-Path $sortBase $firstLetter
+    $destImages = Join-Path $destRoot  'Images'
+    New-Item -ItemType Directory -Force -Path $destImages | Out-Null
 
-    # Check if the root folder exists, create it if not
-    if (!(Test-Path $root -ErrorAction SilentlyContinue)) {
-      New-Item $root -ItemType Directory | Out-Null
-    }
-
-    # Check if the sub folder exists, create it if not
-    if (!(Test-Path $sub -ErrorAction SilentlyContinue)) {
-      New-Item $sub -ItemType Directory | Out-Null
-    }
-
-    # Move the file to the sub folder
-	WriteToLogFile "Sorting File                 : Moving: $($file.FullName) -> $(Join-Path (Join-Path $sortBase $sub) $file.Name)"
-	Move-Item $file.FullName -Destination $sub -Force
+    $destFile = Join-Path $destImages $file.Name
+    WriteToLogFile "Sorting File                 : Moving: $($file.FullName) -> $destFile"
+    Move-Item -LiteralPath $file.FullName -Destination $destFile -Force
   }
-  Set-Location $script_path
 }
 
 #################################
@@ -191,20 +221,44 @@ Function GetBaseFileName([string] $fileName) {
 }
 
 #################################
-# Get-Width function
+# Get-Width function (portable)
 #################################
 Function Get-Width($theName, $theFont, $thePointsize) {
   WriteToLogFile "theName is                   : $theName"
   WriteToLogFile "theFont is                   : $theFont"
   WriteToLogFile "thePointsize is              : $thePointsize"
 
-  $string = magick -debug annotate  xc: -font $theFont -pointsize $thePointsize -annotate 0 $theName null: 2>&1 | Select-String -Pattern Metrics: -CaseSensitive -SimpleMatch
-  $theArray = $string -Split ";"   
-  $arrWidth = $theArray[1].Split(" ")
-  $theWidth = [int]$arrWidth[2]
-  WriteToLogFile "Name Width is                : $theWidth"
-  $theWidth
+  # Try to read width from the debug "Metrics:" line (IM6/IM7)
+  $args   = @('-debug','annotate','xc:','-font',"$theFont",'-pointsize',"$thePointsize",'-annotate','0',"$theName",'null:')
+  $out    = (& $script:IM.Convert @args 2>&1)
+  $line   = $out | Select-String -Pattern 'Metrics:' | Select-Object -First 1 -ExpandProperty Line
+
+  $width = $null
+  if ($line) {
+    # Covers formats like: "... Metrics: text:'X' width: 123 height: ..."
+    if ($line -match 'width[:= ]+([0-9]+(?:\.[0-9]+)?)') {
+      $width = [int][double]$Matches[1]
+    }
+    # Some builds print geometry instead
+    elseif ($line -match 'Geometry: *([0-9]+)x([0-9]+)') {
+      $width = [int]$Matches[1]
+    }
+  }
+
+  if ($null -ne $width) {
+    WriteToLogFile "Name Width is                : $width"
+    return $width
+  }
+
+  # Fallback: render a label and ask ImageMagick for its width
+  # (portable across IM6/IM7; no temp files created)
+  $w = & $script:IM.Convert -background none -font "$theFont" -pointsize "$thePointsize" `
+         "label:$theName" -trim -format "%w" info:
+  $w = [int]$w
+  WriteToLogFile "Name Width (fallback)        : $w"
+  return $w
 }
+
 
 #################################
 # Convert-BinaryToText function
@@ -251,8 +305,9 @@ Function Invoke-kometa-bw-style {
   if ($myWidth -le 1900) {
     WriteToLogFile "Words                        : 1111111111111111111111111111111111111"
     WriteToLogFile "Width-check                  : $postertitle is <= 1900px"
-	# Write-Host "magick $bps@zbase-People.jpg $tpps$noextension`"_pushed.png`" -colorspace gray -gravity center -background None -layers Flatten ``( -font Comfortaa-medium -pointsize 183 -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 ``) -gravity north -geometry +0+0 -quality 100% -composite $outFilename"
-    magick $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -pointsize 183 -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
+    # $__prefix = if ($script:IM.Root) { "$($script:IM.Root) convert" } else { "convert" }
+    # Write-Host "$__prefix $bps@zbase-People.jpg $tpps$noextension`"_pushed.png`" -colorspace gray -gravity center -background None -layers Flatten ``( -font Comfortaa-medium -pointsize 183 -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 ``) -gravity north -geometry +0+0 -quality 100% -composite $outFilename"
+    & $script:IM.Convert $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -pointsize 183 -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
   }
   else {
     WriteToLogFile "Width-check                  : $postertitle is > 1900px"
@@ -260,7 +315,7 @@ Function Invoke-kometa-bw-style {
     $numArr = $postertitle2.Count
     WriteToLogFile "# of Words                   : $postertitle has $numArr"
     if ($numArr -eq 1) {
-      magick $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
+      & $script:IM.Convert $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
     }
     if ($numArr -eq 2) {
       WriteToLogFile "Words                        : 22222222222222222222222222222222222"
@@ -270,14 +325,14 @@ Function Invoke-kometa-bw-style {
         WriteToLogFile "Width-check                  : $tmp_poster is <= 1900px"
         $postertitle = $postertitle2[0] + "\n" + $postertitle2[1]
         WriteToLogFile "Poster-label                 : $postertitle"
-        magick $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -pointsize 183 -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
+        & $script:IM.Convert $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -pointsize 183 -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
       }
       else {
         $tmp_poster = $postertitle2[1]
         WriteToLogFile "Width-check                  : $tmp_poster is > 1900px"
         $postertitle = $postertitle2[0] + "\n" + $postertitle2[1]
         WriteToLogFile "Poster-label                 : $postertitle"
-        magick $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
+        & $script:IM.Convert $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
       }
     }
     if ($numArr -eq 3) {
@@ -288,14 +343,14 @@ Function Invoke-kometa-bw-style {
         WriteToLogFile "Width-check                  : $tmp_poster is <= 1900px"
         $postertitle = $postertitle2[0] + "\n" + $postertitle2[1] + " " + $postertitle2[2]
         WriteToLogFile "Poster-label                 : $postertitle"
-        magick $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -pointsize 183 -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
+        & $script:IM.Convert $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -pointsize 183 -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
       }
       else {
         $tmp_poster = $postertitle2[1] + " " + $postertitle2[2]
         WriteToLogFile "Width-check                  : $tmp_poster is > 1900px"
         $postertitle = $postertitle2[0] + "\n" + $postertitle2[1] + " " + $postertitle2[2]
         WriteToLogFile "Poster-label                 : $postertitle"
-        magick $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
+        & $script:IM.Convert $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
       }
     }
     if ($numArr -eq 4) {
@@ -306,21 +361,21 @@ Function Invoke-kometa-bw-style {
         WriteToLogFile "Width-check                  : $tmp_poster is <= 1900px"
         $postertitle = $postertitle2[0] + "\n" + $postertitle2[1] + " " + $postertitle2[2] + " " + $postertitle2[3]
         WriteToLogFile "Poster-label                 : $postertitle"
-        magick $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -pointsize 183 -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
+        & $script:IM.Convert $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -pointsize 183 -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
       }
       else {
         $tmp_poster = $postertitle2[1] + " " + $postertitle2[2] + " " + $postertitle2[3]
         WriteToLogFile "Width-check                  : $tmp_poster is > 1900px"
         $postertitle = $postertitle2[0] + "\n" + $postertitle2[1] + " " + $postertitle2[2] + " " + $postertitle2[3]
         WriteToLogFile "Poster-label                 : $postertitle"
-        magick $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
+        & $script:IM.Convert $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
       }
     }
     if ($numArr -ge 5) {
       WriteToLogFile "Words                        : 55555555555555555555555555555555555"
       WriteToLogFile "WARNING                      : THIS IMAGE MAY NOT HAVE TEXT OPTIMIZED"
       WriteToLogFile "Poster-label                 : $postertitle"
-      magick $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
+      & $script:IM.Convert $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -colorspace gray -gravity center -background None -layers Flatten `( -font Comfortaa-medium -fill white -size 1900x500 -background none label:$postertitle -trim -gravity center -extent 1900x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
     }
 
   }
@@ -346,15 +401,14 @@ Function Invoke-rainier-style {
       WriteToLogFile "Width-check                  : $tmp_poster is <= 1600px"
       $postertitle = $postertitle2[0]
       WriteToLogFile "Poster-label                 : $postertitle"
-      magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -font Comfortaa-medium -pointsize 183 -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
+      & $script:IM.Convert -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -font Comfortaa-medium -pointsize 183 -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
     }
     else {
       $tmp_poster = $postertitle2[0]
       WriteToLogFile "Width-check                  : $tmp_poster is > 1600px"
       $postertitle = $postertitle2[0]
       WriteToLogFile "Poster-label                 : $postertitle"
-      #magick $bps@zbase-People.jpg$tpps$noextension"_pushed.png" -gravity center -background None -layers Flatten `( -font Comfortaa-medium -fill white -size 1600x500 -background none label:$postertitle -trim -gravity center -extent 1600x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
-      magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
+      & $script:IM.Convert -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
     }
   }
   if ($numArr -eq 2) {
@@ -365,16 +419,14 @@ Function Invoke-rainier-style {
       WriteToLogFile "Width-check                  : $tmp_poster is <= 1600px"
       $postertitle = $postertitle2[0] + "\n" + $postertitle2[1]
       WriteToLogFile "Poster-label                 : $postertitle"
-      magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -pointsize 183 -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
-      #WriteToLogFile "$bps@zbase-People-fade50.png $tpps$noextension"_pushed.png" -gravity center -background None -layers Flatten `( -font Comfortaa-medium -pointsize 183 -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename"
+      & $script:IM.Convert -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -pointsize 183 -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
     }
     else {
       $tmp_poster = $postertitle2[1]
       WriteToLogFile "Width-check                  : $tmp_poster is > 1600px"
       $postertitle = $postertitle2[0] + "\n" + $postertitle2[1]
       WriteToLogFile "Poster-label                 : $postertitle"
-      #magick $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -gravity center -background None -layers Flatten `( -font Comfortaa-medium -fill white -size 1600x500 -background none label:$postertitle -trim -gravity center -extent 1600x500 `) -gravity north -geometry +0+0 -quality 100% -composite $outFilename
-      magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
+      & $script:IM.Convert -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
     }
   }
   if ($numArr -eq 3) {
@@ -389,21 +441,21 @@ Function Invoke-rainier-style {
         WriteToLogFile "Width-check                  : $tmp_poster is <= 1600px OptionA1"
         $postertitle = $postertitle2[0] + " " + $postertitle2[1] + "\n" + $postertitle2[2]
         WriteToLogFile "Poster-label                 : $postertitle"
-        magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
+        & $script:IM.Convert -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
       }
       elseif ($tmp2 -ge 1600) {
         $tmp_poster = $postertitle2[0]
         WriteToLogFile "Width-check                  : $tmp_poster is >= 1600px OptionA2"
         $postertitle = $postertitle2[0] + " " + $postertitle2[1] + "\n" + $postertitle2[2]
         WriteToLogFile "Poster-label                 : $postertitle"
-        magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
+        & $script:IM.Convert -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
       }
       else {
         $tmp_poster = $postertitle2[1] + " " + $postertitle2[2] + " AND " + $postertitle2[0]
         WriteToLogFile "Width-check                  : $tmp_poster is < 1600px OptionA3"
         $postertitle = $postertitle2[0] + " " + $postertitle2[1] + "\n" + $postertitle2[2]
         WriteToLogFile "Poster-label                 : $postertitle"
-        magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -pointsize 183 -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
+        & $script:IM.Convert -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -pointsize 183 -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
       }
     }
     else {
@@ -415,21 +467,21 @@ Function Invoke-rainier-style {
         WriteToLogFile "Width-check                  : $tmp_poster is <= 1600px OptionB1"
         $postertitle = $postertitle2[0] + "\n" + $postertitle2[1] + " " + $postertitle2[2]
         WriteToLogFile "Poster-label                 : $postertitle"
-        magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
+        & $script:IM.Convert -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
       }
       elseif ($tmp2 -ge 1600) {
         $tmp_poster = $postertitle2[0]
         WriteToLogFile "Width-check                  : $tmp_poster is >= 1600px OptionB2"
         $postertitle = $postertitle2[0] + "\n" + $postertitle2[1] + " " + $postertitle2[2]
         WriteToLogFile "Poster-label                 : $postertitle"
-        magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
+        & $script:IM.Convert -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
       }
       else {
         $tmp_poster = $postertitle2[1] + " " + $postertitle2[2] + " AND " + $postertitle2[0]
         WriteToLogFile "Width-check                  : $tmp_poster is < 1600px OptionB3"
         $postertitle = $postertitle2[0] + "\n" + $postertitle2[1] + " " + $postertitle2[2]
         WriteToLogFile "Poster-label                 : $postertitle"
-        magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -pointsize 183 -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
+        & $script:IM.Convert -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -pointsize 183 -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
       }
     }
   }
@@ -441,21 +493,21 @@ Function Invoke-rainier-style {
       WriteToLogFile "Width-check                  : $tmp_poster is <= 1600px"
       $postertitle = $postertitle2[0] + " " + $postertitle2[1] + "\n" + $postertitle2[2] + " " + $postertitle2[3]
       WriteToLogFile "Poster-label                 : $postertitle"
-      magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -pointsize 183 -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
+      & $script:IM.Convert -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -pointsize 183 -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
     }
     else {
       $tmp_poster = $postertitle2[1] + " " + $postertitle2[2]
       WriteToLogFile "Width-check                  : $tmp_poster is > 1600px"
       $postertitle = $postertitle2[0] + " " + $postertitle2[1] + "\n" + $postertitle2[2] + " " + $postertitle2[3]
       WriteToLogFile "Poster-label                 : $postertitle"
-      magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
+      & $script:IM.Convert -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
     }
   }
   if ($numArr -ge 5) {
     WriteToLogFile "Words                        : 55555555555555555555555555555555555"
     WriteToLogFile "WARNING                      : THIS IMAGE MAY NOT HAVE TEXT OPTIMIZED"
     WriteToLogFile "Poster-label                 : $postertitle"
-    magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
+    & $script:IM.Convert -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear2.png -background None -layers Flatten `( -gravity west -font Comfortaa-medium -fill white -size 1600x580 -background none label:$postertitle -trim -gravity west -extent 1600x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
   }
   WriteToLogFile "Output file                  : $outFilename"
 }
@@ -471,15 +523,14 @@ Function Invoke-kometa-signature-style {
   if ($myWidth -le 1900) {
     WriteToLogFile "Words                        : 1111111111111111111111111111111111111"
     WriteToLogFile "Width-check                  : $postertitle_orig is <= 1900px"
-    #magick -gravity center $bps@zbase-People.jpg $file.FullName -quality 100% -composite $bps@zbase-Signature.png -background None -layers Flatten `( -font Fuggles-Regular -pointsize 330 -fill white -size 1900x500 -background none label:$postertitle_orig -trim -gravity south -extent 1900x500 `) -gravity south -geometry +0+250 -quality 100% -composite $outFilename
-    magick -gravity center $bps@zbase-People.jpg $file.FullName -quality 100% -composite $bps@zbase-Signature.png -background None -layers Flatten `( -font Fuggles-Regular -fill white -size 1900x600 -background none label:$postertitle_orig -trim -gravity south -extent 1900x600 `) -gravity south -geometry +0+250 -quality 100% -composite $outFilename
+    & $script:IM.Convert -gravity center $bps@zbase-People.jpg $file.FullName -quality 100% -composite $bps@zbase-Signature.png -background None -layers Flatten `( -font Fuggles-Regular -fill white -size 1900x600 -background none label:$postertitle_orig -trim -gravity south -extent 1900x600 `) -gravity south -geometry +0+250 -quality 100% -composite $outFilename
   }
   else {
     WriteToLogFile "Width-check                  : $postertitle_orig is > 1900px"
     $postertitle_orig2 = $postertitle_orig.Split(" ")
     $numArr = $postertitle_orig2.Count
     WriteToLogFile "# of Words                   : $postertitle_orig has $numArr"
-    magick -gravity center $bps@zbase-People.jpg $file.FullName -quality 100% -composite $bps@zbase-Signature.png -background None -layers Flatten `( -font Fuggles-Regular -fill white -size 1900x600 -background none label:$postertitle_orig -trim -gravity south -extent 1900x600 `) -gravity south -geometry +0+250 -quality 100% -composite $outFilename
+    & $script:IM.Convert -gravity center $bps@zbase-People.jpg $file.FullName -quality 100% -composite $bps@zbase-Signature.png -background None -layers Flatten `( -font Fuggles-Regular -fill white -size 1900x600 -background none label:$postertitle_orig -trim -gravity south -extent 1900x600 `) -gravity south -geometry +0+250 -quality 100% -composite $outFilename
   }
 
   WriteToLogFile "Output file                  : $outFilename"
@@ -496,16 +547,17 @@ Function Invoke-kometa-diiivoy-style {
   if ($myWidth -le 1900) {
     WriteToLogFile "Words                        : 1111111111111111111111111111111111111"
     WriteToLogFile "Width-check                  : $postertitle is <= 1900px"
-    # write-host "magick ${tpps}${noextension}_pushed.png -colorspace gray -set colorspace gray ${tpps}${noextension}_pushed.png && magick -gravity center $bps@zbase-People.jpg ${tpps}${noextension}_pushed.png -quality 100% -composite $bps@zbase-People-Clear3.png -background None -layers Flatten `( -gravity center -font FuturaTEELig -pointsize 200 -fill white -size 1900x580 -background none label:$postertitle -trim -gravity center -extent 1900x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename"
-    magick ${tpps}${noextension}_pushed.png -colorspace gray -set colorspace gray ${tpps}${noextension}_pushed.png && magick -gravity center $bps@zbase-People.jpg ${tpps}${noextension}_pushed.png -quality 100% -composite $bps@zbase-People-Clear3.png -background None -layers Flatten `( -gravity center -font FuturaTEELig -pointsize 200 -fill white -size 1900x580 -background none label:$postertitle -trim -gravity center -extent 1900x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
+    # magick ... && magick ...  ==> run as two commands in PowerShell
+    & $script:IM.Convert ${tpps}${noextension}_pushed.png -colorspace gray -set colorspace gray ${tpps}${noextension}_pushed.png
+    & $script:IM.Convert -gravity center $bps@zbase-People.jpg ${tpps}${noextension}_pushed.png -quality 100% -composite $bps@zbase-People-Clear3.png -background None -layers Flatten `( -gravity center -font FuturaTEELig -pointsize 200 -fill white -size 1900x580 -background none label:$postertitle -trim -gravity center -extent 1900x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
   }
   else {
     WriteToLogFile "Width-check                  : $postertitle is > 1900px"
     $postertitle_orig2 = $postertitle_orig.Split(" ")
     $numArr = $postertitle_orig2.Count
     WriteToLogFile "# of Words                   : $postertitle has $numArr"
-    # write-host "magick $tpps$noextension"_pushed.png" -colorspace gray -set colorspace gray $tpps$noextension"_pushed.png" && magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear3.png -background None -layers Flatten `( -font FuturaTEELig -fill white -size 1900x580 -background none label:$postertitle -trim -gravity center -extent 1900x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename"
-    magick $tpps$noextension"_pushed.png" -colorspace gray -set colorspace gray $tpps$noextension"_pushed.png" && magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear3.png -background None -layers Flatten `( -font FuturaTEELig -fill white -size 1900x580 -background none label:$postertitle -trim -gravity center -extent 1900x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
+    & $script:IM.Convert $tpps$noextension"_pushed.png" -colorspace gray -set colorspace gray $tpps$noextension"_pushed.png"
+    & $script:IM.Convert -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear3.png -background None -layers Flatten `( -font FuturaTEELig -fill white -size 1900x580 -background none label:$postertitle -trim -gravity center -extent 1900x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
   }
   WriteToLogFile "Output file                  : $outFilename"
 }
@@ -521,16 +573,14 @@ Function Invoke-kometa-diiivoycolor-style {
   if ($myWidth -le 1900) {
     WriteToLogFile "Words                        : 1111111111111111111111111111111111111"
     WriteToLogFile "Width-check                  : $postertitle is <= 1900px"
-    # write-host "magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear3.png -background None -layers Flatten `( -gravity center -font FuturaTEELig -pointsize 200 -fill white -size 1900x580 -background none label:$postertitle -trim -gravity center -extent 1900x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename"
-    magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear3.png -background None -layers Flatten `( -gravity center -font FuturaTEELig -pointsize 200 -fill white -size 1900x580 -background none label:$postertitle -trim -gravity center -extent 1900x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
+    & $script:IM.Convert -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear3.png -background None -layers Flatten `( -gravity center -font FuturaTEELig -pointsize 200 -fill white -size 1900x580 -background none label:$postertitle -trim -gravity center -extent 1900x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
   }
   else {
     WriteToLogFile "Width-check                  : $postertitle is > 1900px"
     $postertitle_orig2 = $postertitle_orig.Split(" ")
     $numArr = $postertitle_orig2.Count
     WriteToLogFile "# of Words                   : $postertitle has $numArr"
-    # write-host "magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear3.png -background None -layers Flatten `( -font FuturaTEELig -fill white -size 1900x580 -background none label:$postertitle -trim -gravity center -extent 1900x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename"
-    magick -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear3.png -background None -layers Flatten `( -font FuturaTEELig -fill white -size 1900x580 -background none label:$postertitle -trim -gravity center -extent 1900x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
+    & $script:IM.Convert -gravity center $bps@zbase-People.jpg $tpps$noextension"_pushed.png" -quality 100% -composite $bps@zbase-People-Clear3.png -background None -layers Flatten `( -font FuturaTEELig -fill white -size 1900x580 -background none label:$postertitle -trim -gravity center -extent 1900x580 `) -gravity north -geometry +0+80 -quality 100% -composite $outFilename
   }
 
   WriteToLogFile "Output file                  : $outFilename"
@@ -542,12 +592,12 @@ Function Invoke-kometa-diiivoycolor-style {
 #################################
 Function Test-Image {
 
-  $imageW = magick identify -format "%w" $filepre
-  $imageH = magick identify -format "%h" $filepre
+  $imageW = & $script:IM.Identify -format "%w" $filepre
+  $imageH = & $script:IM.Identify -format "%h" $filepre
   $imageRatio = [math]::Round($imageW / $imageH, 4)
 
   # Find if image is grayscale
-  $theString = magick identify -verbose $filepre | Select-String -Pattern Type: -CaseSensitive
+  $theString = & $script:IM.Identify -verbose $filepre | Select-String -Pattern Type: -CaseSensitive
   $found = $theString | Select-String -Pattern 'Gray' -CaseSensitive -SimpleMatch
   if ($found) {
     $global:Counter1++
@@ -555,7 +605,7 @@ Function Test-Image {
   }
 
   # Find if background is removed and hence has transparency
-  $string = magick $filepre -format "%[opaque]" info:
+  $string = & $script:IM.Convert $filepre -format "%[opaque]" info:
   $found = $string | Select-String -Pattern 'True' -CaseSensitive -SimpleMatch
   if ($found) {
     $global:Counter2++
@@ -563,7 +613,7 @@ Function Test-Image {
   }
 
   # Find if first line is transparent to determine if there is a head chop situation
-  $string = magick $filepre -crop x1+0+0 +repage -alpha extract -format %[fx:mean] info:
+  $string = & $script:IM.Convert $filepre -crop x1+0+0 +repage -alpha extract -format %[fx:mean] info:
   if ($string -gt .06) {
     $global:Counter3++
     WriteToLogFile "WARNING                      : WARNING3!~$filepre~$noextension is most likely a HEAD CHOP and should be reviewed and changed for a better headshot!~Headchop values~$string"
@@ -605,10 +655,13 @@ Function Test-Image {
 Function Push-Down ([bool]$b) {
 
   if ($b) {
-    # Starting from the top of the image, find the first pixel that is not transparent…
-    # Show the identify command we're about to run:
-    # Write-Host ("magick `"{0}`" -format ""%@"" info:" -f $file)
-    $string = magick $file -format "%@" info:
+	# Starting from the top of the image, find the first pixel that is not transparent which will determine where to place the image on top of the faded grey background (https://legacy.imagemagick.org/discourse-server/viewtopic.php?t=36219)
+    $cmdName = if ($script:IM -and $script:IM.Root) { "$($script:IM.Root) convert" } else { "convert" }
+
+    # Show the identify-equivalent command
+    # Write-Host ("{0} `"{1}`" -format ""%@"" info:" -f $cmdName, $file)
+    $string = & $script:IM.Convert $file -format "%@" info:
+
     $theArray = $string.Split("+")
     $theAmt = [int]$theArray[2]
     WriteToLogFile "Vertical_Offset              : $theAmt"
@@ -618,11 +671,8 @@ Function Push-Down ([bool]$b) {
       WriteToLogFile "Pushing down                 : $noextension by $theAmt px"
 
       $outPushed = "$tpps$noextension" + "_pushed.png"
-      # Show the composite command we're about to run:
-      # Write-Host ("magick `"{0}`" -page +0+{1} -background none -flatten `"{2}`"" -f $file, $theAmt, $outPushed)
-
-	  magick $file -page +0+$theAmt -background none -flatten $tpps$noextension"_pushed.png"
-    }
+      & $script:IM.Convert $file -background none -gravity north -splice "0x$theAmt" -gravity north -extent 2000x3000 $tpps$noextension"_pushed.png"
+	}
 
     WriteToLogFile "Moving and Copying           : $noextension to: $tpps"
     Move-Item -Path $file -Destination $tpps -Force
@@ -686,13 +736,13 @@ Convert-TextToBinary -Text $file8 -OutputPath $bps"@zbase-People-Clear3.png"
 #################################
 # https://www.alkanesolutions.co.uk/2021/12/06/installing-fonts-with-powershell/
 # add two fonts and install them
-$chkfont1 = magick identify -list font | Select-String "Font: Comfortaa-Medium$"
-$chkfont2 = magick identify -list font | Select-String "Font: Fuggles-Regular$"
-$chkfont3 = magick identify -list font | Select-String "Font: Montserrat-SemiBold$"
-$chkfont4 = magick identify -list font | Select-String "Font: FuturaTEELig$"
+$chkfont1 = (& $script:IM.Identify -list font) | Select-String "Font: Comfortaa-Medium$"
+$chkfont2 = (& $script:IM.Identify -list font) | Select-String "Font: Fuggles-Regular$"
+$chkfont3 = (& $script:IM.Identify -list font) | Select-String "Font: Montserrat-SemiBold$"
+$chkfont4 = (& $script:IM.Identify -list font) | Select-String "Font: FuturaTEELig$"
 
 if ($chkfont1 -eq "" -or $null -eq $chkfont1 -or $chkfont2 -eq "" -or $null -eq $chkfont2 -or $chkfont3 -eq "" -or $null -eq $chkfont3 -or $chkfont4 -eq "" -or $null -eq $chkfont4) {
-  $font_list = magick identify -list font | Select-String "Font: "
+  $font_list = (& $script:IM.Identify -list font) | Select-String "Font: "
   $font_list -replace "  Font: ", ""> magick_fonts.txt
   Write-Host "Fonts missing >Comfortaa-Medium< or >Fuggles-Regular< or >Montserrat-SemiBold< or >FuturaTEELig< are not installed/found. List of installed fonts that Imagemagick can use listed and exported here: magick_fonts.txt." -ForegroundColor Red -BackgroundColor White
   Write-Host $font_list.count "fonts are visible to Imagemagick. Extracting fonts now to $basePath folder..." -ForegroundColor Red -BackgroundColor White
@@ -748,11 +798,11 @@ foreach ($filepre in $filespre) {
   WriteToLogFile "Separator                    : ###################################################"
   WriteToLogFile "Working on                   : $filepre"
   WriteToLogFile "Name                         : $noextension"
-  $theString = magick identify -format "%w" $filepre
+  $theString = & $script:IM.Identify -format "%w" $filepre
   WriteToLogFile "Geometry                     : $theString"
   if ($theString -ne 2000) {
     WriteToLogFile "Resizing                    : $noextension"
-    magick $filepre -resize 2000 $filepre
+    & $script:IM.Convert $filepre -resize 2000 $filepre
   }
   
   # Before doing anything, copy to another location
