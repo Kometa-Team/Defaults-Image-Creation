@@ -73,7 +73,7 @@ Function Get-ImageMagick {
   if (Get-Command magick -ErrorAction SilentlyContinue) {
     $root     = "magick"
     $identify = { param([Parameter(ValueFromRemainingArguments=$true)] $rest) & magick identify @rest }
-    $convert  = { param([Parameter(ValueFromRemainingArguments=$true)] $rest) & magick convert  @rest }
+    $convert  = { param([Parameter(ValueFromRemainingArguments=$true)] $rest) & magick @rest }
   } else {
     if (Get-Command identify -ErrorAction SilentlyContinue) {
       $identify = { param([Parameter(ValueFromRemainingArguments=$true)] $rest) & identify @rest }
