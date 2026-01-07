@@ -22,11 +22,11 @@ Logs under ./config/logs/:
 CLI
 ---
 python find_and_download_missing_people.py --input_directory "/path/to/kometa/logs"
-  [--styles rainier,transparent] [--branch master] [--no-downloads]
+  [--styles bw,transparent] [--branch master] [--no-downloads]
 
 Env (optional)
 --------------
-GETMISSING_STYLES   = "rainier,transparent"  (default: "rainier")
+GETMISSING_STYLES   = "bw,transparent"  (default: "bw")
 GETMISSING_BRANCH   = "master"               (default: "master")
 """
 
@@ -247,7 +247,7 @@ def parse_no_poster_warnings(text: str) -> Set[str]:
 def fetch_online_names(styles: List[str], branch: str = "master") -> Set[str]:
     """
     Parse README.md(s) for Kometa-Team People-Images-* repos and collect names already online.
-    Default keeps legacy behavior: styles=["rainier"] unless overridden.
+    Default keeps legacy behavior: styles=["bw"] unless overridden.
     """
     online: Set[str] = set()
     tried = set()
@@ -291,14 +291,14 @@ def fetch_online_names(styles: List[str], branch: str = "master") -> Set[str]:
 def main():
     import argparse
 
-    DEFAULT_STYLES = os.getenv("GETMISSING_STYLES", "rainier").split(",")
+    DEFAULT_STYLES = os.getenv("GETMISSING_STYLES", "bw").split(",")
     DEFAULT_STYLES = [s.strip() for s in DEFAULT_STYLES if s.strip()]
     DEFAULT_BRANCH = os.getenv("GETMISSING_BRANCH", "master")
 
     parser = argparse.ArgumentParser(description="Kometa Missing People Downloader")
     parser.add_argument("--input_directory", type=str, help="Kometa logs folder location")
     parser.add_argument("--styles", type=str, default=",".join(DEFAULT_STYLES),
-                        help="Comma list of People-Images styles to check (default from GETMISSING_STYLES or 'rainier')")
+                        help="Comma list of People-Images styles to check (default from GETMISSING_STYLES or 'bw')")
     parser.add_argument("--branch", type=str, default=DEFAULT_BRANCH,
                         help="Branch to read READMEs from (default from GETMISSING_BRANCH or 'master')")
     parser.add_argument("--no-downloads", action="store_true",
