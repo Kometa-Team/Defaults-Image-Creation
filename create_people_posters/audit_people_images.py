@@ -229,7 +229,7 @@ if __name__ == "__main__":
     write_to_log_file("#### START ####")
 
     # Fetch online content (kept minimal to match your current logic)
-    online_file_url = "https://raw.githubusercontent.com/Kometa-Team/People-Images-rainier/master/README.md"
+    online_file_url = "https://raw.githubusercontent.com/Kometa-Team/People-Images-bw/master/README.md"
     online_file_names = fetch_online_file_names(online_file_url)
 
     # Extract file names from the source directory (currently unused, kept for parity with original signature)

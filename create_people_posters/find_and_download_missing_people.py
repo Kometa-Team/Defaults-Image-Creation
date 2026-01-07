@@ -209,10 +209,39 @@ def extract_convert_warning(lines: List[str]) -> List[str]:
             if '"' not in log_content:
                 convert_warning_lines.append(log_content)
     unique_lines = sorted(set(convert_warning_lines))
-    with CONVERT_WARN_FILE.open("w", encoding="utf-8") as f:
-        for s in unique_lines:
-            f.write(f"Convert Warning: {s}\n")
-    write_to_log_file(f'{len(unique_lines)} unique lines containing "Convert Warning:" written to {CONVERT_WARN_FILE.name}')
+    existing_lines: Set[str] = set()
+    if CONVERT_WARN_FILE.exists():
+        try:
+            for line in CONVERT_WARN_FILE.read_text(encoding="utf-8", errors="replace").splitlines():
+                if "Convert Warning:" in line:
+                    existing_content = line.split("Convert Warning:")[-1].strip()
+                    if existing_content:
+                        existing_lines.add(existing_content)
+        except OSError:
+            pass
+    new_lines = [s for s in unique_lines if s not in existing_lines]
+    if new_lines:
+        needs_newline = False
+        if CONVERT_WARN_FILE.exists():
+            try:
+                with CONVERT_WARN_FILE.open("rb") as f:
+                    f.seek(0, os.SEEK_END)
+                    if f.tell() > 0:
+                        f.seek(-1, os.SEEK_END)
+                        last = f.read(1)
+                        needs_newline = last not in (b"\n", b"\r")
+            except OSError:
+                pass
+        with CONVERT_WARN_FILE.open("a", encoding="utf-8") as f:
+            if needs_newline:
+                f.write("\n")
+            for s in new_lines:
+                f.write(f"Convert Warning: {s}\n")
+    total_unique = len(existing_lines) + len(new_lines)
+    write_to_log_file(
+        f'{len(new_lines)} new lines containing "Convert Warning:" appended to {CONVERT_WARN_FILE.name} '
+        f'({total_unique} total)'
+    )
     return unique_lines
 
 
@@ -315,6 +344,11 @@ def main():
     DO_DOWNLOADS = not args.no_downloads
 
     write_to_log_file("#### START ####")
+
+    try:
+        CONVERT_WARN_FILE.write_text("", encoding="utf-8")
+    except OSError:
+        write_to_log_file(f"Failed to reset {CONVERT_WARN_FILE.name}")
 
     # Collect log files
     input_files = [

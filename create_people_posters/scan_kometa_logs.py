@@ -201,7 +201,7 @@ def scan_text_files(folder_path):
 
     # Fetch the online content once
     online_content = requests.get(
-        "https://raw.githubusercontent.com/Kometa-Team/People-Images-rainier/master/README.md"
+        "https://raw.githubusercontent.com/Kometa-Team/People-Images-bw/master/README.md"
     ).text
     not_found_names = set(name for name in online_names if name not in online_content)
 
