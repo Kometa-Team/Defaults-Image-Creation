@@ -4695,6 +4695,7 @@ Function CreateGenre {
         'SHOUNEN| Shounen.png| -500| 1800| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Shounen| #505E99| 1| 1| 0| 1',
         'SILENT| Silent.png| -500| 1800| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Silent2| #84CBC8| 1| 1| 0| 0',
         'SILENT| Silent.png| -500| 1800| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Silent| #84CBC8| 1| 1| 0| 0',
+        'SINISTER_SCREENS| Sinister Screens.png| -500| 1800| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Sinister Screens| #18546C| 1| 1| 0| 0',
         'SLAPSTICK| Slapstick.png| -500| 1800| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Slapstick| #C5C88F| 1| 1| 0| 0',
         'SLASHER| Slasher.png| -500| 1800| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Slasher| #B75157| 1| 1| 0| 1',
         'SLEAZY| Sleazy.png| -500| 1800| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Sleazy| #C291DD| 1| 1| 0| 0',
