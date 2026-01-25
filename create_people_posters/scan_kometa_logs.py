@@ -116,7 +116,9 @@ def scan_text_files(folder_path):
 
     # Warning regex
     warning_regex = re.compile(
-        r'Collection Warning: No Poster Found at https://raw\.githubusercontent\.com/Kometa-Team/People-Images(.+?)\s+'
+        r"Collection Warning: No Poster Found at https://raw\.githubusercontent\.com/"
+        r"(?:Kometa-Team/People-Images(?:-[^/\s]+)?|meisnate12/Plex-Meta-Manager-People-[^/\s]+)"
+        r"(.+?)\s+"
     )
 
     for root, _, files in os.walk(folder_path):
