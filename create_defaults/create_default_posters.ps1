@@ -2733,6 +2733,7 @@ Function CreateChart {
         'PLEX_PILOTS| Plex.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Plex Pilots| #DC9924| 1| 1| 0| 0',
         'PLEX_POPULAR| Plex.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Plex Popular| #DC9924| 1| 1| 0| 0',
         'PLEX_WATCHED| Plex.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Plex Watched| #DC9924| 1| 1| 0| 0',
+        'PLEX_RANDOM| Plex.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Plex Random| #DC9924| 1| 1| 0| 0',
         'POPULAR| AniDB.png| -500| 1800| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | AniDB Popular| #FF7E17| 1| 1| 0| 0',
         'POPULAR| AniList.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | AniList Popular| #414A81| 1| 1| 0| 0',
         'POPULAR| IMDb.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | IMDb Popular| #D7B00B| 1| 1| 0| 0',

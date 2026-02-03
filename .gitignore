@@ -24,14 +24,40 @@ logs/
 # Ignore these files
 playback.txt
 magick_fonts.txt
+defaults-ar_list.txt
+defaults-bu_list.txt
+defaults-da_list.txt
+defaults-nl_list.txt
 defaults-en_list.txt
+defaults-fr_list.txt
+defaults-de_list.txt
+defaults-hu_list.txt
+defaults-it_list.txt
+defaults-nb-NO_list.txt
+defaults-pt_BR_list.txt
+defaults-ru_list.txt
+defaults-es_list.txt
+defaults-sv_list.txt
 OptimalPointSizeCache.db
 
 # Ignore these directories
 uploads/
 .vscode/
 config/
+defaults-ar/
+defaults-bu/
+defaults-da/
+defaults-nl/
 defaults-en/
+defaults-fr/
+defaults-de/
+defaults-hu/
+defaults-it/
+defaults-nb_NO/
+defaults-pt_BR/
+defaults-ru/
+defaults-es/
+defaults-sv/
 tmp/
 magick/
 output/
