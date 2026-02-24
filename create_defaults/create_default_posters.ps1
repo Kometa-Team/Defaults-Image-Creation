@@ -2689,6 +2689,7 @@ Function CreateChart {
         'FAMILIES| css.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Common Sense Selection| #1AA931| 1| 1| 0| 0',
         'FAVORITED| MyAnimeList.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | MyAnimeList Favorited| #304DA6| 1| 1| 0| 0',
         'TOP_250| Letterboxd.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Letterboxd Top 250| #405162| 1| 1| 0| 0',
+        'TOP_500| Letterboxd.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Letterboxd Top 500| #405162| 1| 1| 0| 0',
         'BOX_OFFICE_MOJO_ALL_TIME_100| Letterboxd.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Box Office Mojo All Time 100| #405162| 1| 1| 0| 0',
         'AFI_100_YEARS_100_MOVIES| Letterboxd.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | AFI 100 Years 100 Movies| #405162| 1| 1| 0| 0',
         'SIGHT_AND_SOUND_GREATEST_FILMS| Letterboxd.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Sight & Sound Greatest Films| #405162| 1| 1| 0| 0',
