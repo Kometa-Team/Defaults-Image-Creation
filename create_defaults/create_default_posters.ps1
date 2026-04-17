@@ -2679,10 +2679,10 @@ Function CreateChart {
 
     $myArray = @(
         'key_name| logo| logo_offset| logo_resize| text_offset| font| font_size| font_color| border| border_width| border_color| avg_color_image| out_name| base_color| gradient| clean| avg_color| white_wash',
-        'SIMKL_TRENDING_TODAY| simkl.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | SIMKL Trending Today| #481492| 1| 1| 0| 0',
-        'SIMKL_TRENDING_WEEK| simkl.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | SIMKL Trending Week| #481492| 1| 1| 0| 0',
-        'SIMKL_TRENDING_MONTH| simkl.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | SIMKL Trending Month| #481492| 1| 1| 0| 0',
-        'SIMKL_DVD| simkl.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | SIMKL DVD| #481492| 1| 1| 0| 0',
+        'SIMKL_TRENDING_TODAY| simkl.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Simkl Trending Today| #481492| 1| 1| 0| 0',
+        'SIMKL_TRENDING_WEEK| simkl.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Simkl Trending Week| #481492| 1| 1| 0| 0',
+        'SIMKL_TRENDING_MONTH| simkl.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Simkl Trending Month| #481492| 1| 1| 0| 0',
+        'SIMKL_DVD| simkl.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Simkl DVD| #481492| 1| 1| 0| 0',
         'MUST_SEE| Metacritic.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Metacritic Must See| #80B17A| 1| 1| 0| 0',
         'CERTIFIED_FRESH| Rotten Tomatoes.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | RT Certified Fresh| #4726DC| 1| 1| 0| 0',
         'RATED_100| Rotten Tomatoes.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | RT Rated 100| #4726DC| 1| 1| 0| 0',
