@@ -851,28 +851,66 @@ def _disable_overlays_temporarily(driver):
 
 
 def wait_for_new_download():
-    before = {p for p in Path(DOWNLOAD_DIR).glob("*")}
+    def snapshot():
+        snap = {}
+        for p in Path(DOWNLOAD_DIR).glob("*"):
+            try:
+                stat = p.stat()
+                snap[p] = (stat.st_mtime_ns, stat.st_size)
+            except FileNotFoundError:
+                continue
+        return snap
+
+    before = snapshot()
 
     def wait_new(timeout=MAX_WAIT_DL_SEC):
         t = StepTimer("wait_for_download")
         end = time.time() + timeout
         last_print = 0
         while time.time() < end:
-            after = {p for p in Path(DOWNLOAD_DIR).glob("*")}
-            newset = list(after - before)
-            if newset:
-                f = max(newset, key=lambda p: p.stat().st_mtime)
-                # handle Chrome .crdownload
-                if f.suffix.lower() == ".crdownload":
-                    final = f.with_suffix("")
-                    if final.exists() and final.stat().st_size > 0:
-                        log(f"[dl] detected completed: {final.name}")
+            after = snapshot()
+            changed = []
+            for p, meta in after.items():
+                prev = before.get(p)
+                if prev is None or prev != meta:
+                    changed.append((p, meta))
+
+            if changed:
+                changed.sort(key=lambda item: item[1][0], reverse=True)
+                for f, (_, size) in changed:
+                    # handle Chrome .crdownload completing alongside an existing final name
+                    if f.suffix.lower() == ".crdownload":
+                        final = f.with_suffix("")
+                        try:
+                            if final.exists() and final.stat().st_size > 0:
+                                log(f"[dl] detected completed: {final.name}")
+                                t.done()
+                                return final
+                        except FileNotFoundError:
+                            pass
+                        continue
+
+                    if size > 0:
+                        log(f"[dl] detected: {f.name}")
                         t.done()
-                        return final
-                elif f.exists() and f.stat().st_size > 0:
-                    log(f"[dl] detected: {f.name}")
+                        return f
+
+            # Detect a final file materializing after a transient .crdownload vanished.
+            removed_temp = [p for p in before if p.suffix.lower() == ".crdownload" and p not in after]
+            if removed_temp:
+                candidates = sorted(
+                    (
+                        p for p, (_, size) in after.items()
+                        if p.suffix.lower() != ".crdownload" and size > 0
+                    ),
+                    key=lambda p: after[p][0],
+                    reverse=True,
+                )
+                if candidates:
+                    log(f"[dl] detected finalized file: {candidates[0].name}")
                     t.done()
-                    return f
+                    return candidates[0]
+
             if time.time() - last_print > 2:
                 log("[dl] waiting for file …")
                 last_print = time.time()
