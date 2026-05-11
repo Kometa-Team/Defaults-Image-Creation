@@ -79,6 +79,7 @@ PROC_TIMEOUT = int(os.getenv("SEL_PROC_TIMEOUT", "120"))  # wait for processing 
 MAX_WAIT_DL_SEC = int(os.getenv("SEL_MAX_WAIT_DL_SEC", "240"))  # wait for file to appear
 DL_BTN_TIMEOUT = int(os.getenv("SEL_DL_BUTTON_TIMEOUT", "20"))  # how long to wait for button to be found
 RELOAD_EACH_FILE = os.getenv("SEL_RELOAD_EACH_FILE", "true").lower() in ("1", "true", "yes", "y")
+RESTART_BROWSER_EACH_FILE = os.getenv("SEL_RESTART_BROWSER_EACH_FILE", "true").lower() in ("1", "true", "yes", "y")
 MAX_FILE_ATTEMPTS = max(1, int(os.getenv("SEL_MAX_FILE_ATTEMPTS", "2")))
 
 # Size enforcement
@@ -1028,6 +1029,9 @@ def main():
                 elif fr.status == "ERROR":
                     log(f"[error] {jpg.name} – {fr.detail}")
                 bar()  # advance after finishing the file
+
+                if idx < len(files) and RESTART_BROWSER_EACH_FILE:
+                    driver = restart_driver(driver, f"recycling session after {jpg.name}")
 
         log("All done.")
     finally:
