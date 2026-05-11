@@ -278,6 +278,51 @@ def deep_click(driver, el):
     driver.execute_script("arguments[0].click();", el)
 
 
+def describe_control_state(driver, el):
+    """Return a small state snapshot for buttons/controls, including shadow-host buttons."""
+    try:
+        return driver.execute_script("""
+            const el = arguments[0];
+            if (!el || !el.isConnected) return {connected:false, visible:false, enabled:false, text:''};
+
+            const inner = (el.shadowRoot && el.shadowRoot.querySelector('button')) || el;
+            const style = getComputedStyle(inner);
+            const rect = inner.getBoundingClientRect();
+            const attr = (node, name) => (node && node.getAttribute ? node.getAttribute(name) : null);
+            const hasDisabledClass = (node) => {
+              const cls = ((node && node.className) || '').toString().toLowerCase();
+              return cls.includes('disabled') || cls.includes('is-disabled');
+            };
+
+            const disabled =
+              !!inner.disabled ||
+              attr(inner, 'disabled') !== null ||
+              attr(inner, 'aria-disabled') === 'true' ||
+              attr(el, 'disabled') !== null ||
+              attr(el, 'aria-disabled') === 'true' ||
+              hasDisabledClass(inner) ||
+              hasDisabledClass(el) ||
+              style.pointerEvents === 'none';
+
+            const visible =
+              style.display !== 'none' &&
+              style.visibility !== 'hidden' &&
+              rect.width > 0 &&
+              rect.height > 0;
+
+            const text = ((inner.innerText || inner.textContent || el.innerText || el.textContent || '') + '').trim();
+            return {
+              connected: true,
+              visible,
+              enabled: visible && !disabled,
+              disabled,
+              text
+            };
+        """, el)
+    except Exception:
+        return {"connected": False, "visible": False, "enabled": False, "text": ""}
+
+
 # ===============================
 # Route / consent / promos
 # ===============================
@@ -370,6 +415,17 @@ def upload_file(driver, path_str):
     if inp:
         log("[upload] using live input (attempt 1)")
         inp.send_keys(path_str)
+        try:
+            state = js(driver, """
+                const el = arguments[0];
+                return {
+                  file_count: el && el.files ? el.files.length : 0,
+                  file_name: el && el.files && el.files[0] ? el.files[0].name : ''
+                };
+            """, inp)
+            log(f"[upload] input now holds {state.get('file_count', 0)} file(s): {state.get('file_name', '')}")
+        except Exception:
+            pass
         return
 
     log("[upload] clicking drop-zone container…")
@@ -389,6 +445,17 @@ def upload_file(driver, path_str):
             if inp:
                 log("[upload] input exposed after drop-zone click")
                 inp.send_keys(path_str)
+                try:
+                    state = js(driver, """
+                        const el = arguments[0];
+                        return {
+                          file_count: el && el.files ? el.files.length : 0,
+                          file_name: el && el.files && el.files[0] ? el.files[0].name : ''
+                        };
+                    """, inp)
+                    log(f"[upload] input now holds {state.get('file_count', 0)} file(s): {state.get('file_name', '')}")
+                except Exception:
+                    pass
                 return
 
     # 2) click obvious upload CTAs
@@ -404,6 +471,17 @@ def upload_file(driver, path_str):
             if inp:
                 log("[upload] input exposed after CTA click")
                 inp.send_keys(path_str)
+                try:
+                    state = js(driver, """
+                        const el = arguments[0];
+                        return {
+                          file_count: el && el.files ? el.files.length : 0,
+                          file_name: el && el.files && el.files[0] ? el.files[0].name : ''
+                        };
+                    """, inp)
+                    log(f"[upload] input now holds {state.get('file_count', 0)} file(s): {state.get('file_name', '')}")
+                except Exception:
+                    pass
                 return
 
     # 3) structural hooks
@@ -421,6 +499,17 @@ def upload_file(driver, path_str):
             if inp:
                 log("[upload] input exposed from structural hook")
                 inp.send_keys(path_str)
+                try:
+                    state = js(driver, """
+                        const el = arguments[0];
+                        return {
+                          file_count: el && el.files ? el.files.length : 0,
+                          file_name: el && el.files && el.files[0] ? el.files[0].name : ''
+                        };
+                    """, inp)
+                    log(f"[upload] input now holds {state.get('file_count', 0)} file(s): {state.get('file_name', '')}")
+                except Exception:
+                    pass
                 return
 
     # 4) last try: re-click container and poll for input
@@ -431,6 +520,17 @@ def upload_file(driver, path_str):
         if inp:
             log("[upload] input exposed after re-click")
             inp.send_keys(path_str)
+            try:
+                state = js(driver, """
+                    const el = arguments[0];
+                    return {
+                      file_count: el && el.files ? el.files.length : 0,
+                      file_name: el && el.files && el.files[0] ? el.files[0].name : ''
+                    };
+                """, inp)
+                log(f"[upload] input now holds {state.get('file_count', 0)} file(s): {state.get('file_name', '')}")
+            except Exception:
+                pass
             return
 
     raise RuntimeError("Upload tile never exposed <input type=file>")
@@ -465,20 +565,30 @@ def wait_until_processed_controls(driver, timeout=PROC_TIMEOUT):
     while time.time() < end:
         # 1) selectors first
         for sel in selectors:
-            if deep_query_iframes_one(driver, sel, timeout=0):
-                log(f"[wait] controls detected by selector: {sel}")
-                t.done()
-                return True
+            el = deep_query_iframes_one(driver, sel, timeout=0)
+            if el:
+                state = describe_control_state(driver, el)
+                if state.get("enabled"):
+                    log(f"[wait] controls ready by selector: {sel}")
+                    t.done()
+                    return True
+                log(f"[wait] control seen but not ready: {sel} disabled={state.get('disabled')} text={state.get('text', '')!r}")
 
         # 2) text fallbacks
-        if deep_query_text_iframes(driver, r"\bdownload\b", "*"):
-            log("[wait] controls detected by text: Download")
-            t.done()
-            return True
-        if deep_query_text_iframes(driver, r"\bexport\b", "*"):
-            log("[wait] controls detected by text: Export")
-            t.done()
-            return True
+        hit = deep_query_text_iframes(driver, r"\bdownload\b", "*")
+        if hit:
+            state = describe_control_state(driver, hit)
+            if state.get("enabled"):
+                log("[wait] controls ready by text: Download")
+                t.done()
+                return True
+        hit = deep_query_text_iframes(driver, r"\bexport\b", "*")
+        if hit:
+            state = describe_control_state(driver, hit)
+            if state.get("enabled"):
+                log("[wait] controls ready by text: Export")
+                t.done()
+                return True
 
         if time.time() >= next_beep:
             log("[wait] still processing…")
@@ -522,6 +632,10 @@ def _find_download_button_with_frames(driver, timeout=DL_BTN_TIMEOUT):
         if not host:
             host = deep_query_text_iframes(driver, r"^\s*download\s*$", "*")
         if host:
+            state = describe_control_state(driver, host)
+            if not state.get("enabled"):
+                time.sleep(0.25)
+                continue
             inner = _inner_button(driver, host)
             frame_chain = driver.execute_script("""
                 const el = arguments[0];
