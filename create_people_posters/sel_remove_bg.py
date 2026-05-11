@@ -880,7 +880,7 @@ def wait_for_new_download():
                         final = f.with_suffix("")
                         try:
                             if final.exists() and final.stat().st_size > 0:
-                                log(f"[dl] detected completed: {final.name}")
+                                log(f"[dl] detected completed: {final.name} @ {final}")
                                 t.done()
                                 return final
                         except FileNotFoundError:
@@ -888,7 +888,7 @@ def wait_for_new_download():
                         continue
 
                     if size > 0:
-                        log(f"[dl] detected: {f.name}")
+                        log(f"[dl] detected: {f.name} @ {f}")
                         t.done()
                         return f
 
@@ -904,7 +904,7 @@ def wait_for_new_download():
                     reverse=True,
                 )
                 if candidates:
-                    log(f"[dl] detected finalized file: {candidates[0].name}")
+                    log(f"[dl] detected finalized file: {candidates[0].name} @ {candidates[0]}")
                     t.done()
                     return candidates[0]
 
@@ -951,6 +951,12 @@ def main():
 
     driver = build_driver()
     try:
+        log(f"Script: {Path(__file__).resolve()}")
+        log(f"Source JPG dir: {SRC_DIR}")
+        log(f"Adobe download dir: {DOWNLOAD_DIR}")
+        log(f"Archive original dir: {ORIG_DIR}")
+        log(f"Chrome profile dir: {Path(USER_DATA_DIR).resolve()} [{PROFILE_DIR}]")
+        log(f"Run log file: {LOG_FILE.resolve()}")
         files = sorted(list(SRC_DIR.glob("*.jpg")))
         if not files:
             log(f"No JPGs found in {SRC_DIR}")
@@ -1032,11 +1038,13 @@ def main():
                         if target.exists():
                             target.unlink()
                         shutil.move(str(new_file), str(target))
+                        log(f"[move] downloaded PNG -> {target}")
 
                         dest_jpg = ORIG_DIR / jpg.name
                         if dest_jpg.exists():
                             dest_jpg.unlink()
                         shutil.move(str(jpg), str(dest_jpg))
+                        log(f"[move] original JPG -> {dest_jpg}")
 
                         fr.status = "OK"
                         fr.detail = f"{target.name}"
