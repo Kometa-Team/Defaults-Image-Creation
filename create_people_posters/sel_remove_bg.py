@@ -324,6 +324,73 @@ def describe_control_state(driver, el):
         return {"connected": False, "visible": False, "enabled": False, "text": ""}
 
 
+def wait_for_uploaded_file(driver, expected_name: str, timeout: float = 5.0):
+    """Look across the page/shadow DOM/iframes for a file input holding expected_name."""
+    script = r"""
+    const expected = arguments[0].toLowerCase();
+
+    function scanRoot(root){
+      const out = [];
+      const all = root.querySelectorAll ? root.querySelectorAll('input[type="file"]') : [];
+      for (const el of all){
+        try{
+          const files = el.files || [];
+          const first = files[0];
+          out.push({
+            count: files.length || 0,
+            name: first && first.name ? String(first.name) : ''
+          });
+        }catch(e){}
+      }
+
+      const nodes = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of nodes){
+        if (n.shadowRoot) out.push(...scanRoot(n.shadowRoot));
+      }
+      return out;
+    }
+
+    let found = scanRoot(document);
+    for (const f of document.querySelectorAll('iframe')){
+      try{
+        const d = f.contentDocument || f.contentWindow?.document;
+        if (d) found.push(...scanRoot(d));
+      }catch(e){}
+    }
+
+    for (const item of found){
+      if (item.count > 0 && item.name.toLowerCase() === expected){
+        return {matched: true, count: item.count, name: item.name};
+      }
+    }
+
+    return found[0] || {matched: false, count: 0, name: ''};
+    """
+    end = time.time() + timeout
+    last_state = {"matched": False, "count": 0, "name": ""}
+    while time.time() < end:
+        try:
+            state = driver.execute_script(script, expected_name)
+        except Exception:
+            state = {"matched": False, "count": 0, "name": ""}
+        if state.get("matched"):
+            return state
+        last_state = state
+        time.sleep(0.25)
+    return last_state
+
+
+def send_keys_and_confirm(driver, inp, path_str: str) -> bool:
+    expected_name = Path(path_str).name
+    inp.send_keys(path_str)
+    state = wait_for_uploaded_file(driver, expected_name, timeout=5.0)
+    if state.get("matched"):
+        log(f"[upload] confirmed file input holds: {state.get('name', '')}")
+        return True
+    log(f"[upload] send_keys did not bind expected file: expected={expected_name!r} seen={state.get('name', '')!r} count={state.get('count', 0)}")
+    return False
+
+
 # ===============================
 # Route / consent / promos
 # ===============================
@@ -415,19 +482,9 @@ def upload_file(driver, path_str):
     inp = find_file_input_deep(driver, timeout=3)
     if inp:
         log("[upload] using live input (attempt 1)")
-        inp.send_keys(path_str)
-        try:
-            state = js(driver, """
-                const el = arguments[0];
-                return {
-                  file_count: el && el.files ? el.files.length : 0,
-                  file_name: el && el.files && el.files[0] ? el.files[0].name : ''
-                };
-            """, inp)
-            log(f"[upload] input now holds {state.get('file_count', 0)} file(s): {state.get('file_name', '')}")
-        except Exception:
-            pass
-        return
+        if send_keys_and_confirm(driver, inp, path_str):
+            return
+        log("[upload] live input did not accept file; trying alternate activation paths")
 
     log("[upload] clicking drop-zone container…")
     # 1) click the big container (not just the icon)
@@ -445,19 +502,8 @@ def upload_file(driver, path_str):
             inp = find_file_input_deep(driver, timeout=3)
             if inp:
                 log("[upload] input exposed after drop-zone click")
-                inp.send_keys(path_str)
-                try:
-                    state = js(driver, """
-                        const el = arguments[0];
-                        return {
-                          file_count: el && el.files ? el.files.length : 0,
-                          file_name: el && el.files && el.files[0] ? el.files[0].name : ''
-                        };
-                    """, inp)
-                    log(f"[upload] input now holds {state.get('file_count', 0)} file(s): {state.get('file_name', '')}")
-                except Exception:
-                    pass
-                return
+                if send_keys_and_confirm(driver, inp, path_str):
+                    return
 
     # 2) click obvious upload CTAs
     for (regex, tag) in [
@@ -471,19 +517,8 @@ def upload_file(driver, path_str):
             inp = find_file_input_deep(driver, timeout=3)
             if inp:
                 log("[upload] input exposed after CTA click")
-                inp.send_keys(path_str)
-                try:
-                    state = js(driver, """
-                        const el = arguments[0];
-                        return {
-                          file_count: el && el.files ? el.files.length : 0,
-                          file_name: el && el.files && el.files[0] ? el.files[0].name : ''
-                        };
-                    """, inp)
-                    log(f"[upload] input now holds {state.get('file_count', 0)} file(s): {state.get('file_name', '')}")
-                except Exception:
-                    pass
-                return
+                if send_keys_and_confirm(driver, inp, path_str):
+                    return
 
     # 3) structural hooks
     for sel in [
@@ -499,19 +534,8 @@ def upload_file(driver, path_str):
             inp = find_file_input_deep(driver, timeout=3)
             if inp:
                 log("[upload] input exposed from structural hook")
-                inp.send_keys(path_str)
-                try:
-                    state = js(driver, """
-                        const el = arguments[0];
-                        return {
-                          file_count: el && el.files ? el.files.length : 0,
-                          file_name: el && el.files && el.files[0] ? el.files[0].name : ''
-                        };
-                    """, inp)
-                    log(f"[upload] input now holds {state.get('file_count', 0)} file(s): {state.get('file_name', '')}")
-                except Exception:
-                    pass
-                return
+                if send_keys_and_confirm(driver, inp, path_str):
+                    return
 
     # 4) last try: re-click container and poll for input
     el = deep_query_iframes_one(driver, ".dropzone-content", timeout=0)
@@ -520,21 +544,10 @@ def upload_file(driver, path_str):
         inp = find_file_input_deep(driver, timeout=8)
         if inp:
             log("[upload] input exposed after re-click")
-            inp.send_keys(path_str)
-            try:
-                state = js(driver, """
-                    const el = arguments[0];
-                    return {
-                      file_count: el && el.files ? el.files.length : 0,
-                      file_name: el && el.files && el.files[0] ? el.files[0].name : ''
-                    };
-                """, inp)
-                log(f"[upload] input now holds {state.get('file_count', 0)} file(s): {state.get('file_name', '')}")
-            except Exception:
-                pass
-            return
+            if send_keys_and_confirm(driver, inp, path_str):
+                return
 
-    raise RuntimeError("Upload tile never exposed <input type=file>")
+    raise RuntimeError(f"Upload did not bind expected file: {Path(path_str).name}")
 
 
 # ===============================
@@ -574,22 +587,6 @@ def wait_until_processed_controls(driver, timeout=PROC_TIMEOUT):
                     t.done()
                     return True
                 log(f"[wait] control seen but not ready: {sel} disabled={state.get('disabled')} text={state.get('text', '')!r}")
-
-        # 2) text fallbacks
-        hit = deep_query_text_iframes(driver, r"\bdownload\b", "*")
-        if hit:
-            state = describe_control_state(driver, hit)
-            if state.get("enabled"):
-                log("[wait] controls ready by text: Download")
-                t.done()
-                return True
-        hit = deep_query_text_iframes(driver, r"\bexport\b", "*")
-        if hit:
-            state = describe_control_state(driver, hit)
-            if state.get("enabled"):
-                log("[wait] controls ready by text: Export")
-                t.done()
-                return True
 
         if time.time() >= next_beep:
             log("[wait] still processing…")
