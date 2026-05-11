@@ -9,6 +9,7 @@ from alive_progress import alive_bar
 from PIL import Image, ImageOps
 
 from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.action_chains import ActionChains
@@ -78,6 +79,7 @@ PROC_TIMEOUT = int(os.getenv("SEL_PROC_TIMEOUT", "120"))  # wait for processing 
 MAX_WAIT_DL_SEC = int(os.getenv("SEL_MAX_WAIT_DL_SEC", "240"))  # wait for file to appear
 DL_BTN_TIMEOUT = int(os.getenv("SEL_DL_BUTTON_TIMEOUT", "20"))  # how long to wait for button to be found
 RELOAD_EACH_FILE = os.getenv("SEL_RELOAD_EACH_FILE", "true").lower() in ("1", "true", "yes", "y")
+MAX_FILE_ATTEMPTS = max(1, int(os.getenv("SEL_MAX_FILE_ATTEMPTS", "2")))
 
 # Size enforcement
 EXPECT_W = int(os.getenv("SEL_EXPECT_WIDTH", "2000"))
@@ -175,6 +177,29 @@ def build_driver():
 
 def js(driver, script, *args):
     return driver.execute_script(script, *args)
+
+
+def is_browser_crash(exc: Exception) -> bool:
+    msg = str(exc).lower()
+    markers = (
+        "tab crashed",
+        "session deleted because of page crash",
+        "target frame detached",
+        "invalid session id",
+        "chrome not reachable",
+        "disconnected: not connected to devtools",
+    )
+    return any(marker in msg for marker in markers)
+
+
+def restart_driver(driver, reason: str = ""):
+    detail = reason.strip().splitlines()[0] if reason else "unknown browser failure"
+    log(f"[browser] restarting Chrome ({detail})")
+    try:
+        driver.quit()
+    except Exception:
+        pass
+    return build_driver()
 
 
 # ===============================
@@ -289,6 +314,14 @@ def hide_onetrust(driver):
       const o=document.querySelector('#onetrust-consent-sdk');
       if(o){o.style.display='none';o.style.visibility='hidden';o.style.pointerEvents='none';}
     """)
+
+
+def prepare_tool(driver):
+    driver.get(URL)
+    pin_tool_route(driver)
+    remove_promos(driver)
+    hide_onetrust(driver)
+    wait_until_ready(driver)
 
 
 # ===============================
@@ -781,110 +814,105 @@ def main():
                 fr = FileResult(name=jpg.name, status="")
                 bar.text = f"→ {jpg.name}"
                 log(f"[proc {idx}/{len(files)}] {jpg}")
-
-                # Navigate / get ready
-                if RELOAD_EACH_FILE or idx == 1:
-                    bar.text = f"→ {jpg.name} : opening tool"
-                    driver.get(URL)
-                    pin_tool_route(driver)
-                    remove_promos(driver)
-                    hide_onetrust(driver)
-                    wait_until_ready(driver)
-
-                # --- Size enforcement (pre-upload) ---
-                upload_path = str(jpg)  # stays the same (no temp filename to upload)
-                if ENFORCE_SIZE and (EXPECT_W > 0 and EXPECT_H > 0):
+                for attempt in range(1, MAX_FILE_ATTEMPTS + 1):
                     try:
-                        t_rs = StepTimer("resize_in_place")
-                        changed = resize_in_place(jpg, EXPECT_W, EXPECT_H)
-                        t_rs.done("resized" if changed else "already 2000x3000")
+                        # Navigate / get ready
+                        if RELOAD_EACH_FILE or idx == 1 or attempt > 1:
+                            bar.text = f"→ {jpg.name} : opening tool"
+                            prepare_tool(driver)
+
+                        # --- Size enforcement (pre-upload) ---
+                        upload_path = str(jpg)  # stays the same (no temp filename to upload)
+                        if ENFORCE_SIZE and (EXPECT_W > 0 and EXPECT_H > 0):
+                            try:
+                                t_rs = StepTimer("resize_in_place")
+                                changed = resize_in_place(jpg, EXPECT_W, EXPECT_H)
+                                t_rs.done("resized" if changed else "already 2000x3000")
+                            except Exception as e:
+                                fr.status = "SKIPPED"
+                                fr.detail = f"size check/resize failed: {e}"
+                                break
+
+                        # Upload
+                        bar.text = f"→ {jpg.name} : upload"
+                        t_up = StepTimer("upload")
+                        upload_file(driver, upload_path)
+                        fr.sec_upload = t_up.done()
+
+                        # Wait for controls
+                        bar.text = f"→ {jpg.name} : processing"
+                        t_proc = StepTimer("processing")
+                        ok = wait_until_processed_controls(driver, timeout=PROC_TIMEOUT)
+                        fr.sec_process = t_proc.done()
+                        if not ok:
+                            fr.status = "ERROR"
+                            fr.detail = "Processing did not expose controls in time"
+                            break
+
+                        # Small pause before first download attempt
+                        time.sleep(2.5)
+
+                        # Download
+                        bar.text = f"→ {jpg.name} : download"
+                        t_dl = StepTimer("download")
+                        wait_new = wait_for_new_download()
+                        new_file = click_js_then_native(driver, wait_new)
+
+                        # One quick JS host click as fallback (no canvas fallback)
+                        if not new_file:
+                            log("[dl] native click produced no file; retrying once with JS host click")
+                            try:
+                                host, inner, _ = _find_download_button_with_frames(driver, timeout=6)
+                                if host:
+                                    js(driver, "arguments[0].scrollIntoView({block:'center'}); arguments[0].click();", host)
+                                    new_file = wait_new()
+                            except Exception:
+                                pass
+
+                        if not new_file:
+                            fr.status = "ERROR"
+                            fr.detail = "No file downloaded (timed out)"
+                            fr.sec_download = t_dl.done("TIMEOUT")
+                            break
+
+                        fr.sec_download = t_dl.done()
+
+                        # Place final & move original
+                        target = SRC_DIR / f"{jpg.stem}.png"
+                        if target.exists():
+                            target.unlink()
+                        shutil.move(str(new_file), str(target))
+
+                        dest_jpg = ORIG_DIR / jpg.name
+                        if dest_jpg.exists():
+                            dest_jpg.unlink()
+                        shutil.move(str(jpg), str(dest_jpg))
+
+                        fr.status = "OK"
+                        fr.detail = f"{target.name}"
+                        log(f"[done] {jpg.name} -> {target.name}")
+                        break
+                    except WebDriverException as e:
+                        if is_browser_crash(e):
+                            if attempt < MAX_FILE_ATTEMPTS:
+                                log(f"[warn] browser crash while processing {jpg.name}; retrying (attempt {attempt + 1}/{MAX_FILE_ATTEMPTS})")
+                                driver = restart_driver(driver, str(e))
+                                continue
+                            driver = restart_driver(driver, str(e))
+                        fr.status = "ERROR"
+                        fr.detail = f"Selenium failure: {str(e).splitlines()[0]}"
+                        break
                     except Exception as e:
-                        fr.status = "SKIPPED"
-                        fr.detail = f"size check/resize failed: {e}"
-                        fr.sec_total = time.perf_counter() - per_t0
-                        results.append(fr)
-                        log(f"[skip] {jpg.name} – {fr.detail}")
-                        bar()  # advance even on skip
-                        continue
+                        fr.status = "ERROR"
+                        fr.detail = str(e).splitlines()[0] if str(e) else e.__class__.__name__
+                        break
 
-                # Upload
-                bar.text = f"→ {jpg.name} : upload"
-                t_up = StepTimer("upload")
-                upload_file(driver, upload_path)
-                fr.sec_upload = t_up.done()
-
-                # Wait for controls
-                bar.text = f"→ {jpg.name} : processing"
-                t_proc = StepTimer("processing")
-                ok = wait_until_processed_controls(driver, timeout=PROC_TIMEOUT)
-                fr.sec_process = t_proc.done()
-                if not ok:
-                    fr.status = "ERROR"
-                    fr.detail = "Processing did not expose controls in time"
-                    fr.sec_total = time.perf_counter() - per_t0
-                    results.append(fr)
-                    log(f"[error] {jpg.name} – {fr.detail}")
-                    bar()  # advance on error
-                    continue
-
-                # Small pause before first download attempt
-                time.sleep(2.5)
-
-                # Download
-                bar.text = f"→ {jpg.name} : download"
-                t_dl = StepTimer("download")
-                wait_new = wait_for_new_download()
-                new_file = click_js_then_native(driver, wait_new)
-
-                # One quick JS host click as fallback (no canvas fallback)
-                if not new_file:
-                    log("[dl] native click produced no file; retrying once with JS host click")
-                    try:
-                        host, inner, _ = _find_download_button_with_frames(driver, timeout=6)
-                        if host:
-                            js(driver, "arguments[0].scrollIntoView({block:'center'}); arguments[0].click();", host)
-                            new_file = wait_new()
-                    except Exception:
-                        pass
-
-                if not new_file:
-                    fr.status = "ERROR"
-                    fr.detail = "No file downloaded (timed out)"
-                    fr.sec_download = t_dl.done("TIMEOUT")
-                    fr.sec_total = time.perf_counter() - per_t0
-                    results.append(fr)
-                    log(f"[error] No file downloaded for: {jpg.name} (timed out)")
-                    bar()  # advance on error
-                    continue
-
-                fr.sec_download = t_dl.done()
-
-                # Place final & move original
-                target = SRC_DIR / f"{jpg.stem}.png"
-                if target.exists():
-                    target.unlink()
-                shutil.move(str(new_file), str(target))
-
-                dest_jpg = ORIG_DIR / jpg.name
-                if dest_jpg.exists():
-                    dest_jpg.unlink()
-                shutil.move(str(jpg), str(dest_jpg))
-
-                fr.status = "OK"
-                fr.detail = f"{target.name}"
                 fr.sec_total = time.perf_counter() - per_t0
                 results.append(fr)
-                log(f"[done] {jpg.name} -> {target.name}")
-
-                # Re-assert tool for next file
-                if RELOAD_EACH_FILE and idx < len(files):
-                    bar.text = f"→ {jpg.name} : resetting tool"
-                    driver.get(URL)
-                    pin_tool_route(driver)
-                    remove_promos(driver)
-                    hide_onetrust(driver)
-                    wait_until_ready(driver)
-
+                if fr.status == "SKIPPED":
+                    log(f"[skip] {jpg.name} – {fr.detail}")
+                elif fr.status == "ERROR":
+                    log(f"[error] {jpg.name} – {fr.detail}")
                 bar()  # advance after finishing the file
 
         log("All done.")
