@@ -113,7 +113,7 @@ SEL_SRC_DIR=./config/people_dirs/Downloads            # input JPGs
 SEL_ORIG_DIR=./config/people_dirs/original            # keep original JPGs here
 SEL_TOOL_URL=https://new.express.adobe.com/tools/remove-background
 SEL_USER_DATA_DIR=./config/chrome-profile
-SEL_PROFILE_DIR=Profile 1
+SEL_PROFILE_DIR=Default
 SEL_DOWNLOAD_DIR=./config/sel_downloads               # output PNGs from Adobe Express
 
 # Size enforcement (input JPGs)

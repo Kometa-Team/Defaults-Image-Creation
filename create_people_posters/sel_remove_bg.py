@@ -2,14 +2,14 @@
 import os, time, shutil, subprocess, sys
 from pathlib import Path
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 
 from alive_progress import alive_bar
 
 from PIL import Image, ImageOps
 
 from selenium import webdriver
-from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import StaleElementReferenceException, WebDriverException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.action_chains import ActionChains
@@ -88,6 +88,7 @@ EXPECT_H = int(os.getenv("SEL_EXPECT_HEIGHT", "3000"))
 ENFORCE_SIZE = os.getenv("SEL_ENFORCE_SIZE", "true").lower() in ("1", "true", "yes", "y")
 
 # Make sure folders exist
+SRC_DIR.mkdir(parents=True, exist_ok=True)
 Path(DOWNLOAD_DIR).mkdir(parents=True, exist_ok=True)
 ORIG_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -100,6 +101,9 @@ def now_ts() -> str:
 
 
 LOG_FILE = LOGS_DIR / "sel_remove_bg.log"
+CHROMEDRIVER_LOG_FILE = LOGS_DIR / "chromedriver.log"
+EFFECTIVE_USER_DATA_DIR = Path(USER_DATA_DIR).resolve()
+EFFECTIVE_PROFILE_DIR = PROFILE_DIR
 
 
 def log(msg: str) -> None:
@@ -110,6 +114,38 @@ def log(msg: str) -> None:
             f.write(line + "\n")
     except Exception:
         pass
+
+
+def resolve_profile_directory(user_data_dir: Path, requested_profile: str) -> Optional[str]:
+    requested_profile = (requested_profile or "").strip()
+    if not requested_profile:
+        return None
+
+    requested_path = user_data_dir / requested_profile
+    if requested_path.is_dir():
+        return requested_profile
+
+    fallback_candidates: List[str] = []
+    if (user_data_dir / "Default").is_dir():
+        fallback_candidates.append("Default")
+
+    for child in sorted(user_data_dir.iterdir()):
+        if child.is_dir() and child.name.startswith("Profile "):
+            fallback_candidates.append(child.name)
+
+    for candidate in fallback_candidates:
+        if candidate != requested_profile:
+            log(
+                f"[chrome] requested profile '{requested_profile}' not found in "
+                f"{user_data_dir}; falling back to '{candidate}'"
+            )
+            return candidate
+
+    log(
+        f"[chrome] requested profile '{requested_profile}' not found in "
+        f"{user_data_dir}; starting without --profile-directory"
+    )
+    return None
 
 
 class StepTimer:
@@ -141,14 +177,22 @@ class FileResult:
 # Driver
 # ===============================
 def build_driver():
+    global EFFECTIVE_USER_DATA_DIR, EFFECTIVE_PROFILE_DIR
     # Ensure the profile root exists (fresh machines / first run)
-    Path(USER_DATA_DIR).mkdir(parents=True, exist_ok=True)
+    user_data_dir = Path(USER_DATA_DIR).resolve()
+    user_data_dir.mkdir(parents=True, exist_ok=True)
+    profile_dir = resolve_profile_directory(user_data_dir, PROFILE_DIR)
+    EFFECTIVE_USER_DATA_DIR = user_data_dir
+    EFFECTIVE_PROFILE_DIR = profile_dir or "<none>"
 
     opts = Options()
-    opts.add_argument(f"--user-data-dir={USER_DATA_DIR}")
-    opts.add_argument(f"--profile-directory={PROFILE_DIR}")
+    opts.add_argument(f"--user-data-dir={user_data_dir}")
+    if profile_dir:
+        opts.add_argument(f"--profile-directory={profile_dir}")
     opts.add_argument("--log-level=3")
     opts.add_argument("--disable-features=PrivacySandboxAdsAPIs")
+    opts.add_argument("--no-first-run")
+    opts.add_argument("--no-default-browser-check")
     opts.add_argument("--start-maximized")
     opts.add_experimental_option("excludeSwitches", ["enable-logging", "enable-automation"])
     opts.add_experimental_option("prefs", {
@@ -158,8 +202,20 @@ def build_driver():
         "safebrowsing.enabled": True,
         "profile.default_content_setting_values.automatic_downloads": 1,
     })
-    service = Service(log_output=subprocess.DEVNULL)
-    driver = webdriver.Chrome(options=opts, service=service)
+    try:
+        CHROMEDRIVER_LOG_FILE.unlink(missing_ok=True)
+    except Exception:
+        pass
+    service = Service(log_output=str(CHROMEDRIVER_LOG_FILE))
+    try:
+        driver = webdriver.Chrome(options=opts, service=service)
+    except Exception as exc:
+        detail = (
+            f"Chrome failed to start with user-data dir '{user_data_dir}'"
+            + (f" and profile '{profile_dir}'" if profile_dir else "")
+            + f". ChromeDriver log: {CHROMEDRIVER_LOG_FILE.resolve()}"
+        )
+        raise RuntimeError(detail) from exc
     try:
         driver.maximize_window()
     except Exception:
@@ -324,28 +380,87 @@ def describe_control_state(driver, el):
         return {"connected": False, "visible": False, "enabled": False, "text": ""}
 
 
-def wait_for_uploaded_file(driver, expected_name: str, timeout: float = 5.0):
-    """Look across the page/shadow DOM/iframes for a file input holding expected_name."""
+def wait_for_upload_acceptance(driver, expected_name: str, timeout: float = 8.0):
+    """
+    Confirm the upload was accepted.
+
+    Adobe Express now re-renders the file input immediately after send_keys(),
+    so the old "input still contains the file name" check is no longer reliable.
+    We accept any of these as success:
+      - a live file input still reports the expected file
+      - an upload/progress indicator appears
+      - the Download control appears (even if disabled while processing)
+      - the page title changes to the per-project title
+    """
     script = r"""
     const expected = arguments[0].toLowerCase();
 
     function scanRoot(root){
-      const out = [];
+      const out = {
+        inputs: [],
+        hasProgress: false,
+        hasDownloadControl: false,
+        downloadDisabled: false
+      };
+
       const all = root.querySelectorAll ? root.querySelectorAll('input[type="file"]') : [];
       for (const el of all){
         try{
           const files = el.files || [];
           const first = files[0];
-          out.push({
+          out.inputs.push({
             count: files.length || 0,
             name: first && first.name ? String(first.name) : ''
           });
         }catch(e){}
       }
 
+      const progressSel = [
+        '[role="progressbar"]',
+        'sp-progress-circle',
+        'sp-progressbar',
+        'qa-progress'
+      ];
+      for (const sel of progressSel){
+        try{
+          if (root.querySelector && root.querySelector(sel)){
+            out.hasProgress = true;
+            break;
+          }
+        }catch(e){}
+      }
+
+      const downloadSel = [
+        'sp-button#downloadExportOption',
+        'sp-button[data-testid="qa-download-export-button"]',
+        'sp-button[data-export-target="Download"]',
+        '[data-testid="qa-download-export-button"]',
+        '#downloadExportOption',
+        '[data-export-target="Download"]',
+        '[data-export-option-id="downloadExportOption"]'
+      ];
+      for (const sel of downloadSel){
+        try{
+          const btn = root.querySelector && root.querySelector(sel);
+          if (!btn) continue;
+          out.hasDownloadControl = true;
+          const disabled =
+            !!btn.disabled ||
+            btn.getAttribute('disabled') !== null ||
+            btn.getAttribute('aria-disabled') === 'true';
+          out.downloadDisabled = out.downloadDisabled || disabled;
+          break;
+        }catch(e){}
+      }
+
       const nodes = root.querySelectorAll ? root.querySelectorAll('*') : [];
       for (const n of nodes){
-        if (n.shadowRoot) out.push(...scanRoot(n.shadowRoot));
+        if (!n.shadowRoot) continue;
+        const child = scanRoot(n.shadowRoot);
+        out.inputs.push(...child.inputs);
+        out.hasProgress = out.hasProgress || child.hasProgress;
+        out.hasDownloadControl = out.hasDownloadControl || child.hasDownloadControl;
+        out.downloadDisabled = out.downloadDisabled || child.downloadDisabled;
       }
       return out;
     }
@@ -354,26 +469,54 @@ def wait_for_uploaded_file(driver, expected_name: str, timeout: float = 5.0):
     for (const f of document.querySelectorAll('iframe')){
       try{
         const d = f.contentDocument || f.contentWindow?.document;
-        if (d) found.push(...scanRoot(d));
+        if (!d) continue;
+        const child = scanRoot(d);
+        found.inputs.push(...child.inputs);
+        found.hasProgress = found.hasProgress || child.hasProgress;
+        found.hasDownloadControl = found.hasDownloadControl || child.hasDownloadControl;
+        found.downloadDisabled = found.downloadDisabled || child.downloadDisabled;
       }catch(e){}
     }
 
-    for (const item of found){
+    for (const item of found.inputs){
       if (item.count > 0 && item.name.toLowerCase() === expected){
-        return {matched: true, count: item.count, name: item.name};
+        return {
+          accepted: true,
+          matched: true,
+          count: item.count,
+          name: item.name,
+          hasProgress: found.hasProgress,
+          hasDownloadControl: found.hasDownloadControl,
+          downloadDisabled: found.downloadDisabled,
+          title: document.title || ''
+        };
       }
     }
 
-    return found[0] || {matched: false, count: 0, name: ''};
+    const title = String(document.title || '');
+    const titleLooksUploaded = /remove background project/i.test(title);
+    const accepted = !!(found.hasProgress || found.hasDownloadControl || titleLooksUploaded);
+    const first = found.inputs[0] || {count: 0, name: ''};
+
+    return {
+      accepted,
+      matched: false,
+      count: first.count || 0,
+      name: first.name || '',
+      hasProgress: found.hasProgress,
+      hasDownloadControl: found.hasDownloadControl,
+      downloadDisabled: found.downloadDisabled,
+      title
+    };
     """
     end = time.time() + timeout
-    last_state = {"matched": False, "count": 0, "name": ""}
+    last_state = {"accepted": False, "matched": False, "count": 0, "name": ""}
     while time.time() < end:
         try:
             state = driver.execute_script(script, expected_name)
         except Exception:
-            state = {"matched": False, "count": 0, "name": ""}
-        if state.get("matched"):
+            state = {"accepted": False, "matched": False, "count": 0, "name": ""}
+        if state.get("accepted"):
             return state
         last_state = state
         time.sleep(0.25)
@@ -382,12 +525,34 @@ def wait_for_uploaded_file(driver, expected_name: str, timeout: float = 5.0):
 
 def send_keys_and_confirm(driver, inp, path_str: str) -> bool:
     expected_name = Path(path_str).name
-    inp.send_keys(path_str)
-    state = wait_for_uploaded_file(driver, expected_name, timeout=5.0)
+    try:
+        inp.send_keys(path_str)
+    except StaleElementReferenceException:
+        log("[upload] file input re-rendered during send_keys; checking for processing state")
+    state = wait_for_upload_acceptance(driver, expected_name, timeout=8.0)
     if state.get("matched"):
         log(f"[upload] confirmed file input holds: {state.get('name', '')}")
         return True
-    log(f"[upload] send_keys did not bind expected file: expected={expected_name!r} seen={state.get('name', '')!r} count={state.get('count', 0)}")
+    if state.get("accepted"):
+        signals = []
+        if state.get("hasProgress"):
+            signals.append("progress visible")
+        if state.get("hasDownloadControl"):
+            if state.get("downloadDisabled"):
+                signals.append("download control visible (disabled while processing)")
+            else:
+                signals.append("download control visible")
+        title = state.get("title", "")
+        if title:
+            signals.append(f"title={title!r}")
+        log(f"[upload] upload accepted via UI transition: {', '.join(signals)}")
+        return True
+    log(
+        f"[upload] send_keys did not bind expected file: expected={expected_name!r} "
+        f"seen={state.get('name', '')!r} count={state.get('count', 0)} "
+        f"progress={state.get('hasProgress', False)} download={state.get('hasDownloadControl', False)} "
+        f"title={state.get('title', '')!r}"
+    )
     return False
 
 
@@ -955,7 +1120,7 @@ def main():
         log(f"Source JPG dir: {SRC_DIR}")
         log(f"Adobe download dir: {DOWNLOAD_DIR}")
         log(f"Archive original dir: {ORIG_DIR}")
-        log(f"Chrome profile dir: {Path(USER_DATA_DIR).resolve()} [{PROFILE_DIR}]")
+        log(f"Chrome profile dir: {EFFECTIVE_USER_DATA_DIR} [{EFFECTIVE_PROFILE_DIR}]")
         log(f"Run log file: {LOG_FILE.resolve()}")
         files = sorted(list(SRC_DIR.glob("*.jpg")))
         if not files:
