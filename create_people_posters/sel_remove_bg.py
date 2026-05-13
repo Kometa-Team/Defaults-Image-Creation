@@ -81,6 +81,8 @@ DL_BTN_TIMEOUT = int(os.getenv("SEL_DL_BUTTON_TIMEOUT", "20"))  # how long to wa
 RELOAD_EACH_FILE = os.getenv("SEL_RELOAD_EACH_FILE", "true").lower() in ("1", "true", "yes", "y")
 RESTART_BROWSER_EACH_FILE = os.getenv("SEL_RESTART_BROWSER_EACH_FILE", "true").lower() in ("1", "true", "yes", "y")
 MAX_FILE_ATTEMPTS = max(1, int(os.getenv("SEL_MAX_FILE_ATTEMPTS", "2")))
+PROMPT_FOR_LOGIN = os.getenv("SEL_PROMPT_FOR_LOGIN", "true").lower() in ("1", "true", "yes", "y")
+LOGIN_WAIT_SEC = max(30, int(os.getenv("SEL_LOGIN_WAIT_SEC", "900")))
 
 # Size enforcement
 EXPECT_W = int(os.getenv("SEL_EXPECT_WIDTH", "2000"))
@@ -848,16 +850,30 @@ def click_js_then_native(driver, wait_new):
             time.sleep(0.5)
             continue
 
+        if resolve_download_blocker(driver):
+            continue
+
         # Give each attempt a short window to land a file
         new_file = wait_new(timeout=2.0)
         if new_file:
             return new_file
+        if resolve_download_blocker(driver):
+            continue
         time.sleep(0.5)
 
     # --- Stage B: fallback to your existing native click (slower, but trusted) ---
     log("[dl] JS click attempts exhausted; falling back to native click")
     clicked = click_download_NATIVE(driver, post_click_wait_secs=1.0)
-    return wait_new(timeout=MAX_WAIT_DL_SEC) if clicked else None
+    if not clicked:
+        return None
+    if resolve_download_blocker(driver):
+        return click_js_then_native(driver, wait_new)
+    new_file = wait_new(timeout=MAX_WAIT_DL_SEC)
+    if new_file:
+        return new_file
+    if resolve_download_blocker(driver):
+        return click_js_then_native(driver, wait_new)
+    return None
 
 
 def click_download_NATIVE(driver, post_click_wait_secs=1.2) -> bool:
@@ -1010,6 +1026,145 @@ def _disable_overlays_temporarily(driver):
       ];
       for(const sel of sels){ document.querySelectorAll(sel).forEach(hide); }
     """)
+
+
+def detect_download_blocker(driver) -> str:
+    """
+    Return a human-readable Adobe blocker message if download is gated.
+    """
+    script = r"""
+    function textOf(el){
+      try{
+        return ((el.innerText || el.textContent || '') + '').replace(/\s+/g, ' ').trim();
+      }catch(e){
+        return '';
+      }
+    }
+
+    function scanRoot(root){
+      const checks = [
+        ['qa-authentication-modal', 'auth'],
+        ['qa-error-modal', 'error'],
+      ];
+
+      for (const [sel, kind] of checks){
+        let nodes = [];
+        try{
+          nodes = Array.from(root.querySelectorAll(sel));
+        }catch(e){}
+        for (const node of nodes){
+          const dialog =
+            (node.shadowRoot && node.shadowRoot.querySelector('sp-dialog[open], [role="dialog"]')) ||
+            (node.querySelector && node.querySelector('sp-dialog[open], [role="dialog"]')) ||
+            node;
+          const text = textOf(dialog) || textOf(node);
+          if (!text)
+            continue;
+
+          if (kind === 'auth' && /sign up for free to download your file|sign in|download your file/i.test(text)){
+            return { kind, text };
+          }
+          if (kind === 'error' && /unknown error|please try again|error/i.test(text)){
+            return { kind, text };
+          }
+        }
+      }
+
+      const nodes = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of nodes){
+        if (!n.shadowRoot) continue;
+        const hit = scanRoot(n.shadowRoot);
+        if (hit) return hit;
+      }
+      return null;
+    }
+
+    return scanRoot(document);
+    """
+    try:
+        hit = driver.execute_script(script)
+    except Exception:
+        return ""
+
+    if not hit:
+        return ""
+
+    text = (hit.get("text") or "").strip()
+    kind = (hit.get("kind") or "").strip().lower()
+    if kind == "auth":
+        return f"Adobe login required before download: {text}"
+    if kind == "error":
+        return f"Adobe reported a download error: {text}"
+    return text
+
+
+def prompt_for_adobe_login(driver) -> bool:
+    """
+    Keep the browser open and let the user complete Adobe login in-place.
+    Returns True once the auth gate disappears, else False.
+    """
+    blocker = detect_download_blocker(driver)
+    if "Adobe login required before download:" not in blocker:
+        return True
+
+    log("[auth] Adobe login is required before files can be downloaded.")
+    log(f"[auth] Browser profile: {EFFECTIVE_USER_DATA_DIR} [{EFFECTIVE_PROFILE_DIR}]")
+    log("[auth] Finish the Adobe sign-in/sign-up in the open Chrome window.")
+
+    if not PROMPT_FOR_LOGIN:
+        log("[auth] Interactive login prompting is disabled by SEL_PROMPT_FOR_LOGIN=false.")
+        return False
+
+    if not sys.stdin or not sys.stdin.isatty():
+        log("[auth] No interactive terminal is attached, so login cannot be confirmed automatically.")
+        return False
+
+    deadline = time.time() + LOGIN_WAIT_SEC
+    while time.time() < deadline:
+        remaining = max(1, int(deadline - time.time()))
+        try:
+            response = input(
+                f"[auth] After you finish logging in, press Enter to retry download "
+                f"(or type 'skip' to stop). Time remaining: {remaining}s\n"
+            ).strip().lower()
+        except EOFError:
+            return False
+
+        if response in {"skip", "s", "quit", "q", "stop"}:
+            return False
+
+        # Give the page a few seconds to settle after login/redirects.
+        settle_deadline = time.time() + 10
+        while time.time() < settle_deadline:
+            reassert_route(driver)
+            hide_onetrust(driver)
+            blocker = detect_download_blocker(driver)
+            if "Adobe login required before download:" not in blocker:
+                log("[auth] Adobe login gate cleared; retrying download.")
+                return True
+            time.sleep(1.0)
+
+        log("[auth] Adobe still reports that login is required. Complete login in the browser and try again.")
+
+    log("[auth] Timed out waiting for Adobe login.")
+    return False
+
+
+def resolve_download_blocker(driver) -> bool:
+    """
+    Handle Adobe blockers. Returns True if the caller should retry the click.
+    Raises on non-interactive or unresolved blockers.
+    """
+    blocker = detect_download_blocker(driver)
+    if not blocker:
+        return False
+
+    if blocker.startswith("Adobe login required before download:"):
+        if prompt_for_adobe_login(driver):
+            return True
+        raise RuntimeError(blocker)
+
+    raise RuntimeError(blocker)
 
 
 def wait_for_new_download():
@@ -1186,7 +1341,18 @@ def main():
                                 host, inner, _ = _find_download_button_with_frames(driver, timeout=6)
                                 if host:
                                     js(driver, "arguments[0].scrollIntoView({block:'center'}); arguments[0].click();", host)
+                                    if resolve_download_blocker(driver):
+                                        host, inner, _ = _find_download_button_with_frames(driver, timeout=6)
+                                        if host:
+                                            js(driver, "arguments[0].scrollIntoView({block:'center'}); arguments[0].click();", host)
                                     new_file = wait_new()
+                                    if not new_file and resolve_download_blocker(driver):
+                                        host, inner, _ = _find_download_button_with_frames(driver, timeout=6)
+                                        if host:
+                                            js(driver, "arguments[0].scrollIntoView({block:'center'}); arguments[0].click();", host)
+                                            new_file = wait_new()
+                            except RuntimeError:
+                                raise
                             except Exception:
                                 pass
 

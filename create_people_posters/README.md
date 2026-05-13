@@ -127,9 +127,12 @@ SEL_PROC_TIMEOUT=120
 SEL_MAX_WAIT_DL_SEC=20
 SEL_DL_BUTTON_TIMEOUT=12
 SEL_RELOAD_EACH_FILE=true
+SEL_PROMPT_FOR_LOGIN=true
+SEL_LOGIN_WAIT_SEC=900
 ```
 
 > Tip: run `sel_remove_bg.py -v` once to see which env keys your build respects; the script logs the active configuration.
+> If Adobe blocks download behind a login/sign-up modal, the script will now pause and let you complete login in the same Chrome profile, then resume after you press Enter in the terminal.
 
 ---
 
