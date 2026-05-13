@@ -79,6 +79,7 @@ MAX_WAIT_READY_SEC = int(os.getenv("SEL_MAX_WAIT_READY_SEC", "120"))
 PROC_TIMEOUT = int(os.getenv("SEL_PROC_TIMEOUT", "120"))  # wait for processing (Download visible)
 MAX_WAIT_DL_SEC = int(os.getenv("SEL_MAX_WAIT_DL_SEC", "240"))  # wait for file to appear
 DL_BTN_TIMEOUT = int(os.getenv("SEL_DL_BUTTON_TIMEOUT", "20"))  # how long to wait for button to be found
+FAST_DL_CHECK_SEC = max(2, int(os.getenv("SEL_FAST_DL_CHECK_SEC", "6")))
 RELOAD_EACH_FILE = os.getenv("SEL_RELOAD_EACH_FILE", "true").lower() in ("1", "true", "yes", "y")
 RESTART_BROWSER_EACH_FILE = os.getenv("SEL_RESTART_BROWSER_EACH_FILE", "true").lower() in ("1", "true", "yes", "y")
 MAX_FILE_ATTEMPTS = max(1, int(os.getenv("SEL_MAX_FILE_ATTEMPTS", "2")))
@@ -895,11 +896,8 @@ def click_js_then_native(driver, wait_new):
             time.sleep(0.5)
             continue
 
-        if resolve_download_blocker(driver):
-            continue
-
         # Give each attempt a short window to land a file
-        new_file = wait_new(timeout=2.0)
+        new_file = wait_new(timeout=FAST_DL_CHECK_SEC)
         if new_file:
             return new_file
         if resolve_download_blocker(driver):
@@ -911,8 +909,6 @@ def click_js_then_native(driver, wait_new):
     clicked = click_download_NATIVE(driver, post_click_wait_secs=1.0)
     if not clicked:
         return None
-    if resolve_download_blocker(driver):
-        return click_js_then_native(driver, wait_new)
     new_file = wait_new(timeout=MAX_WAIT_DL_SEC)
     if new_file:
         return new_file
@@ -1073,11 +1069,57 @@ def _disable_overlays_temporarily(driver):
     """)
 
 
+def download_button_still_ready(driver) -> bool:
+    """
+    Return True when the page still shows an enabled Download control.
+    This helps ignore stale auth components that remain mounted in the DOM.
+    """
+    sels = [
+        "sp-button#downloadExportOption",
+        "sp-button[data-testid='qa-download-export-button']",
+        "sp-button[data-export-target='Download']",
+        "[data-testid='qa-download-export-button']",
+        "#downloadExportOption",
+        "[data-export-option-id='downloadExportOption']",
+    ]
+    try:
+        host = None
+        for sel in sels:
+            host = deep_query_iframes_one(driver, sel, timeout=0)
+            if host:
+                break
+        if not host:
+            host = deep_query_text_iframes(driver, r"^\s*download\s*$", "*")
+        if not host:
+            return False
+        state = describe_control_state(driver, host)
+        return bool(state.get("enabled"))
+    except Exception:
+        return False
+
+
 def detect_download_blocker(driver) -> str:
     """
     Return a human-readable Adobe blocker message if download is gated.
     """
     script = r"""
+    function isVisible(el){
+      try{
+        if (!el) return false;
+        const style = getComputedStyle(el);
+        const rect = el.getBoundingClientRect();
+        return (
+          style.display !== 'none' &&
+          style.visibility !== 'hidden' &&
+          style.opacity !== '0' &&
+          rect.width > 0 &&
+          rect.height > 0
+        );
+      }catch(e){
+        return false;
+      }
+    }
+
     function textOf(el){
       try{
         return ((el.innerText || el.textContent || '') + '').replace(/\s+/g, ' ').trim();
@@ -1102,6 +1144,15 @@ def detect_download_blocker(driver) -> str:
             (node.shadowRoot && node.shadowRoot.querySelector('sp-dialog[open], [role="dialog"]')) ||
             (node.querySelector && node.querySelector('sp-dialog[open], [role="dialog"]')) ||
             node;
+          const consideredOpen =
+            !!(
+              (node.getAttribute && node.getAttribute('open') !== null) ||
+              (dialog && dialog.getAttribute && dialog.getAttribute('open') !== null) ||
+              (dialog && dialog.getAttribute && dialog.getAttribute('aria-modal') === 'true')
+            );
+          if (!consideredOpen && !isVisible(dialog) && !isVisible(node))
+            continue;
+
           const text = textOf(dialog) || textOf(node);
           if (!text)
             continue;
@@ -1137,6 +1188,8 @@ def detect_download_blocker(driver) -> str:
     text = (hit.get("text") or "").strip()
     kind = (hit.get("kind") or "").strip().lower()
     if kind == "auth":
+        if download_button_still_ready(driver):
+            return ""
         return f"Adobe login required before download: {text}"
     if kind == "error":
         return f"Adobe reported a download error: {text}"
