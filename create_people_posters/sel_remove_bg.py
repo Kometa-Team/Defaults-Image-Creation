@@ -1,4 +1,5 @@
 # sel_remove_bg.py
+import argparse
 import os, time, shutil, subprocess, sys
 from pathlib import Path
 from dataclasses import dataclass
@@ -150,6 +151,44 @@ def resolve_profile_directory(user_data_dir: Path, requested_profile: str) -> Op
     return None
 
 
+def cleanup_profile_locks(user_data_dir: Path, profile_dir: Optional[str]) -> None:
+    """
+    Remove stale Chrome lock files from this dedicated automation profile.
+    """
+    candidates = [
+        user_data_dir / "SingletonLock",
+        user_data_dir / "SingletonCookie",
+        user_data_dir / "SingletonSocket",
+        user_data_dir / "lockfile",
+    ]
+    if profile_dir:
+        candidates.extend([
+            user_data_dir / profile_dir / "LOCK",
+            user_data_dir / profile_dir / ".org.chromium.Chromium.*",
+        ])
+
+    removed = []
+    for candidate in candidates:
+        if "*" in candidate.name:
+            for match in candidate.parent.glob(candidate.name):
+                try:
+                    if match.exists():
+                        match.unlink()
+                        removed.append(str(match))
+                except Exception:
+                    pass
+            continue
+        try:
+            if candidate.exists():
+                candidate.unlink()
+                removed.append(str(candidate))
+        except Exception:
+            pass
+
+    if removed:
+        log(f"[chrome] removed stale profile lock file(s): {', '.join(removed)}")
+
+
 class StepTimer:
     def __init__(self, label: str):
         self.label = label
@@ -175,6 +214,10 @@ class FileResult:
     sec_download: float = 0.0
 
 
+class AdobeLoginRequiredError(RuntimeError):
+    """Raised when Adobe blocks download until the user logs in."""
+
+
 # ===============================
 # Driver
 # ===============================
@@ -184,6 +227,7 @@ def build_driver():
     user_data_dir = Path(USER_DATA_DIR).resolve()
     user_data_dir.mkdir(parents=True, exist_ok=True)
     profile_dir = resolve_profile_directory(user_data_dir, PROFILE_DIR)
+    cleanup_profile_locks(user_data_dir, profile_dir)
     EFFECTIVE_USER_DATA_DIR = user_data_dir
     EFFECTIVE_PROFILE_DIR = profile_dir or "<none>"
 
@@ -215,7 +259,8 @@ def build_driver():
         detail = (
             f"Chrome failed to start with user-data dir '{user_data_dir}'"
             + (f" and profile '{profile_dir}'" if profile_dir else "")
-            + f". ChromeDriver log: {CHROMEDRIVER_LOG_FILE.resolve()}"
+            + f". Close any Chrome windows using this automation profile and retry. "
+            + f"ChromeDriver log: {CHROMEDRIVER_LOG_FILE.resolve()}"
         )
         raise RuntimeError(detail) from exc
     try:
@@ -1162,9 +1207,34 @@ def resolve_download_blocker(driver) -> bool:
     if blocker.startswith("Adobe login required before download:"):
         if prompt_for_adobe_login(driver):
             return True
-        raise RuntimeError(blocker)
+        raise AdobeLoginRequiredError(blocker)
 
     raise RuntimeError(blocker)
+
+
+def run_login_only() -> int:
+    """
+    Open Adobe Express in the Selenium profile so the user can log in once.
+    """
+    driver = build_driver()
+    try:
+        prepare_tool(driver)
+        log(f"Adobe login prep using browser profile: {EFFECTIVE_USER_DATA_DIR} [{EFFECTIVE_PROFILE_DIR}]")
+        log("Complete Adobe sign-in/sign-up in the open Chrome window for this profile.")
+        if sys.stdin and sys.stdin.isatty():
+            try:
+                input("[auth] Press Enter here after you finish Adobe login. ")
+            except EOFError:
+                pass
+        else:
+            log("[auth] No interactive terminal detected; close the browser when you're done logging in.")
+            time.sleep(30)
+        return 0
+    finally:
+        try:
+            driver.quit()
+        except Exception:
+            pass
 
 
 def wait_for_new_download():
@@ -1265,9 +1335,22 @@ def resize_in_place(jpg_path: Path, expect_w: int, expect_h: int) -> bool:
 # ===============================
 # Main
 # ===============================
-def main():
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="Remove image backgrounds with Adobe Express via Selenium.")
+    parser.add_argument(
+        "--login-only",
+        action="store_true",
+        help="Open Adobe Express with the configured Selenium profile so you can sign in once, then exit.",
+    )
+    args = parser.parse_args(argv)
+
+    if args.login_only:
+        return run_login_only()
+
     session_t0 = time.perf_counter()
     results: List[FileResult] = []
+    abort_run = False
+    exit_code = 0
 
     driver = build_driver()
     try:
@@ -1276,6 +1359,8 @@ def main():
         log(f"Adobe download dir: {DOWNLOAD_DIR}")
         log(f"Archive original dir: {ORIG_DIR}")
         log(f"Chrome profile dir: {EFFECTIVE_USER_DATA_DIR} [{EFFECTIVE_PROFILE_DIR}]")
+        log("[auth] Preflight: this run will reuse the Chrome profile above for Adobe Express.")
+        log("[auth] If Adobe download auth is missing, the run will pause and ask you to finish login in that browser window.")
         log(f"Run log file: {LOG_FILE.resolve()}")
         files = sorted(list(SRC_DIR.glob("*.jpg")))
         if not files:
@@ -1391,6 +1476,12 @@ def main():
                         fr.status = "ERROR"
                         fr.detail = f"Selenium failure: {str(e).splitlines()[0]}"
                         break
+                    except AdobeLoginRequiredError as e:
+                        fr.status = "ERROR"
+                        fr.detail = str(e).splitlines()[0] if str(e) else "Adobe login required before download"
+                        abort_run = True
+                        exit_code = 4
+                        break
                     except Exception as e:
                         fr.status = "ERROR"
                         fr.detail = str(e).splitlines()[0] if str(e) else e.__class__.__name__
@@ -1403,6 +1494,10 @@ def main():
                 elif fr.status == "ERROR":
                     log(f"[error] {jpg.name} – {fr.detail}")
                 bar()  # advance after finishing the file
+
+                if abort_run:
+                    log("[auth] Stopping the batch because Adobe login is still required. Finish login in this profile, then rerun.")
+                    break
 
                 if idx < len(files) and RESTART_BROWSER_EACH_FILE:
                     driver = restart_driver(driver, f"recycling session after {jpg.name}")
@@ -1423,8 +1518,9 @@ def main():
     log(f"Files processed: {len(results)}  (OK: {ok}  Skipped: {skipped}  Errors: {err})")
     avg_ok = (sum(r.sec_total for r in results if r.status == 'OK') / max(1, ok))
     log(f"Total time: {total_sec:.2f}s  (avg per OK: {avg_ok:.2f}s )")
+    return exit_code if exit_code else (1 if err else 0)
 
 
 # Entrypoint
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
