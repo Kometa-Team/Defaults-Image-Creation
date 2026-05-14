@@ -199,7 +199,10 @@ def colorize_one(src: Path, dst: Path, render_factor: int = 35) -> bool:
         import yt_dlp  # required by visualize even for stills
     except Exception as e:
         log.error("DeOldify import failed: %s", e)
+        if "pkg_resources" in str(e):
+            log.error("pkg_resources comes from setuptools. This colorize venv is missing setuptools.")
         log.error("Missing deps? Install inside this venv:\n"
+                  "  pip install -U pip setuptools wheel\n"
                   "  pip install -r requirements-colorize.txt")
         return False
 

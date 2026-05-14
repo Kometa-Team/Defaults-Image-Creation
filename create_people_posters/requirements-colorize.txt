@@ -3,6 +3,10 @@
 torch==1.13.1+cpu
 torchvision==0.14.1+cpu
 
+# pkg_resources is provided by setuptools; some Python/venv builds no longer include it by default
+setuptools>=65,<81
+wheel
+
 # DeOldify stack
 fastai==1.0.61
 
