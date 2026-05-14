@@ -1571,7 +1571,19 @@ def main(argv=None):
     log(f"Files processed: {len(results)}  (OK: {ok}  Skipped: {skipped}  Errors: {err})")
     avg_ok = (sum(r.sec_total for r in results if r.status == 'OK') / max(1, ok))
     log(f"Total time: {total_sec:.2f}s  (avg per OK: {avg_ok:.2f}s )")
-    return exit_code if exit_code else (1 if err else 0)
+    if err:
+        remaining_jpgs = sorted(p.name for p in SRC_DIR.glob("*.jpg"))
+        if remaining_jpgs:
+            log(f"[warn] Remaining JPGs left for retry: {', '.join(remaining_jpgs)}")
+
+    if exit_code:
+        return exit_code
+
+    if err and ok:
+        log("[warn] Background removal completed with partial failures; continuing so downstream steps can use the successful PNGs.")
+        return 0
+
+    return 1 if err else 0
 
 
 # Entrypoint

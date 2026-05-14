@@ -4,6 +4,7 @@
 # Six folders are .jpg; one folder is .png (except explicit .jpg whitelist).
 # Only .jpg/.png are considered; all other file types are ignored (not flagged).
 # Optional: validate that every .jpg/.png is exactly REQUIRED_WIDTH x REQUIRED_HEIGHT.
+# Whitelist entries are exempt from dimension checks in every folder.
 # Outputs console summary + presence matrix CSV and, if enabled, a dimension issues CSV,
 # all saved under ./config/. All messages are logged to ./config/logs/<script>.log
 #
@@ -167,7 +168,8 @@ def gather_stems_and_exts(
       - stems: set of relative stems (without extension) that pass the rules
       - ext_mismatches: list of jpg/png files present but disallowed by the folder rules
       - whitelist_hits: list of .jpg files accepted due to whitelist in PNG folder
-      - dim_issues: list of (rel_path, width, height, error) if enabled and not REQUIRED_WxH
+      - dim_issues: list of (rel_path, width, height, error) if enabled and not REQUIRED_WxH,
+                    excluding globally whitelisted basenames
                     or failed to open (error != None)
 
     Only .jpg/.png are considered; all other extensions are ignored silently.
@@ -192,14 +194,9 @@ def gather_stems_and_exts(
         ext_cmp = p.suffix.lower()
         basename_cmp = normalize_case(rel.stem, case_sensitive)
 
-        # --- Dimension check (with whitelist exemption in PNG folder) ---
+        # --- Dimension check (with global whitelist exemption) ---
         if dim_checker is not None and check_dimensions:
-            skip_dim = False
-            if treat_png_folder and ext_cmp == ".jpg":
-                # If this is a whitelist JPG in the PNG folder, skip dimension checking
-                if basename_cmp in wl_cmp:
-                    skip_dim = True
-            if not skip_dim:
+            if basename_cmp not in wl_cmp:
                 w, h, err = dim_checker(p)
                 if err is not None or w != required_w or h != required_h:
                     dim_issues.append((rel_posix, w, h, err))
@@ -277,7 +274,7 @@ def main():
     parser.set_defaults(check_dimensions=parse_bool_env("COMPTREE_CHECK_DIMENSIONS", True))
 
     parser.add_argument("--required-size", help="WxH e.g. 2000x3000 (env: COMPTREE_REQUIRED_SIZE)")
-    parser.add_argument("--jpg-whitelist", help="Comma list of basenames allowed as .jpg in PNG folder (env: COMPTREE_JPG_WHITELIST; default: grid)")
+    parser.add_argument("--jpg-whitelist", help="Comma list of basenames allowed as .jpg in PNG folder and exempt from dimension checks everywhere (env: COMPTREE_JPG_WHITELIST; default: grid)")
 
     args = parser.parse_args()
 
@@ -359,7 +356,7 @@ def main():
                 base_dir=base,
                 allowed_exts=per_dir_allowed_exts[i],
                 case_sensitive=CASE_SENSITIVE,
-                jpg_whitelist=JPG_WHITELIST if per_dir_is_png[i] else None,
+                jpg_whitelist=JPG_WHITELIST,
                 treat_png_folder=per_dir_is_png[i],
                 dim_checker=dim_checker,
                 required_w=REQUIRED_WIDTH,
@@ -379,7 +376,8 @@ def main():
     logging.info("=== Settings ===")
     logging.info("PNG directory index: %d -> %s", png_idx, DIRS[png_idx])
     logging.info("CASE_SENSITIVE: %s", CASE_SENSITIVE)
-    logging.info("PNG-folder JPG whitelist: %s", sorted(JPG_WHITELIST) if JPG_WHITELIST else "(none)")
+    logging.info("Whitelist basenames: %s", sorted(JPG_WHITELIST) if JPG_WHITELIST else "(none)")
+    logging.info("Whitelist behavior: allowed as .jpg in PNG folder; excluded from dimension checks in all folders")
     logging.info("Check dimensions: %s (required %dx%d)", args.check_dimensions, REQUIRED_WIDTH, REQUIRED_HEIGHT)
     logging.info("Outputs: %s and %s", OUTPUT_CSV, (DIM_ISSUES_CSV if args.check_dimensions else "(dimension CSV skipped)"))
 
