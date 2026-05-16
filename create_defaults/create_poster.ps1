@@ -55,7 +55,7 @@ $global:CurrentImagemagickversion = $null
 $global:LatestImagemagickversion = $null
 $global:AutoUpdateIM = $true
 $global:HeaderWritten = $false
-$CurrentScriptVersion = "2.5"
+$CurrentScriptVersion = "2.6"
 
 #################################
 # collect paths
