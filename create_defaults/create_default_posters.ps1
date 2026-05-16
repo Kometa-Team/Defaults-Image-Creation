@@ -4913,6 +4913,7 @@ Function CreateNetwork {
         ' | DR1.png| +0| 1600| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | DR1| #DEFF1E| 1| 1| 0| 0',
         ' | Dropout.png| +0| 1600| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Dropout| #853211| 1| 1| 0| 0',
         ' | E!.png| +0| 500| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | E!| #BF3137| 1| 1| 0| 0',
+        ' | E4.png| +0| 1600| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | E4| #8700FF| 1| 1| 0| 0',
         ' | Eden.png| +0| 1600| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Eden| #D1A72C| 1| 1| 0| 0',
         ' | Elisa Viihde Viaplay.png| +0| 1600| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Elisa Viihde Viaplay| #692C72| 1| 1| 0| 0',
         ' | Elisa Viihde.png| +0| 1600| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Elisa Viihde| #1DF3B7| 1| 1| 0| 0',
