@@ -136,6 +136,113 @@ Function Update-LogFile {
 }
 
 ################################################################################
+# Function: Get-MagickVisibleFonts
+# Description: Returns the fonts currently visible to ImageMagick
+################################################################################
+Function Get-MagickVisibleFonts {
+    if ($null -ne $script:MagickVisibleFonts) {
+        return $script:MagickVisibleFonts
+    }
+
+    $script:MagickVisibleFonts = @(magick identify -list font | Select-String "Font: " | ForEach-Object {
+            $_.ToString().Trim().Substring(6)
+        })
+
+    return $script:MagickVisibleFonts
+}
+
+################################################################################
+# Function: Get-NormalizedFontToken
+# Description: Normalizes a font name to a simple lookup token
+################################################################################
+Function Get-NormalizedFontToken {
+    param (
+        [string]$FontName
+    )
+
+    if ([string]::IsNullOrWhiteSpace($FontName)) {
+        return ""
+    }
+
+    return (([System.IO.Path]::GetFileNameWithoutExtension($FontName)) -replace '[^A-Za-z0-9]', '').ToLowerInvariant()
+}
+
+################################################################################
+# Function: Get-BundledFontPath
+# Description: Resolves a font name to a bundled font file when available
+################################################################################
+Function Get-BundledFontPath {
+    param (
+        [string]$FontName
+    )
+
+    $fontAliases = @{
+        "barlowregular"        = "Barlow-Regular.ttf"
+        "bebasregular"         = "Bebas-Regular.ttf"
+        "boecklinsuniverse"    = "BoecklinsUniverse.ttf"
+        "boogalooregular"      = "Boogaloo-Regular.ttf"
+        "cherrycreamsoda"      = "CherryCreamSoda-Regular.ttf"
+        "cherrycreamsodaregular" = "CherryCreamSoda-Regular.ttf"
+        "comfortaamedium"      = "Comfortaa-Medium.ttf"
+        "helveticabold"        = "Helvetica-Bold.ttf"
+        "jurabold"             = "Jura-Bold.ttf"
+        "limelightregular"     = "Limelight-Regular.ttf"
+        "monoton"              = "Monoton-Regular.ttf"
+        "monotonregular"       = "Monoton-Regular.ttf"
+        "pressstart2p"         = "Press-Start-2P.ttf"
+        "righteous"            = "Righteous-Regular.ttf"
+        "righteousregular"     = "Righteous-Regular.ttf"
+        "ryeregular"           = "Rye-Regular.ttf"
+        "specialelite"         = "SpecialElite-Regular.ttf"
+        "specialeliteregular"  = "SpecialElite-Regular.ttf"
+        "trochut"              = "Trochut-Regular.ttf"
+        "trochutregular"       = "Trochut-Regular.ttf"
+        "unifrakturcook"       = "UnifrakturCook-Bold.ttf"
+        "unifrakturcookbold"   = "UnifrakturCook-Bold.ttf"
+        "yesteryear"           = "Yesteryear-Regular.ttf"
+        "yesteryearregular"    = "Yesteryear-Regular.ttf"
+    }
+
+    $token = Get-NormalizedFontToken -FontName $FontName
+    if ([string]::IsNullOrWhiteSpace($token) -or -not $fontAliases.ContainsKey($token)) {
+        return $null
+    }
+
+    $fontPath = Join-Path (Join-Path $script_path "fonts") $fontAliases[$token]
+    if (Test-Path $fontPath) {
+        return $fontPath
+    }
+
+    return $null
+}
+
+################################################################################
+# Function: Resolve-MagickFont
+# Description: Resolves a font to an ImageMagick-visible name or bundled file path
+################################################################################
+Function Resolve-MagickFont {
+    param (
+        [string]$FontName
+    )
+
+    if ([string]::IsNullOrWhiteSpace($FontName)) {
+        return $FontName
+    }
+
+    $visibleFonts = Get-MagickVisibleFonts
+    if ($visibleFonts -contains $FontName) {
+        return $FontName
+    }
+
+    $bundledFont = Get-BundledFontPath -FontName $FontName
+    if ($null -ne $bundledFont) {
+        return $bundledFont
+    }
+
+    return $null
+}
+
+################################################################################
 # Function: InstallFontsIfNeeded
 # Description: Determines if font is installed and if not, exits script
 ################################################################################
@@ -159,16 +266,34 @@ Function InstallFontsIfNeeded {
         "Barlow-Regular",
         "Helvetica-Bold"
     )
-    $missingFonts = $fontNames | Where-Object { !(magick identify -list font | Select-String "Font: $_$") }
+    $fontList = Get-MagickVisibleFonts
+    $missingFonts = @()
+    $bundledFonts = @()
+
+    foreach ($fontName in $fontNames) {
+        $resolvedFont = Resolve-MagickFont -FontName $fontName
+        if ($null -eq $resolvedFont) {
+            $missingFonts += $fontName
+            continue
+        }
+
+        if ($resolvedFont -ne $fontName) {
+            $bundledFonts += ("{0} -> {1}" -f $fontName, [System.IO.Path]::GetFileName($resolvedFont))
+        }
+    }
 
     if ($missingFonts) {
-        $fontList = magick identify -list font | Select-String "Font: " | ForEach-Object { $_.ToString().Trim().Substring(6) }
         $fontList | Out-File -Encoding utf8 -FilePath "magick_fonts.txt"
         WriteToLogFile "Fonts Check [ERROR]          : Fonts missing $($missingFonts -join ', ') are not installed/found. List of installed fonts that Imagemagick can use listed and exported here: magick_fonts.txt."
         WriteToLogFile "Fonts Check [ERROR]          : $($fontList.Count) fonts are visible to Imagemagick."
-        WriteToLogFile "Fonts Check [ERROR]          : Please right-click 'Install for all users' on each font file in the $script_path\fonts folder before retrying."
+        WriteToLogFile "Fonts Check [ERROR]          : Checked both installed ImageMagick fonts and bundled .ttf files in $script_path\fonts."
         return $false
     }
+
+    if ($bundledFonts.Count -gt 0) {
+        WriteToLogFile "Fonts Check                  : Using bundled font files for $($bundledFonts -join ', ')."
+    }
+
     return $true
 }
 
@@ -483,6 +608,17 @@ Function Get-OptimalPointSize {
         [int]$min_pointsize,
         [int]$max_pointsize
     )
+
+    if ([string]::IsNullOrWhiteSpace($text)) {
+        WriteToLogFile "Optimal Point Size           : No text supplied. Skipping size calculation."
+        return $max_pointsize
+    }
+
+    $resolvedFont = Resolve-MagickFont -FontName $font
+    if ($null -eq $resolvedFont) {
+        throw "Font '$font' is not visible to ImageMagick and no bundled font file could be found."
+    }
+    $font = $resolvedFont
 
     # Create SQLite cache table if it doesn't exist
     if (-not (Test-Path $databasePath)) {

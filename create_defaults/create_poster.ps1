@@ -85,6 +85,97 @@ function WriteToLogFile ($message) {
 }
 
 #################################
+# Get-MagickVisibleFonts function
+#################################
+function Get-MagickVisibleFonts {
+  if ($null -ne $script:MagickVisibleFonts) {
+    return $script:MagickVisibleFonts
+  }
+
+  $script:MagickVisibleFonts = @(& $magick identify -list font | Select-String "Font: " | ForEach-Object {
+      $_.ToString().Trim().Substring(6)
+    })
+
+  return $script:MagickVisibleFonts
+}
+
+#################################
+# Get-NormalizedFontToken function
+#################################
+function Get-NormalizedFontToken($fontName) {
+  if ([string]::IsNullOrWhiteSpace($fontName)) {
+    return ""
+  }
+
+  return (([System.IO.Path]::GetFileNameWithoutExtension($fontName)) -replace '[^A-Za-z0-9]', '').ToLowerInvariant()
+}
+
+#################################
+# Get-BundledFontPath function
+#################################
+function Get-BundledFontPath($fontName) {
+  $fontAliases = @{
+    "barlowregular"          = "Barlow-Regular.ttf"
+    "bebasregular"           = "Bebas-Regular.ttf"
+    "boecklinsuniverse"      = "BoecklinsUniverse.ttf"
+    "boogalooregular"        = "Boogaloo-Regular.ttf"
+    "cherrycreamsoda"        = "CherryCreamSoda-Regular.ttf"
+    "cherrycreamsodaregular" = "CherryCreamSoda-Regular.ttf"
+    "comfortaamedium"        = "Comfortaa-Medium.ttf"
+    "helveticabold"          = "Helvetica-Bold.ttf"
+    "jurabold"               = "Jura-Bold.ttf"
+    "limelightregular"       = "Limelight-Regular.ttf"
+    "monoton"                = "Monoton-Regular.ttf"
+    "monotonregular"         = "Monoton-Regular.ttf"
+    "pressstart2p"           = "Press-Start-2P.ttf"
+    "righteous"              = "Righteous-Regular.ttf"
+    "righteousregular"       = "Righteous-Regular.ttf"
+    "ryeregular"             = "Rye-Regular.ttf"
+    "specialelite"           = "SpecialElite-Regular.ttf"
+    "specialeliteregular"    = "SpecialElite-Regular.ttf"
+    "trochut"                = "Trochut-Regular.ttf"
+    "trochutregular"         = "Trochut-Regular.ttf"
+    "unifrakturcook"         = "UnifrakturCook-Bold.ttf"
+    "unifrakturcookbold"     = "UnifrakturCook-Bold.ttf"
+    "yesteryear"             = "Yesteryear-Regular.ttf"
+    "yesteryearregular"      = "Yesteryear-Regular.ttf"
+  }
+
+  $token = Get-NormalizedFontToken $fontName
+  if ([string]::IsNullOrWhiteSpace($token) -or -not $fontAliases.ContainsKey($token)) {
+    return $null
+  }
+
+  $fontPath = Join-Path (Join-Path $script_path "fonts") $fontAliases[$token]
+  if (Test-Path $fontPath) {
+    return $fontPath
+  }
+
+  return $null
+}
+
+#################################
+# Resolve-MagickFont function
+#################################
+function Resolve-MagickFont($fontName) {
+  if ([string]::IsNullOrWhiteSpace($fontName)) {
+    return $fontName
+  }
+
+  $visibleFonts = Get-MagickVisibleFonts
+  if ($visibleFonts -contains $fontName) {
+    return $fontName
+  }
+
+  $bundledFont = Get-BundledFontPath $fontName
+  if ($null -ne $bundledFont) {
+    return $bundledFont
+  }
+
+  return $null
+}
+
+#################################
 # AddTrailingSlash function
 #################################
 function AddTrailingSlash($path) {
@@ -1006,30 +1097,27 @@ else {
 # $font checks
 #################################
 if ($font -eq "" -or $null -eq $font) {
+  $chkfont = $null
 }
 else {
-  $font = $font.replace('\', '\\')
-}
+  $resolvedFont = Resolve-MagickFont $font
+  if ($null -ne $resolvedFont) {
+    if ($resolvedFont -ne $font) {
+      Write-Host "Font parameter >$font< is not visible to ImageMagick. Using bundled font file >$resolvedFont< instead." -ForegroundColor Yellow
+    }
 
-$tmpfont = $font + "$"
-$chkfont = & $magick identify -list font | Select-String "Font: $tmpfont"
-if ($chkfont -eq "" -or $null -eq $chkfont) {
-  if ($font -eq "" -or $null -eq $font) {
+    $font = $resolvedFont.replace('\', '\\')
+    $chkfont = $font
   }
   else {
-    if (Test-Path $font) {
-      $chkfont = $chkfont + $font
-    }
-    else {
-      # File not found
-      $font = ""
-    }
+    $font = ""
+    $chkfont = $null
   }
 }
 
 if ($chkfont -eq "" -or $null -eq $chkfont) {
-  $font_list = & $magick identify -list font | Select-String "Font: "
-  $font_list -replace "  Font: ", ""> magick_fonts.txt
+  $font_list = Get-MagickVisibleFonts
+  $font_list | Out-File -Encoding utf8 -FilePath "magick_fonts.txt"
   Write-Host "Font parameter >$font< is not installed/found. Check path to font or check list of installed fonts that Imagemagick can use here: magick_fonts.txt. Random Font mode enabling now..." -ForegroundColor Red -BackgroundColor White
   Write-Host $font_list.count " fonts are visible to Imagemagick. Picking random font and continuing..."
   if ($font_list.count -gt 0) {
