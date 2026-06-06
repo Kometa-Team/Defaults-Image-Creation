@@ -231,13 +231,14 @@ Function SortFiles ($folder) {
 # GetBaseFileName function
 #################################
 Function GetBaseFileName([string] $fileName) {
-  $pattern = '^(.*)\(\d+\)'
-  if ($fileName -match $pattern) {
-    return $matches[1].Trim()
+  $baseName = $fileName.Trim()
+  $pattern = '^(.*)\(\d+\)$'
+
+  if ($baseName -match $pattern) {
+    $baseName = $matches[1].Trim()
   }
-  else {
-    return $fileName
-  }
+
+  return ($baseName -replace '\d+$', '').Trim()
 }
 
 #################################
