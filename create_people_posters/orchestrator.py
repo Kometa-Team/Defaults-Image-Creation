@@ -262,6 +262,19 @@ def parse_zero_from_log(logfile: Path) -> Optional[bool]:
     return None
 
 
+def count_manual_people_overrides(path: Path) -> int:
+    if not path.exists():
+        return 0
+    try:
+        return sum(
+            1
+            for line in path.read_text(encoding="utf-8").splitlines()
+            if line.strip() and not line.lstrip().startswith("#")
+        )
+    except Exception:
+        return 0
+
+
 def sum_copied_from_sync_log(logfile: Path) -> Optional[int]:
     """Parse sync_people_images.log and sum 'copied=N' across categories. Return None if not parseable."""
     if not logfile.exists():
@@ -326,6 +339,8 @@ class Step:
 def main():
     import argparse
     load_env_or_bootstrap()
+    people_override_file = Path(os.getenv("PEOPLE_OVERRIDE_LIST") or (CONFIG_DIR / "people_overrides.txt"))
+    manual_override_count = count_manual_people_overrides(people_override_file)
 
     parser = argparse.ArgumentParser(description="Fixed-order, resumable pipeline runner")
     parser.add_argument("--from", dest="from_key", help="Start at this step key (enforced order).")
@@ -607,15 +622,27 @@ def main():
             elif s.key == "scan_kometa_logs":
                 zero = parse_zero_from_log(log_path_for("scan_kometa_logs.py"))
                 if zero is True:
-                    print("[INFO] scan_kometa_logs found 0 items — stopping.")
-                    sys.exit(0)
+                    if manual_override_count > 0:
+                        print(
+                            "[INFO] scan_kometa_logs found 0 auto items, "
+                            f"but {manual_override_count} manual override(s) exist in {people_override_file} — continuing."
+                        )
+                    else:
+                        print("[INFO] scan_kometa_logs found 0 items — stopping.")
+                        sys.exit(0)
 
             # find_and_download_missing: if clearly zero, stop
             elif s.key == "find_and_download_missing":
                 zero = parse_zero_from_log(log_path_for("find_and_download_missing_people.py"))
                 if zero is True:
-                    print("[INFO] find_and_download_missing produced 0 items — stopping.")
-                    sys.exit(0)
+                    if manual_override_count > 0:
+                        print(
+                            "[INFO] find_and_download_missing produced 0 auto items, "
+                            f"but {manual_override_count} manual override(s) exist in {people_override_file} — continuing."
+                        )
+                    else:
+                        print("[INFO] find_and_download_missing produced 0 items — stopping.")
+                        sys.exit(0)
 
             # tmdb: if no new posters created, stop
             elif s.key == "tmdb":

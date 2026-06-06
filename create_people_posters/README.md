@@ -277,6 +277,33 @@ The orchestrator enforces the single correct order and writes checkpoints so you
 python orchestrator.py
 ```
 
+### Manual duplicate-name overrides
+When two different TMDB people share the same name, the automatic log scan cannot disambiguate them. For those cases, add a manual line to `create_people_posters/config/people_overrides.txt`.
+
+Recommended format:
+```text
+TMDB_ID|AliasToUse
+```
+
+Example for the second Akshay Kumar:
+```text
+35070|Akshay Kumar1
+```
+
+What happens next:
+- `tmdb_people.py` downloads it as `Akshay Kumar1-35070.jpg`
+- `truncate_tmdb_people_names.py` renames that to `Akshay Kumar1.jpg`
+- `create_people_poster.ps1` strips the trailing `1` from the poster text, so the poster still says `Akshay Kumar`
+
+If the pipeline has already run before, re-run from TMDB with:
+```bash
+python orchestrator.py --redo tmdb
+```
+
+If you are starting fresh and just want to begin at the TMDB step, `python orchestrator.py --from tmdb` also works.
+
+The orchestrator now continues past zero-result log scans when `people_overrides.txt` contains entries.
+
 ### Resume & checkpoints
 - **Checkpoints** are JSON files in `./config/.orch/*.done.json`.
 - **Run status**:
