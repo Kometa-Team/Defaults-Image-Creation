@@ -53,6 +53,15 @@ from typing import Optional, Tuple
 CATEGORIES = ["bw", "diiivoy", "diiivoycolor", "rainier", "original", "signature", "transparent"]
 
 
+def format_bytes(size: int) -> str:
+    value = float(size)
+    for unit in ("B", "KiB", "MiB", "GiB", "TiB"):
+        if value < 1024.0 or unit == "TiB":
+            return f"{value:.2f} {unit}"
+        value /= 1024.0
+    return f"{size} B"
+
+
 def run(cmd, cwd: Path, dry: bool, capture=False) -> Tuple[int, str, str]:
     print("→", " ".join(cmd), f"(cwd={cwd})")
     if dry:
@@ -69,6 +78,50 @@ def run_ok(cmd, cwd: Path, dry: bool) -> bool:
 def run_cap(cmd, cwd: Path, dry: bool) -> Tuple[bool, str]:
     rc, out, _ = run(cmd, cwd, dry, capture=True)
     return rc == 0, out.strip()
+
+
+def estimate_push_payload(repo: Path, branch: str, dry: bool) -> Tuple[bool, int, int, list[tuple[str, int]]]:
+    remote_ref = f"origin/{branch}"
+    rc, _, _ = run(["git", "rev-parse", "--verify", remote_ref], repo, dry)
+    range_expr = f"{remote_ref}..HEAD" if rc == 0 else "HEAD"
+    ok, rev_list = run_cap(["git", "rev-list", "--objects", range_expr], repo, dry)
+    if not ok:
+        return False, 0, 0, []
+    if not rev_list.strip():
+        return True, 0, 0, []
+    if dry:
+        return True, 0, 0, []
+
+    cp = subprocess.run(
+        ["git", "cat-file", "--batch-check=%(objectname) %(objecttype) %(objectsize) %(rest)"],
+        cwd=str(repo),
+        text=True,
+        input=rev_list + "\n",
+        capture_output=True,
+    )
+    if cp.returncode != 0:
+        return False, 0, 0, []
+
+    total_bytes = 0
+    object_count = 0
+    largest_blobs: list[tuple[str, int]] = []
+    for line in cp.stdout.splitlines():
+        parts = line.split(" ", 3)
+        if len(parts) < 3:
+            continue
+        object_type = parts[1]
+        try:
+            object_size = int(parts[2])
+        except ValueError:
+            continue
+        object_count += 1
+        total_bytes += object_size
+        path_label = parts[3] if len(parts) >= 4 and parts[3].strip() else parts[0]
+        if object_type == "blob":
+            largest_blobs.append((path_label, object_size))
+
+    largest_blobs.sort(key=lambda item: item[1], reverse=True)
+    return True, total_bytes, object_count, largest_blobs[:20]
 
 
 def detect_remote_head_branch(repo: Path, dry: bool) -> str:
@@ -130,7 +183,7 @@ def ensure_remote_match(repo: Path, branch: str, mode: str, clean_ignored: bool,
 
 
 def commit_and_push(repo: Path, branch: Optional[str], message: str,
-                    user_name: str, user_email: str, dry: bool) -> int:
+                    user_name: str, user_email: str, dry: bool, max_push_bytes: int) -> int:
     # set author config if provided
     if user_name:
         run_ok(["git", "config", "user.name", user_name], repo, dry)
@@ -145,18 +198,31 @@ def commit_and_push(repo: Path, branch: Optional[str], message: str,
     ok, status = run_cap(["git", "status", "--porcelain"], repo, dry)
     if not ok:
         return 1
-    if not status.strip():
+    has_local_changes = bool(status.strip())
+    if has_local_changes:
+        if not run_ok(["git", "commit", "-m", message], repo, dry):
+            return 1
+    else:
         print("  (no changes to commit)")
-        return 0
-
-    # commit
-    if not run_ok(["git", "commit", "-m", message], repo, dry):
-        return 1
 
     # ensure branch value
     if not branch:
         ok, cur = run_cap(["git", "rev-parse", "--abbrev-ref", "HEAD"], repo, dry)
         branch = cur if ok and cur else "master"
+
+    ok, payload_bytes, object_count, largest_blobs = estimate_push_payload(repo, branch, dry)
+    if not ok:
+        return 1
+    if max_push_bytes > 0 and payload_bytes > max_push_bytes:
+        print(
+            f"[ERROR] Refusing push: estimated outbound payload is {format_bytes(payload_bytes)} "
+            f"across {object_count} git object(s), which exceeds the limit of {format_bytes(max_push_bytes)}."
+        )
+        if largest_blobs:
+            print("Largest blobs in this push:")
+            for path_label, blob_size in largest_blobs:
+                print(f"  {format_bytes(blob_size):>10}  {path_label}")
+        return 1
 
     # push
     if not run_ok(["git", "push", "origin", "HEAD"], repo, dry):
@@ -183,6 +249,12 @@ def main():
     parser.add_argument("--message", help="Commit message (only used with --op push)")
     parser.add_argument("--git-user-name", help="Set git user.name locally before commit (push op)")
     parser.add_argument("--git-user-email", help="Set git user.email locally before commit (push op)")
+    parser.add_argument(
+        "--max-push-bytes",
+        type=int,
+        default=int(os.getenv("UPDATE_MAX_PUSH_BYTES", str(1024 ** 3))),
+        help="Fail push when estimated outbound git payload exceeds this many bytes. Use 0 to disable.",
+    )
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
@@ -213,7 +285,15 @@ def main():
             now = datetime.now().strftime("%Y-%m-%d %H:%M")
             msg = args.message or f"chore: sync posters & docs — {now}"
             print(f"=== PUSH {cat} ===")
-            rc = commit_and_push(repo, push_branch, msg, args.git_user_name or "", args.git_user_email or "", args.dry_run)
+            rc = commit_and_push(
+                repo,
+                push_branch,
+                msg,
+                args.git_user_name or "",
+                args.git_user_email or "",
+                args.dry_run,
+                args.max_push_bytes,
+            )
             rc_total |= (rc != 0)
 
     sys.exit(0 if rc_total == 0 else 1)

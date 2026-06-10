@@ -111,6 +111,15 @@ def _bool_env(key: str, default: bool = False) -> bool:
     return str(v).strip().lower() in {"1", "true", "yes", "y", "on"}
 
 
+def _clean_env_value(value: Optional[str]) -> str:
+    if value is None:
+        return ""
+    cleaned = str(value).strip()
+    if not cleaned or cleaned.startswith("#"):
+        return ""
+    return cleaned
+
+
 def load_env_or_bootstrap() -> None:
     """Load ./config/.env; if missing, try to copy from .env.example and exit with guidance."""
     if load_dotenv:
@@ -393,7 +402,7 @@ def main():
     # Resolve env/args
     logs_dir = Path(args.logs_dir).expanduser().resolve() if args.logs_dir else env_path("ORCH_LOGS_DIR")
     repo_root = Path(args.repo_root).expanduser().resolve() if args.repo_root else env_path("PEOPLE_IMAGES_DIR")
-    branch = args.branch or os.getenv("PEOPLE_BRANCH", "")
+    branch = _clean_env_value(args.branch or os.getenv("PEOPLE_BRANCH", ""))
     default_style = args.style or os.getenv("ORCH_STYLE", "transparent")
     styles_env = os.getenv("ORCH_STYLES", "")
     if args.styles:
@@ -403,9 +412,9 @@ def main():
     else:
         styles = [default_style]
 
-    commit_template = os.getenv("ORCH_COMMIT_MESSAGE", "")
-    git_user_name = os.getenv("ORCH_GIT_USER_NAME", "")
-    git_user_email = os.getenv("ORCH_GIT_USER_EMAIL", "")
+    commit_template = _clean_env_value(os.getenv("ORCH_COMMIT_MESSAGE", ""))
+    git_user_name = _clean_env_value(os.getenv("ORCH_GIT_USER_NAME", ""))
+    git_user_email = _clean_env_value(os.getenv("ORCH_GIT_USER_EMAIL", ""))
 
     bg_output_dir = Path(args.bg_output_dir).expanduser().resolve() if args.bg_output_dir else env_path("SEL_DOWNLOAD_DIR")
     bg_exts = {e.strip().lower().lstrip(".") for e in (args.bg_exts or "png").split(",") if e.strip()}
@@ -603,6 +612,13 @@ def main():
                     write_marker(s.marker_path, {"at": time.time(), "styles": styles})
                 continue
 
+            def step_log_path(step_key: str) -> Optional[Path]:
+                if step_key == "update":
+                    return CONFIG_DIR / "logs" / "update_people_repos_update.log"
+                if step_key == "push":
+                    return CONFIG_DIR / "logs" / "update_people_repos_push.log"
+                return None
+
             # Normal steps
             builder = s.builder
             if builder is None:
@@ -621,7 +637,7 @@ def main():
 
             # ensure_repo must exist AND return success; also sanity-check the repo root afterward
             capture_output = (s.key in {"scan_kometa_logs", "find_and_download_missing"})
-            rc, out, _ = run_cmd(s.title, argv, capture=capture_output)
+            rc, out, _ = run_cmd(s.title, argv, capture=capture_output, log_path=step_log_path(s.key))
             if rc != 0:
                 print(f"[FAIL] {s.key} exited with code {rc}. Stopping.", file=sys.stderr)
                 sys.exit(rc)
