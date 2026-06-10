@@ -244,7 +244,7 @@ def _read_limited_bytes(reader, display_name: str, size_hint: int | None = None)
 
 
 def _iter_archive_texts(archive_source, display_name: str, archive_name: str, acceptable_extensions: list[str],
-                        is_acceptable_file, depth: int = 1):
+                        is_acceptable_file, warning_regex: re.Pattern, hits: dict, depth: int = 1):
     if depth > MAX_ARCHIVE_RECURSION_DEPTH:
         _warn_archive_skip(display_name, f"nested archive depth exceeds {MAX_ARCHIVE_RECURSION_DEPTH}")
         return
@@ -267,6 +267,8 @@ def _iter_archive_texts(archive_source, display_name: str, archive_name: str, ac
                 base_name,
                 acceptable_extensions,
                 is_acceptable_file,
+                warning_regex,
+                hits,
                 depth + 1,
             )
             return
@@ -577,6 +579,8 @@ def scan_text_files(folder_path):
                     file_path.name,
                     acceptable_extensions,
                     is_acceptable_file,
+                    warning_regex,
+                    hits,
                 ):
                     count = _scan_archive_text_stream(
                         io.StringIO(content),
