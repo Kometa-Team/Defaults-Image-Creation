@@ -651,8 +651,7 @@ def main():
                 sys.exit(2)
 
             # ensure_repo must exist AND return success; also sanity-check the repo root afterward
-            capture_output = (s.key in {"scan_kometa_logs", "find_and_download_missing"})
-            rc, out, _ = run_cmd(s.title, argv, capture=capture_output, log_path=step_log_path(s.key))
+            rc, _, _ = run_cmd(s.title, argv, log_path=step_log_path(s.key))
             if rc != 0:
                 print(f"[FAIL] {s.key} exited with code {rc}. Stopping.", file=sys.stderr)
                 sys.exit(rc)
