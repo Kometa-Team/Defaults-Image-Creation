@@ -311,19 +311,28 @@ def iter_archive_texts(archive_source, display_name: str, archive_name: str, dep
 
     try:
         if archive_type == "gz":
-            if isinstance(archive_source, (str, Path)):
-                with gzip.open(archive_source, "rb") as gz_file:
-                    content_bytes = read_limited_bytes(gz_file, display_name)
-            else:
-                with gzip.GzipFile(fileobj=io.BytesIO(archive_source), mode="rb") as gz_file:
-                    content_bytes = read_limited_bytes(gz_file, display_name)
-
-            if content_bytes is None:
-                return
-
             extracted_name = archive_name[:-3] if archive_name.lower().endswith(".gz") else archive_name
-            if extracted_name:
+            if not extracted_name:
+                return
+            nested_archive_type = detect_archive_type(extracted_name)
+            if nested_archive_type is not None and has_supported_log_extension(extracted_name):
+                if isinstance(archive_source, (str, Path)):
+                    with gzip.open(archive_source, "rb") as gz_file:
+                        content_bytes = read_limited_bytes(gz_file, display_name)
+                else:
+                    with gzip.GzipFile(fileobj=io.BytesIO(archive_source), mode="rb") as gz_file:
+                        content_bytes = read_limited_bytes(gz_file, display_name)
+                if content_bytes is None:
+                    return
                 yield from handle_member(extracted_name, content_bytes)
+            elif is_candidate_log_name(extracted_name):
+                if isinstance(archive_source, (str, Path)):
+                    with gzip.open(archive_source, "rt", encoding="utf-8", errors="replace") as text_reader:
+                        yield f"{display_name}::{extracted_name}", text_reader.read()
+                else:
+                    with gzip.GzipFile(fileobj=io.BytesIO(archive_source), mode="rb") as gz_file:
+                        with io.TextIOWrapper(gz_file, encoding="utf-8", errors="replace") as text_reader:
+                            yield f"{display_name}::{extracted_name}", text_reader.read()
             return
 
         if archive_type == "zip":
@@ -335,11 +344,17 @@ def iter_archive_texts(archive_source, display_name: str, archive_name: str, dep
                         continue
                     nested_display_name = f"{display_name}::{inner_name}"
                     try:
-                        with zf.open(zi, "r") as raw:
-                            content_bytes = read_limited_bytes(raw, nested_display_name, zi.file_size)
-                        if content_bytes is None:
-                            continue
-                        yield from handle_member(inner_name, content_bytes)
+                        base_name = os.path.basename(inner_name.rstrip("/\\"))
+                        nested_archive_type = detect_archive_type(base_name)
+                        if nested_archive_type is not None and has_supported_log_extension(base_name):
+                            with zf.open(zi, "r") as raw:
+                                content_bytes = read_limited_bytes(raw, nested_display_name, zi.file_size)
+                            if content_bytes is None:
+                                continue
+                            yield from handle_member(inner_name, content_bytes)
+                        elif is_candidate_log_name(base_name):
+                            with zf.open(zi, "r") as raw, io.TextIOWrapper(raw, encoding="utf-8", errors="replace") as text_reader:
+                                yield nested_display_name, text_reader.read()
                     except Exception:
                         log.exception("Failed to read zip entry: %s", nested_display_name)
                         print(f"!! Failed to read zip entry: {nested_display_name}", file=sys.stderr, flush=True)
@@ -357,14 +372,20 @@ def iter_archive_texts(archive_source, display_name: str, archive_name: str, dep
                         continue
                     nested_display_name = f"{display_name}::{inner_name}"
                     try:
+                        base_name = os.path.basename(inner_name.rstrip("/\\"))
+                        nested_archive_type = detect_archive_type(base_name)
                         extracted = tf.extractfile(member)
                         if extracted is None:
                             continue
                         with extracted:
-                            content_bytes = read_limited_bytes(extracted, nested_display_name, member.size)
-                        if content_bytes is None:
-                            continue
-                        yield from handle_member(inner_name, content_bytes)
+                            if nested_archive_type is not None and has_supported_log_extension(base_name):
+                                content_bytes = read_limited_bytes(extracted, nested_display_name, member.size)
+                                if content_bytes is None:
+                                    continue
+                                yield from handle_member(inner_name, content_bytes)
+                            elif is_candidate_log_name(base_name):
+                                with io.TextIOWrapper(extracted, encoding="utf-8", errors="replace") as text_reader:
+                                    yield nested_display_name, text_reader.read()
                     except Exception:
                         log.exception("Failed to read tar entry: %s", nested_display_name)
                         print(f"!! Failed to read tar entry: {nested_display_name}", file=sys.stderr, flush=True)
@@ -394,11 +415,17 @@ def iter_archive_texts(archive_source, display_name: str, archive_name: str, dep
                             continue
                         nested_display_name = f"{display_name}::{inner_name}"
                         try:
+                            base_name = os.path.basename(inner_name.rstrip("/\\"))
+                            nested_archive_type = detect_archive_type(base_name)
                             with rf.open(member) as raw:
-                                content_bytes = read_limited_bytes(raw, nested_display_name, member.file_size)
-                            if content_bytes is None:
-                                continue
-                            yield from handle_member(inner_name, content_bytes)
+                                if nested_archive_type is not None and has_supported_log_extension(base_name):
+                                    content_bytes = read_limited_bytes(raw, nested_display_name, member.file_size)
+                                    if content_bytes is None:
+                                        continue
+                                    yield from handle_member(inner_name, content_bytes)
+                                elif is_candidate_log_name(base_name):
+                                    with io.TextIOWrapper(raw, encoding="utf-8", errors="replace") as text_reader:
+                                        yield nested_display_name, text_reader.read()
                         except Exception:
                             log.exception("Failed to read rar entry: %s", nested_display_name)
                             print(f"!! Failed to read rar entry: {nested_display_name}", file=sys.stderr, flush=True)

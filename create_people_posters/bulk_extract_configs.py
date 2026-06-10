@@ -277,21 +277,19 @@ def iter_candidate_configs(archive_source, display_name: str, archive_name: str,
 
     try:
         if archive_type == "gz":
-            if isinstance(archive_source, (str, Path)):
-                with gzip.open(archive_source, "rb") as gz_file:
-                    content_bytes = read_limited_bytes(gz_file, display_name)
-            else:
-                with gzip.GzipFile(fileobj=io.BytesIO(archive_source), mode="rb") as gz_file:
-                    content_bytes = read_limited_bytes(gz_file, display_name)
-
-            if content_bytes is None:
-                return
-
             extracted_name = archive_name[:-3] if archive_name.lower().endswith(".gz") else archive_name
             if not extracted_name:
                 return
             nested_archive_type = detect_archive_type(extracted_name)
             if nested_archive_type is not None and has_supported_scan_extension(extracted_name):
+                if isinstance(archive_source, (str, Path)):
+                    with gzip.open(archive_source, "rb") as gz_file:
+                        content_bytes = read_limited_bytes(gz_file, display_name)
+                else:
+                    with gzip.GzipFile(fileobj=io.BytesIO(archive_source), mode="rb") as gz_file:
+                        content_bytes = read_limited_bytes(gz_file, display_name)
+                if content_bytes is None:
+                    return
                 yield from handle_member_bytes(extracted_name, content_bytes)
             elif is_candidate_log_name(extracted_name):
                 if isinstance(archive_source, (str, Path)):
@@ -321,9 +319,6 @@ def iter_candidate_configs(archive_source, display_name: str, archive_name: str,
                                 continue
                             yield from handle_member_bytes(inner_name, content_bytes)
                         elif is_candidate_log_name(base_name):
-                            if zi.file_size > MAX_ARCHIVE_MEMBER_BYTES:
-                                warn_archive_skip(nested_display_name, f"entry exceeds {MAX_ARCHIVE_MEMBER_BYTES} bytes")
-                                continue
                             with zf.open(zi, "r") as raw, io.TextIOWrapper(raw, encoding="utf-8", errors="replace") as text_reader:
                                 yield nested_display_name, extract_config_lines_from_stream(text_reader)
                     except Exception as exc:
@@ -355,9 +350,6 @@ def iter_candidate_configs(archive_source, display_name: str, archive_name: str,
                                     continue
                                 yield from handle_member_bytes(inner_name, content_bytes)
                             elif is_candidate_log_name(base_name):
-                                if member.size > MAX_ARCHIVE_MEMBER_BYTES:
-                                    warn_archive_skip(nested_display_name, f"entry exceeds {MAX_ARCHIVE_MEMBER_BYTES} bytes")
-                                    continue
                                 with io.TextIOWrapper(extracted, encoding="utf-8", errors="replace") as text_reader:
                                     yield nested_display_name, extract_config_lines_from_stream(text_reader)
                     except Exception as exc:
@@ -398,9 +390,6 @@ def iter_candidate_configs(archive_source, display_name: str, archive_name: str,
                                         continue
                                     yield from handle_member_bytes(inner_name, content_bytes)
                                 elif is_candidate_log_name(base_name):
-                                    if member.file_size > MAX_ARCHIVE_MEMBER_BYTES:
-                                        warn_archive_skip(nested_display_name, f"entry exceeds {MAX_ARCHIVE_MEMBER_BYTES} bytes")
-                                        continue
                                     with io.TextIOWrapper(raw, encoding="utf-8", errors="replace") as text_reader:
                                         yield nested_display_name, extract_config_lines_from_stream(text_reader)
                         except Exception as exc:
@@ -458,10 +447,6 @@ def iter_input_logs(input_directory: Path) -> Iterator[tuple[str, list[str]]]:
                 continue
 
             try:
-                size_bytes = file_path.stat().st_size
-                if size_bytes > MAX_ARCHIVE_MEMBER_BYTES:
-                    warn_archive_skip(str(file_path), f"entry exceeds {MAX_ARCHIVE_MEMBER_BYTES} bytes")
-                    continue
                 with file_path.open("r", encoding="utf-8", errors="replace") as text_reader:
                     yield str(file_path), extract_config_lines_from_stream(text_reader)
             except Exception as exc:
