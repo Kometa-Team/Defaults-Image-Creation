@@ -8,6 +8,7 @@ alive-progress
 tmdbapis
 rarfile
 py7zr
+PyYAML
 
 # Optional (nice to have, not strictly required by your code):
 # webdriver-manager    # auto-manages ChromeDriver for Selenium

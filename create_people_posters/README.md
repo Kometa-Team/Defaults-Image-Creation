@@ -267,6 +267,7 @@ The orchestrator enforces the single correct order and writes checkpoints so you
 
 > Optional QA tools (not wired by default): `image_check.py`, `compare_image_trees.py` — useful **after** step 11.
 > Optional helper (outside the orchestrator): `grayscale_sweeper.py` — scan any folder tree for non‑color images and copy them into `config/Downloads/other` so `colorize_noncolor.py` can convert them.
+> Optional helper (outside the orchestrator): `bulk_extract_configs.py` — scan mess/meta logs, including nested archives, and export redacted config sections as `parsed_*.yml`.
 
 ---
 
@@ -345,6 +346,13 @@ python colorize_noncolor.py
 ```bash
 python grayscale_sweeper.py --root "D:/Pictures/Headshots" --dest "./config/Downloads/other"
 # Skips files that already exist at the destination (by name).
+```
+
+### Bulk extract redacted config.yml sections (helper)
+```bash
+python bulk_extract_configs.py --input_directory "C:/temp"
+# Writes parsed_*.yml files to: ./config/parsed_configs
+# Re-runs skip files that already have a matching parsed_*.yml output.
 ```
 
 ---
@@ -458,6 +466,7 @@ create_people_posters/
 ├─ auto_readme.py
 ├─ sync_md.py
 ├─ grayscale_sweeper.py           # optional helper (standalone)
+├─ bulk_extract_configs.py        # optional helper (standalone)
 ├─ image_check.py                 # optional QA
 ├─ compare_image_trees.py         # optional QA
 └─ config/
@@ -469,6 +478,7 @@ create_people_posters/
    ├─ Downloads/
    │  ├─ other/                  # non‑color inputs for colorizer
    │  └─ color/                  # colorized outputs (JPG)
+   ├─ parsed_configs/            # extracted parsed_*.yml files
    └─ people_dirs/               # local working folders
 ```
 

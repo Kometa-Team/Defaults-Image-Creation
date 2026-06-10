@@ -13,6 +13,7 @@ import io
 import gzip
 import zipfile
 import tarfile
+import shutil
 import tempfile
 
 try:
@@ -139,6 +140,9 @@ def extract_filename_from_url(url):
 HEARTBEAT_SECS = 1.0  # print a tiny heartbeat while scanning large files
 MAX_ARCHIVE_RECURSION_DEPTH = 3
 MAX_ARCHIVE_MEMBER_BYTES = 100 * 1024 * 1024
+RAR_BACKEND_MISSING_MESSAGE = "RAR backend not found (install UnRAR or 7-Zip, or add it to PATH)"
+_RAR_BACKEND_CHECKED = False
+_RAR_BACKEND_PATH: str | None = None
 
 
 def _human_mb(n_bytes: float) -> str:
@@ -154,7 +158,7 @@ def _safe_getsize(path: Path) -> int | None:
 
 def _has_supported_extension(name: str, acceptable_extensions: list[str]) -> bool:
     lowered = name.lower()
-    return any(lowered.endswith(ext) for ext in acceptable_extensions)
+    return any(lowered.endswith(ext) for ext in acceptable_extensions) or bool(re.search(r"\.\d+$", lowered))
 
 
 def _detect_archive_type(name: str) -> str | None:
@@ -177,6 +181,54 @@ def _detect_archive_type(name: str) -> str | None:
 def _warn_archive_skip(display_name: str, reason: str) -> None:
     logging.warning("Skipping %s: %s", display_name, reason)
     print(f"!! Skipping {display_name}: {reason}", file=sys.stderr)
+
+
+def _resolve_tool_path(candidate: str) -> str | None:
+    if os.path.isabs(candidate):
+        return candidate if os.path.exists(candidate) else None
+    return shutil.which(candidate)
+
+
+def _ensure_rar_backend() -> str | None:
+    global _RAR_BACKEND_CHECKED, _RAR_BACKEND_PATH
+    if _RAR_BACKEND_CHECKED:
+        return _RAR_BACKEND_PATH
+
+    _RAR_BACKEND_CHECKED = True
+    if rarfile is None:
+        return None
+
+    try:
+        rarfile.tool_setup(force=True)
+        _RAR_BACKEND_PATH = "PATH"
+        return _RAR_BACKEND_PATH
+    except Exception:
+        pass
+
+    tool_candidates = [
+        ("UNRAR_TOOL", ["unrar", r"C:\Program Files\WinRAR\UnRAR.exe", r"C:\Program Files (x86)\WinRAR\UnRAR.exe"]),
+        ("SEVENZIP_TOOL", ["7z", r"C:\Program Files\7-Zip\7z.exe", r"C:\Program Files (x86)\7-Zip\7z.exe"]),
+        ("SEVENZIP2_TOOL", ["7zz"]),
+        ("BSDTAR_TOOL", ["bsdtar", r"C:\Windows\System32\bsdtar.exe"]),
+        ("UNAR_TOOL", ["unar"]),
+    ]
+    seen_paths: set[str] = set()
+
+    for attr_name, candidates in tool_candidates:
+        for candidate in candidates:
+            resolved = _resolve_tool_path(candidate)
+            if not resolved or resolved in seen_paths:
+                continue
+            seen_paths.add(resolved)
+            setattr(rarfile, attr_name, resolved)
+            try:
+                rarfile.tool_setup(force=True)
+                _RAR_BACKEND_PATH = resolved
+                return _RAR_BACKEND_PATH
+            except Exception:
+                continue
+
+    return None
 
 
 def _read_limited_bytes(reader, display_name: str, size_hint: int | None = None) -> bytes | None:
@@ -289,6 +341,9 @@ def _iter_archive_texts(archive_source, display_name: str, archive_name: str, ac
             if rarfile is None:
                 _warn_archive_skip(display_name, "rarfile is unavailable")
                 return
+            if _ensure_rar_backend() is None:
+                _warn_archive_skip(display_name, RAR_BACKEND_MISSING_MESSAGE)
+                return
 
             temp_path = None
             try:
@@ -397,7 +452,7 @@ def scan_text_files(folder_path):
     candidate_names = set()
 
     acceptable_extensions = [
-        '.txt', '.log', '.1', '.2', '.3', '.4', '.5', '.6', '.7', '.8', '.9', '.gz', '.zip', '.tar', '.tar.gz',
+        '.txt', '.log', '.gz', '.zip', '.tar', '.tar.gz',
         '.rar', '.7z'
     ]
 
