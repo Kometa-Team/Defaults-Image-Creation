@@ -62,11 +62,22 @@ def format_bytes(size: int) -> str:
     return f"{size} B"
 
 
+def safe_console(text: str) -> str:
+    return text.encode("ascii", "backslashreplace").decode("ascii")
+
+
 def run(cmd, cwd: Path, dry: bool, capture=False) -> Tuple[int, str, str]:
-    print("→", " ".join(cmd), f"(cwd={cwd})")
+    print("->", safe_console(" ".join(cmd)), safe_console(f"(cwd={cwd})"))
     if dry:
         return 0, "", ""
-    cp = subprocess.run(cmd, cwd=str(cwd), text=True, capture_output=capture)
+    cp = subprocess.run(
+        cmd,
+        cwd=str(cwd),
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=capture,
+    )
     return cp.returncode, (cp.stdout or ""), (cp.stderr or "")
 
 
@@ -96,6 +107,8 @@ def estimate_push_payload(repo: Path, branch: str, dry: bool) -> Tuple[bool, int
         ["git", "cat-file", "--batch-check=%(objectname) %(objecttype) %(objectsize) %(rest)"],
         cwd=str(repo),
         text=True,
+        encoding="utf-8",
+        errors="replace",
         input=rev_list + "\n",
         capture_output=True,
     )
@@ -122,6 +135,141 @@ def estimate_push_payload(repo: Path, branch: str, dry: bool) -> Tuple[bool, int
 
     largest_blobs.sort(key=lambda item: item[1], reverse=True)
     return True, total_bytes, object_count, largest_blobs[:20]
+
+
+def remote_ref_exists(repo: Path, branch: str, dry: bool) -> bool:
+    rc, _, _ = run(["git", "rev-parse", "--verify", f"origin/{branch}"], repo, dry)
+    return rc == 0
+
+
+def ahead_commit_count(repo: Path, branch: str, dry: bool) -> int:
+    if not remote_ref_exists(repo, branch, dry):
+        return 0
+    ok, out = run_cap(["git", "rev-list", "--count", f"origin/{branch}..HEAD"], repo, dry)
+    if not ok:
+        return 0
+    try:
+        return int(out.strip() or "0")
+    except ValueError:
+        return 0
+
+
+def get_staged_paths(repo: Path, dry: bool) -> Tuple[bool, list[str]]:
+    if dry:
+        return True, []
+    cp = subprocess.run(
+        ["git", "diff", "--cached", "--name-only", "--no-renames", "-z"],
+        cwd=str(repo),
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+    )
+    if cp.returncode != 0:
+        return False, []
+    return True, [part for part in cp.stdout.split("\0") if part]
+
+
+def chunked(items: list[str], size: int) -> list[list[str]]:
+    return [items[idx: idx + size] for idx in range(0, len(items), size)]
+
+
+def build_path_batches(repo: Path, paths: list[str], max_push_bytes: int) -> Tuple[bool, list[tuple[list[str], int]], Optional[tuple[str, int]]]:
+    normalized = sorted(set(paths), key=lambda item: item.lower())
+    sized_paths: list[tuple[str, int]] = []
+    for rel_path in normalized:
+        abs_path = repo / rel_path
+        file_size = abs_path.stat().st_size if abs_path.exists() and abs_path.is_file() else 0
+        if max_push_bytes > 0 and file_size > max_push_bytes:
+            return False, [], (rel_path, file_size)
+        sized_paths.append((rel_path, file_size))
+
+    if max_push_bytes <= 0:
+        return True, [(normalized, sum(size for _, size in sized_paths))], None
+
+    batches: list[tuple[list[str], int]] = []
+    current_paths: list[str] = []
+    current_bytes = 0
+    for rel_path, file_size in sized_paths:
+        if current_paths and current_bytes + file_size > max_push_bytes:
+            batches.append((current_paths, current_bytes))
+            current_paths = [rel_path]
+            current_bytes = file_size
+            continue
+        current_paths.append(rel_path)
+        current_bytes += file_size
+    if current_paths:
+        batches.append((current_paths, current_bytes))
+    return True, batches, None
+
+
+def stage_paths(repo: Path, paths: list[str], dry: bool) -> bool:
+    for batch in chunked(paths, 100):
+        if not run_ok(["git", "add", "-A", "--"] + batch, repo, dry):
+            return False
+    return True
+
+
+def push_current_head(repo: Path, branch: str, dry: bool, max_push_bytes: int) -> int:
+    ok, payload_bytes, object_count, largest_blobs = estimate_push_payload(repo, branch, dry)
+    if not ok:
+        return 1
+    if max_push_bytes > 0 and payload_bytes > max_push_bytes:
+        print(
+            f"[ERROR] Refusing push: estimated outbound payload is {format_bytes(payload_bytes)} "
+            f"across {object_count} git object(s), which exceeds the limit of {format_bytes(max_push_bytes)}."
+        )
+        if largest_blobs:
+            print("Largest blobs in this push:")
+            for path_label, blob_size in largest_blobs:
+                print(f"  {format_bytes(blob_size):>10}  {path_label}")
+        return 1
+
+    if not run_ok(["git", "push", "origin", "HEAD"], repo, dry):
+        return 0 if run_ok(["git", "push", "origin", branch], repo, dry) else 1
+    return 0
+
+
+def reset_ahead_commits_to_worktree(repo: Path, branch: str, dry: bool) -> bool:
+    if not remote_ref_exists(repo, branch, dry):
+        print(f"[ERROR] Cannot re-batch unpushed commits because origin/{branch} is not available.")
+        return False
+    print(f"[INFO] Rewriting local-only commits back into the worktree for batched push against origin/{branch}.")
+    return run_ok(["git", "reset", "--mixed", f"origin/{branch}"], repo, dry)
+
+
+def commit_batches(repo: Path, branch: str, message: str, dry: bool, max_push_bytes: int, paths: list[str]) -> int:
+    ok, batches, oversized = build_path_batches(repo, paths, max_push_bytes)
+    if not ok:
+        assert oversized is not None
+        rel_path, file_size = oversized
+        print(
+            f"[ERROR] Cannot batch this push because a single file exceeds the limit: "
+            f"{rel_path} ({format_bytes(file_size)} > {format_bytes(max_push_bytes)})."
+        )
+        return 1
+    if not batches:
+        print("  (nothing to commit)")
+        return 0
+
+    total_batches = len(batches)
+    print(
+        f"[INFO] Creating {total_batches} push batch(es) under the {format_bytes(max_push_bytes)} limit."
+    )
+    for idx, (batch_paths, batch_bytes) in enumerate(batches, start=1):
+        if not stage_paths(repo, batch_paths, dry):
+            return 1
+        batch_message = message if total_batches == 1 else f"{message} [batch {idx}/{total_batches}]"
+        print(
+            f"[INFO] Batch {idx}/{total_batches}: {len(batch_paths)} path(s), "
+            f"estimated working-set size {format_bytes(batch_bytes)}."
+        )
+        if not run_ok(["git", "commit", "-m", batch_message], repo, dry):
+            return 1
+        rc = push_current_head(repo, branch, dry, max_push_bytes)
+        if rc != 0:
+            return rc
+    return 0
 
 
 def detect_remote_head_branch(repo: Path, dry: bool) -> str:
@@ -190,45 +338,47 @@ def commit_and_push(repo: Path, branch: Optional[str], message: str,
     if user_email:
         run_ok(["git", "config", "user.email", user_email], repo, dry)
 
-    # stage everything
-    if not run_ok(["git", "add", "-A"], repo, dry):
-        return 1
-
-    # any changes?
-    ok, status = run_cap(["git", "status", "--porcelain"], repo, dry)
-    if not ok:
-        return 1
-    has_local_changes = bool(status.strip())
-    if has_local_changes:
-        if not run_ok(["git", "commit", "-m", message], repo, dry):
-            return 1
-    else:
-        print("  (no changes to commit)")
-
     # ensure branch value
     if not branch:
         ok, cur = run_cap(["git", "rev-parse", "--abbrev-ref", "HEAD"], repo, dry)
         branch = cur if ok and cur else "master"
 
-    ok, payload_bytes, object_count, largest_blobs = estimate_push_payload(repo, branch, dry)
-    if not ok:
-        return 1
-    if max_push_bytes > 0 and payload_bytes > max_push_bytes:
-        print(
-            f"[ERROR] Refusing push: estimated outbound payload is {format_bytes(payload_bytes)} "
-            f"across {object_count} git object(s), which exceeds the limit of {format_bytes(max_push_bytes)}."
-        )
-        if largest_blobs:
-            print("Largest blobs in this push:")
-            for path_label, blob_size in largest_blobs:
-                print(f"  {format_bytes(blob_size):>10}  {path_label}")
+    # stage everything so we can inspect the full pending change set
+    if not run_ok(["git", "add", "-A"], repo, dry):
         return 1
 
-    # push
-    if not run_ok(["git", "push", "origin", "HEAD"], repo, dry):
-        # fallback to named branch push
-        return 0 if run_ok(["git", "push", "origin", branch], repo, dry) else 1
-    return 0
+    ok, staged_paths = get_staged_paths(repo, dry)
+    if not ok:
+        return 1
+    has_local_changes = bool(staged_paths)
+    ahead_count = ahead_commit_count(repo, branch, dry)
+
+    if ahead_count > 0 and (has_local_changes or max_push_bytes > 0):
+        ok, payload_bytes, _, _ = estimate_push_payload(repo, branch, dry)
+        if not ok:
+            return 1
+        if has_local_changes or (max_push_bytes > 0 and payload_bytes > max_push_bytes):
+            if not reset_ahead_commits_to_worktree(repo, branch, dry):
+                return 1
+            if not run_ok(["git", "add", "-A"], repo, dry):
+                return 1
+            ok, staged_paths = get_staged_paths(repo, dry)
+            if not ok:
+                return 1
+            has_local_changes = bool(staged_paths)
+            ahead_count = 0
+
+    if has_local_changes:
+        if not run_ok(["git", "reset"], repo, dry):
+            return 1
+        return commit_batches(repo, branch, message, dry, max_push_bytes, staged_paths)
+
+    if ahead_count == 0:
+        print("  (no changes to commit)")
+        return 0
+
+    print(f"[INFO] No working tree changes, but {ahead_count} local commit(s) are ahead of origin/{branch}.")
+    return push_current_head(repo, branch, dry, max_push_bytes)
 
 
 def main():
@@ -283,7 +433,7 @@ def main():
             # for push, default to current branch if not specified
             push_branch = branch_arg
             now = datetime.now().strftime("%Y-%m-%d %H:%M")
-            msg = args.message or f"chore: sync posters & docs — {now}"
+            msg = args.message or f"chore: sync posters & docs - {now}"
             print(f"=== PUSH {cat} ===")
             rc = commit_and_push(
                 repo,

@@ -61,7 +61,7 @@ def setup_logging(level=logging.INFO, console=True):
         handlers=handlers,
         force=True,
     )
-    logging.info("Logging → %s", log_file)
+    logging.info("Logging -> %s", log_file)
     return log_file
 
 
@@ -86,8 +86,15 @@ def detect_git_repo_info(start_dir: Path) -> dict | None:
     Owner/repo parsed from 'origin' URL. Branch from HEAD.
     """
     def _git(args, cwd):
-        p = subprocess.run(["git", *args], cwd=cwd, text=True,
-                           stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = subprocess.run(
+            ["git", *args],
+            cwd=cwd,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
         if p.returncode != 0:
             return None
         return p.stdout.strip()
@@ -299,7 +306,7 @@ def main():
 
     elapsed = timer() - start
     logging.info("Done in %.2fs (letters=%d, total images=%d)", elapsed, len(letters), total)
-    print(f"Done in {elapsed:.2f}s — letters={len(letters)}, images={total}")
+    print(f"Done in {elapsed:.2f}s - letters={len(letters)}, images={total}")
     return 0
 
 

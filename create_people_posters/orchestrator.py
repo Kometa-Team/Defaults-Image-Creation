@@ -135,7 +135,7 @@ def load_env_or_bootstrap() -> None:
                 env_file.write_text(content, encoding="utf-8")
             except Exception:
                 pass
-            print(f"Missing ./config/.env — created one from example.\n"
+            print(f"Missing ./config/.env - created one from example.\n"
                   f"Please set at least TMDB_KEY inside: {env_file}",
                   file=sys.stderr)
             sys.exit(1)
@@ -149,8 +149,14 @@ def ps_exe() -> Optional[str]:
         candidates += ["powershell", "powershell.exe"]
     for exe in candidates:
         try:
-            cp = subprocess.run([exe, "-NoLogo", "-NoProfile", "-Command", "$PSVersionTable.PSVersion.Major"],
-                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            cp = subprocess.run(
+                [exe, "-NoLogo", "-NoProfile", "-Command", "$PSVersionTable.PSVersion.Major"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+            )
             if cp.returncode == 0:
                 return exe
         except Exception:
@@ -193,10 +199,17 @@ def run_cmd(
 ) -> Tuple[int, Optional[str], Optional[str]]:
     """Run a subprocess; optionally tee combined output to a log file."""
     print(f"\n=== {title} ===")
-    print("→", " ".join(shlex.quote(a) for a in argv))
+    print("->", " ".join(shlex.quote(a) for a in argv))
     try:
         if capture:
-            cp = subprocess.run(argv, cwd=str(SCRIPT_DIR), text=True, capture_output=True)
+            cp = subprocess.run(
+                argv,
+                cwd=str(SCRIPT_DIR),
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                capture_output=True,
+            )
             if log_path:
                 log_path.parent.mkdir(parents=True, exist_ok=True)
                 combined = (cp.stdout or "")
@@ -213,6 +226,8 @@ def run_cmd(
                     argv,
                     cwd=str(SCRIPT_DIR),
                     text=True,
+                    encoding="utf-8",
+                    errors="replace",
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
                 )
@@ -481,7 +496,7 @@ def main():
             if REQUIRE_POWERSHELL:
                 print("[ERROR] ORCH_REQUIRE_POWERSHELL=true but PowerShell (pwsh) not found.", file=sys.stderr)
                 sys.exit(2)
-            print("[WARN] PowerShell (pwsh) not found — skipping create_people_poster.ps1", file=sys.stderr)
+            print("[WARN] PowerShell (pwsh) not found - skipping create_people_poster.ps1", file=sys.stderr)
             return None
         ps1 = str((SCRIPT_DIR / "create_people_poster.ps1").resolve())
         return [ps, "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ps1]
@@ -513,7 +528,7 @@ def main():
         _require_repo_or_die()
         now = datetime.now().strftime("%Y-%m-%d %H:%M")
         styles_tag = ",".join(styles)
-        msg = (commit_template or f"chore: sync posters & docs [{styles_tag}] — {now}").strip()
+        msg = (commit_template or f"chore: sync posters & docs [{styles_tag}] - {now}").strip()
         args2 = ["--repo-root", str(repo_root)]
         if branch:
             args2 += ["--branch", branch]
@@ -554,7 +569,7 @@ def main():
             print(f" - {s.key:12} : {status}")
         for s in steps:
             if s.always_run or not marker_exists(s.marker_path):
-                print(f"\nNext step would be: {s.key} — {s.title}")
+                print(f"\nNext step would be: {s.key} - {s.title}")
                 break
         return
 
@@ -666,10 +681,10 @@ def main():
                     if manual_override_count > 0:
                         print(
                             "[INFO] scan_kometa_logs found 0 auto items, "
-                            f"but {manual_override_count} manual override(s) exist in {people_override_file} — continuing."
+                            f"but {manual_override_count} manual override(s) exist in {people_override_file} - continuing."
                         )
                     else:
-                        print("[INFO] scan_kometa_logs found 0 items — stopping.")
+                        print("[INFO] scan_kometa_logs found 0 items - stopping.")
                         sys.exit(0)
 
             # find_and_download_missing: if clearly zero, stop
@@ -679,24 +694,24 @@ def main():
                     if manual_override_count > 0:
                         print(
                             "[INFO] find_and_download_missing produced 0 auto items, "
-                            f"but {manual_override_count} manual override(s) exist in {people_override_file} — continuing."
+                            f"but {manual_override_count} manual override(s) exist in {people_override_file} - continuing."
                         )
                     else:
-                        print("[INFO] find_and_download_missing produced 0 items — stopping.")
+                        print("[INFO] find_and_download_missing produced 0 items - stopping.")
                         sys.exit(0)
 
             # tmdb: if no new posters created, stop
             elif s.key == "tmdb":
                 created = count_recent_files([CONFIG_DIR], started, {"jpg", "jpeg", "png"})
                 if created == 0:
-                    print("[INFO] tmdb downloaded 0 posters — stopping.")
+                    print("[INFO] tmdb downloaded 0 posters - stopping.")
                     sys.exit(0)
 
             # audit_people_images: if processed 0, stop (parse its log rather than filesystem)
             elif s.key == "audit_people_images":
                 md_count = parsed_processed_from_audit_people_images(log_path_for("audit_people_images.py"))
                 if md_count is not None and md_count == 0:
-                    print("[INFO] audit_people_images sorted/moved 0 items — stopping.")
+                    print("[INFO] audit_people_images sorted/moved 0 items - stopping.")
                     sys.exit(0)
 
             elif s.key == "colorize":
@@ -710,7 +725,7 @@ def main():
                 if changed == 0:
                     zero = parse_zero_from_log(log_path_for("prep_people_dirs.py"))
                     if zero is True:
-                        print("[INFO] prep_dirs moved 0 items — stopping.")
+                        print("[INFO] prep_dirs moved 0 items - stopping.")
                         sys.exit(0)
 
             # remove_bg: verify outputs and possibly stop
@@ -724,7 +739,7 @@ def main():
                     rb_log = log_path_for("sel_remove_bg.py")
                     log_n = parsed_files_processed_from_remove_bg(rb_log)
                     if (log_n is None) or (log_n == 0):
-                        print(f"[INFO] sel_remove_bg produced 0 files in {bg_output_dir} — stopping.")
+                        print(f"[INFO] sel_remove_bg produced 0 files in {bg_output_dir} - stopping.")
                         sys.exit(0)
 
             # sync_images: if copied nothing, stop before readme/sync_md/push (parse its log)
@@ -732,7 +747,7 @@ def main():
                 sync_log = log_path_for("sync_people_images.py")
                 copied_sum = sum_copied_from_sync_log(sync_log)
                 if copied_sum is not None and copied_sum == 0:
-                    print("[INFO] sync_images copied 0 files — stopping before readme/sync_md/push.")
+                    print("[INFO] sync_images copied 0 files - stopping before readme/sync_md/push.")
                     sys.exit(0)
 
             # Write checkpoint if applicable (and not always_run)
