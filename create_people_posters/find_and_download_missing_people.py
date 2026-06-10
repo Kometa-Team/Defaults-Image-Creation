@@ -443,22 +443,32 @@ def iter_archive_texts(archive_source, display_name: str, archive_name: str, dep
                 return
 
             seven_zip_source = archive_source if isinstance(archive_source, (str, Path)) else io.BytesIO(archive_source)
-            with py7zr.SevenZipFile(seven_zip_source, mode="r") as zf:
-                extracted_map = zf.readall()
-                for inner_name, bio in extracted_map.items():
-                    if inner_name.endswith("/") or "__MACOSX" in inner_name:
-                        continue
-                    nested_display_name = f"{display_name}::{inner_name}"
-                    try:
-                        buffer = bio.getbuffer()
-                        size_bytes = len(buffer)
-                        if size_bytes > MAX_ARCHIVE_MEMBER_BYTES:
-                            warn_archive_skip(nested_display_name, f"entry exceeds {MAX_ARCHIVE_MEMBER_BYTES} bytes")
+            with tempfile.TemporaryDirectory(prefix="missing_people_7z_") as temp_dir:
+                with py7zr.SevenZipFile(seven_zip_source, mode="r") as zf:
+                    zf.extractall(path=temp_dir)
+
+                for root, _, files in os.walk(temp_dir):
+                    for file_name in files:
+                        extracted_path = Path(root) / file_name
+                        inner_name = str(extracted_path.relative_to(temp_dir)).replace("\\", "/")
+                        if "__MACOSX" in inner_name:
                             continue
-                        yield from handle_member(inner_name, bytes(buffer))
-                    except Exception:
-                        log.exception("Failed to read 7z entry: %s", nested_display_name)
-                        print(f"!! Failed to read 7z entry: {nested_display_name}", file=sys.stderr, flush=True)
+                        nested_display_name = f"{display_name}::{inner_name}"
+                        try:
+                            base_name = os.path.basename(inner_name.rstrip("/\\"))
+                            nested_archive_type = detect_archive_type(base_name)
+                            size_bytes = extracted_path.stat().st_size
+                            if nested_archive_type is not None and has_supported_log_extension(base_name):
+                                if size_bytes > MAX_ARCHIVE_MEMBER_BYTES:
+                                    warn_archive_skip(nested_display_name, f"entry exceeds {MAX_ARCHIVE_MEMBER_BYTES} bytes")
+                                    continue
+                                yield from handle_member(inner_name, extracted_path.read_bytes())
+                            elif is_candidate_log_name(base_name):
+                                with extracted_path.open("r", encoding="utf-8", errors="replace") as text_reader:
+                                    yield nested_display_name, text_reader.read()
+                        except Exception:
+                            log.exception("Failed to read 7z entry: %s", nested_display_name)
+                            print(f"!! Failed to read 7z entry: {nested_display_name}", file=sys.stderr, flush=True)
             return
     except Exception:
         log.exception("Failed to open archive: %s", display_name)
