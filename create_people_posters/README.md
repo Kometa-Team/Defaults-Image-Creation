@@ -300,7 +300,7 @@ If the pipeline has already run before, re-run from TMDB with:
 python orchestrator.py --redo tmdb
 ```
 
-If you are starting fresh and just want to begin at the TMDB step, `python orchestrator.py --from tmdb` also works.
+If you want to begin at the TMDB step, use `python orchestrator.py --redo tmdb`.
 
 The orchestrator now continues past zero-result log scans when `people_overrides.txt` contains entries.
 
@@ -310,11 +310,8 @@ The orchestrator now continues past zero-result log scans when `people_overrides
   ```bash
   python orchestrator.py --list
   ```
-- **Start at a specific step** (order is still enforced afterward):
-  ```bash
-  python orchestrator.py --from tmdb
-  ```
-- **Redo from a step** (clears that checkpoint and everything after it):
+- **Redo from a step**:
+  Clears that checkpoint and everything after it, then restarts at that exact step.
   ```bash
   python orchestrator.py --redo readme
   ```
@@ -326,14 +323,14 @@ The orchestrator now continues past zero-result log scans when `people_overrides
 ### Start mid‑pipeline
 - From **prep_dirs** onward:
   ```bash
-  python orchestrator.py --from prep_dirs
+  python orchestrator.py --redo prep_dirs
   ```
 - Just run **readme** and **sync_md** for **multiple styles** (uses env or CLI styles):
   ```bash
   # .env → ORCH_STYLES=transparent,diiivoycolor
-  python orchestrator.py --from readme
+  python orchestrator.py --redo readme
   # or override via CLI:
-  python orchestrator.py --from readme --styles transparent,diiivoycolor
+  python orchestrator.py --redo readme --styles transparent,diiivoycolor
   ```
 
 ### Run the colorizer standalone
@@ -369,7 +366,7 @@ The orchestrator will create one from `.env.example` and exit; edit it and re‑
 Set `PEOPLE_IMAGES_DIR` in `.env` (or pass `--repo-root`) and ensure the repo exists on disk.
 
 **TMDB errors / invalid key**  
-Double‑check `TMDB_KEY` and your network. Try re‑running from `--from tmdb`.
+Double‑check `TMDB_KEY` and your network. Try re‑running with `--redo tmdb`.
 
 **Colorizer errors**  
 - Use a dedicated venv (Python 3.10).  

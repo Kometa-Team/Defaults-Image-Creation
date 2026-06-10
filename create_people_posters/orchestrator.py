@@ -49,10 +49,10 @@ Styles
 Common CLI usage
 ----------------
   python orchestrator.py              # resume from the first incomplete step
-  python orchestrator.py --from tmdb  # start at a given step (still in fixed order)
+  python orchestrator.py --redo tmdb  # clear tmdb+downstream checkpoints and restart at tmdb
   python orchestrator.py --force      # ignore checkpoints and run all steps
   python orchestrator.py --list       # show step status & which step would run next
-  python orchestrator.py --redo readme  # re-run from "readme": clears its checkpoint and those after
+  python orchestrator.py --redo readme  # clear readme+downstream checkpoints and restart at readme
 
 Environment (./config/.env or process environment)
 --------------------------------------------------
@@ -343,9 +343,8 @@ def main():
     manual_override_count = count_manual_people_overrides(people_override_file)
 
     parser = argparse.ArgumentParser(description="Fixed-order, resumable pipeline runner")
-    parser.add_argument("--from", dest="from_key", help="Start at this step key (enforced order).")
     parser.add_argument("--force", action="store_true", help="Ignore checkpoints and run all steps from the beginning.")
-    parser.add_argument("--redo", help="Clear checkpoint for this step (and downstream) then run from it.")
+    parser.add_argument("--redo", help="Clear checkpoint for this step (and downstream) and restart at that step.")
     parser.add_argument("--list", action="store_true", help="List step status and exit.")
     parser.add_argument("--logs-dir", help="Kometa logs folder for steps scan_kometa_logs/find_and_download_missing (env ORCH_LOGS_DIR otherwise).")
     parser.add_argument("--repo-root", help="Kometa-People-Images repository root (env PEOPLE_IMAGES_DIR otherwise).")
@@ -532,12 +531,8 @@ def main():
     start_i = 0
     if args.force:
         start_i = 0
-    elif args.from_key:
-        if args.from_key not in step_index:
-            print(f"[ERROR] Unknown step key for --from: {args.from_key}", file=sys.stderr)
-            print("Valid keys:", ", ".join(step_index.keys()), file=sys.stderr)
-            sys.exit(2)
-        start_i = step_index[args.from_key]
+    elif args.redo:
+        start_i = step_index[args.redo]
     else:
         for i, s in enumerate(steps):
             if s.always_run or not marker_exists(s.marker_path):
