@@ -51,7 +51,7 @@ TEXT_EXTENSIONS = {
 }
 ARCHIVE_EXTENSIONS = {".zip", ".tar", ".tar.gz", ".gz", ".rar", ".7z"}
 MAX_ARCHIVE_RECURSION_DEPTH = 3
-MAX_ARCHIVE_MEMBER_BYTES = 100 * 1024 * 1024
+MAX_ARCHIVE_MEMBER_BYTES = 500 * 1024 * 1024
 MAX_CAPTURE_LINES = 10000
 SCHEMA_URL = "https://raw.githubusercontent.com/kometa-team/kometa/nightly/json-schema/config-schema.json"
 RAR_BACKEND_MISSING_MESSAGE = "RAR backend not found (install UnRAR or 7-Zip, or add it to PATH)"
@@ -206,188 +206,13 @@ def read_limited_bytes(reader, display_name: str, size_hint: int | None = None) 
     return content_bytes
 
 
-def iter_candidate_bytes(archive_source, display_name: str, archive_name: str, depth: int = 1) -> Iterator[tuple[str, bytes]]:
-    if depth > MAX_ARCHIVE_RECURSION_DEPTH:
-        warn_archive_skip(display_name, f"nested archive depth exceeds {MAX_ARCHIVE_RECURSION_DEPTH}")
-        return
-
-    archive_type = detect_archive_type(archive_name)
-    if archive_type is None:
-        return
-
-    def handle_member(member_name: str, content_bytes: bytes) -> Iterator[tuple[str, bytes]]:
-        base_name = os.path.basename(member_name.rstrip("/\\"))
-        if not base_name:
-            return
-
-        nested_display_name = f"{display_name}::{member_name}"
-        nested_archive_type = detect_archive_type(base_name)
-        if nested_archive_type is not None and has_supported_scan_extension(base_name):
-            yield from iter_candidate_bytes(content_bytes, nested_display_name, base_name, depth + 1)
-            return
-
-        if not is_candidate_log_name(base_name):
-            return
-
-        yield nested_display_name, content_bytes
-
-    try:
-        if archive_type == "gz":
-            if isinstance(archive_source, (str, Path)):
-                with gzip.open(archive_source, "rb") as gz_file:
-                    content_bytes = read_limited_bytes(gz_file, display_name)
-            else:
-                with gzip.GzipFile(fileobj=io.BytesIO(archive_source), mode="rb") as gz_file:
-                    content_bytes = read_limited_bytes(gz_file, display_name)
-
-            if content_bytes is None:
-                return
-
-            extracted_name = archive_name[:-3] if archive_name.lower().endswith(".gz") else archive_name
-            if extracted_name:
-                yield from handle_member(extracted_name, content_bytes)
-            return
-
-        if archive_type == "zip":
-            zip_source = archive_source if isinstance(archive_source, (str, Path)) else io.BytesIO(archive_source)
-            with zipfile.ZipFile(zip_source) as zf:
-                for zi in zf.infolist():
-                    inner_name = zi.filename
-                    if zi.is_dir() or "__MACOSX" in inner_name:
-                        continue
-                    nested_display_name = f"{display_name}::{inner_name}"
-                    try:
-                        with zf.open(zi, "r") as raw:
-                            content_bytes = read_limited_bytes(raw, nested_display_name, zi.file_size)
-                        if content_bytes is None:
-                            continue
-                        yield from handle_member(inner_name, content_bytes)
-                    except Exception as exc:
-                        logging.exception("Failed to read zip entry: %s", nested_display_name)
-                        print(f"!! Failed to read zip entry: {nested_display_name} ({exc})", file=sys.stderr, flush=True)
-            return
-
-        if archive_type == "tar":
-            if isinstance(archive_source, (str, Path)):
-                tar_ctx = tarfile.open(archive_source, "r:*")
-            else:
-                tar_ctx = tarfile.open(fileobj=io.BytesIO(archive_source), mode="r:*")
-            with tar_ctx as tf:
-                for member in tf.getmembers():
-                    inner_name = member.name
-                    if not member.isfile() or "__MACOSX" in inner_name:
-                        continue
-                    nested_display_name = f"{display_name}::{inner_name}"
-                    try:
-                        extracted = tf.extractfile(member)
-                        if extracted is None:
-                            continue
-                        with extracted:
-                            content_bytes = read_limited_bytes(extracted, nested_display_name, member.size)
-                        if content_bytes is None:
-                            continue
-                        yield from handle_member(inner_name, content_bytes)
-                    except Exception as exc:
-                        logging.exception("Failed to read tar entry: %s", nested_display_name)
-                        print(f"!! Failed to read tar entry: {nested_display_name} ({exc})", file=sys.stderr, flush=True)
-            return
-
-        if archive_type == "rar":
-            if rarfile is None:
-                warn_archive_skip(display_name, "rarfile is unavailable")
-                return
-            if ensure_rar_backend() is None:
-                warn_archive_skip(display_name, RAR_BACKEND_MISSING_MESSAGE)
-                return
-
-            temp_path = None
-            try:
-                rar_source = archive_source
-                if not isinstance(archive_source, (str, Path)):
-                    with tempfile.NamedTemporaryFile(delete=False, suffix=".rar") as temp_file:
-                        temp_file.write(archive_source)
-                        temp_path = temp_file.name
-                    rar_source = temp_path
-
-                with rarfile.RarFile(rar_source) as rf:
-                    for member in rf.infolist():
-                        inner_name = member.filename
-                        if member.isdir() or "__MACOSX" in inner_name:
-                            continue
-                        nested_display_name = f"{display_name}::{inner_name}"
-                        try:
-                            with rf.open(member) as raw:
-                                content_bytes = read_limited_bytes(raw, nested_display_name, member.file_size)
-                            if content_bytes is None:
-                                continue
-                            yield from handle_member(inner_name, content_bytes)
-                        except Exception as exc:
-                            logging.exception("Failed to read rar entry: %s", nested_display_name)
-                            print(f"!! Failed to read rar entry: {nested_display_name} ({exc})", file=sys.stderr, flush=True)
-            finally:
-                if temp_path:
-                    try:
-                        os.unlink(temp_path)
-                    except OSError:
-                        pass
-            return
-
-        if archive_type == "7z":
-            if py7zr is None:
-                warn_archive_skip(display_name, "py7zr is unavailable")
-                return
-
-            seven_zip_source = archive_source if isinstance(archive_source, (str, Path)) else io.BytesIO(archive_source)
-            with py7zr.SevenZipFile(seven_zip_source, mode="r") as zf:
-                extracted_map = zf.readall()
-                for inner_name, bio in extracted_map.items():
-                    if inner_name.endswith("/") or "__MACOSX" in inner_name:
-                        continue
-                    nested_display_name = f"{display_name}::{inner_name}"
-                    try:
-                        buffer = bio.getbuffer()
-                        size_bytes = len(buffer)
-                        if size_bytes > MAX_ARCHIVE_MEMBER_BYTES:
-                            warn_archive_skip(nested_display_name, f"entry exceeds {MAX_ARCHIVE_MEMBER_BYTES} bytes")
-                            continue
-                        yield from handle_member(inner_name, bytes(buffer))
-                    except Exception as exc:
-                        logging.exception("Failed to read 7z entry: %s", nested_display_name)
-                        print(f"!! Failed to read 7z entry: {nested_display_name} ({exc})", file=sys.stderr, flush=True)
-            return
-    except Exception as exc:
-        logging.exception("Failed to open archive: %s", display_name)
-        print(f"!! Failed to open archive: {display_name} ({exc})", file=sys.stderr, flush=True)
-
-
-def iter_input_logs(input_directory: Path) -> Iterator[tuple[str, bytes]]:
-    for root, _, files in os.walk(input_directory):
-        for file_name in files:
-            file_path = Path(root) / file_name
-            archive_type = detect_archive_type(file_name)
-
-            if archive_type is not None:
-                if not has_supported_scan_extension(file_name):
-                    continue
-                yield from iter_candidate_bytes(file_path, str(file_path), file_path.name)
-                continue
-
-            if not is_candidate_log_name(file_name):
-                continue
-
-            try:
-                yield str(file_path), file_path.read_bytes()
-            except Exception as exc:
-                logging.exception("Failed to read log: %s", file_path)
-                print(f"!! Failed to read log: {file_path} ({exc})", file=sys.stderr, flush=True)
-
-
-def extract_config_lines_from_raw(raw_content: str) -> list[str]:
+def extract_config_lines_from_stream(lines_iterable) -> list[str]:
     extraction_started = False
     extracted_lines: list[str] = []
     current_file = None
 
-    for lineno, line in enumerate(raw_content.splitlines(), start=1):
+    for lineno, line in enumerate(lines_iterable, start=1):
+        line = line.rstrip("\r\n")
         if not extraction_started:
             if "Redacted Config" in line:
                 extraction_started = True
@@ -424,6 +249,230 @@ def extract_config_lines_from_raw(raw_content: str) -> list[str]:
     return extracted_lines
 
 
+def iter_candidate_configs(archive_source, display_name: str, archive_name: str, depth: int = 1) -> Iterator[tuple[str, list[str]]]:
+    if depth > MAX_ARCHIVE_RECURSION_DEPTH:
+        warn_archive_skip(display_name, f"nested archive depth exceeds {MAX_ARCHIVE_RECURSION_DEPTH}")
+        return
+
+    archive_type = detect_archive_type(archive_name)
+    if archive_type is None:
+        return
+
+    def handle_member_bytes(member_name: str, content_bytes: bytes) -> Iterator[tuple[str, list[str]]]:
+        base_name = os.path.basename(member_name.rstrip("/\\"))
+        if not base_name:
+            return
+
+        nested_display_name = f"{display_name}::{member_name}"
+        nested_archive_type = detect_archive_type(base_name)
+        if nested_archive_type is not None and has_supported_scan_extension(base_name):
+            yield from iter_candidate_configs(content_bytes, nested_display_name, base_name, depth + 1)
+            return
+
+        if not is_candidate_log_name(base_name):
+            return
+
+        with io.TextIOWrapper(io.BytesIO(content_bytes), encoding="utf-8", errors="replace") as text_reader:
+            yield nested_display_name, extract_config_lines_from_stream(text_reader)
+
+    try:
+        if archive_type == "gz":
+            if isinstance(archive_source, (str, Path)):
+                with gzip.open(archive_source, "rb") as gz_file:
+                    content_bytes = read_limited_bytes(gz_file, display_name)
+            else:
+                with gzip.GzipFile(fileobj=io.BytesIO(archive_source), mode="rb") as gz_file:
+                    content_bytes = read_limited_bytes(gz_file, display_name)
+
+            if content_bytes is None:
+                return
+
+            extracted_name = archive_name[:-3] if archive_name.lower().endswith(".gz") else archive_name
+            if not extracted_name:
+                return
+            nested_archive_type = detect_archive_type(extracted_name)
+            if nested_archive_type is not None and has_supported_scan_extension(extracted_name):
+                yield from handle_member_bytes(extracted_name, content_bytes)
+            elif is_candidate_log_name(extracted_name):
+                if isinstance(archive_source, (str, Path)):
+                    with gzip.open(archive_source, "rt", encoding="utf-8", errors="replace") as text_reader:
+                        yield f"{display_name}::{extracted_name}", extract_config_lines_from_stream(text_reader)
+                else:
+                    with gzip.GzipFile(fileobj=io.BytesIO(archive_source), mode="rb") as gz_file:
+                        with io.TextIOWrapper(gz_file, encoding="utf-8", errors="replace") as text_reader:
+                            yield f"{display_name}::{extracted_name}", extract_config_lines_from_stream(text_reader)
+            return
+
+        if archive_type == "zip":
+            zip_source = archive_source if isinstance(archive_source, (str, Path)) else io.BytesIO(archive_source)
+            with zipfile.ZipFile(zip_source) as zf:
+                for zi in zf.infolist():
+                    inner_name = zi.filename
+                    if zi.is_dir() or "__MACOSX" in inner_name:
+                        continue
+                    nested_display_name = f"{display_name}::{inner_name}"
+                    try:
+                        base_name = os.path.basename(inner_name.rstrip("/\\"))
+                        nested_archive_type = detect_archive_type(base_name)
+                        if nested_archive_type is not None and has_supported_scan_extension(base_name):
+                            with zf.open(zi, "r") as raw:
+                                content_bytes = read_limited_bytes(raw, nested_display_name, zi.file_size)
+                            if content_bytes is None:
+                                continue
+                            yield from handle_member_bytes(inner_name, content_bytes)
+                        elif is_candidate_log_name(base_name):
+                            if zi.file_size > MAX_ARCHIVE_MEMBER_BYTES:
+                                warn_archive_skip(nested_display_name, f"entry exceeds {MAX_ARCHIVE_MEMBER_BYTES} bytes")
+                                continue
+                            with zf.open(zi, "r") as raw, io.TextIOWrapper(raw, encoding="utf-8", errors="replace") as text_reader:
+                                yield nested_display_name, extract_config_lines_from_stream(text_reader)
+                    except Exception as exc:
+                        logging.exception("Failed to read zip entry: %s", nested_display_name)
+                        print(f"!! Failed to read zip entry: {nested_display_name} ({exc})", file=sys.stderr, flush=True)
+            return
+
+        if archive_type == "tar":
+            if isinstance(archive_source, (str, Path)):
+                tar_ctx = tarfile.open(archive_source, "r:*")
+            else:
+                tar_ctx = tarfile.open(fileobj=io.BytesIO(archive_source), mode="r:*")
+            with tar_ctx as tf:
+                for member in tf.getmembers():
+                    inner_name = member.name
+                    if not member.isfile() or "__MACOSX" in inner_name:
+                        continue
+                    nested_display_name = f"{display_name}::{inner_name}"
+                    try:
+                        base_name = os.path.basename(inner_name.rstrip("/\\"))
+                        nested_archive_type = detect_archive_type(base_name)
+                        extracted = tf.extractfile(member)
+                        if extracted is None:
+                            continue
+                        with extracted:
+                            if nested_archive_type is not None and has_supported_scan_extension(base_name):
+                                content_bytes = read_limited_bytes(extracted, nested_display_name, member.size)
+                                if content_bytes is None:
+                                    continue
+                                yield from handle_member_bytes(inner_name, content_bytes)
+                            elif is_candidate_log_name(base_name):
+                                if member.size > MAX_ARCHIVE_MEMBER_BYTES:
+                                    warn_archive_skip(nested_display_name, f"entry exceeds {MAX_ARCHIVE_MEMBER_BYTES} bytes")
+                                    continue
+                                with io.TextIOWrapper(extracted, encoding="utf-8", errors="replace") as text_reader:
+                                    yield nested_display_name, extract_config_lines_from_stream(text_reader)
+                    except Exception as exc:
+                        logging.exception("Failed to read tar entry: %s", nested_display_name)
+                        print(f"!! Failed to read tar entry: {nested_display_name} ({exc})", file=sys.stderr, flush=True)
+            return
+
+        if archive_type == "rar":
+            if rarfile is None:
+                warn_archive_skip(display_name, "rarfile is unavailable")
+                return
+            if ensure_rar_backend() is None:
+                warn_archive_skip(display_name, RAR_BACKEND_MISSING_MESSAGE)
+                return
+
+            temp_path = None
+            try:
+                rar_source = archive_source
+                if not isinstance(archive_source, (str, Path)):
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=".rar") as temp_file:
+                        temp_file.write(archive_source)
+                        temp_path = temp_file.name
+                    rar_source = temp_path
+
+                with rarfile.RarFile(rar_source) as rf:
+                    for member in rf.infolist():
+                        inner_name = member.filename
+                        if member.isdir() or "__MACOSX" in inner_name:
+                            continue
+                        nested_display_name = f"{display_name}::{inner_name}"
+                        try:
+                            base_name = os.path.basename(inner_name.rstrip("/\\"))
+                            nested_archive_type = detect_archive_type(base_name)
+                            with rf.open(member) as raw:
+                                if nested_archive_type is not None and has_supported_scan_extension(base_name):
+                                    content_bytes = read_limited_bytes(raw, nested_display_name, member.file_size)
+                                    if content_bytes is None:
+                                        continue
+                                    yield from handle_member_bytes(inner_name, content_bytes)
+                                elif is_candidate_log_name(base_name):
+                                    if member.file_size > MAX_ARCHIVE_MEMBER_BYTES:
+                                        warn_archive_skip(nested_display_name, f"entry exceeds {MAX_ARCHIVE_MEMBER_BYTES} bytes")
+                                        continue
+                                    with io.TextIOWrapper(raw, encoding="utf-8", errors="replace") as text_reader:
+                                        yield nested_display_name, extract_config_lines_from_stream(text_reader)
+                        except Exception as exc:
+                            logging.exception("Failed to read rar entry: %s", nested_display_name)
+                            print(f"!! Failed to read rar entry: {nested_display_name} ({exc})", file=sys.stderr, flush=True)
+            finally:
+                if temp_path:
+                    try:
+                        os.unlink(temp_path)
+                    except OSError:
+                        pass
+            return
+
+        if archive_type == "7z":
+            if py7zr is None:
+                warn_archive_skip(display_name, "py7zr is unavailable")
+                return
+
+            seven_zip_source = archive_source if isinstance(archive_source, (str, Path)) else io.BytesIO(archive_source)
+            with py7zr.SevenZipFile(seven_zip_source, mode="r") as zf:
+                extracted_map = zf.readall()
+                for inner_name, bio in extracted_map.items():
+                    if inner_name.endswith("/") or "__MACOSX" in inner_name:
+                        continue
+                    nested_display_name = f"{display_name}::{inner_name}"
+                    try:
+                        buffer = bio.getbuffer()
+                        size_bytes = len(buffer)
+                        if size_bytes > MAX_ARCHIVE_MEMBER_BYTES:
+                            warn_archive_skip(nested_display_name, f"entry exceeds {MAX_ARCHIVE_MEMBER_BYTES} bytes")
+                            continue
+                        yield from handle_member_bytes(inner_name, bytes(buffer))
+                    except Exception as exc:
+                        logging.exception("Failed to read 7z entry: %s", nested_display_name)
+                        print(f"!! Failed to read 7z entry: {nested_display_name} ({exc})", file=sys.stderr, flush=True)
+            return
+    except Exception as exc:
+        logging.exception("Failed to open archive: %s", display_name)
+        print(f"!! Failed to open archive: {display_name} ({exc})", file=sys.stderr, flush=True)
+
+
+def iter_input_logs(input_directory: Path) -> Iterator[tuple[str, list[str]]]:
+    for root, _, files in os.walk(input_directory):
+        for file_name in files:
+            file_path = Path(root) / file_name
+            archive_type = detect_archive_type(file_name)
+
+            if archive_type is not None:
+                if not has_supported_scan_extension(file_name):
+                    continue
+                yield from iter_candidate_configs(file_path, str(file_path), file_path.name)
+                continue
+
+            if not is_candidate_log_name(file_name):
+                continue
+
+            try:
+                size_bytes = file_path.stat().st_size
+                if size_bytes > MAX_ARCHIVE_MEMBER_BYTES:
+                    warn_archive_skip(str(file_path), f"entry exceeds {MAX_ARCHIVE_MEMBER_BYTES} bytes")
+                    continue
+                with file_path.open("r", encoding="utf-8", errors="replace") as text_reader:
+                    yield str(file_path), extract_config_lines_from_stream(text_reader)
+            except Exception as exc:
+                logging.exception("Failed to read log: %s", file_path)
+                print(f"!! Failed to read log: {file_path} ({exc})", file=sys.stderr, flush=True)
+
+
+def extract_config_lines_from_raw(raw_content: str) -> list[str]:
+    return extract_config_lines_from_stream(raw_content.splitlines())
+
+
 def strip_one_leading_space_each_line(text: str) -> str:
     return "\n".join(line[1:] if line.startswith(" ") else line for line in text.splitlines())
 
@@ -457,14 +506,12 @@ def build_output_filename(source_name: str) -> str:
     return f"parsed_{readable}_{digest}.yml"
 
 
-def process_log_source(source_name: str, content_bytes: bytes, output_directory: Path, force: bool) -> str:
+def process_log_source(source_name: str, config_lines: list[str], output_directory: Path, force: bool) -> str:
     output_path = output_directory / build_output_filename(source_name)
     if output_path.exists() and not force:
         logging.info("Skipping already extracted config: %s -> %s", source_name, output_path.name)
         return "skipped_existing"
 
-    raw_content = decode_bytes_with_fallback(content_bytes)
-    config_lines = extract_config_lines_from_raw(raw_content)
     if not config_lines:
         logging.info("No config block found in %s", source_name)
         return "no_config"

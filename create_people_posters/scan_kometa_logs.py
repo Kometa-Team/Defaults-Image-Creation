@@ -139,7 +139,7 @@ def extract_filename_from_url(url):
 
 HEARTBEAT_SECS = 1.0  # print a tiny heartbeat while scanning large files
 MAX_ARCHIVE_RECURSION_DEPTH = 3
-MAX_ARCHIVE_MEMBER_BYTES = 100 * 1024 * 1024
+MAX_ARCHIVE_MEMBER_BYTES = 500 * 1024 * 1024
 RAR_BACKEND_MISSING_MESSAGE = "RAR backend not found (install UnRAR or 7-Zip, or add it to PATH)"
 _RAR_BACKEND_CHECKED = False
 _RAR_BACKEND_PATH: str | None = None
