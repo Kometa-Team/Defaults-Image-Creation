@@ -51,6 +51,7 @@ from pathlib import Path
 from typing import Optional, Tuple
 
 CATEGORIES = ["bw", "diiivoy", "diiivoycolor", "rainier", "original", "signature", "transparent"]
+MIN_BATCH_HEADROOM_BYTES = 64 * 1024 * 1024
 
 
 def format_bytes(size: int) -> str:
@@ -64,6 +65,15 @@ def format_bytes(size: int) -> str:
 
 def safe_console(text: str) -> str:
     return text.encode("ascii", "backslashreplace").decode("ascii")
+
+
+def effective_batch_limit(max_push_bytes: int) -> int:
+    if max_push_bytes <= 0:
+        return 0
+    headroom = max(MIN_BATCH_HEADROOM_BYTES, int(max_push_bytes * 0.05))
+    if headroom >= max_push_bytes:
+        return max_push_bytes
+    return max_push_bytes - headroom
 
 
 def run(cmd, cwd: Path, dry: bool, capture=False) -> Tuple[int, str, str]:
@@ -176,6 +186,7 @@ def chunked(items: list[str], size: int) -> list[list[str]]:
 
 def build_path_batches(repo: Path, paths: list[str], max_push_bytes: int) -> Tuple[bool, list[tuple[list[str], int]], Optional[tuple[str, int]]]:
     normalized = sorted(set(paths), key=lambda item: item.lower())
+    batch_limit = effective_batch_limit(max_push_bytes)
     sized_paths: list[tuple[str, int]] = []
     for rel_path in normalized:
         abs_path = repo / rel_path
@@ -191,7 +202,7 @@ def build_path_batches(repo: Path, paths: list[str], max_push_bytes: int) -> Tup
     current_paths: list[str] = []
     current_bytes = 0
     for rel_path, file_size in sized_paths:
-        if current_paths and current_bytes + file_size > max_push_bytes:
+        if current_paths and current_bytes + file_size > batch_limit:
             batches.append((current_paths, current_bytes))
             current_paths = [rel_path]
             current_bytes = file_size
@@ -252,9 +263,11 @@ def commit_batches(repo: Path, branch: str, message: str, dry: bool, max_push_by
         print("  (nothing to commit)")
         return 0
 
+    batch_limit = effective_batch_limit(max_push_bytes)
     total_batches = len(batches)
     print(
-        f"[INFO] Creating {total_batches} push batch(es) under the {format_bytes(max_push_bytes)} limit."
+        f"[INFO] Creating {total_batches} push batch(es) with a {format_bytes(batch_limit)} working-set target "
+        f"to stay below the {format_bytes(max_push_bytes)} push limit."
     )
     for idx, (batch_paths, batch_bytes) in enumerate(batches, start=1):
         if not stage_paths(repo, batch_paths, dry):
