@@ -176,14 +176,44 @@ def marker_exists(marker: Optional[Path]) -> bool:
     return bool(marker and marker.exists())
 
 
-def run_cmd(title: str, argv: List[str], capture: bool = False) -> Tuple[int, Optional[str], Optional[str]]:
-    """Run a subprocess; return (rc, stdout, stderr) if capture else (rc, None, None)."""
+def run_cmd(
+    title: str,
+    argv: List[str],
+    capture: bool = False,
+    log_path: Optional[Path] = None,
+) -> Tuple[int, Optional[str], Optional[str]]:
+    """Run a subprocess; optionally tee combined output to a log file."""
     print(f"\n=== {title} ===")
     print("→", " ".join(shlex.quote(a) for a in argv))
     try:
         if capture:
             cp = subprocess.run(argv, cwd=str(SCRIPT_DIR), text=True, capture_output=True)
+            if log_path:
+                log_path.parent.mkdir(parents=True, exist_ok=True)
+                combined = (cp.stdout or "")
+                if cp.stderr:
+                    if combined and not combined.endswith("\n"):
+                        combined += "\n"
+                    combined += cp.stderr
+                log_path.write_text(combined, encoding="utf-8")
             return cp.returncode, (cp.stdout or ""), (cp.stderr or "")
+        if log_path:
+            log_path.parent.mkdir(parents=True, exist_ok=True)
+            with log_path.open("w", encoding="utf-8", errors="replace") as handle:
+                cp = subprocess.Popen(
+                    argv,
+                    cwd=str(SCRIPT_DIR),
+                    text=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                )
+                assert cp.stdout is not None
+                for line in cp.stdout:
+                    print(line, end="")
+                    handle.write(line)
+                cp.stdout.close()
+                rc = cp.wait()
+            return rc, None, None
         else:
             cp = subprocess.run(argv, cwd=str(SCRIPT_DIR))
             return cp.returncode, None, None
