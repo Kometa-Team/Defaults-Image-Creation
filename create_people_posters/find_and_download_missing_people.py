@@ -498,6 +498,47 @@ def iter_log_contents(input_directory: Path) -> Iterator[Tuple[str, str]]:
                 print(f"!! Failed to read log: {file_path}", file=sys.stderr, flush=True)
 
 
+def collect_top_level_log_candidates(input_directory: Path) -> List[Path]:
+    candidate_files: List[Path] = []
+    write_to_log_file(f"Counting top-level files under {input_directory}")
+    print(f"Counting top-level files under {input_directory} ...", flush=True)
+
+    for root, _, files in os.walk(input_directory):
+        for file_name in files:
+            file_path = Path(root) / file_name
+            archive_type = detect_archive_type(file_name)
+
+            if archive_type is not None:
+                if not has_supported_log_extension(file_name):
+                    continue
+            elif not is_candidate_log_name(file_name):
+                continue
+
+            candidate_files.append(file_path)
+            heartbeat(f"Counting top-level files: {len(candidate_files)} found so far ...")
+
+    return candidate_files
+
+
+def iter_log_contents_from_path(file_path: Path) -> Iterator[Tuple[str, str]]:
+    archive_type = detect_archive_type(file_path.name)
+
+    if archive_type is not None:
+        if not has_supported_log_extension(file_path.name):
+            return
+        yield from iter_archive_texts(file_path, str(file_path), file_path.name)
+        return
+
+    if not is_candidate_log_name(file_path.name):
+        return
+
+    try:
+        yield str(file_path), file_path.read_text(encoding="utf-8", errors="replace")
+    except Exception:
+        log.exception("Failed to read log: %s", file_path)
+        print(f"!! Failed to read log: {file_path}", file=sys.stderr, flush=True)
+
+
 def download_file(url: str, destination: Path) -> bool:
     try:
         r = requests.get(url)  # timeout + retries injected above
@@ -671,7 +712,8 @@ def main():
     DEFAULT_BRANCH = os.getenv("GETMISSING_BRANCH", "master")
 
     parser = argparse.ArgumentParser(description="Kometa Missing People Downloader")
-    parser.add_argument("--input_directory", type=str, help="Kometa logs folder location")
+    parser.add_argument("--input", dest="input_directory", type=str, help="Alias for --input_directory")
+    parser.add_argument("--input_directory", dest="input_directory", type=str, help="Kometa logs folder location")
     parser.add_argument("--styles", type=str, default=",".join(DEFAULT_STYLES),
                         help="Comma list of People-Images styles to check (default from GETMISSING_STYLES or 'bw')")
     parser.add_argument("--branch", type=str, default=DEFAULT_BRANCH,
@@ -702,34 +744,51 @@ def main():
     names_from_warnings: Set[str] = set()
 
     try:
-        input_items = iter_log_contents(input_directory)
-        for i, (item_name, content) in enumerate(input_items, 1):
-            try:
-                write_to_log_file(f"Working on: {item_name}")
-                print(f"Reading {item_name} ({i}) …", flush=True)
+        candidate_files = collect_top_level_log_candidates(input_directory)
+        total_candidate_files = len(candidate_files)
+        write_to_log_file(
+            f"Found {total_candidate_files} top-level file(s) to scan. Nested archive members are not included in this count."
+        )
+        print(
+            f"Found {total_candidate_files} top-level file(s) to scan. "
+            "Nested archive members are not included in this count.",
+            flush=True,
+        )
 
-                # heartbeat while parsing (useful on very large logs)
-                heartbeat(f"Parsing {item_name} …")
+        item_index = 0
+        for top_level_index, file_path in enumerate(candidate_files, 1):
+            progress_prefix = f"[{top_level_index}/{total_candidate_files}]"
+            write_to_log_file(f"{progress_prefix} Scanning {file_path}")
+            print(f"{progress_prefix} Scanning {file_path}", flush=True)
+            input_items = iter_log_contents_from_path(file_path)
+            for item_name, content in input_items:
+                item_index += 1
+                try:
+                    write_to_log_file(f"Working on: {item_name}")
+                    print(f"Reading {item_name} ({item_index}) …", flush=True)
 
-                all_convert_warns.extend(extract_convert_warning(content.splitlines()))
+                    # heartbeat while parsing (useful on very large logs)
+                    heartbeat(f"{progress_prefix} Parsing {item_name} …")
 
-                # Gather URLs from both patterns (update + found/not-updated)
-                block_map = parse_tmdb_blocks(content)  # name -> url
-                total_matches += len(block_map)
+                    all_convert_warns.extend(extract_convert_warning(content.splitlines()))
 
-                # merge (first wins per name)
-                for n, u in block_map.items():
-                    name_to_url.setdefault(n, u)
+                    # Gather URLs from both patterns (update + found/not-updated)
+                    block_map = parse_tmdb_blocks(content)  # name -> url
+                    total_matches += len(block_map)
 
-                # gather names-only from No Poster Found warnings
-                names_from_warnings |= parse_no_poster_warnings(content)
+                    # merge (first wins per name)
+                    for n, u in block_map.items():
+                        name_to_url.setdefault(n, u)
 
-                if not block_map:
-                    write_to_log_file("0 items found...")
-            except Exception as exc:
-                log.exception("Failed while processing %s", item_name)
-                print(f"!! Failed while processing {item_name} ({exc})", file=sys.stderr, flush=True)
-                continue
+                    # gather names-only from No Poster Found warnings
+                    names_from_warnings |= parse_no_poster_warnings(content)
+
+                    if not block_map:
+                        write_to_log_file("0 items found...")
+                except Exception as exc:
+                    log.exception("Failed while processing %s", item_name)
+                    print(f"!! Failed while processing {item_name} ({exc})", file=sys.stderr, flush=True)
+                    continue
     except OSError as exc:
         write_to_log_file(f"Failed to enumerate logs in {input_directory}: {exc}")
         print(f'Failed to enumerate logs in "{input_directory}": {exc}')

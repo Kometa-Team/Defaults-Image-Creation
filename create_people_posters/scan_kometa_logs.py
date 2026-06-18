@@ -532,6 +532,33 @@ def _scan_archive_text_stream(fobj: io.TextIOBase, warning_regex: re.Pattern, pr
     )
 
 
+def _collect_candidate_files(folder_path: Path, acceptable_extensions: list[str], is_acceptable_file) -> list[Path]:
+    candidate_files: list[Path] = []
+    last_print = time.time()
+
+    logging.info("Counting top-level files under %s", folder_path)
+    print(f"Counting top-level files under {folder_path} ...")
+
+    for root, _, files in os.walk(folder_path):
+        for file_name in files:
+            file_path = Path(root) / file_name
+            archive_type = _detect_archive_type(file_name)
+
+            if archive_type is not None:
+                if not _has_supported_extension(file_name, acceptable_extensions):
+                    continue
+            elif not is_acceptable_file(file_name):
+                continue
+
+            candidate_files.append(file_path)
+            now = time.time()
+            if now - last_print >= HEARTBEAT_SECS:
+                print(f"Counting top-level files: {len(candidate_files)} found so far ...")
+                last_print = now
+
+    return candidate_files
+
+
 def scan_text_files(folder_path):
     hits = {}
     candidate_names = set()
@@ -555,56 +582,61 @@ def scan_text_files(folder_path):
         r"(.+?)\s+"
     )
 
-    for root, _, files in os.walk(folder_path):
-        for file in files:
-            file_path = Path(root) / file
-            archive_type = _detect_archive_type(file)
+    candidate_files = _collect_candidate_files(folder_path, acceptable_extensions, is_acceptable_file)
+    total_candidate_files = len(candidate_files)
+    logging.info(
+        "Found %d top-level file(s) to scan. Nested archive members are not included in this count.",
+        total_candidate_files,
+    )
+    print(
+        f"Found {total_candidate_files} top-level file(s) to scan. "
+        "Nested archive members are not included in this count."
+    )
 
-            # Plain files keep the original (name + extension) rule.
-            # Archives are accepted by extension alone so we do not miss
-            # meta/message files stored inside a generically named zip/gz.
-            if archive_type is not None:
-                if not _has_supported_extension(file, acceptable_extensions):
-                    continue
-            elif not is_acceptable_file(file):
-                continue
+    for top_level_index, file_path in enumerate(candidate_files, start=1):
+        archive_type = _detect_archive_type(file_path.name)
+        progress_prefix = f"[{top_level_index}/{total_candidate_files}]"
 
-            logging.info(f"Scanning {file_path}")
-            print(f"Scanning {file_path}")
+        logging.info("%s Scanning %s", progress_prefix, file_path)
+        print(f"{progress_prefix} Scanning {file_path}")
 
-            if archive_type is not None:
-                for nested_name, content, size_bytes in _iter_archive_texts(
-                    file_path,
-                    str(file_path),
-                    file_path.name,
-                    acceptable_extensions,
-                    is_acceptable_file,
+        if archive_type is not None:
+            for nested_name, content, size_bytes in _iter_archive_texts(
+                file_path,
+                str(file_path),
+                file_path.name,
+                acceptable_extensions,
+                is_acceptable_file,
+                warning_regex,
+                hits,
+            ):
+                count = _scan_archive_text_stream(
+                    io.StringIO(content),
                     warning_regex,
-                    hits,
-                ):
-                    count = _scan_archive_text_stream(
-                        io.StringIO(content),
-                        warning_regex,
-                        progress_label=f"Reading {nested_name}",
-                        size_bytes=size_bytes,
-                        hits=hits,
-                    )
-                    logging.info(f"Processed {nested_name}, found {count} hits.")
-                    print(f"Processed {nested_name}, found {count} hits.")
-                continue
+                    progress_label=f"{progress_prefix} Reading {nested_name}",
+                    size_bytes=size_bytes,
+                    hits=hits,
+                )
+                logging.info(f"Processed {nested_name}, found {count} hits.")
+                print(f"Processed {nested_name}, found {count} hits.")
+            continue
 
-            # --- Plain text (streaming, with heartbeat) ---
-            try:
-                size_bytes = _safe_getsize(file_path)
-                with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
-                    count = _process_stream_line_by_line(
-                        f, warning_regex, progress_label=f"Reading {file_path}", size_bytes=size_bytes, hits=hits
-                    )
-                logging.info(f"Processed {file_path}, found {count} hits.")
-                print(f"Processed {file_path}, found {count} hits.")
-            except Exception as e:
-                logging.exception("Failed to read file: %s", file_path)
-                print(f"!! Failed to read file: {file_path} ({e})", file=sys.stderr)
+        # --- Plain text (streaming, with heartbeat) ---
+        try:
+            size_bytes = _safe_getsize(file_path)
+            with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
+                count = _process_stream_line_by_line(
+                    f,
+                    warning_regex,
+                    progress_label=f"{progress_prefix} Reading {file_path}",
+                    size_bytes=size_bytes,
+                    hits=hits,
+                )
+            logging.info(f"Processed {file_path}, found {count} hits.")
+            print(f"Processed {file_path}, found {count} hits.")
+        except Exception as e:
+            logging.exception("Failed to read file: %s", file_path)
+            print(f"!! Failed to read file: {file_path} ({e})", file=sys.stderr)
 
     sorted_hits = sorted(hits.items(), key=lambda x: x[0])
 
@@ -652,7 +684,13 @@ def main():
         description="Scan text files for missing posters in Plex collections."
     )
     parser.add_argument(
+        "--input",
+        dest="input_directory",
+        help="Alias for --input_directory.",
+    )
+    parser.add_argument(
         "--input_directory",
+        dest="input_directory",
         help="Directory to scan. If omitted, you will be prompted.",
     )
     args = parser.parse_args()

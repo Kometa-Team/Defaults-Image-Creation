@@ -21,6 +21,7 @@ import shutil
 import sys
 import tarfile
 import tempfile
+import time
 import zipfile
 from logging import FileHandler, StreamHandler
 from pathlib import Path
@@ -52,6 +53,7 @@ TEXT_EXTENSIONS = {
 ARCHIVE_EXTENSIONS = {".zip", ".tar", ".tar.gz", ".gz", ".rar", ".7z"}
 MAX_ARCHIVE_RECURSION_DEPTH = 3
 MAX_ARCHIVE_MEMBER_BYTES = 500 * 1024 * 1024
+HEARTBEAT_SECS = 1.0
 MAX_CAPTURE_LINES = 10000
 SCHEMA_URL = "https://raw.githubusercontent.com/kometa-team/kometa/nightly/json-schema/config-schema.json"
 RAR_BACKEND_MISSING_MESSAGE = "RAR backend not found (install UnRAR or 7-Zip, or add it to PATH)"
@@ -464,6 +466,53 @@ def iter_input_logs(input_directory: Path) -> Iterator[tuple[str, list[str]]]:
                 print(f"!! Failed to read log: {file_path} ({exc})", file=sys.stderr, flush=True)
 
 
+def _collect_input_candidates(input_directory: Path) -> list[Path]:
+    candidate_files: list[Path] = []
+    last_print = time.time()
+
+    logging.info("Counting top-level files under %s", input_directory)
+    print(f"Counting top-level files under {input_directory} ...")
+
+    for root, _, files in os.walk(input_directory):
+        for file_name in files:
+            file_path = Path(root) / file_name
+            archive_type = detect_archive_type(file_name)
+
+            if archive_type is not None:
+                if not has_supported_scan_extension(file_name):
+                    continue
+            elif not is_candidate_log_name(file_name):
+                continue
+
+            candidate_files.append(file_path)
+            now = time.time()
+            if now - last_print >= HEARTBEAT_SECS:
+                print(f"Counting top-level files: {len(candidate_files)} found so far ...")
+                last_print = now
+
+    return candidate_files
+
+
+def iter_input_logs_from_path(file_path: Path) -> Iterator[tuple[str, list[str]]]:
+    archive_type = detect_archive_type(file_path.name)
+
+    if archive_type is not None:
+        if not has_supported_scan_extension(file_path.name):
+            return
+        yield from iter_candidate_configs(file_path, str(file_path), file_path.name)
+        return
+
+    if not is_candidate_log_name(file_path.name):
+        return
+
+    try:
+        with file_path.open("r", encoding="utf-8", errors="replace") as text_reader:
+            yield str(file_path), extract_config_lines_from_stream(text_reader)
+    except Exception as exc:
+        logging.exception("Failed to read log: %s", file_path)
+        print(f"!! Failed to read log: {file_path} ({exc})", file=sys.stderr, flush=True)
+
+
 def extract_config_lines_from_raw(raw_content: str) -> list[str]:
     return extract_config_lines_from_stream(raw_content.splitlines())
 
@@ -529,7 +578,8 @@ def main() -> None:
     setup_logging()
 
     parser = argparse.ArgumentParser(description="Bulk extract Kometa config sections from mess/meta logs and archives.")
-    parser.add_argument("--input_directory", help="Directory tree containing Kometa logs and/or archives.")
+    parser.add_argument("--input", dest="input_directory", help="Alias for --input_directory.")
+    parser.add_argument("--input_directory", dest="input_directory", help="Directory tree containing Kometa logs and/or archives.")
     parser.add_argument(
         "--output_directory",
         default=str(DEFAULT_OUTPUT_DIR),
@@ -559,9 +609,24 @@ def main() -> None:
         "no_config": 0,
     }
 
-    for source_name, content_bytes in iter_input_logs(input_directory):
-        result = process_log_source(source_name, content_bytes, output_directory, args.force)
-        counts[result] = counts.get(result, 0) + 1
+    candidate_files = _collect_input_candidates(input_directory)
+    total_candidate_files = len(candidate_files)
+    logging.info(
+        "Found %d top-level file(s) to scan. Nested archive members are not included in this count.",
+        total_candidate_files,
+    )
+    print(
+        f"Found {total_candidate_files} top-level file(s) to scan. "
+        "Nested archive members are not included in this count."
+    )
+
+    for top_level_index, file_path in enumerate(candidate_files, start=1):
+        progress_prefix = f"[{top_level_index}/{total_candidate_files}]"
+        logging.info("%s Scanning %s", progress_prefix, file_path)
+        print(f"{progress_prefix} Scanning {file_path}")
+        for source_name, content_bytes in iter_input_logs_from_path(file_path):
+            result = process_log_source(source_name, content_bytes, output_directory, args.force)
+            counts[result] = counts.get(result, 0) + 1
 
     print(
         "Done. "
