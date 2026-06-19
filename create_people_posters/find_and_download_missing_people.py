@@ -23,6 +23,8 @@ CLI
 ---
 python find_and_download_missing_people.py --input_directory "/path/to/kometa/logs"
   [--styles bw,transparent] [--branch master] [--no-downloads]
+python find_and_download_missing_people.py --resume-downloads
+  [--resume-csv ./config/Downloads/missing_with_urls.csv]
 
 Env (optional)
 --------------
@@ -180,6 +182,14 @@ def _normalize_name(name: str) -> str:
     for suffix in (" (Director)", " (Producer)", " (Writer)", "'s Birthday"):
         name = name.replace(suffix, "")
     return name.strip()
+
+
+def sanitize_filename(name: str) -> str:
+    """
+    Make a filesystem-safe filename on Windows while keeping the display name readable.
+    """
+    sanitized = re.sub(r'[<>:"/\\|?*\x00-\x1f]', "_", name).strip().rstrip(". ")
+    return sanitized or "unnamed"
 
 
 def is_text_file(p: Path) -> bool:
@@ -554,6 +564,63 @@ def download_file(url: str, destination: Path) -> bool:
     return True
 
 
+def read_missing_with_urls_csv(csv_path: Path) -> List[Tuple[str, str]]:
+    items: List[Tuple[str, str]] = []
+    if not csv_path.exists():
+        raise FileNotFoundError(f"CSV not found: {csv_path}")
+
+    with csv_path.open("r", encoding="utf-8", newline="") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            name = _normalize_name((row.get("name") or "").strip())
+            url = (row.get("url") or "").strip()
+            if name and url:
+                items.append((name, url))
+    return items
+
+
+def route_downloaded_image(temp_path: Path) -> Path:
+    mode = determine_image_mode(temp_path)
+    subfolder = "color" if mode == "RGB" else "other"
+    final_dir = DOWNLOADS_DIR / subfolder
+    final_dir.mkdir(parents=True, exist_ok=True)
+    final_path = final_dir / temp_path.name
+    if final_path.exists():
+        final_path.unlink()
+    temp_path.rename(final_path)
+    write_to_download_log(f"Image mode: {mode} → {final_path}")
+    return final_path
+
+
+def process_download_batch(missing_with_urls: List[Tuple[str, str]]) -> Tuple[int, int]:
+    new_downloads = 0
+    skipped_existing = 0
+
+    for idx, (n, url) in enumerate(missing_with_urls, 1):
+        heartbeat(f"Downloading {idx}/{len(missing_with_urls)} …")
+        ext = Path(url).suffix or ".jpg"
+        safe_name = sanitize_filename(n)
+        temp_path = DOWNLOADS_DIR / f"{safe_name}{ext}"
+        color_path = DOWNLOADS_DIR / "color" / temp_path.name
+        other_path = DOWNLOADS_DIR / "other" / temp_path.name
+
+        if color_path.exists() or other_path.exists():
+            skipped_existing += 1
+            write_to_download_log(f"Skipping existing download: {n} → {color_path if color_path.exists() else other_path}")
+            continue
+
+        if temp_path.exists():
+            route_downloaded_image(temp_path)
+            skipped_existing += 1
+            continue
+
+        if download_file(url, temp_path) and temp_path.exists():
+            route_downloaded_image(temp_path)
+            new_downloads += 1
+
+    return new_downloads, skipped_existing
+
+
 def determine_image_mode(image_path: Path) -> str:
     """Return 'RGB' or 'Grayscale' (anything not RGB = Grayscale for our routing)."""
     with Image.open(image_path) as img:
@@ -720,28 +787,34 @@ def main():
                         help="Branch to read READMEs from (default from GETMISSING_BRANCH or 'master')")
     parser.add_argument("--no-downloads", action="store_true",
                         help="Only report names; do not download images")
+    parser.add_argument("--resume-downloads", action="store_true",
+                        help="Skip log scanning and resume downloads from missing_with_urls.csv")
+    parser.add_argument("--resume-csv", type=str, default=str(MISSING_WITH_URLS_CSV),
+                        help="CSV used with --resume-downloads (default: ./config/Downloads/missing_with_urls.csv)")
     args = parser.parse_args()
-
-    input_directory = Path(args.input_directory) if args.input_directory else None
-    if not input_directory or not input_directory.exists():
-        print(f'Logs location "{input_directory}" not found. Exiting now...')
-        sys.exit(1)
 
     styles = [s.strip() for s in args.styles.split(",") if s.strip()]
     branch = args.branch
     DO_DOWNLOADS = not args.no_downloads
+    resume_downloads = args.resume_downloads
+    input_directory = Path(args.input_directory) if args.input_directory else None
 
     write_to_log_file("#### START ####")
-
-    try:
-        CONVERT_WARN_FILE.write_text("", encoding="utf-8")
-    except OSError:
-        write_to_log_file(f"Failed to reset {CONVERT_WARN_FILE.name}")
+    if resume_downloads:
+        write_to_log_file("Resume mode enabled: skipping log scan and loading download list from CSV.")
+    elif not input_directory or not input_directory.exists():
+        print(f'Logs location "{input_directory}" not found. Exiting now...')
+        sys.exit(1)
 
     total_matches = 0
+    missing_with_urls: List[Tuple[str, str]] = []
+    missing_no_url: List[str] = []
     all_convert_warns: List[str] = []
     name_to_url: Dict[str, str] = {}
     names_from_warnings: Set[str] = set()
+
+    if resume_downloads:
+        input_directory = DOWNLOADS_DIR
 
     try:
         candidate_files = collect_top_level_log_candidates(input_directory)
@@ -839,31 +912,23 @@ def main():
     else:
         write_to_log_file("No missing names detected (everything appears present online).")
 
+    if resume_downloads:
+        resume_csv = Path(args.resume_csv)
+        missing_with_urls = read_missing_with_urls_csv(resume_csv)
+        missing_no_url = []
+        write_to_log_file(f"Loaded {len(missing_with_urls)} download item(s) from {resume_csv}")
+
     # Optional downloads (non-RGB => other/)
     new_downloads = 0
+    skipped_existing = 0
     if DO_DOWNLOADS and missing_with_urls:
-        for idx, (n, url) in enumerate(missing_with_urls, 1):
-            heartbeat(f"Downloading {idx}/{len(missing_with_urls)} …")
-            ext = Path(url).suffix or ".jpg"
-            safe_name = n  # already normalized
-            temp_path = DOWNLOADS_DIR / f"{safe_name}{ext}"
-            if download_file(url, temp_path):
-                if temp_path.exists():
-                    mode = determine_image_mode(temp_path)
-                    subfolder = "color" if mode == "RGB" else "other"
-                    final_dir = DOWNLOADS_DIR / subfolder
-                    final_dir.mkdir(parents=True, exist_ok=True)
-                    final_path = final_dir / temp_path.name
-                    if final_path.exists():
-                        final_path.unlink()
-                    temp_path.rename(final_path)
-                    write_to_download_log(f"Image mode: {mode} → {final_path}")
-                    new_downloads += 1
+        new_downloads, skipped_existing = process_download_batch(missing_with_urls)
 
     # Summaries for orchestrator early-exit logic
     write_to_log_file(f"TOTAL_LOG_MATCHES={total_matches}")
     write_to_log_file(f"TOTAL_MISSING_NAMES={len(missing_with_urls) + len(missing_no_url)}")
     write_to_log_file(f"TOTAL_NEW_DOWNLOADS={new_downloads}")
+    write_to_log_file(f"TOTAL_SKIPPED_EXISTING_DOWNLOADS={skipped_existing}")
 
     if total_matches == 0:
         write_to_log_file("0 items found overall.")
