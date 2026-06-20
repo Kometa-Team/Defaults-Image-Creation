@@ -674,6 +674,7 @@ PAT_UPDATED = re.compile(
     r"[\s\S]*?Finished\s+(.*?)\s+Collection",
     re.IGNORECASE
 )
+PAT_UPDATED_DETAIL = re.compile(r"Detail:\s*tmdb_person updated poster to \[URL\]\s*(https[^\s|]+)", re.IGNORECASE)
 
 # Anthony Mann case: poster found via TMDB but metadata update not needed
 PAT_FOUND = re.compile(
@@ -742,15 +743,31 @@ def parse_tmdb_blocks(text: str) -> Dict[str, str]:
     Covers both 'updated poster' and 'found but not updated' cases.
     """
     out: Dict[str, str] = {}
-    write_to_log_file("Starting PAT_UPDATED regex pass")
-    print("Starting PAT_UPDATED regex pass …", flush=True)
-    stop_event, thread, started = start_progress_notifier("PAT_UPDATED regex pass")
-    updated_matches = PAT_UPDATED.findall(text)
+    updated_matches = []
+    candidate_url: str | None = None
+
+    write_to_log_file("Starting PAT_UPDATED streaming pass")
+    print("Starting PAT_UPDATED streaming pass …", flush=True)
+    stop_event, thread, started = start_progress_notifier("PAT_UPDATED streaming pass")
+    for line in text.splitlines():
+        match = PAT_UPDATED_DETAIL.search(line)
+        if match:
+            candidate_url = match.group(1)
+            continue
+
+        if candidate_url is None:
+            continue
+
+        match = PAT_FINISHED_COLLECTION.search(line)
+        if match:
+            updated_matches.append((candidate_url, match.group(1)))
+            candidate_url = None
+
     stop_progress_notifier(
         stop_event,
         thread,
         started,
-        "PAT_UPDATED regex pass",
+        "PAT_UPDATED streaming pass",
         f"{len(updated_matches)} raw match(es)",
     )
     for url, name in updated_matches:
