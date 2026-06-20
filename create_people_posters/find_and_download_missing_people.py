@@ -45,6 +45,8 @@ import zipfile
 import tarfile
 import shutil
 import tempfile
+import threading
+import time
 from logging import FileHandler, StreamHandler
 from pathlib import Path
 from typing import Iterator, List, Tuple, Dict, Set
@@ -178,6 +180,38 @@ def write_to_download_log(message: str) -> None:
 
 
 # ---------------- helpers ----------------
+def start_progress_notifier(label: str, every_sec: float = 30.0) -> Tuple[threading.Event, threading.Thread, float]:
+    started = time.perf_counter()
+    stop_event = threading.Event()
+
+    def _worker() -> None:
+        while not stop_event.wait(every_sec):
+            elapsed = time.perf_counter() - started
+            message = f"{label} still running... {elapsed:.0f}s elapsed"
+            write_to_log_file(message)
+            print(message, flush=True)
+
+    thread = threading.Thread(target=_worker, name="progress-notifier", daemon=True)
+    thread.start()
+    return stop_event, thread, started
+
+
+def stop_progress_notifier(
+    stop_event: threading.Event,
+    thread: threading.Thread,
+    started: float,
+    label: str,
+    result_summary: str = "",
+) -> float:
+    stop_event.set()
+    thread.join(timeout=0.2)
+    elapsed = time.perf_counter() - started
+    summary = f" ({result_summary})" if result_summary else ""
+    write_to_log_file(f"{label} finished in {elapsed:.2f}s{summary}")
+    print(f"{label} finished in {elapsed:.2f}s{summary}", flush=True)
+    return elapsed
+
+
 def _normalize_name(name: str) -> str:
     for suffix in (" (Director)", " (Producer)", " (Writer)", "'s Birthday"):
         name = name.replace(suffix, "")
@@ -647,6 +681,9 @@ PAT_FOUND = re.compile(
     r"[\s\S]*?Finished\s+(.*?)\s+Collection",
     re.IGNORECASE
 )
+PAT_FOUND_START = re.compile(r"1\s+poster\s+found:", re.IGNORECASE)
+PAT_FOUND_TMDB_POSTER = re.compile(r"Method:\s*tmdb_person\s*Poster:\s*(https[^\s|]+)", re.IGNORECASE)
+PAT_FINISHED_COLLECTION = re.compile(r"Finished\s+(.*?)\s+Collection", re.IGNORECASE)
 
 # Names-only warning lines (no URL available in the log)
 WARN_PATTERN = re.compile(
@@ -705,10 +742,58 @@ def parse_tmdb_blocks(text: str) -> Dict[str, str]:
     Covers both 'updated poster' and 'found but not updated' cases.
     """
     out: Dict[str, str] = {}
-    for url, name in PAT_UPDATED.findall(text):
+    write_to_log_file("Starting PAT_UPDATED regex pass")
+    print("Starting PAT_UPDATED regex pass …", flush=True)
+    stop_event, thread, started = start_progress_notifier("PAT_UPDATED regex pass")
+    updated_matches = PAT_UPDATED.findall(text)
+    stop_progress_notifier(
+        stop_event,
+        thread,
+        started,
+        "PAT_UPDATED regex pass",
+        f"{len(updated_matches)} raw match(es)",
+    )
+    for url, name in updated_matches:
         name = _normalize_name(html.unescape(name))
         out.setdefault(name, url)
-    for url, name in PAT_FOUND.findall(text):
+
+    found_matches = []
+    candidate_active = False
+    candidate_url: str | None = None
+
+    write_to_log_file("Starting PAT_FOUND streaming pass")
+    print("Starting PAT_FOUND streaming pass …", flush=True)
+    stop_event, thread, started = start_progress_notifier("PAT_FOUND streaming pass")
+
+    for line in text.splitlines():
+        if PAT_FOUND_START.search(line):
+            candidate_active = True
+            candidate_url = None
+            continue
+
+        if not candidate_active:
+            continue
+
+        if candidate_url is None:
+            match = PAT_FOUND_TMDB_POSTER.search(line)
+            if match:
+                candidate_url = match.group(1)
+            continue
+
+        match = PAT_FINISHED_COLLECTION.search(line)
+        if match:
+            found_matches.append((candidate_url, match.group(1)))
+            candidate_active = False
+            candidate_url = None
+
+    stop_progress_notifier(
+        stop_event,
+        thread,
+        started,
+        "PAT_FOUND streaming pass",
+        f"{len(found_matches)} raw match(es)",
+    )
+    for url, name in found_matches:
         name = _normalize_name(html.unescape(name))
         out.setdefault(name, url)
     return out
@@ -717,7 +802,18 @@ def parse_tmdb_blocks(text: str) -> Dict[str, str]:
 def parse_no_poster_warnings(text: str) -> Set[str]:
     names: Set[str] = set()
     t = text.replace("\r\n", "\n") + " "
-    for frag in WARN_PATTERN.findall(t):
+    write_to_log_file("Starting WARN_PATTERN regex pass")
+    print("Starting WARN_PATTERN regex pass …", flush=True)
+    stop_event, thread, started = start_progress_notifier("WARN_PATTERN regex pass")
+    warning_matches = WARN_PATTERN.findall(t)
+    stop_progress_notifier(
+        stop_event,
+        thread,
+        started,
+        "WARN_PATTERN regex pass",
+        f"{len(warning_matches)} raw match(es)",
+    )
+    for frag in warning_matches:
         frag = frag.lstrip("/")
         last = frag.split("/")[-1]
         if "." in last:
@@ -846,7 +942,14 @@ def main():
                     all_convert_warns.extend(extract_convert_warning(content.splitlines()))
 
                     # Gather URLs from both patterns (update + found/not-updated)
+                    write_to_log_file(f"Starting TMDB block parse for {item_name}")
+                    print(f"{progress_prefix} Parsing TMDB blocks in {item_name} …", flush=True)
+                    parse_started = time.perf_counter()
                     block_map = parse_tmdb_blocks(content)  # name -> url
+                    write_to_log_file(
+                        f"Finished TMDB block parse for {item_name} in "
+                        f"{time.perf_counter() - parse_started:.2f}s ({len(block_map)} match(es))"
+                    )
                     total_matches += len(block_map)
 
                     # merge (first wins per name)
@@ -854,7 +957,14 @@ def main():
                         name_to_url.setdefault(n, u)
 
                     # gather names-only from No Poster Found warnings
+                    write_to_log_file(f"Starting no-poster warning parse for {item_name}")
+                    print(f"{progress_prefix} Parsing no-poster warnings in {item_name} …", flush=True)
+                    parse_started = time.perf_counter()
                     names_from_warnings |= parse_no_poster_warnings(content)
+                    write_to_log_file(
+                        f"Finished no-poster warning parse for {item_name} in "
+                        f"{time.perf_counter() - parse_started:.2f}s ({len(names_from_warnings)} total warning name(s))"
+                    )
 
                     if not block_map:
                         write_to_log_file("0 items found...")
