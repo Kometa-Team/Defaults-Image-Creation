@@ -1,14 +1,14 @@
 # CPU PyTorch (works cross-platform; no GPU/CUDA required)
 --extra-index-url https://download.pytorch.org/whl/cpu
-torch==1.13.1+cpu
-torchvision==0.14.1+cpu
+torch==2.13.0
+torchvision==0.28.0
 
 # pkg_resources is provided by setuptools; some Python/venv builds no longer include it by default
-setuptools>=65,<81
+setuptools==83.0.0
 wheel
 
 # DeOldify stack
-fastai==1.0.61
+fastai==2.8.7
 
 # Runtime deps (image I/O & DeOldify imports)
 Pillow>=10.0.0
@@ -20,8 +20,8 @@ imageio>=2.34.0
 imageio-ffmpeg>=0.4.9
 
 # IMPORTANT: fastai 1.x ecosystem expects NumPy 1.x
-numpy<2
-numexpr<2.9
+numpy==2.5.1
+numexpr==2.14.2
 
-ipython<9
-matplotlib<3.9
+ipython==9.15.0
+matplotlib==3.11.1
