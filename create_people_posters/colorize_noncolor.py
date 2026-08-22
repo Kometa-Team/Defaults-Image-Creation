@@ -80,9 +80,6 @@ def require_numpy_v1():
         pass
 
 
-require_numpy_v1()
-
-
 # ---------- tiny http helpers ----------
 def http_get(url: str, timeout: int = 90) -> bytes:
     req = urllib.request.Request(url, headers={"User-Agent": "curl/8.0"})
@@ -254,6 +251,8 @@ def main() -> None:
     if not candidates:
         log.info("No candidate images found in %s — nothing to do.", IN_OTHER)
         sys.exit(0)
+
+    require_numpy_v1()
 
     processed = skipped = failed = removed = 0  # <- added "removed"
     for src in sorted(candidates):
