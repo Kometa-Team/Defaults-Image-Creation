@@ -129,6 +129,7 @@ $targetPath_signature = Join-Path $peopleRoot 'signature'
 $nobackPathColor = Join-Path $peopleRoot 'transparent'
 $tmpPeoplePath = Join-Path $peopleRoot 'tmppeople'
 $basePath = Join-Path $peopleRoot 'base'
+$fontPath = Join-Path $script_path 'fonts'
 
 # Trailing-slash helpers (keep as-is)
 $dds = Join-Path $download_dir ''
@@ -141,10 +142,10 @@ $tpss = Join-Path $targetPath_signature ''
 $nbpcs = Join-Path $nobackPathColor ''
 $tpps = Join-Path $tmpPeoplePath ''
 $bps = Join-Path $basePath ''
-$fontComfortaa = Join-Path $basePath 'Comfortaa-Medium.ttf'
-$fontFuggles = Join-Path $basePath 'Fuggles-Regular.ttf'
-$fontMontserrat = Join-Path $basePath 'Montserrat-SemiBold.ttf'
-$fontFutura = Join-Path $basePath 'FuturaTEELig.ttf'
+$fontComfortaa = (Join-Path $fontPath 'Comfortaa-Medium.ttf') -replace '\\', '/'
+$fontFuggles = (Join-Path $fontPath 'Fuggles-Regular.ttf') -replace '\\', '/'
+$fontMontserrat = (Join-Path $fontPath 'Montserrat-SemiBold.ttf') -replace '\\', '/'
+$fontFutura = (Join-Path $fontPath 'FuturaTEELig.ttf') -replace '\\', '/'
 
 #################################
 # Create dirs
@@ -157,22 +158,6 @@ $dirsToMake = @(
 ) | Sort-Object -Unique
 
 foreach ($d in $dirsToMake) { New-Item -ItemType Directory -Force -Path $d | Out-Null }
-
-#################################
-# Ensure local font assets exist
-#################################
-Function Ensure-FontAsset {
-  param(
-    [Parameter(Mandatory)]
-    [string]$FontPath,
-    [Parameter(Mandatory)]
-    [string]$FontText
-  )
-
-  if (-not (Test-Path -LiteralPath $FontPath)) {
-    Convert-TextToBinary -Text $FontText -OutputPath $FontPath
-  }
-}
 
 #################################
 # WriteToLogFile function
@@ -294,6 +279,59 @@ Function Convert-BinaryToText {
 
   $Bytes = [System.IO.File]::ReadAllBytes($Path)
   [System.Convert]::ToBase64String($Bytes)
+}
+
+#################################
+# Validate font files before rendering
+#################################
+Function Assert-MagickFontFile {
+  param(
+    [Parameter(Mandatory)]
+    [string]$FontPath,
+
+    [Parameter(Mandatory)]
+    [string]$FontLabel
+  )
+
+  if (-not (Test-Path -LiteralPath $FontPath)) {
+    throw "Required font '$FontLabel' is missing at $FontPath"
+  }
+
+  $probeArgs = @(
+    '-debug', 'annotate',
+    '-size', '1200x300',
+    'xc:none',
+    '-font', $FontPath,
+    '-pointsize', '80',
+    '-annotate', '+20+120', 'FontProbe',
+    'null:'
+  )
+  $probeOutput = (& $script:IM.Convert @probeArgs 2>&1)
+  $probeExit = $LASTEXITCODE
+  $probeText = ($probeOutput | Out-String)
+
+  if ($probeExit -ne 0 -or $probeText -match 'unable to read font' -or $probeText -match 'c:[/\\]windows[/\\]fonts[/\\]arial\.ttf') {
+    throw "Required font '$FontLabel' failed ImageMagick probe at $FontPath. Output: $probeText"
+  }
+
+  if ($probeText -notmatch [regex]::Escape($FontPath)) {
+    throw "Required font '$FontLabel' was not used by ImageMagick at $FontPath. Output: $probeText"
+  }
+
+  WriteToLogFile "Font probe OK                : $FontLabel -> $FontPath"
+}
+
+Function Assert-PeoplePosterFonts {
+  $fontChecks = @(
+    [pscustomobject]@{ Label = 'Comfortaa-Medium'; Path = $fontComfortaa },
+    [pscustomobject]@{ Label = 'Fuggles-Regular'; Path = $fontFuggles },
+    [pscustomobject]@{ Label = 'Montserrat-SemiBold'; Path = $fontMontserrat },
+    [pscustomobject]@{ Label = 'FuturaTEELig'; Path = $fontFutura }
+  )
+
+  foreach ($fontCheck in $fontChecks) {
+    Assert-MagickFontFile -FontPath $fontCheck.Path -FontLabel $fontCheck.Label
+  }
 }
 
 #################################
@@ -751,17 +789,16 @@ Convert-TextToBinary -Text $file1 -OutputPath $bps"@zbase-People.jpg"
 Convert-TextToBinary -Text $file2 -OutputPath $bps"@zbase-People-Clear2.png"
 Convert-TextToBinary -Text $file3 -OutputPath $bps"@zbase-Signature.png"
 Convert-TextToBinary -Text $file8 -OutputPath $bps"@zbase-People-Clear3.png"
-Ensure-FontAsset -FontPath $fontComfortaa -FontText $file4
-Ensure-FontAsset -FontPath $fontFuggles -FontText $file5
-Ensure-FontAsset -FontPath $fontMontserrat -FontText $file6
-Ensure-FontAsset -FontPath $fontFutura -FontText $file7
 
 #################################
 # local font checks
 #################################
-if (@($fontComfortaa, $fontFuggles, $fontMontserrat, $fontFutura).Where({ -not (Test-Path -LiteralPath $_) }).Count -gt 0) {
-  Write-Host "Required local font assets are missing from $basePath. Aborting..." -ForegroundColor Red -BackgroundColor White
-  WriteToLogFile "Font check failed: one or more required local font files are missing from $basePath."
+try {
+  Assert-PeoplePosterFonts
+}
+catch {
+  Write-Host $_.Exception.Message -ForegroundColor Red -BackgroundColor White
+  WriteToLogFile "Font check failed            : $($_.Exception.Message)"
   exit 2
 }
 WriteToLogFile "Font paths                    : $fontComfortaa | $fontFuggles | $fontMontserrat | $fontFutura"
@@ -782,6 +819,7 @@ WriteToLogFile "targetPath_signature         : $targetPath_signature"
 WriteToLogFile "nobackPathColor              : $nobackPathColor"
 WriteToLogFile "tmpPeoplePath                : $tmpPeoplePath"
 WriteToLogFile "basePath                     : $basePath"
+WriteToLogFile "fontPath                     : $fontPath"
 
 # Init counters
 $files_to_process = 0
