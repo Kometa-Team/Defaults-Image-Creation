@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-auto_readme.py — Generate per-letter README.md files and a top-level README with links and a grid image,
+auto_readme.py — Generate per-letter README.md files and a top-level README with links,
 with unified logging and progress output.
 
 Behavior mirrors the original script but adds:
@@ -14,6 +14,7 @@ Behavior mirrors the original script but adds:
 
 Typical usage (run from your local style directory or pass --directory):
   python auto_readme.py --style transparent --directory ./transparent
+  python auto_readme.py --style transparent --directory ./transparent --grid
   python auto_readme.py --directory ./bw --verbose
   python auto_readme.py --directory ./original --owner Kometa-Team --repo People-Images --branch master
 """
@@ -203,7 +204,11 @@ def main():
     ap.add_argument("--owner", help="Override GitHub owner/org", type=str, default="")
     ap.add_argument("--repo", help="Override GitHub repo name", type=str, default="")
     ap.add_argument("--branch", help="Override Git branch", type=str, default="")
-    ap.add_argument("--no-grid", dest="grid", action="store_false", help="Disable grid image generation")
+    grid_group = ap.add_mutually_exclusive_group()
+    grid_group.add_argument("--grid", dest="grid", action="store_true", default=False,
+                            help="Generate and link per-letter grid.jpg preview images")
+    grid_group.add_argument("--no-grid", dest="grid", action="store_false",
+                            help="Do not generate or link per-letter grid.jpg preview images (default)")
     ap.add_argument("--verbose", "-v", action="store_true")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
@@ -287,7 +292,8 @@ def main():
             # Write letter README
             letter_md = [f"# {repo_title} - {letter} ({len(files)} Images)", "\n"]
             if files:
-                letter_md.append("![Grid](grid.jpg)\n")
+                if args.grid:
+                    letter_md.append("![Grid](grid.jpg)\n")
                 letter_md.extend(data)
             if not args.dry_run:
                 out_md = letter_folder / "README.md"

@@ -84,6 +84,9 @@ ORCH_STYLE=transparent
 # Multi-style run (comma list). If set, overrides ORCH_STYLE in readme/sync_md steps.
 ORCH_STYLES=transparent,diiivoycolor
 
+# Grid image generation is slow; default is README-only.
+ORCH_GRID_IMAGES=false
+
 # Optional commit/author for push
 ORCH_COMMIT_MESSAGE=chore: sync posters & docs
 ORCH_GIT_USER_NAME=Your Name
@@ -261,7 +264,7 @@ The orchestrator enforces the single correct order and writes checkpoints so you
 10. **poster_ps1** → `create_people_poster.ps1` — poster generation (PowerShell)  
 11. **update** → `update_people_repos.py --op update` — fetch/reset style repos (**always runs**)  
 12. **sync_images** → `sync_people_images.py` — copy new images into the repo style folders  
-13. **readme** → `auto_readme.py` — generate per‑letter grids and READMEs for one or more styles  
+13. **readme** → `auto_readme.py` — generate READMEs for one or more styles; per-letter grids are opt-in  
 14. **sync_md** → `sync_md.py` — mirror `*.md` back to `./config/people_dirs/<style>`  
 15. **push** → `update_people_repos.py --op push` — commit & push changes (**always runs**)
 
@@ -332,6 +335,11 @@ The orchestrator now continues past zero-result log scans when `people_overrides
   python orchestrator.py --redo readme
   # or override via CLI:
   python orchestrator.py --redo readme --styles transparent,diiivoycolor
+  ```
+
+- Include per-letter `grid.jpg` previews only when explicitly requested:
+  ```bash
+  python orchestrator.py --redo readme --styles bw,diiivoy,diiivoycolor,rainier,signature --grid-images
   ```
 
 ### Run the colorizer standalone

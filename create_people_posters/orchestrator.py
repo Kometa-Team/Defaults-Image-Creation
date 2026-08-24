@@ -61,6 +61,7 @@ Environment (./config/.env or process environment)
   PEOPLE_BRANCH         — git branch for update/push (optional)
   ORCH_STYLE            — style for README & MD sync (default: transparent)
   ORCH_STYLES           — comma list of styles for README & MD sync (optional)
+  ORCH_GRID_IMAGES      — when true, generate/link per-letter grid.jpg images in README step [default: false]
   ORCH_COMMIT_MESSAGE   — optional commit message for push (overrides auto)
   ORCH_GIT_USER_NAME    — optional git author.name override for push
   ORCH_GIT_USER_EMAIL   — optional git author.email override for push
@@ -454,6 +455,8 @@ def main():
     parser.add_argument("--branch", help="Git branch for update/push (env PEOPLE_BRANCH or auto-detect).")
     parser.add_argument("--style", help="Default style for README/MD if no multi-style is set (env ORCH_STYLE or 'transparent').")
     parser.add_argument("--styles", help="Comma list of styles for README/MD (overrides ORCH_STYLES).")
+    parser.add_argument("--grid-images", action="store_true",
+                        help="Generate and link per-letter grid.jpg images during the readme step (default: README-only).")
     # BG verification / early-exit controls
     parser.add_argument("--bg-output-dir", help="Where sel_remove_bg downloads go (env SEL_DOWNLOAD_DIR).")
     parser.add_argument("--bg-exts", default=os.getenv("ORCH_BG_EXTS", "png"),
@@ -479,6 +482,7 @@ def main():
     commit_template = _clean_env_value(os.getenv("ORCH_COMMIT_MESSAGE", ""))
     git_user_name = _clean_env_value(os.getenv("ORCH_GIT_USER_NAME", ""))
     git_user_email = _clean_env_value(os.getenv("ORCH_GIT_USER_EMAIL", ""))
+    grid_images = args.grid_images or _bool_env("ORCH_GRID_IMAGES", False)
 
     bg_output_dir = Path(args.bg_output_dir).expanduser().resolve() if args.bg_output_dir else env_path("SEL_DOWNLOAD_DIR")
     bg_exts = {e.strip().lower().lstrip(".") for e in (args.bg_exts or "png").split(",") if e.strip()}
@@ -600,7 +604,10 @@ def main():
     # Per-style builders (used during the run loop)
     def _auto_readme_for(style: str):
         _require_repo_or_die()
-        return [py, "auto_readme.py", "--style", style, "--directory", str((repo_root / style).resolve())]
+        args2 = [py, "auto_readme.py", "--style", style, "--directory", str((repo_root / style).resolve())]
+        if grid_images:
+            args2.append("--grid")
+        return args2
 
     def _sync_md_for(style: str):
         _require_repo_or_die()
@@ -637,7 +644,7 @@ def main():
         Step("poster_ps1",                "Generate posters via PowerShell",            _poster_ps1,                marker="poster_ps1.done.json"),
         Step("update",                    "git fetch/reset category repos",             _update_repos,              marker=None,              always_run=True),
         Step("sync_images",               "Sync images to repo folders",                _sync_images,               marker="sync_images.done.json"),
-        Step("readme",                    "Generate README grid(s)",                    None,                       marker="readme.done.json"),
+        Step("readme",                    "Generate README files",                      None,                       marker="readme.done.json"),
         Step("sync_md",                   "Mirror *.md back to config (per style)",     None,                       marker="sync_md.done.json"),
         Step("push",                      "Commit & push changes upstream",             _push_repos,                marker=None,              always_run=True),
     ]
@@ -687,10 +694,11 @@ def main():
 
             # Special multi-style steps handle inside the loop
             if s.key == "readme":
-                # generate README for each style
+                # generate README for each style; grid images are opt-in because they are expensive
                 for st in styles:
                     argv = _auto_readme_for(st)
-                    rc, _, _ = run_cmd(f"Generate README grid [{st}]", argv)
+                    title = f"Generate README {'with grids' if grid_images else 'without grids'} [{st}]"
+                    rc, _, _ = run_cmd(title, argv)
                     if rc != 0:
                         print(f"[FAIL] readme ({st}) exited with code {rc}. Stopping.", file=sys.stderr)
                         sys.exit(rc)
