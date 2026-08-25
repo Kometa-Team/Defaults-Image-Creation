@@ -49,6 +49,8 @@ REMBG_HOME = CONFIG_DIR / "models" / "rembg"
 TMDB_SEARCH_URL = "https://api.themoviedb.org/3/search/person"
 TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/original"
 TARGET_SIZE = (2000, 3000)
+SAME_IMAGE_HASH_DISTANCE = 8
+SAME_IMAGE_MEAN_DELTA = 6.0
 STYLE_EXTS = {
     "bw": ".jpg",
     "diiivoy": ".jpg",
@@ -307,6 +309,59 @@ def normalize_to_download(candidate_path: Path, download_path: Path) -> None:
         fitted.save(download_path, "JPEG", quality=95, subsampling=0, optimize=True)
 
 
+def original_source_paths(people_root: Path, name: str) -> list[Path]:
+    first = (name[:1] or "_").upper()
+    return [
+        people_root / "original" / first / "Images" / f"{name}.jpg",
+        people_root / "original" / f"{name}.jpg",
+    ]
+
+
+def image_compare_arrays(path: Path) -> tuple[np.ndarray, np.ndarray]:
+    with Image.open(path) as img:
+        rgb = ImageOps.exif_transpose(img).convert("RGB")
+        fitted = ImageOps.fit(rgb, TARGET_SIZE, method=Image.Resampling.LANCZOS, centering=(0.5, 0.5))
+        gray_small = np.asarray(
+            fitted.resize((16, 24), Image.Resampling.LANCZOS).convert("L"),
+            dtype=np.float32,
+        )
+        gray_detail = np.asarray(
+            fitted.resize((64, 96), Image.Resampling.LANCZOS).convert("L"),
+            dtype=np.float32,
+        )
+    bits = gray_small >= float(gray_small.mean())
+    return bits, gray_detail
+
+
+def same_image_summary(candidate_path: Path, existing_path: Path) -> str:
+    try:
+        candidate_bits, candidate_detail = image_compare_arrays(candidate_path)
+        existing_bits, existing_detail = image_compare_arrays(existing_path)
+    except Exception as exc:
+        return f"same-image comparison failed for {existing_path}: {exc}"
+
+    hash_distance = int(np.count_nonzero(candidate_bits != existing_bits))
+    mean_delta = float(np.mean(np.abs(candidate_detail - existing_detail)))
+    if hash_distance <= SAME_IMAGE_HASH_DISTANCE and mean_delta <= SAME_IMAGE_MEAN_DELTA:
+        return (
+            f"same as current original {existing_path} "
+            f"(hash_distance={hash_distance}, mean_delta={mean_delta:.2f})"
+        )
+    return ""
+
+
+def same_as_current_original(candidate_path: Path, people_root: Path, name: str) -> str:
+    for existing_path in original_source_paths(people_root, name):
+        if not existing_path.exists():
+            continue
+        summary = same_image_summary(candidate_path, existing_path)
+        if summary.startswith("same as current original"):
+            return summary
+        if summary.startswith("same-image comparison failed"):
+            log(f"[warn] {name}: {summary}")
+    return ""
+
+
 def noncolor_summary(
     path: Path,
     sat_threshold: int = 35,
@@ -538,6 +593,11 @@ def run_step(title: str, argv: list[str], env: dict[str, str]) -> int:
     cp = subprocess.run(argv, cwd=SCRIPT_DIR, env=env)
     log(f"{title} exit code: {cp.returncode}")
     return cp.returncode
+
+
+def run_orchestrator_from_remove_bg() -> int:
+    argv = [sys.executable, "orchestrator.py", "--redo", "remove_bg", "--no-recover-edge-chops"]
+    return run_step("orchestrator recovery batch", argv, os.environ.copy())
 
 
 def final_transparent_path(people_root: Path, name: str) -> Path:
@@ -787,6 +847,13 @@ def stage_one_for_orchestrator(
                 record_attempt("download_failed", note)
                 continue
 
+            same_source = same_as_current_original(staged_jpg, args.people_root, name)
+            if same_source:
+                note = f"skipped before staging; {same_source}"
+                log(f"[candidate] {name} {candidate.label}: {note}")
+                record_attempt("same_as_current_original", note)
+                continue
+
             if args.reject_grayscale:
                 try:
                     noncolor = noncolor_summary(
@@ -955,6 +1022,12 @@ def parser() -> argparse.ArgumentParser:
         default=env_bool("EDGE_CHOP_STAGE_FOR_ORCHESTRATOR", False),
         help="Stage one viable TMDB alternate per person, then let orchestrator.py --redo remove_bg --no-recover-edge-chops run Selenium/poster/update/sync/push.",
     )
+    ap.add_argument(
+        "--run-orchestrator",
+        action="store_true",
+        default=env_bool("EDGE_CHOP_RUN_ORCHESTRATOR", False),
+        help="After staging candidates, run orchestrator.py --redo remove_bg --no-recover-edge-chops automatically.",
+    )
     return ap
 
 
@@ -972,6 +1045,18 @@ def main() -> int:
     args.rembg_session = None
 
     log("#### START recover_edge_chops ####")
+    if args.run_orchestrator and not args.stage_for_orchestrator:
+        rows = [
+            RecoveryRow(
+                name="",
+                status="error",
+                note="--run-orchestrator requires --stage-for-orchestrator",
+            )
+        ]
+        write_report(args.out_root, rows)
+        log("[error] --run-orchestrator requires --stage-for-orchestrator")
+        return 2
+
     api_key = os.getenv("TMDB_KEY", "").strip()
     if not api_key:
         rows = [RecoveryRow(name="", status="skipped", note="TMDB_KEY missing")]
@@ -1135,7 +1220,12 @@ def main() -> int:
     if added_exhausted:
         log(f"Added exhausted names: {added_exhausted} -> {args.exhausted_file}")
     if args.stage_for_orchestrator and staged:
-        log("Next command: python orchestrator.py --redo remove_bg --no-recover-edge-chops")
+        command = "python orchestrator.py --redo remove_bg --no-recover-edge-chops"
+        if args.run_orchestrator:
+            log(f"Running next command: {command}")
+            exit_code = run_orchestrator_from_remove_bg()
+        else:
+            log(f"Next command: {command}")
     elif args.stage_for_orchestrator:
         log("Next command: no staged candidates; remove names from the exhausted/attempted files only if you want to retry them.")
     else:

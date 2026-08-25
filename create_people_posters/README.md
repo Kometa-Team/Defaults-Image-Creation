@@ -104,6 +104,7 @@ EDGE_CHOP_COLORIZE_GRAYSCALE=true                     # try DeOldify before reje
 EDGE_CHOP_EXHAUSTED_FILE=./config/edge_chop_recovery/exhausted_names.txt
 EDGE_CHOP_ATTEMPTED_FILE=./config/edge_chop_recovery/attempted_candidates.csv
 EDGE_CHOP_STAGE_FOR_ORCHESTRATOR=false                # default false; use CLI flag for backlog batches
+EDGE_CHOP_RUN_ORCHESTRATOR=false                      # default false; use CLI flag for one-command batches
 IMAGE_CHECK_FACE_CROP_CHECKS=chin,left,right           # report-only face crop diagnostics
 COMPTREE_FACE_CROP_CHECKS=chin,left,right              # same diagnostics in compare_image_trees
 FACE_CROP_MODEL_HOME=./config/models/opencv            # YuNet face detector cache
@@ -427,7 +428,9 @@ the script restores the previous local style outputs, writes
 Future recovery batches skip names in that exhausted file; remove a name from the
 file if you want to retry it later. Batch staging also records tried TMDB image
 paths in `./config/edge_chop_recovery/attempted_candidates.csv` so the next
-batch does not choose the same alternate again.
+batch does not choose the same alternate again. If a TMDB alternate is visually
+the same as the current original JPG, it is recorded as attempted and skipped
+before staging so the same head-chop source is not processed again.
 Set `ORCH_RECOVER_EDGE_CHOPS=false` or pass `--no-recover-edge-chops` to skip it.
 Set `EDGE_CHOP_PRECHECK_REMBG=false` or pass `--no-precheck-rembg` only when you
 need to diagnose the older Adobe-only retry path. `rembg` is included in
@@ -447,6 +450,9 @@ python recover_edge_chops.py --all --limit 25 --stage-for-orchestrator
 # Work a larger batch from the backlog. This attempts 100 not-yet-exhausted people;
 # TMDB alternates per person are controlled separately by EDGE_CHOP_TMDB_LIMIT.
 python recover_edge_chops.py --all --limit 100 --stage-for-orchestrator
+
+# Stage the batch and immediately hand off to the orchestrator.
+python recover_edge_chops.py --all --limit 100 --stage-for-orchestrator --run-orchestrator
 
 # Retry only named people.
 python recover_edge_chops.py --names "Person One" "Person Two" --stage-for-orchestrator
