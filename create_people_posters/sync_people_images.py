@@ -174,7 +174,14 @@ def transparent_quality_issues(path: Path) -> list[str]:
     return image_quality_issues("transparent", path)
 
 
-def preflight_sources(src_base: Path) -> int:
+def parse_bool_env(key: str, default: bool) -> bool:
+    value = os.getenv(key)
+    if value is None:
+        return default
+    return str(value).strip().lower() in {"1", "true", "yes", "y", "on"}
+
+
+def preflight_sources(src_base: Path, strict: bool = False) -> int:
     failed = 0
     for category in CATEGORIES:
         src_root = src_base / category
@@ -201,7 +208,10 @@ def preflight_sources(src_base: Path) -> int:
         failed += category_failed
 
     if failed:
-        logging.error("Preflight found %d invalid source file(s); aborting before syncing any style repo.", failed)
+        if strict:
+            logging.error("Preflight found %d invalid source file(s); aborting before syncing any style repo.", failed)
+        else:
+            logging.warning("Preflight found %d invalid source file(s); continuing because preflight is report-only.", failed)
     else:
         logging.info("Preflight passed for all source style folders.")
     return failed
@@ -287,6 +297,18 @@ def main():
         default=Path(os.getenv("PEOPLE_IMAGES_DIR") or (SCRIPT_DIR / "Kometa-People-Images")),
         help="Destination root (default: PEOPLE_IMAGES_DIR env or ./Kometa-People-Images)",
     )
+    ap.add_argument(
+        "--preflight",
+        action=argparse.BooleanOptionalAction,
+        default=parse_bool_env("SYNC_PREFLIGHT", True),
+        help="Run source image QA before syncing; report-only unless --strict-preflight is also set. Default: true.",
+    )
+    ap.add_argument(
+        "--strict-preflight",
+        action="store_true",
+        default=parse_bool_env("SYNC_STRICT_PREFLIGHT", False),
+        help="Run source image QA and abort sync if invalid files are found.",
+    )
     args = ap.parse_args()
 
     src_base = CONFIG_DIR / "people_dirs"
@@ -296,9 +318,15 @@ def main():
     logging.info("Source base: %s", src_base)
     logging.info("Destination base: %s", dest_base)
 
-    preflight_failed = preflight_sources(src_base)
-    if preflight_failed:
-        return 1
+    if args.strict_preflight:
+        args.preflight = True
+
+    if args.preflight:
+        preflight_failed = preflight_sources(src_base, strict=args.strict_preflight)
+        if preflight_failed and args.strict_preflight:
+            return 1
+    else:
+        logging.info("Source preflight skipped. Use SYNC_PREFLIGHT=true for report-only QA or --strict-preflight to block invalid files.")
 
     failed = 0
     for cat in CATEGORIES:

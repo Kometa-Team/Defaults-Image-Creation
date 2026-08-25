@@ -77,6 +77,8 @@ TMDB_KEY=your_tmdb_api_key_here
 ORCH_LOGS_DIR=/absolute/path/to/kometa/logs          # used by steps 2–3
 PEOPLE_IMAGES_DIR=/absolute/path/to/Kometa-People-Images
 PEOPLE_BRANCH=master                                  # optional; branch for update/push
+SYNC_PREFLIGHT=true                                   # optional; report-only sync-time source QA
+SYNC_STRICT_PREFLIGHT=false                           # optional; blocking sync-time source QA
 
 # Single default style (used if ORCH_STYLES not set)
 ORCH_STYLE=transparent
@@ -283,14 +285,17 @@ The orchestrator enforces the single correct order and writes checkpoints so you
 15. **sync_md** → `sync_md.py` — mirror `*.md` back to `./config/people_dirs/<style>`
 16. **push** → `update_people_repos.py --op push` — commit & push changes (**always runs**)
 
-> Optional QA tools: `image_check.py`, `compare_image_trees.py` — useful **after** step 13.
+> Optional QA tools: `image_check.py`, `compare_image_trees.py` — ad hoc reporting for grayscale, dimensions, transparency, edge chops, face-crop risk, and repo/tree consistency.
 > Optional helper (outside the orchestrator): `grayscale_sweeper.py` — scan any folder tree for non‑color images and copy them into `config/Downloads/other` so `colorize_noncolor.py` can convert them.
 > Optional helper (outside the orchestrator): `bulk_extract_configs.py` — scan mess/meta logs, including nested archives, and export redacted config sections as `parsed_*.yml`.
 
-`sync_people_images.py` preflights every source style folder before copying any
-files. If any style has an invalid image, the whole sync stops before touching
-the local People-Images repos, keeping style repo counts from drifting because
-of a partial sync.
+`sync_people_images.py` runs source-image preflight by default, but it is
+report-only. It logs wrong extensions, unreadable/corrupt files, bad dimensions,
+missing transparent alpha, and grayscale in color-required styles, then continues
+syncing. Use `--strict-preflight` or `SYNC_STRICT_PREFLIGHT=true` only when you
+intentionally want those findings to block sync. Use `--no-preflight` or
+`SYNC_PREFLIGHT=false` only when you want sync to copy without even reporting
+source QA findings.
 
 ---
 
