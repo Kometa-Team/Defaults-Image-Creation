@@ -875,7 +875,7 @@ def main() -> int:
     log(f"Exhausted: {exhausted}")
     if added_exhausted:
         log(f"Added exhausted names: {added_exhausted} -> {args.exhausted_file}")
-    log("Next command: python orchestrator.py --redo tmdb")
+    log("Next command: python orchestrator.py --redo update")
     log("#### END recover_edge_chops ####")
     return exit_code
 

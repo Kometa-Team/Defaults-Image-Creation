@@ -448,6 +448,10 @@ python recover_edge_chops.py --all --limit 100
 python recover_edge_chops.py --names "Person One" "Person Two"
 ```
 
+After a standalone recovery batch, continue at the first downstream repo step:
+`python orchestrator.py --redo update`. Do not use `--redo tmdb` unless you
+intend to rerun TMDB download and all downstream image-generation steps.
+
 ### Bulk extract redacted config.yml sections (helper)
 ```bash
 python bulk_extract_configs.py --input_directory "C:/temp"
