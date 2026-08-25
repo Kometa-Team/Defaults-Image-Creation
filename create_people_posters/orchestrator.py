@@ -597,7 +597,7 @@ def main():
         if not recover_edge_chops:
             print("[INFO] recover_edge_chops disabled - skipping.")
             return None
-        args2 = [py, "recover_edge_chops.py"]
+        args2 = [py, "recover_edge_chops.py", "--inline"]
         try:
             poster_started = step_started_at.get("poster_ps1")
         except NameError:

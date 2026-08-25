@@ -104,8 +104,8 @@ EDGE_CHOP_COLORIZE_GRAYSCALE=true                     # try DeOldify before reje
 EDGE_CHOP_RECOVER_WARNINGS=headchop                   # headchop,grayscale,face-chin,face-side,all
 EDGE_CHOP_EXHAUSTED_FILE=./config/edge_chop_recovery/exhausted_names.txt
 EDGE_CHOP_ATTEMPTED_FILE=./config/edge_chop_recovery/attempted_candidates.csv
-EDGE_CHOP_STAGE_FOR_ORCHESTRATOR=false                # default false; use CLI flag for backlog batches
-EDGE_CHOP_RUN_ORCHESTRATOR=false                      # default false; use CLI flag for one-command batches
+EDGE_CHOP_STAGE_ONLY=false                            # stage candidates but do not run orchestrator
+EDGE_CHOP_INLINE=false                                # internal/debug only; orchestrator passes --inline itself
 EDGE_CHOP_FACE_CROP_SIDE_MARGIN=0.02
 EDGE_CHOP_FACE_CROP_CHIN_MARGIN=0.015
 IMAGE_CHECK_FACE_CROP_CHECKS=chin,left,right           # report-only face crop diagnostics
@@ -452,34 +452,34 @@ Whole-tree backlog cleanup is opt-in:
 # Audit whole tree but do not retry.
 python recover_edge_chops.py --all --audit-only
 
-# Stage a small backlog batch for the normal orchestrator remove_bg/poster flow.
-python recover_edge_chops.py --all --limit 25 --stage-for-orchestrator
+# Work a small backlog batch through the normal orchestrator remove_bg/poster flow.
+python recover_edge_chops.py --all --limit 25
 
 # Work a larger batch from the backlog. This attempts 100 not-yet-exhausted people;
 # TMDB alternates per person are controlled separately by EDGE_CHOP_TMDB_LIMIT.
-python recover_edge_chops.py --all --limit 100 --stage-for-orchestrator
+python recover_edge_chops.py --all --limit 100
 
-# Include grayscale/non-color warnings in the staged recovery batch.
-python recover_edge_chops.py --all --limit 100 --recover-warnings headchop,grayscale --stage-for-orchestrator
+# Include grayscale/non-color warnings in the recovery batch.
+python recover_edge_chops.py --all --limit 100 --recover-warnings headchop,grayscale
 
 # Explicit face-model risk recovery modes.
-python recover_edge_chops.py --all --limit 25 --recover-warnings face-chin,face-side --stage-for-orchestrator
+python recover_edge_chops.py --all --limit 25 --recover-warnings face-chin,face-side
 
-# Stage the batch and immediately hand off to the orchestrator.
-python recover_edge_chops.py --all --limit 100 --stage-for-orchestrator --run-orchestrator
+# Stage candidates without running orchestrator, for manual inspection.
+python recover_edge_chops.py --all --limit 100 --stage-only
 
 # Retry only named people.
-python recover_edge_chops.py --names "Person One" "Person Two" --stage-for-orchestrator
+python recover_edge_chops.py --names "Person One" "Person Two"
 ```
 
-After staging a standalone recovery batch, run
+By default, standalone recovery stages viable candidates and immediately runs
 `python orchestrator.py --redo remove_bg --no-recover-edge-chops`. That reuses
 the orchestrator's checkpointed Selenium batch, poster generation, repo update,
 sync, README/MD, and push steps without falling back into the inline recovery
-loop. The next `--stage-for-orchestrator` batch will rescan outputs, skip
-attempted TMDB candidates, and choose the next alternate for anything still
-chopped. Do not use `--redo tmdb` unless you intend to rerun TMDB download and
-all downstream image-generation steps.
+loop. The next recovery batch will rescan outputs, skip attempted TMDB
+candidates, and choose the next alternate for anything still chopped. Do not use
+`--redo tmdb` unless you intend to rerun TMDB download and all downstream
+image-generation steps.
 
 ### Bulk extract redacted config.yml sections (helper)
 ```bash

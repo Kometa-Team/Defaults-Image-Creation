@@ -3,10 +3,10 @@
 This runs after create_people_poster.ps1. It scans the local transparent style
 tree for edge contact, then finds alternate TMDB profile images.
 
-Default inline mode tries alternates one at a time through the normal remove-bg
-and poster-generation scripts. Staged mode writes one viable alternate per
-person into the normal Downloads input folder so orchestrator.py can own the
-Selenium/poster batch and checkpoint resume behavior.
+Default mode writes one viable alternate per person into the normal Downloads
+input folder, then runs orchestrator.py from remove_bg so the Selenium/poster
+batch and checkpoint resume behavior stay centralized. Inline mode is reserved
+for the orchestrator's internal post-poster recovery step or direct debugging.
 
 If no candidate passes the configured retry edges or local prechecks, the person
 is reported as exhausted. Exhausted names are skipped on future runs until
@@ -1173,17 +1173,19 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--all", action="store_true", help="Allow whole-tree recovery attempts")
     ap.add_argument("--audit-only", action="store_true", help="Scan and report matching edge chops without retrying")
     ap.add_argument(
-        "--stage-for-orchestrator",
+        "--inline",
         action="store_true",
-        default=env_bool("EDGE_CHOP_STAGE_FOR_ORCHESTRATOR", False),
-        help="Stage one viable TMDB alternate per person, then let orchestrator.py --redo remove_bg --no-recover-edge-chops run Selenium/poster/update/sync/push.",
+        default=env_bool("EDGE_CHOP_INLINE", False),
+        help="Advanced/internal: run the direct retry loop instead of staging candidates and handing off to orchestrator.",
     )
     ap.add_argument(
-        "--run-orchestrator",
+        "--stage-only",
         action="store_true",
-        default=env_bool("EDGE_CHOP_RUN_ORCHESTRATOR", False),
-        help="After staging candidates, run orchestrator.py --redo remove_bg --no-recover-edge-chops automatically.",
+        default=env_bool("EDGE_CHOP_STAGE_ONLY", False),
+        help="Stage viable candidates but do not run orchestrator automatically.",
     )
+    ap.add_argument("--stage-for-orchestrator", action="store_true", default=False, help=argparse.SUPPRESS)
+    ap.add_argument("--run-orchestrator", action="store_true", default=False, help=argparse.SUPPRESS)
     return ap
 
 
@@ -1204,19 +1206,30 @@ def main() -> int:
     args.report_edges = parse_edges(args.report_edges, ("top",))
     args.retry_edges = parse_edges(args.retry_edges, ("top",))
     args.rembg_session = None
+    raw_stage_for_orchestrator = args.stage_for_orchestrator
+    raw_run_orchestrator = args.run_orchestrator
+    legacy_stage_only = args.stage_for_orchestrator and not args.run_orchestrator
 
     log("#### START recover_edge_chops ####")
-    if args.run_orchestrator and not args.stage_for_orchestrator:
+    if args.inline and (args.stage_only or raw_stage_for_orchestrator or raw_run_orchestrator):
         rows = [
             RecoveryRow(
                 name="",
                 status="error",
-                note="--run-orchestrator requires --stage-for-orchestrator",
+                note="--inline cannot be combined with orchestrator staging flags",
             )
         ]
         write_report(args.out_root, rows)
-        log("[error] --run-orchestrator requires --stage-for-orchestrator")
+        log("[error] --inline cannot be combined with orchestrator staging flags")
         return 2
+    if args.inline:
+        args.stage_for_orchestrator = False
+        args.run_orchestrator = False
+    else:
+        args.stage_for_orchestrator = True
+        args.run_orchestrator = not (args.stage_only or legacy_stage_only)
+        if args.run_orchestrator:
+            args.stage_only = False
 
     api_key = os.getenv("TMDB_KEY", "").strip()
     if not api_key:
