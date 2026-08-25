@@ -176,6 +176,9 @@ def image_quality_findings(
 
 
 def validate_transparent_destination(path: Path) -> int:
+    if not should_validate_file(path):
+        return 0
+
     blocking, warnings = image_quality_findings("transparent", path)
     if warnings:
         logging.warning(
