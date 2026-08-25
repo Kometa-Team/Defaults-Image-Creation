@@ -10,8 +10,10 @@ from timeit import default_timer as timer
 from typing import Dict, Iterable, Optional, Tuple
 
 from dotenv import load_dotenv
-from PIL import Image, ImageChops, ImageStat
+from PIL import Image, ImageChops
 from alive_progress import alive_bar
+
+from edge_chop import detect_edge_chops, issue_summary, parse_edges
 
 # ========= PATHS & LOGGING =========
 SCRIPT_PATH = Path(__file__).resolve()
@@ -60,6 +62,7 @@ KNOWN_STYLES = {
     "signature",
     "transparent",
 }
+DEFAULT_CHOP_EDGES = ("top",)
 
 
 # ========= END CONFIG =====
@@ -92,16 +95,6 @@ def has_any_transparency(img: Image.Image) -> bool:
     return lo < 255
 
 
-def head_chop_alpha_mean(img: Image.Image) -> float:
-    # First-row alpha mean scaled to [0..1]
-    w, h = img.size
-    if w == 0 or h == 0:
-        return 1.0
-    alpha = img.getchannel("A") if "A" in img.getbands() else Image.new("L", (w, h), 255)
-    first_row = alpha.crop((0, 0, w, 1))
-    return float(ImageStat.Stat(first_row).mean[0] / 255.0)
-
-
 # ---------- Checks (log only failures) ----------
 def normalize_style(style: Optional[str]) -> str:
     if not style:
@@ -128,7 +121,7 @@ def allowed_extensions(style: str) -> set[str]:
     return {".png"} if style == TRANSPARENT_STYLE else {".jpg", ".jpeg"}
 
 
-def test_image(image_path: Path, counters: Dict[str, int], style: str):
+def test_image(image_path: Path, counters: Dict[str, int], style: str, chop_edges: tuple[str, ...]):
     filepre = str(image_path)
     name_wo_ext = image_path.stem
 
@@ -159,18 +152,19 @@ def test_image(image_path: Path, counters: Dict[str, int], style: str):
             except Exception as e:
                 logging.warning("Transparency check error for %s (%s)", filepre, e)
 
-            # 3) Head chop (first row alpha mean > 0.06), only meaningful for transparent style
+            # 3) Edge chop, only meaningful for transparent style
             try:
                 if style == TRANSPARENT_STYLE:
-                    head_val = head_chop_alpha_mean(img)
-                    if head_val > 0.06:
+                    chop = detect_edge_chops(image_path, edges=chop_edges)
+                    summary = issue_summary(chop)
+                    if summary:
                         counters["Counter3"] += 1
                         logging.warning(
-                            "WARNING3!~%s~%s likely HEAD CHOP; review/change headshot. Headchop values~%s",
-                            filepre, name_wo_ext, head_val
+                            "WARNING3!~%s~%s likely EDGE CHOP; review/change headshot. %s",
+                            filepre, name_wo_ext, summary
                         )
             except Exception as e:
-                logging.warning("Head-chop check error for %s (%s)", filepre, e)
+                logging.warning("Edge-chop check error for %s (%s)", filepre, e)
 
             # 4) Ratio mismatch
             if ratio != BASE_IMAGE_RATIO:
@@ -224,6 +218,11 @@ def main():
     parser = argparse.ArgumentParser(description="Recursive style-aware image anomaly scanner (quiet console)")
     parser.add_argument("--input_directory", required=True, help="Root folder to scan recursively")
     parser.add_argument("--style", help="Style rules to apply; inferred from input path when omitted")
+    parser.add_argument(
+        "--chop-edges",
+        default=os.getenv("IMAGE_CHECK_CHOP_EDGES", ",".join(DEFAULT_CHOP_EDGES)),
+        help="Comma list of transparent edge checks. Default: top. Optional diagnostics: bottom,left,right",
+    )
     args = parser.parse_args()
 
     root = Path(args.input_directory)
@@ -233,6 +232,7 @@ def main():
 
     style = infer_style(root, args.style)
     extensions = allowed_extensions(style)
+    chop_edges = parse_edges(args.chop_edges, DEFAULT_CHOP_EDGES)
 
     # START metadata in log (not spammy per-file info)
     logging.info("#### START ####")
@@ -240,6 +240,7 @@ def main():
     logging.info("input_directory              : %s", root)
     logging.info("style                        : %s", style)
     logging.info("extensions                   : %s", ", ".join(sorted(extensions)))
+    logging.info("chop_edges                   : %s", ", ".join(chop_edges))
     logging.info("script_path                  : %s", SCRIPT_DIR)
     logging.info("scriptLog                    : %s", LOG_FILE)
 
@@ -254,7 +255,7 @@ def main():
     # Console: progress bar only
     with alive_bar(total or 1, title=f"Scanning {style}", dual_line=False, stats=False) as bar:
         for fp in iter_image_files(root, extensions):
-            test_image(fp, counters, style)
+            test_image(fp, counters, style, chop_edges)
             processed += 1
             bar()
 
@@ -275,7 +276,7 @@ def main():
     logging.info("Posters per minute           : %s", ppm)
     logging.info("WARNING1 Grayscale Total     : %s", counters['Counter1'])
     logging.info("WARNING2 Transparent Total   : %s", counters['Counter2'])
-    logging.info("WARNING3 Head Chop Total     : %s", counters['Counter3'])
+    logging.info("WARNING3 Edge Chop Total     : %s", counters['Counter3'])
     logging.info("WARNING4 Image Ratio Total   : %s", counters['Counter4'])
     logging.info("WARNING5 Quality W Total     : %s", counters['Counter5'])
     logging.info("WARNING6 Quality H Total     : %s", counters['Counter6'])
@@ -289,7 +290,7 @@ def main():
     print("\n=== SUMMARY ===")
     print(f"Processed: {processed}  |  Elapsed: {elapsed_min} min  |  PPM: {ppm}")
     print(
-        f"W1 BadGray: {counters['Counter1']} | W2 NotTransparent: {counters['Counter2']} | W3 HeadChop: {counters['Counter3']}")
+        f"W1 BadGray: {counters['Counter1']} | W2 NotTransparent: {counters['Counter2']} | W3 EdgeChop: {counters['Counter3']}")
     print(
         f"W4 Ratio: {counters['Counter4']} | W5 Width: {counters['Counter5']} | W6 Height: {counters['Counter6']} | W7 2000x3000: {counters['Counter7']}")
     print(f"Issues: {tot_issues} / Checks: {tot_checks}  ({issues_pct}%)")

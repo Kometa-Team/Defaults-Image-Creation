@@ -30,6 +30,8 @@ from typing import Optional, List, Tuple
 from dotenv import load_dotenv
 from alive_progress import alive_bar
 
+from edge_chop import detect_edge_chops, issue_summary, parse_edges
+
 # ========= PATHS & LOGGING =========
 SCRIPT_PATH = Path(__file__).resolve()
 SCRIPT_DIR = SCRIPT_PATH.parent
@@ -72,6 +74,7 @@ DEFAULT_CATEGORIES = [
 ALLOWED_GRAYSCALE_STYLES = {"bw", "diiivoy"}
 TRANSPARENT_STYLE = "transparent"
 KNOWN_STYLES = set(DEFAULT_CATEGORIES)
+DEFAULT_CHOP_EDGES = ("top",)
 
 
 def parse_bool_env(key: str, default: bool) -> bool:
@@ -153,7 +156,7 @@ def check_image_dimensions_lazy(CHECK_DIMENSIONS: bool):
     return _check
 
 
-def check_image_quality_lazy(CHECK_QUALITY: bool):
+def check_image_quality_lazy(CHECK_QUALITY: bool, CHOP_EDGES: tuple[str, ...]):
     """
     Return a function check(path, style)->list[str] depending on CHECK_QUALITY.
     - If disabled: returns [] quickly without importing Pillow.
@@ -202,6 +205,11 @@ def check_image_quality_lazy(CHECK_QUALITY: bool):
                     issues.append(f"grayscale not allowed for style '{style_key}'")
                 if style_key == TRANSPARENT_STYLE and not _has_any_transparency(im):
                     issues.append("transparent style image has no alpha transparency")
+                if style_key == TRANSPARENT_STYLE:
+                    chop = detect_edge_chops(path, edges=CHOP_EDGES)
+                    summary = issue_summary(chop)
+                    if summary:
+                        issues.append(f"edge chop: {summary}")
         except Exception as e:
             issues.append(f"open/process error: {e}")
         return issues
@@ -361,6 +369,11 @@ def main():
     parser.add_argument("--no-quality", dest="check_quality", action="store_false", help="Disable style-aware quality checks")
     parser.add_argument("--quality", dest="check_quality", action="store_true", help="Enable style-aware quality checks")
     parser.set_defaults(check_quality=parse_bool_env("COMPTREE_CHECK_QUALITY", True))
+    parser.add_argument(
+        "--chop-edges",
+        default=os.getenv("COMPTREE_CHOP_EDGES", ",".join(DEFAULT_CHOP_EDGES)),
+        help="Comma list of transparent edge checks. Default: top. Optional diagnostics: bottom,left,right",
+    )
 
     parser.add_argument("--required-size", help="WxH e.g. 2000x3000 (env: COMPTREE_REQUIRED_SIZE)")
     parser.add_argument("--jpg-whitelist", help="Comma list of basenames allowed as .jpg in PNG folder and exempt from dimension checks everywhere (env: COMPTREE_JPG_WHITELIST; default: grid)")
@@ -411,7 +424,8 @@ def main():
 
     # Prepare dimension checker (lazy/no-op if disabled)
     dim_checker = check_image_dimensions_lazy(args.check_dimensions)
-    quality_checker = check_image_quality_lazy(args.check_quality)
+    chop_edges = parse_edges(args.chop_edges, DEFAULT_CHOP_EDGES)
+    quality_checker = check_image_quality_lazy(args.check_quality, chop_edges)
 
     # CSV outputs go under ./config/
     OUTPUT_CSV = CONFIG_DIR / "compare_image_trees.csv"
@@ -476,6 +490,7 @@ def main():
     logging.info("Whitelist behavior: allowed as .jpg in PNG folder; excluded from dimension checks in all folders")
     logging.info("Check dimensions: %s (required %dx%d)", args.check_dimensions, REQUIRED_WIDTH, REQUIRED_HEIGHT)
     logging.info("Check quality: %s (grayscale allowed for %s; transparent alpha required for %s)", args.check_quality, sorted(ALLOWED_GRAYSCALE_STYLES), TRANSPARENT_STYLE)
+    logging.info("Transparent edge-chop checks: %s", ", ".join(chop_edges))
     logging.info(
         "Outputs: %s, %s, and %s",
         OUTPUT_CSV,

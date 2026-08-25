@@ -100,7 +100,8 @@ python compare_image_trees.py --repo-root "/srv/Kometa-People-Images"
 
 Quality rules allow grayscale only for `bw` and `diiivoy`. `original`, `rainier`,
 `signature`, `diiivoycolor`, and `transparent` must be color; `transparent` must
-also contain alpha transparency.
+also contain alpha transparency. Transparent head-chop detection is top-edge
+alpha contact; bottom/left/right are optional edge-contact diagnostics only.
 
 ### Generate a few common default sets
 ```powershell

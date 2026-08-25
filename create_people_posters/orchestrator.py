@@ -20,12 +20,12 @@ Core steps (order is enforced; do not reorder):
   7) colorize_noncolor         -> colorize_noncolor.py                (checkpointed)
   8) prep_dirs                 -> prep_people_dirs.py                 (checkpointed)
   9) remove_bg                 -> sel_remove_bg.py                    (checkpointed)
- 10) poster_ps1                -> create_people_poster.ps1            (checkpointed; requires PowerShell/pwsh)
- 11) update                    -> update_people_repos.py --op update  (ALWAYS runs when reached)
- 12) sync_images               -> sync_people_images.py               (checkpointed)
- 13) readme                    -> auto_readme.py                      (checkpointed; supports multiple styles)
- 14) sync_md                   -> sync_md.py                          (checkpointed; supports multiple styles)
- 15) push                      -> update_people_repos.py --op push    (ALWAYS runs when reached)
+ 11) recover_edge_chops        -> recover_edge_chops.py               (checkpointed; non-blocking)
+ 12) update                    -> update_people_repos.py --op update  (ALWAYS runs when reached)
+ 13) sync_images               -> sync_people_images.py               (checkpointed)
+ 14) readme                    -> auto_readme.py                      (checkpointed; supports multiple styles)
+ 15) sync_md                   -> sync_md.py                          (checkpointed; supports multiple styles)
+ 16) push                      -> update_people_repos.py --op push    (ALWAYS runs when reached)
 
 Fail-fast points
 ----------------
@@ -74,6 +74,7 @@ Environment (./config/.env or process environment)
   # Hard requirements (not optional once set to true)
   ORCH_REQUIRE_POWERSHELL=true        — fail if PowerShell isn't available
   ORCH_REQUIRE_BG_OUTPUT=true         — fail if SEL_DOWNLOAD_DIR isn't set/visible
+  ORCH_RECOVER_EDGE_CHOPS=true        — after poster generation, retry top-edge transparent chops from TMDB alternates
 """
 import os
 import sys
@@ -463,6 +464,8 @@ def main():
                         help="Comma list of extensions to count as processed (default: png)")
     parser.add_argument("--continue-if-empty", action="store_true",
                         help="Don't stop even if sel_remove_bg produced nothing (env ORCH_CONTINUE_IF_EMPTY)")
+    parser.add_argument("--no-recover-edge-chops", action="store_true",
+                        help="Skip non-blocking TMDB alternate retries for top-edge transparent chops.")
 
     args = parser.parse_args()
 
@@ -487,6 +490,7 @@ def main():
     bg_output_dir = Path(args.bg_output_dir).expanduser().resolve() if args.bg_output_dir else env_path("SEL_DOWNLOAD_DIR")
     bg_exts = {e.strip().lower().lstrip(".") for e in (args.bg_exts or "png").split(",") if e.strip()}
     continue_if_empty = args.continue_if_empty or _bool_env("ORCH_CONTINUE_IF_EMPTY", False)
+    recover_edge_chops = (not args.no_recover_edge_chops) and _bool_env("ORCH_RECOVER_EDGE_CHOPS", True)
 
     REQUIRE_POWERSHELL = _bool_env("ORCH_REQUIRE_POWERSHELL", False)
     REQUIRE_BG_OUTPUT = _bool_env("ORCH_REQUIRE_BG_OUTPUT", False)
@@ -589,6 +593,12 @@ def main():
         ps1 = str((SCRIPT_DIR / "create_people_poster.ps1").resolve())
         return [ps, "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ps1]
 
+    def _recover_edge_chops():
+        if not recover_edge_chops:
+            print("[INFO] recover_edge_chops disabled - skipping.")
+            return None
+        return [py, "recover_edge_chops.py"]
+
     def _update_repos():
         _require_repo_or_die()
         args2 = ["--repo-root", str(repo_root)]
@@ -642,6 +652,7 @@ def main():
         Step("prep_dirs",                 "Ensure local people_dirs scaffolds",         _prep_dirs,                 marker="prep_dirs.done.json"),
         Step("remove_bg",                 "Remove backgrounds (Selenium)",              _remove_bg,                 marker="remove_bg.done.json"),
         Step("poster_ps1",                "Generate posters via PowerShell",            _poster_ps1,                marker="poster_ps1.done.json"),
+        Step("recover_edge_chops",        "Retry top-edge chops from TMDB alternates",   _recover_edge_chops,        marker="recover_edge_chops.done.json"),
         Step("update",                    "git fetch/reset category repos",             _update_repos,              marker=None,              always_run=True),
         Step("sync_images",               "Sync images to repo folders",                _sync_images,               marker="sync_images.done.json"),
         Step("readme",                    "Generate README files",                      None,                       marker="readme.done.json"),
@@ -733,8 +744,8 @@ def main():
                 sys.exit(2)
             argv = builder()
             if argv is None:
-                # Only allowed skip is poster_ps1 when pwsh missing & not required
-                if s.key == "poster_ps1":
+                # Allowed skips: poster_ps1 when pwsh missing, or optional recovery disabled.
+                if s.key in {"poster_ps1", "recover_edge_chops"}:
                     if s.marker_path:
                         write_marker(s.marker_path, {"skipped": True, "at": time.time()})
                     continue

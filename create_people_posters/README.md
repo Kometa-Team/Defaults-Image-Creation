@@ -269,13 +269,14 @@ The orchestrator enforces the single correct order and writes checkpoints so you
 8. **prep_dirs** → `prep_people_dirs.py` — ensure local `./config/people_dirs` scaffolds exist  
 9. **remove_bg** → `sel_remove_bg.py` — background removal via Selenium (Adobe Express)  
 10. **poster_ps1** → `create_people_poster.ps1` — poster generation (PowerShell)  
-11. **update** → `update_people_repos.py --op update` — fetch/reset style repos (**always runs**)  
-12. **sync_images** → `sync_people_images.py` — copy new images into the repo style folders  
-13. **readme** → `auto_readme.py` — generate READMEs for one or more styles; per-letter grids are opt-in  
-14. **sync_md** → `sync_md.py` — mirror `*.md` back to `./config/people_dirs/<style>`  
-15. **push** → `update_people_repos.py --op push` — commit & push changes (**always runs**)
+11. **recover_edge_chops** → `recover_edge_chops.py` — non-blocking TMDB alternate retry for top-edge head chops
+12. **update** → `update_people_repos.py --op update` — fetch/reset style repos (**always runs**)
+13. **sync_images** → `sync_people_images.py` — copy new images into the repo style folders
+14. **readme** → `auto_readme.py` — generate READMEs for one or more styles; per-letter grids are opt-in
+15. **sync_md** → `sync_md.py` — mirror `*.md` back to `./config/people_dirs/<style>`
+16. **push** → `update_people_repos.py --op push` — commit & push changes (**always runs**)
 
-> Optional QA tools (not wired by default): `image_check.py`, `compare_image_trees.py` — useful **after** step 11.
+> Optional QA tools: `image_check.py`, `compare_image_trees.py` — useful **after** step 13.
 > Optional helper (outside the orchestrator): `grayscale_sweeper.py` — scan any folder tree for non‑color images and copy them into `config/Downloads/other` so `colorize_noncolor.py` can convert them.
 > Optional helper (outside the orchestrator): `bulk_extract_configs.py` — scan mess/meta logs, including nested archives, and export redacted config sections as `parsed_*.yml`.
 
@@ -385,6 +386,23 @@ Results are written to `./config/original_resolver/manifest.csv`. Any name that
 does not match TMDB or Google above `ORIGINAL_RESOLVER_THRESHOLD` is listed in
 `./config/original_resolver/unresolved.txt` and gets a review contact sheet.
 
+### Recover top-edge head chops
+```bash
+# Standalone, non-blocking: tries TMDB profile alternates for transparent PNGs
+# whose subject touches the top edge.
+python recover_edge_chops.py
+
+# Diagnostics only: bottom/left/right are edge-contact checks, not proof of chin
+# or side chops.
+python image_check.py --input_directory "./config/people_dirs/transparent" --style transparent --chop-edges top,bottom,left,right
+```
+
+The orchestrator runs `recover_edge_chops.py` after `poster_ps1` by default.
+It retries top-edge head chops only, restores the previous local style outputs
+when no alternate clears the check, writes
+`./config/edge_chop_recovery/edge_chop_recovery.csv`, and continues the pipeline.
+Set `ORCH_RECOVER_EDGE_CHOPS=false` or pass `--no-recover-edge-chops` to skip it.
+
 ### Bulk extract redacted config.yml sections (helper)
 ```bash
 python bulk_extract_configs.py --input_directory "C:/temp"
@@ -484,8 +502,12 @@ python compare_image_trees.py
 
 Quality rules allow grayscale only for `bw` and `diiivoy`. `original`, `rainier`,
 `signature`, `diiivoycolor`, and `transparent` must be color; `transparent` must
-also contain alpha transparency. Use `--no-quality` on `compare_image_trees.py`
-only when you want the old presence/dimension-only report.
+also contain alpha transparency. Transparent QA checks top-edge head chops by
+default. Bottom/left/right edge checks are available as explicit diagnostics,
+but they are not semantic chin/side-chop proof because shoulders, necks, and
+body crops can legitimately touch those edges. Use `--no-quality` on
+`compare_image_trees.py` only when you want the old presence/dimension-only
+report.
 
 ---
 
@@ -503,6 +525,7 @@ create_people_posters/
 ├─ prep_people_dirs.py
 ├─ sel_remove_bg.py
 ├─ create_people_poster.ps1
+├─ recover_edge_chops.py          # optional/non-blocking pipeline recovery
 ├─ update_people_repos.py
 ├─ sync_people_images.py
 ├─ auto_readme.py
