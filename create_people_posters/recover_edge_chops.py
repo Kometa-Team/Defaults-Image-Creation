@@ -107,6 +107,7 @@ def find_chopped(
     report_edges: tuple[str, ...],
     retry_edges: tuple[str, ...],
     modified_since: float | None = None,
+    max_matches: int = 0,
 ) -> list[tuple[str, Path, str]]:
     chopped: list[tuple[str, Path, str]] = []
     for path in iter_transparents(root):
@@ -122,6 +123,8 @@ def find_chopped(
             continue
         if has_any_issue(result, retry_edges):
             chopped.append((path.stem, path, issue_summary(result)))
+            if max_matches > 0 and len(chopped) >= max_matches:
+                break
     return chopped
 
 
@@ -442,12 +445,18 @@ def main() -> int:
         log("[info] Whole-tree recovery skipped without scanning to avoid large Adobe retry runs.")
         return 0
 
-    chopped = find_chopped(args.transparent_root, args.threshold, args.report_edges, args.retry_edges, modified_since=modified_since)
+    scan_limit = 0 if args.names else args.limit
+    chopped = find_chopped(
+        args.transparent_root,
+        args.threshold,
+        args.report_edges,
+        args.retry_edges,
+        modified_since=modified_since,
+        max_matches=scan_limit,
+    )
     if args.names:
         wanted = {name.casefold() for name in args.names}
         chopped = [item for item in chopped if item[0].casefold() in wanted]
-    if args.limit > 0:
-        chopped = chopped[: args.limit]
 
     log(f"Chopped transparent images needing retry: {len(chopped)}")
     if args.audit_only:
