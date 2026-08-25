@@ -275,10 +275,10 @@ def final_transparent_path(people_root: Path, name: str) -> Path:
     return people_root / "transparent" / (name[:1] or "_").upper() / "Images" / f"{name}.png"
 
 
-def downloads_are_clear(name: str, downloads_dir: Path) -> bool:
-    allowed = {f"{name}.jpg", f"{name}.png"}
+def downloads_pngs_are_clear(name: str, downloads_dir: Path) -> bool:
+    allowed = {f"{name}.png"}
     for path in downloads_dir.glob("*"):
-        if path.is_file() and path.suffix.lower() in {".jpg", ".jpeg", ".png"} and path.name not in allowed:
+        if path.is_file() and path.suffix.lower() == ".png" and path.name not in allowed:
             return False
     return True
 
@@ -300,15 +300,21 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
             row.note = "no TMDB profile candidates"
             return row
 
-        if not downloads_are_clear(name, args.downloads_dir):
-            row.note = f"downloads folder has unrelated images; skipped to avoid processing the wrong files: {args.downloads_dir}"
+        if not downloads_pngs_are_clear(name, args.downloads_dir):
+            row.note = f"downloads folder has unrelated PNGs; skipped to avoid poster generation processing the wrong files: {args.downloads_dir}"
             return row
+
+        sel_src_dir = Path(tmp) / "sel_src"
+        sel_orig_dir = Path(tmp) / "sel_original"
+        sel_download_dir = Path(tmp) / "sel_downloads"
+        for work_dir in (sel_src_dir, sel_orig_dir, sel_download_dir, args.downloads_dir):
+            work_dir.mkdir(parents=True, exist_ok=True)
 
         env = os.environ.copy()
         env["PYTHONIOENCODING"] = "utf-8"
-        env["SEL_SRC_DIR"] = str(args.downloads_dir)
-        env["SEL_ORIG_DIR"] = str(args.people_root / "original")
-        env["SEL_DOWNLOAD_DIR"] = str(CONFIG_DIR / "sel_downloads")
+        env["SEL_SRC_DIR"] = str(sel_src_dir)
+        env["SEL_ORIG_DIR"] = str(sel_orig_dir)
+        env["SEL_DOWNLOAD_DIR"] = str(sel_download_dir)
 
         ps = ps_exe()
         if not ps:
@@ -319,9 +325,14 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
         for candidate in candidates:
             row.attempts += 1
             raw_path = candidate_dir / f"{candidate.label}{Path(candidate.file_path).suffix or '.jpg'}"
-            staged_jpg = args.downloads_dir / f"{name}.jpg"
+            staged_jpg = sel_src_dir / f"{name}.jpg"
+            generated_png = sel_src_dir / f"{name}.png"
+            staged_png = args.downloads_dir / f"{name}.png"
             try:
                 remove_style_outputs(paths)
+                for old_file in sel_src_dir.glob("*"):
+                    if old_file.is_file():
+                        old_file.unlink()
                 download_candidate(session, candidate, raw_path)
                 normalize_to_download(raw_path, staged_jpg)
             except Exception as exc:
@@ -332,6 +343,11 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
             if rc != 0:
                 log(f"[warn] {name} {candidate.label}: remove-bg failed")
                 continue
+            if not generated_png.exists():
+                log(f"[warn] {name} {candidate.label}: remove-bg did not produce {generated_png}")
+                continue
+
+            shutil.copy2(generated_png, staged_png)
 
             rc = run_step(
                 f"poster retry {name} {candidate.label}",
