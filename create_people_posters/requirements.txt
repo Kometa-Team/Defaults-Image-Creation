@@ -3,6 +3,7 @@ requests
 Pillow
 numpy
 rembg[cpu,cli]
+opencv-python-headless
 selenium
 python-dotenv
 alive-progress

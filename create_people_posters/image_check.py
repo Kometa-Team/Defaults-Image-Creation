@@ -14,6 +14,18 @@ from PIL import Image, ImageChops
 from alive_progress import alive_bar
 
 from edge_chop import detect_edge_chops, issue_summary, parse_edges
+from face_crop import (
+    DEFAULT_FACE_CROP_CHECKS,
+    detect_face_crop_issues,
+    face_crop_summary,
+    parse_face_crop_checks,
+)
+
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
 
 # ========= PATHS & LOGGING =========
 SCRIPT_PATH = Path(__file__).resolve()
@@ -63,6 +75,8 @@ KNOWN_STYLES = {
     "transparent",
 }
 DEFAULT_CHOP_EDGES = ("top",)
+DEFAULT_FACE_CROP_SIDE_MARGIN = 0.02
+DEFAULT_FACE_CROP_CHIN_MARGIN = 0.015
 
 
 # ========= END CONFIG =====
@@ -121,7 +135,15 @@ def allowed_extensions(style: str) -> set[str]:
     return {".png"} if style == TRANSPARENT_STYLE else {".jpg", ".jpeg"}
 
 
-def test_image(image_path: Path, counters: Dict[str, int], style: str, chop_edges: tuple[str, ...]):
+def test_image(
+    image_path: Path,
+    counters: Dict[str, int],
+    style: str,
+    chop_edges: tuple[str, ...],
+    face_crop_checks: tuple[str, ...],
+    face_crop_side_margin: float,
+    face_crop_chin_margin: float,
+):
     filepre = str(image_path)
     name_wo_ext = image_path.stem
 
@@ -165,6 +187,27 @@ def test_image(image_path: Path, counters: Dict[str, int], style: str, chop_edge
                         )
             except Exception as e:
                 logging.warning("Edge-chop check error for %s (%s)", filepre, e)
+
+            # 8) Face crop diagnostics, only meaningful for transparent style
+            try:
+                if style == TRANSPARENT_STYLE and face_crop_checks:
+                    face_crop = detect_face_crop_issues(
+                        image_path,
+                        checks=face_crop_checks,
+                        side_margin_threshold=face_crop_side_margin,
+                        chin_margin_threshold=face_crop_chin_margin,
+                    )
+                    summary = face_crop_summary(face_crop)
+                    if face_crop.error:
+                        logging.warning("Face-crop check error for %s (%s)", filepre, face_crop.error)
+                    elif summary:
+                        counters["Counter8"] += 1
+                        logging.warning(
+                            "WARNING8!~%s~%s possible FACE CROP; review only. %s",
+                            filepre, name_wo_ext, summary
+                        )
+            except Exception as e:
+                logging.warning("Face-crop check error for %s (%s)", filepre, e)
 
             # 4) Ratio mismatch
             if ratio != BASE_IMAGE_RATIO:
@@ -223,6 +266,23 @@ def main():
         default=os.getenv("IMAGE_CHECK_CHOP_EDGES", ",".join(DEFAULT_CHOP_EDGES)),
         help="Comma list of transparent edge checks. Default: top. Optional diagnostics: bottom,left,right",
     )
+    parser.add_argument(
+        "--face-crop-checks",
+        default=os.getenv("IMAGE_CHECK_FACE_CROP_CHECKS", ",".join(DEFAULT_FACE_CROP_CHECKS)),
+        help="Comma list of transparent face-crop diagnostics. Default: chin,left,right. Use none to disable.",
+    )
+    parser.add_argument(
+        "--face-crop-side-margin",
+        type=float,
+        default=float(os.getenv("IMAGE_CHECK_FACE_CROP_SIDE_MARGIN", str(DEFAULT_FACE_CROP_SIDE_MARGIN))),
+        help="Warn when detected face left/right margin ratio is at or below this value.",
+    )
+    parser.add_argument(
+        "--face-crop-chin-margin",
+        type=float,
+        default=float(os.getenv("IMAGE_CHECK_FACE_CROP_CHIN_MARGIN", str(DEFAULT_FACE_CROP_CHIN_MARGIN))),
+        help="Warn when detected face bottom margin ratio is at or below this value.",
+    )
     args = parser.parse_args()
 
     root = Path(args.input_directory)
@@ -233,6 +293,7 @@ def main():
     style = infer_style(root, args.style)
     extensions = allowed_extensions(style)
     chop_edges = parse_edges(args.chop_edges, DEFAULT_CHOP_EDGES)
+    face_crop_checks = parse_face_crop_checks(args.face_crop_checks, DEFAULT_FACE_CROP_CHECKS)
 
     # START metadata in log (not spammy per-file info)
     logging.info("#### START ####")
@@ -241,6 +302,9 @@ def main():
     logging.info("style                        : %s", style)
     logging.info("extensions                   : %s", ", ".join(sorted(extensions)))
     logging.info("chop_edges                   : %s", ", ".join(chop_edges))
+    logging.info("face_crop_checks             : %s", ", ".join(face_crop_checks) if face_crop_checks else "(disabled)")
+    logging.info("face_crop_side_margin        : %s", args.face_crop_side_margin)
+    logging.info("face_crop_chin_margin        : %s", args.face_crop_chin_margin)
     logging.info("script_path                  : %s", SCRIPT_DIR)
     logging.info("scriptLog                    : %s", LOG_FILE)
 
@@ -249,13 +313,21 @@ def main():
     print(f"Planned scan: {total} {ext_label} files under {root} (recursive, style={style})")
 
     start = timer()
-    counters: Dict[str, int] = {f"Counter{i}": 0 for i in range(1, 8)}
+    counters: Dict[str, int] = {f"Counter{i}": 0 for i in range(1, 9)}
     processed = 0
 
     # Console: progress bar only
     with alive_bar(total or 1, title=f"Scanning {style}", dual_line=False, stats=False) as bar:
         for fp in iter_image_files(root, extensions):
-            test_image(fp, counters, style, chop_edges)
+            test_image(
+                fp,
+                counters,
+                style,
+                chop_edges,
+                face_crop_checks,
+                args.face_crop_side_margin,
+                args.face_crop_chin_margin,
+            )
             processed += 1
             bar()
 
@@ -263,7 +335,7 @@ def main():
     elapsed_min = round((timer() - start) / 60.0, 2)
     ppm = round((processed / elapsed_min), 2) if elapsed_min > 0 else processed
     tot_issues = sum(counters.values())
-    checks_per_file = 7 if style == TRANSPARENT_STYLE else 5
+    checks_per_file = 8 if style == TRANSPARENT_STYLE else 5
     tot_checks = processed * checks_per_file
     issues_pct = round(((tot_issues / tot_checks) * 100), 2) if processed > 0 else 0.0
 
@@ -281,6 +353,7 @@ def main():
     logging.info("WARNING5 Quality W Total     : %s", counters['Counter5'])
     logging.info("WARNING6 Quality H Total     : %s", counters['Counter6'])
     logging.info("WARNING7 2000x3000 Total     : %s", counters['Counter7'])
+    logging.info("WARNING8 Face Crop Total     : %s", counters['Counter8'])
     logging.info("Total issues                 : %s", tot_issues)
     logging.info("Total checks                 : %s", tot_checks)
     logging.info("Percent Issues               : %s %%", issues_pct)
@@ -292,7 +365,7 @@ def main():
     print(
         f"W1 BadGray: {counters['Counter1']} | W2 NotTransparent: {counters['Counter2']} | W3 EdgeChop: {counters['Counter3']}")
     print(
-        f"W4 Ratio: {counters['Counter4']} | W5 Width: {counters['Counter5']} | W6 Height: {counters['Counter6']} | W7 2000x3000: {counters['Counter7']}")
+        f"W4 Ratio: {counters['Counter4']} | W5 Width: {counters['Counter5']} | W6 Height: {counters['Counter6']} | W7 2000x3000: {counters['Counter7']} | W8 FaceCrop: {counters['Counter8']}")
     print(f"Issues: {tot_issues} / Checks: {tot_checks}  ({issues_pct}%)")
     print(f"Details in log -> {LOG_FILE}")
 

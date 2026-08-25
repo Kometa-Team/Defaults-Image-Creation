@@ -31,6 +31,18 @@ from dotenv import load_dotenv
 from alive_progress import alive_bar
 
 from edge_chop import detect_edge_chops, issue_summary, parse_edges
+from face_crop import (
+    DEFAULT_FACE_CROP_CHECKS,
+    detect_face_crop_issues,
+    face_crop_summary,
+    parse_face_crop_checks,
+)
+
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
 
 # ========= PATHS & LOGGING =========
 SCRIPT_PATH = Path(__file__).resolve()
@@ -75,6 +87,8 @@ ALLOWED_GRAYSCALE_STYLES = {"bw", "diiivoy"}
 TRANSPARENT_STYLE = "transparent"
 KNOWN_STYLES = set(DEFAULT_CATEGORIES)
 DEFAULT_CHOP_EDGES = ("top",)
+DEFAULT_FACE_CROP_SIDE_MARGIN = 0.02
+DEFAULT_FACE_CROP_CHIN_MARGIN = 0.015
 
 
 def parse_bool_env(key: str, default: bool) -> bool:
@@ -103,13 +117,15 @@ def detect_png_dir_index(dirs) -> Optional[int]:
 
 
 def detect_style_name(path: Path) -> str:
-    name = path.name.lower()
-    if name in KNOWN_STYLES:
-        return name
-    for style in KNOWN_STYLES:
-        if style in name:
-            return style
-    return name
+    candidates = [part.lower() for part in [path.name, *(parent.name for parent in path.parents[:3])]]
+    for candidate in candidates:
+        if candidate in KNOWN_STYLES:
+            return candidate
+    for candidate in candidates:
+        for style in KNOWN_STYLES:
+            if style in candidate:
+                return style
+    return path.name.lower()
 
 
 def normalize_case(s: str, case_sensitive: bool) -> str:
@@ -156,7 +172,13 @@ def check_image_dimensions_lazy(CHECK_DIMENSIONS: bool):
     return _check
 
 
-def check_image_quality_lazy(CHECK_QUALITY: bool, CHOP_EDGES: tuple[str, ...]):
+def check_image_quality_lazy(
+    CHECK_QUALITY: bool,
+    CHOP_EDGES: tuple[str, ...],
+    FACE_CROP_CHECKS: tuple[str, ...],
+    FACE_CROP_SIDE_MARGIN: float,
+    FACE_CROP_CHIN_MARGIN: float,
+):
     """
     Return a function check(path, style)->list[str] depending on CHECK_QUALITY.
     - If disabled: returns [] quickly without importing Pillow.
@@ -210,6 +232,18 @@ def check_image_quality_lazy(CHECK_QUALITY: bool, CHOP_EDGES: tuple[str, ...]):
                     summary = issue_summary(chop)
                     if summary:
                         issues.append(f"edge chop: {summary}")
+                    if FACE_CROP_CHECKS:
+                        face_crop = detect_face_crop_issues(
+                            path,
+                            checks=FACE_CROP_CHECKS,
+                            side_margin_threshold=FACE_CROP_SIDE_MARGIN,
+                            chin_margin_threshold=FACE_CROP_CHIN_MARGIN,
+                        )
+                        face_summary = face_crop_summary(face_crop)
+                        if face_crop.error:
+                            issues.append(f"face crop check error: {face_crop.error}")
+                        elif face_summary:
+                            issues.append(f"possible face crop: {face_summary}")
         except Exception as e:
             issues.append(f"open/process error: {e}")
         return issues
@@ -374,6 +408,23 @@ def main():
         default=os.getenv("COMPTREE_CHOP_EDGES", ",".join(DEFAULT_CHOP_EDGES)),
         help="Comma list of transparent edge checks. Default: top. Optional diagnostics: bottom,left,right",
     )
+    parser.add_argument(
+        "--face-crop-checks",
+        default=os.getenv("COMPTREE_FACE_CROP_CHECKS", ",".join(DEFAULT_FACE_CROP_CHECKS)),
+        help="Comma list of transparent face-crop diagnostics. Default: chin,left,right. Use none to disable.",
+    )
+    parser.add_argument(
+        "--face-crop-side-margin",
+        type=float,
+        default=float(os.getenv("COMPTREE_FACE_CROP_SIDE_MARGIN", str(DEFAULT_FACE_CROP_SIDE_MARGIN))),
+        help="Warn when detected face left/right margin ratio is at or below this value.",
+    )
+    parser.add_argument(
+        "--face-crop-chin-margin",
+        type=float,
+        default=float(os.getenv("COMPTREE_FACE_CROP_CHIN_MARGIN", str(DEFAULT_FACE_CROP_CHIN_MARGIN))),
+        help="Warn when detected face bottom margin ratio is at or below this value.",
+    )
 
     parser.add_argument("--required-size", help="WxH e.g. 2000x3000 (env: COMPTREE_REQUIRED_SIZE)")
     parser.add_argument("--jpg-whitelist", help="Comma list of basenames allowed as .jpg in PNG folder and exempt from dimension checks everywhere (env: COMPTREE_JPG_WHITELIST; default: grid)")
@@ -425,7 +476,14 @@ def main():
     # Prepare dimension checker (lazy/no-op if disabled)
     dim_checker = check_image_dimensions_lazy(args.check_dimensions)
     chop_edges = parse_edges(args.chop_edges, DEFAULT_CHOP_EDGES)
-    quality_checker = check_image_quality_lazy(args.check_quality, chop_edges)
+    face_crop_checks = parse_face_crop_checks(args.face_crop_checks, DEFAULT_FACE_CROP_CHECKS)
+    quality_checker = check_image_quality_lazy(
+        args.check_quality,
+        chop_edges,
+        face_crop_checks,
+        args.face_crop_side_margin,
+        args.face_crop_chin_margin,
+    )
 
     # CSV outputs go under ./config/
     OUTPUT_CSV = CONFIG_DIR / "compare_image_trees.csv"
@@ -491,6 +549,9 @@ def main():
     logging.info("Check dimensions: %s (required %dx%d)", args.check_dimensions, REQUIRED_WIDTH, REQUIRED_HEIGHT)
     logging.info("Check quality: %s (grayscale allowed for %s; transparent alpha required for %s)", args.check_quality, sorted(ALLOWED_GRAYSCALE_STYLES), TRANSPARENT_STYLE)
     logging.info("Transparent edge-chop checks: %s", ", ".join(chop_edges))
+    logging.info("Transparent face-crop checks: %s", ", ".join(face_crop_checks) if face_crop_checks else "(disabled)")
+    logging.info("Face-crop side margin threshold: %s", args.face_crop_side_margin)
+    logging.info("Face-crop chin margin threshold: %s", args.face_crop_chin_margin)
     logging.info(
         "Outputs: %s, %s, and %s",
         OUTPUT_CSV,

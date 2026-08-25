@@ -98,6 +98,9 @@ ORCH_BG_EXTS=png                                      # exts to count after remo
 ORCH_CONTINUE_IF_EMPTY=false                          # continue run even if 0 PNGs were produced
 EDGE_CHOP_PRECHECK_REMBG=true                         # prefilter retry candidates locally before Adobe
 REMBG_HOME=./config/models/rembg                       # rembg model cache for recovery
+IMAGE_CHECK_FACE_CROP_CHECKS=chin,left,right           # report-only face crop diagnostics
+COMPTREE_FACE_CROP_CHECKS=chin,left,right              # same diagnostics in compare_image_trees
+FACE_CROP_MODEL_HOME=./config/models/opencv            # YuNet face detector cache
 
 # Hard requirements (fail fast when true)
 ORCH_REQUIRE_POWERSHELL=false
@@ -396,6 +399,9 @@ python recover_edge_chops.py
 # Diagnostics only: bottom/left/right are edge-contact checks, not proof of chin
 # or side chops.
 python image_check.py --input_directory "./config/people_dirs/transparent" --style transparent --chop-edges top,bottom,left,right
+
+# Face-model diagnostics only: report possible chin/side face crops.
+python image_check.py --input_directory "./config/people_dirs/transparent" --style transparent --face-crop-checks chin,left,right
 ```
 
 The orchestrator runs `recover_edge_chops.py` after `poster_ps1` by default,
@@ -526,7 +532,13 @@ Quality rules allow grayscale only for `bw` and `diiivoy`. `original`, `rainier`
 also contain alpha transparency. Transparent QA checks top-edge head chops by
 default. Bottom/left/right edge checks are available as explicit diagnostics,
 but they are not semantic chin/side-chop proof because shoulders, necks, and
-body crops can legitimately touch those edges. Use `--no-quality` on
+body crops can legitimately touch those edges. Transparent QA also runs a
+report-only OpenCV face detector for possible chin/left/right face crop risk;
+those findings are written as warnings or quality CSV rows, but they do not
+trigger automatic recovery. Use `--face-crop-checks none` or set
+`COMPTREE_FACE_CROP_CHECKS=none` to disable those diagnostics. The detector uses
+OpenCV YuNet and caches `face_detection_yunet_2026may.onnx` under
+`FACE_CROP_MODEL_HOME` on first use. Use `--no-quality` on
 `compare_image_trees.py` only when you want the old presence/dimension-only
 report.
 
