@@ -57,6 +57,12 @@ CATEGORIES = [
     "transparent",
 ]
 TARGET_TRANSPARENT_SIZE = (2000, 3000)
+IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tif", ".tiff"}
+COLOR_REQUIRED_CATEGORIES = {"diiivoycolor", "original", "rainier", "signature", "transparent"}
+
+
+def expected_extensions(category: str) -> set[str]:
+    return {".png"} if category == "transparent" else {".jpg"}
 
 
 def newer_than(src: Path, dst: Path) -> bool:
@@ -137,22 +143,68 @@ def is_grayscale(img: Image.Image) -> bool:
     )
 
 
-def transparent_quality_issues(path: Path) -> list[str]:
+def should_validate_file(path: Path) -> bool:
+    return path.suffix.lower() in IMAGE_EXTENSIONS or path.parent.name.lower() == "images"
+
+
+def image_quality_issues(category: str, path: Path, allow_fixable_dimensions: bool = False) -> list[str]:
     issues: list[str] = []
-    if path.suffix.lower() != ".png":
-        return ["transparent repo files must be PNG"]
+    suffix = path.suffix.lower()
+    expected = expected_extensions(category)
+    if suffix not in expected:
+        expected_text = ", ".join(sorted(expected))
+        issues.append(f"{category} files must use {expected_text}")
+        if suffix not in IMAGE_EXTENSIONS:
+            return issues
 
     try:
         with Image.open(path) as img:
-            if img.size != TARGET_TRANSPARENT_SIZE:
+            if img.size != TARGET_TRANSPARENT_SIZE and not allow_fixable_dimensions:
                 issues.append(f"dimensions are {img.width}x{img.height}, expected 2000x3000")
-            if not has_any_transparency(img):
+            if category == "transparent" and not has_any_transparency(img):
                 issues.append("not transparent; send through remove_bg")
-            if is_grayscale(img):
+            if category in COLOR_REQUIRED_CATEGORIES and is_grayscale(img):
                 issues.append("grayscale; send original through DeOldify before remove_bg")
     except Exception as exc:
         issues.append(f"unreadable image: {exc}")
     return issues
+
+
+def transparent_quality_issues(path: Path) -> list[str]:
+    return image_quality_issues("transparent", path)
+
+
+def preflight_sources(src_base: Path) -> int:
+    failed = 0
+    for category in CATEGORIES:
+        src_root = src_base / category
+        if not src_root.exists():
+            logging.info("preflight %s: source does not exist, skipping (%s)", category, src_root)
+            continue
+
+        category_failed = 0
+        for path in iter_files(src_root):
+            if not should_validate_file(path):
+                continue
+            rel = path.relative_to(src_root)
+            issues = image_quality_issues(
+                category,
+                path,
+                allow_fixable_dimensions=(category == "transparent"),
+            )
+            if issues:
+                category_failed += 1
+                logging.warning("preflight %s failed for %s: %s", category, rel, "; ".join(issues))
+
+        if category_failed:
+            logging.warning("preflight %s: %d invalid file(s)", category, category_failed)
+        failed += category_failed
+
+    if failed:
+        logging.error("Preflight found %d invalid source file(s); aborting before syncing any style repo.", failed)
+    else:
+        logging.info("Preflight passed for all source style folders.")
+    return failed
 
 
 def sync_tree(src_root: Path, dst_root: Path, title: str, normalize_transparent: bool = False):
@@ -187,21 +239,6 @@ def sync_tree(src_root: Path, dst_root: Path, title: str, normalize_transparent:
 
             try:
                 if newer_than(f, df):
-                    if normalize_transparent:
-                        source_issues = [
-                            issue for issue in transparent_quality_issues(f)
-                            if not issue.startswith("dimensions are ")
-                        ]
-                        if source_issues:
-                            failed += 1
-                            bar.text = f"-> failed:  {rel}"
-                            logging.warning(
-                                "Refusing transparent copy %s -> %s: %s",
-                                f, df, "; ".join(source_issues),
-                            )
-                            bar()
-                            continue
-
                     # copy2 ≈ COPY:DAT (data + basic metadata/timestamps)
                     shutil.copy2(f, df)
                     if normalize_transparent and enforce_transparent_canvas(df):
@@ -258,6 +295,10 @@ def main():
     start = timer()
     logging.info("Source base: %s", src_base)
     logging.info("Destination base: %s", dest_base)
+
+    preflight_failed = preflight_sources(src_base)
+    if preflight_failed:
+        return 1
 
     failed = 0
     for cat in CATEGORIES:

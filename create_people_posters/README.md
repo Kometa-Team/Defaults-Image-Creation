@@ -279,6 +279,11 @@ The orchestrator enforces the single correct order and writes checkpoints so you
 > Optional helper (outside the orchestrator): `grayscale_sweeper.py` — scan any folder tree for non‑color images and copy them into `config/Downloads/other` so `colorize_noncolor.py` can convert them.
 > Optional helper (outside the orchestrator): `bulk_extract_configs.py` — scan mess/meta logs, including nested archives, and export redacted config sections as `parsed_*.yml`.
 
+`sync_people_images.py` preflights every source style folder before copying any
+files. If any style has an invalid image, the whole sync stops before touching
+the local People-Images repos, keeping style repo counts from drifting because
+of a partial sync.
+
 ---
 
 ## Run it
