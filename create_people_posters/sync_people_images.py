@@ -15,6 +15,7 @@ import shutil
 from pathlib import Path
 from timeit import default_timer as timer
 
+from PIL import Image
 from dotenv import load_dotenv
 from alive_progress import alive_bar
 
@@ -55,6 +56,7 @@ CATEGORIES = [
     "rainier",
     "transparent",
 ]
+TARGET_TRANSPARENT_SIZE = (2000, 3000)
 
 
 def newer_than(src: Path, dst: Path) -> bool:
@@ -91,7 +93,32 @@ def copystat_dir(src: Path, dst: Path):
         logging.debug("copystat failed on dir %s -> %s: %s", src, dst, e)
 
 
-def sync_tree(src_root: Path, dst_root: Path, title: str):
+def enforce_transparent_canvas(path: Path) -> bool:
+    """Force a transparent PNG onto the standard 2000x3000 canvas."""
+    if path.suffix.lower() != ".png":
+        return False
+
+    with Image.open(path) as img:
+        if img.size == TARGET_TRANSPARENT_SIZE:
+            return False
+
+        rgba = img.convert("RGBA")
+        if rgba.width != TARGET_TRANSPARENT_SIZE[0]:
+            new_height = round(rgba.height * (TARGET_TRANSPARENT_SIZE[0] / rgba.width))
+            rgba = rgba.resize((TARGET_TRANSPARENT_SIZE[0], new_height), Image.Resampling.LANCZOS)
+
+        if rgba.height > TARGET_TRANSPARENT_SIZE[1]:
+            top = max((rgba.height - TARGET_TRANSPARENT_SIZE[1]) // 2, 0)
+            rgba = rgba.crop((0, top, TARGET_TRANSPARENT_SIZE[0], top + TARGET_TRANSPARENT_SIZE[1]))
+
+        canvas = Image.new("RGBA", TARGET_TRANSPARENT_SIZE, (0, 0, 0, 0))
+        y = max((TARGET_TRANSPARENT_SIZE[1] - rgba.height) // 2, 0)
+        canvas.alpha_composite(rgba, (0, y))
+        canvas.save(path, "PNG")
+        return True
+
+
+def sync_tree(src_root: Path, dst_root: Path, title: str, normalize_transparent: bool = False):
     """
     Rough equivalent of:
       robocopy <src> <dst> /E /COPY:DAT /DCOPY:T /XO
@@ -112,7 +139,7 @@ def sync_tree(src_root: Path, dst_root: Path, title: str):
 
     files = iter_files(src_root)
     total = len(files)
-    copied = skipped = failed = 0
+    copied = skipped = normalized = failed = 0
 
     logging.info("%s: %d file(s) to evaluate", title, total)
     with alive_bar(total, dual_line=True, title=title) as bar:
@@ -125,9 +152,13 @@ def sync_tree(src_root: Path, dst_root: Path, title: str):
                 if newer_than(f, df):
                     # copy2 ≈ COPY:DAT (data + basic metadata/timestamps)
                     shutil.copy2(f, df)
+                    if normalize_transparent and enforce_transparent_canvas(df):
+                        normalized += 1
                     bar.text = f"-> copied:  {rel}"
                     copied += 1
                 else:
+                    if normalize_transparent and enforce_transparent_canvas(df):
+                        normalized += 1
                     bar.text = f"-> skipped: {rel} (dest newer/same)"
                     skipped += 1
             except Exception as e:
@@ -137,8 +168,8 @@ def sync_tree(src_root: Path, dst_root: Path, title: str):
             bar()
 
     logging.info(
-        "%s: dirs created=%d, copied=%d, skipped=%d, failed=%d",
-        title, created_dirs, copied, skipped, failed
+        "%s: dirs created=%d, copied=%d, skipped=%d, normalized=%d, failed=%d",
+        title, created_dirs, copied, skipped, normalized, failed
     )
 
 
@@ -164,7 +195,7 @@ def main():
         dst = dest_base / cat
         title = f"sync {cat}"
         logging.info("---- %s ----", title)
-        sync_tree(src, dst, title)
+        sync_tree(src, dst, title, normalize_transparent=(cat == "transparent"))
 
     elapsed = timer() - start
     logging.info("All done in %.2fs", elapsed)
