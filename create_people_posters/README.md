@@ -102,6 +102,8 @@ REMBG_HOME=./config/models/rembg                       # rembg model cache for r
 EDGE_CHOP_REJECT_GRAYSCALE=true                       # do not accept B/W TMDB alternates during recovery
 EDGE_CHOP_COLORIZE_GRAYSCALE=true                     # try DeOldify before rejecting B/W alternates
 EDGE_CHOP_EXHAUSTED_FILE=./config/edge_chop_recovery/exhausted_names.txt
+EDGE_CHOP_ATTEMPTED_FILE=./config/edge_chop_recovery/attempted_candidates.csv
+EDGE_CHOP_STAGE_FOR_ORCHESTRATOR=false                # default false; use CLI flag for backlog batches
 IMAGE_CHECK_FACE_CROP_CHECKS=chin,left,right           # report-only face crop diagnostics
 COMPTREE_FACE_CROP_CHECKS=chin,left,right              # same diagnostics in compare_image_trees
 FACE_CROP_MODEL_HOME=./config/models/opencv            # YuNet face detector cache
@@ -423,7 +425,9 @@ the script restores the previous local style outputs, writes
 `./config/edge_chop_recovery/edge_chop_recovery.csv`, records the person in
 `./config/edge_chop_recovery/exhausted_names.txt`, and continues the pipeline.
 Future recovery batches skip names in that exhausted file; remove a name from the
-file if you want to retry it later.
+file if you want to retry it later. Batch staging also records tried TMDB image
+paths in `./config/edge_chop_recovery/attempted_candidates.csv` so the next
+batch does not choose the same alternate again.
 Set `ORCH_RECOVER_EDGE_CHOPS=false` or pass `--no-recover-edge-chops` to skip it.
 Set `EDGE_CHOP_PRECHECK_REMBG=false` or pass `--no-precheck-rembg` only when you
 need to diagnose the older Adobe-only retry path. `rembg` is included in
@@ -437,20 +441,25 @@ Whole-tree backlog cleanup is opt-in:
 # Audit whole tree but do not retry.
 python recover_edge_chops.py --all --audit-only
 
-# Work a small batch from the backlog.
-python recover_edge_chops.py --all --limit 25
+# Stage a small backlog batch for the normal orchestrator remove_bg/poster flow.
+python recover_edge_chops.py --all --limit 25 --stage-for-orchestrator
 
 # Work a larger batch from the backlog. This attempts 100 not-yet-exhausted people;
 # TMDB alternates per person are controlled separately by EDGE_CHOP_TMDB_LIMIT.
-python recover_edge_chops.py --all --limit 100
+python recover_edge_chops.py --all --limit 100 --stage-for-orchestrator
 
 # Retry only named people.
-python recover_edge_chops.py --names "Person One" "Person Two"
+python recover_edge_chops.py --names "Person One" "Person Two" --stage-for-orchestrator
 ```
 
-After a standalone recovery batch, continue at the first downstream repo step:
-`python orchestrator.py --redo update`. Do not use `--redo tmdb` unless you
-intend to rerun TMDB download and all downstream image-generation steps.
+After staging a standalone recovery batch, run
+`python orchestrator.py --redo remove_bg --no-recover-edge-chops`. That reuses
+the orchestrator's checkpointed Selenium batch, poster generation, repo update,
+sync, README/MD, and push steps without falling back into the inline recovery
+loop. The next `--stage-for-orchestrator` batch will rescan outputs, skip
+attempted TMDB candidates, and choose the next alternate for anything still
+chopped. Do not use `--redo tmdb` unless you intend to rerun TMDB download and
+all downstream image-generation steps.
 
 ### Bulk extract redacted config.yml sections (helper)
 ```bash

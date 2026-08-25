@@ -1,11 +1,16 @@
 """Retry chopped transparent portraits using alternate TMDB profile images.
 
 This runs after create_people_poster.ps1. It scans the local transparent style
-tree for edge contact, then tries TMDB profile alternates one at a time through
-the normal remove-bg and poster-generation pipeline. If no candidate passes the
-configured retry edges, the original local style outputs are restored and the
-person is reported as exhausted. Exhausted names are skipped on future runs
-until removed from the exhausted-name file.
+tree for edge contact, then finds alternate TMDB profile images.
+
+Default inline mode tries alternates one at a time through the normal remove-bg
+and poster-generation scripts. Staged mode writes one viable alternate per
+person into the normal Downloads input folder so orchestrator.py can own the
+Selenium/poster batch and checkpoint resume behavior.
+
+If no candidate passes the configured retry edges or local prechecks, the person
+is reported as exhausted. Exhausted names are skipped on future runs until
+removed from the exhausted-name file.
 """
 
 from __future__ import annotations
@@ -17,6 +22,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
@@ -38,6 +44,7 @@ TRANSPARENT_ROOT = PEOPLE_ROOT / "transparent"
 ORIGINAL_ROOT = PEOPLE_ROOT / "original"
 OUT_ROOT = CONFIG_DIR / "edge_chop_recovery"
 EXHAUSTED_NAMES_FILE = OUT_ROOT / "exhausted_names.txt"
+ATTEMPTED_CANDIDATES_FILE = OUT_ROOT / "attempted_candidates.csv"
 REMBG_HOME = CONFIG_DIR / "models" / "rembg"
 TMDB_SEARCH_URL = "https://api.themoviedb.org/3/search/person"
 TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/original"
@@ -76,6 +83,16 @@ class RecoveryRow:
     chosen_url: str = ""
     initial_issues: str = ""
     final_issues: str = ""
+    note: str = ""
+
+
+@dataclass(frozen=True)
+class AttemptedCandidate:
+    name: str
+    file_path: str
+    url: str
+    label: str
+    status: str
     note: str = ""
 
 
@@ -170,6 +187,58 @@ def append_exhausted_names(path: Path, names: Iterable[str]) -> int:
     with path.open("a", encoding="utf-8") as fh:
         for name in to_add:
             fh.write(name + "\n")
+    return len(to_add)
+
+
+def attempted_key(name: str, file_path: str) -> tuple[str, str]:
+    return name.casefold(), file_path
+
+
+def load_attempted_candidates(path: Path) -> set[tuple[str, str]]:
+    if not path.exists():
+        return set()
+    attempted: set[tuple[str, str]] = set()
+    with path.open("r", newline="", encoding="utf-8") as fh:
+        for row in csv.DictReader(fh):
+            name = (row.get("name") or "").strip()
+            file_path = (row.get("file_path") or "").strip()
+            if name and file_path:
+                attempted.add(attempted_key(name, file_path))
+    return attempted
+
+
+def append_attempted_candidates(path: Path, records: Iterable[AttemptedCandidate]) -> int:
+    records = list(records)
+    if not records:
+        return 0
+
+    existing = load_attempted_candidates(path)
+    to_add = [record for record in records if attempted_key(record.name, record.file_path) not in existing]
+    if not to_add:
+        return 0
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    write_header = not path.exists() or path.stat().st_size == 0
+    with path.open("a", newline="", encoding="utf-8") as fh:
+        writer = csv.DictWriter(
+            fh,
+            fieldnames=["at", "name", "file_path", "url", "label", "status", "note"],
+        )
+        if write_header:
+            writer.writeheader()
+        at = str(int(time.time()))
+        for record in to_add:
+            writer.writerow(
+                {
+                    "at": at,
+                    "name": record.name,
+                    "file_path": record.file_path,
+                    "url": record.url,
+                    "label": record.label,
+                    "status": record.status,
+                    "note": record.note,
+                }
+            )
     return len(to_add)
 
 
@@ -664,6 +733,139 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
         return row
 
 
+def stage_one_for_orchestrator(
+    args: argparse.Namespace,
+    session: requests.Session,
+    api_key: str,
+    name: str,
+    initial_issues: str,
+    attempted_candidates: set[tuple[str, str]],
+    attempted_records: list[AttemptedCandidate],
+) -> RecoveryRow:
+    row = RecoveryRow(name=name, status="unresolved", initial_issues=initial_issues)
+    try:
+        candidates = tmdb_candidates(session, api_key, name, args.tmdb_limit)
+    except Exception as exc:
+        row.note = f"TMDB lookup failed: {exc}"
+        return row
+
+    if not candidates:
+        row.status = "exhausted"
+        row.note = "no TMDB profile candidates"
+        return row
+
+    candidate_dir = args.out_root / "candidates" / safe_name(name)
+    with tempfile.TemporaryDirectory(prefix=f"edge_chop_stage_{safe_name(name)}_") as tmp:
+        staged_jpg = Path(tmp) / f"{name}.jpg"
+        for candidate in candidates:
+            key = attempted_key(name, candidate.file_path)
+            if key in attempted_candidates:
+                continue
+
+            row.attempts += 1
+            raw_path = candidate_dir / f"{candidate.label}{Path(candidate.file_path).suffix or '.jpg'}"
+
+            def record_attempt(status: str, note: str = "") -> None:
+                attempted_candidates.add(key)
+                attempted_records.append(
+                    AttemptedCandidate(
+                        name=name,
+                        file_path=candidate.file_path,
+                        url=candidate.url,
+                        label=candidate.label,
+                        status=status,
+                        note=note,
+                    )
+                )
+
+            try:
+                download_candidate(session, candidate, raw_path)
+                normalize_to_download(raw_path, staged_jpg)
+            except Exception as exc:
+                note = f"candidate download/normalize failed: {exc}"
+                log(f"[warn] {name} {candidate.label}: {note}")
+                record_attempt("download_failed", note)
+                continue
+
+            if args.reject_grayscale:
+                try:
+                    noncolor = noncolor_summary(
+                        staged_jpg,
+                        sat_threshold=args.grayscale_sat_threshold,
+                        sat_quantile=args.grayscale_sat_quantile,
+                        colorfulness_cutoff=args.grayscale_colorfulness_cutoff,
+                    )
+                except Exception as exc:
+                    raise RuntimeError(f"{name} {candidate.label}: grayscale candidate check failed: {exc}") from exc
+                if noncolor:
+                    if args.colorize_grayscale:
+                        log(f"[candidate] {name} {candidate.label}: non-color candidate; trying DeOldify: {noncolor}")
+                        ok, note = deoldify_candidate(staged_jpg, Path(tmp) / "deoldify")
+                        if ok:
+                            try:
+                                noncolor = noncolor_summary(
+                                    staged_jpg,
+                                    sat_threshold=args.grayscale_sat_threshold,
+                                    sat_quantile=args.grayscale_sat_quantile,
+                                    colorfulness_cutoff=args.grayscale_colorfulness_cutoff,
+                                )
+                            except Exception as exc:
+                                raise RuntimeError(f"{name} {candidate.label}: grayscale candidate recheck failed: {exc}") from exc
+                            if not noncolor:
+                                row.grayscale_colorized += 1
+                                log(f"[candidate] {name} {candidate.label}: {note}")
+                            else:
+                                row.grayscale_rejected += 1
+                                note = f"DeOldify output still non-color: {noncolor}"
+                                log(f"[candidate] {name} {candidate.label}: {note}")
+                                record_attempt("grayscale_rejected", note)
+                                continue
+                        else:
+                            row.grayscale_rejected += 1
+                            log(f"[candidate] {name} {candidate.label}: non-color candidate skipped before staging; {note}")
+                            record_attempt("grayscale_rejected", note)
+                            continue
+                    else:
+                        row.grayscale_rejected += 1
+                        log(f"[candidate] {name} {candidate.label}: non-color candidate skipped before staging: {noncolor}")
+                        record_attempt("grayscale_rejected", noncolor)
+                        continue
+
+            if args.precheck_rembg:
+                precheck_png = candidate_dir / f"{candidate.label}.rembg.png"
+                try:
+                    should_try, precheck_summary = rembg_precheck_candidate(args, staged_jpg, precheck_png)
+                except RuntimeError as exc:
+                    raise RuntimeError(f"{name} {candidate.label}: {exc}") from exc
+                if not should_try:
+                    row.precheck_rejected += 1
+                    log(f"[precheck] {name} {candidate.label}: rembg still has edge issue: {precheck_summary}")
+                    record_attempt("precheck_rejected", precheck_summary)
+                    continue
+                if precheck_summary:
+                    log(f"[precheck] {name} {candidate.label}: rembg cleared retry edges; {precheck_summary}")
+
+            target = args.downloads_dir / f"{name}.jpg"
+            args.downloads_dir.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(staged_jpg, target)
+            row.status = "staged"
+            row.chosen_label = candidate.label
+            row.chosen_url = candidate.url
+            row.note = f"staged for orchestrator remove_bg: {target}"
+            record_attempt("staged", row.note)
+            return row
+
+    row.status = "exhausted"
+    row.note = "no untried TMDB alternate cleared local recovery prechecks"
+    if row.grayscale_colorized:
+        row.note += f"; DeOldify colorized {row.grayscale_colorized} candidates"
+    if row.grayscale_rejected:
+        row.note += f"; non-color checks rejected {row.grayscale_rejected} candidates"
+    if row.precheck_rejected:
+        row.note += f"; rembg precheck rejected {row.precheck_rejected} candidates before Adobe"
+    return row
+
+
 def write_report(out_root: Path, rows: list[RecoveryRow]) -> None:
     out_root.mkdir(parents=True, exist_ok=True)
     path = out_root / "edge_chop_recovery.csv"
@@ -717,6 +919,12 @@ def parser() -> argparse.ArgumentParser:
         default=Path(os.getenv("EDGE_CHOP_EXHAUSTED_FILE") or EXHAUSTED_NAMES_FILE),
         help="Names listed here are skipped on future recovery runs until removed from the file.",
     )
+    ap.add_argument(
+        "--attempted-file",
+        type=Path,
+        default=Path(os.getenv("EDGE_CHOP_ATTEMPTED_FILE") or ATTEMPTED_CANDIDATES_FILE),
+        help="TMDB candidate attempts already staged or rejected by local prechecks.",
+    )
     ap.add_argument("--threshold", type=float, default=float(os.getenv("EDGE_CHOP_THRESHOLD", "0.06")))
     ap.add_argument("--report-edges", default=os.getenv("EDGE_CHOP_REPORT_EDGES", "top"))
     ap.add_argument("--retry-edges", default=os.getenv("EDGE_CHOP_RETRY_EDGES", "top"))
@@ -741,6 +949,12 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--modified-within-hours", type=float, default=0.0, help="Only retry transparent PNGs modified within this many hours")
     ap.add_argument("--all", action="store_true", help="Allow whole-tree recovery attempts")
     ap.add_argument("--audit-only", action="store_true", help="Scan and report matching edge chops without retrying")
+    ap.add_argument(
+        "--stage-for-orchestrator",
+        action="store_true",
+        default=env_bool("EDGE_CHOP_STAGE_FOR_ORCHESTRATOR", False),
+        help="Stage one viable TMDB alternate per person, then let orchestrator.py --redo remove_bg --no-recover-edge-chops run Selenium/poster/update/sync/push.",
+    )
     return ap
 
 
@@ -751,6 +965,7 @@ def main() -> int:
     args.downloads_dir = args.downloads_dir.resolve()
     args.out_root = args.out_root.resolve()
     args.exhausted_file = args.exhausted_file.resolve()
+    args.attempted_file = args.attempted_file.resolve()
     args.rembg_home = args.rembg_home.resolve()
     args.report_edges = parse_edges(args.report_edges, ("top",))
     args.retry_edges = parse_edges(args.retry_edges, ("top",))
@@ -821,6 +1036,30 @@ def main() -> int:
         write_report(args.out_root, [])
         return 0
 
+    if args.stage_for_orchestrator:
+        existing_inputs = sorted(
+            path for path in args.downloads_dir.iterdir()
+            if path.is_file() and path.suffix.lower() in {".jpg", ".jpeg", ".png"}
+        ) if args.downloads_dir.exists() else []
+        if existing_inputs:
+            rows = [
+                RecoveryRow(
+                    name="",
+                    status="error",
+                    note=(
+                        "downloads folder is not empty; run the pending orchestrator batch "
+                        f"or clear this folder before staging recovery inputs: {args.downloads_dir}"
+                    ),
+                )
+            ]
+            write_report(args.out_root, rows)
+            log(f"[error] downloads folder is not empty: {args.downloads_dir}")
+            for path in existing_inputs[:20]:
+                log(f"[error] existing input: {path}")
+            if len(existing_inputs) > 20:
+                log(f"[error] existing input count truncated: {len(existing_inputs)} total")
+            return 2
+
     if args.precheck_rembg:
         args.rembg_home.mkdir(parents=True, exist_ok=True)
         os.environ["REMBG_HOME"] = str(args.rembg_home)
@@ -847,12 +1086,27 @@ def main() -> int:
         log("[info] non-color recovery candidates allowed")
 
     rows: list[RecoveryRow] = []
+    attempted_candidates = load_attempted_candidates(args.attempted_file)
+    attempted_records: list[AttemptedCandidate] = []
+    if args.stage_for_orchestrator and attempted_candidates:
+        log(f"[info] skipping {len(attempted_candidates)} attempted TMDB candidate(s) from {args.attempted_file}")
     session = requests.Session()
     exit_code = 0
     for idx, (name, path, issues) in enumerate(chopped, start=1):
         log(f"[{idx}/{len(chopped)}] {name}: {issues}")
         try:
-            row = recover_one(args, session, api_key, name, issues)
+            if args.stage_for_orchestrator:
+                row = stage_one_for_orchestrator(
+                    args,
+                    session,
+                    api_key,
+                    name,
+                    issues,
+                    attempted_candidates,
+                    attempted_records,
+                )
+            else:
+                row = recover_one(args, session, api_key, name, issues)
         except RuntimeError as exc:
             row = RecoveryRow(name=name, status="error", initial_issues=issues, note=str(exc))
             exit_code = 2
@@ -864,18 +1118,28 @@ def main() -> int:
 
     write_report(args.out_root, rows)
     recovered = sum(1 for row in rows if row.status == "recovered")
+    staged = sum(1 for row in rows if row.status == "staged")
     unresolved = sum(1 for row in rows if row.status == "unresolved")
     exhausted = sum(1 for row in rows if row.status == "exhausted")
+    added_attempted = append_attempted_candidates(args.attempted_file, attempted_records)
     added_exhausted = append_exhausted_names(
         args.exhausted_file,
         (row.name for row in rows if row.status == "exhausted"),
     )
     log(f"Recovered: {recovered}")
+    log(f"Staged: {staged}")
     log(f"Unresolved: {unresolved}")
     log(f"Exhausted: {exhausted}")
+    if added_attempted:
+        log(f"Added attempted TMDB candidates: {added_attempted} -> {args.attempted_file}")
     if added_exhausted:
         log(f"Added exhausted names: {added_exhausted} -> {args.exhausted_file}")
-    log("Next command: python orchestrator.py --redo update")
+    if args.stage_for_orchestrator and staged:
+        log("Next command: python orchestrator.py --redo remove_bg --no-recover-edge-chops")
+    elif args.stage_for_orchestrator:
+        log("Next command: no staged candidates; remove names from the exhausted/attempted files only if you want to retry them.")
+    else:
+        log("Next command: python orchestrator.py --redo update")
     log("#### END recover_edge_chops ####")
     return exit_code
 
