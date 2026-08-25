@@ -20,9 +20,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
 
+import numpy as np
 import requests
 from dotenv import load_dotenv
-from PIL import Image, ImageOps
+from PIL import Image, ImageChops, ImageOps
 
 from edge_chop import detect_edge_chops, has_any_issue, issue_summary, parse_edges
 
@@ -66,6 +67,8 @@ class RecoveryRow:
     name: str
     status: str
     attempts: int = 0
+    grayscale_colorized: int = 0
+    grayscale_rejected: int = 0
     precheck_rejected: int = 0
     chosen_label: str = ""
     chosen_url: str = ""
@@ -193,6 +196,124 @@ def normalize_to_download(candidate_path: Path, download_path: Path) -> None:
         img = ImageOps.exif_transpose(img).convert("RGB")
         fitted = ImageOps.fit(img, TARGET_SIZE, method=Image.Resampling.LANCZOS, centering=(0.5, 0.5))
         fitted.save(download_path, "JPEG", quality=95, subsampling=0, optimize=True)
+
+
+def noncolor_summary(
+    path: Path,
+    sat_threshold: int = 35,
+    sat_quantile: float = 0.95,
+    colorfulness_cutoff: float = 12.0,
+) -> str:
+    with Image.open(path) as img:
+        img = ImageOps.exif_transpose(img)
+        if img.mode in ("1", "L", "LA"):
+            return f"grayscale mode {img.mode}"
+
+        if "A" in img.getbands():
+            rgba = img.convert("RGBA")
+            bg = Image.new("RGBA", rgba.size, (255, 255, 255, 255))
+            rgb = Image.alpha_composite(bg, rgba).convert("RGB")
+        else:
+            rgb = img.convert("RGB")
+        r, g, b = rgb.split()
+        exact_gray = (
+            ImageChops.difference(r, g).getbbox() is None
+            and ImageChops.difference(g, b).getbbox() is None
+        )
+        if exact_gray:
+            return "RGB channels are equal"
+
+        sample = ImageOps.contain(rgb, (500, 750), method=Image.Resampling.LANCZOS)
+        sat = np.asarray(sample.convert("HSV"))[..., 1].astype(np.uint8)
+        sat_q = float(np.quantile(sat, sat_quantile))
+
+        arr = np.asarray(sample, dtype=np.float32)
+        red, green, blue = arr[..., 0], arr[..., 1], arr[..., 2]
+        rg = red - green
+        yb = 0.5 * (red + green) - blue
+        colorfulness = float(
+            np.hypot(rg.std(), yb.std())
+            + 0.3 * np.hypot(np.abs(rg).mean(), np.abs(yb).mean())
+        )
+
+        if sat_q <= sat_threshold or colorfulness < colorfulness_cutoff:
+            return (
+                f"near-grayscale sat_q{sat_quantile:.2f}={sat_q:.1f} <= {sat_threshold} "
+                f"or colorfulness={colorfulness:.1f} < {colorfulness_cutoff:.1f}"
+            )
+    return ""
+
+
+def colorize_python_candidates() -> list[list[str]]:
+    configured = os.getenv("COLORIZE_PYTHON", "").strip().strip("\"'")
+    local_venv = SCRIPT_DIR / ".venv-colorize" / ("Scripts/python.exe" if sys.platform.startswith("win") else "bin/python")
+    candidates: list[list[str]] = []
+    if configured:
+        candidates.append([configured])
+    candidates.append([str(local_venv)])
+    if sys.platform.startswith("win"):
+        candidates.append(["py", "-3.10"])
+    candidates.append(["python3.10"])
+
+    seen: set[tuple[str, ...]] = set()
+    unique: list[list[str]] = []
+    for candidate in candidates:
+        key = tuple(candidate)
+        if key not in seen:
+            seen.add(key)
+            unique.append(candidate)
+    return unique
+
+
+def deoldify_candidate(staged_jpg: Path, work_root: Path) -> tuple[bool, str]:
+    color_in = work_root / "colorize_other"
+    color_out = work_root / "colorize_color"
+    color_in.mkdir(parents=True, exist_ok=True)
+    color_out.mkdir(parents=True, exist_ok=True)
+
+    input_path = color_in / staged_jpg.name
+    output_path = color_out / staged_jpg.name
+    for folder in (color_in, color_out):
+        for old_file in folder.glob("*"):
+            if old_file.is_file():
+                old_file.unlink()
+
+    shutil.copy2(staged_jpg, input_path)
+    env = os.environ.copy()
+    env["PYTHONIOENCODING"] = "utf-8"
+    env["COLORIZE_INPUT_OTHER"] = str(color_in)
+    env["COLORIZE_OUTPUT_COLOR"] = str(color_out)
+
+    failures: list[str] = []
+    for argv_prefix in colorize_python_candidates():
+        try:
+            cp = subprocess.run(
+                argv_prefix + ["colorize_noncolor.py"],
+                cwd=SCRIPT_DIR,
+                env=env,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                timeout=900,
+            )
+        except FileNotFoundError as exc:
+            failures.append(f"{' '.join(argv_prefix)}: {exc}")
+            continue
+        except Exception as exc:
+            failures.append(f"{' '.join(argv_prefix)}: {exc}")
+            continue
+
+        output = (cp.stdout or "").strip()
+        if cp.returncode == 0 and output_path.exists() and output_path.stat().st_size > 0:
+            normalize_to_download(output_path, staged_jpg)
+            return True, f"DeOldify colorized with {' '.join(argv_prefix)}"
+
+        tail = "\n".join(output.splitlines()[-6:])
+        failures.append(f"{' '.join(argv_prefix)} exit {cp.returncode}: {tail}")
+
+    return False, "DeOldify failed: " + " | ".join(failures)
 
 
 def build_rembg_session(model: str):
@@ -378,6 +499,48 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                 log(f"[warn] {name} {candidate.label}: candidate download/normalize failed: {exc}")
                 continue
 
+            if args.reject_grayscale:
+                try:
+                    noncolor = noncolor_summary(
+                        staged_jpg,
+                        sat_threshold=args.grayscale_sat_threshold,
+                        sat_quantile=args.grayscale_sat_quantile,
+                        colorfulness_cutoff=args.grayscale_colorfulness_cutoff,
+                    )
+                except Exception as exc:
+                    restore_backups(backups, paths)
+                    raise RuntimeError(f"{name} {candidate.label}: grayscale candidate check failed: {exc}") from exc
+                if noncolor:
+                    if args.colorize_grayscale:
+                        log(f"[candidate] {name} {candidate.label}: non-color candidate; trying DeOldify: {noncolor}")
+                        ok, note = deoldify_candidate(staged_jpg, Path(tmp) / "deoldify")
+                        if ok:
+                            try:
+                                noncolor = noncolor_summary(
+                                    staged_jpg,
+                                    sat_threshold=args.grayscale_sat_threshold,
+                                    sat_quantile=args.grayscale_sat_quantile,
+                                    colorfulness_cutoff=args.grayscale_colorfulness_cutoff,
+                                )
+                            except Exception as exc:
+                                restore_backups(backups, paths)
+                                raise RuntimeError(f"{name} {candidate.label}: grayscale candidate recheck failed: {exc}") from exc
+                            if not noncolor:
+                                row.grayscale_colorized += 1
+                                log(f"[candidate] {name} {candidate.label}: {note}")
+                            else:
+                                row.grayscale_rejected += 1
+                                log(f"[candidate] {name} {candidate.label}: DeOldify output still non-color; skipped before rembg/Adobe: {noncolor}")
+                                continue
+                        else:
+                            row.grayscale_rejected += 1
+                            log(f"[candidate] {name} {candidate.label}: non-color candidate skipped before rembg/Adobe; {note}")
+                            continue
+                    else:
+                        row.grayscale_rejected += 1
+                        log(f"[candidate] {name} {candidate.label}: non-color candidate skipped before rembg/Adobe: {noncolor}")
+                        continue
+
             if args.precheck_rembg:
                 precheck_png = candidate_dir / f"{candidate.label}.rembg.png"
                 try:
@@ -414,12 +577,32 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
             transparent = final_transparent_path(args.people_root, name)
             result = detect_edge_chops(transparent, threshold=args.threshold, edges=args.report_edges)
             summary = issue_summary(result)
+            if args.reject_grayscale:
+                try:
+                    final_noncolor = noncolor_summary(
+                        transparent,
+                        sat_threshold=args.grayscale_sat_threshold,
+                        sat_quantile=args.grayscale_sat_quantile,
+                        colorfulness_cutoff=args.grayscale_colorfulness_cutoff,
+                    )
+                except Exception as exc:
+                    restore_backups(backups, paths)
+                    raise RuntimeError(f"{name} {candidate.label}: grayscale final check failed: {exc}") from exc
+                if final_noncolor:
+                    row.grayscale_rejected += 1
+                    log(f"[retry] {name} {candidate.label}: final transparent is non-color; trying next candidate: {final_noncolor}")
+                    continue
+
             if not has_any_issue(result, args.retry_edges) and not result.error:
                 row.status = "recovered"
                 row.chosen_label = candidate.label
                 row.chosen_url = candidate.url
                 row.final_issues = summary
                 row.note = "accepted TMDB alternate"
+                if row.grayscale_colorized:
+                    row.note += f"; DeOldify colorized {row.grayscale_colorized} candidates"
+                if row.grayscale_rejected:
+                    row.note += f"; non-color checks rejected {row.grayscale_rejected} candidates"
                 if row.precheck_rejected:
                     row.note += f"; rembg precheck rejected {row.precheck_rejected} earlier candidates"
                 return row
@@ -430,6 +613,10 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
         current = final_transparent_path(args.people_root, name)
         row.final_issues = issue_summary(detect_edge_chops(current, threshold=args.threshold, edges=args.report_edges)) if current.exists() else ""
         row.note = "no TMDB alternate cleared retry edges; restored previous local outputs"
+        if row.grayscale_colorized:
+            row.note += f"; DeOldify colorized {row.grayscale_colorized} candidates"
+        if row.grayscale_rejected:
+            row.note += f"; non-color checks rejected {row.grayscale_rejected} candidates"
         if row.precheck_rejected:
             row.note += f"; rembg precheck rejected {row.precheck_rejected} candidates before Adobe"
         return row
@@ -445,6 +632,8 @@ def write_report(out_root: Path, rows: list[RecoveryRow]) -> None:
                 "name",
                 "status",
                 "attempts",
+                "grayscale_colorized",
+                "grayscale_rejected",
                 "precheck_rejected",
                 "chosen_label",
                 "chosen_url",
@@ -460,6 +649,8 @@ def write_report(out_root: Path, rows: list[RecoveryRow]) -> None:
                     "name": row.name,
                     "status": row.status,
                     "attempts": row.attempts,
+                    "grayscale_colorized": row.grayscale_colorized,
+                    "grayscale_rejected": row.grayscale_rejected,
                     "precheck_rejected": row.precheck_rejected,
                     "chosen_label": row.chosen_label,
                     "chosen_url": row.chosen_url,
@@ -489,6 +680,13 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--rembg-alpha-matting", action="store_true", default=env_bool("EDGE_CHOP_REMBG_ALPHA_MATTING", False))
     ap.add_argument("--rembg-post-process-mask", dest="rembg_post_process_mask", action="store_true", default=env_bool("EDGE_CHOP_REMBG_POST_PROCESS_MASK", True))
     ap.add_argument("--no-rembg-post-process-mask", dest="rembg_post_process_mask", action="store_false")
+    ap.add_argument("--reject-grayscale", dest="reject_grayscale", action="store_true", default=env_bool("EDGE_CHOP_REJECT_GRAYSCALE", True))
+    ap.add_argument("--allow-grayscale", dest="reject_grayscale", action="store_false")
+    ap.add_argument("--colorize-grayscale", dest="colorize_grayscale", action="store_true", default=env_bool("EDGE_CHOP_COLORIZE_GRAYSCALE", True))
+    ap.add_argument("--no-colorize-grayscale", dest="colorize_grayscale", action="store_false")
+    ap.add_argument("--grayscale-sat-threshold", type=int, default=int(os.getenv("EDGE_CHOP_GRAYSCALE_SAT_THRESHOLD", "35")))
+    ap.add_argument("--grayscale-sat-quantile", type=float, default=float(os.getenv("EDGE_CHOP_GRAYSCALE_SAT_QUANTILE", "0.95")))
+    ap.add_argument("--grayscale-colorfulness-cutoff", type=float, default=float(os.getenv("EDGE_CHOP_GRAYSCALE_COLORFULNESS_CUTOFF", "12.0")))
     ap.add_argument("--limit", type=int, default=0, help="Maximum chopped people to attempt; 0 means all")
     ap.add_argument("--names", nargs="*", default=[])
     ap.add_argument("--modified-since", type=float, help="Only retry transparent PNGs modified at/after this Unix timestamp")
@@ -578,6 +776,16 @@ def main() -> int:
         log(f"[info] rembg precheck enabled with model: {args.rembg_model}; home: {args.rembg_home}")
     else:
         log("[info] rembg precheck disabled")
+    if args.reject_grayscale:
+        log(
+            "[info] non-color recovery candidates rejected "
+            f"(sat q{args.grayscale_sat_quantile:.2f}<={args.grayscale_sat_threshold}, "
+            f"colorfulness<{args.grayscale_colorfulness_cutoff:.1f})"
+        )
+        if args.colorize_grayscale:
+            log("[info] non-color recovery candidates are sent through DeOldify before rejection")
+    else:
+        log("[info] non-color recovery candidates allowed")
 
     rows: list[RecoveryRow] = []
     session = requests.Session()

@@ -98,6 +98,8 @@ ORCH_BG_EXTS=png                                      # exts to count after remo
 ORCH_CONTINUE_IF_EMPTY=false                          # continue run even if 0 PNGs were produced
 EDGE_CHOP_PRECHECK_REMBG=true                         # prefilter retry candidates locally before Adobe
 REMBG_HOME=./config/models/rembg                       # rembg model cache for recovery
+EDGE_CHOP_REJECT_GRAYSCALE=true                       # do not accept B/W TMDB alternates during recovery
+EDGE_CHOP_COLORIZE_GRAYSCALE=true                     # try DeOldify before rejecting B/W alternates
 IMAGE_CHECK_FACE_CROP_CHECKS=chin,left,right           # report-only face crop diagnostics
 COMPTREE_FACE_CROP_CHECKS=chin,left,right              # same diagnostics in compare_image_trees
 FACE_CROP_MODEL_HOME=./config/models/opencv            # YuNet face detector cache
@@ -406,17 +408,22 @@ python image_check.py --input_directory "./config/people_dirs/transparent" --sty
 
 The orchestrator runs `recover_edge_chops.py` after `poster_ps1` by default,
 scoped to transparent PNGs generated in that same `poster_ps1` run. It retries
-top-edge head chops only. By default, each TMDB alternate first runs through
-`rembg` locally; alternates that still touch the retry edge are skipped before
-the Selenium/Adobe step. The first alternate that passes the local precheck is
-sent through Adobe, then the final poster output is checked again. If no
-alternate clears the check, the script restores the previous local style outputs,
-writes
+top-edge head chops only. By default, black-and-white or near-grayscale TMDB
+alternates are sent through DeOldify first, then rechecked; an alternate is
+skipped only if it is still non-color afterward. Each remaining alternate first
+runs through `rembg` locally; alternates that still touch the retry edge are
+skipped before the Selenium/Adobe step. The first alternate that passes the
+local precheck is sent through Adobe, then the final poster output is checked
+again for both retry-edge and non-color issues. If no alternate clears the check,
+the script restores the previous local style outputs, writes
 `./config/edge_chop_recovery/edge_chop_recovery.csv`, and continues the pipeline.
 Set `ORCH_RECOVER_EDGE_CHOPS=false` or pass `--no-recover-edge-chops` to skip it.
 Set `EDGE_CHOP_PRECHECK_REMBG=false` or pass `--no-precheck-rembg` only when you
 need to diagnose the older Adobe-only retry path. `rembg` is included in
 `requirements.txt`; its model weights may download to `REMBG_HOME` on first use.
+Set `EDGE_CHOP_COLORIZE_GRAYSCALE=false` to skip the DeOldify attempt, or set
+`EDGE_CHOP_REJECT_GRAYSCALE=false` / pass `--allow-grayscale` only for a manual
+exception.
 Whole-tree backlog cleanup is opt-in:
 
 ```bash
