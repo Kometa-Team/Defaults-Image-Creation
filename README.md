@@ -92,11 +92,15 @@ python orchestrator.py --steps ensure_repo,update,sync_images,readme,sync_md,pus
 ### Validate generated images
 ```bash
 # Single tree
-python image_check.py --root "/srv/Kometa-People-Images/transparent" --exts png --required-size 2000x3000
+python image_check.py --input_directory "/srv/Kometa-People-Images/transparent" --style transparent
 
-# Seven-way matrix across style folders
+# Seven-way matrix across style folders, including dimension and quality issues
 python compare_image_trees.py --repo-root "/srv/Kometa-People-Images"
 ```
+
+Quality rules allow grayscale only for `bw` and `diiivoy`. `original`, `rainier`,
+`signature`, `diiivoycolor`, and `transparent` must be color; `transparent` must
+also contain alpha transparency.
 
 ### Generate a few common default sets
 ```powershell

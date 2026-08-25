@@ -3,16 +3,19 @@
 # Compares file names (without extensions) across 7 directories (with subfolders).
 # Six folders are .jpg; one folder is .png (except explicit .jpg whitelist).
 # Only .jpg/.png are considered; all other file types are ignored (not flagged).
-# Optional: validate that every .jpg/.png is exactly REQUIRED_WIDTH x REQUIRED_HEIGHT.
-# Whitelist entries are exempt from dimension checks in every folder.
-# Outputs console summary + presence matrix CSV and, if enabled, a dimension issues CSV,
-# all saved under ./config/. All messages are logged to ./config/logs/<script>.log
+# Optional: validate that every .jpg/.png is exactly REQUIRED_WIDTH x REQUIRED_HEIGHT
+# and run style-aware image quality checks.
+# Whitelist entries are exempt from dimension and quality checks in every folder.
+# Outputs console summary + presence matrix CSV and, if enabled, dimension/quality
+# issue CSVs, all saved under ./config/. All messages are logged to
+# ./config/logs/<script>.log
 #
 # Usage (examples):
 #   py compare_image_trees.py
 #   py compare_image_trees.py --repo-root "D:/Kometa-People-Images"
 #   py compare_image_trees.py --dirs "/data/PI/bw" "/data/PI/diiivoy" "/data/PI/diiivoycolor" "/data/PI/rainier" "/data/PI/original" "/data/PI/signature" "/data/PI/transparent"
 #   py compare_image_trees.py --no-dimensions --case-insensitive
+#   py compare_image_trees.py --no-quality
 #   py compare_image_trees.py --required-size 2000x3000 --jpg-whitelist grid,poster-grid
 
 import os
@@ -47,7 +50,7 @@ def setup_logging(level=logging.INFO, console=True):
         handlers=handlers,
         force=True,
     )
-    logging.info("Logging → %s", log_file)
+    logging.info("Logging -> %s", log_file)
     return log_file
 
 
@@ -66,6 +69,9 @@ DEFAULT_CATEGORIES = [
     "signature",
     "transparent",
 ]
+ALLOWED_GRAYSCALE_STYLES = {"bw", "diiivoy"}
+TRANSPARENT_STYLE = "transparent"
+KNOWN_STYLES = set(DEFAULT_CATEGORIES)
 
 
 def parse_bool_env(key: str, default: bool) -> bool:
@@ -91,6 +97,16 @@ def detect_png_dir_index(dirs) -> Optional[int]:
         if "transparent" in Path(d).name.lower():
             return i
     return None
+
+
+def detect_style_name(path: Path) -> str:
+    name = path.name.lower()
+    if name in KNOWN_STYLES:
+        return name
+    for style in KNOWN_STYLES:
+        if style in name:
+            return style
+    return name
 
 
 def normalize_case(s: str, case_sensitive: bool) -> str:
@@ -137,6 +153,62 @@ def check_image_dimensions_lazy(CHECK_DIMENSIONS: bool):
     return _check
 
 
+def check_image_quality_lazy(CHECK_QUALITY: bool):
+    """
+    Return a function check(path, style)->list[str] depending on CHECK_QUALITY.
+    - If disabled: returns [] quickly without importing Pillow.
+    - If enabled: imports Pillow lazily and performs style-aware checks.
+    """
+    if not CHECK_QUALITY:
+        def _noop(_path: Path, _style: str):
+            return []
+
+        return _noop
+
+    try:
+        from PIL import Image, ImageChops  # lazy import only when enabled
+    except Exception as e:
+        logging.warning("Quality checking enabled but Pillow is unavailable: %s", e)
+        logging.warning("Install with: pip install pillow")
+
+        def _fail(_path: Path, _style: str):
+            return ["Pillow not installed"]
+
+        return _fail
+
+    def _is_grayscale(img) -> bool:
+        mode = img.mode
+        if mode in ("1", "L", "LA"):
+            return True
+        rgb = img.convert("RGB")
+        r, g, b = rgb.split()
+        return (
+            ImageChops.difference(r, g).getbbox() is None
+            and ImageChops.difference(g, b).getbbox() is None
+        )
+
+    def _has_any_transparency(img) -> bool:
+        if "A" not in img.getbands():
+            return False
+        lo, _hi = img.getchannel("A").getextrema()
+        return lo < 255
+
+    def _check(path: Path, style: str):
+        issues: list[str] = []
+        try:
+            with Image.open(path) as im:
+                style_key = style.lower()
+                if style_key not in ALLOWED_GRAYSCALE_STYLES and _is_grayscale(im):
+                    issues.append(f"grayscale not allowed for style '{style_key}'")
+                if style_key == TRANSPARENT_STYLE and not _has_any_transparency(im):
+                    issues.append("transparent style image has no alpha transparency")
+        except Exception as e:
+            issues.append(f"open/process error: {e}")
+        return issues
+
+    return _check
+
+
 def iter_image_files(base_dir: Path):
     """Yield jpg/png file Paths under base_dir (recursive)."""
     if not base_dir.exists():
@@ -158,9 +230,12 @@ def gather_stems_and_exts(
     jpg_whitelist: Optional[set[str]] = None,
     treat_png_folder: bool = False,
     dim_checker=None,
+    quality_checker=None,
+    style_name: str = "",
     required_w: int = 2000,
     required_h: int = 3000,
     check_dimensions: bool = True,
+    check_quality: bool = True,
     progress=None,
 ):
     """
@@ -171,6 +246,8 @@ def gather_stems_and_exts(
       - dim_issues: list of (rel_path, width, height, error) if enabled and not REQUIRED_WxH,
                     excluding globally whitelisted basenames
                     or failed to open (error != None)
+      - quality_issues: list of (rel_path, issue) if enabled and the style rules fail,
+                        excluding globally whitelisted basenames
 
     Only .jpg/.png are considered; all other extensions are ignored silently.
     """
@@ -178,12 +255,14 @@ def gather_stems_and_exts(
     ext_mismatches: List[Tuple[str, str]] = []  # (rel_path, reason)
     whitelist_hits: List[str] = []  # (rel_path)
     dim_issues: List[Tuple[str, Optional[int], Optional[int], Optional[str]]] = []
+    quality_issues: List[Tuple[str, str]] = []
 
     if not base_dir.exists():
         logging.warning("Directory does not exist: %s", base_dir)
-        return stems, ext_mismatches, whitelist_hits, dim_issues
+        return stems, ext_mismatches, whitelist_hits, dim_issues, quality_issues
 
     wl_cmp = {normalize_case(x, case_sensitive) for x in (jpg_whitelist or set())}
+    style = style_name or detect_style_name(base_dir)
 
     for p in iter_image_files(base_dir):
         if progress:
@@ -200,6 +279,12 @@ def gather_stems_and_exts(
                 w, h, err = dim_checker(p)
                 if err is not None or w != required_w or h != required_h:
                     dim_issues.append((rel_posix, w, h, err))
+
+        # --- Style-aware quality check (with global whitelist exemption) ---
+        if quality_checker is not None and check_quality:
+            if basename_cmp not in wl_cmp:
+                for issue in quality_checker(p, style):
+                    quality_issues.append((rel_posix, issue))
 
         # --- Presence/mismatch logic ---
         if ext_cmp in allowed_exts:
@@ -222,7 +307,7 @@ def gather_stems_and_exts(
         if progress:
             progress()  # tick
 
-    return stems, ext_mismatches, whitelist_hits, dim_issues
+    return stems, ext_mismatches, whitelist_hits, dim_issues, quality_issues
 
 
 def build_dirs_from_args_env(args: argparse.Namespace) -> list[Path]:
@@ -273,6 +358,10 @@ def main():
     parser.add_argument("--dimensions", dest="check_dimensions", action="store_true", help="Enable dimension checks")
     parser.set_defaults(check_dimensions=parse_bool_env("COMPTREE_CHECK_DIMENSIONS", True))
 
+    parser.add_argument("--no-quality", dest="check_quality", action="store_false", help="Disable style-aware quality checks")
+    parser.add_argument("--quality", dest="check_quality", action="store_true", help="Enable style-aware quality checks")
+    parser.set_defaults(check_quality=parse_bool_env("COMPTREE_CHECK_QUALITY", True))
+
     parser.add_argument("--required-size", help="WxH e.g. 2000x3000 (env: COMPTREE_REQUIRED_SIZE)")
     parser.add_argument("--jpg-whitelist", help="Comma list of basenames allowed as .jpg in PNG folder and exempt from dimension checks everywhere (env: COMPTREE_JPG_WHITELIST; default: grid)")
 
@@ -322,10 +411,12 @@ def main():
 
     # Prepare dimension checker (lazy/no-op if disabled)
     dim_checker = check_image_dimensions_lazy(args.check_dimensions)
+    quality_checker = check_image_quality_lazy(args.check_quality)
 
     # CSV outputs go under ./config/
     OUTPUT_CSV = CONFIG_DIR / "compare_image_trees.csv"
     DIM_ISSUES_CSV = CONFIG_DIR / "image_dimension_issues.csv"
+    QUALITY_ISSUES_CSV = CONFIG_DIR / "image_quality_issues.csv"
 
     # How many lines to show in each section (None for unlimited)
     PRINT_LIMIT = 100
@@ -348,26 +439,31 @@ def main():
     dir_to_mismatches: dict[str, List[Tuple[str, str]]] = {}
     dir_to_wl_hits: dict[str, List[str]] = {}
     dir_to_dim_issues: dict[str, List[Tuple[str, Optional[int], Optional[int], Optional[str]]]] = {}
+    dir_to_quality_issues: dict[str, List[Tuple[str, str]]] = {}
 
     with alive_bar(grand_total or 1, dual_line=True, title="Scanning images") as bar:
         for i, d in enumerate(DIRS):
             base = Path(d)
-            stems, mismatches, wl_hits, dim_issues = gather_stems_and_exts(
+            stems, mismatches, wl_hits, dim_issues, quality_issues = gather_stems_and_exts(
                 base_dir=base,
                 allowed_exts=per_dir_allowed_exts[i],
                 case_sensitive=CASE_SENSITIVE,
                 jpg_whitelist=JPG_WHITELIST,
                 treat_png_folder=per_dir_is_png[i],
                 dim_checker=dim_checker,
+                quality_checker=quality_checker,
+                style_name=detect_style_name(base),
                 required_w=REQUIRED_WIDTH,
                 required_h=REQUIRED_HEIGHT,
                 check_dimensions=args.check_dimensions,
+                check_quality=args.check_quality,
                 progress=bar,
             )
             dir_to_stems[d] = stems
             dir_to_mismatches[d] = mismatches
             dir_to_wl_hits[d] = wl_hits
             dir_to_dim_issues[d] = dim_issues
+            dir_to_quality_issues[d] = quality_issues
 
     # Union of all stems
     all_stems = set().union(*dir_to_stems.values()) if dir_to_stems else set()
@@ -379,7 +475,13 @@ def main():
     logging.info("Whitelist basenames: %s", sorted(JPG_WHITELIST) if JPG_WHITELIST else "(none)")
     logging.info("Whitelist behavior: allowed as .jpg in PNG folder; excluded from dimension checks in all folders")
     logging.info("Check dimensions: %s (required %dx%d)", args.check_dimensions, REQUIRED_WIDTH, REQUIRED_HEIGHT)
-    logging.info("Outputs: %s and %s", OUTPUT_CSV, (DIM_ISSUES_CSV if args.check_dimensions else "(dimension CSV skipped)"))
+    logging.info("Check quality: %s (grayscale allowed for %s; transparent alpha required for %s)", args.check_quality, sorted(ALLOWED_GRAYSCALE_STYLES), TRANSPARENT_STYLE)
+    logging.info(
+        "Outputs: %s, %s, and %s",
+        OUTPUT_CSV,
+        (DIM_ISSUES_CSV if args.check_dimensions else "(dimension CSV skipped)"),
+        (QUALITY_ISSUES_CSV if args.check_quality else "(quality CSV skipped)"),
+    )
 
     logging.info("=== Directory Stats (included .jpg/.png files only) ===")
     for d in DIRS:
@@ -500,6 +602,37 @@ def main():
             logging.info("Dimension issues CSV written: %s", DIM_ISSUES_CSV.resolve())
         else:
             logging.info("No dimension issues found.")
+
+    # --- Quality Issues CSV (only if enabled) ---
+    if args.check_quality:
+        quality_total = sum(len(v) for v in dir_to_quality_issues.values())
+        logging.info("=== Quality issues ===")
+        for d in DIRS:
+            issues = dir_to_quality_issues[d]
+            logging.info("[%s] quality issues: %d", Path(d).name, len(issues))
+            to_show = issues if PRINT_LIMIT is None else issues[:PRINT_LIMIT]
+            for rel, issue in to_show:
+                logging.info("  %s  ->  %s", rel, issue)
+            if PRINT_LIMIT is not None and len(issues) > PRINT_LIMIT:
+                logging.info("  ... (+%d more)", len(issues) - PRINT_LIMIT)
+
+        QUALITY_ISSUES_CSV.parent.mkdir(parents=True, exist_ok=True)
+        if quality_total > 0:
+            with QUALITY_ISSUES_CSV.open("w", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(
+                    f, fieldnames=["directory", "relative_path", "issue"]
+                )
+                writer.writeheader()
+                for d in DIRS:
+                    for rel, issue in dir_to_quality_issues[d]:
+                        writer.writerow({
+                            "directory": str(d),
+                            "relative_path": rel,
+                            "issue": issue,
+                        })
+            logging.info("Quality issues CSV written: %s", QUALITY_ISSUES_CSV.resolve())
+        else:
+            logging.info("No quality issues found.")
 
     elapsed = timer() - start
     logging.info("Done in %.2fs", elapsed)

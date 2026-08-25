@@ -7,7 +7,7 @@ import os
 import logging
 from pathlib import Path
 from timeit import default_timer as timer
-from typing import Dict, Tuple
+from typing import Dict, Iterable, Optional, Tuple
 
 from dotenv import load_dotenv
 from PIL import Image, ImageChops, ImageStat
@@ -32,7 +32,7 @@ def setup_logging():
         handlers=[fh],
         force=True,
     )
-    logging.info("Logging → %s", log_file)
+    logging.info("Logging -> %s", log_file)
     return log_file
 
 
@@ -49,6 +49,17 @@ REQUIRED_HEIGHT = 3000
 BASE_IMAGE_RATIO = round(1 / 1.5, 4)  # 0.6667
 BASE_W_QUALITY = 399
 BASE_H_QUALITY = 599
+ALLOWED_GRAYSCALE_STYLES = {"bw", "diiivoy"}
+TRANSPARENT_STYLE = "transparent"
+KNOWN_STYLES = {
+    "bw",
+    "diiivoy",
+    "diiivoycolor",
+    "original",
+    "rainier",
+    "signature",
+    "transparent",
+}
 
 
 # ========= END CONFIG =====
@@ -92,7 +103,32 @@ def head_chop_alpha_mean(img: Image.Image) -> float:
 
 
 # ---------- Checks (log only failures) ----------
-def test_image(image_path: Path, counters: Dict[str, int]):
+def normalize_style(style: Optional[str]) -> str:
+    if not style:
+        return TRANSPARENT_STYLE
+    return style.strip().lower()
+
+
+def infer_style(root: Path, cli_style: Optional[str]) -> str:
+    if cli_style:
+        return normalize_style(cli_style)
+
+    candidates = [root.name.lower(), root.parent.name.lower()]
+    for candidate in candidates:
+        if candidate in KNOWN_STYLES:
+            return candidate
+        for style in KNOWN_STYLES:
+            if style in candidate:
+                return style
+
+    return TRANSPARENT_STYLE
+
+
+def allowed_extensions(style: str) -> set[str]:
+    return {".png"} if style == TRANSPARENT_STYLE else {".jpg", ".jpeg"}
+
+
+def test_image(image_path: Path, counters: Dict[str, int], style: str):
     filepre = str(image_path)
     name_wo_ext = image_path.stem
 
@@ -101,20 +137,20 @@ def test_image(image_path: Path, counters: Dict[str, int]):
             w, h = get_dimensions(img)
             ratio = round((w / h) if h else 0.0, 4)
 
-            # 1) Grayscale
+            # 1) Grayscale, allowed only for bw and diiivoy
             try:
-                if is_grayscale(img):
+                if style not in ALLOWED_GRAYSCALE_STYLES and is_grayscale(img):
                     counters["Counter1"] += 1
                     logging.warning(
-                        "WARNING1!~%s~%s is Grayscale! Find a color image on TMDB and re-process",
-                        filepre, name_wo_ext
+                        "WARNING1!~%s~%s is Grayscale but style '%s' requires color! Find a color image on TMDB and re-process",
+                        filepre, name_wo_ext, style
                     )
             except Exception as e:
                 logging.warning("Grayscale check error for %s (%s)", filepre, e)
 
-            # 2) Not Transparent
+            # 2) Not Transparent, only meaningful for transparent style
             try:
-                if not has_any_transparency(img):
+                if style == TRANSPARENT_STYLE and not has_any_transparency(img):
                     counters["Counter2"] += 1
                     logging.warning(
                         "WARNING2!~%s~%s is NOT Transparent and needs background removed!",
@@ -123,15 +159,16 @@ def test_image(image_path: Path, counters: Dict[str, int]):
             except Exception as e:
                 logging.warning("Transparency check error for %s (%s)", filepre, e)
 
-            # 3) Head chop (first row alpha mean > 0.06)
+            # 3) Head chop (first row alpha mean > 0.06), only meaningful for transparent style
             try:
-                head_val = head_chop_alpha_mean(img)
-                if head_val > 0.06:
-                    counters["Counter3"] += 1
-                    logging.warning(
-                        "WARNING3!~%s~%s likely HEAD CHOP; review/change headshot. Headchop values~%s",
-                        filepre, name_wo_ext, head_val
-                    )
+                if style == TRANSPARENT_STYLE:
+                    head_val = head_chop_alpha_mean(img)
+                    if head_val > 0.06:
+                        counters["Counter3"] += 1
+                        logging.warning(
+                            "WARNING3!~%s~%s likely HEAD CHOP; review/change headshot. Headchop values~%s",
+                            filepre, name_wo_ext, head_val
+                        )
             except Exception as e:
                 logging.warning("Head-chop check error for %s (%s)", filepre, e)
 
@@ -171,20 +208,22 @@ def test_image(image_path: Path, counters: Dict[str, int]):
         logging.warning("Open/process error for %s (%s)", filepre, e)
 
 
-# ---------- File iteration (PNG only) ----------
-def iter_png_files(root: Path):
+# ---------- File iteration ----------
+def iter_image_files(root: Path, extensions: Iterable[str]):
     if not root.exists():
         return
+    allowed = {ext.lower() for ext in extensions}
     for p in root.rglob("*"):
-        if p.is_file() and p.suffix.lower() == ".png":
+        if p.is_file() and p.suffix.lower() in allowed:
             yield p
 
 
 # ---------- CLI ----------
 def main():
     import argparse
-    parser = argparse.ArgumentParser(description="Recursive PNG image anomaly scanner (quiet console)")
-    parser.add_argument("--input_directory", required=True, help="Root folder (recursive, PNG only)")
+    parser = argparse.ArgumentParser(description="Recursive style-aware image anomaly scanner (quiet console)")
+    parser.add_argument("--input_directory", required=True, help="Root folder to scan recursively")
+    parser.add_argument("--style", help="Style rules to apply; inferred from input path when omitted")
     args = parser.parse_args()
 
     root = Path(args.input_directory)
@@ -192,24 +231,30 @@ def main():
         print(f"Images location >{root}< not found. Exiting now...")
         sys.exit(1)
 
+    style = infer_style(root, args.style)
+    extensions = allowed_extensions(style)
+
     # START metadata in log (not spammy per-file info)
     logging.info("#### START ####")
     logging.info("scriptName                   : %s", SCRIPT_PATH.name)
     logging.info("input_directory              : %s", root)
+    logging.info("style                        : %s", style)
+    logging.info("extensions                   : %s", ", ".join(sorted(extensions)))
     logging.info("script_path                  : %s", SCRIPT_DIR)
     logging.info("scriptLog                    : %s", LOG_FILE)
 
-    total = sum(1 for _ in iter_png_files(root))
-    print(f"Planned scan: {total} PNG files under {root} (recursive)")
+    total = sum(1 for _ in iter_image_files(root, extensions))
+    ext_label = "/".join(sorted(extensions))
+    print(f"Planned scan: {total} {ext_label} files under {root} (recursive, style={style})")
 
     start = timer()
     counters: Dict[str, int] = {f"Counter{i}": 0 for i in range(1, 8)}
     processed = 0
 
     # Console: progress bar only
-    with alive_bar(total or 1, title="Scanning PNGs", dual_line=False, stats=False) as bar:
-        for fp in iter_png_files(root):
-            test_image(fp, counters)
+    with alive_bar(total or 1, title=f"Scanning {style}", dual_line=False, stats=False) as bar:
+        for fp in iter_image_files(root, extensions):
+            test_image(fp, counters, style)
             processed += 1
             bar()
 
@@ -217,7 +262,8 @@ def main():
     elapsed_min = round((timer() - start) / 60.0, 2)
     ppm = round((processed / elapsed_min), 2) if elapsed_min > 0 else processed
     tot_issues = sum(counters.values())
-    tot_checks = processed * 7
+    checks_per_file = 7 if style == TRANSPARENT_STYLE else 5
+    tot_checks = processed * checks_per_file
     issues_pct = round(((tot_issues / tot_checks) * 100), 2) if processed > 0 else 0.0
 
     # Log the summary (always written)
@@ -243,11 +289,11 @@ def main():
     print("\n=== SUMMARY ===")
     print(f"Processed: {processed}  |  Elapsed: {elapsed_min} min  |  PPM: {ppm}")
     print(
-        f"W1 Gray: {counters['Counter1']} | W2 NotTransparent: {counters['Counter2']} | W3 HeadChop: {counters['Counter3']}")
+        f"W1 BadGray: {counters['Counter1']} | W2 NotTransparent: {counters['Counter2']} | W3 HeadChop: {counters['Counter3']}")
     print(
         f"W4 Ratio: {counters['Counter4']} | W5 Width: {counters['Counter5']} | W6 Height: {counters['Counter6']} | W7 2000x3000: {counters['Counter7']}")
     print(f"Issues: {tot_issues} / Checks: {tot_checks}  ({issues_pct}%)")
-    print(f"Details in log → {LOG_FILE}")
+    print(f"Details in log -> {LOG_FILE}")
 
 
 if __name__ == "__main__":

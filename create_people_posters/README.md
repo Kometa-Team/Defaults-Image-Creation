@@ -475,12 +475,17 @@ gh auth status
 After syncing images to the repo (step 11), you can run:
 
 ```bash
-# Dimensions & basic validity checks
-python image_check.py
+# Single-tree dimensions and style-aware validity checks
+python image_check.py --input_directory "./config/people_dirs/transparent" --style transparent
 
-# Compare presence across style trees
+# Compare presence across style trees, including dimension and quality issues
 python compare_image_trees.py
 ```
+
+Quality rules allow grayscale only for `bw` and `diiivoy`. `original`, `rainier`,
+`signature`, `diiivoycolor`, and `transparent` must be color; `transparent` must
+also contain alpha transparency. Use `--no-quality` on `compare_image_trees.py`
+only when you want the old presence/dimension-only report.
 
 ---
 
