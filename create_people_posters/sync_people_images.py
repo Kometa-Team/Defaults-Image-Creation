@@ -15,7 +15,7 @@ import shutil
 from pathlib import Path
 from timeit import default_timer as timer
 
-from PIL import Image
+from PIL import Image, ImageChops
 from dotenv import load_dotenv
 from alive_progress import alive_bar
 
@@ -39,7 +39,7 @@ def setup_logging(level=logging.INFO, console=True):
         handlers=handlers,
         force=True,
     )
-    logging.info("Logging → %s", log_file)
+    logging.info("Logging -> %s", log_file)
     return log_file
 
 
@@ -118,6 +118,43 @@ def enforce_transparent_canvas(path: Path) -> bool:
         return True
 
 
+def has_any_transparency(img: Image.Image) -> bool:
+    if "A" not in img.getbands():
+        return False
+    lo, _ = img.getchannel("A").getextrema()
+    return lo < 255
+
+
+def is_grayscale(img: Image.Image) -> bool:
+    mode = img.mode
+    if mode in ("1", "L", "LA"):
+        return True
+    rgb = img.convert("RGB")
+    r, g, b = rgb.split()
+    return (
+        ImageChops.difference(r, g).getbbox() is None
+        and ImageChops.difference(g, b).getbbox() is None
+    )
+
+
+def transparent_quality_issues(path: Path) -> list[str]:
+    issues: list[str] = []
+    if path.suffix.lower() != ".png":
+        return ["transparent repo files must be PNG"]
+
+    try:
+        with Image.open(path) as img:
+            if img.size != TARGET_TRANSPARENT_SIZE:
+                issues.append(f"dimensions are {img.width}x{img.height}, expected 2000x3000")
+            if not has_any_transparency(img):
+                issues.append("not transparent; send through remove_bg")
+            if is_grayscale(img):
+                issues.append("grayscale; send original through DeOldify before remove_bg")
+    except Exception as exc:
+        issues.append(f"unreadable image: {exc}")
+    return issues
+
+
 def sync_tree(src_root: Path, dst_root: Path, title: str, normalize_transparent: bool = False):
     """
     Rough equivalent of:
@@ -125,7 +162,7 @@ def sync_tree(src_root: Path, dst_root: Path, title: str, normalize_transparent:
     """
     if not src_root.exists():
         logging.info("%s: source does not exist, skipping (%s)", title, src_root)
-        return
+        return 0
 
     # 1) Ensure directory tree exists at destination (and copy dir timestamps)
     created_dirs = 0
@@ -150,15 +187,46 @@ def sync_tree(src_root: Path, dst_root: Path, title: str, normalize_transparent:
 
             try:
                 if newer_than(f, df):
+                    if normalize_transparent:
+                        source_issues = [
+                            issue for issue in transparent_quality_issues(f)
+                            if not issue.startswith("dimensions are ")
+                        ]
+                        if source_issues:
+                            failed += 1
+                            bar.text = f"-> failed:  {rel}"
+                            logging.warning(
+                                "Refusing transparent copy %s -> %s: %s",
+                                f, df, "; ".join(source_issues),
+                            )
+                            bar()
+                            continue
+
                     # copy2 ≈ COPY:DAT (data + basic metadata/timestamps)
                     shutil.copy2(f, df)
                     if normalize_transparent and enforce_transparent_canvas(df):
                         normalized += 1
+                    if normalize_transparent:
+                        dest_issues = transparent_quality_issues(df)
+                        if dest_issues:
+                            failed += 1
+                            logging.warning(
+                                "Invalid transparent destination %s: %s",
+                                df, "; ".join(dest_issues),
+                            )
                     bar.text = f"-> copied:  {rel}"
                     copied += 1
                 else:
                     if normalize_transparent and enforce_transparent_canvas(df):
                         normalized += 1
+                    if normalize_transparent:
+                        dest_issues = transparent_quality_issues(df)
+                        if dest_issues:
+                            failed += 1
+                            logging.warning(
+                                "Invalid existing transparent destination %s: %s",
+                                df, "; ".join(dest_issues),
+                            )
                     bar.text = f"-> skipped: {rel} (dest newer/same)"
                     skipped += 1
             except Exception as e:
@@ -171,6 +239,7 @@ def sync_tree(src_root: Path, dst_root: Path, title: str, normalize_transparent:
         "%s: dirs created=%d, copied=%d, skipped=%d, normalized=%d, failed=%d",
         title, created_dirs, copied, skipped, normalized, failed
     )
+    return failed
 
 
 def main():
@@ -190,17 +259,19 @@ def main():
     logging.info("Source base: %s", src_base)
     logging.info("Destination base: %s", dest_base)
 
+    failed = 0
     for cat in CATEGORIES:
         src = src_base / cat
         dst = dest_base / cat
         title = f"sync {cat}"
         logging.info("---- %s ----", title)
-        sync_tree(src, dst, title, normalize_transparent=(cat == "transparent"))
+        failed += sync_tree(src, dst, title, normalize_transparent=(cat == "transparent"))
 
     elapsed = timer() - start
     logging.info("All done in %.2fs", elapsed)
     print(f"Done in {elapsed:.2f}s")
+    return 1 if failed else 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
