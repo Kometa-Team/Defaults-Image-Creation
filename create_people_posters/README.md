@@ -77,8 +77,7 @@ TMDB_KEY=your_tmdb_api_key_here
 ORCH_LOGS_DIR=/absolute/path/to/kometa/logs          # used by steps 2–3
 PEOPLE_IMAGES_DIR=/absolute/path/to/Kometa-People-Images
 PEOPLE_BRANCH=master                                  # optional; branch for update/push
-SYNC_PREFLIGHT=true                                   # optional; report-only sync-time source QA
-SYNC_STRICT_PREFLIGHT=false                           # optional; blocking sync-time source QA
+SYNC_PREFLIGHT=true                                   # optional; source QA before sync
 
 # Single default style (used if ORCH_STYLES not set)
 ORCH_STYLE=transparent
@@ -290,12 +289,11 @@ The orchestrator enforces the single correct order and writes checkpoints so you
 > Optional helper (outside the orchestrator): `bulk_extract_configs.py` — scan mess/meta logs, including nested archives, and export redacted config sections as `parsed_*.yml`.
 
 `sync_people_images.py` runs source-image preflight by default, but it is
-report-only. It logs wrong extensions, unreadable/corrupt files, bad dimensions,
-missing transparent alpha, and grayscale in color-required styles, then continues
-syncing. Use `--strict-preflight` or `SYNC_STRICT_PREFLIGHT=true` only when you
-intentionally want those findings to block sync. Use `--no-preflight` or
-`SYNC_PREFLIGHT=false` only when you want sync to copy without even reporting
-source QA findings.
+split by severity. It blocks sync for wrong extensions, unreadable/corrupt
+files, bad dimensions, and transparent PNGs with no alpha. Grayscale in
+color-required styles is logged as warning-only and does not block sync. Use
+`--no-preflight` or `SYNC_PREFLIGHT=false` only when you want sync to copy
+without source QA.
 
 ---
 

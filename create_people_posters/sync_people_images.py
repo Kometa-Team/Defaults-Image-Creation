@@ -147,31 +147,50 @@ def should_validate_file(path: Path) -> bool:
     return path.suffix.lower() in IMAGE_EXTENSIONS or path.parent.name.lower() == "images"
 
 
-def image_quality_issues(category: str, path: Path, allow_fixable_dimensions: bool = False) -> list[str]:
-    issues: list[str] = []
+def image_quality_findings(
+    category: str,
+    path: Path,
+    allow_fixable_dimensions: bool = False,
+) -> tuple[list[str], list[str]]:
+    blocking: list[str] = []
+    warnings: list[str] = []
     suffix = path.suffix.lower()
     expected = expected_extensions(category)
     if suffix not in expected:
         expected_text = ", ".join(sorted(expected))
-        issues.append(f"{category} files must use {expected_text}")
+        blocking.append(f"{category} files must use {expected_text}")
         if suffix not in IMAGE_EXTENSIONS:
-            return issues
+            return blocking, warnings
 
     try:
         with Image.open(path) as img:
             if img.size != TARGET_TRANSPARENT_SIZE and not allow_fixable_dimensions:
-                issues.append(f"dimensions are {img.width}x{img.height}, expected 2000x3000")
+                blocking.append(f"dimensions are {img.width}x{img.height}, expected 2000x3000")
             if category == "transparent" and not has_any_transparency(img):
-                issues.append("not transparent; send through remove_bg")
+                blocking.append("not transparent; send through remove_bg")
             if category in COLOR_REQUIRED_CATEGORIES and is_grayscale(img):
-                issues.append("grayscale; send original through DeOldify before remove_bg")
+                warnings.append("grayscale; send original through DeOldify before remove_bg")
     except Exception as exc:
-        issues.append(f"unreadable image: {exc}")
-    return issues
+        blocking.append(f"unreadable image: {exc}")
+    return blocking, warnings
 
 
-def transparent_quality_issues(path: Path) -> list[str]:
-    return image_quality_issues("transparent", path)
+def validate_transparent_destination(path: Path) -> int:
+    blocking, warnings = image_quality_findings("transparent", path)
+    if warnings:
+        logging.warning(
+            "Transparent destination warning %s: %s",
+            path,
+            "; ".join(warnings),
+        )
+    if blocking:
+        logging.warning(
+            "Invalid transparent destination %s: %s",
+            path,
+            "; ".join(blocking),
+        )
+        return 1
+    return 0
 
 
 def parse_bool_env(key: str, default: bool) -> bool:
@@ -181,8 +200,9 @@ def parse_bool_env(key: str, default: bool) -> bool:
     return str(value).strip().lower() in {"1", "true", "yes", "y", "on"}
 
 
-def preflight_sources(src_base: Path, strict: bool = False) -> int:
-    failed = 0
+def preflight_sources(src_base: Path) -> int:
+    blocking_failed = 0
+    warning_only = 0
     for category in CATEGORIES:
         src_root = src_base / category
         if not src_root.exists():
@@ -190,31 +210,37 @@ def preflight_sources(src_base: Path, strict: bool = False) -> int:
             continue
 
         category_failed = 0
+        category_warnings = 0
         for path in iter_files(src_root):
             if not should_validate_file(path):
                 continue
             rel = path.relative_to(src_root)
-            issues = image_quality_issues(
+            blocking, warnings = image_quality_findings(
                 category,
                 path,
                 allow_fixable_dimensions=(category == "transparent"),
             )
-            if issues:
+            if blocking:
                 category_failed += 1
-                logging.warning("preflight %s failed for %s: %s", category, rel, "; ".join(issues))
+                logging.warning("preflight %s failed for %s: %s", category, rel, "; ".join(blocking))
+            if warnings:
+                category_warnings += 1
+                logging.warning("preflight %s warning for %s: %s", category, rel, "; ".join(warnings))
 
         if category_failed:
-            logging.warning("preflight %s: %d invalid file(s)", category, category_failed)
-        failed += category_failed
+            logging.warning("preflight %s: %d blocking invalid file(s)", category, category_failed)
+        if category_warnings:
+            logging.warning("preflight %s: %d warning-only file(s)", category, category_warnings)
+        blocking_failed += category_failed
+        warning_only += category_warnings
 
-    if failed:
-        if strict:
-            logging.error("Preflight found %d invalid source file(s); aborting before syncing any style repo.", failed)
-        else:
-            logging.warning("Preflight found %d invalid source file(s); continuing because preflight is report-only.", failed)
+    if blocking_failed:
+        logging.error("Preflight found %d blocking invalid source file(s); aborting before syncing any style repo.", blocking_failed)
+    elif warning_only:
+        logging.warning("Preflight found %d warning-only source file(s); continuing sync.", warning_only)
     else:
         logging.info("Preflight passed for all source style folders.")
-    return failed
+    return blocking_failed
 
 
 def sync_tree(src_root: Path, dst_root: Path, title: str, normalize_transparent: bool = False):
@@ -254,26 +280,14 @@ def sync_tree(src_root: Path, dst_root: Path, title: str, normalize_transparent:
                     if normalize_transparent and enforce_transparent_canvas(df):
                         normalized += 1
                     if normalize_transparent:
-                        dest_issues = transparent_quality_issues(df)
-                        if dest_issues:
-                            failed += 1
-                            logging.warning(
-                                "Invalid transparent destination %s: %s",
-                                df, "; ".join(dest_issues),
-                            )
+                        failed += validate_transparent_destination(df)
                     bar.text = f"-> copied:  {rel}"
                     copied += 1
                 else:
                     if normalize_transparent and enforce_transparent_canvas(df):
                         normalized += 1
                     if normalize_transparent:
-                        dest_issues = transparent_quality_issues(df)
-                        if dest_issues:
-                            failed += 1
-                            logging.warning(
-                                "Invalid existing transparent destination %s: %s",
-                                df, "; ".join(dest_issues),
-                            )
+                        failed += validate_transparent_destination(df)
                     bar.text = f"-> skipped: {rel} (dest newer/same)"
                     skipped += 1
             except Exception as e:
@@ -301,13 +315,7 @@ def main():
         "--preflight",
         action=argparse.BooleanOptionalAction,
         default=parse_bool_env("SYNC_PREFLIGHT", True),
-        help="Run source image QA before syncing; report-only unless --strict-preflight is also set. Default: true.",
-    )
-    ap.add_argument(
-        "--strict-preflight",
-        action="store_true",
-        default=parse_bool_env("SYNC_STRICT_PREFLIGHT", False),
-        help="Run source image QA and abort sync if invalid files are found.",
+        help="Run source image QA before syncing. Fatal file issues block; grayscale is report-only. Default: true.",
     )
     args = ap.parse_args()
 
@@ -318,15 +326,12 @@ def main():
     logging.info("Source base: %s", src_base)
     logging.info("Destination base: %s", dest_base)
 
-    if args.strict_preflight:
-        args.preflight = True
-
     if args.preflight:
-        preflight_failed = preflight_sources(src_base, strict=args.strict_preflight)
-        if preflight_failed and args.strict_preflight:
+        preflight_failed = preflight_sources(src_base)
+        if preflight_failed:
             return 1
     else:
-        logging.info("Source preflight skipped. Use SYNC_PREFLIGHT=true for report-only QA or --strict-preflight to block invalid files.")
+        logging.info("Source preflight skipped. Use SYNC_PREFLIGHT=true to restore source QA before sync.")
 
     failed = 0
     for cat in CATEGORIES:
