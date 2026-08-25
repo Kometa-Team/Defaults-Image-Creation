@@ -1315,6 +1315,10 @@ def main() -> int:
                 log(f"[error] existing input: {path}")
             if len(existing_inputs) > 20:
                 log(f"[error] existing input count truncated: {len(existing_inputs)} total")
+            log("[next] These files are already staged for the normal pipeline.")
+            log("[next] Run: python orchestrator.py --redo remove_bg --no-recover-edge-chops")
+            log("[next] After that finishes, rerun this recovery command for the next batch.")
+            log("[next] Only clear Downloads manually if you intentionally want to discard those staged inputs.")
             return 2
 
     if args.precheck_rembg:
