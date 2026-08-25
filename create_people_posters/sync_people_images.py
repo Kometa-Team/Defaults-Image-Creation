@@ -214,21 +214,26 @@ def preflight_sources(src_base: Path) -> int:
 
         category_failed = 0
         category_warnings = 0
-        for path in iter_files(src_root):
-            if not should_validate_file(path):
-                continue
-            rel = path.relative_to(src_root)
-            blocking, warnings = image_quality_findings(
-                category,
-                path,
-                allow_fixable_dimensions=(category == "transparent"),
-            )
-            if blocking:
-                category_failed += 1
-                logging.warning("preflight %s failed for %s: %s", category, rel, "; ".join(blocking))
-            if warnings:
-                category_warnings += 1
-                logging.warning("preflight %s warning for %s: %s", category, rel, "; ".join(warnings))
+        files = [path for path in iter_files(src_root) if should_validate_file(path)]
+        logging.info("preflight %s: %d file(s) to scan", category, len(files))
+        with alive_bar(len(files), dual_line=True, title=f"preflight {category}") as bar:
+            for path in files:
+                rel = path.relative_to(src_root)
+                try:
+                    blocking, warnings = image_quality_findings(
+                        category,
+                        path,
+                        allow_fixable_dimensions=(category == "transparent"),
+                    )
+                    if blocking:
+                        category_failed += 1
+                        logging.warning("preflight %s failed for %s: %s", category, rel, "; ".join(blocking))
+                    if warnings:
+                        category_warnings += 1
+                        logging.warning("preflight %s warning for %s: %s", category, rel, "; ".join(warnings))
+                    bar.text = f"-> checked: {rel}"
+                finally:
+                    bar()
 
         if category_failed:
             logging.warning("preflight %s: %d blocking invalid file(s)", category, category_failed)
