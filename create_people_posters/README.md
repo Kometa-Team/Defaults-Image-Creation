@@ -101,6 +101,7 @@ EDGE_CHOP_PRECHECK_REMBG=true                         # prefilter retry candidat
 REMBG_HOME=./config/models/rembg                       # rembg model cache for recovery
 EDGE_CHOP_REJECT_GRAYSCALE=true                       # do not accept B/W TMDB alternates during recovery
 EDGE_CHOP_COLORIZE_GRAYSCALE=true                     # try DeOldify before rejecting B/W alternates
+EDGE_CHOP_EXHAUSTED_FILE=./config/edge_chop_recovery/exhausted_names.txt
 IMAGE_CHECK_FACE_CROP_CHECKS=chin,left,right           # report-only face crop diagnostics
 COMPTREE_FACE_CROP_CHECKS=chin,left,right              # same diagnostics in compare_image_trees
 FACE_CROP_MODEL_HOME=./config/models/opencv            # YuNet face detector cache
@@ -419,7 +420,10 @@ skipped before the Selenium/Adobe step. The first alternate that passes the
 local precheck is sent through Adobe, then the final poster output is checked
 again for both retry-edge and non-color issues. If no alternate clears the check,
 the script restores the previous local style outputs, writes
-`./config/edge_chop_recovery/edge_chop_recovery.csv`, and continues the pipeline.
+`./config/edge_chop_recovery/edge_chop_recovery.csv`, records the person in
+`./config/edge_chop_recovery/exhausted_names.txt`, and continues the pipeline.
+Future recovery batches skip names in that exhausted file; remove a name from the
+file if you want to retry it later.
 Set `ORCH_RECOVER_EDGE_CHOPS=false` or pass `--no-recover-edge-chops` to skip it.
 Set `EDGE_CHOP_PRECHECK_REMBG=false` or pass `--no-precheck-rembg` only when you
 need to diagnose the older Adobe-only retry path. `rembg` is included in
@@ -435,6 +439,10 @@ python recover_edge_chops.py --all --audit-only
 
 # Work a small batch from the backlog.
 python recover_edge_chops.py --all --limit 25
+
+# Work a larger batch from the backlog. This attempts 100 not-yet-exhausted people;
+# TMDB alternates per person are controlled separately by EDGE_CHOP_TMDB_LIMIT.
+python recover_edge_chops.py --all --limit 100
 
 # Retry only named people.
 python recover_edge_chops.py --names "Person One" "Person Two"

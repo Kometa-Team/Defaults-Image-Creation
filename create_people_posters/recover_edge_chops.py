@@ -4,7 +4,8 @@ This runs after create_people_poster.ps1. It scans the local transparent style
 tree for edge contact, then tries TMDB profile alternates one at a time through
 the normal remove-bg and poster-generation pipeline. If no candidate passes the
 configured retry edges, the original local style outputs are restored and the
-person is reported as unresolved.
+person is reported as exhausted. Exhausted names are skipped on future runs
+until removed from the exhausted-name file.
 """
 
 from __future__ import annotations
@@ -36,6 +37,7 @@ DOWNLOADS_DIR = PEOPLE_ROOT / "Downloads"
 TRANSPARENT_ROOT = PEOPLE_ROOT / "transparent"
 ORIGINAL_ROOT = PEOPLE_ROOT / "original"
 OUT_ROOT = CONFIG_DIR / "edge_chop_recovery"
+EXHAUSTED_NAMES_FILE = OUT_ROOT / "exhausted_names.txt"
 REMBG_HOME = CONFIG_DIR / "models" / "rembg"
 TMDB_SEARCH_URL = "https://api.themoviedb.org/3/search/person"
 TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/original"
@@ -111,10 +113,13 @@ def find_chopped(
     threshold: float,
     report_edges: tuple[str, ...],
     retry_edges: tuple[str, ...],
+    exhausted_names: set[str] | None = None,
     modified_since: float | None = None,
     max_matches: int = 0,
-) -> list[tuple[str, Path, str]]:
+) -> tuple[list[tuple[str, Path, str]], int]:
     chopped: list[tuple[str, Path, str]] = []
+    skipped_exhausted = 0
+    exhausted_names = exhausted_names or set()
     for path in iter_transparents(root):
         if modified_since is not None:
             try:
@@ -122,15 +127,50 @@ def find_chopped(
                     continue
             except OSError:
                 continue
+        name = path.stem
+        if name.casefold() in exhausted_names:
+            skipped_exhausted += 1
+            continue
         result = detect_edge_chops(path, threshold=threshold, edges=report_edges)
         if result.error:
-            chopped.append((path.stem, path, issue_summary(result)))
-            continue
-        if has_any_issue(result, retry_edges):
-            chopped.append((path.stem, path, issue_summary(result)))
+            chopped.append((name, path, issue_summary(result)))
             if max_matches > 0 and len(chopped) >= max_matches:
                 break
-    return chopped
+            continue
+        if has_any_issue(result, retry_edges):
+            chopped.append((name, path, issue_summary(result)))
+            if max_matches > 0 and len(chopped) >= max_matches:
+                break
+    return chopped, skipped_exhausted
+
+
+def load_exhausted_names(path: Path) -> set[str]:
+    if not path.exists():
+        return set()
+    names: set[str] = set()
+    with path.open("r", encoding="utf-8") as fh:
+        for line in fh:
+            name = line.strip()
+            if name and not name.startswith("#"):
+                names.add(name.casefold())
+    return names
+
+
+def append_exhausted_names(path: Path, names: Iterable[str]) -> int:
+    unique_names = sorted({name.strip() for name in names if name.strip()}, key=str.casefold)
+    if not unique_names:
+        return 0
+
+    existing = load_exhausted_names(path)
+    to_add = [name for name in unique_names if name.casefold() not in existing]
+    if not to_add:
+        return 0
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as fh:
+        for name in to_add:
+            fh.write(name + "\n")
+    return len(to_add)
 
 
 def tmdb_person(session: requests.Session, api_key: str, name: str) -> dict | None:
@@ -457,6 +497,7 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
             return row
 
         if not candidates:
+            row.status = "exhausted"
             row.note = "no TMDB profile candidates"
             return row
 
@@ -612,6 +653,7 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
         restore_backups(backups, paths)
         current = final_transparent_path(args.people_root, name)
         row.final_issues = issue_summary(detect_edge_chops(current, threshold=args.threshold, edges=args.report_edges)) if current.exists() else ""
+        row.status = "exhausted"
         row.note = "no TMDB alternate cleared retry edges; restored previous local outputs"
         if row.grayscale_colorized:
             row.note += f"; DeOldify colorized {row.grayscale_colorized} candidates"
@@ -669,6 +711,12 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--transparent-root", type=Path, default=Path(os.getenv("EDGE_CHOP_TRANSPARENT_ROOT") or TRANSPARENT_ROOT))
     ap.add_argument("--downloads-dir", type=Path, default=Path(os.getenv("EDGE_CHOP_DOWNLOADS_DIR") or DOWNLOADS_DIR))
     ap.add_argument("--out-root", type=Path, default=Path(os.getenv("EDGE_CHOP_OUT_ROOT") or OUT_ROOT))
+    ap.add_argument(
+        "--exhausted-file",
+        type=Path,
+        default=Path(os.getenv("EDGE_CHOP_EXHAUSTED_FILE") or EXHAUSTED_NAMES_FILE),
+        help="Names listed here are skipped on future recovery runs until removed from the file.",
+    )
     ap.add_argument("--threshold", type=float, default=float(os.getenv("EDGE_CHOP_THRESHOLD", "0.06")))
     ap.add_argument("--report-edges", default=os.getenv("EDGE_CHOP_REPORT_EDGES", "top"))
     ap.add_argument("--retry-edges", default=os.getenv("EDGE_CHOP_RETRY_EDGES", "top"))
@@ -702,6 +750,7 @@ def main() -> int:
     args.transparent_root = args.transparent_root.resolve()
     args.downloads_dir = args.downloads_dir.resolve()
     args.out_root = args.out_root.resolve()
+    args.exhausted_file = args.exhausted_file.resolve()
     args.rembg_home = args.rembg_home.resolve()
     args.report_edges = parse_edges(args.report_edges, ("top",))
     args.retry_edges = parse_edges(args.retry_edges, ("top",))
@@ -736,18 +785,28 @@ def main() -> int:
         log("[info] Whole-tree recovery skipped without scanning to avoid large Adobe retry runs.")
         return 0
 
+    exhausted_names = load_exhausted_names(args.exhausted_file)
+    if exhausted_names:
+        log(f"[info] skipping {len(exhausted_names)} exhausted name(s) from {args.exhausted_file}")
+
     scan_limit = 0 if args.names else args.limit
-    chopped = find_chopped(
+    chopped, skipped_exhausted = find_chopped(
         args.transparent_root,
         args.threshold,
         args.report_edges,
         args.retry_edges,
+        exhausted_names=exhausted_names,
         modified_since=modified_since,
         max_matches=scan_limit,
     )
+    if skipped_exhausted:
+        log(f"[info] skipped {skipped_exhausted} transparent file(s) already listed as exhausted")
     if args.names:
         wanted = {name.casefold() for name in args.names}
         chopped = [item for item in chopped if item[0].casefold() in wanted]
+        requested_exhausted = [name for name in args.names if name.casefold() in exhausted_names]
+        for name in requested_exhausted:
+            log(f"[info] {name}: skipped because it is listed in {args.exhausted_file}")
 
     log(f"Chopped transparent images needing retry: {len(chopped)}")
     if args.audit_only:
@@ -806,8 +865,17 @@ def main() -> int:
     write_report(args.out_root, rows)
     recovered = sum(1 for row in rows if row.status == "recovered")
     unresolved = sum(1 for row in rows if row.status == "unresolved")
+    exhausted = sum(1 for row in rows if row.status == "exhausted")
+    added_exhausted = append_exhausted_names(
+        args.exhausted_file,
+        (row.name for row in rows if row.status == "exhausted"),
+    )
     log(f"Recovered: {recovered}")
     log(f"Unresolved: {unresolved}")
+    log(f"Exhausted: {exhausted}")
+    if added_exhausted:
+        log(f"Added exhausted names: {added_exhausted} -> {args.exhausted_file}")
+    log("Next command: python orchestrator.py --redo tmdb")
     log("#### END recover_edge_chops ####")
     return exit_code
 
