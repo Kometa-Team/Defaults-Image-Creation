@@ -101,10 +101,13 @@ EDGE_CHOP_PRECHECK_REMBG=true                         # prefilter retry candidat
 REMBG_HOME=./config/models/rembg                       # rembg model cache for recovery
 EDGE_CHOP_REJECT_GRAYSCALE=true                       # do not accept B/W TMDB alternates during recovery
 EDGE_CHOP_COLORIZE_GRAYSCALE=true                     # try DeOldify before rejecting B/W alternates
+EDGE_CHOP_RECOVER_WARNINGS=headchop                   # headchop,grayscale,face-chin,face-side,all
 EDGE_CHOP_EXHAUSTED_FILE=./config/edge_chop_recovery/exhausted_names.txt
 EDGE_CHOP_ATTEMPTED_FILE=./config/edge_chop_recovery/attempted_candidates.csv
 EDGE_CHOP_STAGE_FOR_ORCHESTRATOR=false                # default false; use CLI flag for backlog batches
 EDGE_CHOP_RUN_ORCHESTRATOR=false                      # default false; use CLI flag for one-command batches
+EDGE_CHOP_FACE_CROP_SIDE_MARGIN=0.02
+EDGE_CHOP_FACE_CROP_CHIN_MARGIN=0.015
 IMAGE_CHECK_FACE_CROP_CHECKS=chin,left,right           # report-only face crop diagnostics
 COMPTREE_FACE_CROP_CHECKS=chin,left,right              # same diagnostics in compare_image_trees
 FACE_CROP_MODEL_HOME=./config/models/opencv            # YuNet face detector cache
@@ -400,7 +403,7 @@ Results are written to `./config/original_resolver/manifest.csv`. Any name that
 does not match TMDB or Google above `ORIGINAL_RESOLVER_THRESHOLD` is listed in
 `./config/original_resolver/unresolved.txt` and gets a review contact sheet.
 
-### Recover top-edge head chops
+### Recover image warnings
 ```bash
 # Safe no-scope run: writes a skipped report and avoids a whole-tree retry.
 python recover_edge_chops.py
@@ -415,13 +418,14 @@ python image_check.py --input_directory "./config/people_dirs/transparent" --sty
 
 The orchestrator runs `recover_edge_chops.py` after `poster_ps1` by default,
 scoped to transparent PNGs generated in that same `poster_ps1` run. It retries
-top-edge head chops only. By default, black-and-white or near-grayscale TMDB
+top-edge head chops only unless `EDGE_CHOP_RECOVER_WARNINGS` or
+`--recover-warnings` says otherwise. By default, black-and-white or near-grayscale TMDB
 alternates are sent through DeOldify first, then rechecked; an alternate is
 skipped only if it is still non-color afterward. Each remaining alternate first
-runs through `rembg` locally; alternates that still touch the retry edge are
-skipped before the Selenium/Adobe step. The first alternate that passes the
-local precheck is sent through Adobe, then the final poster output is checked
-again for both retry-edge and non-color issues. If no alternate clears the check,
+runs through `rembg` locally; alternates that still have selected recovery
+warnings are skipped before the Selenium/Adobe step. The first alternate that
+passes the local precheck is sent through Adobe, then the final poster output is
+checked again for the selected recovery warnings. If no alternate clears the check,
 the script restores the previous local style outputs, writes
 `./config/edge_chop_recovery/edge_chop_recovery.csv`, records the person in
 `./config/edge_chop_recovery/exhausted_names.txt`, and continues the pipeline.
@@ -438,6 +442,10 @@ need to diagnose the older Adobe-only retry path. `rembg` is included in
 Set `EDGE_CHOP_COLORIZE_GRAYSCALE=false` to skip the DeOldify attempt, or set
 `EDGE_CHOP_REJECT_GRAYSCALE=false` / pass `--allow-grayscale` only for a manual
 exception.
+`--recover-warnings` accepts `headchop`, `grayscale`, `face-chin`,
+`face-left`, `face-right`, `face-side`, or `all`. `face-chin` and `face-side`
+use the same face-model diagnostics as `image_check.py`; they are risk signals,
+so keep them explicit rather than default.
 Whole-tree backlog cleanup is opt-in:
 
 ```bash
@@ -450,6 +458,12 @@ python recover_edge_chops.py --all --limit 25 --stage-for-orchestrator
 # Work a larger batch from the backlog. This attempts 100 not-yet-exhausted people;
 # TMDB alternates per person are controlled separately by EDGE_CHOP_TMDB_LIMIT.
 python recover_edge_chops.py --all --limit 100 --stage-for-orchestrator
+
+# Include grayscale/non-color warnings in the staged recovery batch.
+python recover_edge_chops.py --all --limit 100 --recover-warnings headchop,grayscale --stage-for-orchestrator
+
+# Explicit face-model risk recovery modes.
+python recover_edge_chops.py --all --limit 25 --recover-warnings face-chin,face-side --stage-for-orchestrator
 
 # Stage the batch and immediately hand off to the orchestrator.
 python recover_edge_chops.py --all --limit 100 --stage-for-orchestrator --run-orchestrator

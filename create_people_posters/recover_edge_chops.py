@@ -33,6 +33,10 @@ from dotenv import load_dotenv
 from PIL import Image, ImageChops, ImageOps
 
 from edge_chop import detect_edge_chops, has_any_issue, issue_summary, parse_edges
+from face_crop import (
+    detect_face_crop_issues,
+    face_crop_summary,
+)
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -51,6 +55,14 @@ TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/original"
 TARGET_SIZE = (2000, 3000)
 SAME_IMAGE_HASH_DISTANCE = 8
 SAME_IMAGE_MEAN_DELTA = 6.0
+COLOR_REQUIRED_STYLES = {"diiivoycolor", "original", "rainier", "signature", "transparent"}
+RECOVERY_WARNING_CHOICES = {
+    "headchop",
+    "grayscale",
+    "face-chin",
+    "face-left",
+    "face-right",
+}
 STYLE_EXTS = {
     "bw": ".jpg",
     "diiivoy": ".jpg",
@@ -119,6 +131,50 @@ def safe_name(name: str) -> str:
     return cleaned or "unknown"
 
 
+def parse_recover_warnings(value: str | Iterable[str] | None) -> tuple[str, ...]:
+    raw = "headchop" if value is None else value
+    if isinstance(raw, str):
+        items = [item.strip().lower() for item in raw.split(",")]
+    else:
+        items = [str(item).strip().lower() for item in raw]
+
+    selected: list[str] = []
+    for item in items:
+        if item in {"", "none", "false", "off", "0"}:
+            continue
+        if item in {"all", "*"}:
+            for warning in ("headchop", "grayscale", "face-chin", "face-left", "face-right"):
+                if warning not in selected:
+                    selected.append(warning)
+            continue
+        if item in {"top", "edge-top", "head", "head-chop", "head_chop"}:
+            item = "headchop"
+        elif item in {"bw", "b/w", "black-and-white", "black_white", "noncolor", "non-color"}:
+            item = "grayscale"
+        elif item in {"chin", "bottom-face", "face-bottom"}:
+            item = "face-chin"
+        elif item in {"left", "left-face"}:
+            item = "face-left"
+        elif item in {"right", "right-face"}:
+            item = "face-right"
+        elif item in {"side", "sides", "face-side", "face-sides"}:
+            for side in ("face-left", "face-right"):
+                if side not in selected:
+                    selected.append(side)
+            continue
+        elif item.startswith("face_"):
+            item = item.replace("_", "-")
+
+        if item not in RECOVERY_WARNING_CHOICES:
+            raise ValueError(
+                f"unknown recover warning '{item}'. Valid values: "
+                "headchop, grayscale, face-chin, face-left, face-right, face-side, all"
+            )
+        if item not in selected:
+            selected.append(item)
+    return tuple(selected or ["headchop"])
+
+
 def iter_transparents(root: Path) -> Iterable[Path]:
     if not root.exists():
         return
@@ -127,40 +183,129 @@ def iter_transparents(root: Path) -> Iterable[Path]:
             yield path
 
 
-def find_chopped(
-    root: Path,
-    threshold: float,
-    report_edges: tuple[str, ...],
-    retry_edges: tuple[str, ...],
+def iter_style_images(root: Path) -> Iterable[Path]:
+    if not root.exists():
+        return
+    for path in sorted(root.rglob("*")):
+        if path.is_file() and path.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tif", ".tiff"}:
+            yield path
+
+
+def selected_face_checks(recover_warnings: Iterable[str]) -> tuple[str, ...]:
+    checks: list[str] = []
+    selected = set(recover_warnings)
+    if "face-chin" in selected:
+        checks.append("chin")
+    if "face-left" in selected:
+        checks.append("left")
+    if "face-right" in selected:
+        checks.append("right")
+    return tuple(checks)
+
+
+def transparent_target_issues(path: Path, args: argparse.Namespace) -> list[str]:
+    issues: list[str] = []
+    selected = set(args.recover_warnings)
+    if "headchop" in selected:
+        result = detect_edge_chops(path, threshold=args.threshold, edges=args.report_edges)
+        summary = issue_summary(result)
+        if result.error:
+            issues.append(f"edge check error: {summary}")
+        elif has_any_issue(result, args.retry_edges):
+            issues.append(summary)
+
+    face_checks = selected_face_checks(args.recover_warnings)
+    if face_checks:
+        result = detect_face_crop_issues(
+            path,
+            checks=face_checks,
+            side_margin_threshold=args.face_crop_side_margin,
+            chin_margin_threshold=args.face_crop_chin_margin,
+        )
+        summary = face_crop_summary(result)
+        if result.error:
+            issues.append(f"face crop check error: {result.error}")
+        elif summary:
+            issues.append(summary)
+    return issues
+
+
+def candidate_target_issues(path: Path, args: argparse.Namespace) -> list[str]:
+    issues = transparent_target_issues(path, args)
+    if "grayscale" in set(args.recover_warnings):
+        noncolor = noncolor_summary(
+            path,
+            sat_threshold=args.grayscale_sat_threshold,
+            sat_quantile=args.grayscale_sat_quantile,
+            colorfulness_cutoff=args.grayscale_colorfulness_cutoff,
+        )
+        if noncolor:
+            issues.append(f"non-color output: {noncolor}")
+    return issues
+
+
+def find_recovery_targets(
+    args: argparse.Namespace,
     exhausted_names: set[str] | None = None,
     modified_since: float | None = None,
     max_matches: int = 0,
 ) -> tuple[list[tuple[str, Path, str]], int]:
-    chopped: list[tuple[str, Path, str]] = []
+    selected = set(args.recover_warnings)
+    targets: dict[str, tuple[str, Path, list[str]]] = {}
     skipped_exhausted = 0
     exhausted_names = exhausted_names or set()
-    for path in iter_transparents(root):
+
+    def add_target(name: str, path: Path, issue: str) -> bool:
+        nonlocal skipped_exhausted
+        key = name.casefold()
+        if key in exhausted_names:
+            skipped_exhausted += 1
+            return False
         if modified_since is not None:
             try:
                 if path.stat().st_mtime < modified_since:
-                    continue
+                    return False
             except OSError:
-                continue
-        name = path.stem
-        if name.casefold() in exhausted_names:
-            skipped_exhausted += 1
-            continue
-        result = detect_edge_chops(path, threshold=threshold, edges=report_edges)
-        if result.error:
-            chopped.append((name, path, issue_summary(result)))
-            if max_matches > 0 and len(chopped) >= max_matches:
-                break
-            continue
-        if has_any_issue(result, retry_edges):
-            chopped.append((name, path, issue_summary(result)))
-            if max_matches > 0 and len(chopped) >= max_matches:
-                break
-    return chopped, skipped_exhausted
+                return False
+        if key not in targets:
+            targets[key] = (name, path, [])
+        targets[key][2].append(issue)
+        return max_matches > 0 and len(targets) >= max_matches
+
+    if selected.intersection({"headchop", "face-chin", "face-left", "face-right"}):
+        for path in iter_transparents(args.transparent_root):
+            name = path.stem
+            issues = transparent_target_issues(path, args)
+            if issues and add_target(name, path, "; ".join(issues)):
+                return [
+                    (name, path, "; ".join(issues))
+                    for name, path, issues in targets.values()
+                ], skipped_exhausted
+
+    if "grayscale" in selected:
+        for style in sorted(COLOR_REQUIRED_STYLES):
+            style_root = args.people_root / style
+            for path in iter_style_images(style_root):
+                name = path.stem.replace("_ccexpress", "")
+                try:
+                    noncolor = noncolor_summary(
+                        path,
+                        sat_threshold=args.grayscale_sat_threshold,
+                        sat_quantile=args.grayscale_sat_quantile,
+                        colorfulness_cutoff=args.grayscale_colorfulness_cutoff,
+                    )
+                except Exception as exc:
+                    noncolor = f"non-color check error: {exc}"
+                if noncolor and add_target(name, path, f"{style} non-color: {noncolor}"):
+                    return [
+                        (name, path, "; ".join(issues))
+                        for name, path, issues in targets.values()
+                    ], skipped_exhausted
+
+    return [
+        (name, path, "; ".join(issues))
+        for name, path, issues in targets.values()
+    ], skipped_exhausted
 
 
 def load_exhausted_names(path: Path) -> set[str]:
@@ -508,13 +653,13 @@ def rembg_precheck_candidate(args: argparse.Namespace, staged_jpg: Path, prechec
     except Exception as exc:
         raise RuntimeError(f"rembg precheck failed for {staged_jpg}: {exc}") from exc
 
-    result = detect_edge_chops(precheck_png, threshold=args.threshold, edges=args.report_edges)
-    summary = issue_summary(result) or result.error
-    if result.error:
-        raise RuntimeError(f"rembg precheck could not audit {precheck_png}: {summary}")
-    if has_any_issue(result, args.retry_edges):
-        return False, summary
-    return True, summary
+    try:
+        issues = candidate_target_issues(precheck_png, args)
+    except Exception as exc:
+        raise RuntimeError(f"rembg precheck could not audit {precheck_png}: {exc}") from exc
+    if issues:
+        return False, "; ".join(issues)
+    return True, "selected recovery warnings cleared"
 
 
 def style_file_paths(people_root: Path, name: str) -> list[Path]:
@@ -720,10 +865,10 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                     raise RuntimeError(f"{name} {candidate.label}: {exc}") from exc
                 if not should_try:
                     row.precheck_rejected += 1
-                    log(f"[precheck] {name} {candidate.label}: rembg still has edge issue: {precheck_summary}")
+                    log(f"[precheck] {name} {candidate.label}: rembg still has selected warning(s): {precheck_summary}")
                     continue
                 if precheck_summary:
-                    log(f"[precheck] {name} {candidate.label}: rembg cleared retry edges; {precheck_summary}")
+                    log(f"[precheck] {name} {candidate.label}: rembg cleared selected warning(s); {precheck_summary}")
 
             rc = run_step(f"remove-bg retry {name} {candidate.label}", [sys.executable, "sel_remove_bg.py"], env)
             if rc != 0:
@@ -745,8 +890,6 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                 continue
 
             transparent = final_transparent_path(args.people_root, name)
-            result = detect_edge_chops(transparent, threshold=args.threshold, edges=args.report_edges)
-            summary = issue_summary(result)
             if args.reject_grayscale:
                 try:
                     final_noncolor = noncolor_summary(
@@ -763,11 +906,17 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                     log(f"[retry] {name} {candidate.label}: final transparent is non-color; trying next candidate: {final_noncolor}")
                     continue
 
-            if not has_any_issue(result, args.retry_edges) and not result.error:
+            try:
+                final_issues = candidate_target_issues(transparent, args)
+            except Exception as exc:
+                restore_backups(backups, paths)
+                raise RuntimeError(f"{name} {candidate.label}: final selected-warning check failed: {exc}") from exc
+
+            if not final_issues:
                 row.status = "recovered"
                 row.chosen_label = candidate.label
                 row.chosen_url = candidate.url
-                row.final_issues = summary
+                row.final_issues = ""
                 row.note = "accepted TMDB alternate"
                 if row.grayscale_colorized:
                     row.note += f"; DeOldify colorized {row.grayscale_colorized} candidates"
@@ -777,13 +926,13 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                     row.note += f"; rembg precheck rejected {row.precheck_rejected} earlier candidates"
                 return row
 
-            log(f"[retry] {name} {candidate.label} still has edge issue: {summary or result.error}")
+            log(f"[retry] {name} {candidate.label} still has selected warning(s): {'; '.join(final_issues)}")
 
         restore_backups(backups, paths)
         current = final_transparent_path(args.people_root, name)
-        row.final_issues = issue_summary(detect_edge_chops(current, threshold=args.threshold, edges=args.report_edges)) if current.exists() else ""
+        row.final_issues = "; ".join(candidate_target_issues(current, args)) if current.exists() else ""
         row.status = "exhausted"
-        row.note = "no TMDB alternate cleared retry edges; restored previous local outputs"
+        row.note = "no TMDB alternate cleared selected recovery warnings; restored previous local outputs"
         if row.grayscale_colorized:
             row.note += f"; DeOldify colorized {row.grayscale_colorized} candidates"
         if row.grayscale_rejected:
@@ -906,11 +1055,11 @@ def stage_one_for_orchestrator(
                     raise RuntimeError(f"{name} {candidate.label}: {exc}") from exc
                 if not should_try:
                     row.precheck_rejected += 1
-                    log(f"[precheck] {name} {candidate.label}: rembg still has edge issue: {precheck_summary}")
+                    log(f"[precheck] {name} {candidate.label}: rembg still has selected warning(s): {precheck_summary}")
                     record_attempt("precheck_rejected", precheck_summary)
                     continue
                 if precheck_summary:
-                    log(f"[precheck] {name} {candidate.label}: rembg cleared retry edges; {precheck_summary}")
+                    log(f"[precheck] {name} {candidate.label}: rembg cleared selected warning(s); {precheck_summary}")
 
             target = args.downloads_dir / f"{name}.jpg"
             args.downloads_dir.mkdir(parents=True, exist_ok=True)
@@ -923,7 +1072,7 @@ def stage_one_for_orchestrator(
             return row
 
     row.status = "exhausted"
-    row.note = "no untried TMDB alternate cleared local recovery prechecks"
+    row.note = "no untried TMDB alternate cleared selected local recovery prechecks"
     if row.grayscale_colorized:
         row.note += f"; DeOldify colorized {row.grayscale_colorized} candidates"
     if row.grayscale_rejected:
@@ -993,6 +1142,11 @@ def parser() -> argparse.ArgumentParser:
         help="TMDB candidate attempts already staged or rejected by local prechecks.",
     )
     ap.add_argument("--threshold", type=float, default=float(os.getenv("EDGE_CHOP_THRESHOLD", "0.06")))
+    ap.add_argument(
+        "--recover-warnings",
+        default=os.getenv("EDGE_CHOP_RECOVER_WARNINGS", "headchop"),
+        help="Comma list of warnings to recover: headchop, grayscale, face-chin, face-left, face-right, face-side, all.",
+    )
     ap.add_argument("--report-edges", default=os.getenv("EDGE_CHOP_REPORT_EDGES", "top"))
     ap.add_argument("--retry-edges", default=os.getenv("EDGE_CHOP_RETRY_EDGES", "top"))
     ap.add_argument("--tmdb-limit", type=int, default=int(os.getenv("EDGE_CHOP_TMDB_LIMIT", "12")))
@@ -1010,6 +1164,8 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--grayscale-sat-threshold", type=int, default=int(os.getenv("EDGE_CHOP_GRAYSCALE_SAT_THRESHOLD", "35")))
     ap.add_argument("--grayscale-sat-quantile", type=float, default=float(os.getenv("EDGE_CHOP_GRAYSCALE_SAT_QUANTILE", "0.95")))
     ap.add_argument("--grayscale-colorfulness-cutoff", type=float, default=float(os.getenv("EDGE_CHOP_GRAYSCALE_COLORFULNESS_CUTOFF", "12.0")))
+    ap.add_argument("--face-crop-side-margin", type=float, default=float(os.getenv("EDGE_CHOP_FACE_CROP_SIDE_MARGIN", os.getenv("IMAGE_CHECK_FACE_CROP_SIDE_MARGIN", "0.02"))))
+    ap.add_argument("--face-crop-chin-margin", type=float, default=float(os.getenv("EDGE_CHOP_FACE_CROP_CHIN_MARGIN", os.getenv("IMAGE_CHECK_FACE_CROP_CHIN_MARGIN", "0.015"))))
     ap.add_argument("--limit", type=int, default=0, help="Maximum chopped people to attempt; 0 means all")
     ap.add_argument("--names", nargs="*", default=[])
     ap.add_argument("--modified-since", type=float, help="Only retry transparent PNGs modified at/after this Unix timestamp")
@@ -1040,6 +1196,11 @@ def main() -> int:
     args.exhausted_file = args.exhausted_file.resolve()
     args.attempted_file = args.attempted_file.resolve()
     args.rembg_home = args.rembg_home.resolve()
+    try:
+        args.recover_warnings = parse_recover_warnings(args.recover_warnings)
+    except ValueError as exc:
+        print(f"[ERROR] {exc}", file=sys.stderr)
+        return 2
     args.report_edges = parse_edges(args.report_edges, ("top",))
     args.retry_edges = parse_edges(args.retry_edges, ("top",))
     args.rembg_session = None
@@ -1088,19 +1249,17 @@ def main() -> int:
     exhausted_names = load_exhausted_names(args.exhausted_file)
     if exhausted_names:
         log(f"[info] skipping {len(exhausted_names)} exhausted name(s) from {args.exhausted_file}")
+    log(f"[info] recover warnings: {', '.join(args.recover_warnings)}")
 
     scan_limit = 0 if args.names else args.limit
-    chopped, skipped_exhausted = find_chopped(
-        args.transparent_root,
-        args.threshold,
-        args.report_edges,
-        args.retry_edges,
+    chopped, skipped_exhausted = find_recovery_targets(
+        args,
         exhausted_names=exhausted_names,
         modified_since=modified_since,
         max_matches=scan_limit,
     )
     if skipped_exhausted:
-        log(f"[info] skipped {skipped_exhausted} transparent file(s) already listed as exhausted")
+        log(f"[info] skipped {skipped_exhausted} recovery target(s) already listed as exhausted")
     if args.names:
         wanted = {name.casefold() for name in args.names}
         chopped = [item for item in chopped if item[0].casefold() in wanted]
@@ -1108,7 +1267,7 @@ def main() -> int:
         for name in requested_exhausted:
             log(f"[info] {name}: skipped because it is listed in {args.exhausted_file}")
 
-    log(f"Chopped transparent images needing retry: {len(chopped)}")
+    log(f"Recovery targets needing retry: {len(chopped)}")
     if args.audit_only:
         rows = [
             RecoveryRow(name=name, status="audit", initial_issues=issues, note=str(path))
