@@ -709,6 +709,30 @@ Function Test-Image {
 }
 
 #################################
+# Enforce-TransparentCanvas function
+#################################
+Function Enforce-TransparentCanvas ([string]$imagePath) {
+  if (-not (Test-Path $imagePath)) {
+    return
+  }
+
+  $imageW = [int](& $script:IM.Identify -format "%w" $imagePath)
+  $imageH = [int](& $script:IM.Identify -format "%h" $imagePath)
+  if ($imageW -eq 2000 -and $imageH -eq 3000) {
+    return
+  }
+
+  WriteToLogFile "Canvas normalize             : $imagePath from $imageW x $imageH to 2000 x 3000"
+  $tmpPath = "$imagePath.tmp.png"
+  & $script:IM.Convert $imagePath -background none -gravity center -resize 2000 -extent 2000x3000 $tmpPath
+  if ($LASTEXITCODE -ne 0 -or -not (Test-Path $tmpPath)) {
+    throw "Failed to normalize transparent canvas for $imagePath"
+  }
+
+  Move-Item -Path $tmpPath -Destination $imagePath -Force
+}
+
+#################################
 # Push-Down function
 #################################
 Function Push-Down ([bool]$b) {
@@ -731,15 +755,18 @@ Function Push-Down ([bool]$b) {
 
       $outPushed = "$tpps$noextension" + "_pushed.png"
       & $script:IM.Convert $file -background none -gravity north -splice "0x$theAmt" -gravity north -extent 2000x3000 $tpps$noextension"_pushed.png"
+      Enforce-TransparentCanvas $outPushed
 	}
 
     WriteToLogFile "Moving and Copying           : $noextension to: $tpps"
     Move-Item -Path $file -Destination $tpps -Force
-    if (Test-Path $tpps$noextension"_pushed.png") {
+    $outPushed = "$tpps$noextension" + "_pushed.png"
+    if (Test-Path $outPushed) {
     }
     else {
-      Copy-Item -Path $file -Destination $tpps$noextension"_pushed.png" -Force
+      Copy-Item -Path $file -Destination $outPushed -Force
     }
+    Enforce-TransparentCanvas $outPushed
   }
 }
 
@@ -854,6 +881,7 @@ foreach ($filepre in $filespre) {
     WriteToLogFile "Resizing                    : $noextension"
     & $script:IM.Convert $filepre -resize 2000 $filepre
   }
+  Enforce-TransparentCanvas $filepre
   
   # Before doing anything, copy to another location
   WriteToLogFile "Copying                      : $noextension to $nbpcs"
