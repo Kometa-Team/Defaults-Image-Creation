@@ -101,9 +101,21 @@ def iter_transparents(root: Path) -> Iterable[Path]:
             yield path
 
 
-def find_chopped(root: Path, threshold: float, report_edges: tuple[str, ...], retry_edges: tuple[str, ...]) -> list[tuple[str, Path, str]]:
+def find_chopped(
+    root: Path,
+    threshold: float,
+    report_edges: tuple[str, ...],
+    retry_edges: tuple[str, ...],
+    modified_since: float | None = None,
+) -> list[tuple[str, Path, str]]:
     chopped: list[tuple[str, Path, str]] = []
     for path in iter_transparents(root):
+        if modified_since is not None:
+            try:
+                if path.stat().st_mtime < modified_since:
+                    continue
+            except OSError:
+                continue
         result = detect_edge_chops(path, threshold=threshold, edges=report_edges)
         if result.error:
             chopped.append((path.stem, path, issue_summary(result)))
@@ -385,6 +397,10 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--tmdb-limit", type=int, default=int(os.getenv("EDGE_CHOP_TMDB_LIMIT", "12")))
     ap.add_argument("--limit", type=int, default=0, help="Maximum chopped people to attempt; 0 means all")
     ap.add_argument("--names", nargs="*", default=[])
+    ap.add_argument("--modified-since", type=float, help="Only retry transparent PNGs modified at/after this Unix timestamp")
+    ap.add_argument("--modified-within-hours", type=float, default=0.0, help="Only retry transparent PNGs modified within this many hours")
+    ap.add_argument("--all", action="store_true", help="Allow whole-tree recovery attempts")
+    ap.add_argument("--audit-only", action="store_true", help="Scan and report matching edge chops without retrying")
     return ap
 
 
@@ -405,7 +421,28 @@ def main() -> int:
         log("[warn] TMDB_KEY missing; edge-chop recovery skipped.")
         return 0
 
-    chopped = find_chopped(args.transparent_root, args.threshold, args.report_edges, args.retry_edges)
+    modified_since = args.modified_since
+    if args.modified_within_hours > 0:
+        import time
+
+        modified_since = max(modified_since or 0.0, time.time() - (args.modified_within_hours * 3600.0))
+
+    if not (args.all or args.names or modified_since is not None):
+        rows = [
+            RecoveryRow(
+                name="",
+                status="skipped",
+                note=(
+                    "no recovery scope provided; pass --all, --names, "
+                    "--modified-since, or --modified-within-hours"
+                ),
+            )
+        ]
+        write_report(args.out_root, rows)
+        log("[info] Whole-tree recovery skipped without scanning to avoid large Adobe retry runs.")
+        return 0
+
+    chopped = find_chopped(args.transparent_root, args.threshold, args.report_edges, args.retry_edges, modified_since=modified_since)
     if args.names:
         wanted = {name.casefold() for name in args.names}
         chopped = [item for item in chopped if item[0].casefold() in wanted]
@@ -413,6 +450,14 @@ def main() -> int:
         chopped = chopped[: args.limit]
 
     log(f"Chopped transparent images needing retry: {len(chopped)}")
+    if args.audit_only:
+        rows = [
+            RecoveryRow(name=name, status="audit", initial_issues=issues, note=str(path))
+            for name, path, issues in chopped
+        ]
+        write_report(args.out_root, rows)
+        return 0
+
     if not chopped:
         write_report(args.out_root, [])
         return 0

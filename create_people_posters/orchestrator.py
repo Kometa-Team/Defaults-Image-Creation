@@ -597,7 +597,14 @@ def main():
         if not recover_edge_chops:
             print("[INFO] recover_edge_chops disabled - skipping.")
             return None
-        return [py, "recover_edge_chops.py"]
+        args2 = [py, "recover_edge_chops.py"]
+        try:
+            poster_started = step_started_at.get("poster_ps1")
+        except NameError:
+            poster_started = None
+        if poster_started:
+            args2 += ["--modified-since", str(poster_started - 1.0)]
+        return args2
 
     def _update_repos():
         _require_repo_or_die()

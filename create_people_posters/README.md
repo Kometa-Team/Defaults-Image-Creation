@@ -397,11 +397,24 @@ python recover_edge_chops.py
 python image_check.py --input_directory "./config/people_dirs/transparent" --style transparent --chop-edges top,bottom,left,right
 ```
 
-The orchestrator runs `recover_edge_chops.py` after `poster_ps1` by default.
-It retries top-edge head chops only, restores the previous local style outputs
-when no alternate clears the check, writes
+The orchestrator runs `recover_edge_chops.py` after `poster_ps1` by default,
+scoped to transparent PNGs generated in that same `poster_ps1` run. It retries
+top-edge head chops only, restores the previous local style outputs when no
+alternate clears the check, writes
 `./config/edge_chop_recovery/edge_chop_recovery.csv`, and continues the pipeline.
 Set `ORCH_RECOVER_EDGE_CHOPS=false` or pass `--no-recover-edge-chops` to skip it.
+Whole-tree backlog cleanup is opt-in:
+
+```bash
+# Audit whole tree but do not retry.
+python recover_edge_chops.py --all --audit-only
+
+# Work a small batch from the backlog.
+python recover_edge_chops.py --all --limit 25
+
+# Retry only named people.
+python recover_edge_chops.py --names "Person One" "Person Two"
+```
 
 ### Bulk extract redacted config.yml sections (helper)
 ```bash
