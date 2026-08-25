@@ -35,6 +35,7 @@ DOWNLOADS_DIR = PEOPLE_ROOT / "Downloads"
 TRANSPARENT_ROOT = PEOPLE_ROOT / "transparent"
 ORIGINAL_ROOT = PEOPLE_ROOT / "original"
 OUT_ROOT = CONFIG_DIR / "edge_chop_recovery"
+REMBG_HOME = CONFIG_DIR / "models" / "rembg"
 TMDB_SEARCH_URL = "https://api.themoviedb.org/3/search/person"
 TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/original"
 TARGET_SIZE = (2000, 3000)
@@ -65,6 +66,7 @@ class RecoveryRow:
     name: str
     status: str
     attempts: int = 0
+    precheck_rejected: int = 0
     chosen_label: str = ""
     chosen_url: str = ""
     initial_issues: str = ""
@@ -191,6 +193,43 @@ def normalize_to_download(candidate_path: Path, download_path: Path) -> None:
         img = ImageOps.exif_transpose(img).convert("RGB")
         fitted = ImageOps.fit(img, TARGET_SIZE, method=Image.Resampling.LANCZOS, centering=(0.5, 0.5))
         fitted.save(download_path, "JPEG", quality=95, subsampling=0, optimize=True)
+
+
+def build_rembg_session(model: str):
+    try:
+        from rembg import new_session
+    except ImportError as exc:
+        raise RuntimeError("rembg is not installed; run pip install -r requirements.txt") from exc
+
+    return new_session(model)
+
+
+def rembg_precheck_candidate(args: argparse.Namespace, staged_jpg: Path, precheck_png: Path) -> tuple[bool, str]:
+    try:
+        from rembg import remove
+
+        with Image.open(staged_jpg) as img:
+            img = ImageOps.exif_transpose(img).convert("RGB")
+            output = remove(
+                img,
+                session=args.rembg_session,
+                alpha_matting=args.rembg_alpha_matting,
+                post_process_mask=args.rembg_post_process_mask,
+            )
+        precheck_png.parent.mkdir(parents=True, exist_ok=True)
+        if output.mode != "RGBA":
+            output = output.convert("RGBA")
+        output.save(precheck_png)
+    except Exception as exc:
+        raise RuntimeError(f"rembg precheck failed for {staged_jpg}: {exc}") from exc
+
+    result = detect_edge_chops(precheck_png, threshold=args.threshold, edges=args.report_edges)
+    summary = issue_summary(result) or result.error
+    if result.error:
+        raise RuntimeError(f"rembg precheck could not audit {precheck_png}: {summary}")
+    if has_any_issue(result, args.retry_edges):
+        return False, summary
+    return True, summary
 
 
 def style_file_paths(people_root: Path, name: str) -> list[Path]:
@@ -339,6 +378,20 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                 log(f"[warn] {name} {candidate.label}: candidate download/normalize failed: {exc}")
                 continue
 
+            if args.precheck_rembg:
+                precheck_png = candidate_dir / f"{candidate.label}.rembg.png"
+                try:
+                    should_try, precheck_summary = rembg_precheck_candidate(args, staged_jpg, precheck_png)
+                except RuntimeError as exc:
+                    restore_backups(backups, paths)
+                    raise RuntimeError(f"{name} {candidate.label}: {exc}") from exc
+                if not should_try:
+                    row.precheck_rejected += 1
+                    log(f"[precheck] {name} {candidate.label}: rembg still has edge issue: {precheck_summary}")
+                    continue
+                if precheck_summary:
+                    log(f"[precheck] {name} {candidate.label}: rembg cleared retry edges; {precheck_summary}")
+
             rc = run_step(f"remove-bg retry {name} {candidate.label}", [sys.executable, "sel_remove_bg.py"], env)
             if rc != 0:
                 log(f"[warn] {name} {candidate.label}: remove-bg failed")
@@ -367,6 +420,8 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                 row.chosen_url = candidate.url
                 row.final_issues = summary
                 row.note = "accepted TMDB alternate"
+                if row.precheck_rejected:
+                    row.note += f"; rembg precheck rejected {row.precheck_rejected} earlier candidates"
                 return row
 
             log(f"[retry] {name} {candidate.label} still has edge issue: {summary or result.error}")
@@ -375,6 +430,8 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
         current = final_transparent_path(args.people_root, name)
         row.final_issues = issue_summary(detect_edge_chops(current, threshold=args.threshold, edges=args.report_edges)) if current.exists() else ""
         row.note = "no TMDB alternate cleared retry edges; restored previous local outputs"
+        if row.precheck_rejected:
+            row.note += f"; rembg precheck rejected {row.precheck_rejected} candidates before Adobe"
         return row
 
 
@@ -384,7 +441,17 @@ def write_report(out_root: Path, rows: list[RecoveryRow]) -> None:
     with path.open("w", newline="", encoding="utf-8") as fh:
         writer = csv.DictWriter(
             fh,
-            fieldnames=["name", "status", "attempts", "chosen_label", "chosen_url", "initial_issues", "final_issues", "note"],
+            fieldnames=[
+                "name",
+                "status",
+                "attempts",
+                "precheck_rejected",
+                "chosen_label",
+                "chosen_url",
+                "initial_issues",
+                "final_issues",
+                "note",
+            ],
         )
         writer.writeheader()
         for row in rows:
@@ -393,6 +460,7 @@ def write_report(out_root: Path, rows: list[RecoveryRow]) -> None:
                     "name": row.name,
                     "status": row.status,
                     "attempts": row.attempts,
+                    "precheck_rejected": row.precheck_rejected,
                     "chosen_label": row.chosen_label,
                     "chosen_url": row.chosen_url,
                     "initial_issues": row.initial_issues,
@@ -414,6 +482,13 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--report-edges", default=os.getenv("EDGE_CHOP_REPORT_EDGES", "top"))
     ap.add_argument("--retry-edges", default=os.getenv("EDGE_CHOP_RETRY_EDGES", "top"))
     ap.add_argument("--tmdb-limit", type=int, default=int(os.getenv("EDGE_CHOP_TMDB_LIMIT", "12")))
+    ap.add_argument("--precheck-rembg", dest="precheck_rembg", action="store_true", default=env_bool("EDGE_CHOP_PRECHECK_REMBG", True))
+    ap.add_argument("--no-precheck-rembg", dest="precheck_rembg", action="store_false")
+    ap.add_argument("--rembg-model", default=os.getenv("EDGE_CHOP_REMBG_MODEL", "u2net"))
+    ap.add_argument("--rembg-home", type=Path, default=Path(os.getenv("REMBG_HOME") or REMBG_HOME))
+    ap.add_argument("--rembg-alpha-matting", action="store_true", default=env_bool("EDGE_CHOP_REMBG_ALPHA_MATTING", False))
+    ap.add_argument("--rembg-post-process-mask", dest="rembg_post_process_mask", action="store_true", default=env_bool("EDGE_CHOP_REMBG_POST_PROCESS_MASK", True))
+    ap.add_argument("--no-rembg-post-process-mask", dest="rembg_post_process_mask", action="store_false")
     ap.add_argument("--limit", type=int, default=0, help="Maximum chopped people to attempt; 0 means all")
     ap.add_argument("--names", nargs="*", default=[])
     ap.add_argument("--modified-since", type=float, help="Only retry transparent PNGs modified at/after this Unix timestamp")
@@ -429,8 +504,10 @@ def main() -> int:
     args.transparent_root = args.transparent_root.resolve()
     args.downloads_dir = args.downloads_dir.resolve()
     args.out_root = args.out_root.resolve()
+    args.rembg_home = args.rembg_home.resolve()
     args.report_edges = parse_edges(args.report_edges, ("top",))
     args.retry_edges = parse_edges(args.retry_edges, ("top",))
+    args.rembg_session = None
 
     log("#### START recover_edge_chops ####")
     api_key = os.getenv("TMDB_KEY", "").strip()
@@ -487,11 +564,34 @@ def main() -> int:
         write_report(args.out_root, [])
         return 0
 
+    if args.precheck_rembg:
+        args.rembg_home.mkdir(parents=True, exist_ok=True)
+        os.environ["REMBG_HOME"] = str(args.rembg_home)
+        try:
+            args.rembg_session = build_rembg_session(args.rembg_model)
+        except RuntimeError as exc:
+            log(f"[error] {exc}")
+            return 2
+        except Exception as exc:
+            log(f"[error] rembg precheck could not initialize model {args.rembg_model}: {exc}")
+            return 2
+        log(f"[info] rembg precheck enabled with model: {args.rembg_model}; home: {args.rembg_home}")
+    else:
+        log("[info] rembg precheck disabled")
+
     rows: list[RecoveryRow] = []
     session = requests.Session()
+    exit_code = 0
     for idx, (name, path, issues) in enumerate(chopped, start=1):
         log(f"[{idx}/{len(chopped)}] {name}: {issues}")
-        row = recover_one(args, session, api_key, name, issues)
+        try:
+            row = recover_one(args, session, api_key, name, issues)
+        except RuntimeError as exc:
+            row = RecoveryRow(name=name, status="error", initial_issues=issues, note=str(exc))
+            exit_code = 2
+            rows.append(row)
+            log(f"{name}: error; {row.note}")
+            break
         rows.append(row)
         log(f"{name}: {row.status}; attempts={row.attempts}; {row.note}")
 
@@ -501,7 +601,7 @@ def main() -> int:
     log(f"Recovered: {recovered}")
     log(f"Unresolved: {unresolved}")
     log("#### END recover_edge_chops ####")
-    return 0
+    return exit_code
 
 
 if __name__ == "__main__":

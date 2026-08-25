@@ -2,6 +2,7 @@
 requests
 Pillow
 numpy
+rembg[cpu,cli]
 selenium
 python-dotenv
 alive-progress
