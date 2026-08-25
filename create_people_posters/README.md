@@ -105,6 +105,13 @@ ORCH_REQUIRE_BG_OUTPUT=false
 # If you keep a separate venv just for DeOldify, point to its python here:
 COLORIZE_PYTHON=D:/Defaults-Image-Creation/create_people_posters/.venv-colorize/Scripts/python.exe
 COLORIZE_PYTHON=/absolute/path/to/.venv-colorize/bin/python
+
+# Original resolver (optional)
+PEOPLE_IMPORT_DIR=/absolute/path/to/people_dirs        # defaults to ./config/people_dirs
+ORIGINAL_RESOLVER_STYLES=transparent,rainier
+ORIGINAL_RESOLVER_THRESHOLD=0.82
+GOOGLE_API_KEY=your_google_api_key_here                # optional Google fallback
+GOOGLE_CSE_ID=your_programmable_search_engine_id_here  # optional Google fallback
 ```
 
 **Selenium background removal (used by `sel_remove_bg.py`)**  
@@ -356,6 +363,23 @@ python grayscale_sweeper.py --root "D:/Pictures/Headshots" --dest "./config/Down
 # Skips files that already exist at the destination (by name).
 ```
 
+### Resolve original portraits from styled outputs
+```bash
+# Dry-run: compare transparent/rainier outputs to TMDB profiles first, then Google
+# Custom Search image results if GOOGLE_API_KEY and GOOGLE_CSE_ID are configured.
+python resolve_original_images.py --names "Anne Hathaway" "Pedro Pascal"
+
+# Copy accepted matches into ./config/people_dirs/original as normalized 2000x3000 JPGs.
+python resolve_original_images.py --names-file ./config/people_list.txt --apply
+
+# Process all referenced names instead of only names missing local originals.
+python resolve_original_images.py --all --limit 25
+```
+
+Results are written to `./config/original_resolver/manifest.csv`. Any name that
+does not match TMDB or Google above `ORIGINAL_RESOLVER_THRESHOLD` is listed in
+`./config/original_resolver/unresolved.txt` and gets a review contact sheet.
+
 ### Bulk extract redacted config.yml sections (helper)
 ```bash
 python bulk_extract_configs.py --input_directory "C:/temp"
@@ -474,6 +498,7 @@ create_people_posters/
 ├─ auto_readme.py
 ├─ sync_md.py
 ├─ grayscale_sweeper.py           # optional helper (standalone)
+├─ resolve_original_images.py     # optional original resolver (TMDB, then Google fallback)
 ├─ bulk_extract_configs.py        # optional helper (standalone)
 ├─ image_check.py                 # optional QA
 ├─ compare_image_trees.py         # optional QA
