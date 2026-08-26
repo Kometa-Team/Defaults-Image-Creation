@@ -120,6 +120,55 @@ def log(msg: str) -> None:
         pass
 
 
+def read_console_line_if_available(buffer: List[str]) -> Optional[str]:
+    """
+    Non-blocking console line read.
+
+    input() cannot enforce LOGIN_WAIT_SEC because it blocks until Enter. This
+    helper lets the login loop keep checking Adobe and the timeout deadline.
+    """
+    if os.name == "nt":
+        try:
+            import msvcrt
+        except Exception:
+            return None
+
+        while msvcrt.kbhit():
+            ch = msvcrt.getwch()
+            if ch in ("\r", "\n"):
+                print()
+                response = "".join(buffer).strip().lower()
+                buffer.clear()
+                return response
+            if ch == "\003":
+                raise KeyboardInterrupt
+            if ch == "\b":
+                if buffer:
+                    buffer.pop()
+                    print("\b \b", end="", flush=True)
+                continue
+            if ch in ("\x00", "\xe0"):
+                if msvcrt.kbhit():
+                    msvcrt.getwch()
+                continue
+            buffer.append(ch)
+            print(ch, end="", flush=True)
+        return None
+
+    try:
+        import select
+        readable, _, _ = select.select([sys.stdin], [], [], 0)
+    except Exception:
+        return None
+
+    if not readable:
+        return None
+    line = sys.stdin.readline()
+    if line == "":
+        return None
+    return line.strip().lower()
+
+
 def resolve_profile_directory(user_data_dir: Path, requested_profile: str) -> Optional[str]:
     requested_profile = (requested_profile or "").strip()
     if not requested_profile:
@@ -1218,15 +1267,33 @@ def prompt_for_adobe_login(driver) -> bool:
         return False
 
     deadline = time.time() + LOGIN_WAIT_SEC
+    typed: List[str] = []
+    log(
+        "[auth] Press Enter here after login to retry download, "
+        "or type 'skip' to stop."
+    )
+    log("[auth] The script will also resume automatically if the Adobe login gate clears.")
+    next_beep = 0.0
     while time.time() < deadline:
         remaining = max(1, int(deadline - time.time()))
-        try:
-            response = input(
-                f"[auth] After you finish logging in, press Enter to retry download "
-                f"(or type 'skip' to stop). Time remaining: {remaining}s\n"
-            ).strip().lower()
-        except EOFError:
-            return False
+        if time.time() >= next_beep:
+            log(f"[auth] Waiting for Adobe login; {remaining}s remaining.")
+            next_beep = time.time() + 30
+
+        response = read_console_line_if_available(typed)
+        if response is None:
+            try:
+                current_url = driver.current_url
+            except Exception:
+                current_url = ""
+            if "/tools/remove-background" in current_url:
+                hide_onetrust(driver)
+                blocker = detect_download_blocker(driver)
+                if "Adobe login required before download:" not in blocker:
+                    log("[auth] Adobe login gate cleared; retrying download.")
+                    return True
+            time.sleep(2.0)
+            continue
 
         if response in {"skip", "s", "quit", "q", "stop"}:
             return False

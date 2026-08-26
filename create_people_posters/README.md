@@ -157,7 +157,10 @@ SEL_LOGIN_WAIT_SEC=900
 ```
 
 > Tip: run `sel_remove_bg.py -v` once to see which env keys your build respects; the script logs the active configuration.
-> If Adobe blocks download behind a login/sign-up modal, the script will now pause and let you complete login in the same Chrome profile, then resume after you press Enter in the terminal.
+> If Adobe blocks download behind a login/sign-up modal, the script will pause
+> for up to `SEL_LOGIN_WAIT_SEC`, let you complete login in the same Chrome
+> profile, and retry after you press Enter or after it detects that the Adobe
+> login gate cleared.
 > You can also prepare the Selenium profile ahead of time with `python sel_remove_bg.py --login-only`, sign into Adobe in that browser window once, then rerun the full pipeline.
 
 ---
