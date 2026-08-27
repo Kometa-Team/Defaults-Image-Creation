@@ -327,6 +327,76 @@ without source QA.
 python orchestrator.py
 ```
 
+### Common operator commands
+
+Run the normal people pipeline from a folder of Kometa logs:
+
+```bash
+python orchestrator.py --logs-dir "C:/path/to/kometa/logs"
+```
+
+Retry from log scanning when you want to rescan the same folder:
+
+```bash
+python orchestrator.py --redo scan_kometa_logs --logs-dir "C:/path/to/kometa/logs"
+```
+
+Build `config/people_list.txt` from TMDB popular people:
+
+```bash
+# Preview without writing.
+python tmdb_top_people_list.py --limit 1000 --require-profile --dry-run
+
+# Write the list, filtering out people already present in the configured image repos.
+python tmdb_top_people_list.py --limit 1000 --require-profile
+
+# Process the generated list through TMDB and downstream image steps.
+python orchestrator.py --redo tmdb
+```
+
+Use a smaller TMDB popular batch:
+
+```bash
+python tmdb_top_people_list.py --limit 250 --require-profile
+python orchestrator.py --redo tmdb
+```
+
+Audit warning-based recovery targets without changing files:
+
+```bash
+python recover_edge_chops.py --all --audit-only --recover-warnings headchop
+```
+
+Recover warning-based batches through the normal orchestrator flow:
+
+```bash
+# Default/common case: top-edge head chops.
+python recover_edge_chops.py --all --limit 100 --recover-warnings headchop
+
+# Head chops plus grayscale/non-color warnings.
+python recover_edge_chops.py --all --limit 100 --recover-warnings headchop,grayscale
+
+# Face-model risk signals; keep these explicit because they are less certain.
+python recover_edge_chops.py --all --limit 25 --recover-warnings face-chin,face-side
+
+# All supported warning recovery modes.
+python recover_edge_chops.py --all --limit 100 --recover-warnings all
+```
+
+Run ad hoc QA reports:
+
+```bash
+python image_check.py --input_directory "./config/people_dirs/transparent" --style transparent
+python compare_image_trees.py --repo-root "C:/Users/bullmoose20/Kometa-People-Images"
+```
+
+Occasional helpers:
+
+- `resolve_original_images.py` — recover original JPGs by matching transparent/rainier outputs against TMDB first, then Google Custom Search when configured.
+- `grayscale_sweeper.py` — scan an arbitrary folder tree for non-color images and stage them for DeOldify.
+- `bulk_extract_configs.py` — extract redacted config sections from mess/meta logs and nested archives.
+- `auto_readme.py` / `sync_md.py` — retained for deliberate local README work, but normal README generation is owned by the People image repo GitHub Actions.
+
 ### Manual duplicate-name overrides
 When two different TMDB people share the same name, the automatic log scan cannot disambiguate them. For those cases, add a manual line to `create_people_posters/config/people_overrides.txt`.
 
