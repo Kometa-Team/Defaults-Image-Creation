@@ -367,6 +367,12 @@ Audit warning-based recovery targets without changing files:
 python recover_edge_chops.py --all --audit-only --recover-warnings headchop
 ```
 
+Whole-tree recovery audits the local cloned image repos from `PEOPLE_IMAGES_DIR`
+by default, not the temporary `config/people_dirs` build folders. It scans
+`PEOPLE_IMAGES_DIR/transparent` for head/face-crop warnings and the configured
+style repos for grayscale warnings, stages viable replacement originals into
+`config/people_dirs/Downloads`, then hands off to the orchestrator.
+
 Recover warning-based batches through the normal orchestrator flow:
 
 ```bash
@@ -386,7 +392,7 @@ python recover_edge_chops.py --all --limit 100 --recover-warnings all
 Run ad hoc QA reports:
 
 ```bash
-python image_check.py --input_directory "./config/people_dirs/transparent" --style transparent
+python image_check.py --input_directory "C:/Users/bullmoose20/Kometa-People-Images/transparent" --style transparent
 python compare_image_trees.py --repo-root "C:/Users/bullmoose20/Kometa-People-Images"
 ```
 
@@ -559,6 +565,11 @@ python recover_edge_chops.py --all --limit 100 --stage-only
 # Retry only named people.
 python recover_edge_chops.py --names "Person One" "Person Two"
 ```
+
+Whole-tree recovery reads from the repo root configured by `PEOPLE_IMAGES_DIR`.
+Use `EDGE_CHOP_PEOPLE_ROOT` or `--people-root` only when you intentionally want
+to scan a different local repo set; use `EDGE_CHOP_TRANSPARENT_ROOT` or
+`--transparent-root` only for a custom transparent tree.
 
 By default, standalone recovery stages viable candidates and immediately runs
 `python orchestrator.py --redo remove_bg --no-recover-edge-chops`. That reuses

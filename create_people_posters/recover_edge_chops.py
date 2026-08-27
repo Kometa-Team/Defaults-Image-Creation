@@ -1,7 +1,7 @@
 """Retry chopped transparent portraits using alternate TMDB profile images.
 
-This runs after create_people_poster.ps1. It scans the local transparent style
-tree for edge contact, then finds alternate TMDB profile images.
+This runs after create_people_poster.ps1. It scans the local cloned People image
+repos for warning targets, then finds alternate TMDB profile images.
 
 Default mode writes one viable alternate per person into the normal Downloads
 input folder, then runs orchestrator.py from remove_bg so the Selenium/poster
@@ -72,6 +72,39 @@ STYLE_EXTS = {
     "signature": ".jpg",
     "transparent": ".png",
 }
+
+
+def env_path(key: str) -> Path | None:
+    value = os.getenv(key, "").strip()
+    if not value:
+        return None
+    return Path(value).expanduser()
+
+
+def default_people_root() -> Path:
+    explicit = env_path("EDGE_CHOP_PEOPLE_ROOT")
+    if explicit:
+        return explicit
+
+    repo_root = env_path("PEOPLE_IMAGES_DIR")
+    if repo_root:
+        return repo_root
+
+    return PEOPLE_ROOT
+
+
+def default_transparent_root(people_root: Path) -> Path:
+    explicit = env_path("EDGE_CHOP_TRANSPARENT_ROOT")
+    if explicit:
+        return explicit
+    return people_root / "transparent"
+
+
+def path_exists(path: Path) -> bool:
+    try:
+        return path.exists()
+    except OSError:
+        return False
 
 
 @dataclass(frozen=True)
@@ -176,19 +209,35 @@ def parse_recover_warnings(value: str | Iterable[str] | None) -> tuple[str, ...]
 
 
 def iter_transparents(root: Path) -> Iterable[Path]:
-    if not root.exists():
+    if not path_exists(root):
         return
-    for path in sorted(root.rglob("*.png")):
-        if path.is_file() and path.parent.name.lower() == "images":
-            yield path
+    try:
+        paths = sorted(root.rglob("*.png"))
+    except OSError as exc:
+        log(f"[warn] transparent scan root is not readable: {root}; {exc}")
+        return
+    for path in paths:
+        try:
+            if path.is_file() and path.parent.name.lower() == "images":
+                yield path
+        except OSError:
+            continue
 
 
 def iter_style_images(root: Path) -> Iterable[Path]:
-    if not root.exists():
+    if not path_exists(root):
         return
-    for path in sorted(root.rglob("*")):
-        if path.is_file() and path.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tif", ".tiff"}:
-            yield path
+    try:
+        paths = sorted(root.rglob("*"))
+    except OSError as exc:
+        log(f"[warn] style scan root is not readable: {root}; {exc}")
+        return
+    for path in paths:
+        try:
+            if path.is_file() and path.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tif", ".tiff"}:
+                yield path
+        except OSError:
+            continue
 
 
 def selected_face_checks(recover_warnings: Iterable[str]) -> tuple[str, ...]:
@@ -1124,9 +1173,20 @@ def write_report(out_root: Path, rows: list[RecoveryRow]) -> None:
 
 def parser() -> argparse.ArgumentParser:
     load_dotenv(CONFIG_DIR / ".env")
+    people_root = default_people_root()
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--people-root", type=Path, default=Path(os.getenv("EDGE_CHOP_PEOPLE_ROOT") or PEOPLE_ROOT))
-    ap.add_argument("--transparent-root", type=Path, default=Path(os.getenv("EDGE_CHOP_TRANSPARENT_ROOT") or TRANSPARENT_ROOT))
+    ap.add_argument(
+        "--people-root",
+        type=Path,
+        default=people_root,
+        help="Root containing local cloned People image repos; defaults to EDGE_CHOP_PEOPLE_ROOT, then PEOPLE_IMAGES_DIR.",
+    )
+    ap.add_argument(
+        "--transparent-root",
+        type=Path,
+        default=default_transparent_root(people_root),
+        help="Transparent style repo/tree to audit; defaults to EDGE_CHOP_TRANSPARENT_ROOT, then people-root/transparent.",
+    )
     ap.add_argument("--downloads-dir", type=Path, default=Path(os.getenv("EDGE_CHOP_DOWNLOADS_DIR") or DOWNLOADS_DIR))
     ap.add_argument("--out-root", type=Path, default=Path(os.getenv("EDGE_CHOP_OUT_ROOT") or OUT_ROOT))
     ap.add_argument(
@@ -1263,6 +1323,14 @@ def main() -> int:
     if exhausted_names:
         log(f"[info] skipping {len(exhausted_names)} exhausted name(s) from {args.exhausted_file}")
     log(f"[info] recover warnings: {', '.join(args.recover_warnings)}")
+    log(f"[info] scan people root: {args.people_root}")
+    log(f"[info] scan transparent root: {args.transparent_root}")
+    if selected_face_checks(args.recover_warnings) or "headchop" in set(args.recover_warnings):
+        if not path_exists(args.transparent_root):
+            log(
+                "[warn] transparent scan root does not exist; no transparent "
+                f"head/face-crop targets can be found or read: {args.transparent_root}"
+            )
 
     scan_limit = 0 if args.names else args.limit
     chopped, skipped_exhausted = find_recovery_targets(
