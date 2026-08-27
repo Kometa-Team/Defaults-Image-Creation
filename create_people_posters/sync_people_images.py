@@ -147,6 +147,12 @@ def should_validate_file(path: Path) -> bool:
     return path.suffix.lower() in IMAGE_EXTENSIONS or path.parent.name.lower() == "images"
 
 
+def should_sync_file(path: Path, sync_markdown: bool) -> bool:
+    if not sync_markdown and path.suffix.lower() == ".md":
+        return False
+    return True
+
+
 def image_quality_findings(
     category: str,
     path: Path,
@@ -251,7 +257,13 @@ def preflight_sources(src_base: Path) -> int:
     return blocking_failed
 
 
-def sync_tree(src_root: Path, dst_root: Path, title: str, normalize_transparent: bool = False):
+def sync_tree(
+    src_root: Path,
+    dst_root: Path,
+    title: str,
+    normalize_transparent: bool = False,
+    sync_markdown: bool = False,
+):
     """
     Rough equivalent of:
       robocopy <src> <dst> /E /COPY:DAT /DCOPY:T /XO
@@ -270,7 +282,7 @@ def sync_tree(src_root: Path, dst_root: Path, title: str, normalize_transparent:
             created_dirs += 1
         copystat_dir(d, dd)
 
-    files = iter_files(src_root)
+    files = [path for path in iter_files(src_root) if should_sync_file(path, sync_markdown)]
     total = len(files)
     copied = skipped = normalized = failed = 0
 
@@ -325,6 +337,12 @@ def main():
         default=parse_bool_env("SYNC_PREFLIGHT", True),
         help="Run source image QA before syncing. Fatal file issues block; grayscale is report-only. Default: true.",
     )
+    ap.add_argument(
+        "--sync-markdown",
+        action=argparse.BooleanOptionalAction,
+        default=parse_bool_env("SYNC_MARKDOWN", False),
+        help="Copy markdown files such as README.md during sync. Default: false because GitHub Actions owns README generation.",
+    )
     args = ap.parse_args()
 
     src_base = CONFIG_DIR / "people_dirs"
@@ -347,7 +365,13 @@ def main():
         dst = dest_base / cat
         title = f"sync {cat}"
         logging.info("---- %s ----", title)
-        failed += sync_tree(src, dst, title, normalize_transparent=(cat == "transparent"))
+        failed += sync_tree(
+            src,
+            dst,
+            title,
+            normalize_transparent=(cat == "transparent"),
+            sync_markdown=args.sync_markdown,
+        )
 
     elapsed = timer() - start
     logging.info("All done in %.2fs", elapsed)

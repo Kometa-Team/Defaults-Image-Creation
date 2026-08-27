@@ -61,6 +61,7 @@ Environment (./config/.env or process environment)
   PEOPLE_BRANCH         — git branch for update/push (optional)
   ORCH_STYLE            — style for README & MD sync (default: transparent)
   ORCH_STYLES           — comma list of styles for README & MD sync (optional)
+  ORCH_GENERATE_READMES — when true, run local readme/sync_md steps [default: false]
   ORCH_GRID_IMAGES      — when true, generate/link per-letter grid.jpg images in README step [default: false]
   ORCH_COMMIT_MESSAGE   — optional commit message for push (overrides auto)
   ORCH_GIT_USER_NAME    — optional git author.name override for push
@@ -456,6 +457,9 @@ def main():
     parser.add_argument("--branch", help="Git branch for update/push (env PEOPLE_BRANCH or auto-detect).")
     parser.add_argument("--style", help="Default style for README/MD if no multi-style is set (env ORCH_STYLE or 'transparent').")
     parser.add_argument("--styles", help="Comma list of styles for README/MD (overrides ORCH_STYLES).")
+    parser.add_argument("--generate-readmes", action=argparse.BooleanOptionalAction,
+                        default=None,
+                        help="Run local README generation and sync_md steps. Default: ORCH_GENERATE_READMES or false.")
     parser.add_argument("--grid-images", action="store_true",
                         help="Generate and link per-letter grid.jpg images during the readme step (default: README-only).")
     # BG verification / early-exit controls
@@ -485,6 +489,11 @@ def main():
     commit_template = _clean_env_value(os.getenv("ORCH_COMMIT_MESSAGE", ""))
     git_user_name = _clean_env_value(os.getenv("ORCH_GIT_USER_NAME", ""))
     git_user_email = _clean_env_value(os.getenv("ORCH_GIT_USER_EMAIL", ""))
+    generate_readmes = (
+        args.generate_readmes
+        if args.generate_readmes is not None
+        else _bool_env("ORCH_GENERATE_READMES", False)
+    )
     grid_images = args.grid_images or _bool_env("ORCH_GRID_IMAGES", False)
 
     bg_output_dir = Path(args.bg_output_dir).expanduser().resolve() if args.bg_output_dir else env_path("SEL_DOWNLOAD_DIR")
@@ -712,6 +721,11 @@ def main():
 
             # Special multi-style steps handle inside the loop
             if s.key == "readme":
+                if not generate_readmes:
+                    print("[INFO] local README generation disabled - skipping readme step.")
+                    if s.marker_path:
+                        write_marker(s.marker_path, {"skipped": True, "at": time.time(), "reason": "ORCH_GENERATE_READMES=false"})
+                    continue
                 # generate README for each style; grid images are opt-in because they are expensive
                 for st in styles:
                     argv = _auto_readme_for(st)
@@ -726,6 +740,11 @@ def main():
                 continue
 
             if s.key == "sync_md":
+                if not generate_readmes:
+                    print("[INFO] local README generation disabled - skipping sync_md step.")
+                    if s.marker_path:
+                        write_marker(s.marker_path, {"skipped": True, "at": time.time(), "reason": "ORCH_GENERATE_READMES=false"})
+                    continue
                 # sync md for each style
                 for st in styles:
                     argv = _sync_md_for(st)

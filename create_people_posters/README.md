@@ -78,14 +78,19 @@ ORCH_LOGS_DIR=/absolute/path/to/kometa/logs          # used by steps 2–3
 PEOPLE_IMAGES_DIR=/absolute/path/to/Kometa-People-Images
 PEOPLE_BRANCH=master                                  # optional; branch for update/push
 SYNC_PREFLIGHT=true                                   # optional; source QA before sync
+SYNC_MARKDOWN=false                                   # keep local sync from overwriting GitHub-generated READMEs
 
 # Single default style (used if ORCH_STYLES not set)
 ORCH_STYLE=transparent
 
-# Multi-style run (comma list). If set, overrides ORCH_STYLE in readme/sync_md steps.
+# Local README generation is disabled by default because GitHub Actions owns
+# README generation in the People image repos.
+ORCH_GENERATE_READMES=false
+
+# Multi-style local README run (comma list). Used only when ORCH_GENERATE_READMES=true.
 ORCH_STYLES=transparent,diiivoycolor
 
-# Grid image generation is slow; default is README-only.
+# Grid image generation is slow and only applies to local README generation.
 ORCH_GRID_IMAGES=false
 
 # Optional commit/author for push
@@ -289,14 +294,22 @@ The orchestrator enforces the single correct order and writes checkpoints so you
 10. **poster_ps1** → `create_people_poster.ps1` — poster generation (PowerShell)  
 11. **recover_edge_chops** → `recover_edge_chops.py` — non-blocking TMDB alternate retry for top-edge head chops
 12. **update** → `update_people_repos.py --op update` — fetch/reset style repos (**always runs**)
-13. **sync_images** → `sync_people_images.py` — copy new images into the repo style folders
-14. **readme** → `auto_readme.py` — generate READMEs for one or more styles; per-letter grids are opt-in
-15. **sync_md** → `sync_md.py` — mirror `*.md` back to `./config/people_dirs/<style>`
+13. **sync_images** → `sync_people_images.py` — copy new images into the repo style folders; skips markdown by default
+14. **readme** → `auto_readme.py` — optional local README generation; skipped by default because GitHub Actions owns README generation
+15. **sync_md** → `sync_md.py` — optional local markdown mirror; skipped by default with local README generation disabled
 16. **push** → `update_people_repos.py --op push` — commit & push changes (**always runs**)
 
 > Optional QA tools: `image_check.py`, `compare_image_trees.py` — ad hoc reporting for grayscale, dimensions, transparency, edge chops, face-crop risk, and repo/tree consistency.
 > Optional helper (outside the orchestrator): `grayscale_sweeper.py` — scan any folder tree for non‑color images and copy them into `config/Downloads/other` so `colorize_noncolor.py` can convert them.
 > Optional helper (outside the orchestrator): `bulk_extract_configs.py` — scan mess/meta logs, including nested archives, and export redacted config sections as `parsed_*.yml`.
+
+README generation for the People image repos is owned by each repo's
+`.github/workflows/readme.yml`. Local orchestrator runs skip `readme` and
+`sync_md` by default, and `sync_people_images.py` skips `*.md` by default, so
+local image sync cannot overwrite the remotely generated README files. Set
+`ORCH_GENERATE_READMES=true` or pass `--generate-readmes` only for a deliberate
+local README run; set `SYNC_MARKDOWN=true` or pass `--sync-markdown` only when
+you intentionally want local sync to copy markdown.
 
 `sync_people_images.py` runs source-image preflight by default, but it is
 split by severity. It blocks sync for wrong extensions, unreadable/corrupt
@@ -362,17 +375,19 @@ The orchestrator now continues past zero-result log scans when `people_overrides
   ```bash
   python orchestrator.py --redo prep_dirs
   ```
-- Just run **readme** and **sync_md** for **multiple styles** (uses env or CLI styles):
+- Just run **readme** and **sync_md** locally for **multiple styles**:
   ```bash
+  # Local README generation is normally disabled because GitHub Actions owns it.
+  # Enable it explicitly only for a deliberate local README pass.
   # .env → ORCH_STYLES=transparent,diiivoycolor
-  python orchestrator.py --redo readme
+  python orchestrator.py --redo readme --generate-readmes
   # or override via CLI:
-  python orchestrator.py --redo readme --styles transparent,diiivoycolor
+  python orchestrator.py --redo readme --styles transparent,diiivoycolor --generate-readmes
   ```
 
 - Include per-letter `grid.jpg` previews only when explicitly requested:
   ```bash
-  python orchestrator.py --redo readme --styles bw,diiivoy,diiivoycolor,rainier,signature --grid-images
+  python orchestrator.py --redo readme --styles bw,diiivoy,diiivoycolor,rainier,signature --generate-readmes --grid-images
   ```
 
 ### Run the colorizer standalone
@@ -478,8 +493,10 @@ python recover_edge_chops.py --names "Person One" "Person Two"
 By default, standalone recovery stages viable candidates and immediately runs
 `python orchestrator.py --redo remove_bg --no-recover-edge-chops`. That reuses
 the orchestrator's checkpointed Selenium batch, poster generation, repo update,
-sync, README/MD, and push steps without falling back into the inline recovery
-loop. The next recovery batch will rescan outputs, skip attempted TMDB
+sync, and push steps without falling back into the inline recovery loop. Local
+README/MD steps remain skipped unless `ORCH_GENERATE_READMES=true` or
+`--generate-readmes` is used; remote GitHub Actions regenerates People image
+repo READMEs after push. The next recovery batch will rescan outputs, skip attempted TMDB
 candidates, and choose the next alternate for anything still chopped. Do not use
 `--redo tmdb` unless you intend to rerun TMDB download and all downstream
 image-generation steps.
