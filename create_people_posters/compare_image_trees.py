@@ -6,8 +6,8 @@
 # Optional: validate that every .jpg/.png is exactly REQUIRED_WIDTH x REQUIRED_HEIGHT
 # and run style-aware image quality checks.
 # Whitelist entries are exempt from dimension and quality checks in every folder.
-# Outputs console summary + presence matrix CSV and, if enabled, dimension/quality
-# issue CSVs, all saved under ./config/. All messages are logged to
+# Outputs console summary + README drift CSV + presence matrix CSV and, if
+# enabled, dimension/quality issue CSVs, all saved under ./config/. All messages are logged to
 # ./config/logs/<script>.log
 #
 # Usage (examples):
@@ -23,6 +23,7 @@ import sys
 import csv
 import argparse
 import logging
+import re
 from pathlib import Path
 from timeit import default_timer as timer
 from typing import Optional, List, Tuple
@@ -89,6 +90,8 @@ KNOWN_STYLES = set(DEFAULT_CATEGORIES)
 DEFAULT_CHOP_EDGES = ("top",)
 DEFAULT_FACE_CROP_SIDE_MARGIN = 0.02
 DEFAULT_FACE_CROP_CHIN_MARGIN = 0.015
+README_COUNT_RE = re.compile(r"\((\d+)\s+Images\)")
+README_ENTRY_RE = re.compile(r"^\*\s+\[(.+?)\]\(")
 
 
 def parse_bool_env(key: str, default: bool) -> bool:
@@ -137,6 +140,11 @@ def normalize_stem(rel_path: Path, case_sensitive: bool) -> str:
     stem_path = rel_path.with_suffix("")  # strip extension
     as_posix = stem_path.as_posix()
     return normalize_case(as_posix, case_sensitive)
+
+
+def clean_path_arg(value: str | os.PathLike[str]) -> Path:
+    text = str(value).strip().strip('"').strip("'")
+    return Path(text).expanduser().resolve()
 
 
 def check_image_dimensions_lazy(CHECK_DIMENSIONS: bool):
@@ -260,6 +268,214 @@ def iter_image_files(base_dir: Path):
             yield p
 
 
+def parse_readme_entries(readme_path: Path) -> tuple[Optional[int], set[str], str]:
+    if not readme_path.exists():
+        return None, set(), "README.md missing"
+
+    try:
+        lines = readme_path.read_text(encoding="utf-8", errors="replace").splitlines()
+    except Exception as exc:
+        return None, set(), f"README.md unreadable: {exc}"
+
+    heading_count: Optional[int] = None
+    if lines:
+        match = README_COUNT_RE.search(lines[0])
+        if match:
+            heading_count = int(match.group(1))
+
+    names: set[str] = set()
+    for line in lines:
+        match = README_ENTRY_RE.match(line)
+        if match:
+            names.add(match.group(1))
+
+    return heading_count, names, ""
+
+
+def actual_readme_names(
+    base_dir: Path,
+    allowed_exts: set[str],
+    case_sensitive: bool,
+    jpg_whitelist: Optional[set[str]] = None,
+    treat_png_folder: bool = False,
+) -> set[str]:
+    if not base_dir.exists():
+        return set()
+
+    wl_cmp = {normalize_case(x, case_sensitive) for x in (jpg_whitelist or set())}
+    names: set[str] = set()
+    for path in iter_image_files(base_dir):
+        rel = path.relative_to(base_dir)
+        ext_cmp = path.suffix.lower()
+        basename_cmp = normalize_case(rel.stem, case_sensitive)
+        if ext_cmp in allowed_exts or (treat_png_folder and ext_cmp == ".jpg" and basename_cmp in wl_cmp):
+            names.add(rel.stem)
+    return names
+
+
+def write_readme_issues_csv(path: Path, rows: list[dict[str, str]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as fh:
+        writer = csv.DictWriter(fh, fieldnames=["directory", "issue", "name", "detail"])
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def audit_readmes(
+    dirs: list[str],
+    per_dir_allowed_exts: list[set[str]],
+    per_dir_is_png: list[bool],
+    case_sensitive: bool,
+    jpg_whitelist: set[str],
+    output_csv: Path,
+    print_limit: int = 100,
+) -> None:
+    logging.info("=== Quick README vs file audit ===")
+    readme_sets: dict[str, set[str]] = {}
+    actual_sets: dict[str, set[str]] = {}
+    issue_rows: list[dict[str, str]] = []
+
+    for i, d in enumerate(dirs):
+        base = Path(d)
+        style = base.name
+        heading_count, readme_names, readme_error = parse_readme_entries(base / "README.md")
+        actual_names = actual_readme_names(
+            base,
+            per_dir_allowed_exts[i],
+            case_sensitive,
+            jpg_whitelist=jpg_whitelist,
+            treat_png_folder=per_dir_is_png[i],
+        )
+        readme_sets[d] = readme_names
+        actual_sets[d] = actual_names
+
+        missing = sorted(actual_names - readme_names)
+        extra = sorted(readme_names - actual_names)
+        status_parts: list[str] = []
+        if readme_error:
+            status_parts.append(readme_error)
+            issue_rows.append(
+                {
+                    "directory": str(base),
+                    "issue": "readme_error",
+                    "name": "",
+                    "detail": readme_error,
+                }
+            )
+        if heading_count is None:
+            status_parts.append("heading count missing")
+            issue_rows.append(
+                {
+                    "directory": str(base),
+                    "issue": "heading_count_missing",
+                    "name": "",
+                    "detail": "README heading does not contain '(N Images)'",
+                }
+            )
+        elif heading_count != len(actual_names):
+            detail = f"heading={heading_count}, actual={len(actual_names)}"
+            status_parts.append(f"heading count drift: {detail}")
+            issue_rows.append(
+                {
+                    "directory": str(base),
+                    "issue": "heading_count_drift",
+                    "name": "",
+                    "detail": detail,
+                }
+            )
+        if len(readme_names) != len(actual_names):
+            detail = f"readme={len(readme_names)}, actual={len(actual_names)}"
+            status_parts.append(f"entry count drift: {detail}")
+            issue_rows.append(
+                {
+                    "directory": str(base),
+                    "issue": "entry_count_drift",
+                    "name": "",
+                    "detail": detail,
+                }
+            )
+        if missing and not extra:
+            status_parts.append("likely stale README; files exist but entries are missing")
+        elif extra and not missing:
+            status_parts.append("README has entries without matching files")
+        elif missing or extra:
+            status_parts.append("README/file name sets differ")
+        if not status_parts:
+            status_parts.append("ok")
+
+        logging.info(
+            "[%s] heading=%s readme_entries=%d actual_files=%d :: %s",
+            style,
+            heading_count if heading_count is not None else "(missing)",
+            len(readme_names),
+            len(actual_names),
+            "; ".join(status_parts),
+        )
+
+        for name in missing:
+            issue_rows.append(
+                {
+                    "directory": str(base),
+                    "issue": "missing_readme_entry",
+                    "name": name,
+                    "detail": "actual file exists but README entry is missing",
+                }
+            )
+        for name in extra:
+            issue_rows.append(
+                {
+                    "directory": str(base),
+                    "issue": "extra_readme_entry",
+                    "name": name,
+                    "detail": "README entry exists but matching image file was not found",
+                }
+            )
+
+        for name in missing[:print_limit]:
+            logging.info("  missing README entry: %s", name)
+        if len(missing) > print_limit:
+            logging.info("  ... (+%d more missing README entries)", len(missing) - print_limit)
+        for name in extra[:print_limit]:
+            logging.info("  extra README entry: %s", name)
+        if len(extra) > print_limit:
+            logging.info("  ... (+%d more extra README entries)", len(extra) - print_limit)
+
+    baseline = next((d for d in dirs if Path(d).name.lower() == "original"), dirs[0] if dirs else "")
+    if baseline:
+        base_names = readme_sets[baseline]
+        logging.info("=== Quick README set drift vs %s ===", Path(baseline).name)
+        for d in dirs:
+            if d == baseline:
+                continue
+            missing = sorted(base_names - readme_sets[d])
+            extra = sorted(readme_sets[d] - base_names)
+            logging.info(
+                "[%s] missing_vs_%s=%d extra_vs_%s=%d",
+                Path(d).name,
+                Path(baseline).name,
+                len(missing),
+                Path(baseline).name,
+                len(extra),
+            )
+            for name in missing[:print_limit]:
+                actual_here = name in actual_sets[d]
+                detail = "actual file exists; README drift" if actual_here else "actual file missing"
+                logging.info("  missing vs %s: %s (%s)", Path(baseline).name, name, detail)
+            if len(missing) > print_limit:
+                logging.info("  ... (+%d more missing)", len(missing) - print_limit)
+            for name in extra[:print_limit]:
+                logging.info("  extra vs %s: %s", Path(baseline).name, name)
+            if len(extra) > print_limit:
+                logging.info("  ... (+%d more extra)", len(extra) - print_limit)
+
+    write_readme_issues_csv(output_csv, issue_rows)
+    if issue_rows:
+        logging.info("README issues CSV written: %s", output_csv.resolve())
+    else:
+        logging.info("No README drift found.")
+        logging.info("README issues CSV written: %s", output_csv.resolve())
+
+
 def rel_clean(rel: Path) -> str:
     """Clean relative path for pretty output and logs."""
     return rel.as_posix().lstrip("./\\")
@@ -360,11 +576,9 @@ def build_dirs_from_args_env(args: argparse.Namespace) -> list[Path]:
       3) PEOPLE_IMAGES_DIR env (+ COMPARE_CATEGORIES env or defaults)
     """
     if args.dirs:
-        dirs = [Path(d).expanduser().resolve() for d in args.dirs]
+        dirs = [clean_path_arg(d) for d in args.dirs]
     else:
-        repo_root = Path(
-            (args.repo_root or os.getenv("PEOPLE_IMAGES_DIR", "./Kometa-People-Images"))
-        ).expanduser().resolve()
+        repo_root = clean_path_arg(args.repo_root or os.getenv("PEOPLE_IMAGES_DIR", "./Kometa-People-Images"))
 
         cats = args.categories
         if not cats:
@@ -403,6 +617,9 @@ def main():
     parser.add_argument("--no-quality", dest="check_quality", action="store_false", help="Disable style-aware quality checks")
     parser.add_argument("--quality", dest="check_quality", action="store_true", help="Enable style-aware quality checks")
     parser.set_defaults(check_quality=parse_bool_env("COMPTREE_CHECK_QUALITY", True))
+    parser.add_argument("--no-readme", dest="check_readme", action="store_false", help="Disable quick README vs file audit")
+    parser.add_argument("--readme", dest="check_readme", action="store_true", help="Enable quick README vs file audit")
+    parser.set_defaults(check_readme=parse_bool_env("COMPTREE_CHECK_README", True))
     parser.add_argument(
         "--chop-edges",
         default=os.getenv("COMPTREE_CHOP_EDGES", ",".join(DEFAULT_CHOP_EDGES)),
@@ -487,6 +704,7 @@ def main():
 
     # CSV outputs go under ./config/
     OUTPUT_CSV = CONFIG_DIR / "compare_image_trees.csv"
+    README_ISSUES_CSV = CONFIG_DIR / "readme_issues.csv"
     DIM_ISSUES_CSV = CONFIG_DIR / "image_dimension_issues.csv"
     QUALITY_ISSUES_CSV = CONFIG_DIR / "image_quality_issues.csv"
 
@@ -495,6 +713,19 @@ def main():
 
     # Case sensitivity
     CASE_SENSITIVE = args.case_sensitive
+
+    if args.check_readme:
+        audit_readmes(
+            DIRS,
+            per_dir_allowed_exts,
+            per_dir_is_png,
+            CASE_SENSITIVE,
+            JPG_WHITELIST,
+            README_ISSUES_CSV,
+            print_limit=PRINT_LIMIT,
+        )
+    else:
+        logging.info("Quick README vs file audit disabled.")
 
     # --- Pre-count files for a nice progress bar ---
     totals = []
@@ -553,7 +784,8 @@ def main():
     logging.info("Face-crop side margin threshold: %s", args.face_crop_side_margin)
     logging.info("Face-crop chin margin threshold: %s", args.face_crop_chin_margin)
     logging.info(
-        "Outputs: %s, %s, and %s",
+        "Outputs: %s, %s, %s, and %s",
+        README_ISSUES_CSV,
         OUTPUT_CSV,
         (DIM_ISSUES_CSV if args.check_dimensions else "(dimension CSV skipped)"),
         (QUALITY_ISSUES_CSV if args.check_quality else "(quality CSV skipped)"),

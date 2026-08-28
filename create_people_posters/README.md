@@ -679,8 +679,8 @@ After syncing images to the repo (step 11), you can run:
 # Single-tree dimensions and style-aware validity checks
 python image_check.py --input_directory "./config/people_dirs/transparent" --style transparent
 
-# Compare presence across style trees, including dimension and quality issues
-python compare_image_trees.py
+# Compare local repo style trees, including README, presence, dimension, and quality issues
+python compare_image_trees.py --repo-root "C:/Users/bullmoose20/Kometa-People-Images"
 ```
 
 Quality rules allow grayscale only for `bw` and `diiivoy`. `original`, `rainier`,
@@ -696,7 +696,12 @@ trigger automatic recovery. Use `--face-crop-checks none` or set
 OpenCV YuNet and caches `face_detection_yunet_2026may.onnx` under
 `FACE_CROP_MODEL_HOME` on first use. Use `--no-quality` on
 `compare_image_trees.py` only when you want the old presence/dimension-only
-report.
+report. `compare_image_trees.py` also runs a quick README audit before the
+full image scan by default: it compares README heading counts and entry names
+to actual files, then writes `config/readme_issues.csv`. That catches stale
+remote-generated READMEs separately from real missing-file drift. Use
+`--no-readme` or set `COMPTREE_CHECK_README=false` only when you want to skip
+that cheap precheck.
 
 ---
 
