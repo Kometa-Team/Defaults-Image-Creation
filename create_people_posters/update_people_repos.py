@@ -41,6 +41,8 @@ Environment:
   UPDATE_MODE=hardreset|ffonly
   UPDATE_CLEAN_IGNORED=true|false
   UPDATE_LFS=auto|on|off
+  UPDATE_TRIGGER_READMES=true|false
+  UPDATE_REQUIRE_README_DISPATCH=true|false
 """
 
 import os
@@ -52,6 +54,7 @@ from typing import Optional, Tuple
 
 CATEGORIES = ["bw", "diiivoy", "diiivoycolor", "rainier", "original", "signature", "transparent"]
 MIN_BATCH_HEADROOM_BYTES = 64 * 1024 * 1024
+README_WORKFLOW = "readme.yml"
 
 
 def format_bytes(size: int) -> str:
@@ -65,6 +68,13 @@ def format_bytes(size: int) -> str:
 
 def safe_console(text: str) -> str:
     return text.encode("ascii", "backslashreplace").decode("ascii")
+
+
+def env_bool(key: str, default: bool) -> bool:
+    value = os.getenv(key)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "y", "on"}
 
 
 def effective_batch_limit(max_push_bytes: int) -> int:
@@ -99,6 +109,57 @@ def run_ok(cmd, cwd: Path, dry: bool) -> bool:
 def run_cap(cmd, cwd: Path, dry: bool) -> Tuple[bool, str]:
     rc, out, _ = run(cmd, cwd, dry, capture=True)
     return rc == 0, out.strip()
+
+
+def remote_repo_slug(repo: Path, dry: bool) -> str:
+    ok, url = run_cap(["git", "config", "--get", "remote.origin.url"], repo, dry)
+    if not ok or not url:
+        return ""
+
+    url = url.strip()
+    if url.endswith(".git"):
+        url = url[:-4]
+
+    lower = url.lower()
+    https_marker = "github.com/"
+    if https_marker in lower:
+        idx = lower.index(https_marker) + len(https_marker)
+        return url[idx:].strip("/")
+
+    ssh_marker = "github.com:"
+    if ssh_marker in lower:
+        idx = lower.index(ssh_marker) + len(ssh_marker)
+        return url[idx:].strip("/")
+
+    return ""
+
+
+def dispatch_readme_workflow(repo: Path, branch: str, dry: bool, required: bool) -> int:
+    slug = remote_repo_slug(repo, dry)
+    if not slug:
+        print(f"[WARN] Could not determine GitHub repo slug for README dispatch: {repo}")
+        return 1 if required else 0
+
+    cmd = ["gh", "workflow", "run", README_WORKFLOW, "--repo", slug, "--ref", branch]
+    print("->", safe_console(" ".join(cmd)), safe_console(f"(cwd={repo})"))
+    if dry:
+        return 0
+
+    cp = subprocess.run(
+        cmd,
+        cwd=str(repo),
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+    )
+    if cp.returncode == 0:
+        print(f"[INFO] Dispatched {README_WORKFLOW} for {slug}@{branch}")
+        return 0
+
+    detail = (cp.stderr or cp.stdout or "").strip()
+    print(f"[WARN] README workflow dispatch failed for {slug}@{branch}: {detail}")
+    return 1 if required else 0
 
 
 def estimate_push_payload(repo: Path, branch: str, dry: bool) -> Tuple[bool, int, int, list[tuple[str, int]]]:
@@ -299,6 +360,11 @@ def detect_remote_head_branch(repo: Path, dry: bool) -> str:
     return out or "master"
 
 
+def current_branch(repo: Path, dry: bool) -> str:
+    ok, out = run_cap(["git", "rev-parse", "--abbrev-ref", "HEAD"], repo, dry)
+    return out if ok and out else "master"
+
+
 def repo_uses_lfs(repo: Path, dry: bool) -> bool:
     gattr = repo / ".gitattributes"
     if not gattr.exists():
@@ -418,6 +484,18 @@ def main():
         default=int(os.getenv("UPDATE_MAX_PUSH_BYTES", str(1024 ** 3))),
         help="Fail push when estimated outbound git payload exceeds this many bytes. Use 0 to disable.",
     )
+    parser.add_argument(
+        "--trigger-readmes",
+        action=argparse.BooleanOptionalAction,
+        default=env_bool("UPDATE_TRIGGER_READMES", True),
+        help="After --op push, dispatch readme.yml for every category repo. Default: true.",
+    )
+    parser.add_argument(
+        "--require-readme-dispatch",
+        action=argparse.BooleanOptionalAction,
+        default=env_bool("UPDATE_REQUIRE_README_DISPATCH", False),
+        help="Fail --op push if a README workflow dispatch fails. Default: false.",
+    )
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
@@ -429,6 +507,7 @@ def main():
     branch_arg = args.branch or os.getenv("PEOPLE_BRANCH")
 
     rc_total = 0
+    pushed_repos: list[tuple[str, Path, str]] = []
     for cat in CATEGORIES:
         repo = repo_root / cat
         if not repo.exists():
@@ -444,7 +523,7 @@ def main():
         else:
             # push op
             # for push, default to current branch if not specified
-            push_branch = branch_arg
+            push_branch = branch_arg or current_branch(repo, args.dry_run)
             now = datetime.now().strftime("%Y-%m-%d %H:%M")
             msg = args.message or f"chore: sync posters & docs - {now}"
             print(f"=== PUSH {cat} ===")
@@ -458,6 +537,16 @@ def main():
                 args.max_push_bytes,
             )
             rc_total |= (rc != 0)
+            pushed_repos.append((cat, repo, push_branch))
+
+    if args.op == "push" and args.trigger_readmes and rc_total == 0:
+        print("=== DISPATCH README WORKFLOWS ===")
+        for cat, repo, branch in pushed_repos:
+            print(f"=== README {cat} ===")
+            rc = dispatch_readme_workflow(repo, branch, args.dry_run, args.require_readme_dispatch)
+            rc_total |= (rc != 0)
+    elif args.op == "push" and args.trigger_readmes:
+        print("[WARN] Skipping README workflow dispatch because one or more repo pushes failed.")
 
     sys.exit(0 if rc_total == 0 else 1)
 

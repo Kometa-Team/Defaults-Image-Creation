@@ -309,7 +309,11 @@ README generation for the People image repos is owned by each repo's
 local image sync cannot overwrite the remotely generated README files. Set
 `ORCH_GENERATE_READMES=true` or pass `--generate-readmes` only for a deliberate
 local README run; set `SYNC_MARKDOWN=true` or pass `--sync-markdown` only when
-you intentionally want local sync to copy markdown.
+you intentionally want local sync to copy markdown. The push step attempts to
+dispatch `readme.yml` for all seven People repos afterward, including repos with
+no image changes, so remote README generation stays consistent across styles.
+That dispatch uses the GitHub CLI (`gh`) and is warning-only by default; set
+`UPDATE_REQUIRE_README_DISPATCH=true` if a failed dispatch should fail the run.
 
 `sync_people_images.py` runs source-image preflight by default, but it is
 split by severity. It blocks sync for wrong extensions, unreadable/corrupt
