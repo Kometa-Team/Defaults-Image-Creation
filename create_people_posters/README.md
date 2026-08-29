@@ -304,18 +304,20 @@ The orchestrator enforces the single correct order and writes checkpoints so you
 > Optional helper (outside the orchestrator): `bulk_extract_configs.py` — scan mess/meta logs, including nested archives, and export redacted config sections as `parsed_*.yml`.
 
 README generation for the People image repos is owned by each repo's
-`.github/workflows/readme.yml`. Those workflows are dispatch-only: they do not
-run on every image push, because auto README commits can race with multi-batch
-image pushes. Local orchestrator runs skip `readme` and `sync_md` by default,
-and `sync_people_images.py` skips `*.md` by default, so local image sync cannot
-overwrite the remotely generated README files. Set `ORCH_GENERATE_READMES=true`
-or pass `--generate-readmes` only for a deliberate local README run; set
+`.github/workflows/readme.yml`. Manual pushes to those repos trigger README
+generation automatically. Local orchestrator runs still skip `readme` and
+`sync_md` by default, and `sync_people_images.py` skips `*.md` by default, so
+local image sync cannot overwrite the remotely generated README files. Scripted
+pushes from `update_people_repos.py` append `[skip readme]` by default so
+push-triggered README commits cannot race with multi-batch image pushes. After
+all repo pushes succeed, `update_people_repos.py` dispatches `readme.yml` for
+all seven People repos, including repos with no image changes, so remote README
+generation stays consistent across styles. Set `ORCH_GENERATE_READMES=true` or
+pass `--generate-readmes` only for a deliberate local README run; set
 `SYNC_MARKDOWN=true` or pass `--sync-markdown` only when you intentionally want
-local sync to copy markdown. The push step attempts to dispatch `readme.yml`
-for all seven People repos after all repo pushes succeed, including repos with
-no image changes, so remote README generation stays consistent across styles.
-That dispatch uses the GitHub CLI (`gh`) and is warning-only by default; set
-`UPDATE_REQUIRE_README_DISPATCH=true` if a failed dispatch should fail the run.
+local sync to copy markdown. The dispatch uses the GitHub CLI (`gh`) and is
+warning-only by default; set `UPDATE_REQUIRE_README_DISPATCH=true` if a failed
+dispatch should fail the run.
 
 `sync_people_images.py` runs source-image preflight by default, but it is
 split by severity. It blocks sync for wrong extensions, unreadable/corrupt

@@ -43,6 +43,7 @@ Environment:
   UPDATE_LFS=auto|on|off
   UPDATE_TRIGGER_READMES=true|false
   UPDATE_REQUIRE_README_DISPATCH=true|false
+  UPDATE_README_SKIP_MARKER="[skip readme]"
 """
 
 import os
@@ -55,6 +56,7 @@ from typing import Optional, Tuple
 CATEGORIES = ["bw", "diiivoy", "diiivoycolor", "rainier", "original", "signature", "transparent"]
 MIN_BATCH_HEADROOM_BYTES = 64 * 1024 * 1024
 README_WORKFLOW = "readme.yml"
+DEFAULT_README_SKIP_MARKER = "[skip readme]"
 
 
 def format_bytes(size: int) -> str:
@@ -68,6 +70,13 @@ def format_bytes(size: int) -> str:
 
 def safe_console(text: str) -> str:
     return text.encode("ascii", "backslashreplace").decode("ascii")
+
+
+def append_skip_marker(message: str, marker: str) -> str:
+    marker = (marker or "").strip()
+    if not marker or marker in message:
+        return message
+    return f"{message} {marker}"
 
 
 def env_bool(key: str, default: bool) -> bool:
@@ -496,6 +505,11 @@ def main():
         default=env_bool("UPDATE_REQUIRE_README_DISPATCH", False),
         help="Fail --op push if a README workflow dispatch fails. Default: false.",
     )
+    parser.add_argument(
+        "--readme-skip-marker",
+        default=os.getenv("UPDATE_README_SKIP_MARKER", DEFAULT_README_SKIP_MARKER),
+        help="Marker appended to update_people_repos.py commits so push-triggered README workflows skip them.",
+    )
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
@@ -525,7 +539,10 @@ def main():
             # for push, default to current branch if not specified
             push_branch = branch_arg or current_branch(repo, args.dry_run)
             now = datetime.now().strftime("%Y-%m-%d %H:%M")
-            msg = args.message or f"chore: sync posters & docs - {now}"
+            msg = append_skip_marker(
+                args.message or f"chore: sync posters & docs - {now}",
+                args.readme_skip_marker,
+            )
             print(f"=== PUSH {cat} ===")
             rc = commit_and_push(
                 repo,
