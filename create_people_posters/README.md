@@ -167,6 +167,10 @@ SEL_LOGIN_WAIT_SEC=900
 > profile, and retry after you press Enter or after it detects that the Adobe
 > login gate cleared.
 > You can also prepare the Selenium profile ahead of time with `python sel_remove_bg.py --login-only`, sign into Adobe in that browser window once, then rerun the full pipeline.
+> If Adobe asks you to sign in during a recovery/orchestrator batch and the run
+> exits with code `4`, completed downloads are kept and remaining JPGs stay in
+> the source folder. Run `python sel_remove_bg.py --login-only`, then resume with
+> `python orchestrator.py --redo remove_bg --no-recover-edge-chops`.
 
 ---
 

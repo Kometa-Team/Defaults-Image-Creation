@@ -1617,6 +1617,8 @@ def main(argv=None):
 
                 if abort_run:
                     log("[auth] Stopping the batch because Adobe login is still required. Finish login in this profile, then rerun.")
+                    log("[next] Run: python sel_remove_bg.py --login-only")
+                    log("[next] Then resume: python orchestrator.py --redo remove_bg --no-recover-edge-chops")
                     break
 
                 if idx < len(files) and RESTART_BROWSER_EACH_FILE:
@@ -1642,6 +1644,10 @@ def main(argv=None):
         remaining_jpgs = sorted(p.name for p in SRC_DIR.glob("*.jpg"))
         if remaining_jpgs:
             log(f"[warn] Remaining JPGs left for retry: {', '.join(remaining_jpgs)}")
+        if exit_code == 4:
+            log("[auth] No completed work was rolled back; remaining JPGs are still in the source folder.")
+            log("[next] Run: python sel_remove_bg.py --login-only")
+            log("[next] Then resume: python orchestrator.py --redo remove_bg --no-recover-edge-chops")
 
     if exit_code:
         return exit_code

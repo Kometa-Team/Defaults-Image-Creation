@@ -1468,6 +1468,10 @@ def main() -> int:
         if args.run_orchestrator:
             log(f"Running next command: {command}")
             exit_code = run_orchestrator_from_remove_bg()
+            if exit_code == 4:
+                log("[auth] Adobe login stopped the orchestrator recovery batch.")
+                log("[next] Run: python sel_remove_bg.py --login-only")
+                log("[next] Then resume: python orchestrator.py --redo remove_bg --no-recover-edge-chops")
         else:
             log(f"Next command: {command}")
     elif args.stage_for_orchestrator:
