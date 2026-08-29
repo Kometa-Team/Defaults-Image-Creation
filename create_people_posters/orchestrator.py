@@ -301,6 +301,20 @@ def run_cmd(
         return 1, None, None
 
 
+def print_abort_recovery(step_key: str, rc: int) -> None:
+    print(f"[ABORT] Orchestrator stopped at step '{step_key}' with exit code {rc}.", file=sys.stderr)
+    if step_key == "remove_bg" and rc == 4:
+        print(
+            "[ABORT] Adobe login is required. Completed downloads were kept; "
+            "remaining JPGs are still queued for retry.",
+            file=sys.stderr,
+        )
+        print("[NEXT] Run: python sel_remove_bg.py --login-only", file=sys.stderr)
+        print("[NEXT] Then resume: python orchestrator.py --redo remove_bg --no-recover-edge-chops", file=sys.stderr)
+        return
+    print(f"[NEXT] Resume after fixing the issue: python orchestrator.py --redo {step_key}", file=sys.stderr)
+
+
 def acquire_lock() -> None:
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     if LOCK_FILE.exists():
@@ -792,6 +806,7 @@ def main():
             rc, _, _ = run_cmd(s.title, argv, log_path=step_log_path(s.key))
             if rc != 0:
                 print(f"[FAIL] {s.key} exited with code {rc}. Stopping.", file=sys.stderr)
+                print_abort_recovery(s.key, rc)
                 sys.exit(rc)
 
             # Post-step fail-fast checks (confident zeros -> exit 0; hard requirements -> exit 2)

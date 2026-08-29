@@ -170,7 +170,8 @@ SEL_LOGIN_WAIT_SEC=900
 > If Adobe asks you to sign in during a recovery/orchestrator batch and the run
 > exits with code `4`, completed downloads are kept and remaining JPGs stay in
 > the source folder. Run `python sel_remove_bg.py --login-only`, then resume with
-> `python orchestrator.py --redo remove_bg --no-recover-edge-chops`.
+> `python orchestrator.py --redo remove_bg --no-recover-edge-chops`. The
+> orchestrator also prints the aborted step and the same recovery command.
 
 ---
 
