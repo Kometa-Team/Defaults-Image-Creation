@@ -691,11 +691,88 @@ def hide_onetrust(driver):
     """)
 
 
+def dismiss_stale_modals(driver) -> int:
+    """
+    Dismiss non-auth Adobe overlays that can block the upload/remove-background
+    surface after a previous file. Auth modals are left alone so the login
+    handler can report them accurately.
+    """
+    script = r"""
+    const clicked = [];
+    const authRe = /sign up for free to download your file|sign in|download your file/i;
+    const skipButtonRe = /^(close|dismiss|not now|maybe later|cancel|start over|start again|replace|replace image|new file|new image|upload new|try another)$/i;
+
+    function visible(el){
+      if (!el) return false;
+      const style = getComputedStyle(el);
+      const rect = el.getBoundingClientRect();
+      return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
+    }
+    function textOf(el){
+      try { return String(el.innerText || el.textContent || '').trim(); } catch(e) { return ''; }
+    }
+    function scan(root){
+      const dialogs = root.querySelectorAll ? root.querySelectorAll('[aria-modal="true"], [role="dialog"], sp-dialog[open], qa-error-modal') : [];
+      for (const dialog of dialogs){
+        if (!visible(dialog)) continue;
+        const text = textOf(dialog);
+        if (authRe.test(text)) continue;
+
+        const buttons = dialog.querySelectorAll ? Array.from(dialog.querySelectorAll('button, sp-button, [role="button"], a')) : [];
+        for (const btn of buttons){
+          const label = textOf(btn) || btn.getAttribute?.('aria-label') || btn.getAttribute?.('title') || '';
+          const inner = btn.shadowRoot && btn.shadowRoot.querySelector('button');
+          if (skipButtonRe.test(String(label).trim()) || btn.getAttribute?.('aria-label') === 'Close'){
+            try {
+              (inner || btn).click();
+              clicked.push(label || 'close');
+              return;
+            } catch(e) {}
+          }
+        }
+
+        const close = dialog.querySelector && dialog.querySelector('[aria-label="Close"], [aria-label="close"], button[title="Close"], sp-button[title="Close"]');
+        if (close){
+          try {
+            const inner = close.shadowRoot && close.shadowRoot.querySelector('button');
+            (inner || close).click();
+            clicked.push('close');
+            return;
+          } catch(e) {}
+        }
+      }
+
+      const nodes = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of nodes){
+        if (n.shadowRoot) scan(n.shadowRoot);
+      }
+    }
+
+    scan(document);
+    for (const f of document.querySelectorAll('iframe')){
+      try {
+        const d = f.contentDocument || f.contentWindow?.document;
+        if (d) scan(d);
+      } catch(e) {}
+    }
+    return clicked;
+    """
+    try:
+        clicked = driver.execute_script(script) or []
+    except Exception:
+        return 0
+    if clicked:
+        labels = ", ".join(str(item) for item in clicked[:5])
+        log(f"[modal] dismissed stale Adobe modal control(s): {labels}")
+    return len(clicked)
+
+
 def prepare_tool(driver):
     driver.get(URL)
     pin_tool_route(driver)
     remove_promos(driver)
     hide_onetrust(driver)
+    dismiss_stale_modals(driver)
     wait_until_ready(driver)
 
 
@@ -739,6 +816,7 @@ def find_file_input_deep(driver, timeout=20):
 def upload_file(driver, path_str):
     reassert_route(driver)
     hide_onetrust(driver)
+    dismiss_stale_modals(driver)
 
     # 0) if input is already present, use it
     inp = find_file_input_deep(driver, timeout=3)
@@ -839,6 +917,7 @@ def wait_until_processed_controls(driver, timeout=PROC_TIMEOUT):
     end = time.time() + timeout
     next_beep = 0.0
     while time.time() < end:
+        dismiss_stale_modals(driver)
         # 1) selectors first
         for sel in selectors:
             el = deep_query_iframes_one(driver, sel, timeout=0)
@@ -1526,6 +1605,13 @@ def main(argv=None):
                         ok = wait_until_processed_controls(driver, timeout=PROC_TIMEOUT)
                         fr.sec_process = t_proc.done()
                         if not ok:
+                            if attempt < MAX_FILE_ATTEMPTS:
+                                log(
+                                    f"[retry] processing timed out for {jpg.name}; restarting Chrome "
+                                    f"and retrying same file (attempt {attempt + 1}/{MAX_FILE_ATTEMPTS})"
+                                )
+                                driver = restart_driver(driver, f"processing timeout for {jpg.name}")
+                                continue
                             fr.status = "ERROR"
                             fr.detail = "Processing did not expose controls in time"
                             break
@@ -1562,6 +1648,14 @@ def main(argv=None):
                                 pass
 
                         if not new_file:
+                            if attempt < MAX_FILE_ATTEMPTS:
+                                fr.sec_download = t_dl.done("TIMEOUT")
+                                log(
+                                    f"[retry] download timed out for {jpg.name}; restarting Chrome "
+                                    f"and retrying same file (attempt {attempt + 1}/{MAX_FILE_ATTEMPTS})"
+                                )
+                                driver = restart_driver(driver, f"download timeout for {jpg.name}")
+                                continue
                             fr.status = "ERROR"
                             fr.detail = "No file downloaded (timed out)"
                             fr.sec_download = t_dl.done("TIMEOUT")
@@ -1597,6 +1691,13 @@ def main(argv=None):
                         fr.detail = f"Selenium failure: {str(e).splitlines()[0]}"
                         break
                     except AdobeLoginRequiredError as e:
+                        if attempt < MAX_FILE_ATTEMPTS:
+                            log(
+                                f"[retry] Adobe auth/modal blocker while processing {jpg.name}; restarting Chrome "
+                                f"and retrying same file (attempt {attempt + 1}/{MAX_FILE_ATTEMPTS})"
+                            )
+                            driver = restart_driver(driver, f"Adobe blocker for {jpg.name}")
+                            continue
                         fr.status = "ERROR"
                         fr.detail = str(e).splitlines()[0] if str(e) else "Adobe login required before download"
                         abort_run = True

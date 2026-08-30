@@ -156,6 +156,8 @@ SEL_MAX_WAIT_READY_SEC=60
 SEL_PROC_TIMEOUT=120
 SEL_MAX_WAIT_DL_SEC=20
 SEL_DL_BUTTON_TIMEOUT=12
+SEL_RESTART_BROWSER_EACH_FILE=true
+SEL_MAX_FILE_ATTEMPTS=2
 SEL_RELOAD_EACH_FILE=true
 SEL_PROMPT_FOR_LOGIN=true
 SEL_LOGIN_WAIT_SEC=900
@@ -172,6 +174,8 @@ SEL_LOGIN_WAIT_SEC=900
 > the source folder. Run `python sel_remove_bg.py --login-only`, then resume with
 > `python orchestrator.py --redo remove_bg --no-recover-edge-chops`. The
 > orchestrator also prints the aborted step and the same recovery command.
+> Stale Adobe project/modals and processing/download timeouts are retried by
+> restarting Chrome and reprocessing the same JPG up to `SEL_MAX_FILE_ATTEMPTS`.
 
 ---
 
