@@ -212,32 +212,41 @@ def iter_transparents(root: Path) -> Iterable[Path]:
     if not path_exists(root):
         return
     try:
-        paths = sorted(root.rglob("*.png"))
+        walker = os.walk(root)
     except OSError as exc:
         log(f"[warn] transparent scan root is not readable: {root}; {exc}")
         return
-    for path in paths:
-        try:
-            if path.is_file() and path.parent.name.lower() == "images":
-                yield path
-        except OSError:
+    for dirpath, dirnames, filenames in walker:
+        dirnames.sort(key=str.casefold)
+        if Path(dirpath).name.lower() != "images":
             continue
+        for filename in sorted(filenames, key=str.casefold):
+            path = Path(dirpath) / filename
+            try:
+                if path.is_file() and path.suffix.lower() == ".png":
+                    yield path
+            except OSError:
+                continue
 
 
 def iter_style_images(root: Path) -> Iterable[Path]:
     if not path_exists(root):
         return
     try:
-        paths = sorted(root.rglob("*"))
+        walker = os.walk(root)
     except OSError as exc:
         log(f"[warn] style scan root is not readable: {root}; {exc}")
         return
-    for path in paths:
-        try:
-            if path.is_file() and path.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tif", ".tiff"}:
-                yield path
-        except OSError:
-            continue
+    allowed = {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tif", ".tiff"}
+    for dirpath, dirnames, filenames in walker:
+        dirnames.sort(key=str.casefold)
+        for filename in sorted(filenames, key=str.casefold):
+            path = Path(dirpath) / filename
+            try:
+                if path.is_file() and path.suffix.lower() in allowed:
+                    yield path
+            except OSError:
+                continue
 
 
 def selected_face_checks(recover_warnings: Iterable[str]) -> tuple[str, ...]:
@@ -303,6 +312,31 @@ def find_recovery_targets(
     targets: dict[str, tuple[str, Path, list[str]]] = {}
     skipped_exhausted = 0
     exhausted_names = exhausted_names or set()
+    scan_started = time.time()
+    last_progress = scan_started
+
+    def progress(kind: str, scanned: int, current: Path | None = None, force: bool = False) -> None:
+        nonlocal last_progress
+        every = max(0, int(getattr(args, "scan_progress_every", 0) or 0))
+        seconds = max(0.0, float(getattr(args, "scan_progress_seconds", 0.0) or 0.0))
+        if every == 0 and seconds == 0 and not force:
+            return
+
+        now = time.time()
+        if not force:
+            by_count = every > 0 and scanned > 0 and scanned % every == 0
+            by_time = seconds > 0 and now - last_progress >= seconds
+            if not (by_count or by_time):
+                return
+
+        elapsed = now - scan_started
+        location = f"; current={current}" if current else ""
+        limit_text = f"/{max_matches}" if max_matches else ""
+        log(
+            f"[scan] {kind}: inspected={scanned}; targets={len(targets)}{limit_text}; "
+            f"skipped_exhausted={skipped_exhausted}; elapsed={elapsed:.1f}s{location}"
+        )
+        last_progress = now
 
     def add_target(name: str, path: Path, issue: str) -> bool:
         nonlocal skipped_exhausted
@@ -322,19 +356,30 @@ def find_recovery_targets(
         return max_matches > 0 and len(targets) >= max_matches
 
     if selected.intersection({"headchop", "face-chin", "face-left", "face-right"}):
+        scanned = 0
+        progress("transparent", scanned, force=True)
         for path in iter_transparents(args.transparent_root):
+            scanned += 1
+            progress("transparent", scanned, path)
             name = path.stem
             issues = transparent_target_issues(path, args)
             if issues and add_target(name, path, "; ".join(issues)):
+                progress("transparent", scanned, path, force=True)
                 return [
                     (name, path, "; ".join(issues))
                     for name, path, issues in targets.values()
                 ], skipped_exhausted
+        if scanned:
+            progress("transparent", scanned, force=True)
 
     if "grayscale" in selected:
         for style in sorted(COLOR_REQUIRED_STYLES):
             style_root = args.people_root / style
+            scanned = 0
+            progress(f"{style} grayscale", scanned, force=True)
             for path in iter_style_images(style_root):
+                scanned += 1
+                progress(f"{style} grayscale", scanned, path)
                 name = path.stem.replace("_ccexpress", "")
                 try:
                     noncolor = noncolor_summary(
@@ -346,10 +391,13 @@ def find_recovery_targets(
                 except Exception as exc:
                     noncolor = f"non-color check error: {exc}"
                 if noncolor and add_target(name, path, f"{style} non-color: {noncolor}"):
+                    progress(f"{style} grayscale", scanned, path, force=True)
                     return [
                         (name, path, "; ".join(issues))
                         for name, path, issues in targets.values()
                     ], skipped_exhausted
+            if scanned:
+                progress(f"{style} grayscale", scanned, force=True)
 
     return [
         (name, path, "; ".join(issues))
@@ -1275,6 +1323,18 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--names", nargs="*", default=[])
     ap.add_argument("--modified-since", type=float, help="Only retry transparent PNGs modified at/after this Unix timestamp")
     ap.add_argument("--modified-within-hours", type=float, default=0.0, help="Only retry transparent PNGs modified within this many hours")
+    ap.add_argument(
+        "--scan-progress-every",
+        type=int,
+        default=int(os.getenv("EDGE_CHOP_SCAN_PROGRESS_EVERY", "500")),
+        help="Log target-discovery progress every N inspected files; 0 disables count-based progress.",
+    )
+    ap.add_argument(
+        "--scan-progress-seconds",
+        type=float,
+        default=float(os.getenv("EDGE_CHOP_SCAN_PROGRESS_SECONDS", "30")),
+        help="Log target-discovery progress at least every N seconds; 0 disables time-based progress.",
+    )
     ap.add_argument("--all", action="store_true", help="Allow whole-tree recovery attempts")
     ap.add_argument("--audit-only", action="store_true", help="Scan and report matching edge chops without retrying")
     ap.add_argument(

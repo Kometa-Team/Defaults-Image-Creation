@@ -628,6 +628,9 @@ python recover_edge_chops.py --all --limit 25
 # TMDB alternates per person are controlled separately by EDGE_CHOP_TMDB_LIMIT.
 python recover_edge_chops.py --all --limit 100
 
+# Target discovery logs progress while it scans repo images.
+python recover_edge_chops.py --all --limit 100 --scan-progress-every 250 --scan-progress-seconds 15
+
 # Include grayscale/non-color warnings in the recovery batch.
 python recover_edge_chops.py --all --limit 100 --recover-warnings headchop,grayscale
 
@@ -644,7 +647,10 @@ python recover_edge_chops.py --names "Person One" "Person Two"
 Whole-tree recovery reads from the repo root configured by `PEOPLE_IMAGES_DIR`.
 Use `EDGE_CHOP_PEOPLE_ROOT` or `--people-root` only when you intentionally want
 to scan a different local repo set; use `EDGE_CHOP_TRANSPARENT_ROOT` or
-`--transparent-root` only for a custom transparent tree.
+`--transparent-root` only for a custom transparent tree. Target discovery logs
+`[scan]` heartbeat lines by default every 500 inspected files or 30 seconds;
+adjust with `EDGE_CHOP_SCAN_PROGRESS_EVERY`, `EDGE_CHOP_SCAN_PROGRESS_SECONDS`,
+`--scan-progress-every`, or `--scan-progress-seconds`.
 
 By default, standalone recovery stages viable candidates and immediately runs
 `python orchestrator.py --redo remove_bg --no-recover-edge-chops`. That reuses
