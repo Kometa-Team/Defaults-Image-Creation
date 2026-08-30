@@ -107,6 +107,8 @@ REMBG_HOME=./config/models/rembg                       # rembg model cache for r
 EDGE_CHOP_REJECT_GRAYSCALE=true                       # do not accept B/W TMDB alternates during recovery
 EDGE_CHOP_COLORIZE_GRAYSCALE=true                     # try DeOldify before rejecting B/W alternates
 EDGE_CHOP_RECOVER_WARNINGS=headchop                   # headchop,grayscale,face-chin,face-side,all
+EDGE_CHOP_COVERAGE_THRESHOLD=0.015                    # foreground edge coverage threshold for headchop checks
+EDGE_CHOP_ALPHA_MIN=8                                  # alpha value counted as foreground for edge coverage
 EDGE_CHOP_EXHAUSTED_FILE=./config/edge_chop_recovery/exhausted_names.txt
 EDGE_CHOP_ATTEMPTED_FILE=./config/edge_chop_recovery/attempted_candidates.csv
 EDGE_CHOP_STAGE_ONLY=false                            # stage candidates but do not run orchestrator
@@ -536,9 +538,15 @@ top-edge head chops only unless `EDGE_CHOP_RECOVER_WARNINGS` or
 alternates are sent through DeOldify first, then rechecked; an alternate is
 skipped only if it is still non-color afterward. Each remaining alternate first
 runs through `rembg` locally; alternates that still have selected recovery
-warnings are skipped before the Selenium/Adobe step. The first alternate that
-passes the local precheck is sent through Adobe, then the final poster output is
-checked again for the selected recovery warnings. If no alternate clears the check,
+warnings are skipped before the Selenium/Adobe step. The head/top edge check
+uses both edge alpha mean and foreground coverage, so narrow hair/head contact
+at the top edge is not hidden by transparent space across the rest of the row.
+The first alternate that passes the local precheck is sent through Adobe. In
+default standalone mode, recovery stages viable alternates, runs the normal
+orchestrator `remove_bg` flow, then checks the final transparent poster output
+again. If Adobe's final output still has selected warnings, the report marks
+that row unresolved; rerun the same recovery command to skip that attempted
+TMDB image and try the next unattempted candidate. If no alternate clears the check,
 the script restores the previous local style outputs, writes
 `./config/edge_chop_recovery/edge_chop_recovery.csv`, records the person in
 `./config/edge_chop_recovery/exhausted_names.txt`, and continues the pipeline.
@@ -597,7 +605,8 @@ sync, and push steps without falling back into the inline recovery loop. Local
 README/MD steps remain skipped unless `ORCH_GENERATE_READMES=true` or
 `--generate-readmes` is used; remote GitHub Actions regenerates People image
 repo READMEs after push. The next recovery batch will rescan outputs, skip attempted TMDB
-candidates, and choose the next alternate for anything still chopped. Do not use
+candidates, and choose the next alternate for anything still chopped or still
+non-color. Do not use
 `--redo tmdb` unless you intend to rerun TMDB download and all downstream
 image-generation steps.
 
@@ -701,7 +710,8 @@ python compare_image_trees.py --repo-root "C:/Users/bullmoose20/Kometa-People-Im
 Quality rules allow grayscale only for `bw` and `diiivoy`. `original`, `rainier`,
 `signature`, `diiivoycolor`, and `transparent` must be color; `transparent` must
 also contain alpha transparency. Transparent QA checks top-edge head chops by
-default. Bottom/left/right edge checks are available as explicit diagnostics,
+default using both edge alpha mean and foreground coverage. Bottom/left/right
+edge checks are available as explicit diagnostics,
 but they are not semantic chin/side-chop proof because shoulders, necks, and
 body crops can legitimately touch those edges. Transparent QA also runs a
 report-only OpenCV face detector for possible chin/left/right face crop risk;

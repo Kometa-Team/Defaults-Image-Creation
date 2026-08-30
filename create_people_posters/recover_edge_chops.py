@@ -798,6 +798,51 @@ def final_transparent_path(people_root: Path, name: str) -> Path:
     return people_root / "transparent" / (name[:1] or "_").upper() / "Images" / f"{name}.png"
 
 
+def postcheck_staged_outputs(rows: list[RecoveryRow], args: argparse.Namespace) -> int:
+    checked = 0
+    for row in rows:
+        if row.status != "staged" or not row.name:
+            continue
+
+        checked += 1
+        transparent = final_transparent_path(args.people_root, row.name)
+        if not transparent.exists():
+            row.status = "unresolved"
+            row.final_issues = f"final transparent output missing: {transparent}"
+            row.note += "; post-orchestrator check failed; rerun recovery after fixing the pipeline output"
+            log(f"[postcheck] {row.name}: {row.final_issues}")
+            continue
+
+        try:
+            issues = candidate_target_issues(transparent, args)
+        except Exception as exc:
+            row.status = "unresolved"
+            row.final_issues = f"final selected-warning check failed: {exc}"
+            row.note += "; post-orchestrator check failed; rerun recovery after fixing the QA error"
+            log(f"[postcheck] {row.name}: {row.final_issues}")
+            continue
+
+        if issues:
+            row.status = "unresolved"
+            row.final_issues = "; ".join(issues)
+            row.note += "; post-orchestrator final output still has selected warning(s); rerun recovery to try the next TMDB candidate"
+            log(f"[postcheck] {row.name}: final output still has selected warning(s): {row.final_issues}")
+        else:
+            row.status = "recovered"
+            row.final_issues = ""
+            row.note += "; post-orchestrator final QA passed"
+            log(f"[postcheck] {row.name}: final selected-warning QA passed")
+    return checked
+
+
+def log_status_counts(rows: list[RecoveryRow], prefix: str = "") -> None:
+    label = f"{prefix} " if prefix else ""
+    log(f"{label}Recovered: {sum(1 for row in rows if row.status == 'recovered')}")
+    log(f"{label}Staged: {sum(1 for row in rows if row.status == 'staged')}")
+    log(f"{label}Unresolved: {sum(1 for row in rows if row.status == 'unresolved')}")
+    log(f"{label}Exhausted: {sum(1 for row in rows if row.status == 'exhausted')}")
+
+
 def downloads_pngs_are_clear(name: str, downloads_dir: Path) -> bool:
     allowed = {f"{name}.png"}
     for path in downloads_dir.glob("*"):
@@ -1446,23 +1491,17 @@ def main() -> int:
         log(f"{name}: {row.status}; attempts={row.attempts}; {row.note}")
 
     write_report(args.out_root, rows)
-    recovered = sum(1 for row in rows if row.status == "recovered")
-    staged = sum(1 for row in rows if row.status == "staged")
-    unresolved = sum(1 for row in rows if row.status == "unresolved")
-    exhausted = sum(1 for row in rows if row.status == "exhausted")
     added_attempted = append_attempted_candidates(args.attempted_file, attempted_records)
     added_exhausted = append_exhausted_names(
         args.exhausted_file,
         (row.name for row in rows if row.status == "exhausted"),
     )
-    log(f"Recovered: {recovered}")
-    log(f"Staged: {staged}")
-    log(f"Unresolved: {unresolved}")
-    log(f"Exhausted: {exhausted}")
+    log_status_counts(rows)
     if added_attempted:
         log(f"Added attempted TMDB candidates: {added_attempted} -> {args.attempted_file}")
     if added_exhausted:
         log(f"Added exhausted names: {added_exhausted} -> {args.exhausted_file}")
+    staged = sum(1 for row in rows if row.status == "staged")
     if args.stage_for_orchestrator and staged:
         command = "python orchestrator.py --redo remove_bg --no-recover-edge-chops"
         if args.run_orchestrator:
@@ -1472,6 +1511,20 @@ def main() -> int:
                 log("[auth] Adobe login stopped the orchestrator recovery batch.")
                 log("[next] Run: python sel_remove_bg.py --login-only")
                 log("[next] Then resume: python orchestrator.py --redo remove_bg --no-recover-edge-chops")
+            elif exit_code == 0:
+                checked = postcheck_staged_outputs(rows, args)
+                if checked:
+                    write_report(args.out_root, rows)
+                    log_status_counts(rows, prefix="Postcheck")
+                    unresolved_after = sum(1 for row in rows if row.status == "unresolved")
+                    if unresolved_after:
+                        log("[next] Some staged candidates still failed selected warning QA after Adobe.")
+                        log("[next] Rerun this recovery command to skip those attempted TMDB images and try the next candidates.")
+                    else:
+                        log("[next] Recovery batch passed selected final QA; continue with the normal pipeline as needed.")
+            else:
+                log("[next] Orchestrator did not finish cleanly; resolve the logged failure, then resume:")
+                log("[next] python orchestrator.py --redo remove_bg --no-recover-edge-chops")
         else:
             log(f"Next command: {command}")
     elif args.stage_for_orchestrator:
