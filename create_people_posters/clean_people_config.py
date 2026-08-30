@@ -253,7 +253,9 @@ def remove_empty_dirs(root: Path, protected_roots: set[Path], apply: bool) -> in
         base = root / base_name
         if not base.exists() or not base.is_dir():
             continue
-        for path in sorted((p for p in base.rglob("*") if p.is_dir()), key=lambda p: len(p.parts), reverse=True):
+        dirs = [p for p in base.rglob("*") if p.is_dir()]
+        dirs.append(base)
+        for path in sorted(dirs, key=lambda p: len(p.parts), reverse=True):
             resolved = path.resolve()
             if any(resolved == protected or is_within(resolved, protected) for protected in protected_roots):
                 continue

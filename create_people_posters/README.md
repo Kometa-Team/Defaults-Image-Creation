@@ -442,7 +442,8 @@ model/vendor caches, active staging folders, `config/people_dirs`, and recovery
 state files such as `exhausted_names.txt` and `attempted_candidates.csv`.
 Cleanup output includes total candidate count/bytes, file vs tree totals,
 top-level config path totals, reason totals, and per-path delete details.
-Use `--summary-only` when you only want the totals.
+Use `--summary-only` when you only want the totals. Empty generated directories
+are removed after cleanup unless `--no-empty-dirs` is passed.
 Heavier cleanup is explicit:
 
 ```bash
