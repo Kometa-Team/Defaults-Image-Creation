@@ -270,6 +270,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--config-root", type=Path, default=CONFIG_DIR, help="Config directory to clean. Default: ./config")
     parser.add_argument("--days", type=float, default=float(os.getenv("CLEAN_PEOPLE_CONFIG_DAYS", DEFAULT_DAYS)), help=f"Delete age-pruned files older than this many days. Default: {DEFAULT_DAYS}")
     parser.add_argument("--apply", action="store_true", help="Actually delete files. Without this, only print what would be deleted.")
+    parser.add_argument("--max", action="store_true", help="Aggressive cleanup alias: --days 0 plus staging, checkpoints, caches, and recovery state. Chrome profile is still preserved.")
     parser.add_argument("--include-staging", action="store_true", help="Also delete active staging folders Downloads, people_dirs/Downloads, and people_dirs/tmppeople.")
     parser.add_argument("--include-checkpoints", action="store_true", help="Also delete .orch checkpoints, forcing orchestrator steps to rerun.")
     parser.add_argument("--include-caches", action="store_true", help="Also delete model/vendor caches; they may need to download again.")
@@ -280,6 +281,13 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    if args.max:
+        args.days = 0.0
+        args.include_staging = True
+        args.include_checkpoints = True
+        args.include_caches = True
+        args.include_recovery_state = True
+
     root = args.config_root.expanduser().resolve()
     if not root.exists() or not root.is_dir():
         print(f"[ERROR] config root does not exist or is not a directory: {root}", file=sys.stderr)
@@ -297,6 +305,8 @@ def main() -> int:
     log(f"#### START clean_people_config ({mode}) ####")
     log(f"Config root: {root}")
     log(f"Age cutoff: {args.days:g} day(s)")
+    if args.max:
+        log("Max cleanup: enabled; includes staging, checkpoints, caches, and recovery state; chrome-profile is preserved")
 
     candidates = unique_candidates(
         list(iter_age_pruned_files(root, cutoff)) + list(iter_optional_heavy_roots(args, root)),

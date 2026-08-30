@@ -428,6 +428,9 @@ python clean_people_config.py --apply
 
 # Use a shorter or longer age cutoff.
 python clean_people_config.py --days 7 --apply
+
+# Most aggressive cleanup this helper allows; still preserves chrome-profile.
+python clean_people_config.py --max --apply
 ```
 
 By default, cleanup preserves live pipeline state: `.env`, `people_list.txt`,
@@ -450,6 +453,8 @@ python clean_people_config.py --include-staging --apply
 python clean_people_config.py --include-recovery-state --apply
 ```
 
+`--max` is shorthand for `--days 0 --include-staging --include-checkpoints
+--include-caches --include-recovery-state`.
 `config/chrome-profile` is never deleted by this helper. Remove it manually only
 when you intentionally want to reset the Adobe browser profile and sign in again.
 
