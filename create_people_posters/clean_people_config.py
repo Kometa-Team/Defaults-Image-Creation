@@ -24,6 +24,13 @@ from pathlib import Path
 from typing import Iterable
 
 
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
+
+
 SCRIPT_DIR = Path(__file__).resolve().parent
 CONFIG_DIR = SCRIPT_DIR / "config"
 LOGS_DIR = CONFIG_DIR / "logs"
@@ -182,7 +189,6 @@ def iter_age_pruned_files(root: Path, cutoff: float) -> Iterable[Candidate]:
 def iter_optional_heavy_roots(args: argparse.Namespace, root: Path) -> Iterable[Candidate]:
     optional_roots: list[tuple[bool, str, str]] = [
         (args.include_checkpoints, ".orch", "explicit --include-checkpoints"),
-        (args.include_chrome_profile, "chrome-profile", "explicit --include-chrome-profile"),
         (args.include_caches, "models", "explicit --include-caches"),
         (args.include_caches, "vendor", "explicit --include-caches"),
         (args.include_staging, "Downloads", "explicit --include-staging"),
@@ -266,7 +272,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--apply", action="store_true", help="Actually delete files. Without this, only print what would be deleted.")
     parser.add_argument("--include-staging", action="store_true", help="Also delete active staging folders Downloads, people_dirs/Downloads, and people_dirs/tmppeople.")
     parser.add_argument("--include-checkpoints", action="store_true", help="Also delete .orch checkpoints, forcing orchestrator steps to rerun.")
-    parser.add_argument("--include-chrome-profile", action="store_true", help="Also delete the Adobe Selenium Chrome profile; you will need to sign in again.")
     parser.add_argument("--include-caches", action="store_true", help="Also delete model/vendor caches; they may need to download again.")
     parser.add_argument("--include-recovery-state", action="store_true", help="Also delete recovery attempted/exhausted files.")
     parser.add_argument("--no-empty-dirs", action="store_true", help="Do not remove empty directories left inside age-pruned roots.")

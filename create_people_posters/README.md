@@ -437,9 +437,6 @@ state files such as `exhausted_names.txt` and `attempted_candidates.csv`.
 Heavier cleanup is explicit:
 
 ```bash
-# Forces Adobe sign-in again.
-python clean_people_config.py --include-chrome-profile --apply
-
 # Forces models/vendor content to download or rebuild again.
 python clean_people_config.py --include-caches --apply
 
@@ -452,6 +449,9 @@ python clean_people_config.py --include-staging --apply
 # Makes recovery forget exhausted names and attempted TMDB candidates.
 python clean_people_config.py --include-recovery-state --apply
 ```
+
+`config/chrome-profile` is never deleted by this helper. Remove it manually only
+when you intentionally want to reset the Adobe browser profile and sign in again.
 
 Occasional helpers:
 
