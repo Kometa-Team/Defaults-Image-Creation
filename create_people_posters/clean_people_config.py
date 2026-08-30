@@ -19,6 +19,7 @@ import os
 import shutil
 import sys
 import time
+from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
@@ -128,6 +129,15 @@ def tree_size(path: Path) -> int:
         if item.is_file():
             total += file_size(item)
     return total
+
+
+def human_bytes(size: int) -> str:
+    value = float(size)
+    for unit in ("B", "KiB", "MiB", "GiB", "TiB"):
+        if value < 1024.0 or unit == "TiB":
+            return f"{value:.2f} {unit}" if unit != "B" else f"{int(value)} B"
+        value /= 1024.0
+    return f"{size} B"
 
 
 def older_than(path: Path, cutoff: float) -> bool:
@@ -265,6 +275,36 @@ def delete_candidate(candidate: Candidate) -> None:
         candidate.path.unlink()
 
 
+def log_candidate_totals(candidates: list[Candidate], root: Path, prefix: str = "") -> None:
+    label = f"{prefix} " if prefix else ""
+    total_bytes = sum(candidate.bytes for candidate in candidates)
+    log(f"{label}Total candidates: {len(candidates)}")
+    log(f"{label}Total bytes: {total_bytes} ({human_bytes(total_bytes)})")
+
+    by_kind: dict[str, list[int]] = defaultdict(lambda: [0, 0])
+    by_root: dict[str, list[int]] = defaultdict(lambda: [0, 0])
+    by_reason: dict[str, list[int]] = defaultdict(lambda: [0, 0])
+    for candidate in candidates:
+        by_kind[candidate.kind][0] += 1
+        by_kind[candidate.kind][1] += candidate.bytes
+        root_name = top_level_name(candidate.path, root) or "."
+        by_root[root_name][0] += 1
+        by_root[root_name][1] += candidate.bytes
+        by_reason[candidate.reason][0] += 1
+        by_reason[candidate.reason][1] += candidate.bytes
+
+    for kind, (count, size) in sorted(by_kind.items()):
+        log(f"{label}By kind [{kind}]: {count} candidate(s), {size} bytes ({human_bytes(size)})")
+
+    log(f"{label}By top-level config path:")
+    for name, (count, size) in sorted(by_root.items(), key=lambda item: (-item[1][1], item[0].casefold())):
+        log(f"{label}  {name}: {count} candidate(s), {size} bytes ({human_bytes(size)})")
+
+    log(f"{label}By reason:")
+    for reason, (count, size) in sorted(by_reason.items(), key=lambda item: (-item[1][1], item[0].casefold())):
+        log(f"{label}  {reason}: {count} candidate(s), {size} bytes ({human_bytes(size)})")
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Dry-run/apply cleanup for generated create_people_posters config artifacts.")
     parser.add_argument("--config-root", type=Path, default=CONFIG_DIR, help="Config directory to clean. Default: ./config")
@@ -276,6 +316,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--include-caches", action="store_true", help="Also delete model/vendor caches; they may need to download again.")
     parser.add_argument("--include-recovery-state", action="store_true", help="Also delete recovery attempted/exhausted files.")
     parser.add_argument("--no-empty-dirs", action="store_true", help="Do not remove empty directories left inside age-pruned roots.")
+    parser.add_argument("--summary-only", action="store_true", help="Print totals only; skip per-path delete detail lines.")
     return parser.parse_args()
 
 
@@ -312,26 +353,34 @@ def main() -> int:
         list(iter_age_pruned_files(root, cutoff)) + list(iter_optional_heavy_roots(args, root)),
         root,
     )
-    total_bytes = sum(candidate.bytes for candidate in candidates)
-    log(f"Candidates: {len(candidates)}")
-    log(f"Bytes: {total_bytes}")
+    log_candidate_totals(candidates, root)
 
-    for candidate in candidates:
-        action = "delete" if args.apply else "would delete"
-        log(f"[{action}] {candidate.kind:4} {candidate.bytes:12d} {rel(candidate.path, root)} :: {candidate.reason}")
+    if args.summary_only:
+        log("Per-path details: skipped because --summary-only was passed")
+    else:
+        for candidate in candidates:
+            action = "delete" if args.apply else "would delete"
+            log(f"[{action}] {candidate.kind:4} {candidate.bytes:12d} {rel(candidate.path, root)} :: {candidate.reason}")
 
     if args.apply:
         errors = 0
+        failed: list[Candidate] = []
         for candidate in candidates:
             try:
                 delete_candidate(candidate)
             except Exception as exc:
                 errors += 1
+                failed.append(candidate)
                 log(f"[error] failed to delete {rel(candidate.path, root)}: {exc}")
         protected = {root / name for name in PRESERVE_ROOT_NAMES}
         empty_removed = 0 if args.no_empty_dirs else remove_empty_dirs(root, protected, apply=True)
+        deleted_bytes = sum(candidate.bytes for candidate in candidates) - sum(candidate.bytes for candidate in failed)
+        failed_bytes = sum(candidate.bytes for candidate in failed)
         log(f"Deleted candidates: {len(candidates) - errors}")
+        log(f"Deleted bytes: {deleted_bytes} ({human_bytes(deleted_bytes)})")
         log(f"Delete errors: {errors}")
+        if failed:
+            log(f"Failed bytes: {failed_bytes} ({human_bytes(failed_bytes)})")
         log(f"Empty dirs removed: {empty_removed}")
         rc = 1 if errors else 0
     else:

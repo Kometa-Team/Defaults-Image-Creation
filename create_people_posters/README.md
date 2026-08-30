@@ -431,12 +431,18 @@ python clean_people_config.py --days 7 --apply
 
 # Most aggressive cleanup this helper allows; still preserves chrome-profile.
 python clean_people_config.py --max --apply
+
+# Preview totals without listing every path.
+python clean_people_config.py --max --summary-only
 ```
 
 By default, cleanup preserves live pipeline state: `.env`, `people_list.txt`,
 `people_overrides.txt`, orchestrator checkpoints, the Adobe Chrome profile,
 model/vendor caches, active staging folders, `config/people_dirs`, and recovery
 state files such as `exhausted_names.txt` and `attempted_candidates.csv`.
+Cleanup output includes total candidate count/bytes, file vs tree totals,
+top-level config path totals, reason totals, and per-path delete details.
+Use `--summary-only` when you only want the totals.
 Heavier cleanup is explicit:
 
 ```bash
