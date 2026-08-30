@@ -693,9 +693,10 @@ def hide_onetrust(driver):
 
 def dismiss_stale_modals(driver) -> int:
     """
-    Dismiss non-auth Adobe overlays that can block the upload/remove-background
+    Handle non-auth Adobe overlays that can block the upload/remove-background
     surface after a previous file. Auth modals are left alone so the login
-    handler can report them accurately.
+    handler can report them accurately. The "Start from your image" chooser is
+    advanced by selecting "Remove background".
     """
     script = r"""
     const clicked = [];
@@ -711,34 +712,79 @@ def dismiss_stale_modals(driver) -> int:
     function textOf(el){
       try { return String(el.innerText || el.textContent || '').trim(); } catch(e) { return ''; }
     }
+    function clickTarget(el){
+      if (!el) return false;
+      try {
+        const inner = el.shadowRoot && el.shadowRoot.querySelector('button');
+        (inner || el).click();
+        return true;
+      } catch(e) {
+        return false;
+      }
+    }
+    function clickableAncestor(el, stopAt){
+      let node = el;
+      while (node && node !== stopAt){
+        try {
+          const tag = String(node.tagName || '').toLowerCase();
+          const role = String(node.getAttribute?.('role') || '').toLowerCase();
+          const style = getComputedStyle(node);
+          if (
+            tag === 'button' || tag === 'sp-button' || tag === 'a' ||
+            role === 'button' || node.tabIndex >= 0 || !!node.onclick ||
+            style.cursor === 'pointer'
+          ){
+            return node;
+          }
+        } catch(e) {}
+        node = node.parentElement || node.getRootNode?.().host || null;
+      }
+      return el;
+    }
+    function chooseRemoveBackground(dialog){
+      const text = textOf(dialog);
+      if (!/start from your image/i.test(text) || !/remove background/i.test(text))
+        return false;
+      const candidates = dialog.querySelectorAll ? Array.from(dialog.querySelectorAll('button, sp-button, [role="button"], a, div, span')) : [];
+      for (const el of candidates){
+        if (!visible(el)) continue;
+        const label = textOf(el);
+        if (!label) continue;
+        if (/^remove background$/i.test(label) || (/remove background/i.test(label) && !/edit original image|add to a new design|start from your image/i.test(label))){
+          const target = clickableAncestor(el, dialog);
+          if (clickTarget(target)){
+            clicked.push('Remove background');
+            return true;
+          }
+        }
+      }
+      return false;
+    }
     function scan(root){
-      const dialogs = root.querySelectorAll ? root.querySelectorAll('[aria-modal="true"], [role="dialog"], sp-dialog[open], qa-error-modal') : [];
+      const dialogs = root.querySelectorAll ? root.querySelectorAll('[aria-modal="true"], [role="dialog"], sp-dialog[open], qa-error-modal, .modal, [class*="modal"], [class*="dialog"]') : [];
       for (const dialog of dialogs){
         if (!visible(dialog)) continue;
         const text = textOf(dialog);
         if (authRe.test(text)) continue;
+        if (chooseRemoveBackground(dialog)) return;
 
         const buttons = dialog.querySelectorAll ? Array.from(dialog.querySelectorAll('button, sp-button, [role="button"], a')) : [];
         for (const btn of buttons){
           const label = textOf(btn) || btn.getAttribute?.('aria-label') || btn.getAttribute?.('title') || '';
-          const inner = btn.shadowRoot && btn.shadowRoot.querySelector('button');
           if (skipButtonRe.test(String(label).trim()) || btn.getAttribute?.('aria-label') === 'Close'){
-            try {
-              (inner || btn).click();
+            if (clickTarget(btn)){
               clicked.push(label || 'close');
               return;
-            } catch(e) {}
+            }
           }
         }
 
         const close = dialog.querySelector && dialog.querySelector('[aria-label="Close"], [aria-label="close"], button[title="Close"], sp-button[title="Close"]');
         if (close){
-          try {
-            const inner = close.shadowRoot && close.shadowRoot.querySelector('button');
-            (inner || close).click();
+          if (clickTarget(close)){
             clicked.push('close');
             return;
-          } catch(e) {}
+          }
         }
       }
 
@@ -763,7 +809,7 @@ def dismiss_stale_modals(driver) -> int:
         return 0
     if clicked:
         labels = ", ".join(str(item) for item in clicked[:5])
-        log(f"[modal] dismissed stale Adobe modal control(s): {labels}")
+        log(f"[modal] handled Adobe modal control(s): {labels}")
     return len(clicked)
 
 

@@ -176,6 +176,8 @@ SEL_LOGIN_WAIT_SEC=900
 > orchestrator also prints the aborted step and the same recovery command.
 > Stale Adobe project/modals and processing/download timeouts are retried by
 > restarting Chrome and reprocessing the same JPG up to `SEL_MAX_FILE_ATTEMPTS`.
+> If Adobe opens the "Start from your image" chooser after upload, the Selenium
+> step selects "Remove background" automatically.
 
 ---
 
