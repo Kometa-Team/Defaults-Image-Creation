@@ -417,10 +417,47 @@ python image_check.py --input_directory "C:/Users/bullmoose20/Kometa-People-Imag
 python compare_image_trees.py --repo-root "C:/Users/bullmoose20/Kometa-People-Images"
 ```
 
+Clean generated `config` artifacts:
+
+```bash
+# Preview cleanup. This is the default and deletes nothing.
+python clean_people_config.py
+
+# Delete generated logs/reports/review artifacts older than 14 days.
+python clean_people_config.py --apply
+
+# Use a shorter or longer age cutoff.
+python clean_people_config.py --days 7 --apply
+```
+
+By default, cleanup preserves live pipeline state: `.env`, `people_list.txt`,
+`people_overrides.txt`, orchestrator checkpoints, the Adobe Chrome profile,
+model/vendor caches, active staging folders, `config/people_dirs`, and recovery
+state files such as `exhausted_names.txt` and `attempted_candidates.csv`.
+Heavier cleanup is explicit:
+
+```bash
+# Forces Adobe sign-in again.
+python clean_people_config.py --include-chrome-profile --apply
+
+# Forces models/vendor content to download or rebuild again.
+python clean_people_config.py --include-caches --apply
+
+# Clears checkpoints, so orchestrator steps are no longer marked complete.
+python clean_people_config.py --include-checkpoints --apply
+
+# Clears active staging folders. Use only when you want to discard pending work.
+python clean_people_config.py --include-staging --apply
+
+# Makes recovery forget exhausted names and attempted TMDB candidates.
+python clean_people_config.py --include-recovery-state --apply
+```
+
 Occasional helpers:
 
 - `resolve_original_images.py` — recover original JPGs by matching transparent/rainier outputs against TMDB first, then Google Custom Search when configured.
 - `grayscale_sweeper.py` — scan an arbitrary folder tree for non-color images and stage them for DeOldify.
+- `clean_people_config.py` — prune old generated logs, reports, review artifacts, and candidate previews from `config`.
 - `bulk_extract_configs.py` — extract redacted config sections from mess/meta logs and nested archives.
 - `auto_readme.py` / `sync_md.py` — retained for deliberate local README work, but normal README generation is owned by the People image repo GitHub Actions.
 
@@ -745,6 +782,7 @@ create_people_posters/
 ├─ sel_remove_bg.py
 ├─ create_people_poster.ps1
 ├─ recover_edge_chops.py          # optional/non-blocking pipeline recovery
+├─ clean_people_config.py         # optional config cleanup helper
 ├─ update_people_repos.py
 ├─ sync_people_images.py
 ├─ auto_readme.py
