@@ -67,6 +67,7 @@ AGE_PRUNE_FILE_GLOBS = (
     "*.log",
     "*.md",
     "*.zip.*",
+    "pre-online-checklist.txt",
     "people_list.*.bak.txt",
     "rebuild_since_signature_commit.txt",
     "traceback_summary.txt",

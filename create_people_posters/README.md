@@ -440,6 +440,8 @@ By default, cleanup preserves live pipeline state: `.env`, `people_list.txt`,
 `people_overrides.txt`, orchestrator checkpoints, the Adobe Chrome profile,
 model/vendor caches, active staging folders, `config/people_dirs`, and recovery
 state files such as `exhausted_names.txt` and `attempted_candidates.csv`.
+Generated intermediates such as `pre-online-checklist.txt` are cleanup
+candidates; `people_list.txt` is preserved because it is active input.
 Cleanup output includes total candidate count/bytes, file vs tree totals,
 top-level config path totals, reason totals, and per-path delete details.
 Use `--summary-only` when you only want the totals. Empty generated directories
