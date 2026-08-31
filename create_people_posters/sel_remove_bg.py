@@ -87,6 +87,7 @@ MAX_FILE_ATTEMPTS = max(1, int(os.getenv("SEL_MAX_FILE_ATTEMPTS", "2")))
 PROMPT_FOR_LOGIN = os.getenv("SEL_PROMPT_FOR_LOGIN", "true").lower() in ("1", "true", "yes", "y")
 LOGIN_WAIT_SEC = max(30, int(os.getenv("SEL_LOGIN_WAIT_SEC", "900")))
 DISABLE_CHROME_RESTORE = os.getenv("SEL_DISABLE_CHROME_RESTORE", "true").lower() in ("1", "true", "yes", "y")
+MAX_TOOL_READY_RESTARTS = max(1, int(os.getenv("SEL_MAX_TOOL_READY_RESTARTS", "5")))
 
 # Size enforcement
 EXPECT_W = int(os.getenv("SEL_EXPECT_WIDTH", "2000"))
@@ -312,6 +313,10 @@ class FileResult:
 
 class AdobeLoginRequiredError(RuntimeError):
     """Raised when Adobe blocks download until the user logs in."""
+
+
+class StaleAdobeProjectStateError(RuntimeError):
+    """Raised when Adobe opens a reused project chooser instead of the fresh upload page."""
 
 
 # ===============================
@@ -745,13 +750,59 @@ def hide_onetrust(driver):
     """)
 
 
+def detect_start_from_image_modal(driver) -> bool:
+    script = r"""
+    function visible(el){
+      if (!el) return false;
+      const style = getComputedStyle(el);
+      const rect = el.getBoundingClientRect();
+      return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
+    }
+    function textOf(el){
+      try { return String(el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim(); } catch(e) { return ''; }
+    }
+    function scan(root){
+      const dialogs = root.querySelectorAll ? root.querySelectorAll('[aria-modal="true"], [role="dialog"], sp-dialog[open], .modal, [class*="modal"], [class*="dialog"]') : [];
+      for (const dialog of dialogs){
+        if (!visible(dialog)) continue;
+        const text = textOf(dialog);
+        if (/start from your image/i.test(text) && /remove background/i.test(text))
+          return true;
+      }
+      const nodes = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of nodes){
+        if (!n.shadowRoot) continue;
+        if (scan(n.shadowRoot)) return true;
+      }
+      return false;
+    }
+    if (scan(document)) return true;
+    for (const f of document.querySelectorAll('iframe')){
+      try {
+        const d = f.contentDocument || f.contentWindow?.document;
+        if (d && scan(d)) return true;
+      } catch(e) {}
+    }
+    return false;
+    """
+    try:
+        return bool(driver.execute_script(script))
+    except Exception:
+        return False
+
+
 def dismiss_stale_modals(driver) -> int:
     """
     Handle non-auth Adobe overlays that can block the upload/remove-background
     surface after a previous file. Auth modals are left alone so the login
     handler can report them accurately. The "Start from your image" chooser is
-    advanced by selecting "Remove background".
+    treated as stale state and handled by restarting the browser.
     """
+    if detect_start_from_image_modal(driver):
+        raise StaleAdobeProjectStateError(
+            "Adobe opened the stale 'Start from your image' chooser instead of the fresh Remove background upload page"
+        )
+
     script = r"""
     const clicked = [];
     const authRe = /sign up for free to download your file|sign in|download your file/i;
@@ -795,32 +846,13 @@ def dismiss_stale_modals(driver) -> int:
       }
       return el;
     }
-    function chooseRemoveBackground(dialog){
-      const text = textOf(dialog);
-      if (!/start from your image/i.test(text) || !/remove background/i.test(text))
-        return false;
-      const candidates = dialog.querySelectorAll ? Array.from(dialog.querySelectorAll('button, sp-button, [role="button"], a, div, span')) : [];
-      for (const el of candidates){
-        if (!visible(el)) continue;
-        const label = textOf(el);
-        if (!label) continue;
-        if (/^remove background$/i.test(label) || (/remove background/i.test(label) && !/edit original image|add to a new design|start from your image/i.test(label))){
-          const target = clickableAncestor(el, dialog);
-          if (clickTarget(target)){
-            clicked.push('Remove background');
-            return true;
-          }
-        }
-      }
-      return false;
-    }
     function scan(root){
       const dialogs = root.querySelectorAll ? root.querySelectorAll('[aria-modal="true"], [role="dialog"], sp-dialog[open], qa-error-modal, .modal, [class*="modal"], [class*="dialog"]') : [];
       for (const dialog of dialogs){
         if (!visible(dialog)) continue;
         const text = textOf(dialog);
         if (authRe.test(text)) continue;
-        if (chooseRemoveBackground(dialog)) return;
+        if (/start from your image/i.test(text) && /remove background/i.test(text)) continue;
 
         const buttons = dialog.querySelectorAll ? Array.from(dialog.querySelectorAll('button, sp-button, [role="button"], a')) : [];
         for (const btn of buttons){
@@ -876,6 +908,22 @@ def prepare_tool(driver):
     wait_until_ready(driver)
 
 
+def prepare_fresh_tool(driver):
+    for restart_idx in range(0, MAX_TOOL_READY_RESTARTS + 1):
+        try:
+            prepare_tool(driver)
+            return driver
+        except StaleAdobeProjectStateError as exc:
+            if restart_idx >= MAX_TOOL_READY_RESTARTS:
+                raise
+            log(
+                f"[browser] stale Adobe project chooser detected; restarting Chrome "
+                f"({restart_idx + 1}/{MAX_TOOL_READY_RESTARTS}): {exc}"
+            )
+            driver = restart_driver(driver, "stale Adobe project chooser")
+    return driver
+
+
 # ===============================
 # Upload flow
 # ===============================
@@ -883,10 +931,20 @@ def wait_until_ready(driver, timeout=MAX_WAIT_READY_SEC):
     t = StepTimer("wait_until_ready")
     end = time.time() + timeout
     while time.time() < end:
+        if detect_start_from_image_modal(driver):
+            raise StaleAdobeProjectStateError(
+                "Adobe opened the stale 'Start from your image' chooser while waiting for the upload page"
+            )
         if deep_query_iframes_one(driver, "input[type='file']"):
+            if not deep_query_text_iframes(driver, r"\bremove background\b", "*"):
+                time.sleep(0.3)
+                continue
             t.done("file input present")
             return True
-        if deep_query_text_iframes(driver, r"(tap to upload|upload image|drag.*drop|upload)", "*"):
+        if (
+            deep_query_text_iframes(driver, r"(tap to upload|upload image|drag.*drop|upload)", "*")
+            and deep_query_text_iframes(driver, r"\bremove background\b", "*")
+        ):
             t.done("upload CTA present")
             return True
         time.sleep(0.3)
@@ -1674,12 +1732,16 @@ def main(argv=None):
                 fr = FileResult(name=jpg.name, status="")
                 bar.text = f"→ {jpg.name}"
                 log(f"[proc {idx}/{len(files)}] {jpg}")
-                for attempt in range(1, MAX_FILE_ATTEMPTS + 1):
+                attempt = 1
+                stale_project_restarts = 0
+                force_prepare = False
+                while attempt <= MAX_FILE_ATTEMPTS:
                     try:
                         # Navigate / get ready
-                        if RELOAD_EACH_FILE or idx == 1 or attempt > 1:
+                        if force_prepare or RELOAD_EACH_FILE or idx == 1 or attempt > 1:
                             bar.text = f"→ {jpg.name} : opening tool"
-                            prepare_tool(driver)
+                            driver = prepare_fresh_tool(driver)
+                            force_prepare = False
 
                         # --- Size enforcement (pre-upload) ---
                         upload_path = str(jpg)  # stays the same (no temp filename to upload)
@@ -1710,7 +1772,9 @@ def main(argv=None):
                                     f"[retry] processing timed out for {jpg.name}; restarting Chrome "
                                     f"and retrying same file (attempt {attempt + 1}/{MAX_FILE_ATTEMPTS})"
                                 )
+                                attempt += 1
                                 driver = restart_driver(driver, f"processing timeout for {jpg.name}")
+                                force_prepare = True
                                 continue
                             fr.status = "ERROR"
                             fr.detail = "Processing did not expose controls in time"
@@ -1754,7 +1818,9 @@ def main(argv=None):
                                     f"[retry] download timed out for {jpg.name}; restarting Chrome "
                                     f"and retrying same file (attempt {attempt + 1}/{MAX_FILE_ATTEMPTS})"
                                 )
+                                attempt += 1
                                 driver = restart_driver(driver, f"download timeout for {jpg.name}")
+                                force_prepare = True
                                 continue
                             fr.status = "ERROR"
                             fr.detail = "No file downloaded (timed out)"
@@ -1784,11 +1850,27 @@ def main(argv=None):
                         if is_browser_crash(e):
                             if attempt < MAX_FILE_ATTEMPTS:
                                 log(f"[warn] browser crash while processing {jpg.name}; retrying (attempt {attempt + 1}/{MAX_FILE_ATTEMPTS})")
+                                attempt += 1
                                 driver = restart_driver(driver, str(e))
+                                force_prepare = True
                                 continue
                             driver = restart_driver(driver, str(e))
                         fr.status = "ERROR"
                         fr.detail = f"Selenium failure: {str(e).splitlines()[0]}"
+                        break
+                    except StaleAdobeProjectStateError as e:
+                        if stale_project_restarts < MAX_TOOL_READY_RESTARTS:
+                            stale_project_restarts += 1
+                            log(
+                                f"[retry] stale Adobe project state while processing {jpg.name}; restarting Chrome "
+                                f"and retrying same file (stale restart {stale_project_restarts}/{MAX_TOOL_READY_RESTARTS}; "
+                                f"file attempt {attempt}/{MAX_FILE_ATTEMPTS})"
+                            )
+                            driver = restart_driver(driver, str(e))
+                            force_prepare = True
+                            continue
+                        fr.status = "ERROR"
+                        fr.detail = str(e).splitlines()[0] if str(e) else "Stale Adobe project state"
                         break
                     except AdobeLoginRequiredError as e:
                         if attempt < MAX_FILE_ATTEMPTS:
@@ -1796,7 +1878,9 @@ def main(argv=None):
                                 f"[retry] Adobe auth/modal blocker while processing {jpg.name}; restarting Chrome "
                                 f"and retrying same file (attempt {attempt + 1}/{MAX_FILE_ATTEMPTS})"
                             )
+                            attempt += 1
                             driver = restart_driver(driver, f"Adobe blocker for {jpg.name}")
+                            force_prepare = True
                             continue
                         fr.status = "ERROR"
                         fr.detail = str(e).splitlines()[0] if str(e) else "Adobe login required before download"
