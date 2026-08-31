@@ -146,6 +146,8 @@ SEL_ORIG_DIR=./config/people_dirs/original            # keep original JPGs here
 SEL_TOOL_URL=https://new.express.adobe.com/tools/remove-background
 SEL_USER_DATA_DIR=./config/chrome-profile
 SEL_PROFILE_DIR=Default
+SEL_HEADLESS_USER_DATA_DIR=./config/chrome-profile-headless
+SEL_HEADLESS_PROFILE_DIR=Default
 SEL_DOWNLOAD_DIR=./config/sel_downloads               # output PNGs from Adobe Express
 
 # Size enforcement (input JPGs)
@@ -181,8 +183,14 @@ SEL_WINDOW_SIZE=1400,1000
 > For unattended runs, set `SEL_PROMPT_FOR_LOGIN=false`; auth/download gates
 > will fail the current attempt instead of waiting for terminal input.
 > `SEL_HEADLESS=true` runs Chrome without a visible browser window. Treat it as
-> opt-in because Adobe Express can behave differently in headless mode; if Adobe
-> requires login during a headless run, the script exits instead of waiting.
+> opt-in because Adobe Express can behave differently in headless mode. Headless
+> mode uses `SEL_HEADLESS_USER_DATA_DIR`/`SEL_HEADLESS_PROFILE_DIR`, separate
+> from the normal headed profile, so it does not corrupt or crash the visible
+> Chrome profile. If Adobe requires login during a headless run, the script exits
+> instead of waiting.
+> To prepare the headless profile in PowerShell, first open it visibly and sign
+> in: `$env:SEL_HEADLESS="false"; $env:SEL_USER_DATA_DIR="./config/chrome-profile-headless"; $env:SEL_PROFILE_DIR="Default"; python sel_remove_bg.py --login-only`.
+> Then run the batch with `$env:SEL_HEADLESS="true"; $env:SEL_PROMPT_FOR_LOGIN="false"`.
 > Stale Adobe project/modals and processing/download timeouts are retried by
 > restarting Chrome and reprocessing the same JPG up to `SEL_MAX_FILE_ATTEMPTS`.
 > If Adobe opens the "Start from your image" chooser after upload, the Selenium

@@ -65,10 +65,20 @@ if not ENV_FILE.exists():
 # --- Only load from ./config/.env (no fallback to CWD) ---
 load_dotenv(ENV_FILE)
 
+
+def env_bool(name: str, default: str = "false") -> bool:
+    return os.getenv(name, default).lower() in ("1", "true", "yes", "y")
+
+
 # Chrome profile (keeps you signed in)
+HEADLESS = env_bool("SEL_HEADLESS", "false")
 URL = os.getenv("SEL_TOOL_URL", "https://new.express.adobe.com/tools/remove-background")
-USER_DATA_DIR = os.getenv("SEL_USER_DATA_DIR", str(Path.cwd() / "chrome-profile"))
-PROFILE_DIR = os.getenv("SEL_PROFILE_DIR", "Profile 1")
+HEADED_USER_DATA_DIR = os.getenv("SEL_USER_DATA_DIR", str(Path.cwd() / "chrome-profile"))
+HEADED_PROFILE_DIR = os.getenv("SEL_PROFILE_DIR", "Profile 1")
+HEADLESS_USER_DATA_DIR = os.getenv("SEL_HEADLESS_USER_DATA_DIR", str(Path.cwd() / "chrome-profile-headless"))
+HEADLESS_PROFILE_DIR = os.getenv("SEL_HEADLESS_PROFILE_DIR", "Default")
+USER_DATA_DIR = HEADLESS_USER_DATA_DIR if HEADLESS else HEADED_USER_DATA_DIR
+PROFILE_DIR = HEADLESS_PROFILE_DIR if HEADLESS else HEADED_PROFILE_DIR
 
 # Normalize to absolute paths even if .env uses relative paths
 SRC_DIR = Path(os.getenv("SEL_SRC_DIR", str(Path.cwd()))).resolve()
@@ -81,19 +91,18 @@ PROC_TIMEOUT = int(os.getenv("SEL_PROC_TIMEOUT", "120"))  # wait for processing 
 MAX_WAIT_DL_SEC = int(os.getenv("SEL_MAX_WAIT_DL_SEC", "240"))  # wait for file to appear
 DL_BTN_TIMEOUT = int(os.getenv("SEL_DL_BUTTON_TIMEOUT", "20"))  # how long to wait for button to be found
 FAST_DL_CHECK_SEC = max(2, int(os.getenv("SEL_FAST_DL_CHECK_SEC", "6")))
-RELOAD_EACH_FILE = os.getenv("SEL_RELOAD_EACH_FILE", "true").lower() in ("1", "true", "yes", "y")
-RESTART_BROWSER_EACH_FILE = os.getenv("SEL_RESTART_BROWSER_EACH_FILE", "true").lower() in ("1", "true", "yes", "y")
+RELOAD_EACH_FILE = env_bool("SEL_RELOAD_EACH_FILE", "true")
+RESTART_BROWSER_EACH_FILE = env_bool("SEL_RESTART_BROWSER_EACH_FILE", "true")
 MAX_FILE_ATTEMPTS = max(1, int(os.getenv("SEL_MAX_FILE_ATTEMPTS", "2")))
-PROMPT_FOR_LOGIN = os.getenv("SEL_PROMPT_FOR_LOGIN", "true").lower() in ("1", "true", "yes", "y")
+PROMPT_FOR_LOGIN = env_bool("SEL_PROMPT_FOR_LOGIN", "true")
 LOGIN_WAIT_SEC = max(30, int(os.getenv("SEL_LOGIN_WAIT_SEC", "900")))
-HEADLESS = os.getenv("SEL_HEADLESS", "false").lower() in ("1", "true", "yes", "y")
-DISABLE_CHROME_RESTORE = os.getenv("SEL_DISABLE_CHROME_RESTORE", "true").lower() in ("1", "true", "yes", "y")
+DISABLE_CHROME_RESTORE = env_bool("SEL_DISABLE_CHROME_RESTORE", "true")
 MAX_TOOL_READY_RESTARTS = max(1, int(os.getenv("SEL_MAX_TOOL_READY_RESTARTS", "5")))
 
 # Size enforcement
 EXPECT_W = int(os.getenv("SEL_EXPECT_WIDTH", "2000"))
 EXPECT_H = int(os.getenv("SEL_EXPECT_HEIGHT", "3000"))
-ENFORCE_SIZE = os.getenv("SEL_ENFORCE_SIZE", "true").lower() in ("1", "true", "yes", "y")
+ENFORCE_SIZE = env_bool("SEL_ENFORCE_SIZE", "true")
 
 # Make sure folders exist
 SRC_DIR.mkdir(parents=True, exist_ok=True)
@@ -363,6 +372,8 @@ def build_driver():
     if HEADLESS:
         opts.add_argument("--headless=new")
         opts.add_argument("--disable-gpu")
+        opts.add_argument("--remote-debugging-port=0")
+        opts.add_argument("--disable-dev-shm-usage")
         opts.add_argument(f"--window-size={WINDOW_W},{WINDOW_H}")
     else:
         opts.add_argument("--start-maximized")
@@ -384,10 +395,17 @@ def build_driver():
     try:
         driver = webdriver.Chrome(options=opts, service=service)
     except Exception as exc:
+        mode = "headless" if HEADLESS else "headed"
+        profile_hint = (
+            " For headless mode, sign into Adobe once using the separate headless profile in headed mode, "
+            "then retry with SEL_HEADLESS=true."
+            if HEADLESS else
+            " Close any Chrome windows using this automation profile and retry."
+        )
         detail = (
-            f"Chrome failed to start with user-data dir '{user_data_dir}'"
+            f"Chrome failed to start in {mode} mode with user-data dir '{user_data_dir}'"
             + (f" and profile '{profile_dir}'" if profile_dir else "")
-            + f". Close any Chrome windows using this automation profile and retry. "
+            + f".{profile_hint} "
             + f"ChromeDriver log: {CHROMEDRIVER_LOG_FILE.resolve()}"
         )
         raise RuntimeError(detail) from exc
