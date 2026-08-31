@@ -1430,13 +1430,7 @@ def detect_download_blocker(driver) -> str:
             (node.shadowRoot && node.shadowRoot.querySelector('sp-dialog[open], [role="dialog"]')) ||
             (node.querySelector && node.querySelector('sp-dialog[open], [role="dialog"]')) ||
             node;
-          const consideredOpen =
-            !!(
-              (node.getAttribute && node.getAttribute('open') !== null) ||
-              (dialog && dialog.getAttribute && dialog.getAttribute('open') !== null) ||
-              (dialog && dialog.getAttribute && dialog.getAttribute('aria-modal') === 'true')
-            );
-          if (!consideredOpen && !isVisible(dialog) && !isVisible(node))
+          if (!isVisible(dialog) && !isVisible(node))
             continue;
 
           const text = textOf(dialog) || textOf(node);
