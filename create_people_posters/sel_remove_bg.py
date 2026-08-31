@@ -86,6 +86,7 @@ RESTART_BROWSER_EACH_FILE = os.getenv("SEL_RESTART_BROWSER_EACH_FILE", "true").l
 MAX_FILE_ATTEMPTS = max(1, int(os.getenv("SEL_MAX_FILE_ATTEMPTS", "2")))
 PROMPT_FOR_LOGIN = os.getenv("SEL_PROMPT_FOR_LOGIN", "true").lower() in ("1", "true", "yes", "y")
 LOGIN_WAIT_SEC = max(30, int(os.getenv("SEL_LOGIN_WAIT_SEC", "900")))
+HEADLESS = os.getenv("SEL_HEADLESS", "false").lower() in ("1", "true", "yes", "y")
 DISABLE_CHROME_RESTORE = os.getenv("SEL_DISABLE_CHROME_RESTORE", "true").lower() in ("1", "true", "yes", "y")
 MAX_TOOL_READY_RESTARTS = max(1, int(os.getenv("SEL_MAX_TOOL_READY_RESTARTS", "5")))
 
@@ -111,6 +112,19 @@ LOG_FILE = LOGS_DIR / "sel_remove_bg.log"
 CHROMEDRIVER_LOG_FILE = LOGS_DIR / "chromedriver.log"
 EFFECTIVE_USER_DATA_DIR = Path(USER_DATA_DIR).resolve()
 EFFECTIVE_PROFILE_DIR = PROFILE_DIR
+
+
+def parse_window_size(raw: str) -> tuple[int, int]:
+    try:
+        w_raw, h_raw = raw.lower().replace("x", ",").split(",", 1)
+        w = max(800, int(w_raw.strip()))
+        h = max(600, int(h_raw.strip()))
+        return w, h
+    except Exception:
+        return 1400, 1000
+
+
+WINDOW_W, WINDOW_H = parse_window_size(os.getenv("SEL_WINDOW_SIZE", "1400,1000"))
 
 
 def log(msg: str) -> None:
@@ -346,7 +360,12 @@ def build_driver():
         opts.add_argument("--hide-crash-restore-bubble")
         opts.add_argument("--disable-session-crashed-bubble")
         opts.add_argument("--restore-last-session=false")
-    opts.add_argument("--start-maximized")
+    if HEADLESS:
+        opts.add_argument("--headless=new")
+        opts.add_argument("--disable-gpu")
+        opts.add_argument(f"--window-size={WINDOW_W},{WINDOW_H}")
+    else:
+        opts.add_argument("--start-maximized")
     opts.add_experimental_option("excludeSwitches", ["enable-logging", "enable-automation"])
     opts.add_experimental_option("prefs", {
         "download.default_directory": str(DOWNLOAD_DIR),
@@ -372,10 +391,13 @@ def build_driver():
             + f"ChromeDriver log: {CHROMEDRIVER_LOG_FILE.resolve()}"
         )
         raise RuntimeError(detail) from exc
-    try:
-        driver.maximize_window()
-    except Exception:
-        driver.set_window_size(1400, 1000)
+    if HEADLESS:
+        driver.set_window_size(WINDOW_W, WINDOW_H)
+    else:
+        try:
+            driver.maximize_window()
+        except Exception:
+            driver.set_window_size(WINDOW_W, WINDOW_H)
 
     # Force download path via CDP (helps SPA downloads)
     try:
@@ -1489,6 +1511,10 @@ def prompt_for_adobe_login(driver) -> bool:
     log(f"[auth] Browser profile: {EFFECTIVE_USER_DATA_DIR} [{EFFECTIVE_PROFILE_DIR}]")
     log("[auth] Finish the Adobe sign-in/sign-up in the open Chrome window.")
 
+    if HEADLESS:
+        log("[auth] Headless mode is active, so interactive Adobe login cannot be completed in this run.")
+        return False
+
     if not PROMPT_FOR_LOGIN:
         log("[auth] Interactive login prompting is disabled by SEL_PROMPT_FOR_LOGIN=false.")
         return False
@@ -1710,6 +1736,7 @@ def main(argv=None):
         log(f"Adobe download dir: {DOWNLOAD_DIR}")
         log(f"Archive original dir: {ORIG_DIR}")
         log(f"Chrome profile dir: {EFFECTIVE_USER_DATA_DIR} [{EFFECTIVE_PROFILE_DIR}]")
+        log(f"Chrome mode: {'headless' if HEADLESS else 'headed'} ({WINDOW_W}x{WINDOW_H})")
         log("[auth] Preflight: this run will reuse the Chrome profile above for Adobe Express.")
         log("[auth] If Adobe download auth is missing, the run will pause and ask you to finish login in that browser window.")
         log(f"Run log file: {LOG_FILE.resolve()}")

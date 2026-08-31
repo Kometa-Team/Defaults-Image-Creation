@@ -163,6 +163,8 @@ SEL_MAX_FILE_ATTEMPTS=2
 SEL_RELOAD_EACH_FILE=true
 SEL_PROMPT_FOR_LOGIN=true
 SEL_LOGIN_WAIT_SEC=900
+SEL_HEADLESS=false
+SEL_WINDOW_SIZE=1400,1000
 ```
 
 > Tip: run `sel_remove_bg.py -v` once to see which env keys your build respects; the script logs the active configuration.
@@ -176,10 +178,16 @@ SEL_LOGIN_WAIT_SEC=900
 > the source folder. Run `python sel_remove_bg.py --login-only`, then resume with
 > `python orchestrator.py --redo remove_bg --no-recover-edge-chops`. The
 > orchestrator also prints the aborted step and the same recovery command.
+> For unattended runs, set `SEL_PROMPT_FOR_LOGIN=false`; auth/download gates
+> will fail the current attempt instead of waiting for terminal input.
+> `SEL_HEADLESS=true` runs Chrome without a visible browser window. Treat it as
+> opt-in because Adobe Express can behave differently in headless mode; if Adobe
+> requires login during a headless run, the script exits instead of waiting.
 > Stale Adobe project/modals and processing/download timeouts are retried by
 > restarting Chrome and reprocessing the same JPG up to `SEL_MAX_FILE_ATTEMPTS`.
 > If Adobe opens the "Start from your image" chooser after upload, the Selenium
-> step selects "Remove background" automatically.
+> step treats it as stale project state, restarts Chrome, and retries until it
+> gets the normal upload page headed "Remove background".
 
 ---
 
