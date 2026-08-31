@@ -1,5 +1,6 @@
 # sel_remove_bg.py
 import argparse
+import json
 import os, time, shutil, subprocess, sys
 from pathlib import Path
 from dataclasses import dataclass
@@ -85,6 +86,7 @@ RESTART_BROWSER_EACH_FILE = os.getenv("SEL_RESTART_BROWSER_EACH_FILE", "true").l
 MAX_FILE_ATTEMPTS = max(1, int(os.getenv("SEL_MAX_FILE_ATTEMPTS", "2")))
 PROMPT_FOR_LOGIN = os.getenv("SEL_PROMPT_FOR_LOGIN", "true").lower() in ("1", "true", "yes", "y")
 LOGIN_WAIT_SEC = max(30, int(os.getenv("SEL_LOGIN_WAIT_SEC", "900")))
+DISABLE_CHROME_RESTORE = os.getenv("SEL_DISABLE_CHROME_RESTORE", "true").lower() in ("1", "true", "yes", "y")
 
 # Size enforcement
 EXPECT_W = int(os.getenv("SEL_EXPECT_WIDTH", "2000"))
@@ -239,6 +241,50 @@ def cleanup_profile_locks(user_data_dir: Path, profile_dir: Optional[str]) -> No
         log(f"[chrome] removed stale profile lock file(s): {', '.join(removed)}")
 
 
+def mark_profile_clean_exit(user_data_dir: Path, profile_dir: Optional[str]) -> None:
+    """
+    Suppress Chrome's crash/session restore bubble for this automation profile.
+    This preserves cookies and login state; it only clears the dirty-exit flags.
+    """
+    paths = [user_data_dir / "Local State"]
+    if profile_dir:
+        paths.append(user_data_dir / profile_dir / "Preferences")
+
+    updated = []
+    for pref_path in paths:
+        if not pref_path.is_file():
+            continue
+        try:
+            data = json.loads(pref_path.read_text(encoding="utf-8"))
+        except Exception as exc:
+            log(f"[chrome] could not read clean-exit prefs from {pref_path}: {exc}")
+            continue
+
+        changed = False
+        profile = data.setdefault("profile", {})
+        if profile.get("exit_type") != "Normal":
+            profile["exit_type"] = "Normal"
+            changed = True
+        if profile.get("exited_cleanly") is not True:
+            profile["exited_cleanly"] = True
+            changed = True
+
+        if not changed:
+            continue
+
+        try:
+            pref_path.write_text(
+                json.dumps(data, ensure_ascii=False, separators=(",", ":")),
+                encoding="utf-8",
+            )
+            updated.append(str(pref_path))
+        except Exception as exc:
+            log(f"[chrome] could not write clean-exit prefs to {pref_path}: {exc}")
+
+    if updated:
+        log(f"[chrome] marked profile clean to suppress restore bubble: {', '.join(updated)}")
+
+
 class StepTimer:
     def __init__(self, label: str):
         self.label = label
@@ -278,6 +324,8 @@ def build_driver():
     user_data_dir.mkdir(parents=True, exist_ok=True)
     profile_dir = resolve_profile_directory(user_data_dir, PROFILE_DIR)
     cleanup_profile_locks(user_data_dir, profile_dir)
+    if DISABLE_CHROME_RESTORE:
+        mark_profile_clean_exit(user_data_dir, profile_dir)
     EFFECTIVE_USER_DATA_DIR = user_data_dir
     EFFECTIVE_PROFILE_DIR = profile_dir or "<none>"
 
@@ -289,6 +337,10 @@ def build_driver():
     opts.add_argument("--disable-features=PrivacySandboxAdsAPIs")
     opts.add_argument("--no-first-run")
     opts.add_argument("--no-default-browser-check")
+    if DISABLE_CHROME_RESTORE:
+        opts.add_argument("--hide-crash-restore-bubble")
+        opts.add_argument("--disable-session-crashed-bubble")
+        opts.add_argument("--restore-last-session=false")
     opts.add_argument("--start-maximized")
     opts.add_experimental_option("excludeSwitches", ["enable-logging", "enable-automation"])
     opts.add_experimental_option("prefs", {
@@ -297,6 +349,8 @@ def build_driver():
         "download.directory_upgrade": True,
         "safebrowsing.enabled": True,
         "profile.default_content_setting_values.automatic_downloads": 1,
+        "profile.exit_type": "Normal",
+        "profile.exited_cleanly": True,
     })
     try:
         CHROMEDRIVER_LOG_FILE.unlink(missing_ok=True)
