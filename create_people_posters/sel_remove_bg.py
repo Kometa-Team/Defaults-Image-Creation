@@ -73,9 +73,9 @@ def env_bool(name: str, default: str = "false") -> bool:
 # Chrome profile (keeps you signed in)
 HEADLESS = env_bool("SEL_HEADLESS", "false")
 URL = os.getenv("SEL_TOOL_URL", "https://new.express.adobe.com/tools/remove-background")
-HEADED_USER_DATA_DIR = os.getenv("SEL_USER_DATA_DIR", str(Path.cwd() / "chrome-profile"))
+HEADED_USER_DATA_DIR = os.getenv("SEL_USER_DATA_DIR", str(CONFIG_DIR / "chrome-profile"))
 HEADED_PROFILE_DIR = os.getenv("SEL_PROFILE_DIR", "Profile 1")
-HEADLESS_USER_DATA_DIR = os.getenv("SEL_HEADLESS_USER_DATA_DIR", str(Path.cwd() / "chrome-profile-headless"))
+HEADLESS_USER_DATA_DIR = os.getenv("SEL_HEADLESS_USER_DATA_DIR", str(CONFIG_DIR / "chrome-profile-headless"))
 HEADLESS_PROFILE_DIR = os.getenv("SEL_HEADLESS_PROFILE_DIR", "Default")
 USER_DATA_DIR = HEADLESS_USER_DATA_DIR if HEADLESS else HEADED_USER_DATA_DIR
 PROFILE_DIR = HEADLESS_PROFILE_DIR if HEADLESS else HEADED_PROFILE_DIR
@@ -1508,8 +1508,6 @@ def detect_download_blocker(driver) -> str:
     text = (hit.get("text") or "").strip()
     kind = (hit.get("kind") or "").strip().lower()
     if kind == "auth":
-        if download_button_still_ready(driver):
-            return ""
         return f"Adobe login required before download: {text}"
     if kind == "error":
         return f"Adobe reported a download error: {text}"
@@ -1527,11 +1525,12 @@ def prompt_for_adobe_login(driver) -> bool:
 
     log("[auth] Adobe login is required before files can be downloaded.")
     log(f"[auth] Browser profile: {EFFECTIVE_USER_DATA_DIR} [{EFFECTIVE_PROFILE_DIR}]")
-    log("[auth] Finish the Adobe sign-in/sign-up in the open Chrome window.")
 
     if HEADLESS:
         log("[auth] Headless mode is active, so interactive Adobe login cannot be completed in this run.")
         return False
+
+    log("[auth] Finish the Adobe sign-in/sign-up in the open Chrome window.")
 
     if not PROMPT_FOR_LOGIN:
         log("[auth] Interactive login prompting is disabled by SEL_PROMPT_FOR_LOGIN=false.")
@@ -1632,6 +1631,36 @@ def run_login_only() -> int:
             pass
 
 
+def accept_downloaded_image(path: Path) -> bool:
+    """
+    Accept only real Adobe PNG outputs. Headless Adobe can return downloads.htm
+    for auth/download gates; never let that get renamed to a person PNG.
+    """
+    path = Path(path)
+    if path.suffix.lower() != ".png":
+        log(f"[dl] rejected non-PNG download: {path.name}")
+        try:
+            path.unlink(missing_ok=True)
+        except Exception:
+            pass
+        return False
+
+    try:
+        with Image.open(path) as im:
+            if im.format != "PNG":
+                raise ValueError(f"format={im.format!r}")
+            im.verify()
+    except Exception as exc:
+        log(f"[dl] rejected invalid PNG download: {path.name} ({exc})")
+        try:
+            path.unlink(missing_ok=True)
+        except Exception:
+            pass
+        return False
+
+    return True
+
+
 def wait_for_new_download():
     def snapshot():
         snap = {}
@@ -1665,6 +1694,8 @@ def wait_for_new_download():
                         final = f.with_suffix("")
                         try:
                             if final.exists() and final.stat().st_size > 0:
+                                if not accept_downloaded_image(final):
+                                    continue
                                 log(f"[dl] detected completed: {final.name} @ {final}")
                                 t.done()
                                 return final
@@ -1673,6 +1704,8 @@ def wait_for_new_download():
                         continue
 
                     if size > 0:
+                        if not accept_downloaded_image(f):
+                            continue
                         log(f"[dl] detected: {f.name} @ {f}")
                         t.done()
                         return f
@@ -1689,6 +1722,9 @@ def wait_for_new_download():
                     reverse=True,
                 )
                 if candidates:
+                    if not accept_downloaded_image(candidates[0]):
+                        time.sleep(0.3)
+                        continue
                     log(f"[dl] detected finalized file: {candidates[0].name} @ {candidates[0]}")
                     t.done()
                     return candidates[0]

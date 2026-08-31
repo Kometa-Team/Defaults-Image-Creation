@@ -43,6 +43,8 @@ OptimalPointSizeCache.db
 # Ignore these directories
 uploads/
 .vscode/
+create_people_posters/chrome-profile/
+create_people_posters/chrome-profile-headless/
 config/
 defaults-ar/
 defaults-bu/
