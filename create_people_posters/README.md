@@ -388,7 +388,21 @@ without source QA.
 python orchestrator.py
 ```
 
-### Common operator commands
+### Most used commands
+
+Use this section for normal day-to-day operation. These commands assume you are
+in `create_people_posters` with the venv activated and `PEOPLE_IMAGES_DIR`
+pointing at the folder that contains the seven local People image repos.
+
+Resume the pipeline from the first incomplete checkpoint:
+
+```bash
+python orchestrator.py
+```
+
+Use this after a crash, CTRL-C, reboot, or any run that printed a `[NEXT]`
+resume command. The orchestrator will reuse checkpoints and continue from the
+right step.
 
 Run the normal people pipeline from a folder of Kometa logs:
 
@@ -396,11 +410,27 @@ Run the normal people pipeline from a folder of Kometa logs:
 python orchestrator.py --logs-dir "C:/path/to/kometa/logs"
 ```
 
+Use this when the input is a batch of Kometa logs and you want the full
+missing-person discovery through sync/push flow.
+
 Retry from log scanning when you want to rescan the same folder:
 
 ```bash
 python orchestrator.py --redo scan_kometa_logs --logs-dir "C:/path/to/kometa/logs"
 ```
+
+Use this when new logs were added, the previous name scan was wrong, or you
+changed log/name discovery settings.
+
+Redo from TMDB download/list processing forward:
+
+```bash
+python orchestrator.py --redo tmdb
+```
+
+Use this after editing `config/people_list.txt`, after generating a TMDB popular
+people list, or when you intentionally want to discard later checkpoints and run
+TMDB download plus all downstream image steps again.
 
 Build `config/people_list.txt` from TMDB popular people:
 
@@ -415,6 +445,10 @@ python tmdb_top_people_list.py --limit 1000 --require-profile
 python orchestrator.py --redo tmdb
 ```
 
+Use this to grow the People repos from TMDB popularity rather than Kometa logs.
+The `--require-profile` flag filters out people without usable TMDB profile
+images.
+
 Use a smaller TMDB popular batch:
 
 ```bash
@@ -422,11 +456,17 @@ python tmdb_top_people_list.py --limit 250 --require-profile
 python orchestrator.py --redo tmdb
 ```
 
+Use smaller batches when you want a faster manual review cycle or when Adobe is
+being unstable.
+
 Audit warning-based recovery targets without changing files:
 
 ```bash
 python recover_edge_chops.py --all --audit-only --recover-warnings headchop
 ```
+
+Use audit-only first when you want to see the current backlog without staging
+new files into `config/people_dirs/Downloads`.
 
 Whole-tree recovery scans the transparent repo tree from `PEOPLE_IMAGES_DIR`
 by default, not the temporary `config/people_dirs` build folders. It checks
@@ -451,12 +491,52 @@ python recover_edge_chops.py --all --limit 25 --recover-warnings face-chin,face-
 python recover_edge_chops.py --all --limit 100 --recover-warnings all
 ```
 
+Use recovery batches after audits show headchop/grayscale issues in the repo.
+Recovery searches TMDB alternates, runs local rembg prechecks, skips exhausted
+names, stages viable candidates, and hands off to the normal orchestrator flow.
+Do not start a new recovery batch while `config/people_dirs/Downloads` still has
+pending JPGs from a prior batch.
+
 Run ad hoc QA reports:
 
 ```bash
 python image_check.py --input_directory "C:/Users/bullmoose20/Kometa-People-Images/transparent" --style transparent
 python compare_image_trees.py --repo-root "C:/Users/bullmoose20/Kometa-People-Images"
 ```
+
+Use `image_check.py` for one style/tree when you want detailed image-quality
+warnings. Use `compare_image_trees.py` for the seven local repos when you want
+presence drift, dimensions, README drift, grayscale, transparency, and crop-risk
+reporting in one pass.
+
+Check local git status across the seven People repos:
+
+```bash
+python update_people_repos.py --op status --repo-root "C:/Users/bullmoose20/Kometa-People-Images"
+```
+
+Use this when a workflow push was rejected, README counts look inconsistent, or
+you need to know which repos are dirty, ahead, or behind before continuing.
+
+Push repo changes manually:
+
+```bash
+python update_people_repos.py --op push --repo-root "C:/Users/bullmoose20/Kometa-People-Images"
+```
+
+Use this only when images were already synced into the seven repos but the
+orchestrator stopped before or during the push step. Normal orchestrator runs
+push automatically.
+
+Refresh Adobe login/profile:
+
+```bash
+python sel_remove_bg.py --login-only
+```
+
+Use this when Adobe auth expires, download is blocked by login, or you are
+setting up a fresh Selenium/Chrome profile. After signing in, resume with the
+`python orchestrator.py --redo remove_bg` command printed by the failed run.
 
 Clean generated `config` artifacts:
 
