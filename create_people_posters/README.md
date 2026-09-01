@@ -109,6 +109,8 @@ EDGE_CHOP_REJECT_GRAYSCALE=true                       # do not accept B/W TMDB a
 EDGE_CHOP_COLORIZE_GRAYSCALE=true                     # try DeOldify before rejecting B/W alternates
 EDGE_CHOP_RECOVER_WARNINGS=headchop                   # headchop,grayscale,face-chin,face-side,all
 EDGE_CHOP_COVERAGE_THRESHOLD=0.015                    # foreground edge coverage threshold for headchop checks
+EDGE_CHOP_PRECHECK_THRESHOLD=0.03                     # stricter local rembg alpha-mean threshold before Adobe
+EDGE_CHOP_PRECHECK_COVERAGE_THRESHOLD=0.005           # stricter local rembg foreground coverage threshold before Adobe
 EDGE_CHOP_ALPHA_MIN=8                                  # alpha value counted as foreground for edge coverage
 EDGE_CHOP_EXHAUSTED_FILE=./config/edge_chop_recovery/exhausted_names.txt
 EDGE_CHOP_ATTEMPTED_FILE=./config/edge_chop_recovery/attempted_candidates.csv
@@ -728,6 +730,9 @@ command to skip that attempted TMDB image and try the next unattempted
 candidate. If no alternate clears the check, the script restores the previous local style outputs, writes
 `./config/edge_chop_recovery/edge_chop_recovery.csv`, records the person in
 `./config/edge_chop_recovery/exhausted_names.txt`, and continues the pipeline.
+The recovery CSV includes `precheck_metrics` and `final_metrics` columns for
+headchop runs so you can compare local `rembg` alpha/coverage values against
+the Adobe final-output values.
 Future recovery batches skip names in that exhausted file; remove a name from the
 file if you want to retry it later. Batch staging also records tried TMDB image
 paths in `./config/edge_chop_recovery/attempted_candidates.csv` so the next
@@ -738,6 +743,10 @@ Set `ORCH_RECOVER_EDGE_CHOPS=false` or pass `--no-recover-edge-chops` to skip it
 Set `EDGE_CHOP_PRECHECK_REMBG=false` or pass `--no-precheck-rembg` only when you
 need to diagnose the older Adobe-only retry path. `rembg` is included in
 `requirements.txt`; its model weights may download to `REMBG_HOME` on first use.
+Local `rembg` precheck is intentionally stricter than final QA by default:
+`EDGE_CHOP_PRECHECK_THRESHOLD=0.03` and
+`EDGE_CHOP_PRECHECK_COVERAGE_THRESHOLD=0.005`, while final repo/audit checks keep
+using `EDGE_CHOP_THRESHOLD=0.06` and `EDGE_CHOP_COVERAGE_THRESHOLD=0.015`.
 Set `EDGE_CHOP_COLORIZE_GRAYSCALE=false` to skip the DeOldify attempt, or set
 `EDGE_CHOP_REJECT_GRAYSCALE=false` / pass `--allow-grayscale` only for a manual
 exception.

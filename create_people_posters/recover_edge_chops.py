@@ -129,6 +129,8 @@ class RecoveryRow:
     chosen_url: str = ""
     initial_issues: str = ""
     final_issues: str = ""
+    precheck_metrics: str = ""
+    final_metrics: str = ""
     note: str = ""
 
 
@@ -240,11 +242,21 @@ def selected_face_checks(recover_warnings: Iterable[str]) -> tuple[str, ...]:
     return tuple(checks)
 
 
-def transparent_target_issues(path: Path, args: argparse.Namespace) -> list[str]:
+def transparent_target_issues(
+    path: Path,
+    args: argparse.Namespace,
+    edge_threshold: float | None = None,
+    coverage_threshold: float | None = None,
+) -> list[str]:
     issues: list[str] = []
     selected = set(args.recover_warnings)
     if "headchop" in selected:
-        result = detect_edge_chops(path, threshold=args.threshold, edges=args.report_edges)
+        result = detect_edge_chops(
+            path,
+            threshold=args.threshold if edge_threshold is None else edge_threshold,
+            edges=args.report_edges,
+            coverage_threshold=coverage_threshold,
+        )
         summary = issue_summary(result)
         if result.error:
             issues.append(f"edge check error: {summary}")
@@ -267,8 +279,46 @@ def transparent_target_issues(path: Path, args: argparse.Namespace) -> list[str]
     return issues
 
 
-def candidate_target_issues(path: Path, args: argparse.Namespace) -> list[str]:
-    issues = transparent_target_issues(path, args)
+def edge_metric_summary(
+    path: Path,
+    args: argparse.Namespace,
+    edge_threshold: float | None = None,
+    coverage_threshold: float | None = None,
+) -> str:
+    if "headchop" not in set(args.recover_warnings):
+        return ""
+    result = detect_edge_chops(
+        path,
+        threshold=args.threshold if edge_threshold is None else edge_threshold,
+        edges=args.report_edges,
+        coverage_threshold=coverage_threshold,
+    )
+    if result.error:
+        return f"edge_error={result.error}"
+    values = result.values()
+    coverages = result.coverages()
+    edges = parse_edges(args.retry_edges, ("top",)) or parse_edges(args.report_edges, ("top",))
+    metrics: list[str] = []
+    for edge in edges:
+        metrics.append(f"{edge}_mean={values[edge]:.4f}")
+        metrics.append(f"{edge}_coverage={coverages[edge]:.4f}")
+    metrics.append(f"mean_threshold={result.threshold:.4f}")
+    metrics.append(f"coverage_threshold={result.coverage_threshold:.4f}")
+    return "; ".join(metrics)
+
+
+def candidate_target_issues(
+    path: Path,
+    args: argparse.Namespace,
+    edge_threshold: float | None = None,
+    coverage_threshold: float | None = None,
+) -> list[str]:
+    issues = transparent_target_issues(
+        path,
+        args,
+        edge_threshold=edge_threshold,
+        coverage_threshold=coverage_threshold,
+    )
     if "grayscale" in set(args.recover_warnings):
         noncolor = noncolor_summary(
             path,
@@ -684,7 +734,7 @@ def build_rembg_session(model: str):
     return new_session(model)
 
 
-def rembg_precheck_candidate(args: argparse.Namespace, staged_jpg: Path, precheck_png: Path) -> tuple[bool, str]:
+def rembg_precheck_candidate(args: argparse.Namespace, staged_jpg: Path, precheck_png: Path) -> tuple[bool, str, str]:
     try:
         from rembg import remove
 
@@ -704,12 +754,23 @@ def rembg_precheck_candidate(args: argparse.Namespace, staged_jpg: Path, prechec
         raise RuntimeError(f"rembg precheck failed for {staged_jpg}: {exc}") from exc
 
     try:
-        issues = candidate_target_issues(precheck_png, args)
+        issues = candidate_target_issues(
+            precheck_png,
+            args,
+            edge_threshold=args.precheck_threshold,
+            coverage_threshold=args.precheck_coverage_threshold,
+        )
     except Exception as exc:
         raise RuntimeError(f"rembg precheck could not audit {precheck_png}: {exc}") from exc
+    metrics = edge_metric_summary(
+        precheck_png,
+        args,
+        edge_threshold=args.precheck_threshold,
+        coverage_threshold=args.precheck_coverage_threshold,
+    )
     if issues:
-        return False, "; ".join(issues)
-    return True, "selected recovery warnings cleared"
+        return False, "; ".join(issues), metrics
+    return True, "selected recovery warnings cleared", metrics
 
 
 def style_file_paths(people_root: Path, name: str) -> list[Path]:
@@ -829,17 +890,18 @@ def postcheck_staged_outputs(rows: list[RecoveryRow], args: argparse.Namespace) 
             row.note += "; post-orchestrator check failed; rerun recovery after fixing the QA error"
             log(f"[postcheck] {row.name}: {row.final_issues}")
             continue
+        row.final_metrics = edge_metric_summary(transparent, args)
 
         if issues:
             row.status = "unresolved"
             row.final_issues = "; ".join(issues)
             row.note += "; post-orchestrator final output still has selected warning(s); rerun recovery to try the next TMDB candidate"
-            log(f"[postcheck] {row.name}: final output still has selected warning(s): {row.final_issues}")
+            log(f"[postcheck] {row.name}: final output still has selected warning(s): {row.final_issues}; {row.final_metrics}")
         else:
             row.status = "recovered"
             row.final_issues = ""
             row.note += "; post-orchestrator final QA passed"
-            log(f"[postcheck] {row.name}: final selected-warning QA passed")
+            log(f"[postcheck] {row.name}: final selected-warning QA passed; {row.final_metrics}")
     return checked
 
 
@@ -978,16 +1040,17 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
             if args.precheck_rembg:
                 precheck_png = candidate_dir / f"{candidate.label}.rembg.png"
                 try:
-                    should_try, precheck_summary = rembg_precheck_candidate(args, staged_jpg, precheck_png)
+                    should_try, precheck_summary, precheck_metrics = rembg_precheck_candidate(args, staged_jpg, precheck_png)
                 except RuntimeError as exc:
                     restore_backups(backups, paths)
                     raise RuntimeError(f"{name} {candidate.label}: {exc}") from exc
                 if not should_try:
                     row.precheck_rejected += 1
-                    log(f"[precheck] {name} {candidate.label}: rembg still has selected warning(s): {precheck_summary}")
+                    log(f"[precheck] {name} {candidate.label}: rembg still has selected warning(s): {precheck_summary}; {precheck_metrics}")
                     continue
+                row.precheck_metrics = precheck_metrics
                 if precheck_summary:
-                    log(f"[precheck] {name} {candidate.label}: rembg cleared selected warning(s); {precheck_summary}")
+                    log(f"[precheck] {name} {candidate.label}: rembg cleared selected warning(s); {precheck_summary}; {precheck_metrics}")
 
             rc = run_step(f"remove-bg retry {name} {candidate.label}", [sys.executable, "sel_remove_bg.py"], env)
             if rc != 0:
@@ -1030,6 +1093,7 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
             except Exception as exc:
                 restore_backups(backups, paths)
                 raise RuntimeError(f"{name} {candidate.label}: final selected-warning check failed: {exc}") from exc
+            row.final_metrics = edge_metric_summary(transparent, args)
 
             if not final_issues:
                 row.status = "recovered"
@@ -1045,11 +1109,12 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                     row.note += f"; rembg precheck rejected {row.precheck_rejected} earlier candidates"
                 return row
 
-            log(f"[retry] {name} {candidate.label} still has selected warning(s): {'; '.join(final_issues)}")
+            log(f"[retry] {name} {candidate.label} still has selected warning(s): {'; '.join(final_issues)}; {row.final_metrics}")
 
         restore_backups(backups, paths)
         current = final_transparent_path(args.people_root, name)
         row.final_issues = "; ".join(candidate_target_issues(current, args)) if current.exists() else ""
+        row.final_metrics = edge_metric_summary(current, args) if current.exists() else ""
         row.status = "exhausted"
         row.note = "no TMDB alternate cleared selected recovery warnings; restored previous local outputs"
         if row.grayscale_colorized:
@@ -1169,16 +1234,18 @@ def stage_one_for_orchestrator(
             if args.precheck_rembg:
                 precheck_png = candidate_dir / f"{candidate.label}.rembg.png"
                 try:
-                    should_try, precheck_summary = rembg_precheck_candidate(args, staged_jpg, precheck_png)
+                    should_try, precheck_summary, precheck_metrics = rembg_precheck_candidate(args, staged_jpg, precheck_png)
                 except RuntimeError as exc:
                     raise RuntimeError(f"{name} {candidate.label}: {exc}") from exc
                 if not should_try:
                     row.precheck_rejected += 1
-                    log(f"[precheck] {name} {candidate.label}: rembg still has selected warning(s): {precheck_summary}")
-                    record_attempt("precheck_rejected", precheck_summary)
+                    note = f"{precheck_summary}; {precheck_metrics}"
+                    log(f"[precheck] {name} {candidate.label}: rembg still has selected warning(s): {note}")
+                    record_attempt("precheck_rejected", note)
                     continue
+                row.precheck_metrics = precheck_metrics
                 if precheck_summary:
-                    log(f"[precheck] {name} {candidate.label}: rembg cleared selected warning(s); {precheck_summary}")
+                    log(f"[precheck] {name} {candidate.label}: rembg cleared selected warning(s); {precheck_summary}; {precheck_metrics}")
 
             target = args.downloads_dir / f"{name}.jpg"
             args.downloads_dir.mkdir(parents=True, exist_ok=True)
@@ -1218,6 +1285,8 @@ def write_report(out_root: Path, rows: list[RecoveryRow]) -> None:
                 "chosen_url",
                 "initial_issues",
                 "final_issues",
+                "precheck_metrics",
+                "final_metrics",
                 "note",
             ],
         )
@@ -1235,6 +1304,8 @@ def write_report(out_root: Path, rows: list[RecoveryRow]) -> None:
                     "chosen_url": row.chosen_url,
                     "initial_issues": row.initial_issues,
                     "final_issues": row.final_issues,
+                    "precheck_metrics": row.precheck_metrics,
+                    "final_metrics": row.final_metrics,
                     "note": row.note,
                 }
             )
@@ -1282,6 +1353,12 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--tmdb-limit", type=int, default=int(os.getenv("EDGE_CHOP_TMDB_LIMIT", "12")))
     ap.add_argument("--precheck-rembg", dest="precheck_rembg", action="store_true", default=env_bool("EDGE_CHOP_PRECHECK_REMBG", True))
     ap.add_argument("--no-precheck-rembg", dest="precheck_rembg", action="store_false")
+    ap.add_argument("--precheck-threshold", type=float, default=float(os.getenv("EDGE_CHOP_PRECHECK_THRESHOLD", "0.03")))
+    ap.add_argument(
+        "--precheck-coverage-threshold",
+        type=float,
+        default=float(os.getenv("EDGE_CHOP_PRECHECK_COVERAGE_THRESHOLD", "0.005")),
+    )
     ap.add_argument("--rembg-model", default=os.getenv("EDGE_CHOP_REMBG_MODEL", "u2net"))
     ap.add_argument("--rembg-home", type=Path, default=Path(os.getenv("REMBG_HOME") or REMBG_HOME))
     ap.add_argument("--rembg-alpha-matting", action="store_true", default=env_bool("EDGE_CHOP_REMBG_ALPHA_MATTING", False))
@@ -1482,7 +1559,10 @@ def main() -> int:
         except Exception as exc:
             log(f"[error] rembg precheck could not initialize model {args.rembg_model}: {exc}")
             return 2
-        log(f"[info] rembg precheck enabled with model: {args.rembg_model}; home: {args.rembg_home}")
+        log(
+            f"[info] rembg precheck enabled with model: {args.rembg_model}; home: {args.rembg_home}; "
+            f"headchop threshold={args.precheck_threshold:.4f}; coverage={args.precheck_coverage_threshold:.4f}"
+        )
     else:
         log("[info] rembg precheck disabled")
     if args.reject_grayscale:
