@@ -424,11 +424,12 @@ Audit warning-based recovery targets without changing files:
 python recover_edge_chops.py --all --audit-only --recover-warnings headchop
 ```
 
-Whole-tree recovery audits the local cloned image repos from `PEOPLE_IMAGES_DIR`
-by default, not the temporary `config/people_dirs` build folders. It scans
-`PEOPLE_IMAGES_DIR/transparent` for head/face-crop warnings and the configured
-style repos for grayscale warnings, stages viable replacement originals into
-`config/people_dirs/Downloads`, then hands off to the orchestrator.
+Whole-tree recovery scans the transparent repo tree from `PEOPLE_IMAGES_DIR`
+by default, not the temporary `config/people_dirs` build folders. It checks
+selected recovery warnings there, including grayscale/non-color, stages viable
+replacement originals into `config/people_dirs/Downloads`, then hands off to the
+orchestrator. Use `compare_image_trees.py` / `image_check.py` for broad
+all-style audit reports.
 
 Recover warning-based batches through the normal orchestrator flow:
 
@@ -683,7 +684,8 @@ python recover_edge_chops.py --all --limit 100 --stage-only
 python recover_edge_chops.py --names "Person One" "Person Two"
 ```
 
-Whole-tree recovery reads from the repo root configured by `PEOPLE_IMAGES_DIR`.
+Whole-tree recovery reads the transparent repo tree from the repo root configured
+by `PEOPLE_IMAGES_DIR`.
 Use `EDGE_CHOP_PEOPLE_ROOT` or `--people-root` only when you intentionally want
 to scan a different local repo set; use `EDGE_CHOP_TRANSPARENT_ROOT` or
 `--transparent-root` only for a custom transparent tree. Target discovery logs

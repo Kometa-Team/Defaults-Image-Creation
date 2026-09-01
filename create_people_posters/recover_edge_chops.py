@@ -55,7 +55,6 @@ TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/original"
 TARGET_SIZE = (2000, 3000)
 SAME_IMAGE_HASH_DISTANCE = 8
 SAME_IMAGE_MEAN_DELTA = 6.0
-COLOR_REQUIRED_STYLES = {"diiivoycolor", "original", "rainier", "signature", "transparent"}
 RECOVERY_WARNING_CHOICES = {
     "headchop",
     "grayscale",
@@ -229,26 +228,6 @@ def iter_transparents(root: Path) -> Iterable[Path]:
                 continue
 
 
-def iter_style_images(root: Path) -> Iterable[Path]:
-    if not path_exists(root):
-        return
-    try:
-        walker = os.walk(root)
-    except OSError as exc:
-        log(f"[warn] style scan root is not readable: {root}; {exc}")
-        return
-    allowed = {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tif", ".tiff"}
-    for dirpath, dirnames, filenames in walker:
-        dirnames.sort(key=str.casefold)
-        for filename in sorted(filenames, key=str.casefold):
-            path = Path(dirpath) / filename
-            try:
-                if path.is_file() and path.suffix.lower() in allowed:
-                    yield path
-            except OSError:
-                continue
-
-
 def selected_face_checks(recover_warnings: Iterable[str]) -> tuple[str, ...]:
     checks: list[str] = []
     selected = set(recover_warnings)
@@ -314,6 +293,7 @@ def find_recovery_targets(
     exhausted_names = exhausted_names or set()
     scan_started = time.time()
     last_progress = scan_started
+    transparent_warning_scan = bool(selected.intersection({"headchop", "grayscale", "face-chin", "face-left", "face-right"}))
 
     def progress(kind: str, scanned: int, current: Path | None = None, force: bool = False) -> None:
         nonlocal last_progress
@@ -355,14 +335,14 @@ def find_recovery_targets(
         targets[key][2].append(issue)
         return max_matches > 0 and len(targets) >= max_matches
 
-    if selected.intersection({"headchop", "face-chin", "face-left", "face-right"}):
+    if transparent_warning_scan:
         scanned = 0
         progress("transparent", scanned, force=True)
         for path in iter_transparents(args.transparent_root):
             scanned += 1
             progress("transparent", scanned, path)
             name = path.stem
-            issues = transparent_target_issues(path, args)
+            issues = candidate_target_issues(path, args)
             if issues and add_target(name, path, "; ".join(issues)):
                 progress("transparent", scanned, path, force=True)
                 return [
@@ -371,33 +351,6 @@ def find_recovery_targets(
                 ], skipped_exhausted
         if scanned:
             progress("transparent", scanned, force=True)
-
-    if "grayscale" in selected:
-        for style in sorted(COLOR_REQUIRED_STYLES):
-            style_root = args.people_root / style
-            scanned = 0
-            progress(f"{style} grayscale", scanned, force=True)
-            for path in iter_style_images(style_root):
-                scanned += 1
-                progress(f"{style} grayscale", scanned, path)
-                name = path.stem.replace("_ccexpress", "")
-                try:
-                    noncolor = noncolor_summary(
-                        path,
-                        sat_threshold=args.grayscale_sat_threshold,
-                        sat_quantile=args.grayscale_sat_quantile,
-                        colorfulness_cutoff=args.grayscale_colorfulness_cutoff,
-                    )
-                except Exception as exc:
-                    noncolor = f"non-color check error: {exc}"
-                if noncolor and add_target(name, path, f"{style} non-color: {noncolor}"):
-                    progress(f"{style} grayscale", scanned, path, force=True)
-                    return [
-                        (name, path, "; ".join(issues))
-                        for name, path, issues in targets.values()
-                    ], skipped_exhausted
-            if scanned:
-                progress(f"{style} grayscale", scanned, force=True)
 
     return [
         (name, path, "; ".join(issues))
