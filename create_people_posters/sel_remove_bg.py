@@ -125,6 +125,7 @@ CHROMEDRIVER_LOG_FILE = LOGS_DIR / "chromedriver.log"
 EFFECTIVE_USER_DATA_DIR = Path(USER_DATA_DIR).resolve()
 EFFECTIVE_PROFILE_DIR = PROFILE_DIR
 EFFECTIVE_HEADLESS = HEADLESS
+ACTIVE_STARTUP_OVERRIDE: Optional[tuple[str, str, bool]] = None
 
 
 def parse_window_size(raw: str) -> tuple[int, int]:
@@ -397,9 +398,16 @@ def prepare_chrome_profile(user_data_dir_raw: str, profile_dir_raw: str) -> tupl
 
 
 def build_driver(force_headed: bool = False):
-    global EFFECTIVE_USER_DATA_DIR, EFFECTIVE_PROFILE_DIR, EFFECTIVE_HEADLESS
-    configured_headless = HEADLESS and not force_headed
-    primary_user_data_dir, primary_profile_dir = prepare_chrome_profile(USER_DATA_DIR, PROFILE_DIR)
+    global EFFECTIVE_USER_DATA_DIR, EFFECTIVE_PROFILE_DIR, EFFECTIVE_HEADLESS, ACTIVE_STARTUP_OVERRIDE
+    if ACTIVE_STARTUP_OVERRIDE and not force_headed:
+        startup_user_data_dir, startup_profile_dir, startup_headless = ACTIVE_STARTUP_OVERRIDE
+    else:
+        startup_user_data_dir = USER_DATA_DIR
+        startup_profile_dir = PROFILE_DIR
+        startup_headless = HEADLESS
+
+    configured_headless = startup_headless and not force_headed
+    primary_user_data_dir, primary_profile_dir = prepare_chrome_profile(startup_user_data_dir, startup_profile_dir)
     EFFECTIVE_USER_DATA_DIR = primary_user_data_dir
     EFFECTIVE_PROFILE_DIR = primary_profile_dir or "<none>"
 
@@ -446,6 +454,13 @@ def build_driver(force_headed: bool = False):
                 log("[chrome] headless profile startup failed; using normal headed automation profile")
             driver_user_data_dir = attempt_user_data_dir
             driver_profile_dir = attempt_profile_dir
+            if configured_headless and not headless_mode:
+                ACTIVE_STARTUP_OVERRIDE = (
+                    str(attempt_user_data_dir),
+                    attempt_profile_dir or "",
+                    False,
+                )
+                log("[chrome] reusing this fallback mode for future browser restarts in this run")
             break
         except Exception as exc:
             detail = str(exc).splitlines()[0] if str(exc) else exc.__class__.__name__
