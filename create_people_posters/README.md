@@ -158,6 +158,7 @@ SEL_ENFORCE_SIZE=true
 # Timeouts/tuning (seconds)
 SEL_MAX_WAIT_READY_SEC=60
 SEL_PROC_TIMEOUT=120
+SEL_DISABLED_DOWNLOAD_STALL_SEC=45
 SEL_MAX_WAIT_DL_SEC=20
 SEL_DL_BUTTON_TIMEOUT=12
 SEL_RESTART_BROWSER_EACH_FILE=true
@@ -208,6 +209,9 @@ SEL_WINDOW_SIZE=1400,1000
 > Then run the batch with `$env:SEL_HEADLESS="true"; $env:SEL_PROMPT_FOR_LOGIN="false"`.
 > Stale Adobe project/modals and processing/download timeouts are retried by
 > restarting Chrome and reprocessing the same JPG up to `SEL_MAX_FILE_ATTEMPTS`.
+> If Adobe shows a Download/Export control that remains disabled for
+> `SEL_DISABLED_DOWNLOAD_STALL_SEC`, that is treated as a retryable processing
+> stall instead of waiting for the full processing timeout.
 > If Adobe opens the "Start from your image" chooser after upload, the Selenium
 > step treats it as stale project state, restarts Chrome, and retries until it
 > gets the normal upload page headed "Remove background".

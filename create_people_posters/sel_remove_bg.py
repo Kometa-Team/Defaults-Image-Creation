@@ -92,6 +92,7 @@ DOWNLOAD_DIR = Path(os.getenv("SEL_DOWNLOAD_DIR", str(Path.cwd() / "sel_download
 # Flow & patience knobs
 MAX_WAIT_READY_SEC = int(os.getenv("SEL_MAX_WAIT_READY_SEC", "120"))
 PROC_TIMEOUT = int(os.getenv("SEL_PROC_TIMEOUT", "120"))  # wait for processing (Download visible)
+DISABLED_DOWNLOAD_STALL_SEC = max(0, int(os.getenv("SEL_DISABLED_DOWNLOAD_STALL_SEC", "45")))
 MAX_WAIT_DL_SEC = int(os.getenv("SEL_MAX_WAIT_DL_SEC", "240"))  # wait for file to appear
 DL_BTN_TIMEOUT = int(os.getenv("SEL_DL_BUTTON_TIMEOUT", "20"))  # how long to wait for button to be found
 FAST_DL_CHECK_SEC = max(2, int(os.getenv("SEL_FAST_DL_CHECK_SEC", "6")))
@@ -1207,8 +1208,11 @@ def wait_until_processed_controls(driver, timeout=PROC_TIMEOUT):
     log("[wait] waiting for processing to finish (Download/Export)…")
     end = time.time() + timeout
     next_beep = 0.0
+    disabled_since = None
+    last_disabled = None
     while time.time() < end:
         dismiss_stale_modals(driver)
+        disabled_seen = None
         # 1) selectors first
         for sel in selectors:
             el = deep_query_iframes_one(driver, sel, timeout=0)
@@ -1218,11 +1222,35 @@ def wait_until_processed_controls(driver, timeout=PROC_TIMEOUT):
                     log(f"[wait] controls ready by selector: {sel}")
                     t.done()
                     return True
-                log(f"[wait] control seen but not ready: {sel} disabled={state.get('disabled')} text={state.get('text', '')!r}")
+                disabled_seen = (sel, state)
+                last_disabled = disabled_seen
 
-        if time.time() >= next_beep:
-            log("[wait] still processing…")
-            next_beep = time.time() + 2
+        now = time.time()
+        if disabled_seen:
+            if disabled_since is None:
+                disabled_since = now
+            disabled_for = now - disabled_since
+            if DISABLED_DOWNLOAD_STALL_SEC and disabled_for >= DISABLED_DOWNLOAD_STALL_SEC:
+                sel, state = disabled_seen
+                log(
+                    f"[wait] Download/Export stayed disabled for {disabled_for:.1f}s "
+                    f"({sel} text={state.get('text', '')!r}); treating as retryable processing stall"
+                )
+                t.done("DISABLED_STALL")
+                return False
+        else:
+            disabled_since = None
+
+        if now >= next_beep:
+            if disabled_since is not None and last_disabled:
+                sel, state = last_disabled
+                log(
+                    f"[wait] Download/Export visible but disabled for {now - disabled_since:.1f}s: "
+                    f"{sel} text={state.get('text', '')!r}"
+                )
+            else:
+                log("[wait] still processing…")
+            next_beep = now + 2
         time.sleep(0.25)
 
     log("[wait] gave up – no Download/Export detected before timeout")
