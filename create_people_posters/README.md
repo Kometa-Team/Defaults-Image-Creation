@@ -80,7 +80,7 @@ PEOPLE_BRANCH=master                                  # optional; branch for upd
 SYNC_PREFLIGHT=true                                   # optional; source QA before sync
 SYNC_MARKDOWN=false                                   # keep local sync from overwriting GitHub-generated READMEs
 
-# Single default style (used if ORCH_STYLES not set)
+# Fallback style for deliberate local README/sync_md runs only
 ORCH_STYLE=transparent
 
 # Local README generation is disabled by default because GitHub Actions owns
@@ -88,13 +88,14 @@ ORCH_STYLE=transparent
 ORCH_GENERATE_READMES=false
 
 # Multi-style local README run (comma list). Used only when ORCH_GENERATE_READMES=true.
-ORCH_STYLES=transparent,diiivoycolor
+# This does not limit poster generation, image sync, or repo pushes.
+# ORCH_STYLES=transparent,diiivoycolor
 
 # Grid image generation is slow and only applies to local README generation.
 ORCH_GRID_IMAGES=false
 
 # Optional commit/author for push
-ORCH_COMMIT_MESSAGE=chore: sync posters & docs
+ORCH_COMMIT_MESSAGE=
 ORCH_GIT_USER_NAME=Your Name
 ORCH_GIT_USER_EMAIL=you@example.com
 

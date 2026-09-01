@@ -43,8 +43,8 @@ Styles
 - Multiple styles from CLI: --styles transparent,diiivoycolor
 - From env:
     ORCH_STYLE=transparent
-    ORCH_STYLES=transparent,diiivoycolor
-  Precedence: --styles > ORCH_STYLES > --style > ORCH_STYLE.
+    # ORCH_STYLES=transparent,diiivoycolor
+  README style precedence: --styles > ORCH_STYLES > --style > ORCH_STYLE.
 
 Common CLI usage
 ----------------
@@ -59,8 +59,8 @@ Environment (./config/.env or process environment)
   ORCH_LOGS_DIR         — Kometa logs folder for steps 2–3 (optional)
   PEOPLE_IMAGES_DIR     — repo root for steps needing the People-Images repo
   PEOPLE_BRANCH         — git branch for update/push (optional)
-  ORCH_STYLE            — style for README & MD sync (default: transparent)
-  ORCH_STYLES           — comma list of styles for README & MD sync (optional)
+  ORCH_STYLE            — fallback style for optional local README & MD sync
+  ORCH_STYLES           — optional comma list for local README & MD sync only
   ORCH_GENERATE_READMES — when true, run local readme/sync_md steps [default: false]
   ORCH_GRID_IMAGES      — when true, generate/link per-letter grid.jpg images in README step [default: false]
   ORCH_COMMIT_MESSAGE   — optional commit message for push (overrides auto)
@@ -667,8 +667,7 @@ def main():
     def _push_repos():
         _require_repo_or_die()
         now = datetime.now().strftime("%Y-%m-%d %H:%M")
-        styles_tag = ",".join(styles)
-        msg = (commit_template or f"chore: sync posters & docs [{styles_tag}] - {now}").strip()
+        msg = (commit_template or f"chore: sync posters - {now}").strip()
         args2 = ["--repo-root", str(repo_root)]
         if branch:
             args2 += ["--branch", branch]
