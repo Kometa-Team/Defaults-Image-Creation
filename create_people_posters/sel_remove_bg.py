@@ -81,6 +81,7 @@ USER_DATA_DIR = HEADLESS_USER_DATA_DIR if HEADLESS else HEADED_USER_DATA_DIR
 PROFILE_DIR = HEADLESS_PROFILE_DIR if HEADLESS else HEADED_PROFILE_DIR
 HEADLESS_REMOTE_DEBUGGING_PIPE = env_bool("SEL_HEADLESS_REMOTE_DEBUGGING_PIPE", "true")
 HEADLESS_FALLBACK_TO_HEADED = env_bool("SEL_HEADLESS_FALLBACK_TO_HEADED", "true")
+HEADLESS_FALLBACK_TO_USER_PROFILE = env_bool("SEL_HEADLESS_FALLBACK_TO_USER_PROFILE", "true")
 HEADLESS_FALLBACK_TO_HEADED_PROFILE = env_bool("SEL_HEADLESS_FALLBACK_TO_HEADED_PROFILE", "true")
 
 # Normalize to absolute paths even if .env uses relative paths
@@ -416,9 +417,13 @@ def build_driver(force_headed: bool = False):
         attempts.append(("headless", primary_user_data_dir, primary_profile_dir, True, HEADLESS_REMOTE_DEBUGGING_PIPE))
         if HEADLESS_REMOTE_DEBUGGING_PIPE:
             attempts.append(("headless", primary_user_data_dir, primary_profile_dir, True, False))
+        headed_user_data_dir, headed_profile_dir = prepare_chrome_profile(HEADED_USER_DATA_DIR, HEADED_PROFILE_DIR)
+        if HEADLESS_FALLBACK_TO_USER_PROFILE and headed_user_data_dir != primary_user_data_dir:
+            attempts.append(("headless user profile fallback", headed_user_data_dir, headed_profile_dir, True, HEADLESS_REMOTE_DEBUGGING_PIPE))
+            if HEADLESS_REMOTE_DEBUGGING_PIPE:
+                attempts.append(("headless user profile fallback", headed_user_data_dir, headed_profile_dir, True, False))
         if HEADLESS_FALLBACK_TO_HEADED:
             attempts.append(("headed fallback", primary_user_data_dir, primary_profile_dir, False, False))
-            headed_user_data_dir, headed_profile_dir = prepare_chrome_profile(HEADED_USER_DATA_DIR, HEADED_PROFILE_DIR)
             if (
                 HEADLESS_FALLBACK_TO_HEADED_PROFILE
                 and headed_user_data_dir != primary_user_data_dir
@@ -450,15 +455,24 @@ def build_driver(force_headed: bool = False):
             driver_headless = headless_mode
             if label == "headed fallback":
                 log("[chrome] headless startup failed; using headed fallback with the same automation profile")
+            elif label == "headless user profile fallback":
+                log("[chrome] headless profile startup failed; using normal automation profile in headless mode")
             elif label == "headed profile fallback":
                 log("[chrome] headless profile startup failed; using normal headed automation profile")
             driver_user_data_dir = attempt_user_data_dir
             driver_profile_dir = attempt_profile_dir
-            if configured_headless and not headless_mode:
+            if (
+                configured_headless
+                and (
+                    not headless_mode
+                    or attempt_user_data_dir != primary_user_data_dir
+                    or attempt_profile_dir != primary_profile_dir
+                )
+            ):
                 ACTIVE_STARTUP_OVERRIDE = (
                     str(attempt_user_data_dir),
                     attempt_profile_dir or "",
-                    False,
+                    headless_mode,
                 )
                 log("[chrome] reusing this fallback mode for future browser restarts in this run")
             break

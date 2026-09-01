@@ -167,6 +167,7 @@ SEL_PROMPT_FOR_LOGIN=true
 SEL_LOGIN_WAIT_SEC=900
 SEL_HEADLESS=false
 SEL_HEADLESS_REMOTE_DEBUGGING_PIPE=true
+SEL_HEADLESS_FALLBACK_TO_USER_PROFILE=true
 SEL_HEADLESS_FALLBACK_TO_HEADED=true
 SEL_HEADLESS_FALLBACK_TO_HEADED_PROFILE=true
 SEL_WINDOW_SIZE=1400,1000
@@ -191,7 +192,11 @@ SEL_WINDOW_SIZE=1400,1000
 > from the normal headed profile, so it does not corrupt or crash the visible
 > Chrome profile. `SEL_HEADLESS_REMOTE_DEBUGGING_PIPE=true` uses ChromeDriver's
 > pipe mode for startup, which avoids the old `DevToolsActivePort` file path.
-> If headless Chrome itself crashes before Adobe loads,
+> If the dedicated headless profile crashes before Adobe loads,
+> `SEL_HEADLESS_FALLBACK_TO_USER_PROFILE=true` tries the normal signed-in
+> `SEL_USER_DATA_DIR` automation profile in headless mode before using any
+> visible browser fallback.
+> If headless Chrome itself still crashes before Adobe loads,
 > `SEL_HEADLESS_FALLBACK_TO_HEADED=true` continues in a visible browser with the
 > same automation profile instead of aborting the orchestrator. If that separate
 > headless profile also crashes in visible Chrome,
