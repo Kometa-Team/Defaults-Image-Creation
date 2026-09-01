@@ -93,6 +93,7 @@ DOWNLOAD_DIR = Path(os.getenv("SEL_DOWNLOAD_DIR", str(Path.cwd() / "sel_download
 MAX_WAIT_READY_SEC = int(os.getenv("SEL_MAX_WAIT_READY_SEC", "120"))
 PROC_TIMEOUT = int(os.getenv("SEL_PROC_TIMEOUT", "120"))  # wait for processing (Download visible)
 DISABLED_DOWNLOAD_STALL_SEC = max(0, int(os.getenv("SEL_DISABLED_DOWNLOAD_STALL_SEC", "45")))
+NO_DOWNLOAD_CONTROL_STALL_SEC = max(0, int(os.getenv("SEL_NO_DOWNLOAD_CONTROL_STALL_SEC", "75")))
 MAX_WAIT_DL_SEC = int(os.getenv("SEL_MAX_WAIT_DL_SEC", "240"))  # wait for file to appear
 DL_BTN_TIMEOUT = int(os.getenv("SEL_DL_BUTTON_TIMEOUT", "20"))  # how long to wait for button to be found
 FAST_DL_CHECK_SEC = max(2, int(os.getenv("SEL_FAST_DL_CHECK_SEC", "6")))
@@ -1210,6 +1211,7 @@ def wait_until_processed_controls(driver, timeout=PROC_TIMEOUT):
     next_beep = 0.0
     disabled_since = None
     last_disabled = None
+    no_control_since = time.time()
     while time.time() < end:
         dismiss_stale_modals(driver)
         disabled_seen = None
@@ -1227,6 +1229,7 @@ def wait_until_processed_controls(driver, timeout=PROC_TIMEOUT):
 
         now = time.time()
         if disabled_seen:
+            no_control_since = now
             if disabled_since is None:
                 disabled_since = now
             disabled_for = now - disabled_since
@@ -1240,6 +1243,14 @@ def wait_until_processed_controls(driver, timeout=PROC_TIMEOUT):
                 return False
         else:
             disabled_since = None
+            no_control_for = now - no_control_since
+            if NO_DOWNLOAD_CONTROL_STALL_SEC and no_control_for >= NO_DOWNLOAD_CONTROL_STALL_SEC:
+                log(
+                    f"[wait] no Download/Export control appeared for {no_control_for:.1f}s; "
+                    "treating as retryable processing stall"
+                )
+                t.done("NO_CONTROL_STALL")
+                return False
 
         if now >= next_beep:
             if disabled_since is not None and last_disabled:
@@ -1249,7 +1260,7 @@ def wait_until_processed_controls(driver, timeout=PROC_TIMEOUT):
                     f"{sel} text={state.get('text', '')!r}"
                 )
             else:
-                log("[wait] still processing…")
+                log(f"[wait] still processing; no Download/Export control for {now - no_control_since:.1f}s")
             next_beep = now + 2
         time.sleep(0.25)
 
