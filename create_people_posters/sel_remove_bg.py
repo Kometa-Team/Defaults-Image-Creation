@@ -81,6 +81,7 @@ USER_DATA_DIR = HEADLESS_USER_DATA_DIR if HEADLESS else HEADED_USER_DATA_DIR
 PROFILE_DIR = HEADLESS_PROFILE_DIR if HEADLESS else HEADED_PROFILE_DIR
 HEADLESS_REMOTE_DEBUGGING_PIPE = env_bool("SEL_HEADLESS_REMOTE_DEBUGGING_PIPE", "true")
 HEADLESS_FALLBACK_TO_HEADED = env_bool("SEL_HEADLESS_FALLBACK_TO_HEADED", "true")
+HEADLESS_FALLBACK_TO_HEADED_PROFILE = env_bool("SEL_HEADLESS_FALLBACK_TO_HEADED_PROFILE", "true")
 
 # Normalize to absolute paths even if .env uses relative paths
 SRC_DIR = Path(os.getenv("SEL_SRC_DIR", str(Path.cwd()))).resolve()
@@ -385,28 +386,38 @@ def build_chrome_options(user_data_dir: Path, profile_dir: Optional[str], *, hea
     return opts
 
 
-def build_driver(force_headed: bool = False):
-    global EFFECTIVE_USER_DATA_DIR, EFFECTIVE_PROFILE_DIR, EFFECTIVE_HEADLESS
-    # Ensure the profile root exists (fresh machines / first run)
-    user_data_dir = Path(USER_DATA_DIR).resolve()
+def prepare_chrome_profile(user_data_dir_raw: str, profile_dir_raw: str) -> tuple[Path, Optional[str]]:
+    user_data_dir = Path(user_data_dir_raw).resolve()
     user_data_dir.mkdir(parents=True, exist_ok=True)
-    profile_dir = resolve_profile_directory(user_data_dir, PROFILE_DIR)
+    profile_dir = resolve_profile_directory(user_data_dir, profile_dir_raw)
     cleanup_profile_locks(user_data_dir, profile_dir)
     if DISABLE_CHROME_RESTORE:
         mark_profile_clean_exit(user_data_dir, profile_dir)
-    EFFECTIVE_USER_DATA_DIR = user_data_dir
-    EFFECTIVE_PROFILE_DIR = profile_dir or "<none>"
+    return user_data_dir, profile_dir
 
+
+def build_driver(force_headed: bool = False):
+    global EFFECTIVE_USER_DATA_DIR, EFFECTIVE_PROFILE_DIR, EFFECTIVE_HEADLESS
     configured_headless = HEADLESS and not force_headed
+    primary_user_data_dir, primary_profile_dir = prepare_chrome_profile(USER_DATA_DIR, PROFILE_DIR)
+    EFFECTIVE_USER_DATA_DIR = primary_user_data_dir
+    EFFECTIVE_PROFILE_DIR = primary_profile_dir or "<none>"
+
     attempts = []
     if configured_headless:
-        attempts.append(("headless", True, HEADLESS_REMOTE_DEBUGGING_PIPE))
+        attempts.append(("headless", primary_user_data_dir, primary_profile_dir, True, HEADLESS_REMOTE_DEBUGGING_PIPE))
         if HEADLESS_REMOTE_DEBUGGING_PIPE:
-            attempts.append(("headless", True, False))
+            attempts.append(("headless", primary_user_data_dir, primary_profile_dir, True, False))
         if HEADLESS_FALLBACK_TO_HEADED:
-            attempts.append(("headed fallback", False, False))
+            attempts.append(("headed fallback", primary_user_data_dir, primary_profile_dir, False, False))
+            headed_user_data_dir, headed_profile_dir = prepare_chrome_profile(HEADED_USER_DATA_DIR, HEADED_PROFILE_DIR)
+            if (
+                HEADLESS_FALLBACK_TO_HEADED_PROFILE
+                and headed_user_data_dir != primary_user_data_dir
+            ):
+                attempts.append(("headed profile fallback", headed_user_data_dir, headed_profile_dir, False, False))
     else:
-        attempts.append(("headed", False, False))
+        attempts.append(("headed", primary_user_data_dir, primary_profile_dir, False, False))
 
     try:
         CHROMEDRIVER_LOG_FILE.unlink(missing_ok=True)
@@ -416,38 +427,51 @@ def build_driver(force_headed: bool = False):
     errors = []
     driver = None
     driver_headless = False
-    for label, headless_mode, use_pipe in attempts:
-        opts = build_chrome_options(user_data_dir, profile_dir, headless=headless_mode, use_pipe=use_pipe)
+    driver_user_data_dir = primary_user_data_dir
+    driver_profile_dir = primary_profile_dir
+    for label, attempt_user_data_dir, attempt_profile_dir, headless_mode, use_pipe in attempts:
+        opts = build_chrome_options(
+            attempt_user_data_dir,
+            attempt_profile_dir,
+            headless=headless_mode,
+            use_pipe=use_pipe,
+        )
         service = Service(log_output=str(CHROMEDRIVER_LOG_FILE))
         try:
             driver = webdriver.Chrome(options=opts, service=service)
             driver_headless = headless_mode
             if label == "headed fallback":
                 log("[chrome] headless startup failed; using headed fallback with the same automation profile")
+            elif label == "headed profile fallback":
+                log("[chrome] headless profile startup failed; using normal headed automation profile")
+            driver_user_data_dir = attempt_user_data_dir
+            driver_profile_dir = attempt_profile_dir
             break
         except Exception as exc:
             detail = str(exc).splitlines()[0] if str(exc) else exc.__class__.__name__
             pipe_detail = "pipe" if use_pipe else "port"
-            errors.append(f"{label}/{pipe_detail}: {detail}")
-            if label != attempts[-1][0] or headless_mode != attempts[-1][1] or use_pipe != attempts[-1][2]:
+            errors.append(f"{label}/{pipe_detail} [{attempt_user_data_dir}]: {detail}")
+            if (label, attempt_user_data_dir, attempt_profile_dir, headless_mode, use_pipe) != attempts[-1]:
                 log(f"[chrome] startup failed for {label} ({pipe_detail}); trying next mode")
 
     if driver is None:
         mode = "headless" if configured_headless else "headed"
         profile_hint = (
             " For headless mode, run `python sel_remove_bg.py --login-only` once to sign into the separate "
-            "headless profile in a visible browser, or set SEL_HEADLESS=false."
+            "headless profile in a visible browser, set SEL_HEADLESS=false, or use a fresh SEL_HEADLESS_USER_DATA_DIR."
             if configured_headless else
             " Close any Chrome windows using this automation profile and retry."
         )
         detail = (
-            f"Chrome failed to start in {mode} mode with user-data dir '{user_data_dir}'"
-            + (f" and profile '{profile_dir}'" if profile_dir else "")
+            f"Chrome failed to start in {mode} mode with user-data dir '{primary_user_data_dir}'"
+            + (f" and profile '{primary_profile_dir}'" if primary_profile_dir else "")
             + f". Attempts: {'; '.join(errors)}.{profile_hint} "
             + f"ChromeDriver log: {CHROMEDRIVER_LOG_FILE.resolve()}"
         )
         raise RuntimeError(detail)
 
+    EFFECTIVE_USER_DATA_DIR = driver_user_data_dir
+    EFFECTIVE_PROFILE_DIR = driver_profile_dir or "<none>"
     EFFECTIVE_HEADLESS = driver_headless
     if driver_headless:
         driver.set_window_size(WINDOW_W, WINDOW_H)
