@@ -441,13 +441,18 @@ python tmdb_top_people_list.py --limit 1000 --require-profile --dry-run
 # Write the list, filtering out people already present in the configured image repos.
 python tmdb_top_people_list.py --limit 1000 --require-profile
 
+# Keep fetching popular pages until 1000 missing/non-existing people are found.
+python tmdb_top_people_list.py --target-missing 1000 --require-profile
+
 # Process the generated list through TMDB and downstream image steps.
 python orchestrator.py --redo tmdb
 ```
 
 Use this to grow the People repos from TMDB popularity rather than Kometa logs.
 The `--require-profile` flag filters out people without usable TMDB profile
-images.
+images. Use `--limit` when you want to inspect a fixed number of popular TMDB
+people first. Use `--target-missing` when you want the output list to contain
+that many people who do not already exist locally.
 
 Use a smaller TMDB popular batch:
 

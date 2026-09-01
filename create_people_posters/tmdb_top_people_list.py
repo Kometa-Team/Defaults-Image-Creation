@@ -221,6 +221,67 @@ def fetch_popular_people(
     return people
 
 
+def fetch_popular_missing_people(
+    api_key: str,
+    target_missing: int,
+    language: str,
+    require_profile: bool,
+    max_pages: int | None,
+    existing_names: set[str],
+) -> tuple[list[dict[str, Any]], int, int]:
+    missing: list[dict[str, Any]] = []
+    seen_ids: set[int] = set()
+    checked = 0
+    skipped_existing = 0
+
+    with requests.Session() as session:
+        page = 1
+        total_pages = None
+        while len(missing) < target_missing:
+            if max_pages is not None and page > max_pages:
+                logging.warning(
+                    "Stopped at --max-pages=%d before collecting %d missing people.",
+                    max_pages,
+                    target_missing,
+                )
+                break
+            if total_pages is not None and page > total_pages:
+                break
+
+            data = tmdb_get(session, api_key, page, language)
+            total_pages = int(data.get("total_pages") or page)
+            results = data.get("results") or []
+            logging.info("Fetched page %d/%d (%d result(s))", page, total_pages, len(results))
+
+            for person in results:
+                person_id = person.get("id")
+                name = clean_name(str(person.get("name") or ""))
+                if not isinstance(person_id, int) or not name:
+                    continue
+                if person_id in seen_ids:
+                    continue
+                if require_profile and not person.get("profile_path"):
+                    logging.debug("Skipping %s (%s): no profile_path", name, person_id)
+                    continue
+
+                checked += 1
+                seen_ids.add(person_id)
+                if normalize_name(name) in existing_names:
+                    skipped_existing += 1
+                    logging.debug("Skipping existing image: %s (%s)", name, person_id)
+                    continue
+
+                missing.append(person)
+                if len(missing) >= target_missing:
+                    return missing, checked, skipped_existing
+
+            if not results:
+                break
+            page += 1
+
+    return missing, checked, skipped_existing
+
+
 def render_people_list(people: list[dict[str, Any]]) -> str:
     lines = []
     for person in people:
@@ -264,6 +325,12 @@ def write_text_atomic(path: Path, content: str) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Build a TMDB popular people list for the poster orchestrator.")
     parser.add_argument("--limit", type=int, default=1000, help="Number of people to write (default: 1000).")
+    parser.add_argument(
+        "--target-missing",
+        type=int,
+        default=0,
+        help="Keep fetching TMDB popular pages until this many non-existing people are found.",
+    )
     parser.add_argument("--max-pages", type=int, default=None, help="Stop after this many TMDB pages even if --limit is not reached.")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT, help=f"Output list path (default: {DEFAULT_OUTPUT}).")
     parser.add_argument("--language", default="en-US", help="TMDB language parameter (default: en-US).")
@@ -288,6 +355,10 @@ def main() -> int:
 
     if args.limit < 1:
         parser.error("--limit must be at least 1")
+    if args.target_missing < 0:
+        parser.error("--target-missing cannot be negative")
+    if args.target_missing and args.no_existing_check:
+        parser.error("--target-missing requires the existing-image check")
     if args.max_pages is not None and args.max_pages < 1:
         parser.error("--max-pages must be at least 1")
 
@@ -303,25 +374,44 @@ def main() -> int:
     if not output.is_absolute():
         output = (SCRIPT_DIR / output).resolve()
 
-    logging.info("Writing up to %d popular TMDB people to %s", args.limit, output)
-    people = fetch_popular_people(
-        api_key=api_key,
-        limit=args.limit,
-        language=args.language,
-        require_profile=args.require_profile,
-        max_pages=args.max_pages,
-    )
-
-    missing_people = people
+    missing_people: list[dict[str, Any]]
+    people: list[dict[str, Any]]
     skipped_existing = 0
     existing_count = 0
+    people_checked = 0
     if not args.no_existing_check:
         styles = parse_styles(args.styles)
         roots = default_existing_roots(styles)
         roots.extend(resolve_script_path(root) for root in args.existing_root)
         existing_names = collect_existing_names(roots)
         existing_count = len(existing_names)
-        missing_people, skipped_existing = filter_missing_people(people, existing_names)
+    else:
+        existing_names = set()
+
+    if args.target_missing:
+        logging.info("Writing %d missing TMDB people to %s", args.target_missing, output)
+        missing_people, people_checked, skipped_existing = fetch_popular_missing_people(
+            api_key=api_key,
+            target_missing=args.target_missing,
+            language=args.language,
+            require_profile=args.require_profile,
+            max_pages=args.max_pages,
+            existing_names=existing_names,
+        )
+        people = missing_people
+    else:
+        logging.info("Writing up to %d popular TMDB people to %s", args.limit, output)
+        people = fetch_popular_people(
+            api_key=api_key,
+            limit=args.limit,
+            language=args.language,
+            require_profile=args.require_profile,
+            max_pages=args.max_pages,
+        )
+        people_checked = len(people)
+        missing_people = people
+        if not args.no_existing_check:
+            missing_people, skipped_existing = filter_missing_people(people, existing_names)
 
     content = render_people_list(missing_people)
 
@@ -334,10 +424,16 @@ def main() -> int:
         write_text_atomic(output, content)
         logging.info("Wrote %d missing people to %s", len(missing_people), output)
 
-    if len(people) < args.limit:
+    if args.target_missing and len(missing_people) < args.target_missing:
+        logging.warning(
+            "Requested %d missing people, but only collected %d.",
+            args.target_missing,
+            len(missing_people),
+        )
+    elif not args.target_missing and len(people) < args.limit:
         logging.warning("Requested %d people, but only collected %d.", args.limit, len(people))
 
-    print(f"People checked        : {len(people)}")
+    print(f"People checked        : {people_checked}")
     print(f"Existing image names  : {existing_count if not args.no_existing_check else '(not checked)'}")
     print(f"Skipped existing      : {skipped_existing if not args.no_existing_check else '(not checked)'}")
     print(f"Missing to process    : {len(missing_people)}")
