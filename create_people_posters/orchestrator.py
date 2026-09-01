@@ -53,6 +53,7 @@ Common CLI usage
   python orchestrator.py --force      # ignore checkpoints and run all steps
   python orchestrator.py --list       # show step status & which step would run next
   python orchestrator.py --redo readme  # clear readme+downstream checkpoints and restart at readme
+  python orchestrator.py --redo remove_bg --stop-after poster_ps1
 
 Environment (./config/.env or process environment)
 --------------------------------------------------
@@ -465,6 +466,7 @@ def main():
     parser = argparse.ArgumentParser(description="Fixed-order, resumable pipeline runner")
     parser.add_argument("--force", action="store_true", help="Ignore checkpoints and run all steps from the beginning.")
     parser.add_argument("--redo", help="Clear checkpoint for this step (and downstream) and restart at that step.")
+    parser.add_argument("--stop-after", help="Stop cleanly after this step completes; useful for recovery QA gates.")
     parser.add_argument("--list", action="store_true", help="List step status and exit.")
     parser.add_argument("--logs-dir", help="Kometa logs folder for steps scan_kometa_logs/find_and_download_missing (env ORCH_LOGS_DIR otherwise).")
     parser.add_argument("--repo-root", help="Kometa-People-Images repository root (env PEOPLE_IMAGES_DIR otherwise).")
@@ -699,6 +701,10 @@ def main():
     ]
 
     step_index = {s.key: i for i, s in enumerate(steps)}
+    if args.stop_after and args.stop_after not in step_index:
+        print(f"[ERROR] Unknown step key for --stop-after: {args.stop_after}", file=sys.stderr)
+        print("Valid keys:", ", ".join(step_index.keys()), file=sys.stderr)
+        sys.exit(2)
 
     # Status mode
     if args.list:
@@ -732,6 +738,9 @@ def main():
             if s.always_run or not marker_exists(s.marker_path):
                 start_i = i
                 break
+    if args.stop_after and step_index[args.stop_after] < start_i:
+        print(f"[INFO] --stop-after {args.stop_after} is before the selected start step; nothing to run.")
+        return
 
     # Run
     acquire_lock()
@@ -747,6 +756,9 @@ def main():
                     print("[INFO] local README generation disabled - skipping readme step.")
                     if s.marker_path:
                         write_marker(s.marker_path, {"skipped": True, "at": time.time(), "reason": "ORCH_GENERATE_READMES=false"})
+                    if s.key == args.stop_after:
+                        print(f"[INFO] Stop requested after {s.key}; exiting before downstream steps.")
+                        return
                     continue
                 # generate README for each style; grid images are opt-in because they are expensive
                 for st in styles:
@@ -759,6 +771,9 @@ def main():
                 # checkpoint once for the whole batch
                 if s.marker_path:
                     write_marker(s.marker_path, {"at": time.time(), "styles": styles})
+                if s.key == args.stop_after:
+                    print(f"[INFO] Stop requested after {s.key}; exiting before downstream steps.")
+                    return
                 continue
 
             if s.key == "sync_md":
@@ -766,6 +781,9 @@ def main():
                     print("[INFO] local README generation disabled - skipping sync_md step.")
                     if s.marker_path:
                         write_marker(s.marker_path, {"skipped": True, "at": time.time(), "reason": "ORCH_GENERATE_READMES=false"})
+                    if s.key == args.stop_after:
+                        print(f"[INFO] Stop requested after {s.key}; exiting before downstream steps.")
+                        return
                     continue
                 # sync md for each style
                 for st in styles:
@@ -776,6 +794,9 @@ def main():
                         sys.exit(rc)
                 if s.marker_path:
                     write_marker(s.marker_path, {"at": time.time(), "styles": styles})
+                if s.key == args.stop_after:
+                    print(f"[INFO] Stop requested after {s.key}; exiting before downstream steps.")
+                    return
                 continue
 
             def step_log_path(step_key: str) -> Optional[Path]:
@@ -796,6 +817,9 @@ def main():
                 if s.key in {"poster_ps1", "recover_edge_chops"}:
                     if s.marker_path:
                         write_marker(s.marker_path, {"skipped": True, "at": time.time()})
+                    if s.key == args.stop_after:
+                        print(f"[INFO] Stop requested after {s.key}; exiting before downstream steps.")
+                        return
                     continue
                 # Any other None means something critical was missing; die
                 print(f"[ERROR] Step {s.key} could not build its command.", file=sys.stderr)
@@ -904,6 +928,9 @@ def main():
             # Write checkpoint if applicable (and not always_run)
             if s.marker_path and not s.always_run:
                 write_marker(s.marker_path, {"at": time.time(), "argv": argv})
+            if s.key == args.stop_after:
+                print(f"[INFO] Stop requested after {s.key}; exiting before downstream steps.")
+                return
 
         print("\nAll steps completed.")
     finally:

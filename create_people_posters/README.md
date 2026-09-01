@@ -720,11 +720,12 @@ uses both edge alpha mean and foreground coverage, so narrow hair/head contact
 at the top edge is not hidden by transparent space across the rest of the row.
 The first alternate that passes the local precheck is sent through Adobe. In
 default standalone mode, recovery stages viable alternates, runs the normal
-orchestrator `remove_bg` flow, then checks the final transparent poster output
-again. If Adobe's final output still has selected warnings, the report marks
-that row unresolved; rerun the same recovery command to skip that attempted
-TMDB image and try the next unattempted candidate. If no alternate clears the check,
-the script restores the previous local style outputs, writes
+orchestrator through `remove_bg` and `poster_ps1`, then checks the final
+transparent poster output before repo sync/push. If Adobe's final output still
+has selected warnings, the report marks that row unresolved and removes those
+generated work outputs from `config/people_dirs`; rerun the same recovery
+command to skip that attempted TMDB image and try the next unattempted
+candidate. If no alternate clears the check, the script restores the previous local style outputs, writes
 `./config/edge_chop_recovery/edge_chop_recovery.csv`, records the person in
 `./config/edge_chop_recovery/exhausted_names.txt`, and continues the pipeline.
 Future recovery batches skip names in that exhausted file; remove a name from the
@@ -782,13 +783,15 @@ to scan a different local repo set; use `EDGE_CHOP_TRANSPARENT_ROOT` or
 adjust with `EDGE_CHOP_SCAN_PROGRESS_EVERY`, `EDGE_CHOP_SCAN_PROGRESS_SECONDS`,
 `--scan-progress-every`, or `--scan-progress-seconds`.
 
-By default, standalone recovery stages viable candidates and immediately runs
-`python orchestrator.py --redo remove_bg --no-recover-edge-chops`. That reuses
-the orchestrator's checkpointed Selenium batch, poster generation, repo update,
-sync, and push steps without falling back into the inline recovery loop. Local
-README/MD steps remain skipped unless `ORCH_GENERATE_READMES=true` or
-`--generate-readmes` is used; remote GitHub Actions regenerates People image
-repo READMEs after push. The next recovery batch will rescan outputs, skip attempted TMDB
+By default, standalone recovery stages viable candidates and runs
+`python orchestrator.py --redo remove_bg --no-recover-edge-chops --stop-after poster_ps1`.
+That reuses the orchestrator's checkpointed Selenium batch and poster
+generation without falling back into the inline recovery loop. Recovery then
+postchecks the generated transparent outputs, removes unresolved work outputs,
+and only runs `python orchestrator.py --redo update --no-recover-edge-chops`
+when at least one staged candidate passed final QA. Local README/MD steps remain
+skipped unless `ORCH_GENERATE_READMES=true` or `--generate-readmes` is used;
+remote GitHub Actions regenerates People image repo READMEs after push. The next recovery batch will rescan outputs, skip attempted TMDB
 candidates, and choose the next alternate for anything still chopped or still
 non-color. Do not use
 `--redo tmdb` unless you intend to rerun TMDB download and all downstream

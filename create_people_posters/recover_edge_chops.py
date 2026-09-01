@@ -790,9 +790,16 @@ def run_step(title: str, argv: list[str], env: dict[str, str]) -> int:
     return cp.returncode
 
 
-def run_orchestrator_from_remove_bg() -> int:
+def run_orchestrator_from_remove_bg(stop_after: str | None = None) -> int:
     argv = [sys.executable, "orchestrator.py", "--redo", "remove_bg", "--no-recover-edge-chops"]
+    if stop_after:
+        argv.extend(["--stop-after", stop_after])
     return run_step("orchestrator recovery batch", argv, os.environ.copy())
+
+
+def run_orchestrator_from_update() -> int:
+    argv = [sys.executable, "orchestrator.py", "--redo", "update", "--no-recover-edge-chops"]
+    return run_step("orchestrator recovery sync/push", argv, os.environ.copy())
 
 
 def final_transparent_path(people_root: Path, name: str) -> Path:
@@ -834,6 +841,23 @@ def postcheck_staged_outputs(rows: list[RecoveryRow], args: argparse.Namespace) 
             row.note += "; post-orchestrator final QA passed"
             log(f"[postcheck] {row.name}: final selected-warning QA passed")
     return checked
+
+
+def remove_unresolved_work_outputs(rows: list[RecoveryRow], people_root: Path) -> int:
+    removed = 0
+    for row in rows:
+        if row.status != "unresolved" or not row.name or not row.chosen_url:
+            continue
+        for path in style_file_paths(people_root, row.name):
+            try:
+                if path.exists() and path.is_file():
+                    path.unlink()
+                    removed += 1
+            except OSError:
+                pass
+    if removed:
+        log(f"[postcheck] removed {removed} unresolved generated work output(s) before sync")
+    return removed
 
 
 def log_status_counts(rows: list[RecoveryRow], prefix: str = "") -> None:
@@ -1516,14 +1540,15 @@ def main() -> int:
         log(f"Added exhausted names: {added_exhausted} -> {args.exhausted_file}")
     staged = sum(1 for row in rows if row.status == "staged")
     if args.stage_for_orchestrator and staged:
-        command = "python orchestrator.py --redo remove_bg --no-recover-edge-chops"
+        command = "python orchestrator.py --redo remove_bg --no-recover-edge-chops --stop-after poster_ps1"
+        continue_command = "python orchestrator.py --redo update --no-recover-edge-chops"
         if args.run_orchestrator:
             log(f"Running next command: {command}")
-            exit_code = run_orchestrator_from_remove_bg()
+            exit_code = run_orchestrator_from_remove_bg(stop_after="poster_ps1")
             if exit_code == 4:
                 log("[auth] Adobe login stopped the orchestrator recovery batch.")
                 log("[next] Run: python sel_remove_bg.py --login-only")
-                log("[next] Then resume: python orchestrator.py --redo remove_bg --no-recover-edge-chops")
+                log("[next] Then resume: python orchestrator.py --redo remove_bg --no-recover-edge-chops --stop-after poster_ps1")
             elif exit_code == 0:
                 checked = postcheck_staged_outputs(rows, args)
                 if checked:
@@ -1531,13 +1556,23 @@ def main() -> int:
                     log_status_counts(rows, prefix="Postcheck")
                     unresolved_after = sum(1 for row in rows if row.status == "unresolved")
                     if unresolved_after:
+                        remove_unresolved_work_outputs(rows, args.people_root)
+                        write_report(args.out_root, rows)
                         log("[next] Some staged candidates still failed selected warning QA after Adobe.")
-                        log("[next] Rerun this recovery command to skip those attempted TMDB images and try the next candidates.")
+                        log("[next] Removed unresolved generated work outputs before repo sync.")
+                        log("[next] Rerun this recovery command later to skip those attempted TMDB images and try the next candidates.")
+                    recovered_after = sum(1 for row in rows if row.status == "recovered")
+                    if recovered_after:
+                        log(f"Running next command: {continue_command}")
+                        exit_code = run_orchestrator_from_update()
                     else:
-                        log("[next] Recovery batch passed selected final QA; continue with the normal pipeline as needed.")
+                        log("[next] No recovered staged candidates to sync/push.")
+                else:
+                    log(f"Running next command: {continue_command}")
+                    exit_code = run_orchestrator_from_update()
             else:
                 log("[next] Orchestrator did not finish cleanly; resolve the logged failure, then resume:")
-                log("[next] python orchestrator.py --redo remove_bg --no-recover-edge-chops")
+                log("[next] python orchestrator.py --redo remove_bg --no-recover-edge-chops --stop-after poster_ps1")
         else:
             log(f"Next command: {command}")
     elif args.stage_for_orchestrator:
