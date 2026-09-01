@@ -79,6 +79,8 @@ HEADLESS_USER_DATA_DIR = os.getenv("SEL_HEADLESS_USER_DATA_DIR", str(CONFIG_DIR 
 HEADLESS_PROFILE_DIR = os.getenv("SEL_HEADLESS_PROFILE_DIR", "Default")
 USER_DATA_DIR = HEADLESS_USER_DATA_DIR if HEADLESS else HEADED_USER_DATA_DIR
 PROFILE_DIR = HEADLESS_PROFILE_DIR if HEADLESS else HEADED_PROFILE_DIR
+HEADLESS_REMOTE_DEBUGGING_PIPE = env_bool("SEL_HEADLESS_REMOTE_DEBUGGING_PIPE", "true")
+HEADLESS_FALLBACK_TO_HEADED = env_bool("SEL_HEADLESS_FALLBACK_TO_HEADED", "true")
 
 # Normalize to absolute paths even if .env uses relative paths
 SRC_DIR = Path(os.getenv("SEL_SRC_DIR", str(Path.cwd()))).resolve()
@@ -121,6 +123,7 @@ LOG_FILE = LOGS_DIR / "sel_remove_bg.log"
 CHROMEDRIVER_LOG_FILE = LOGS_DIR / "chromedriver.log"
 EFFECTIVE_USER_DATA_DIR = Path(USER_DATA_DIR).resolve()
 EFFECTIVE_PROFILE_DIR = PROFILE_DIR
+EFFECTIVE_HEADLESS = HEADLESS
 
 
 def parse_window_size(raw: str) -> tuple[int, int]:
@@ -345,18 +348,7 @@ class StaleAdobeProjectStateError(RuntimeError):
 # ===============================
 # Driver
 # ===============================
-def build_driver():
-    global EFFECTIVE_USER_DATA_DIR, EFFECTIVE_PROFILE_DIR
-    # Ensure the profile root exists (fresh machines / first run)
-    user_data_dir = Path(USER_DATA_DIR).resolve()
-    user_data_dir.mkdir(parents=True, exist_ok=True)
-    profile_dir = resolve_profile_directory(user_data_dir, PROFILE_DIR)
-    cleanup_profile_locks(user_data_dir, profile_dir)
-    if DISABLE_CHROME_RESTORE:
-        mark_profile_clean_exit(user_data_dir, profile_dir)
-    EFFECTIVE_USER_DATA_DIR = user_data_dir
-    EFFECTIVE_PROFILE_DIR = profile_dir or "<none>"
-
+def build_chrome_options(user_data_dir: Path, profile_dir: Optional[str], *, headless: bool, use_pipe: bool) -> Options:
     opts = Options()
     opts.add_argument(f"--user-data-dir={user_data_dir}")
     if profile_dir:
@@ -369,10 +361,13 @@ def build_driver():
         opts.add_argument("--hide-crash-restore-bubble")
         opts.add_argument("--disable-session-crashed-bubble")
         opts.add_argument("--restore-last-session=false")
-    if HEADLESS:
+    if headless:
         opts.add_argument("--headless=new")
         opts.add_argument("--disable-gpu")
-        opts.add_argument("--remote-debugging-port=0")
+        if use_pipe:
+            opts.add_argument("--remote-debugging-pipe")
+        else:
+            opts.add_argument("--remote-debugging-port=0")
         opts.add_argument("--disable-dev-shm-usage")
         opts.add_argument(f"--window-size={WINDOW_W},{WINDOW_H}")
     else:
@@ -387,29 +382,74 @@ def build_driver():
         "profile.exit_type": "Normal",
         "profile.exited_cleanly": True,
     })
+    return opts
+
+
+def build_driver(force_headed: bool = False):
+    global EFFECTIVE_USER_DATA_DIR, EFFECTIVE_PROFILE_DIR, EFFECTIVE_HEADLESS
+    # Ensure the profile root exists (fresh machines / first run)
+    user_data_dir = Path(USER_DATA_DIR).resolve()
+    user_data_dir.mkdir(parents=True, exist_ok=True)
+    profile_dir = resolve_profile_directory(user_data_dir, PROFILE_DIR)
+    cleanup_profile_locks(user_data_dir, profile_dir)
+    if DISABLE_CHROME_RESTORE:
+        mark_profile_clean_exit(user_data_dir, profile_dir)
+    EFFECTIVE_USER_DATA_DIR = user_data_dir
+    EFFECTIVE_PROFILE_DIR = profile_dir or "<none>"
+
+    configured_headless = HEADLESS and not force_headed
+    attempts = []
+    if configured_headless:
+        attempts.append(("headless", True, HEADLESS_REMOTE_DEBUGGING_PIPE))
+        if HEADLESS_REMOTE_DEBUGGING_PIPE:
+            attempts.append(("headless", True, False))
+        if HEADLESS_FALLBACK_TO_HEADED:
+            attempts.append(("headed fallback", False, False))
+    else:
+        attempts.append(("headed", False, False))
+
     try:
         CHROMEDRIVER_LOG_FILE.unlink(missing_ok=True)
     except Exception:
         pass
-    service = Service(log_output=str(CHROMEDRIVER_LOG_FILE))
-    try:
-        driver = webdriver.Chrome(options=opts, service=service)
-    except Exception as exc:
-        mode = "headless" if HEADLESS else "headed"
+
+    errors = []
+    driver = None
+    driver_headless = False
+    for label, headless_mode, use_pipe in attempts:
+        opts = build_chrome_options(user_data_dir, profile_dir, headless=headless_mode, use_pipe=use_pipe)
+        service = Service(log_output=str(CHROMEDRIVER_LOG_FILE))
+        try:
+            driver = webdriver.Chrome(options=opts, service=service)
+            driver_headless = headless_mode
+            if label == "headed fallback":
+                log("[chrome] headless startup failed; using headed fallback with the same automation profile")
+            break
+        except Exception as exc:
+            detail = str(exc).splitlines()[0] if str(exc) else exc.__class__.__name__
+            pipe_detail = "pipe" if use_pipe else "port"
+            errors.append(f"{label}/{pipe_detail}: {detail}")
+            if label != attempts[-1][0] or headless_mode != attempts[-1][1] or use_pipe != attempts[-1][2]:
+                log(f"[chrome] startup failed for {label} ({pipe_detail}); trying next mode")
+
+    if driver is None:
+        mode = "headless" if configured_headless else "headed"
         profile_hint = (
-            " For headless mode, sign into Adobe once using the separate headless profile in headed mode, "
-            "then retry with SEL_HEADLESS=true."
-            if HEADLESS else
+            " For headless mode, run `python sel_remove_bg.py --login-only` once to sign into the separate "
+            "headless profile in a visible browser, or set SEL_HEADLESS=false."
+            if configured_headless else
             " Close any Chrome windows using this automation profile and retry."
         )
         detail = (
             f"Chrome failed to start in {mode} mode with user-data dir '{user_data_dir}'"
             + (f" and profile '{profile_dir}'" if profile_dir else "")
-            + f".{profile_hint} "
+            + f". Attempts: {'; '.join(errors)}.{profile_hint} "
             + f"ChromeDriver log: {CHROMEDRIVER_LOG_FILE.resolve()}"
         )
-        raise RuntimeError(detail) from exc
-    if HEADLESS:
+        raise RuntimeError(detail)
+
+    EFFECTIVE_HEADLESS = driver_headless
+    if driver_headless:
         driver.set_window_size(WINDOW_W, WINDOW_H)
     else:
         try:
@@ -1610,7 +1650,7 @@ def run_login_only() -> int:
     """
     Open Adobe Express in the Selenium profile so the user can log in once.
     """
-    driver = build_driver()
+    driver = build_driver(force_headed=True)
     try:
         prepare_tool(driver)
         log(f"Adobe login prep using browser profile: {EFFECTIVE_USER_DATA_DIR} [{EFFECTIVE_PROFILE_DIR}]")
@@ -1790,7 +1830,7 @@ def main(argv=None):
         log(f"Adobe download dir: {DOWNLOAD_DIR}")
         log(f"Archive original dir: {ORIG_DIR}")
         log(f"Chrome profile dir: {EFFECTIVE_USER_DATA_DIR} [{EFFECTIVE_PROFILE_DIR}]")
-        log(f"Chrome mode: {'headless' if HEADLESS else 'headed'} ({WINDOW_W}x{WINDOW_H})")
+        log(f"Chrome mode: {'headless' if EFFECTIVE_HEADLESS else 'headed'} ({WINDOW_W}x{WINDOW_H})")
         log("[auth] Preflight: this run will reuse the Chrome profile above for Adobe Express.")
         log("[auth] If Adobe download auth is missing, the run will pause and ask you to finish login in that browser window.")
         log(f"Run log file: {LOG_FILE.resolve()}")

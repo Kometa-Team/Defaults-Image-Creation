@@ -166,6 +166,8 @@ SEL_RELOAD_EACH_FILE=true
 SEL_PROMPT_FOR_LOGIN=true
 SEL_LOGIN_WAIT_SEC=900
 SEL_HEADLESS=false
+SEL_HEADLESS_REMOTE_DEBUGGING_PIPE=true
+SEL_HEADLESS_FALLBACK_TO_HEADED=true
 SEL_WINDOW_SIZE=1400,1000
 ```
 
@@ -186,8 +188,12 @@ SEL_WINDOW_SIZE=1400,1000
 > opt-in because Adobe Express can behave differently in headless mode. Headless
 > mode uses `SEL_HEADLESS_USER_DATA_DIR`/`SEL_HEADLESS_PROFILE_DIR`, separate
 > from the normal headed profile, so it does not corrupt or crash the visible
-> Chrome profile. If Adobe requires login during a headless run, the script exits
-> instead of waiting.
+> Chrome profile. `SEL_HEADLESS_REMOTE_DEBUGGING_PIPE=true` uses ChromeDriver's
+> pipe mode for startup, which avoids the old `DevToolsActivePort` file path.
+> If headless Chrome itself crashes before Adobe loads,
+> `SEL_HEADLESS_FALLBACK_TO_HEADED=true` continues in a visible browser with the
+> same automation profile instead of aborting the orchestrator.
+> If Adobe requires login during a headless run, the script exits instead of waiting.
 > To prepare the headless profile in PowerShell, first open it visibly and sign
 > in: `$env:SEL_HEADLESS="false"; $env:SEL_USER_DATA_DIR="./config/chrome-profile-headless"; $env:SEL_PROFILE_DIR="Default"; python sel_remove_bg.py --login-only`.
 > Then run the batch with `$env:SEL_HEADLESS="true"; $env:SEL_PROMPT_FOR_LOGIN="false"`.
