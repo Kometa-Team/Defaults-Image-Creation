@@ -408,6 +408,178 @@ def select_matching_rows(driver, query: str, limit: int) -> dict[str, Any]:
     return driver.execute_script(script, query, limit) or {"clicked": 0, "samples": []}
 
 
+def selection_toolbar_state(driver) -> dict[str, Any]:
+    script = r"""
+    function visible(el){
+      if (!el) return false;
+      const style = getComputedStyle(el);
+      const rect = el.getBoundingClientRect();
+      return style.display !== 'none' &&
+             style.visibility !== 'hidden' &&
+             rect.width > 0 &&
+             rect.height > 0;
+    }
+
+    function textOf(el){
+      try { return String(el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim(); }
+      catch(e) { return ''; }
+    }
+
+    function collectRoots(root, out){
+      out.push(root);
+      const all = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of all){
+        if (n.shadowRoot) collectRoots(n.shadowRoot, out);
+      }
+    }
+
+    const roots = [];
+    collectRoots(document, roots);
+    let selected = 0;
+    let deleteVisible = false;
+    for (const root of roots){
+      const nodes = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of nodes){
+        if (!visible(n)) continue;
+        const text = textOf(n);
+        const match = text.match(/\b(\d+)\s+selected\b/i);
+        if (match) selected = Math.max(selected, Number(match[1] || 0));
+        if (/^\s*Delete\s*$/i.test(text)) {
+          deleteVisible = true;
+        }
+      }
+    }
+    return {selected, deleteVisible};
+    """
+    try:
+        return driver.execute_script(script) or {"selected": 0, "deleteVisible": False}
+    except Exception:
+        return {"selected": 0, "deleteVisible": False}
+
+
+def matching_row_targets(driver, query: str, limit: int) -> list[dict[str, Any]]:
+    script = r"""
+    const query = String(arguments[0] || '').toLowerCase();
+    const limit = Number(arguments[1] || 25);
+
+    function visible(el){
+      if (!el) return false;
+      const style = getComputedStyle(el);
+      const rect = el.getBoundingClientRect();
+      return style.display !== 'none' &&
+             style.visibility !== 'hidden' &&
+             rect.width > 0 &&
+             rect.height > 0 &&
+             rect.bottom >= 0 &&
+             rect.top <= window.innerHeight;
+    }
+
+    function textOf(el){
+      try { return String(el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim(); }
+      catch(e) { return ''; }
+    }
+
+    function looksLikeRow(el){
+      const role = (el.getAttribute && String(el.getAttribute('role') || '').toLowerCase()) || '';
+      const tag = (el.tagName || '').toLowerCase();
+      const rect = el.getBoundingClientRect();
+      return role === 'row' ||
+             role === 'listitem' ||
+             tag === 'tr' ||
+             tag === 'li' ||
+             (rect.width > window.innerWidth * 0.45 && rect.height >= 40 && rect.height <= 160);
+    }
+
+    function rowKey(row){
+      const rect = row.getBoundingClientRect();
+      return `${Math.round(rect.top / 4) * 4}:${Math.round(rect.height / 4) * 4}`;
+    }
+
+    function collectRoots(root, out){
+      out.push(root);
+      const all = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of all){
+        if (n.shadowRoot) collectRoots(n.shadowRoot, out);
+      }
+    }
+
+    const roots = [];
+    collectRoots(document, roots);
+    const rowMap = new Map();
+    for (const root of roots){
+      const nodes = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of nodes){
+        if (!visible(n) || !looksLikeRow(n)) continue;
+        const text = textOf(n);
+        if (!text || (query && !text.toLowerCase().includes(query))) continue;
+        const rect = n.getBoundingClientRect();
+        const key = rowKey(n);
+        if (!rowMap.has(key)) {
+          rowMap.set(key, {
+            text: text.slice(0, 180),
+            y: Math.min(window.innerHeight - 5, Math.max(5, rect.top + rect.height / 2)),
+            xs: [
+              Math.min(window.innerWidth - 5, Math.max(5, rect.left + 34)),
+              Math.min(window.innerWidth - 5, Math.max(5, rect.left + 50)),
+              Math.min(window.innerWidth - 5, Math.max(5, rect.left + 70))
+            ],
+            top: rect.top
+          });
+        }
+      }
+    }
+
+    return Array.from(rowMap.values())
+      .sort((a, b) => a.top - b.top)
+      .slice(0, limit);
+    """
+    try:
+        return driver.execute_script(script, query, limit) or []
+    except Exception:
+        return []
+
+
+def cdp_click(driver, x: float, y: float) -> None:
+    for event_type in ("mouseMoved", "mousePressed", "mouseReleased"):
+        payload: dict[str, Any] = {"type": event_type, "x": float(x), "y": float(y)}
+        if event_type != "mouseMoved":
+            payload.update({"button": "left", "clickCount": 1})
+        driver.execute_cdp_cmd("Input.dispatchMouseEvent", payload)
+
+
+def select_matching_rows_with_cdp(driver, query: str, limit: int) -> dict[str, Any]:
+    targets = matching_row_targets(driver, query, limit)
+    if not targets:
+        return {"clicked": 0, "samples": []}
+
+    clicked: list[str] = []
+    for target in targets:
+        before = selection_toolbar_state(driver)
+        before_count = int(before.get("selected", 0) or 0)
+        selected = False
+        for x in target.get("xs", []):
+            try:
+                cdp_click(driver, float(x), float(target["y"]))
+            except Exception:
+                continue
+            time.sleep(0.25)
+            after = selection_toolbar_state(driver)
+            after_count = int(after.get("selected", 0) or 0)
+            if after_count > before_count or after.get("deleteVisible"):
+                selected = True
+                break
+        if selected:
+            clicked.append(str(target.get("text", "")))
+
+    final_state = selection_toolbar_state(driver)
+    return {
+        "clicked": len(clicked),
+        "samples": clicked,
+        "toolbarSelected": final_state.get("selected", 0),
+        "deleteVisible": final_state.get("deleteVisible", False),
+    }
+
+
 def click_button_by_text(driver, pattern: str, label: str, timeout: float = 15.0) -> bool:
     script = r"""
     const pattern = new RegExp(arguments[0], 'i');
@@ -668,7 +840,7 @@ def main(argv: list[str] | None = None) -> int:
                 break
 
             batch_limit = min(args.batch_size, remaining_cap) if args.max_delete else args.batch_size
-            selected = select_matching_rows(driver, query, batch_limit)
+            selected = select_matching_rows_with_cdp(driver, query, batch_limit)
             clicked = int(selected.get("clicked", 0) or 0)
 
             if clicked <= 0:
@@ -696,7 +868,16 @@ def main(argv: list[str] | None = None) -> int:
             selected_total += clicked
             for sample in selected.get("samples", [])[:3]:
                 log(f"[selected] {sample}")
+            log(
+                "[selected] toolbar: "
+                f"{selected.get('toolbarSelected', 0)} selected; "
+                f"delete visible={selected.get('deleteVisible', False)}"
+            )
             time.sleep(args.pause_sec)
+
+            if not selected.get("deleteVisible"):
+                log("[error] Rows were clicked, but Adobe did not expose the Delete toolbar.")
+                return 4
 
             if not delete_selected_batch(driver):
                 log("[error] Could not click Delete and confirmation. Leaving selected rows untouched.")
