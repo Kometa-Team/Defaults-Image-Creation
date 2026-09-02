@@ -266,6 +266,21 @@ def write_debug_dump(driver, query: str, select_xs: list[int], label: str) -> Pa
         return None
 
 
+def chrome_error_summary(driver) -> str:
+    script = r"""
+    if (!String(location.href || '').startsWith('chrome-error://')) return '';
+    function textOf(el){
+      try { return String(el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim(); }
+      catch(e) { return ''; }
+    }
+    return textOf(document.body || document).slice(0, 500);
+    """
+    try:
+        return str(driver.execute_script(script) or "").strip()
+    except Exception:
+        return ""
+
+
 def wait_for_page(driver, timeout: float = 45.0) -> bool:
     script = r"""
     function textOf(el){
@@ -1733,14 +1748,21 @@ def main(argv: list[str] | None = None) -> int:
             log("[error] Adobe file list did not become ready. Check login or page layout.")
             write_debug_dump(driver, query, select_xs, "not_ready")
             if args.headless:
+                chrome_error = chrome_error_summary(driver)
+                if chrome_error:
+                    log(f"[error] Headless Chrome failed before Adobe loaded: {chrome_error}")
                 login_cmd = "python sel_remove_bg.py --login-only --headless-profile"
                 if args.headless_user_data_dir:
                     login_cmd += f" --headless-user-data-dir {args.headless_user_data_dir}"
                 if args.headless_profile_dir:
                     login_cmd += f" --headless-profile-dir {args.headless_profile_dir}"
-                log("[next] Headless cleanup requires the separate headless Chrome profile to be signed in.")
-                log(f"[next] Run: {login_cmd}")
-                log("[next] Then retry the same adobe_express_cleanup.py --headless command.")
+                if chrome_error:
+                    log("[next] Retry this command once with the updated Chrome network flags.")
+                    log("[next] If it still reaches chrome-error://, use headed cleanup for Adobe Deleted.")
+                else:
+                    log("[next] Headless cleanup requires the separate headless Chrome profile to be signed in.")
+                    log(f"[next] Run: {login_cmd}")
+                    log("[next] Then retry the same adobe_express_cleanup.py --headless command.")
             return 3
 
         state = ensure_file_list_page(driver, args.url, query, args.row_wait_sec)
