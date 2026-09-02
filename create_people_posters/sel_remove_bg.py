@@ -1629,9 +1629,9 @@ def detect_adobe_storage_full(driver) -> str:
 def log_adobe_storage_cleanup_next_steps() -> None:
     log("[storage] Adobe Express storage is full; remove-background downloads may stay disabled or stall.")
     log("[next] Clean Adobe Express remote storage:")
-    log("[next] python adobe_express_cleanup.py --apply --batch-size 100 --select-per-delete 2 --viewports-per-delete 1 --row-wait-sec 90")
-    log("[next] Or run cleanup headless:")
-    log("[next] python adobe_express_cleanup.py --apply --batch-size 100 --select-per-delete 2 --viewports-per-delete 1 --row-wait-sec 90 --headless")
+    log("[next] python adobe_express_cleanup.py --apply --batch-size 1000 --select-per-delete 4 --viewports-per-delete 1 --headless")
+    log("[next] Then permanently delete the moved files from Adobe Deleted:")
+    log("[next] python adobe_express_cleanup.py --deleted --apply --batch-size 1000 --select-per-delete 4 --viewports-per-delete 1 --headless")
     log("[next] Then resume:")
     log("[next] python orchestrator.py --redo remove_bg --no-recover-edge-chops")
 

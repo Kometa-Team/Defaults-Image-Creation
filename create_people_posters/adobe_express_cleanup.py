@@ -32,6 +32,7 @@ from sel_remove_bg import build_driver, hide_onetrust, js  # noqa: E402
 
 
 DEFAULT_URL = "https://new.express.adobe.com/your-stuff/files?view=list"
+DEFAULT_DELETED_URL = "https://www.adobe.com/files/deleted"
 DEFAULT_QUERY = "Remove background project"
 DEFAULT_SELECT_XS = "110,100,120,130,150,166,180,200"
 DEFAULT_ROW_WAIT_SEC = "45"
@@ -75,6 +76,16 @@ def log(message: str) -> None:
         pass
 
 
+def is_expected_cleanup_page(current_url: str, expected_url: str) -> bool:
+    current = (current_url or "").lower()
+    expected = (expected_url or "").lower()
+    if "/files/deleted" in expected:
+        return "/files/deleted" in current
+    if "/your-stuff/files" in expected:
+        return "/your-stuff/files" in current
+    return current.startswith(expected.split("?", 1)[0])
+
+
 def write_debug_dump(driver, query: str, select_xs: list[int], label: str) -> Path | None:
     DEBUG_DIR.mkdir(parents=True, exist_ok=True)
     stamp = time.strftime("%Y%m%d-%H%M%S")
@@ -102,6 +113,16 @@ def write_debug_dump(driver, query: str, select_xs: list[int], label: str) -> Pa
     function textOf(el){
       try { return String(el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim(); }
       catch(e) { return ''; }
+    }
+
+    function labelOf(el){
+      const text = textOf(el);
+      if (text) return text;
+      try {
+        return String(el.getAttribute('aria-label') || el.getAttribute('title') || '').replace(/\s+/g, ' ').trim();
+      } catch(e) {
+        return '';
+      }
     }
 
     function attrs(el){
@@ -263,7 +284,7 @@ def wait_for_page(driver, timeout: float = 45.0) -> bool:
     }
 
     const text = chunks.join(' ').replace(/\s+/g, ' ').trim();
-    const hasFileListText = /Your stuff|Search Files|Remove background project/i.test(text);
+    const hasFileListText = /Your stuff|Search Files|Deleted|Your files|Remove background project/i.test(text);
     const hasCheckboxes = !!document.querySelector('sp-table-checkbox-cell[label], input[type="checkbox"], [role="checkbox"], sp-checkbox');
     return {
       readyState: document.readyState,
@@ -463,8 +484,8 @@ def ensure_file_list_page(driver, url: str, query: str, row_wait_sec: float) -> 
         current = driver.current_url
     except Exception:
         pass
-    if "/your-stuff/files" not in current:
-        log(f"[nav] browser left file list ({current}); returning to Adobe file list")
+    if not is_expected_cleanup_page(current, url):
+        log(f"[nav] browser left cleanup page ({current}); returning to Adobe cleanup URL")
         driver.get(url)
         wait_for_page(driver)
     return wait_for_matching_rows(driver, query, row_wait_sec)
@@ -704,10 +725,10 @@ def selection_toolbar_state(driver) -> dict[str, Any]:
       const nodes = root.querySelectorAll ? root.querySelectorAll('*') : [];
       for (const n of nodes){
         if (!visible(n)) continue;
-        const text = textOf(n);
+        const text = labelOf(n);
         const match = text.match(/\b(\d+)\s+selected\b/i);
         if (match) selected = Math.max(selected, Number(match[1] || 0));
-        if (/^\s*Delete\s*$/i.test(text)) {
+        if (/^\s*(Delete|Delete permanently|Permanently delete)\s*$/i.test(text)) {
           deleteVisible = true;
         }
       }
@@ -835,12 +856,45 @@ def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, 
              rect.top <= window.innerHeight;
     }
 
+    function textOf(el){
+      try { return String(el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim(); }
+      catch(e) { return ''; }
+    }
+
+    function looksLikeRow(el){
+      const role = (el.getAttribute && String(el.getAttribute('role') || '').toLowerCase()) || '';
+      const tag = (el.tagName || '').toLowerCase();
+      const rect = el.getBoundingClientRect();
+      return role === 'row' ||
+             role === 'listitem' ||
+             tag === 'tr' ||
+             tag === 'li' ||
+             (rect.width > window.innerWidth * 0.45 && rect.height >= 36 && rect.height <= 180);
+    }
+
+    function rowKey(row){
+      const rect = row.getBoundingClientRect();
+      return `${Math.round(rect.top / 4) * 4}:${Math.round(rect.height / 4) * 4}`;
+    }
+
     function collectRoots(root, out){
       out.push(root);
       const all = root.querySelectorAll ? root.querySelectorAll('*') : [];
       for (const n of all){
         if (n.shadowRoot) collectRoots(n.shadowRoot, out);
       }
+    }
+
+    function deepFirst(root, selector){
+      const hit = root.querySelector ? root.querySelector(selector) : null;
+      if (hit) return hit;
+      const all = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of all){
+        if (!n.shadowRoot) continue;
+        const nested = deepFirst(n.shadowRoot, selector);
+        if (nested) return nested;
+      }
+      return null;
     }
 
     const roots = [];
@@ -865,6 +919,26 @@ def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, 
             cell,
             checkbox: sp,
             input,
+            label,
+            top: rect.top
+          });
+        }
+      }
+
+      const nodes = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const row of nodes){
+        if (!visible(row) || !looksLikeRow(row)) continue;
+        const label = textOf(row);
+        if (!label || (query && !label.toLowerCase().includes(query))) continue;
+        const checkbox = deepFirst(row, 'input[type="checkbox"], [role="checkbox"], sp-checkbox');
+        if (!checkbox || !visible(checkbox)) continue;
+        const rect = row.getBoundingClientRect();
+        const key = rowKey(row);
+        if (!map.has(key)) {
+          map.set(key, {
+            cell: row,
+            checkbox,
+            input: checkbox.matches && checkbox.matches('input[type="checkbox"]') ? checkbox : null,
             label,
             top: rect.top
           });
@@ -921,7 +995,8 @@ def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, 
                     continue
                 time.sleep(0.25)
                 try:
-                    if "/your-stuff/files" not in driver.current_url:
+                    current = driver.current_url
+                    if "new.express.adobe.com/id/" in current:
                         return {
                             "clicked": len(clicked),
                             "samples": clicked,
@@ -972,7 +1047,7 @@ def select_matching_rows_with_cdp(
             {
                 "toolbarSelected": final_state.get("selected", 0),
                 "deleteVisible": final_state.get("deleteVisible", False),
-                "method": "sp-table-checkbox-cell",
+                "method": "checkbox-cell",
             }
         )
         if final_state.get("selected", 0) or final_state.get("deleteVisible"):
@@ -988,7 +1063,7 @@ def select_matching_rows_with_cdp(
             "toolbarSelected": final_state.get("selected", 0),
             "deleteVisible": final_state.get("deleteVisible", False),
             "directClicked": direct_clicked,
-            "method": "sp-table-checkbox-cell",
+            "method": "checkbox-cell",
         }
 
     targets = matching_row_targets(driver, query, limit, select_xs)
@@ -1008,7 +1083,7 @@ def select_matching_rows_with_cdp(
                 continue
             time.sleep(0.25)
             try:
-                if "/your-stuff/files" not in driver.current_url:
+                if "new.express.adobe.com/id/" in driver.current_url:
                     opened_editor = True
                     break
             except Exception:
@@ -1054,6 +1129,16 @@ def click_button_by_text(driver, pattern: str, label: str, timeout: float = 15.0
       catch(e) { return ''; }
     }
 
+    function labelOf(el){
+      const text = textOf(el);
+      if (text) return text;
+      try {
+        return String(el.getAttribute('aria-label') || el.getAttribute('title') || '').replace(/\s+/g, ' ').trim();
+      } catch(e) {
+        return '';
+      }
+    }
+
     function disabled(el){
       try {
         const inner = (el.shadowRoot && el.shadowRoot.querySelector('button')) || el;
@@ -1085,7 +1170,7 @@ def click_button_by_text(driver, pattern: str, label: str, timeout: float = 15.0
         ? root.querySelectorAll('button, [role="button"], sp-button, a')
         : [];
       for (const n of nodes){
-        const text = textOf(n);
+        const text = labelOf(n);
         if (!text || !pattern.test(text) || !visible(n) || disabled(n)) continue;
         hits.push(n);
       }
@@ -1171,13 +1256,18 @@ def scroll_next_page(driver) -> dict[str, Any]:
         return {"moved": False, "target": "error"}
 
 
-def delete_selected_batch(driver) -> bool:
-    if not click_button_by_text(driver, r"^\s*Delete\s*$", "Delete action", timeout=10):
+def delete_selected_batch(driver, permanent: bool = False) -> bool:
+    action_pattern = (
+        r"^\s*(Delete permanently|Permanently delete|Delete)\s*$"
+        if permanent
+        else r"^\s*Delete\s*$"
+    )
+    if not click_button_by_text(driver, action_pattern, "Delete action", timeout=10):
         return False
     time.sleep(0.8)
     return click_button_by_text(
         driver,
-        r"^\s*(Delete|Permanently delete|Move to trash)\s*$",
+        r"^\s*(Delete|Delete permanently|Permanently delete|Move to trash|Yes, delete|Delete forever)\s*$",
         "Delete confirmation",
         timeout=15,
     )
@@ -1191,6 +1281,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--url",
         default=os.getenv("ADOBE_CLEANUP_URL", DEFAULT_URL),
         help="Adobe Express file-list URL.",
+    )
+    parser.add_argument(
+        "--deleted",
+        action="store_true",
+        default=env_bool("ADOBE_CLEANUP_DELETED", "false"),
+        help="Open Adobe Deleted files and permanently delete matching rows.",
     )
     parser.add_argument(
         "--query",
@@ -1285,6 +1381,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    if args.deleted:
+        args.url = DEFAULT_DELETED_URL
     query = (args.query or "").strip()
     if not query and not args.allow_all:
         log("[error] Refusing empty --query unless --allow-all is also set.")
@@ -1295,6 +1393,8 @@ def main(argv: list[str] | None = None) -> int:
     log(f"URL: {args.url}")
     log(f"Query: {query!r}" if query else "Query: <all visible rows>")
     log(f"Mode: {'apply/delete' if args.apply else 'dry-run/report only'}")
+    permanent_delete = args.deleted or "/files/deleted" in args.url.lower()
+    log(f"Permanent delete mode: {permanent_delete}")
     log(f"Batch size: {args.batch_size}; max delete: {args.max_delete or 'unlimited'}")
     select_xs = parse_select_xs(args.select_xs)
     log(f"Select X coordinates: {select_xs or '<row-relative only>'}")
@@ -1463,7 +1563,7 @@ def main(argv: list[str] | None = None) -> int:
                 write_debug_dump(driver, query, select_xs, "selection_failed")
                 return 4
 
-            if not delete_selected_batch(driver):
+            if not delete_selected_batch(driver, permanent=permanent_delete):
                 log("[error] Could not click Delete and confirmation. Leaving selected rows untouched.")
                 write_debug_dump(driver, query, select_xs, "delete_failed")
                 return 4

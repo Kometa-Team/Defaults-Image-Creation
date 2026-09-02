@@ -562,6 +562,12 @@ python adobe_express_cleanup.py --apply --batch-size 25
 # Delete up to 500 matching files this run.
 python adobe_express_cleanup.py --apply --batch-size 500
 
+# Delete up to 1000 matching files in headless mode. This moves them to Adobe Deleted.
+python adobe_express_cleanup.py --apply --batch-size 1000 --select-per-delete 4 --viewports-per-delete 1 --headless
+
+# Permanently delete matching files already in Adobe Deleted.
+python adobe_express_cleanup.py --deleted --apply --batch-size 1000 --select-per-delete 4 --viewports-per-delete 1 --headless
+
 # Select two rows, scroll, select two more, repeat for fewer Delete confirmations.
 python adobe_express_cleanup.py --apply --batch-size 500 --select-per-delete 2 --viewports-per-delete 5
 
@@ -582,10 +588,14 @@ Use this when Adobe says the account storage is full and remove-background
 jobs stall with Download/Export disabled. The cleanup uses the same Selenium
 Chrome profile as `sel_remove_bg.py`, opens Adobe Express "Your stuff", selects
 visible rows whose text contains `Remove background project`, deletes them,
-refreshes, and repeats. It is destructive only with `--apply`. Keep the default
-query unless you intentionally want to delete a different class of Adobe files.
-The Selenium remove-background step detects Adobe's storage-full banner and
-prints the cleanup and resume commands before stopping the batch.
+refreshes, and repeats. That first pass moves files into Adobe Deleted, where
+they still count until Adobe permanently removes them. Run the same helper with
+`--deleted` to open `https://www.adobe.com/files/deleted` and permanently delete
+matching rows. It is destructive only with `--apply`. Keep the default query
+unless you intentionally want to delete a different class of Adobe files. The
+Selenium remove-background step detects Adobe's storage-full banner and prints
+the active cleanup, deleted-files cleanup, and resume commands before stopping
+the batch.
 Adobe's file list is virtualized, so the script works on the rendered viewport
 and scrolls/refreshes to hydrate more rows. By default it selects and deletes
 two rows per cycle because Adobe's bottom Delete toolbar can cover lower rows
