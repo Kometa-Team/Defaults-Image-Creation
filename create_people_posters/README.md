@@ -584,6 +584,8 @@ Chrome profile as `sel_remove_bg.py`, opens Adobe Express "Your stuff", selects
 visible rows whose text contains `Remove background project`, deletes them,
 refreshes, and repeats. It is destructive only with `--apply`. Keep the default
 query unless you intentionally want to delete a different class of Adobe files.
+The Selenium remove-background step detects Adobe's storage-full banner and
+prints the cleanup and resume commands before stopping the batch.
 Adobe's file list is virtualized, so the script works on the rendered viewport
 and scrolls/refreshes to hydrate more rows. By default it selects and deletes
 two rows per cycle because Adobe's bottom Delete toolbar can cover lower rows

@@ -347,6 +347,10 @@ class AdobeLoginRequiredError(RuntimeError):
     """Raised when Adobe blocks download until the user logs in."""
 
 
+class AdobeStorageFullError(RuntimeError):
+    """Raised when Adobe Express reports that account storage is full."""
+
+
 class StaleAdobeProjectStateError(RuntimeError):
     """Raised when Adobe opens a reused project chooser instead of the fresh upload page."""
 
@@ -1222,6 +1226,10 @@ def wait_until_processed_controls(driver, timeout=PROC_TIMEOUT):
     no_control_since = time.time()
     while time.time() < end:
         dismiss_stale_modals(driver)
+        storage_full = detect_adobe_storage_full(driver)
+        if storage_full:
+            raise AdobeStorageFullError(f"Adobe Express storage is full: {storage_full}")
+
         disabled_seen = None
         # 1) selectors first
         for sel in selectors:
@@ -1564,10 +1572,78 @@ def download_button_still_ready(driver) -> bool:
         return False
 
 
+def detect_adobe_storage_full(driver) -> str:
+    """
+    Return Adobe's storage-full banner/message when the account is out of space.
+    """
+    script = r"""
+    function textOf(el){
+      try{
+        return ((el.innerText || el.textContent || '') + '').replace(/\s+/g, ' ').trim();
+      }catch(e){
+        return '';
+      }
+    }
+
+    function scanRoot(root){
+      const text = textOf(root);
+      if (/storage is full|remove files to free up space|upgrade your plan to keep creating/i.test(text)){
+        const nodes = root.querySelectorAll ? Array.from(root.querySelectorAll('*')) : [];
+        for (const node of nodes){
+          const nodeText = textOf(node);
+          if (/storage is full|remove files to free up space|upgrade your plan to keep creating/i.test(nodeText)){
+            return nodeText.slice(0, 500);
+          }
+        }
+        return text.slice(0, 500);
+      }
+
+      const nodes = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of nodes){
+        if (!n.shadowRoot) continue;
+        const hit = scanRoot(n.shadowRoot);
+        if (hit) return hit;
+      }
+      return '';
+    }
+
+    let hit = scanRoot(document);
+    if (hit) return hit;
+
+    for (const f of document.querySelectorAll('iframe')){
+      try{
+        const d = f.contentDocument || f.contentWindow?.document;
+        if (!d) continue;
+        hit = scanRoot(d);
+        if (hit) return hit;
+      }catch(e){}
+    }
+    return '';
+    """
+    try:
+        return str(driver.execute_script(script) or "").strip()
+    except Exception:
+        return ""
+
+
+def log_adobe_storage_cleanup_next_steps() -> None:
+    log("[storage] Adobe Express storage is full; remove-background downloads may stay disabled or stall.")
+    log("[next] Clean Adobe Express remote storage:")
+    log("[next] python adobe_express_cleanup.py --apply --batch-size 100 --select-per-delete 2 --viewports-per-delete 1 --row-wait-sec 90")
+    log("[next] Or run cleanup headless:")
+    log("[next] python adobe_express_cleanup.py --apply --batch-size 100 --select-per-delete 2 --viewports-per-delete 1 --row-wait-sec 90 --headless")
+    log("[next] Then resume:")
+    log("[next] python orchestrator.py --redo remove_bg --no-recover-edge-chops")
+
+
 def detect_download_blocker(driver) -> str:
     """
     Return a human-readable Adobe blocker message if download is gated.
     """
+    storage_full = detect_adobe_storage_full(driver)
+    if storage_full:
+        return f"Adobe Express storage is full: {storage_full}"
+
     script = r"""
     function isVisible(el){
       try{
@@ -1742,6 +1818,9 @@ def resolve_download_blocker(driver) -> bool:
         if prompt_for_adobe_login(driver):
             return True
         raise AdobeLoginRequiredError(blocker)
+
+    if blocker.startswith("Adobe Express storage is full:"):
+        raise AdobeStorageFullError(blocker)
 
     raise RuntimeError(blocker)
 
@@ -2103,6 +2182,13 @@ def main(argv=None):
                         abort_run = True
                         exit_code = 4
                         break
+                    except AdobeStorageFullError as e:
+                        fr.status = "ERROR"
+                        fr.detail = str(e).splitlines()[0] if str(e) else "Adobe Express storage is full"
+                        abort_run = True
+                        exit_code = 6
+                        log_adobe_storage_cleanup_next_steps()
+                        break
                     except Exception as e:
                         fr.status = "ERROR"
                         fr.detail = str(e).splitlines()[0] if str(e) else e.__class__.__name__
@@ -2144,6 +2230,8 @@ def main(argv=None):
                         log("[auth] Stopping the batch because Adobe login is still required. Finish login in this profile, then rerun.")
                         log("[next] Run: python sel_remove_bg.py --login-only")
                         log("[next] Then resume: python orchestrator.py --redo remove_bg --no-recover-edge-chops")
+                    elif exit_code == 6:
+                        log("[storage] Stopping the batch because Adobe Express storage is full.")
                     break
 
                 if idx < len(files) and RESTART_BROWSER_EACH_FILE:
@@ -2173,6 +2261,9 @@ def main(argv=None):
             log("[auth] No completed work was rolled back; remaining JPGs are still in the source folder.")
             log("[next] Run: python sel_remove_bg.py --login-only")
             log("[next] Then resume: python orchestrator.py --redo remove_bg --no-recover-edge-chops")
+        elif exit_code == 6:
+            log("[storage] No completed work was rolled back; remaining JPGs are still in the source folder.")
+            log_adobe_storage_cleanup_next_steps()
 
     if exit_code:
         return exit_code
