@@ -17,6 +17,8 @@ from typing import Any
 
 from dotenv import load_dotenv
 from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -841,51 +843,6 @@ def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, 
       }
     }
 
-    function checkboxTargets(cell){
-      const out = [];
-      if (!cell) return out;
-      if (cell.matches && cell.matches('input[type="checkbox"], sp-checkbox, [role="checkbox"]')) {
-        out.push(cell);
-      }
-      if (cell.shadowRoot) {
-        const sp = cell.shadowRoot.querySelector('sp-checkbox');
-        if (sp && sp.shadowRoot) {
-          const input = sp.shadowRoot.querySelector('input[type="checkbox"]');
-          if (sp) out.push(sp);
-          if (input) out.push(input);
-        } else if (sp) {
-          out.push(sp);
-        }
-        const input = cell.shadowRoot.querySelector('input[type="checkbox"]');
-        if (input) out.push(input);
-      }
-      if (cell.querySelector) {
-        const local = cell.querySelector('input[type="checkbox"], sp-checkbox, [role="checkbox"]');
-        if (local) out.push(local);
-      }
-      out.push(cell);
-      return Array.from(new Set(out));
-    }
-
-    function clickTarget(target){
-      if (!target) return false;
-      try {
-        target.scrollIntoView({block: 'center', inline: 'nearest'});
-        target.dispatchEvent(new MouseEvent('mousedown', {bubbles: true, cancelable: true, view: window}));
-        target.dispatchEvent(new MouseEvent('mouseup', {bubbles: true, cancelable: true, view: window}));
-        target.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}));
-        if (target.click) target.click();
-        return true;
-      } catch(e) {
-        try {
-          target.click();
-          return true;
-        } catch(e2) {
-          return false;
-        }
-      }
-    }
-
     const roots = [];
     collectRoots(document, roots);
     const map = new Map();
@@ -900,41 +857,103 @@ def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, 
         const rect = cell.getBoundingClientRect();
         const key = `${Math.round(rect.top / 4) * 4}:${label}`;
         if (!map.has(key)) {
-          map.set(key, {cell, label, top: rect.top});
+          const sp = cell.shadowRoot ? cell.shadowRoot.querySelector('sp-checkbox') : null;
+          const input = sp && sp.shadowRoot
+            ? sp.shadowRoot.querySelector('input[type="checkbox"]')
+            : (cell.shadowRoot ? cell.shadowRoot.querySelector('input[type="checkbox"]') : null);
+          map.set(key, {
+            cell,
+            checkbox: sp,
+            input,
+            label,
+            top: rect.top
+          });
         }
       }
     }
 
-    const targets = Array.from(map.values())
+    return Array.from(map.values())
       .sort((a, b) => b.top - a.top)
       .slice(0, limit);
-    const clicked = [];
-    for (const item of targets){
-      let ok = false;
-      for (const target of checkboxTargets(item.cell)){
-        if (clickTarget(target)) {
-          ok = true;
-          break;
-        }
-      }
-      if (ok) clicked.push(item.label);
-    }
-    return {
-      clicked: clicked.length,
-      samples: clicked,
-      targetCount: targets.length,
-      directCheckboxCells: true
-    };
     """
     try:
-        return driver.execute_script(script, query, limit) or {
-            "clicked": 0,
-            "samples": [],
-            "targetCount": 0,
-            "directCheckboxCells": True,
-        }
+        targets = driver.execute_script(script, query, limit) or []
     except Exception:
         return {"clicked": 0, "samples": [], "targetCount": 0, "directCheckboxCells": True}
+
+    clicked: list[str] = []
+    for item in targets:
+        label = str(item.get("label", ""))
+        before = selection_toolbar_state(driver)
+        before_count = int(before.get("selected", 0) or 0)
+        candidates = [
+            item.get("checkbox"),
+            item.get("input"),
+            item.get("cell"),
+        ]
+        seen: set[int] = set()
+        selected = False
+        for candidate in candidates:
+            if candidate is None:
+                continue
+            ident = id(candidate)
+            if ident in seen:
+                continue
+            seen.add(ident)
+            try:
+                driver.execute_script(
+                    "arguments[0].scrollIntoView({block:'center', inline:'nearest'});",
+                    candidate,
+                )
+            except Exception:
+                pass
+
+            actions = (
+                lambda el: el.click(),
+                lambda el: ActionChains(driver).move_to_element(el).click().perform(),
+                lambda el: el.send_keys(Keys.SPACE),
+            )
+            for action in actions:
+                before_delete_visible = bool(before.get("deleteVisible"))
+                try:
+                    action(candidate)
+                except Exception:
+                    continue
+                time.sleep(0.25)
+                try:
+                    if "/your-stuff/files" not in driver.current_url:
+                        return {
+                            "clicked": len(clicked),
+                            "samples": clicked,
+                            "targetCount": len(targets),
+                            "openedEditor": True,
+                            "directCheckboxCells": True,
+                        }
+                except Exception:
+                    pass
+                after = selection_toolbar_state(driver)
+                after_count = int(after.get("selected", 0) or 0)
+                if after_count > before_count or (
+                    before_count <= 0
+                    and not before_delete_visible
+                    and after.get("deleteVisible")
+                ):
+                    selected = True
+                    break
+            if selected:
+                break
+        if selected:
+            clicked.append(label)
+
+    final_state = selection_toolbar_state(driver)
+    return {
+        "clicked": len(clicked),
+        "samples": clicked,
+        "targetCount": len(targets),
+        "toolbarSelected": final_state.get("selected", 0),
+        "deleteVisible": final_state.get("deleteVisible", False),
+        "directCheckboxCells": True,
+    }
 
 
 def select_matching_rows_with_cdp(
