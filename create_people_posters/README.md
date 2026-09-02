@@ -198,10 +198,10 @@ SEL_WINDOW_SIZE=1400,1000
 > from the normal headed profile, so it does not corrupt or crash the visible
 > Chrome profile. `SEL_HEADLESS_REMOTE_DEBUGGING_PIPE=true` uses ChromeDriver's
 > pipe mode for startup, which avoids the old `DevToolsActivePort` file path.
-> If the dedicated headless profile crashes before Adobe loads,
-> `SEL_HEADLESS_FALLBACK_TO_USER_PROFILE=true` tries the normal signed-in
-> `SEL_USER_DATA_DIR` automation profile in headless mode before using any
-> visible browser fallback.
+> If the dedicated headless profile crashes before Adobe loads during the
+> normal remove-background step, `SEL_HEADLESS_FALLBACK_TO_USER_PROFILE=true`
+> tries the normal signed-in `SEL_USER_DATA_DIR` automation profile in headless
+> mode before using any visible browser fallback.
 > If headless Chrome itself still crashes before Adobe loads,
 > `SEL_HEADLESS_FALLBACK_TO_HEADED=true` continues in a visible browser with the
 > same automation profile instead of aborting the orchestrator. If that separate
@@ -209,8 +209,8 @@ SEL_WINDOW_SIZE=1400,1000
 > `SEL_HEADLESS_FALLBACK_TO_HEADED_PROFILE=true` tries the normal
 > `SEL_USER_DATA_DIR` headed automation profile as the last startup fallback.
 > If Adobe requires login during a headless run, the script exits instead of waiting.
-> To prepare the headless profile in PowerShell, first open it visibly and sign
-> in: `$env:SEL_HEADLESS="false"; $env:SEL_USER_DATA_DIR="./config/chrome-profile-headless"; $env:SEL_PROFILE_DIR="Default"; python sel_remove_bg.py --login-only`.
+> To prepare the separate headless profile, first open it visibly and sign in:
+> `python sel_remove_bg.py --login-only --headless-profile`.
 > Then run the batch with `$env:SEL_HEADLESS="true"; $env:SEL_PROMPT_FOR_LOGIN="false"`.
 > Stale Adobe project/modals and processing/download timeouts are retried by
 > restarting Chrome and reprocessing the same JPG up to `SEL_MAX_FILE_ATTEMPTS`.
@@ -562,10 +562,16 @@ python adobe_express_cleanup.py --apply --batch-size 25
 # Delete up to 500 matching files this run.
 python adobe_express_cleanup.py --apply --batch-size 500
 
-# Delete up to 1000 matching files in headless mode. This moves them to Adobe Deleted.
-python adobe_express_cleanup.py --apply --batch-size 1000 --select-per-delete 4 --viewports-per-delete 1 --headless
+# Delete up to 1000 matching files. This moves them to Adobe Deleted.
+python adobe_express_cleanup.py --apply --batch-size 1000 --select-per-delete 4 --viewports-per-delete 1
 
 # Permanently delete matching files already in Adobe Deleted.
+python adobe_express_cleanup.py --deleted --apply --batch-size 1000 --select-per-delete 4 --viewports-per-delete 1
+
+# One-time setup for cleanup headless mode: open the headless profile visibly and sign in.
+python sel_remove_bg.py --login-only --headless-profile
+
+# Run the same cleanup headlessly after the headless profile is signed in.
 python adobe_express_cleanup.py --deleted --apply --batch-size 1000 --select-per-delete 4 --viewports-per-delete 1 --headless
 
 # Select two rows, scroll, select two more, repeat for fewer Delete confirmations.
@@ -580,7 +586,7 @@ python adobe_express_cleanup.py --debug-dump
 # If Adobe's shell loads before the file rows hydrate, wait longer for rows.
 python adobe_express_cleanup.py --apply --batch-size 10 --row-wait-sec 90
 
-# Run cleanup with the shared Selenium headless profile.
+# Run active-file cleanup with the separate Selenium headless profile.
 python adobe_express_cleanup.py --apply --batch-size 100 --select-per-delete 2 --row-wait-sec 90 --headless
 ```
 
@@ -609,8 +615,12 @@ older screen-coordinate fallback is disabled unless `--coordinate-fallback` or
 `ADOBE_CLEANUP_COORDINATE_FALLBACK=true` is set, because missed coordinate clicks
 can open the editor instead of selecting rows. Use `--debug-dump` to write a live
 DOM/control JSON file and screenshot under `config/adobe_express_cleanup_debug`
-when selectors need tuning. `--headless` explicitly uses the Selenium headless
-profile, even when `SEL_HEADLESS=false` for the normal background-removal flow.
+when selectors need tuning. `--headless` explicitly uses the separate Selenium
+headless profile, even when `SEL_HEADLESS=false` for the normal
+background-removal flow. Cleanup headless mode does not fall back to the normal
+headed profile, because Adobe may serve the wrong page in that combination; if
+the headless profile is not signed in or fails to load, the script writes a
+debug dump and prints `python sel_remove_bg.py --login-only --headless-profile`.
 
 Clean generated `config` artifacts:
 

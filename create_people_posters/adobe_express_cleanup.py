@@ -1629,7 +1629,11 @@ def main(argv: list[str] | None = None) -> int:
             f"({delete_goal})"
         )
 
-    driver = build_driver(force_headed=not args.headless, force_headless=args.headless)
+    driver = build_driver(
+        force_headed=not args.headless,
+        force_headless=args.headless,
+        allow_headless_fallback=not args.headless,
+    )
     deleted = 0
     selected_total = 0
     empty_scrolls = 0
@@ -1638,6 +1642,11 @@ def main(argv: list[str] | None = None) -> int:
         driver.get(args.url)
         if not wait_for_page(driver):
             log("[error] Adobe file list did not become ready. Check login or page layout.")
+            write_debug_dump(driver, query, select_xs, "not_ready")
+            if args.headless:
+                log("[next] Headless cleanup requires the separate headless Chrome profile to be signed in.")
+                log("[next] Run: python sel_remove_bg.py --login-only --headless-profile")
+                log("[next] Then retry the same adobe_express_cleanup.py --headless command.")
             return 3
 
         state = ensure_file_list_page(driver, args.url, query, args.row_wait_sec)

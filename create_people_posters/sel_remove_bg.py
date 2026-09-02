@@ -405,7 +405,14 @@ def prepare_chrome_profile(user_data_dir_raw: str, profile_dir_raw: str) -> tupl
     return user_data_dir, profile_dir
 
 
-def build_driver(force_headed: bool = False, force_headless: bool = False):
+def build_driver(
+    force_headed: bool = False,
+    force_headless: bool = False,
+    *,
+    user_data_dir_override: str | None = None,
+    profile_dir_override: str | None = None,
+    allow_headless_fallback: bool = True,
+):
     global EFFECTIVE_USER_DATA_DIR, EFFECTIVE_PROFILE_DIR, EFFECTIVE_HEADLESS, ACTIVE_STARTUP_OVERRIDE
     if force_headed and force_headless:
         raise ValueError("force_headed and force_headless cannot both be true")
@@ -425,6 +432,11 @@ def build_driver(force_headed: bool = False, force_headless: bool = False):
         startup_profile_dir = PROFILE_DIR
         startup_headless = HEADLESS
 
+    if user_data_dir_override is not None:
+        startup_user_data_dir = user_data_dir_override
+    if profile_dir_override is not None:
+        startup_profile_dir = profile_dir_override
+
     configured_headless = startup_headless and not force_headed
     primary_user_data_dir, primary_profile_dir = prepare_chrome_profile(startup_user_data_dir, startup_profile_dir)
     EFFECTIVE_USER_DATA_DIR = primary_user_data_dir
@@ -435,18 +447,19 @@ def build_driver(force_headed: bool = False, force_headless: bool = False):
         attempts.append(("headless", primary_user_data_dir, primary_profile_dir, True, HEADLESS_REMOTE_DEBUGGING_PIPE))
         if HEADLESS_REMOTE_DEBUGGING_PIPE:
             attempts.append(("headless", primary_user_data_dir, primary_profile_dir, True, False))
-        headed_user_data_dir, headed_profile_dir = prepare_chrome_profile(HEADED_USER_DATA_DIR, HEADED_PROFILE_DIR)
-        if HEADLESS_FALLBACK_TO_USER_PROFILE and headed_user_data_dir != primary_user_data_dir:
-            attempts.append(("headless user profile fallback", headed_user_data_dir, headed_profile_dir, True, HEADLESS_REMOTE_DEBUGGING_PIPE))
-            if HEADLESS_REMOTE_DEBUGGING_PIPE:
-                attempts.append(("headless user profile fallback", headed_user_data_dir, headed_profile_dir, True, False))
-        if HEADLESS_FALLBACK_TO_HEADED:
-            attempts.append(("headed fallback", primary_user_data_dir, primary_profile_dir, False, False))
-            if (
-                HEADLESS_FALLBACK_TO_HEADED_PROFILE
-                and headed_user_data_dir != primary_user_data_dir
-            ):
-                attempts.append(("headed profile fallback", headed_user_data_dir, headed_profile_dir, False, False))
+        if allow_headless_fallback:
+            headed_user_data_dir, headed_profile_dir = prepare_chrome_profile(HEADED_USER_DATA_DIR, HEADED_PROFILE_DIR)
+            if HEADLESS_FALLBACK_TO_USER_PROFILE and headed_user_data_dir != primary_user_data_dir:
+                attempts.append(("headless user profile fallback", headed_user_data_dir, headed_profile_dir, True, HEADLESS_REMOTE_DEBUGGING_PIPE))
+                if HEADLESS_REMOTE_DEBUGGING_PIPE:
+                    attempts.append(("headless user profile fallback", headed_user_data_dir, headed_profile_dir, True, False))
+            if HEADLESS_FALLBACK_TO_HEADED:
+                attempts.append(("headed fallback", primary_user_data_dir, primary_profile_dir, False, False))
+                if (
+                    HEADLESS_FALLBACK_TO_HEADED_PROFILE
+                    and headed_user_data_dir != primary_user_data_dir
+                ):
+                    attempts.append(("headed profile fallback", headed_user_data_dir, headed_profile_dir, False, False))
     else:
         attempts.append(("headed", primary_user_data_dir, primary_profile_dir, False, False))
 
@@ -504,7 +517,7 @@ def build_driver(force_headed: bool = False, force_headless: bool = False):
     if driver is None:
         mode = "headless" if configured_headless else "headed"
         profile_hint = (
-            " For headless mode, run `python sel_remove_bg.py --login-only` once to sign into the separate "
+            " For headless mode, run `python sel_remove_bg.py --login-only --headless-profile` once to sign into the separate "
             "headless profile in a visible browser, set SEL_HEADLESS=false, or use a fresh SEL_HEADLESS_USER_DATA_DIR."
             if configured_headless else
             " Close any Chrome windows using this automation profile and retry."
@@ -1829,11 +1842,18 @@ def resolve_download_blocker(driver) -> bool:
     raise RuntimeError(blocker)
 
 
-def run_login_only() -> int:
+def run_login_only(use_headless_profile: bool = False) -> int:
     """
     Open Adobe Express in the Selenium profile so the user can log in once.
     """
-    driver = build_driver(force_headed=True)
+    if use_headless_profile:
+        driver = build_driver(
+            force_headed=True,
+            user_data_dir_override=HEADLESS_USER_DATA_DIR,
+            profile_dir_override=HEADLESS_PROFILE_DIR,
+        )
+    else:
+        driver = build_driver(force_headed=True)
     try:
         prepare_tool(driver)
         log(f"Adobe login prep using browser profile: {EFFECTIVE_USER_DATA_DIR} [{EFFECTIVE_PROFILE_DIR}]")
@@ -1996,10 +2016,15 @@ def main(argv=None):
         action="store_true",
         help="Open Adobe Express with the configured Selenium profile so you can sign in once, then exit.",
     )
+    parser.add_argument(
+        "--headless-profile",
+        action="store_true",
+        help="With --login-only, open the separate headless Chrome profile visibly so you can sign into it.",
+    )
     args = parser.parse_args(argv)
 
     if args.login_only:
-        return run_login_only()
+        return run_login_only(use_headless_profile=args.headless_profile)
 
     session_t0 = time.perf_counter()
     results: List[FileResult] = []
