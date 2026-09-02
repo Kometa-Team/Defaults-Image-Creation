@@ -211,6 +211,9 @@ SEL_WINDOW_SIZE=1400,1000
 > If Adobe requires login during a headless run, the script exits instead of waiting.
 > To prepare the separate headless profile, first open it visibly and sign in:
 > `python sel_remove_bg.py --login-only --headless-profile`.
+> If that profile crashes even in visible mode, leave it alone and use a fresh
+> profile path:
+> `python sel_remove_bg.py --login-only --headless-profile --headless-user-data-dir ./config/chrome-profile-headless-2`.
 > Then run the batch with `$env:SEL_HEADLESS="true"; $env:SEL_PROMPT_FOR_LOGIN="false"`.
 > Stale Adobe project/modals and processing/download timeouts are retried by
 > restarting Chrome and reprocessing the same JPG up to `SEL_MAX_FILE_ATTEMPTS`.
@@ -571,8 +574,14 @@ python adobe_express_cleanup.py --deleted --apply --batch-size 1000 --select-per
 # One-time setup for cleanup headless mode: open the headless profile visibly and sign in.
 python sel_remove_bg.py --login-only --headless-profile
 
+# If the default headless profile crashes, use a fresh stable profile path instead.
+python sel_remove_bg.py --login-only --headless-profile --headless-user-data-dir ./config/chrome-profile-headless-2
+
 # Run the same cleanup headlessly after the headless profile is signed in.
 python adobe_express_cleanup.py --deleted --apply --batch-size 1000 --select-per-delete 4 --viewports-per-delete 1 --headless
+
+# Run cleanup headlessly with that same fresh profile path.
+python adobe_express_cleanup.py --deleted --apply --batch-size 1000 --select-per-delete 4 --viewports-per-delete 1 --headless --headless-user-data-dir ./config/chrome-profile-headless-2
 
 # Select two rows, scroll, select two more, repeat for fewer Delete confirmations.
 python adobe_express_cleanup.py --apply --batch-size 500 --select-per-delete 2 --viewports-per-delete 5

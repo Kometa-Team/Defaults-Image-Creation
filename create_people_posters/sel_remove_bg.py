@@ -518,7 +518,8 @@ def build_driver(
         mode = "headless" if configured_headless else "headed"
         profile_hint = (
             " For headless mode, run `python sel_remove_bg.py --login-only --headless-profile` once to sign into the separate "
-            "headless profile in a visible browser, set SEL_HEADLESS=false, or use a fresh SEL_HEADLESS_USER_DATA_DIR."
+            "headless profile in a visible browser, set SEL_HEADLESS=false, or use a fresh "
+            "SEL_HEADLESS_USER_DATA_DIR / --headless-user-data-dir path."
             if configured_headless else
             " Close any Chrome windows using this automation profile and retry."
         )
@@ -1842,15 +1843,19 @@ def resolve_download_blocker(driver) -> bool:
     raise RuntimeError(blocker)
 
 
-def run_login_only(use_headless_profile: bool = False) -> int:
+def run_login_only(
+    use_headless_profile: bool = False,
+    headless_user_data_dir: str | None = None,
+    headless_profile_dir: str | None = None,
+) -> int:
     """
     Open Adobe Express in the Selenium profile so the user can log in once.
     """
     if use_headless_profile:
         driver = build_driver(
             force_headed=True,
-            user_data_dir_override=HEADLESS_USER_DATA_DIR,
-            profile_dir_override=HEADLESS_PROFILE_DIR,
+            user_data_dir_override=headless_user_data_dir or HEADLESS_USER_DATA_DIR,
+            profile_dir_override=headless_profile_dir or HEADLESS_PROFILE_DIR,
         )
     else:
         driver = build_driver(force_headed=True)
@@ -2021,10 +2026,30 @@ def main(argv=None):
         action="store_true",
         help="With --login-only, open the separate headless Chrome profile visibly so you can sign into it.",
     )
+    parser.add_argument(
+        "--headless-user-data-dir",
+        default=None,
+        help=(
+            "With --login-only --headless-profile, use this Chrome user-data directory "
+            "instead of SEL_HEADLESS_USER_DATA_DIR."
+        ),
+    )
+    parser.add_argument(
+        "--headless-profile-dir",
+        default=None,
+        help=(
+            "With --login-only --headless-profile, use this Chrome profile directory "
+            "instead of SEL_HEADLESS_PROFILE_DIR."
+        ),
+    )
     args = parser.parse_args(argv)
 
     if args.login_only:
-        return run_login_only(use_headless_profile=args.headless_profile)
+        return run_login_only(
+            use_headless_profile=args.headless_profile,
+            headless_user_data_dir=args.headless_user_data_dir,
+            headless_profile_dir=args.headless_profile_dir,
+        )
 
     session_t0 = time.perf_counter()
     results: List[FileResult] = []

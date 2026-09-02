@@ -1612,6 +1612,22 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Run cleanup in Chrome headless mode. Headed mode is the default for visual safety.",
     )
     parser.add_argument(
+        "--headless-user-data-dir",
+        default=os.getenv("ADOBE_CLEANUP_HEADLESS_USER_DATA_DIR"),
+        help=(
+            "With --headless, use this Chrome user-data directory instead of "
+            "SEL_HEADLESS_USER_DATA_DIR."
+        ),
+    )
+    parser.add_argument(
+        "--headless-profile-dir",
+        default=os.getenv("ADOBE_CLEANUP_HEADLESS_PROFILE_DIR"),
+        help=(
+            "With --headless, use this Chrome profile directory instead of "
+            "SEL_HEADLESS_PROFILE_DIR."
+        ),
+    )
+    parser.add_argument(
         "--pause-sec",
         type=float,
         default=max(0.1, float(os.getenv("ADOBE_CLEANUP_PAUSE_SEC", "1.5"))),
@@ -1689,6 +1705,10 @@ def main(argv: list[str] | None = None) -> int:
     log(f"Select per delete cycle: {args.select_per_delete}")
     log(f"Viewports per delete cycle: {args.viewports_per_delete}")
     log(f"Coordinate fallback: {args.coordinate_fallback}")
+    if args.headless and args.headless_user_data_dir:
+        log(f"Headless user-data dir override: {args.headless_user_data_dir}")
+    if args.headless and args.headless_profile_dir:
+        log(f"Headless profile dir override: {args.headless_profile_dir}")
     delete_goal = args.max_delete or args.batch_size
     if args.max_delete <= 0:
         log(
@@ -1699,6 +1719,8 @@ def main(argv: list[str] | None = None) -> int:
     driver = build_driver(
         force_headed=not args.headless,
         force_headless=args.headless,
+        user_data_dir_override=args.headless_user_data_dir if args.headless else None,
+        profile_dir_override=args.headless_profile_dir if args.headless else None,
         allow_headless_fallback=not args.headless,
     )
     deleted = 0
