@@ -1733,8 +1733,13 @@ def main(argv: list[str] | None = None) -> int:
             log("[error] Adobe file list did not become ready. Check login or page layout.")
             write_debug_dump(driver, query, select_xs, "not_ready")
             if args.headless:
+                login_cmd = "python sel_remove_bg.py --login-only --headless-profile"
+                if args.headless_user_data_dir:
+                    login_cmd += f" --headless-user-data-dir {args.headless_user_data_dir}"
+                if args.headless_profile_dir:
+                    login_cmd += f" --headless-profile-dir {args.headless_profile_dir}"
                 log("[next] Headless cleanup requires the separate headless Chrome profile to be signed in.")
-                log("[next] Run: python sel_remove_bg.py --login-only --headless-profile")
+                log(f"[next] Run: {login_cmd}")
                 log("[next] Then retry the same adobe_express_cleanup.py --headless command.")
             return 3
 

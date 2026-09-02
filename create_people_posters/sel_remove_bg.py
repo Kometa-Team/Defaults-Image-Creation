@@ -365,6 +365,7 @@ def build_chrome_options(user_data_dir: Path, profile_dir: Optional[str], *, hea
         opts.add_argument(f"--profile-directory={profile_dir}")
     opts.add_argument("--log-level=3")
     opts.add_argument("--disable-features=PrivacySandboxAdsAPIs")
+    opts.add_argument("--disable-quic")
     opts.add_argument("--no-first-run")
     opts.add_argument("--no-default-browser-check")
     if DISABLE_CHROME_RESTORE:
