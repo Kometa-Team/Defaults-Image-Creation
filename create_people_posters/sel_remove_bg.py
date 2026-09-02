@@ -410,7 +410,11 @@ def build_driver(force_headed: bool = False, force_headless: bool = False):
     if force_headed and force_headless:
         raise ValueError("force_headed and force_headless cannot both be true")
 
-    if force_headless:
+    if force_headed:
+        startup_user_data_dir = HEADED_USER_DATA_DIR
+        startup_profile_dir = HEADED_PROFILE_DIR
+        startup_headless = False
+    elif force_headless:
         startup_user_data_dir = HEADLESS_USER_DATA_DIR
         startup_profile_dir = HEADLESS_PROFILE_DIR
         startup_headless = True
