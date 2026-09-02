@@ -104,7 +104,7 @@ PROMPT_FOR_LOGIN = env_bool("SEL_PROMPT_FOR_LOGIN", "true")
 LOGIN_WAIT_SEC = max(30, int(os.getenv("SEL_LOGIN_WAIT_SEC", "900")))
 DISABLE_CHROME_RESTORE = env_bool("SEL_DISABLE_CHROME_RESTORE", "true")
 MAX_TOOL_READY_RESTARTS = max(1, int(os.getenv("SEL_MAX_TOOL_READY_RESTARTS", "5")))
-MAX_CONSECUTIVE_PROCESSING_STALLS = max(0, int(os.getenv("SEL_MAX_CONSECUTIVE_PROCESSING_STALLS", "10")))
+MAX_CONSECUTIVE_PROCESSING_STALLS = max(0, int(os.getenv("SEL_MAX_CONSECUTIVE_PROCESSING_STALLS", "3")))
 
 # Size enforcement
 EXPECT_W = int(os.getenv("SEL_EXPECT_WIDTH", "2000"))
@@ -2109,6 +2109,11 @@ def main(argv=None):
                     log(f"[error] {jpg.name} – {fr.detail}")
                     if fr.detail == "Processing did not expose controls in time":
                         consecutive_processing_stalls += 1
+                        if MAX_CONSECUTIVE_PROCESSING_STALLS:
+                            log(
+                                f"[stall] consecutive Adobe processing stalls: "
+                                f"{consecutive_processing_stalls}/{MAX_CONSECUTIVE_PROCESSING_STALLS}"
+                            )
                         if (
                             MAX_CONSECUTIVE_PROCESSING_STALLS
                             and consecutive_processing_stalls >= MAX_CONSECUTIVE_PROCESSING_STALLS
