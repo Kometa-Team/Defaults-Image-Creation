@@ -565,8 +565,8 @@ python adobe_express_cleanup.py --apply --batch-size 500
 # Select two rows, scroll, select two more, repeat for fewer Delete confirmations.
 python adobe_express_cleanup.py --apply --batch-size 500 --select-per-delete 2 --viewports-per-delete 5
 
-# If Adobe rows are found but not visibly selected, tune the checkbox X position.
-python adobe_express_cleanup.py --apply --batch-size 10 --select-xs 110,100,120,130,150,166,180,200
+# Last-resort diagnostic only: allow coordinate clicks if direct checkbox selection fails.
+python adobe_express_cleanup.py --apply --batch-size 10 --coordinate-fallback --select-xs 110,100,120,130,150,166,180,200
 
 # Capture the live rendered Adobe DOM/control geometry without deleting anything.
 python adobe_express_cleanup.py --debug-dump
@@ -588,11 +588,13 @@ after selection. `--batch-size` is the run target when `--max-delete` is not
 set. Use `--viewports-per-delete` to select two rows, scroll to hydrate more
 rows, select two more, and then delete the accumulated selection with fewer
 confirmations. It waits for matching asset rows after Adobe's shell/navigation loads;
-increase `--row-wait-sec` if the shell is ready but rows appear late. If
-matching rows are logged but the Delete toolbar does not appear, adjust
-`--select-xs` to the checkbox column's screen X coordinate in the visible
-browser. Use `--debug-dump` to write a live DOM/control JSON file and screenshot under
-`config/adobe_express_cleanup_debug` when selectors need tuning.
+increase `--row-wait-sec` if the shell is ready but rows appear late. Selection
+uses Adobe's `sp-table-checkbox-cell[label]` checkbox component by default. The
+older screen-coordinate fallback is disabled unless `--coordinate-fallback` or
+`ADOBE_CLEANUP_COORDINATE_FALLBACK=true` is set, because missed coordinate clicks
+can open the editor instead of selecting rows. Use `--debug-dump` to write a live
+DOM/control JSON file and screenshot under `config/adobe_express_cleanup_debug`
+when selectors need tuning.
 
 Clean generated `config` artifacts:
 

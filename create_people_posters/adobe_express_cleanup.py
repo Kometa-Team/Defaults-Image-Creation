@@ -35,6 +35,7 @@ DEFAULT_SELECT_XS = "110,100,120,130,150,166,180,200"
 DEFAULT_ROW_WAIT_SEC = "45"
 DEFAULT_SELECT_PER_DELETE = "2"
 DEFAULT_VIEWPORTS_PER_DELETE = "1"
+DEFAULT_COORDINATE_FALLBACK = "false"
 LOG_FILE = LOGS_DIR / "adobe_express_cleanup.log"
 DEBUG_DIR = CONFIG_DIR / "adobe_express_cleanup_debug"
 
@@ -815,12 +816,168 @@ def cdp_click(driver, x: float, y: float) -> None:
         driver.execute_cdp_cmd("Input.dispatchMouseEvent", payload)
 
 
-def select_matching_rows_with_cdp(driver, query: str, limit: int, select_xs: list[int]) -> dict[str, Any]:
+def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, Any]:
+    script = r"""
+    const query = String(arguments[0] || '').toLowerCase();
+    const limit = Number(arguments[1] || 2);
+
+    function visible(el){
+      if (!el) return false;
+      const style = getComputedStyle(el);
+      const rect = el.getBoundingClientRect();
+      return style.display !== 'none' &&
+             style.visibility !== 'hidden' &&
+             rect.width > 0 &&
+             rect.height > 0 &&
+             rect.bottom >= 0 &&
+             rect.top <= window.innerHeight;
+    }
+
+    function collectRoots(root, out){
+      out.push(root);
+      const all = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of all){
+        if (n.shadowRoot) collectRoots(n.shadowRoot, out);
+      }
+    }
+
+    function checkboxTargets(cell){
+      const out = [];
+      if (!cell) return out;
+      if (cell.matches && cell.matches('input[type="checkbox"], sp-checkbox, [role="checkbox"]')) {
+        out.push(cell);
+      }
+      if (cell.shadowRoot) {
+        const sp = cell.shadowRoot.querySelector('sp-checkbox');
+        if (sp && sp.shadowRoot) {
+          const input = sp.shadowRoot.querySelector('input[type="checkbox"]');
+          if (sp) out.push(sp);
+          if (input) out.push(input);
+        } else if (sp) {
+          out.push(sp);
+        }
+        const input = cell.shadowRoot.querySelector('input[type="checkbox"]');
+        if (input) out.push(input);
+      }
+      if (cell.querySelector) {
+        const local = cell.querySelector('input[type="checkbox"], sp-checkbox, [role="checkbox"]');
+        if (local) out.push(local);
+      }
+      out.push(cell);
+      return Array.from(new Set(out));
+    }
+
+    function clickTarget(target){
+      if (!target) return false;
+      try {
+        target.scrollIntoView({block: 'center', inline: 'nearest'});
+        target.dispatchEvent(new MouseEvent('mousedown', {bubbles: true, cancelable: true, view: window}));
+        target.dispatchEvent(new MouseEvent('mouseup', {bubbles: true, cancelable: true, view: window}));
+        target.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}));
+        if (target.click) target.click();
+        return true;
+      } catch(e) {
+        try {
+          target.click();
+          return true;
+        } catch(e2) {
+          return false;
+        }
+      }
+    }
+
+    const roots = [];
+    collectRoots(document, roots);
+    const map = new Map();
+    for (const root of roots){
+      const cells = root.querySelectorAll
+        ? root.querySelectorAll('sp-table-checkbox-cell[label]')
+        : [];
+      for (const cell of cells){
+        const label = String(cell.getAttribute('label') || '');
+        if (!label || (query && !label.toLowerCase().includes(query))) continue;
+        if (!visible(cell)) continue;
+        const rect = cell.getBoundingClientRect();
+        const key = `${Math.round(rect.top / 4) * 4}:${label}`;
+        if (!map.has(key)) {
+          map.set(key, {cell, label, top: rect.top});
+        }
+      }
+    }
+
+    const targets = Array.from(map.values())
+      .sort((a, b) => b.top - a.top)
+      .slice(0, limit);
+    const clicked = [];
+    for (const item of targets){
+      let ok = false;
+      for (const target of checkboxTargets(item.cell)){
+        if (clickTarget(target)) {
+          ok = true;
+          break;
+        }
+      }
+      if (ok) clicked.push(item.label);
+    }
+    return {
+      clicked: clicked.length,
+      samples: clicked,
+      targetCount: targets.length,
+      directCheckboxCells: true
+    };
+    """
+    try:
+        return driver.execute_script(script, query, limit) or {
+            "clicked": 0,
+            "samples": [],
+            "targetCount": 0,
+            "directCheckboxCells": True,
+        }
+    except Exception:
+        return {"clicked": 0, "samples": [], "targetCount": 0, "directCheckboxCells": True}
+
+
+def select_matching_rows_with_cdp(
+    driver,
+    query: str,
+    limit: int,
+    select_xs: list[int],
+    coordinate_fallback: bool = False,
+) -> dict[str, Any]:
+    direct = select_matching_checkbox_cells(driver, query, limit)
+    direct_clicked = int(direct.get("clicked", 0) or 0)
+    if direct_clicked > 0:
+        time.sleep(0.5)
+        final_state = selection_toolbar_state(driver)
+        direct.update(
+            {
+                "toolbarSelected": final_state.get("selected", 0),
+                "deleteVisible": final_state.get("deleteVisible", False),
+                "method": "sp-table-checkbox-cell",
+            }
+        )
+        if final_state.get("selected", 0) or final_state.get("deleteVisible"):
+            return direct
+        direct["clicked"] = 0
+
+    if not coordinate_fallback:
+        final_state = selection_toolbar_state(driver)
+        return {
+            "clicked": 0,
+            "samples": direct.get("samples", []),
+            "targetCount": direct.get("targetCount", 0),
+            "toolbarSelected": final_state.get("selected", 0),
+            "deleteVisible": final_state.get("deleteVisible", False),
+            "directClicked": direct_clicked,
+            "method": "sp-table-checkbox-cell",
+        }
+
     targets = matching_row_targets(driver, query, limit, select_xs)
     if not targets:
         return {"clicked": 0, "samples": [], "targetCount": 0}
 
     clicked: list[str] = []
+    opened_editor = False
     for target in targets:
         before = selection_toolbar_state(driver)
         before_count = int(before.get("selected", 0) or 0)
@@ -831,11 +988,19 @@ def select_matching_rows_with_cdp(driver, query: str, limit: int, select_xs: lis
             except Exception:
                 continue
             time.sleep(0.25)
+            try:
+                if "/your-stuff/files" not in driver.current_url:
+                    opened_editor = True
+                    break
+            except Exception:
+                pass
             after = selection_toolbar_state(driver)
             after_count = int(after.get("selected", 0) or 0)
             if after_count > before_count or after.get("deleteVisible"):
                 selected = True
                 break
+        if opened_editor:
+            break
         if selected:
             clicked.append(str(target.get("text", "")))
 
@@ -846,6 +1011,8 @@ def select_matching_rows_with_cdp(driver, query: str, limit: int, select_xs: lis
         "targetCount": len(targets),
         "toolbarSelected": final_state.get("selected", 0),
         "deleteVisible": final_state.get("deleteVisible", False),
+        "openedEditor": opened_editor,
+        "method": "coordinate-fallback",
     }
 
 
@@ -1051,7 +1218,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--select-xs",
         default=os.getenv("ADOBE_CLEANUP_SELECT_XS", DEFAULT_SELECT_XS),
         help=(
-            "Comma-list of viewport X coordinates to try for row checkbox clicks. "
+            "Comma-list of viewport X coordinates used only with --coordinate-fallback. "
             "Default matches Adobe's left select column in list view."
         ),
     )
@@ -1085,6 +1252,15 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=max(1, int(os.getenv("ADOBE_CLEANUP_MAX_EMPTY_SCROLLS", "5"))),
         help="Stop after this many scrolls with no matching visible rows.",
     )
+    parser.add_argument(
+        "--coordinate-fallback",
+        action="store_true",
+        default=env_bool("ADOBE_CLEANUP_COORDINATE_FALLBACK", DEFAULT_COORDINATE_FALLBACK),
+        help=(
+            "Allow older viewport-coordinate checkbox clicks if direct Adobe checkbox "
+            "selection fails. This can open the editor if Adobe moves the checkbox."
+        ),
+    )
     return parser.parse_args(argv)
 
 
@@ -1105,6 +1281,7 @@ def main(argv: list[str] | None = None) -> int:
     log(f"Select X coordinates: {select_xs or '<row-relative only>'}")
     log(f"Select per delete cycle: {args.select_per_delete}")
     log(f"Viewports per delete cycle: {args.viewports_per_delete}")
+    log(f"Coordinate fallback: {args.coordinate_fallback}")
     delete_goal = args.max_delete or args.batch_size
     if args.max_delete <= 0:
         log(
@@ -1160,6 +1337,7 @@ def main(argv: list[str] | None = None) -> int:
             cycle_clicked = 0
             cycle_selected = 0
             delete_visible = False
+            opened_editor_cycle = False
 
             for viewport_index in range(1, args.viewports_per_delete + 1):
                 remaining_cycle = delete_goal - deleted - cycle_selected
@@ -1167,7 +1345,13 @@ def main(argv: list[str] | None = None) -> int:
                     break
 
                 batch_limit = min(args.select_per_delete, remaining_cycle)
-                selected = select_matching_rows_with_cdp(driver, query, batch_limit, select_xs)
+                selected = select_matching_rows_with_cdp(
+                    driver,
+                    query,
+                    batch_limit,
+                    select_xs,
+                    coordinate_fallback=args.coordinate_fallback,
+                )
                 clicked = int(selected.get("clicked", 0) or 0)
                 toolbar_selected = int(selected.get("toolbarSelected", 0) or 0)
                 if toolbar_selected > cycle_selected:
@@ -1182,11 +1366,19 @@ def main(argv: list[str] | None = None) -> int:
                     f"attempted row targets: {selected.get('targetCount', 0)}; "
                     f"clicked/verified: {clicked}; "
                     f"toolbar selected={toolbar_selected}; "
-                    f"delete visible={selected.get('deleteVisible', False)}"
+                    f"delete visible={selected.get('deleteVisible', False)}; "
+                    f"method={selected.get('method', 'unknown')}"
                 )
 
                 for sample in selected.get("samples", [])[:3]:
                     log(f"[selected] {sample}")
+
+                if selected.get("openedEditor"):
+                    opened_editor_cycle = True
+                    log("[nav] selection opened the Adobe editor; returning to file list and retrying")
+                    write_debug_dump(driver, query, select_xs, "opened_editor")
+                    state = ensure_file_list_page(driver, args.url, query, args.row_wait_sec)
+                    break
 
                 if clicked <= 0:
                     if (
@@ -1222,6 +1414,11 @@ def main(argv: list[str] | None = None) -> int:
                     f"{state.get('matching', 0)}; "
                     f"checkbox-backed: {state.get('checkboxBacked', 0)}"
                 )
+
+            if opened_editor_cycle:
+                empty_scrolls = 0
+                time.sleep(args.pause_sec)
+                continue
 
             if cycle_selected <= 0:
                 scroll = scroll_next_page(driver)
