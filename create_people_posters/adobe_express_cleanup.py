@@ -52,18 +52,68 @@ def log(message: str) -> None:
 
 
 def wait_for_page(driver, timeout: float = 45.0) -> bool:
+    script = r"""
+    function textOf(el){
+      try { return String(el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim(); }
+      catch(e) { return ''; }
+    }
+
+    function scanText(root, out){
+      const text = textOf(root);
+      if (text) out.push(text);
+      const all = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of all){
+        if (n.shadowRoot) scanText(n.shadowRoot, out);
+      }
+    }
+
+    const chunks = [];
+    scanText(document, chunks);
+    for (const f of document.querySelectorAll('iframe')){
+      try {
+        const d = f.contentDocument || f.contentWindow?.document;
+        if (d) scanText(d, chunks);
+      } catch(e) {}
+    }
+
+    const text = chunks.join(' ').replace(/\s+/g, ' ').trim();
+    const hasFileListText = /Your stuff|Search Files|Remove background project/i.test(text);
+    const hasCheckboxes = !!document.querySelector('input[type="checkbox"], [role="checkbox"], sp-checkbox');
+    return {
+      readyState: document.readyState,
+      title: document.title || '',
+      url: location.href,
+      hasFileListText,
+      hasCheckboxes,
+      sample: text.slice(0, 400)
+    };
+    """
     end = time.time() + timeout
+    last_state = {}
     while time.time() < end:
         try:
             hide_onetrust(driver)
-            text = js(driver, "return document.body ? document.body.innerText : '';") or ""
-            if "Your stuff" in text or "Search Files" in text or "Remove background project" in text:
+            state = driver.execute_script(script) or {}
+            last_state = state
+            if state.get("hasFileListText") or (
+                state.get("hasCheckboxes") and state.get("readyState") == "complete"
+            ):
                 return True
         except WebDriverException:
             raise
         except Exception:
             pass
         time.sleep(0.5)
+    log(
+        "[ready] timed out; "
+        f"url={last_state.get('url', '')!r}; "
+        f"title={last_state.get('title', '')!r}; "
+        f"readyState={last_state.get('readyState', '')!r}; "
+        f"hasCheckboxes={last_state.get('hasCheckboxes', False)}"
+    )
+    sample = str(last_state.get("sample", "")).strip()
+    if sample:
+        log(f"[ready] text sample: {sample}")
     return False
 
 
