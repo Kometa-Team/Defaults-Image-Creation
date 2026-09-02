@@ -550,6 +550,26 @@ Use this when Adobe auth expires, download is blocked by login, or you are
 setting up a fresh Selenium/Chrome profile. After signing in, resume with the
 `python orchestrator.py --redo remove_bg` command printed by the failed run.
 
+Clean Adobe Express remote storage:
+
+```bash
+# Preview visible matching files. This deletes nothing.
+python adobe_express_cleanup.py
+
+# Delete remove-background projects in visible batches of 25.
+python adobe_express_cleanup.py --apply --batch-size 25
+
+# Stop after deleting 500 matching files this run.
+python adobe_express_cleanup.py --apply --batch-size 25 --max-delete 500
+```
+
+Use this when Adobe says the account storage is full and remove-background
+jobs stall with Download/Export disabled. The cleanup uses the same Selenium
+Chrome profile as `sel_remove_bg.py`, opens Adobe Express "Your stuff", selects
+visible rows whose text contains `Remove background project`, deletes them,
+refreshes, and repeats. It is destructive only with `--apply`. Keep the default
+query unless you intentionally want to delete a different class of Adobe files.
+
 Clean generated `config` artifacts:
 
 ```bash
@@ -604,6 +624,7 @@ Occasional helpers:
 
 - `resolve_original_images.py` — recover original JPGs by matching transparent/rainier outputs against TMDB first, then Google Custom Search when configured.
 - `grayscale_sweeper.py` — scan an arbitrary folder tree for non-color images and stage them for DeOldify.
+- `adobe_express_cleanup.py` — delete old Adobe Express remove-background projects when the account storage is full.
 - `clean_people_config.py` — prune old generated logs, reports, review artifacts, and candidate previews from `config`.
 - `bulk_extract_configs.py` — extract redacted config sections from mess/meta logs and nested archives.
 - `auto_readme.py` / `sync_md.py` — retained for deliberate local README work, but normal README generation is owned by the People image repo GitHub Actions.
@@ -944,6 +965,7 @@ create_people_posters/
 ├─ colorize_noncolor.py
 ├─ prep_people_dirs.py
 ├─ sel_remove_bg.py
+├─ adobe_express_cleanup.py      # optional Adobe Express remote storage cleanup
 ├─ create_people_poster.ps1
 ├─ recover_edge_chops.py          # optional/non-blocking pipeline recovery
 ├─ clean_people_config.py         # optional config cleanup helper
