@@ -31,7 +31,7 @@ from sel_remove_bg import build_driver, hide_onetrust, js  # noqa: E402
 
 DEFAULT_URL = "https://new.express.adobe.com/your-stuff/files?view=list"
 DEFAULT_QUERY = "Remove background project"
-DEFAULT_SELECT_XS = "166,150,180,130,200"
+DEFAULT_SELECT_XS = "110,100,120,130,150,166,180,200"
 DEFAULT_ROW_WAIT_SEC = "45"
 LOG_FILE = LOGS_DIR / "adobe_express_cleanup.log"
 DEBUG_DIR = CONFIG_DIR / "adobe_express_cleanup_debug"
@@ -803,7 +803,7 @@ def cdp_click(driver, x: float, y: float) -> None:
 def select_matching_rows_with_cdp(driver, query: str, limit: int, select_xs: list[int]) -> dict[str, Any]:
     targets = matching_row_targets(driver, query, limit, select_xs)
     if not targets:
-        return {"clicked": 0, "samples": []}
+        return {"clicked": 0, "samples": [], "targetCount": 0}
 
     clicked: list[str] = []
     for target in targets:
@@ -828,6 +828,7 @@ def select_matching_rows_with_cdp(driver, query: str, limit: int, select_xs: lis
     return {
         "clicked": len(clicked),
         "samples": clicked,
+        "targetCount": len(targets),
         "toolbarSelected": final_state.get("selected", 0),
         "deleteVisible": final_state.get("deleteVisible", False),
     }
@@ -1121,8 +1122,15 @@ def main(argv: list[str] | None = None) -> int:
             batch_limit = min(args.batch_size, remaining_cap) if args.max_delete else args.batch_size
             selected = select_matching_rows_with_cdp(driver, query, batch_limit, select_xs)
             clicked = int(selected.get("clicked", 0) or 0)
+            log(
+                "[select] attempted row targets: "
+                f"{selected.get('targetCount', 0)}; clicked/verified: {clicked}; "
+                f"delete visible={selected.get('deleteVisible', False)}"
+            )
 
             if clicked <= 0:
+                if int(state.get("matching", 0) or 0) > 0 or int(selected.get("targetCount", 0) or 0) > 0:
+                    write_debug_dump(driver, query, select_xs, "selection_zero")
                 scroll = scroll_next_page(driver)
                 moved = bool(scroll.get("moved"))
                 empty_scrolls += 1

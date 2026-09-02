@@ -563,7 +563,7 @@ python adobe_express_cleanup.py --apply --batch-size 25
 python adobe_express_cleanup.py --apply --batch-size 25 --max-delete 500
 
 # If Adobe rows are found but not visibly selected, tune the checkbox X position.
-python adobe_express_cleanup.py --apply --batch-size 10 --select-xs 166,150,180,130,200
+python adobe_express_cleanup.py --apply --batch-size 10 --select-xs 110,100,120,130,150,166,180,200
 
 # Capture the live rendered Adobe DOM/control geometry without deleting anything.
 python adobe_express_cleanup.py --debug-dump
