@@ -30,11 +30,27 @@ from sel_remove_bg import build_driver, hide_onetrust, js  # noqa: E402
 
 DEFAULT_URL = "https://new.express.adobe.com/your-stuff/files?view=list"
 DEFAULT_QUERY = "Remove background project"
+DEFAULT_SELECT_XS = "166,150,180,130,200"
 LOG_FILE = LOGS_DIR / "adobe_express_cleanup.log"
 
 
 def env_bool(name: str, default: str = "false") -> bool:
     return os.getenv(name, default).strip().lower() in {"1", "true", "yes", "y", "on"}
+
+
+def parse_select_xs(raw: str) -> list[int]:
+    xs: list[int] = []
+    for part in (raw or "").replace(";", ",").split(","):
+        part = part.strip()
+        if not part:
+            continue
+        try:
+            value = int(float(part))
+        except ValueError:
+            continue
+        if value > 0:
+            xs.append(value)
+    return xs
 
 
 def now_ts() -> str:
@@ -457,10 +473,11 @@ def selection_toolbar_state(driver) -> dict[str, Any]:
         return {"selected": 0, "deleteVisible": False}
 
 
-def matching_row_targets(driver, query: str, limit: int) -> list[dict[str, Any]]:
+def matching_row_targets(driver, query: str, limit: int, select_xs: list[int]) -> list[dict[str, Any]]:
     script = r"""
     const query = String(arguments[0] || '').toLowerCase();
     const limit = Number(arguments[1] || 25);
+    const configuredXs = (arguments[2] || []).map(Number).filter(x => Number.isFinite(x) && x > 0);
 
     function visible(el){
       if (!el) return false;
@@ -515,14 +532,21 @@ def matching_row_targets(driver, query: str, limit: int) -> list[dict[str, Any]]
         const rect = n.getBoundingClientRect();
         const key = rowKey(n);
         if (!rowMap.has(key)) {
+          const localXs = [
+            rect.left + 34,
+            rect.left + 50,
+            rect.left + 70,
+            rect.left - 155,
+            rect.left - 135,
+            rect.left - 115
+          ];
+          const xs = configuredXs.concat(localXs)
+            .map(x => Math.min(window.innerWidth - 5, Math.max(5, x)))
+            .filter((x, idx, arr) => arr.findIndex(v => Math.abs(v - x) < 3) === idx);
           rowMap.set(key, {
             text: text.slice(0, 180),
             y: Math.min(window.innerHeight - 5, Math.max(5, rect.top + rect.height / 2)),
-            xs: [
-              Math.min(window.innerWidth - 5, Math.max(5, rect.left + 34)),
-              Math.min(window.innerWidth - 5, Math.max(5, rect.left + 50)),
-              Math.min(window.innerWidth - 5, Math.max(5, rect.left + 70))
-            ],
+            xs,
             top: rect.top
           });
         }
@@ -534,7 +558,7 @@ def matching_row_targets(driver, query: str, limit: int) -> list[dict[str, Any]]
       .slice(0, limit);
     """
     try:
-        return driver.execute_script(script, query, limit) or []
+        return driver.execute_script(script, query, limit, select_xs) or []
     except Exception:
         return []
 
@@ -547,8 +571,8 @@ def cdp_click(driver, x: float, y: float) -> None:
         driver.execute_cdp_cmd("Input.dispatchMouseEvent", payload)
 
 
-def select_matching_rows_with_cdp(driver, query: str, limit: int) -> dict[str, Any]:
-    targets = matching_row_targets(driver, query, limit)
+def select_matching_rows_with_cdp(driver, query: str, limit: int, select_xs: list[int]) -> dict[str, Any]:
+    targets = matching_row_targets(driver, query, limit, select_xs)
     if not targets:
         return {"clicked": 0, "samples": []}
 
@@ -777,6 +801,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Pause after selection/delete/scroll actions.",
     )
     parser.add_argument(
+        "--select-xs",
+        default=os.getenv("ADOBE_CLEANUP_SELECT_XS", DEFAULT_SELECT_XS),
+        help=(
+            "Comma-list of viewport X coordinates to try for row checkbox clicks. "
+            "Default matches Adobe's left select column in list view."
+        ),
+    )
+    parser.add_argument(
         "--max-empty-scrolls",
         type=int,
         default=max(1, int(os.getenv("ADOBE_CLEANUP_MAX_EMPTY_SCROLLS", "5"))),
@@ -798,6 +830,8 @@ def main(argv: list[str] | None = None) -> int:
     log(f"Query: {query!r}" if query else "Query: <all visible rows>")
     log(f"Mode: {'apply/delete' if args.apply else 'dry-run/report only'}")
     log(f"Batch size: {args.batch_size}; max delete: {args.max_delete or 'unlimited'}")
+    select_xs = parse_select_xs(args.select_xs)
+    log(f"Select X coordinates: {select_xs or '<row-relative only>'}")
 
     driver = build_driver(force_headed=not args.headless)
     deleted = 0
@@ -840,7 +874,7 @@ def main(argv: list[str] | None = None) -> int:
                 break
 
             batch_limit = min(args.batch_size, remaining_cap) if args.max_delete else args.batch_size
-            selected = select_matching_rows_with_cdp(driver, query, batch_limit)
+            selected = select_matching_rows_with_cdp(driver, query, batch_limit, select_xs)
             clicked = int(selected.get("clicked", 0) or 0)
 
             if clicked <= 0:

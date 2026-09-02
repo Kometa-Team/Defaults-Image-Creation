@@ -561,6 +561,9 @@ python adobe_express_cleanup.py --apply --batch-size 25
 
 # Stop after deleting 500 matching files this run.
 python adobe_express_cleanup.py --apply --batch-size 25 --max-delete 500
+
+# If Adobe rows are found but not visibly selected, tune the checkbox X position.
+python adobe_express_cleanup.py --apply --batch-size 10 --select-xs 166,150,180,130,200
 ```
 
 Use this when Adobe says the account storage is full and remove-background
@@ -569,6 +572,10 @@ Chrome profile as `sel_remove_bg.py`, opens Adobe Express "Your stuff", selects
 visible rows whose text contains `Remove background project`, deletes them,
 refreshes, and repeats. It is destructive only with `--apply`. Keep the default
 query unless you intentionally want to delete a different class of Adobe files.
+Adobe's file list is virtualized, so the script works on the rendered viewport
+and scrolls/refreshes to hydrate more rows. If matching rows are logged but the
+Delete toolbar does not appear, adjust `--select-xs` to the checkbox column's
+screen X coordinate in the visible browser.
 
 Clean generated `config` artifacts:
 
