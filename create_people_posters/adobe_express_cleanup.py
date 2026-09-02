@@ -783,7 +783,7 @@ def matching_row_targets(driver, query: str, limit: int, select_xs: list[int]) -
     }
 
     return Array.from(rowMap.values())
-      .sort((a, b) => a.top - b.top)
+      .sort((a, b) => b.top - a.top)
       .slice(0, limit);
     """
     try:
@@ -1152,14 +1152,22 @@ def main(argv: list[str] | None = None) -> int:
                 continue
 
             empty_scrolls = 0
-            selected_total += clicked
             for sample in selected.get("samples", [])[:3]:
                 log(f"[selected] {sample}")
+            toolbar_selected = int(selected.get("toolbarSelected", 0) or 0)
+            actual_selected = toolbar_selected if toolbar_selected > 0 else clicked
             log(
                 "[selected] toolbar: "
-                f"{selected.get('toolbarSelected', 0)} selected; "
+                f"{toolbar_selected} selected; "
                 f"delete visible={selected.get('deleteVisible', False)}"
             )
+            if toolbar_selected and toolbar_selected != clicked:
+                log(
+                    f"[warn] clicked {clicked} row target(s), but Adobe toolbar reports "
+                    f"{toolbar_selected} selected; using toolbar count for totals."
+                )
+                write_debug_dump(driver, query, select_xs, "selection_mismatch")
+            selected_total += actual_selected
             time.sleep(args.pause_sec)
 
             if not selected.get("deleteVisible"):
@@ -1172,8 +1180,8 @@ def main(argv: list[str] | None = None) -> int:
                 write_debug_dump(driver, query, select_xs, "delete_failed")
                 return 4
 
-            deleted += clicked
-            log(f"[deleted] batch={clicked}; total={deleted}")
+            deleted += actual_selected
+            log(f"[deleted] batch={actual_selected}; total={deleted}")
             time.sleep(args.pause_sec)
             driver.refresh()
             if not wait_for_page(driver):
