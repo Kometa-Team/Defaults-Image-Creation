@@ -562,8 +562,8 @@ python adobe_express_cleanup.py --apply --batch-size 25
 # Delete up to 500 matching files this run.
 python adobe_express_cleanup.py --apply --batch-size 500
 
-# Explicitly override the per-delete cycle size.
-python adobe_express_cleanup.py --apply --batch-size 500 --select-per-delete 2
+# Select two rows, scroll, select two more, repeat for fewer Delete confirmations.
+python adobe_express_cleanup.py --apply --batch-size 500 --select-per-delete 2 --viewports-per-delete 5
 
 # If Adobe rows are found but not visibly selected, tune the checkbox X position.
 python adobe_express_cleanup.py --apply --batch-size 10 --select-xs 110,100,120,130,150,166,180,200
@@ -585,7 +585,9 @@ Adobe's file list is virtualized, so the script works on the rendered viewport
 and scrolls/refreshes to hydrate more rows. By default it selects and deletes
 two rows per cycle because Adobe's bottom Delete toolbar can cover lower rows
 after selection. `--batch-size` is the run target when `--max-delete` is not
-set. It waits for matching asset rows after Adobe's shell/navigation loads;
+set. Use `--viewports-per-delete` to select two rows, scroll to hydrate more
+rows, select two more, and then delete the accumulated selection with fewer
+confirmations. It waits for matching asset rows after Adobe's shell/navigation loads;
 increase `--row-wait-sec` if the shell is ready but rows appear late. If
 matching rows are logged but the Delete toolbar does not appear, adjust
 `--select-xs` to the checkbox column's screen X coordinate in the visible

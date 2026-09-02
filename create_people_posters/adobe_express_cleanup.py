@@ -34,6 +34,7 @@ DEFAULT_QUERY = "Remove background project"
 DEFAULT_SELECT_XS = "110,100,120,130,150,166,180,200"
 DEFAULT_ROW_WAIT_SEC = "45"
 DEFAULT_SELECT_PER_DELETE = "2"
+DEFAULT_VIEWPORTS_PER_DELETE = "1"
 LOG_FILE = LOGS_DIR / "adobe_express_cleanup.log"
 DEBUG_DIR = CONFIG_DIR / "adobe_express_cleanup_debug"
 
@@ -1073,6 +1074,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Rows to select before each Delete action. Default 2 avoids Adobe's bottom toolbar overlay.",
     )
     parser.add_argument(
+        "--viewports-per-delete",
+        type=int,
+        default=max(1, int(os.getenv("ADOBE_CLEANUP_VIEWPORTS_PER_DELETE", DEFAULT_VIEWPORTS_PER_DELETE))),
+        help="Rendered viewports to scan/select before each Delete action. Increase for fewer confirmations.",
+    )
+    parser.add_argument(
         "--max-empty-scrolls",
         type=int,
         default=max(1, int(os.getenv("ADOBE_CLEANUP_MAX_EMPTY_SCROLLS", "5"))),
@@ -1097,6 +1104,7 @@ def main(argv: list[str] | None = None) -> int:
     select_xs = parse_select_xs(args.select_xs)
     log(f"Select X coordinates: {select_xs or '<row-relative only>'}")
     log(f"Select per delete cycle: {args.select_per_delete}")
+    log(f"Viewports per delete cycle: {args.viewports_per_delete}")
     delete_goal = args.max_delete or args.batch_size
     if args.max_delete <= 0:
         log(
@@ -1149,18 +1157,73 @@ def main(argv: list[str] | None = None) -> int:
                 log("[done] Reached delete target.")
                 break
 
-            batch_limit = min(args.select_per_delete, remaining_cap)
-            selected = select_matching_rows_with_cdp(driver, query, batch_limit, select_xs)
-            clicked = int(selected.get("clicked", 0) or 0)
-            log(
-                "[select] attempted row targets: "
-                f"{selected.get('targetCount', 0)}; clicked/verified: {clicked}; "
-                f"delete visible={selected.get('deleteVisible', False)}"
-            )
+            cycle_clicked = 0
+            cycle_selected = 0
+            delete_visible = False
 
-            if clicked <= 0:
-                if int(state.get("matching", 0) or 0) > 0 or int(selected.get("targetCount", 0) or 0) > 0:
-                    write_debug_dump(driver, query, select_xs, "selection_zero")
+            for viewport_index in range(1, args.viewports_per_delete + 1):
+                remaining_cycle = delete_goal - deleted - cycle_selected
+                if remaining_cycle <= 0:
+                    break
+
+                batch_limit = min(args.select_per_delete, remaining_cycle)
+                selected = select_matching_rows_with_cdp(driver, query, batch_limit, select_xs)
+                clicked = int(selected.get("clicked", 0) or 0)
+                toolbar_selected = int(selected.get("toolbarSelected", 0) or 0)
+                if toolbar_selected > cycle_selected:
+                    cycle_selected = toolbar_selected
+                elif toolbar_selected <= 0 and clicked > 0:
+                    cycle_selected += clicked
+                cycle_clicked += clicked
+                delete_visible = delete_visible or bool(selected.get("deleteVisible"))
+                log(
+                    "[select] viewport "
+                    f"{viewport_index}/{args.viewports_per_delete}; "
+                    f"attempted row targets: {selected.get('targetCount', 0)}; "
+                    f"clicked/verified: {clicked}; "
+                    f"toolbar selected={toolbar_selected}; "
+                    f"delete visible={selected.get('deleteVisible', False)}"
+                )
+
+                for sample in selected.get("samples", [])[:3]:
+                    log(f"[selected] {sample}")
+
+                if clicked <= 0:
+                    if (
+                        int(state.get("matching", 0) or 0) > 0
+                        or int(selected.get("targetCount", 0) or 0) > 0
+                    ):
+                        write_debug_dump(driver, query, select_xs, "selection_zero")
+                    break
+
+                if toolbar_selected and toolbar_selected != cycle_clicked:
+                    log(
+                        f"[warn] clicked {cycle_clicked} row target(s), but Adobe toolbar reports "
+                        f"{toolbar_selected} selected; using toolbar count for totals."
+                    )
+                    write_debug_dump(driver, query, select_xs, "selection_mismatch")
+
+                if viewport_index >= args.viewports_per_delete or deleted + cycle_selected >= delete_goal:
+                    break
+
+                scroll = scroll_next_page(driver)
+                moved = bool(scroll.get("moved"))
+                log(
+                    f"[scan] selected {cycle_selected}; scrolling for more before delete: "
+                    f"moved={moved} target={scroll.get('target', 'unknown')} "
+                    f"{scroll.get('before', '')}->{scroll.get('after', '')}"
+                )
+                if not moved:
+                    break
+                time.sleep(args.pause_sec)
+                state = page_state(driver, query, limit=3)
+                log(
+                    "[scan] after scroll visible matching rows: "
+                    f"{state.get('matching', 0)}; "
+                    f"checkbox-backed: {state.get('checkboxBacked', 0)}"
+                )
+
+            if cycle_selected <= 0:
                 scroll = scroll_next_page(driver)
                 moved = bool(scroll.get("moved"))
                 empty_scrolls += 1
@@ -1173,34 +1236,13 @@ def main(argv: list[str] | None = None) -> int:
                 if not moved or empty_scrolls >= args.max_empty_scrolls:
                     break
                 time.sleep(args.pause_sec)
-                state = page_state(driver, query, limit=3)
-                log(
-                    "[scan] after scroll visible matching rows: "
-                    f"{state.get('matching', 0)}; "
-                    f"checkbox-backed: {state.get('checkboxBacked', 0)}"
-                )
                 continue
 
             empty_scrolls = 0
-            for sample in selected.get("samples", [])[:3]:
-                log(f"[selected] {sample}")
-            toolbar_selected = int(selected.get("toolbarSelected", 0) or 0)
-            actual_selected = toolbar_selected if toolbar_selected > 0 else clicked
-            log(
-                "[selected] toolbar: "
-                f"{toolbar_selected} selected; "
-                f"delete visible={selected.get('deleteVisible', False)}"
-            )
-            if toolbar_selected and toolbar_selected != clicked:
-                log(
-                    f"[warn] clicked {clicked} row target(s), but Adobe toolbar reports "
-                    f"{toolbar_selected} selected; using toolbar count for totals."
-                )
-                write_debug_dump(driver, query, select_xs, "selection_mismatch")
-            selected_total += actual_selected
+            selected_total += cycle_selected
             time.sleep(args.pause_sec)
 
-            if not selected.get("deleteVisible"):
+            if not delete_visible:
                 log("[error] Rows were clicked, but Adobe did not expose the Delete toolbar.")
                 write_debug_dump(driver, query, select_xs, "selection_failed")
                 return 4
@@ -1210,8 +1252,8 @@ def main(argv: list[str] | None = None) -> int:
                 write_debug_dump(driver, query, select_xs, "delete_failed")
                 return 4
 
-            deleted += actual_selected
-            log(f"[deleted] batch={actual_selected}; total={deleted}")
+            deleted += cycle_selected
+            log(f"[deleted] batch={cycle_selected}; total={deleted}")
             if deleted >= delete_goal:
                 log("[done] Reached delete target.")
                 break
