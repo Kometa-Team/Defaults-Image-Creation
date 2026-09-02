@@ -401,9 +401,16 @@ def prepare_chrome_profile(user_data_dir_raw: str, profile_dir_raw: str) -> tupl
     return user_data_dir, profile_dir
 
 
-def build_driver(force_headed: bool = False):
+def build_driver(force_headed: bool = False, force_headless: bool = False):
     global EFFECTIVE_USER_DATA_DIR, EFFECTIVE_PROFILE_DIR, EFFECTIVE_HEADLESS, ACTIVE_STARTUP_OVERRIDE
-    if ACTIVE_STARTUP_OVERRIDE and not force_headed:
+    if force_headed and force_headless:
+        raise ValueError("force_headed and force_headless cannot both be true")
+
+    if force_headless:
+        startup_user_data_dir = HEADLESS_USER_DATA_DIR
+        startup_profile_dir = HEADLESS_PROFILE_DIR
+        startup_headless = True
+    elif ACTIVE_STARTUP_OVERRIDE and not force_headed:
         startup_user_data_dir, startup_profile_dir, startup_headless = ACTIVE_STARTUP_OVERRIDE
     else:
         startup_user_data_dir = USER_DATA_DIR

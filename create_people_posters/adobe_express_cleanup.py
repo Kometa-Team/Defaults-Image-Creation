@@ -1225,7 +1225,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--headless",
         action="store_true",
         default=env_bool("ADOBE_CLEANUP_HEADLESS", "false"),
-        help="Allow headless Chrome. Headed mode is the default for visual safety.",
+        help="Run cleanup in Chrome headless mode. Headed mode is the default for visual safety.",
     )
     parser.add_argument(
         "--pause-sec",
@@ -1308,7 +1308,7 @@ def main(argv: list[str] | None = None) -> int:
             f"({delete_goal})"
         )
 
-    driver = build_driver(force_headed=not args.headless)
+    driver = build_driver(force_headed=not args.headless, force_headless=args.headless)
     deleted = 0
     selected_total = 0
     empty_scrolls = 0

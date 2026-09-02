@@ -573,6 +573,9 @@ python adobe_express_cleanup.py --debug-dump
 
 # If Adobe's shell loads before the file rows hydrate, wait longer for rows.
 python adobe_express_cleanup.py --apply --batch-size 10 --row-wait-sec 90
+
+# Run cleanup with the shared Selenium headless profile.
+python adobe_express_cleanup.py --apply --batch-size 100 --select-per-delete 2 --row-wait-sec 90 --headless
 ```
 
 Use this when Adobe says the account storage is full and remove-background
@@ -594,7 +597,8 @@ older screen-coordinate fallback is disabled unless `--coordinate-fallback` or
 `ADOBE_CLEANUP_COORDINATE_FALLBACK=true` is set, because missed coordinate clicks
 can open the editor instead of selecting rows. Use `--debug-dump` to write a live
 DOM/control JSON file and screenshot under `config/adobe_express_cleanup_debug`
-when selectors need tuning.
+when selectors need tuning. `--headless` explicitly uses the Selenium headless
+profile, even when `SEL_HEADLESS=false` for the normal background-removal flow.
 
 Clean generated `config` artifacts:
 
