@@ -33,6 +33,7 @@ DEFAULT_URL = "https://new.express.adobe.com/your-stuff/files?view=list"
 DEFAULT_QUERY = "Remove background project"
 DEFAULT_SELECT_XS = "110,100,120,130,150,166,180,200"
 DEFAULT_ROW_WAIT_SEC = "45"
+DEFAULT_SELECT_PER_DELETE = "2"
 LOG_FILE = LOGS_DIR / "adobe_express_cleanup.log"
 DEBUG_DIR = CONFIG_DIR / "adobe_express_cleanup_debug"
 
@@ -450,6 +451,19 @@ def wait_for_matching_rows(driver, query: str, timeout: float) -> dict[str, Any]
             )
             last_log = now
         time.sleep(0.75)
+
+
+def ensure_file_list_page(driver, url: str, query: str, row_wait_sec: float) -> dict[str, Any]:
+    current = ""
+    try:
+        current = driver.current_url
+    except Exception:
+        pass
+    if "/your-stuff/files" not in current:
+        log(f"[nav] browser left file list ({current}); returning to Adobe file list")
+        driver.get(url)
+        wait_for_page(driver)
+    return wait_for_matching_rows(driver, query, row_wait_sec)
 
 
 def select_matching_rows(driver, query: str, limit: int) -> dict[str, Any]:
@@ -1000,7 +1014,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--batch-size",
         type=int,
         default=max(1, int(os.getenv("ADOBE_CLEANUP_BATCH_SIZE", "25"))),
-        help="Maximum visible matching rows to select before each delete.",
+        help=(
+            "Target number to delete when --max-delete is not set."
+        ),
     )
     parser.add_argument(
         "--max-delete",
@@ -1051,6 +1067,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Seconds to wait for the virtualized Adobe asset rows after the page shell loads.",
     )
     parser.add_argument(
+        "--select-per-delete",
+        type=int,
+        default=max(1, int(os.getenv("ADOBE_CLEANUP_SELECT_PER_DELETE", DEFAULT_SELECT_PER_DELETE))),
+        help="Rows to select before each Delete action. Default 2 avoids Adobe's bottom toolbar overlay.",
+    )
+    parser.add_argument(
         "--max-empty-scrolls",
         type=int,
         default=max(1, int(os.getenv("ADOBE_CLEANUP_MAX_EMPTY_SCROLLS", "5"))),
@@ -1074,6 +1096,13 @@ def main(argv: list[str] | None = None) -> int:
     log(f"Batch size: {args.batch_size}; max delete: {args.max_delete or 'unlimited'}")
     select_xs = parse_select_xs(args.select_xs)
     log(f"Select X coordinates: {select_xs or '<row-relative only>'}")
+    log(f"Select per delete cycle: {args.select_per_delete}")
+    delete_goal = args.max_delete or args.batch_size
+    if args.max_delete <= 0:
+        log(
+            "[mode] no --max-delete set; using --batch-size as this run's delete target "
+            f"({delete_goal})"
+        )
 
     driver = build_driver(force_headed=not args.headless)
     deleted = 0
@@ -1086,7 +1115,7 @@ def main(argv: list[str] | None = None) -> int:
             log("[error] Adobe file list did not become ready. Check login or page layout.")
             return 3
 
-        state = wait_for_matching_rows(driver, query, args.row_wait_sec)
+        state = ensure_file_list_page(driver, args.url, query, args.row_wait_sec)
         log(
             "[state] visible matching rows: "
             f"{state.get('matching', 0)}; selected: {state.get('selected', 0)}; "
@@ -1114,12 +1143,13 @@ def main(argv: list[str] | None = None) -> int:
             return 0
 
         while True:
-            remaining_cap = args.max_delete - deleted if args.max_delete else args.batch_size
-            if args.max_delete and remaining_cap <= 0:
-                log("[done] Reached --max-delete cap.")
+            state = ensure_file_list_page(driver, args.url, query, args.row_wait_sec)
+            remaining_cap = delete_goal - deleted
+            if remaining_cap <= 0:
+                log("[done] Reached delete target.")
                 break
 
-            batch_limit = min(args.batch_size, remaining_cap) if args.max_delete else args.batch_size
+            batch_limit = min(args.select_per_delete, remaining_cap)
             selected = select_matching_rows_with_cdp(driver, query, batch_limit, select_xs)
             clicked = int(selected.get("clicked", 0) or 0)
             log(
@@ -1182,12 +1212,15 @@ def main(argv: list[str] | None = None) -> int:
 
             deleted += actual_selected
             log(f"[deleted] batch={actual_selected}; total={deleted}")
+            if deleted >= delete_goal:
+                log("[done] Reached delete target.")
+                break
             time.sleep(args.pause_sec)
             driver.refresh()
             if not wait_for_page(driver):
                 log("[warn] Page did not fully report ready after refresh; continuing scan.")
             else:
-                state = page_state(driver, query, limit=3)
+                state = wait_for_matching_rows(driver, query, min(args.row_wait_sec, 20.0))
                 log(
                     "[scan] after refresh visible matching rows: "
                     f"{state.get('matching', 0)}; "

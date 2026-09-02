@@ -556,11 +556,14 @@ Clean Adobe Express remote storage:
 # Preview visible matching files. This deletes nothing.
 python adobe_express_cleanup.py
 
-# Delete remove-background projects in visible batches of 25.
+# Delete up to 25 remove-background projects, two rows per delete cycle.
 python adobe_express_cleanup.py --apply --batch-size 25
 
-# Stop after deleting 500 matching files this run.
-python adobe_express_cleanup.py --apply --batch-size 25 --max-delete 500
+# Delete up to 500 matching files this run.
+python adobe_express_cleanup.py --apply --batch-size 500
+
+# Explicitly override the per-delete cycle size.
+python adobe_express_cleanup.py --apply --batch-size 500 --select-per-delete 2
 
 # If Adobe rows are found but not visibly selected, tune the checkbox X position.
 python adobe_express_cleanup.py --apply --batch-size 10 --select-xs 110,100,120,130,150,166,180,200
@@ -579,12 +582,14 @@ visible rows whose text contains `Remove background project`, deletes them,
 refreshes, and repeats. It is destructive only with `--apply`. Keep the default
 query unless you intentionally want to delete a different class of Adobe files.
 Adobe's file list is virtualized, so the script works on the rendered viewport
-and scrolls/refreshes to hydrate more rows. It waits for matching asset rows
-after Adobe's shell/navigation loads; increase `--row-wait-sec` if the shell is
-ready but rows appear late. If matching rows are logged but the Delete toolbar
-does not appear, adjust `--select-xs` to the checkbox column's screen X
-coordinate in the visible browser. Use `--debug-dump` to write a live
-DOM/control JSON file and screenshot under
+and scrolls/refreshes to hydrate more rows. By default it selects and deletes
+two rows per cycle because Adobe's bottom Delete toolbar can cover lower rows
+after selection. `--batch-size` is the run target when `--max-delete` is not
+set. It waits for matching asset rows after Adobe's shell/navigation loads;
+increase `--row-wait-sec` if the shell is ready but rows appear late. If
+matching rows are logged but the Delete toolbar does not appear, adjust
+`--select-xs` to the checkbox column's screen X coordinate in the visible
+browser. Use `--debug-dump` to write a live DOM/control JSON file and screenshot under
 `config/adobe_express_cleanup_debug` when selectors need tuning.
 
 Clean generated `config` artifacts:
