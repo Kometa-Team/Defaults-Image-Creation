@@ -32,6 +32,7 @@ from sel_remove_bg import build_driver, hide_onetrust, js  # noqa: E402
 DEFAULT_URL = "https://new.express.adobe.com/your-stuff/files?view=list"
 DEFAULT_QUERY = "Remove background project"
 DEFAULT_SELECT_XS = "166,150,180,130,200"
+DEFAULT_ROW_WAIT_SEC = "45"
 LOG_FILE = LOGS_DIR / "adobe_express_cleanup.log"
 DEBUG_DIR = CONFIG_DIR / "adobe_express_cleanup_debug"
 
@@ -426,6 +427,29 @@ def page_state(driver, query: str, limit: int = 10) -> dict[str, Any]:
     };
     """
     return driver.execute_script(script, query, limit) or {}
+
+
+def wait_for_matching_rows(driver, query: str, timeout: float) -> dict[str, Any]:
+    end = time.time() + max(0.0, timeout)
+    last_state: dict[str, Any] = {}
+    last_log = 0.0
+    while True:
+        state = page_state(driver, query)
+        last_state = state
+        if int(state.get("matching", 0) or 0) > 0:
+            return state
+
+        now = time.time()
+        if now >= end:
+            return last_state
+        if now - last_log >= 5:
+            log(
+                "[wait] file-list shell is ready; waiting for matching asset rows "
+                f"({state.get('matching', 0)} visible, "
+                f"{state.get('checkboxLikeCount', 0)} checkbox-like controls)"
+            )
+            last_log = now
+        time.sleep(0.75)
 
 
 def select_matching_rows(driver, query: str, limit: int) -> dict[str, Any]:
@@ -1020,6 +1044,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Write live Adobe DOM/control/point-probe JSON plus screenshot, then continue normally.",
     )
     parser.add_argument(
+        "--row-wait-sec",
+        type=float,
+        default=max(0.0, float(os.getenv("ADOBE_CLEANUP_ROW_WAIT_SEC", DEFAULT_ROW_WAIT_SEC))),
+        help="Seconds to wait for the virtualized Adobe asset rows after the page shell loads.",
+    )
+    parser.add_argument(
         "--max-empty-scrolls",
         type=int,
         default=max(1, int(os.getenv("ADOBE_CLEANUP_MAX_EMPTY_SCROLLS", "5"))),
@@ -1055,7 +1085,7 @@ def main(argv: list[str] | None = None) -> int:
             log("[error] Adobe file list did not become ready. Check login or page layout.")
             return 3
 
-        state = page_state(driver, query)
+        state = wait_for_matching_rows(driver, query, args.row_wait_sec)
         log(
             "[state] visible matching rows: "
             f"{state.get('matching', 0)}; selected: {state.get('selected', 0)}; "

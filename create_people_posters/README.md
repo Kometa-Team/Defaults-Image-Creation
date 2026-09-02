@@ -567,6 +567,9 @@ python adobe_express_cleanup.py --apply --batch-size 10 --select-xs 166,150,180,
 
 # Capture the live rendered Adobe DOM/control geometry without deleting anything.
 python adobe_express_cleanup.py --debug-dump
+
+# If Adobe's shell loads before the file rows hydrate, wait longer for rows.
+python adobe_express_cleanup.py --apply --batch-size 10 --row-wait-sec 90
 ```
 
 Use this when Adobe says the account storage is full and remove-background
@@ -576,9 +579,11 @@ visible rows whose text contains `Remove background project`, deletes them,
 refreshes, and repeats. It is destructive only with `--apply`. Keep the default
 query unless you intentionally want to delete a different class of Adobe files.
 Adobe's file list is virtualized, so the script works on the rendered viewport
-and scrolls/refreshes to hydrate more rows. If matching rows are logged but the
-Delete toolbar does not appear, adjust `--select-xs` to the checkbox column's
-screen X coordinate in the visible browser. Use `--debug-dump` to write a live
+and scrolls/refreshes to hydrate more rows. It waits for matching asset rows
+after Adobe's shell/navigation loads; increase `--row-wait-sec` if the shell is
+ready but rows appear late. If matching rows are logged but the Delete toolbar
+does not appear, adjust `--select-xs` to the checkbox column's screen X
+coordinate in the visible browser. Use `--debug-dump` to write a live
 DOM/control JSON file and screenshot under
 `config/adobe_express_cleanup_debug` when selectors need tuning.
 
