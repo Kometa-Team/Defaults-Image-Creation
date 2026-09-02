@@ -167,6 +167,7 @@ SEL_MAX_WAIT_DL_SEC=20
 SEL_DL_BUTTON_TIMEOUT=12
 SEL_RESTART_BROWSER_EACH_FILE=true
 SEL_MAX_FILE_ATTEMPTS=2
+SEL_MAX_CONSECUTIVE_PROCESSING_STALLS=10
 SEL_RELOAD_EACH_FILE=true
 SEL_PROMPT_FOR_LOGIN=true
 SEL_LOGIN_WAIT_SEC=900
@@ -219,6 +220,10 @@ SEL_WINDOW_SIZE=1400,1000
 > If no Download/Export control appears at all for
 > `SEL_NO_DOWNLOAD_CONTROL_STALL_SEC`, that is also treated as a retryable
 > processing stall.
+> If `SEL_MAX_CONSECUTIVE_PROCESSING_STALLS` processing stalls happen back to
+> back, the batch stops with remaining JPGs preserved so a temporary Adobe
+> service/session problem does not mark hundreds of files as errors. Resume
+> later with `python orchestrator.py --redo remove_bg --no-recover-edge-chops`.
 > If Adobe opens the "Start from your image" chooser after upload, the Selenium
 > step treats it as stale project state, restarts Chrome, and retries until it
 > gets the normal upload page headed "Remove background".

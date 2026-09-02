@@ -104,6 +104,7 @@ PROMPT_FOR_LOGIN = env_bool("SEL_PROMPT_FOR_LOGIN", "true")
 LOGIN_WAIT_SEC = max(30, int(os.getenv("SEL_LOGIN_WAIT_SEC", "900")))
 DISABLE_CHROME_RESTORE = env_bool("SEL_DISABLE_CHROME_RESTORE", "true")
 MAX_TOOL_READY_RESTARTS = max(1, int(os.getenv("SEL_MAX_TOOL_READY_RESTARTS", "5")))
+MAX_CONSECUTIVE_PROCESSING_STALLS = max(0, int(os.getenv("SEL_MAX_CONSECUTIVE_PROCESSING_STALLS", "10")))
 
 # Size enforcement
 EXPECT_W = int(os.getenv("SEL_EXPECT_WIDTH", "2000"))
@@ -1914,6 +1915,7 @@ def main(argv=None):
     results: List[FileResult] = []
     abort_run = False
     exit_code = 0
+    consecutive_processing_stalls = 0
 
     driver = build_driver()
     try:
@@ -2105,12 +2107,31 @@ def main(argv=None):
                     log(f"[skip] {jpg.name} – {fr.detail}")
                 elif fr.status == "ERROR":
                     log(f"[error] {jpg.name} – {fr.detail}")
+                    if fr.detail == "Processing did not expose controls in time":
+                        consecutive_processing_stalls += 1
+                        if (
+                            MAX_CONSECUTIVE_PROCESSING_STALLS
+                            and consecutive_processing_stalls >= MAX_CONSECUTIVE_PROCESSING_STALLS
+                        ):
+                            log(
+                                f"[abort] {consecutive_processing_stalls} consecutive Adobe processing stalls; "
+                                "stopping the batch to preserve remaining JPGs for a later resume."
+                            )
+                            log("[next] Wait for Adobe to recover or refresh the session, then resume:")
+                            log("[next] python orchestrator.py --redo remove_bg --no-recover-edge-chops")
+                            abort_run = True
+                            exit_code = 5
+                    else:
+                        consecutive_processing_stalls = 0
+                elif fr.status == "OK":
+                    consecutive_processing_stalls = 0
                 bar()  # advance after finishing the file
 
                 if abort_run:
-                    log("[auth] Stopping the batch because Adobe login is still required. Finish login in this profile, then rerun.")
-                    log("[next] Run: python sel_remove_bg.py --login-only")
-                    log("[next] Then resume: python orchestrator.py --redo remove_bg --no-recover-edge-chops")
+                    if exit_code == 4:
+                        log("[auth] Stopping the batch because Adobe login is still required. Finish login in this profile, then rerun.")
+                        log("[next] Run: python sel_remove_bg.py --login-only")
+                        log("[next] Then resume: python orchestrator.py --redo remove_bg --no-recover-edge-chops")
                     break
 
                 if idx < len(files) and RESTART_BROWSER_EACH_FILE:
