@@ -486,6 +486,156 @@ def wait_for_matching_rows(driver, query: str, timeout: float) -> dict[str, Any]
         time.sleep(0.75)
 
 
+def is_deleted_page_url(url: str) -> bool:
+    return "/files/deleted" in (url or "").lower()
+
+
+def ensure_deleted_page_mode(driver, query: str) -> dict[str, Any]:
+    script = r"""
+    const query = String(arguments[0] || '').toLowerCase();
+
+    function visible(el){
+      if (!el) return false;
+      const style = getComputedStyle(el);
+      const rect = el.getBoundingClientRect();
+      return style.display !== 'none' &&
+             style.visibility !== 'hidden' &&
+             rect.width > 0 &&
+             rect.height > 0 &&
+             rect.bottom >= 0 &&
+             rect.top <= window.innerHeight;
+    }
+
+    function textOf(el){
+      try { return String(el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim(); }
+      catch(e) { return ''; }
+    }
+
+    function labelOf(el){
+      const text = textOf(el);
+      if (text) return text;
+      try {
+        return String(
+          el.getAttribute('aria-label') ||
+          el.getAttribute('title') ||
+          el.getAttribute('data-testid') ||
+          el.getAttribute('id') ||
+          ''
+        ).replace(/\s+/g, ' ').trim();
+      } catch(e) {
+        return '';
+      }
+    }
+
+    function looksLikeRow(el){
+      const role = (el.getAttribute && String(el.getAttribute('role') || '').toLowerCase()) || '';
+      const tag = (el.tagName || '').toLowerCase();
+      const rect = el.getBoundingClientRect();
+      return role === 'row' ||
+             role === 'listitem' ||
+             tag === 'tr' ||
+             tag === 'li' ||
+             (rect.width > window.innerWidth * 0.45 && rect.height >= 40 && rect.height <= 160);
+    }
+
+    function collectRoots(root, out){
+      out.push(root);
+      const all = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of all){
+        if (n.shadowRoot) collectRoots(n.shadowRoot, out);
+      }
+    }
+
+    const roots = [];
+    collectRoots(document, roots);
+    const pageText = roots.map(root => textOf(root)).filter(Boolean).join(' ').replace(/\s+/g, ' ');
+    const hasQueryText = !query || pageText.toLowerCase().includes(query);
+    let matchingRows = 0;
+    let checkboxLikeCount = 0;
+    let selectLabelCount = 0;
+    const buttons = [];
+
+    for (const root of roots){
+      const nodes = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of nodes){
+        if (!visible(n)) continue;
+        const text = textOf(n);
+        if (looksLikeRow(n) && text && (!query || text.toLowerCase().includes(query))) {
+          matchingRows += 1;
+        }
+        const tag = (n.tagName || '').toLowerCase();
+        const role = (n.getAttribute && String(n.getAttribute('role') || '').toLowerCase()) || '';
+        if (tag === 'button' || tag.includes('button') || role === 'button' || n.getAttribute('data-testid')) {
+          buttons.push(n);
+        }
+      }
+      const boxes = root.querySelectorAll
+        ? root.querySelectorAll('sp-table-checkbox-cell[label], input[type="checkbox"], [role="checkbox"], sp-checkbox')
+        : [];
+      checkboxLikeCount += boxes.length;
+      if (root.querySelectorAll) {
+        selectLabelCount += root.querySelectorAll('[aria-label*="Select"], [title*="Select"]').length;
+      }
+    }
+
+    let clickedList = false;
+    let clickedSelect = false;
+
+    if (hasQueryText && matchingRows <= 0) {
+      const listButton = buttons.find(btn => {
+        const haystack = [
+          labelOf(btn),
+          btn.getAttribute && btn.getAttribute('data-testid'),
+          btn.getAttribute && btn.getAttribute('id'),
+          btn.getAttribute && btn.getAttribute('aria-label'),
+          btn.getAttribute && btn.getAttribute('title')
+        ].filter(Boolean).join(' ');
+        return /viewlist|view-list|list view|show list|switch to list/i.test(haystack);
+      });
+      if (listButton) {
+        listButton.scrollIntoView({block: 'center', inline: 'nearest'});
+        listButton.click();
+        clickedList = true;
+      }
+    }
+
+    if (matchingRows > 0 && checkboxLikeCount <= 0 && selectLabelCount <= 0) {
+      const selectButton = buttons.find(btn => {
+        const haystack = [
+          labelOf(btn),
+          btn.getAttribute && btn.getAttribute('data-testid'),
+          btn.getAttribute && btn.getAttribute('id'),
+          btn.getAttribute && btn.getAttribute('aria-label'),
+          btn.getAttribute && btn.getAttribute('title')
+        ].filter(Boolean).join(' ');
+        return /header-select-button|select/i.test(haystack) &&
+               !/selected|deselect|selection toolbar/i.test(haystack);
+      });
+      if (selectButton) {
+        selectButton.scrollIntoView({block: 'center', inline: 'nearest'});
+        selectButton.click();
+        clickedSelect = true;
+      }
+    }
+
+    return {clickedList, clickedSelect, matchingRows, checkboxLikeCount, selectLabelCount};
+    """
+    try:
+        result = driver.execute_script(script, query) or {}
+    except WebDriverException:
+        raise
+    except Exception:
+        return {}
+
+    if result.get("clickedList"):
+        log("[mode] switched Adobe Deleted to list view")
+        time.sleep(1.0)
+    if result.get("clickedSelect"):
+        log("[mode] enabled Adobe Deleted selection mode")
+        time.sleep(1.0)
+    return result
+
+
 def ensure_file_list_page(driver, url: str, query: str, row_wait_sec: float) -> dict[str, Any]:
     current = ""
     try:
@@ -496,7 +646,13 @@ def ensure_file_list_page(driver, url: str, query: str, row_wait_sec: float) -> 
         log(f"[nav] browser left cleanup page ({current}); returning to Adobe cleanup URL")
         driver.get(url)
         wait_for_page(driver)
-    return wait_for_matching_rows(driver, query, row_wait_sec)
+    if is_deleted_page_url(url):
+        ensure_deleted_page_mode(driver, query)
+    state = wait_for_matching_rows(driver, query, row_wait_sec)
+    if is_deleted_page_url(url):
+        ensure_deleted_page_mode(driver, query)
+        state = page_state(driver, query)
+    return state
 
 
 def select_matching_rows(driver, query: str, limit: int) -> dict[str, Any]:
@@ -715,6 +871,22 @@ def selection_toolbar_state(driver) -> dict[str, Any]:
     function textOf(el){
       try { return String(el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim(); }
       catch(e) { return ''; }
+    }
+
+    function labelOf(el){
+      const text = textOf(el);
+      if (text) return text;
+      try {
+        return String(
+          el.getAttribute('aria-label') ||
+          el.getAttribute('title') ||
+          el.getAttribute('data-testid') ||
+          el.getAttribute('id') ||
+          ''
+        ).replace(/\s+/g, ' ').trim();
+      } catch(e) {
+        return '';
+      }
     }
 
     function collectRoots(root, out){
