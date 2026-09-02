@@ -155,18 +155,43 @@ def page_state(driver, query: str, limit: int = 10) -> dict[str, Any]:
       return false;
     }
 
+    function looksLikeRow(el){
+      const role = (el.getAttribute && String(el.getAttribute('role') || '').toLowerCase()) || '';
+      const tag = (el.tagName || '').toLowerCase();
+      const rect = el.getBoundingClientRect();
+      return role === 'row' ||
+             role === 'listitem' ||
+             tag === 'tr' ||
+             tag === 'li' ||
+             (rect.width > window.innerWidth * 0.45 && rect.height >= 40 && rect.height <= 160);
+    }
+
+    function rowKey(row){
+      const rect = row.getBoundingClientRect();
+      return `${Math.round(rect.top / 4) * 4}:${Math.round(rect.height / 4) * 4}`;
+    }
+
     function rowFor(el){
       let cur = el;
       for (let i = 0; cur && i < 14; i++){
-        const role = (cur.getAttribute && String(cur.getAttribute('role') || '').toLowerCase()) || '';
-        const tag = (cur.tagName || '').toLowerCase();
         const text = textOf(cur);
-        const rowish = role === 'row' || role === 'listitem' || tag === 'tr' || tag === 'li';
         const queryMatch = !query || text.toLowerCase().includes(query);
-        if (text && queryMatch && (rowish || text.length > 30)) return cur;
+        if (text && queryMatch && looksLikeRow(cur)) return cur;
         cur = rootParent(cur);
       }
       return null;
+    }
+
+    function collectCandidateRows(root, rowMap){
+      const nodes = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of nodes){
+        if (!visible(n)) continue;
+        const text = textOf(n);
+        if (!text || (query && !text.toLowerCase().includes(query))) continue;
+        if (!looksLikeRow(n)) continue;
+        const key = rowKey(n);
+        if (!rowMap.has(key)) rowMap.set(key, {row: n, box: null, text, selected: false});
+      }
     }
 
     function collectRoots(root, out){
@@ -181,22 +206,31 @@ def page_state(driver, query: str, limit: int = 10) -> dict[str, Any]:
     collectRoots(document, roots);
 
     const rowMap = new Map();
+    let checkboxLikeCount = 0;
+    let selectLabelCount = 0;
     for (const root of roots){
+      collectCandidateRows(root, rowMap);
       const boxes = root.querySelectorAll
         ? root.querySelectorAll('input[type="checkbox"], [role="checkbox"], sp-checkbox')
         : [];
+      checkboxLikeCount += boxes.length;
+      if (root.querySelectorAll) {
+        selectLabelCount += root.querySelectorAll('[aria-label*="Select"], [title*="Select"]').length;
+      }
       for (const box of boxes){
         if (!visible(box)) continue;
         const row = rowFor(box);
         if (!row || !visible(row)) continue;
         const text = textOf(row);
         if (query && !text.toLowerCase().includes(query)) continue;
-        if (!rowMap.has(row)) rowMap.set(row, {row, box, text, selected: checked(box)});
+        const key = rowKey(row);
+        if (!rowMap.has(key)) rowMap.set(key, {row, box, text, selected: checked(box)});
       }
     }
 
     const rows = Array.from(rowMap.values());
     const selected = rows.filter(item => item.selected).length;
+    const textSample = roots.map(root => textOf(root)).filter(Boolean).join(' ').replace(/\s+/g, ' ').slice(0, 500);
     return {
       url: location.href,
       y: Math.round(window.scrollY || document.documentElement.scrollTop || 0),
@@ -204,6 +238,10 @@ def page_state(driver, query: str, limit: int = 10) -> dict[str, Any]:
       viewport: Math.round(window.innerHeight || 0),
       matching: rows.length,
       selected,
+      checkboxBacked: rows.filter(item => !!item.box).length,
+      checkboxLikeCount,
+      selectLabelCount,
+      textSample,
       samples: rows.slice(0, limit).map(item => item.text.slice(0, 180))
     };
     """
@@ -248,18 +286,79 @@ def select_matching_rows(driver, query: str, limit: int) -> dict[str, Any]:
       return false;
     }
 
+    function looksLikeRow(el){
+      const role = (el.getAttribute && String(el.getAttribute('role') || '').toLowerCase()) || '';
+      const tag = (el.tagName || '').toLowerCase();
+      const rect = el.getBoundingClientRect();
+      return role === 'row' ||
+             role === 'listitem' ||
+             tag === 'tr' ||
+             tag === 'li' ||
+             (rect.width > window.innerWidth * 0.45 && rect.height >= 40 && rect.height <= 160);
+    }
+
+    function rowKey(row){
+      const rect = row.getBoundingClientRect();
+      return `${Math.round(rect.top / 4) * 4}:${Math.round(rect.height / 4) * 4}`;
+    }
+
     function rowFor(el){
       let cur = el;
       for (let i = 0; cur && i < 14; i++){
-        const role = (cur.getAttribute && String(cur.getAttribute('role') || '').toLowerCase()) || '';
-        const tag = (cur.tagName || '').toLowerCase();
         const text = textOf(cur);
-        const rowish = role === 'row' || role === 'listitem' || tag === 'tr' || tag === 'li';
         const queryMatch = !query || text.toLowerCase().includes(query);
-        if (text && queryMatch && (rowish || text.length > 30)) return cur;
+        if (text && queryMatch && looksLikeRow(cur)) return cur;
         cur = rootParent(cur);
       }
       return null;
+    }
+
+    function collectCandidateRows(root, rowMap){
+      const nodes = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of nodes){
+        if (!visible(n)) continue;
+        const text = textOf(n);
+        if (!text || (query && !text.toLowerCase().includes(query))) continue;
+        if (!looksLikeRow(n)) continue;
+        const key = rowKey(n);
+        if (!rowMap.has(key)) rowMap.set(key, {row: n, box: null, text});
+      }
+    }
+
+    function selectableFor(row){
+      const selectors = [
+        'input[type="checkbox"]',
+        '[role="checkbox"]',
+        'sp-checkbox',
+        '[aria-label*="Select"]',
+        '[title*="Select"]'
+      ];
+      for (const sel of selectors){
+        const hits = row.querySelectorAll ? Array.from(row.querySelectorAll(sel)) : [];
+        for (const hit of hits){
+          if (visible(hit) && !checked(hit)) return hit;
+        }
+      }
+      return null;
+    }
+
+    function clickRowSelect(row){
+      const rect = row.getBoundingClientRect();
+      const y = Math.min(window.innerHeight - 5, Math.max(5, rect.top + rect.height / 2));
+      const xCandidates = [
+        Math.max(5, rect.left + 24),
+        Math.max(5, rect.left + 36),
+        Math.max(5, rect.left + 52)
+      ];
+      for (const x of xCandidates){
+        const el = document.elementFromPoint(x, y);
+        if (!el) continue;
+        try {
+          el.click();
+          return true;
+        } catch(e) {}
+      }
+      return false;
     }
 
     function collectRoots(root, out){
@@ -275,6 +374,7 @@ def select_matching_rows(driver, query: str, limit: int) -> dict[str, Any]:
 
     const rowMap = new Map();
     for (const root of roots){
+      collectCandidateRows(root, rowMap);
       const boxes = root.querySelectorAll
         ? root.querySelectorAll('input[type="checkbox"], [role="checkbox"], sp-checkbox')
         : [];
@@ -284,7 +384,8 @@ def select_matching_rows(driver, query: str, limit: int) -> dict[str, Any]:
         if (!row || !visible(row)) continue;
         const text = textOf(row);
         if (query && !text.toLowerCase().includes(query)) continue;
-        if (!rowMap.has(row)) rowMap.set(row, {row, box, text});
+        const key = rowKey(row);
+        if (!rowMap.has(key)) rowMap.set(key, {row, box, text});
       }
     }
 
@@ -292,9 +393,14 @@ def select_matching_rows(driver, query: str, limit: int) -> dict[str, Any]:
     const clicked = [];
     for (const item of rows){
       try {
-        item.box.scrollIntoView({block: 'center', inline: 'nearest'});
-        item.box.click();
-        clicked.push(item.text.slice(0, 180));
+        item.row.scrollIntoView({block: 'center', inline: 'nearest'});
+        const target = item.box || selectableFor(item.row);
+        if (target) {
+          target.click();
+          clicked.push(item.text.slice(0, 180));
+          continue;
+        }
+        if (clickRowSelect(item.row)) clicked.push(item.text.slice(0, 180));
       } catch(e) {}
     }
     return {clicked: clicked.length, samples: clicked};
@@ -491,10 +597,20 @@ def main(argv: list[str] | None = None) -> int:
         log(
             "[state] visible matching rows: "
             f"{state.get('matching', 0)}; selected: {state.get('selected', 0)}; "
+            f"checkbox-backed: {state.get('checkboxBacked', 0)}; "
             f"scroll={state.get('y', 0)}/{state.get('height', 0)}"
         )
         for sample in state.get("samples", [])[:5]:
             log(f"[sample] {sample}")
+        if int(state.get("matching", 0) or 0) == 0:
+            log(
+                "[state] no matching rows; "
+                f"checkbox-like controls: {state.get('checkboxLikeCount', 0)}; "
+                f"select labels: {state.get('selectLabelCount', 0)}"
+            )
+            text_sample = str(state.get("textSample", "")).strip()
+            if text_sample:
+                log(f"[state] page text sample: {text_sample}")
 
         if not args.apply:
             log("[dry-run] No remote files were deleted. Re-run with --apply to delete.")
