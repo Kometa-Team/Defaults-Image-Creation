@@ -169,6 +169,14 @@ def write_debug_dump(driver, query: str, select_xs: list[int], label: str) -> Pa
       return `${Math.round(rect.top / 4) * 4}:${Math.round(rect.height / 4) * 4}`;
     }
 
+    function rowSelectPoint(row){
+      const rect = row.getBoundingClientRect();
+      return {
+        x: Math.min(window.innerWidth - 5, Math.max(5, rect.left + 24)),
+        y: Math.min(window.innerHeight - 5, Math.max(5, rect.top + rect.height / 2))
+      };
+    }
+
     function collectRoots(root, out){
       out.push(root);
       const all = root.querySelectorAll ? root.querySelectorAll('*') : [];
@@ -801,6 +809,8 @@ def matching_row_targets(driver, query: str, limit: int, select_xs: list[int]) -
         const key = rowKey(n);
         if (!rowMap.has(key)) {
           const localXs = [
+            rect.left + 18,
+            rect.left + 24,
             rect.left + 34,
             rect.left + 50,
             rect.left + 70,
@@ -877,6 +887,14 @@ def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, 
       return `${Math.round(rect.top / 4) * 4}:${Math.round(rect.height / 4) * 4}`;
     }
 
+    function rowSelectPoint(row){
+      const rect = row.getBoundingClientRect();
+      return {
+        x: Math.min(window.innerWidth - 5, Math.max(5, rect.left + 24)),
+        y: Math.min(window.innerHeight - 5, Math.max(5, rect.top + rect.height / 2))
+      };
+    }
+
     function collectRoots(root, out){
       out.push(root);
       const all = root.querySelectorAll ? root.querySelectorAll('*') : [];
@@ -931,16 +949,20 @@ def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, 
         const label = textOf(row);
         if (!label || (query && !label.toLowerCase().includes(query))) continue;
         const checkbox = deepFirst(row, 'input[type="checkbox"], [role="checkbox"], sp-checkbox');
-        if (!checkbox || !visible(checkbox)) continue;
+        const point = rowSelectPoint(row);
+        const hasUsableCheckbox = !!checkbox && visible(checkbox);
+        if (!hasUsableCheckbox && !document.elementFromPoint(point.x, point.y)) continue;
         const rect = row.getBoundingClientRect();
         const key = rowKey(row);
         if (!map.has(key)) {
           map.set(key, {
             cell: row,
-            checkbox,
-            input: checkbox.matches && checkbox.matches('input[type="checkbox"]') ? checkbox : null,
+            checkbox: hasUsableCheckbox ? checkbox : null,
+            input: hasUsableCheckbox && checkbox.matches && checkbox.matches('input[type="checkbox"]') ? checkbox : null,
             label,
-            top: rect.top
+            top: rect.top,
+            pointX: point.x,
+            pointY: point.y
           });
         }
       }
@@ -963,8 +985,9 @@ def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, 
         candidates = [
             item.get("checkbox"),
             item.get("input"),
-            item.get("cell"),
         ]
+        if item.get("pointX") is None or item.get("pointY") is None:
+            candidates.append(item.get("cell"))
         seen: set[int] = set()
         selected = False
         for candidate in candidates:
@@ -1017,6 +1040,32 @@ def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, 
                     break
             if selected:
                 break
+        if not selected and item.get("pointX") is not None and item.get("pointY") is not None:
+            before = selection_toolbar_state(driver)
+            before_count = int(before.get("selected", 0) or 0)
+            before_delete_visible = bool(before.get("deleteVisible"))
+            try:
+                cdp_click(driver, float(item["pointX"]), float(item["pointY"]))
+                time.sleep(0.25)
+                current = driver.current_url
+                if "new.express.adobe.com/id/" in current:
+                    return {
+                        "clicked": len(clicked),
+                        "samples": clicked,
+                        "targetCount": len(targets),
+                        "openedEditor": True,
+                        "directCheckboxCells": True,
+                    }
+                after = selection_toolbar_state(driver)
+                after_count = int(after.get("selected", 0) or 0)
+                if after_count > before_count or (
+                    before_count <= 0
+                    and not before_delete_visible
+                    and after.get("deleteVisible")
+                ):
+                    selected = True
+            except Exception:
+                pass
         if selected:
             clicked.append(label)
 
