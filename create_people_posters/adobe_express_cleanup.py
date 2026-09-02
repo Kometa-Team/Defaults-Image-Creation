@@ -1021,6 +1021,37 @@ def cdp_click(driver, x: float, y: float) -> None:
         driver.execute_cdp_cmd("Input.dispatchMouseEvent", payload)
 
 
+def element_checked(driver, element) -> bool:
+    script = r"""
+    function checked(el){
+      if (!el) return false;
+      try {
+        if (el.checked === true) return true;
+        if (el.getAttribute && el.getAttribute('aria-checked') === 'true') return true;
+        if (el.matches && el.matches('[checked]')) return true;
+      } catch(e) {}
+      try {
+        if (el.shadowRoot) {
+          const nested = el.shadowRoot.querySelector('input[type="checkbox"], [role="checkbox"], sp-checkbox');
+          if (nested && checked(nested)) return true;
+        }
+      } catch(e) {}
+      try {
+        const nested = el.querySelector && el.querySelector('input[type="checkbox"], [role="checkbox"], sp-checkbox');
+        if (nested && checked(nested)) return true;
+      } catch(e) {}
+      return false;
+    }
+    return checked(arguments[0]);
+    """
+    if element is None:
+        return False
+    try:
+        return bool(driver.execute_script(script, element))
+    except Exception:
+        return False
+
+
 def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, Any]:
     script = r"""
     const query = String(arguments[0] || '').toLowerCase();
@@ -1087,6 +1118,22 @@ def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, 
       return null;
     }
 
+    function checked(el){
+      if (!el) return false;
+      try {
+        if (el.checked === true) return true;
+        if (el.getAttribute && el.getAttribute('aria-checked') === 'true') return true;
+        if (el.matches && el.matches('[checked]')) return true;
+      } catch(e) {}
+      try {
+        if (el.shadowRoot) {
+          const nested = el.shadowRoot.querySelector('input[type="checkbox"], [role="checkbox"], sp-checkbox');
+          if (nested && checked(nested)) return true;
+        }
+      } catch(e) {}
+      return false;
+    }
+
     const roots = [];
     collectRoots(document, roots);
     const map = new Map();
@@ -1105,6 +1152,7 @@ def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, 
           const input = sp && sp.shadowRoot
             ? sp.shadowRoot.querySelector('input[type="checkbox"]')
             : (cell.shadowRoot ? cell.shadowRoot.querySelector('input[type="checkbox"]') : null);
+          if (checked(input) || checked(sp) || checked(cell)) continue;
           map.set(key, {
             cell,
             checkbox: sp,
@@ -1123,6 +1171,7 @@ def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, 
         const checkbox = deepFirst(row, 'input[type="checkbox"], [role="checkbox"], sp-checkbox');
         const point = rowSelectPoint(row);
         const hasUsableCheckbox = !!checkbox && visible(checkbox);
+        if (hasUsableCheckbox && checked(checkbox)) continue;
         if (!hasUsableCheckbox && !document.elementFromPoint(point.x, point.y)) continue;
         const rect = row.getBoundingClientRect();
         const key = rowKey(row);
@@ -1203,7 +1252,7 @@ def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, 
                     pass
                 after = selection_toolbar_state(driver)
                 after_count = int(after.get("selected", 0) or 0)
-                if after_count > before_count or (
+                if element_checked(driver, candidate) or after_count > before_count or (
                     before_count <= 0
                     and not before_delete_visible
                     and after.get("deleteVisible")
@@ -1242,11 +1291,16 @@ def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, 
             clicked.append(label)
 
     final_state = selection_toolbar_state(driver)
+    verified_selected = max(
+        int(final_state.get("selected", 0) or 0),
+        len(clicked) if final_state.get("deleteVisible") else 0,
+    )
     return {
         "clicked": len(clicked),
         "samples": clicked,
         "targetCount": len(targets),
-        "toolbarSelected": final_state.get("selected", 0),
+        "toolbarSelected": verified_selected,
+        "toolbarReportedSelected": final_state.get("selected", 0),
         "deleteVisible": final_state.get("deleteVisible", False),
         "directCheckboxCells": True,
     }
@@ -1264,9 +1318,14 @@ def select_matching_rows_with_cdp(
     if direct_clicked > 0:
         time.sleep(0.5)
         final_state = selection_toolbar_state(driver)
+        verified_selected = max(
+            int(final_state.get("selected", 0) or 0),
+            direct_clicked if final_state.get("deleteVisible") else 0,
+        )
         direct.update(
             {
-                "toolbarSelected": final_state.get("selected", 0),
+                "toolbarSelected": verified_selected,
+                "toolbarReportedSelected": final_state.get("selected", 0),
                 "deleteVisible": final_state.get("deleteVisible", False),
                 "method": "checkbox-cell",
             }
@@ -1715,6 +1774,7 @@ def main(argv: list[str] | None = None) -> int:
                     f"attempted row targets: {selected.get('targetCount', 0)}; "
                     f"clicked/verified: {clicked}; "
                     f"toolbar selected={toolbar_selected}; "
+                    f"toolbar reported={selected.get('toolbarReportedSelected', toolbar_selected)}; "
                     f"delete visible={selected.get('deleteVisible', False)}; "
                     f"method={selected.get('method', 'unknown')}"
                 )
