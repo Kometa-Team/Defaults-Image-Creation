@@ -484,19 +484,64 @@ def click_button_by_text(driver, pattern: str, label: str, timeout: float = 15.0
     return False
 
 
-def scroll_next_page(driver) -> bool:
+def scroll_next_page(driver) -> dict[str, Any]:
     script = r"""
-    const before = Math.round(window.scrollY || document.documentElement.scrollTop || 0);
-    window.scrollBy(0, Math.max(500, Math.floor(window.innerHeight * 0.85)));
-    const after = Math.round(window.scrollY || document.documentElement.scrollTop || 0);
-    return after > before;
+    const amount = Math.max(500, Math.floor(window.innerHeight * 0.85));
+
+    function visible(el){
+      if (!el) return false;
+      const style = getComputedStyle(el);
+      const rect = el.getBoundingClientRect();
+      return style.display !== 'none' &&
+             style.visibility !== 'hidden' &&
+             rect.width > 0 &&
+             rect.height > 0;
+    }
+
+    const winBefore = Math.round(window.scrollY || document.documentElement.scrollTop || 0);
+    window.scrollBy(0, amount);
+    const winAfter = Math.round(window.scrollY || document.documentElement.scrollTop || 0);
+    if (winAfter > winBefore) {
+      return {moved: true, target: 'window', before: winBefore, after: winAfter};
+    }
+
+    const candidates = [];
+    for (const el of document.querySelectorAll('*')){
+      if (!visible(el)) continue;
+      if (el.scrollHeight <= el.clientHeight + 20) continue;
+      const rect = el.getBoundingClientRect();
+      candidates.push({
+        el,
+        area: rect.width * rect.height,
+        before: Math.round(el.scrollTop),
+        max: Math.round(el.scrollHeight - el.clientHeight),
+        tag: (el.tagName || '').toLowerCase(),
+        role: el.getAttribute ? String(el.getAttribute('role') || '') : ''
+      });
+    }
+    candidates.sort((a, b) => b.area - a.area);
+    for (const item of candidates.slice(0, 12)){
+      if (item.before >= item.max) continue;
+      item.el.scrollTop = Math.min(item.max, item.before + amount);
+      const after = Math.round(item.el.scrollTop);
+      if (after > item.before) {
+        return {
+          moved: true,
+          target: `${item.tag}${item.role ? `[role=${item.role}]` : ''}`,
+          before: item.before,
+          after
+        };
+      }
+    }
+
+    return {moved: false, target: 'none', before: winBefore, after: winAfter};
     """
     try:
-        return bool(driver.execute_script(script))
+        return driver.execute_script(script) or {"moved": False, "target": "unknown"}
     except WebDriverException:
         raise
     except Exception:
-        return False
+        return {"moved": False, "target": "error"}
 
 
 def delete_selected_batch(driver) -> bool:
@@ -627,15 +672,24 @@ def main(argv: list[str] | None = None) -> int:
             clicked = int(selected.get("clicked", 0) or 0)
 
             if clicked <= 0:
-                moved = scroll_next_page(driver)
+                scroll = scroll_next_page(driver)
+                moved = bool(scroll.get("moved"))
                 empty_scrolls += 1
                 log(
                     f"[scan] no matching visible rows selected; "
-                    f"scroll moved={moved}; empty scrolls={empty_scrolls}/{args.max_empty_scrolls}"
+                    f"scroll moved={moved} target={scroll.get('target', 'unknown')} "
+                    f"{scroll.get('before', '')}->{scroll.get('after', '')}; "
+                    f"empty scrolls={empty_scrolls}/{args.max_empty_scrolls}"
                 )
                 if not moved or empty_scrolls >= args.max_empty_scrolls:
                     break
                 time.sleep(args.pause_sec)
+                state = page_state(driver, query, limit=3)
+                log(
+                    "[scan] after scroll visible matching rows: "
+                    f"{state.get('matching', 0)}; "
+                    f"checkbox-backed: {state.get('checkboxBacked', 0)}"
+                )
                 continue
 
             empty_scrolls = 0
@@ -654,6 +708,13 @@ def main(argv: list[str] | None = None) -> int:
             driver.refresh()
             if not wait_for_page(driver):
                 log("[warn] Page did not fully report ready after refresh; continuing scan.")
+            else:
+                state = page_state(driver, query, limit=3)
+                log(
+                    "[scan] after refresh visible matching rows: "
+                    f"{state.get('matching', 0)}; "
+                    f"checkbox-backed: {state.get('checkboxBacked', 0)}"
+                )
 
         log("====== SUMMARY ======")
         log(f"Selected rows: {selected_total}")
