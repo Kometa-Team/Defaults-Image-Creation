@@ -1090,6 +1090,14 @@ def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, 
       return `${Math.round(rect.top / 4) * 4}:${Math.round(rect.height / 4) * 4}`;
     }
 
+    function assetKey(text, el){
+      const compact = String(text || '').replace(/\s+/g, ' ').trim().toLowerCase();
+      const titleMatch = compact.match(/remove background project\s*-\s*[a-z]+\s+\d{1,2},\s+\d{4}\s+at\s+\d{1,2}\.\d{2}\.\d{2}/i);
+      if (titleMatch) return titleMatch[0];
+      const rect = el && el.getBoundingClientRect ? el.getBoundingClientRect() : {top: 0};
+      return `${Math.round((rect.top || 0) / 4) * 4}:${compact.slice(0, 120)}`;
+    }
+
     function rowSelectPoint(row){
       const rect = row.getBoundingClientRect();
       return {
@@ -1146,7 +1154,7 @@ def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, 
         if (!label || (query && !label.toLowerCase().includes(query))) continue;
         if (!visible(cell)) continue;
         const rect = cell.getBoundingClientRect();
-        const key = `${Math.round(rect.top / 4) * 4}:${label}`;
+        const key = assetKey(label, cell);
         if (!map.has(key)) {
           const sp = cell.shadowRoot ? cell.shadowRoot.querySelector('sp-checkbox') : null;
           const input = sp && sp.shadowRoot
@@ -1174,7 +1182,7 @@ def select_matching_checkbox_cells(driver, query: str, limit: int) -> dict[str, 
         if (hasUsableCheckbox && checked(checkbox)) continue;
         if (!hasUsableCheckbox && !document.elementFromPoint(point.x, point.y)) continue;
         const rect = row.getBoundingClientRect();
-        const key = rowKey(row);
+        const key = assetKey(label, row);
         if (!map.has(key)) {
           map.set(key, {
             cell: row,
