@@ -564,6 +564,9 @@ python adobe_express_cleanup.py --apply --batch-size 25 --max-delete 500
 
 # If Adobe rows are found but not visibly selected, tune the checkbox X position.
 python adobe_express_cleanup.py --apply --batch-size 10 --select-xs 166,150,180,130,200
+
+# Capture the live rendered Adobe DOM/control geometry without deleting anything.
+python adobe_express_cleanup.py --debug-dump
 ```
 
 Use this when Adobe says the account storage is full and remove-background
@@ -575,7 +578,9 @@ query unless you intentionally want to delete a different class of Adobe files.
 Adobe's file list is virtualized, so the script works on the rendered viewport
 and scrolls/refreshes to hydrate more rows. If matching rows are logged but the
 Delete toolbar does not appear, adjust `--select-xs` to the checkbox column's
-screen X coordinate in the visible browser.
+screen X coordinate in the visible browser. Use `--debug-dump` to write a live
+DOM/control JSON file and screenshot under
+`config/adobe_express_cleanup_debug` when selectors need tuning.
 
 Clean generated `config` artifacts:
 

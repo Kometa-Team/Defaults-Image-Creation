@@ -8,6 +8,7 @@ pipeline should not delete remote Adobe files as a side effect.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import sys
 import time
@@ -32,6 +33,7 @@ DEFAULT_URL = "https://new.express.adobe.com/your-stuff/files?view=list"
 DEFAULT_QUERY = "Remove background project"
 DEFAULT_SELECT_XS = "166,150,180,130,200"
 LOG_FILE = LOGS_DIR / "adobe_express_cleanup.log"
+DEBUG_DIR = CONFIG_DIR / "adobe_express_cleanup_debug"
 
 
 def env_bool(name: str, default: str = "false") -> bool:
@@ -67,6 +69,168 @@ def log(message: str) -> None:
         pass
 
 
+def write_debug_dump(driver, query: str, select_xs: list[int], label: str) -> Path | None:
+    DEBUG_DIR.mkdir(parents=True, exist_ok=True)
+    stamp = time.strftime("%Y%m%d-%H%M%S")
+    safe_label = "".join(ch if ch.isalnum() or ch in "-_" else "_" for ch in label).strip("_") or "dump"
+    base = DEBUG_DIR / f"{stamp}_{safe_label}"
+    png_path = base.with_suffix(".png")
+    json_path = base.with_suffix(".json")
+
+    script = r"""
+    const query = String(arguments[0] || '').toLowerCase();
+    const selectXs = (arguments[1] || []).map(Number).filter(x => Number.isFinite(x) && x > 0);
+
+    function visible(el){
+      if (!el) return false;
+      const style = getComputedStyle(el);
+      const rect = el.getBoundingClientRect();
+      return style.display !== 'none' &&
+             style.visibility !== 'hidden' &&
+             rect.width > 0 &&
+             rect.height > 0 &&
+             rect.bottom >= 0 &&
+             rect.top <= window.innerHeight;
+    }
+
+    function textOf(el){
+      try { return String(el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim(); }
+      catch(e) { return ''; }
+    }
+
+    function attrs(el){
+      const out = {};
+      if (!el || !el.getAttribute) return out;
+      for (const name of ['id', 'class', 'role', 'aria-label', 'aria-checked', 'aria-selected', 'title', 'data-testid', 'type']) {
+        const val = el.getAttribute(name);
+        if (val !== null && val !== '') out[name] = String(val).slice(0, 240);
+      }
+      return out;
+    }
+
+    function desc(el){
+      if (!el) return null;
+      const rect = el.getBoundingClientRect();
+      return {
+        tag: (el.tagName || '').toLowerCase(),
+        attrs: attrs(el),
+        text: textOf(el).slice(0, 240),
+        rect: {
+          x: Math.round(rect.x),
+          y: Math.round(rect.y),
+          w: Math.round(rect.width),
+          h: Math.round(rect.height),
+          top: Math.round(rect.top),
+          left: Math.round(rect.left)
+        }
+      };
+    }
+
+    function looksLikeRow(el){
+      const role = (el.getAttribute && String(el.getAttribute('role') || '').toLowerCase()) || '';
+      const tag = (el.tagName || '').toLowerCase();
+      const rect = el.getBoundingClientRect();
+      return role === 'row' ||
+             role === 'listitem' ||
+             tag === 'tr' ||
+             tag === 'li' ||
+             (rect.width > window.innerWidth * 0.45 && rect.height >= 40 && rect.height <= 180);
+    }
+
+    function rowKey(row){
+      const rect = row.getBoundingClientRect();
+      return `${Math.round(rect.top / 4) * 4}:${Math.round(rect.height / 4) * 4}`;
+    }
+
+    function collectRoots(root, out){
+      out.push(root);
+      const all = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of all){
+        if (n.shadowRoot) collectRoots(n.shadowRoot, out);
+      }
+    }
+
+    const roots = [];
+    collectRoots(document, roots);
+    const rows = new Map();
+    const controls = [];
+    const controlSelector = [
+      'input',
+      'button',
+      'a',
+      '[role="button"]',
+      '[role="checkbox"]',
+      'sp-button',
+      'sp-table-checkbox-cell[label]',
+      'sp-checkbox',
+      '[aria-label]',
+      '[title]'
+    ].join(',');
+
+    for (const root of roots){
+      const nodes = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of nodes){
+        if (!visible(n)) continue;
+        const text = textOf(n);
+        if (text && (!query || text.toLowerCase().includes(query)) && looksLikeRow(n)) {
+          const key = rowKey(n);
+          if (!rows.has(key)) rows.set(key, desc(n));
+        }
+      }
+
+      const hits = root.querySelectorAll ? root.querySelectorAll(controlSelector) : [];
+      for (const hit of hits){
+        if (!visible(hit)) continue;
+        controls.push(desc(hit));
+        if (controls.length >= 250) break;
+      }
+    }
+
+    const pointProbe = [];
+    for (const row of Array.from(rows.values()).slice(0, 20)){
+      const y = row.rect.y + Math.max(8, Math.floor(row.rect.h / 2));
+      for (const x of selectXs){
+        const el = document.elementFromPoint(x, y);
+        pointProbe.push({x, y, rowText: row.text, hit: desc(el)});
+      }
+    }
+
+    return {
+      url: location.href,
+      title: document.title || '',
+      readyState: document.readyState,
+      viewport: {w: window.innerWidth, h: window.innerHeight},
+      scroll: {
+        y: Math.round(window.scrollY || document.documentElement.scrollTop || 0),
+        height: Math.round(document.documentElement.scrollHeight || 0)
+      },
+      query,
+      selectXs,
+      rowCount: rows.size,
+      rows: Array.from(rows.values()).slice(0, 80),
+      controlCount: controls.length,
+      controls: controls.slice(0, 250),
+      pointProbe,
+      bodyTextSample: textOf(document.body || document).slice(0, 1500)
+    };
+    """
+    try:
+        data = driver.execute_script(script, query, select_xs) or {}
+        json_path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+        try:
+            driver.save_screenshot(str(png_path))
+        except Exception as exc:
+            data["screenshot_error"] = str(exc)
+            json_path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+        log(f"[debug] wrote live Adobe dump: {json_path}")
+        if png_path.exists():
+            log(f"[debug] wrote screenshot: {png_path}")
+        return json_path
+    except Exception as exc:
+        log(f"[debug] failed to write live Adobe dump: {exc}")
+        return None
+
+
 def wait_for_page(driver, timeout: float = 45.0) -> bool:
     script = r"""
     function textOf(el){
@@ -94,7 +258,7 @@ def wait_for_page(driver, timeout: float = 45.0) -> bool:
 
     const text = chunks.join(' ').replace(/\s+/g, ' ').trim();
     const hasFileListText = /Your stuff|Search Files|Remove background project/i.test(text);
-    const hasCheckboxes = !!document.querySelector('input[type="checkbox"], [role="checkbox"], sp-checkbox');
+    const hasCheckboxes = !!document.querySelector('sp-table-checkbox-cell[label], input[type="checkbox"], [role="checkbox"], sp-checkbox');
     return {
       readyState: document.readyState,
       title: document.title || '',
@@ -227,7 +391,7 @@ def page_state(driver, query: str, limit: int = 10) -> dict[str, Any]:
     for (const root of roots){
       collectCandidateRows(root, rowMap);
       const boxes = root.querySelectorAll
-        ? root.querySelectorAll('input[type="checkbox"], [role="checkbox"], sp-checkbox')
+        ? root.querySelectorAll('sp-table-checkbox-cell[label], input[type="checkbox"], [role="checkbox"], sp-checkbox')
         : [];
       checkboxLikeCount += boxes.length;
       if (root.querySelectorAll) {
@@ -341,8 +505,48 @@ def select_matching_rows(driver, query: str, limit: int) -> dict[str, Any]:
       }
     }
 
+    function deepClickableCheckbox(root){
+      const selectors = [
+        'input[type="checkbox"]',
+        'sp-checkbox',
+        '[role="checkbox"]'
+      ];
+      for (const sel of selectors){
+        const hit = root.querySelector && root.querySelector(sel);
+        if (hit) {
+          if (hit.shadowRoot) {
+            const nested = deepClickableCheckbox(hit.shadowRoot);
+            if (nested) return nested;
+          }
+          return hit;
+        }
+      }
+      const all = root.querySelectorAll ? root.querySelectorAll('*') : [];
+      for (const n of all){
+        if (n.shadowRoot) {
+          const hit = deepClickableCheckbox(n.shadowRoot);
+          if (hit) return hit;
+        }
+      }
+      return null;
+    }
+
+    function clickCheckboxControl(el){
+      const inner = el && el.shadowRoot ? deepClickableCheckbox(el.shadowRoot) : null;
+      const target = inner || el;
+      if (!target) return false;
+      try {
+        target.scrollIntoView({block: 'center', inline: 'nearest'});
+        target.click();
+        return true;
+      } catch(e) {
+        return false;
+      }
+    }
+
     function selectableFor(row){
       const selectors = [
+        'sp-table-checkbox-cell[label]',
         'input[type="checkbox"]',
         '[role="checkbox"]',
         'sp-checkbox',
@@ -392,7 +596,7 @@ def select_matching_rows(driver, query: str, limit: int) -> dict[str, Any]:
     for (const root of roots){
       collectCandidateRows(root, rowMap);
       const boxes = root.querySelectorAll
-        ? root.querySelectorAll('input[type="checkbox"], [role="checkbox"], sp-checkbox')
+        ? root.querySelectorAll('sp-table-checkbox-cell[label], input[type="checkbox"], [role="checkbox"], sp-checkbox')
         : [];
       for (const box of boxes){
         if (!visible(box) || checked(box)) continue;
@@ -412,9 +616,10 @@ def select_matching_rows(driver, query: str, limit: int) -> dict[str, Any]:
         item.row.scrollIntoView({block: 'center', inline: 'nearest'});
         const target = item.box || selectableFor(item.row);
         if (target) {
-          target.click();
-          clicked.push(item.text.slice(0, 180));
-          continue;
+          if (clickCheckboxControl(target)) {
+            clicked.push(item.text.slice(0, 180));
+            continue;
+          }
         }
         if (clickRowSelect(item.row)) clicked.push(item.text.slice(0, 180));
       } catch(e) {}
@@ -809,6 +1014,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         ),
     )
     parser.add_argument(
+        "--debug-dump",
+        action="store_true",
+        default=env_bool("ADOBE_CLEANUP_DEBUG_DUMP", "false"),
+        help="Write live Adobe DOM/control/point-probe JSON plus screenshot, then continue normally.",
+    )
+    parser.add_argument(
         "--max-empty-scrolls",
         type=int,
         default=max(1, int(os.getenv("ADOBE_CLEANUP_MAX_EMPTY_SCROLLS", "5"))),
@@ -862,6 +1073,10 @@ def main(argv: list[str] | None = None) -> int:
             text_sample = str(state.get("textSample", "")).strip()
             if text_sample:
                 log(f"[state] page text sample: {text_sample}")
+            write_debug_dump(driver, query, select_xs, "zero_matches")
+
+        if args.debug_dump:
+            write_debug_dump(driver, query, select_xs, "manual")
 
         if not args.apply:
             log("[dry-run] No remote files were deleted. Re-run with --apply to delete.")
@@ -911,10 +1126,12 @@ def main(argv: list[str] | None = None) -> int:
 
             if not selected.get("deleteVisible"):
                 log("[error] Rows were clicked, but Adobe did not expose the Delete toolbar.")
+                write_debug_dump(driver, query, select_xs, "selection_failed")
                 return 4
 
             if not delete_selected_batch(driver):
                 log("[error] Could not click Delete and confirmation. Leaving selected rows untouched.")
+                write_debug_dump(driver, query, select_xs, "delete_failed")
                 return 4
 
             deleted += clicked
