@@ -4,7 +4,7 @@ Grayscale Image Copier
 
 Copies images from an input directory into ./config/Downloads/{other,color},
 classifying each file as 'Grayscale' or 'RGB' using PIL. Skips names found in
-the online README list (simple text containment, same as original logic).
+the online README list using exact, Unicode-normalized person names.
 
 Input directory resolution (in this order):
   1) CLI: --input_directory
@@ -22,7 +22,9 @@ Dependencies:
 """
 
 import os
+import re
 import shutil
+import unicodedata
 import datetime
 from pathlib import Path
 from PIL import Image
@@ -132,28 +134,38 @@ def is_image_file(file_path: Path) -> bool:
         return False
 
 
-def fetch_online_file_names(online_url: str) -> str:
-    """
-    Fetch file names from an online URL.
-    Returns the raw text (original behavior).
-    """
+def person_name_key(value: str) -> str:
+    """Return a stable key for exact person-name comparisons."""
+    return " ".join(unicodedata.normalize("NFC", value).casefold().split())
+
+
+def extract_online_person_names(readme: str) -> set[str]:
+    """Extract exact person names from People Images README links."""
+    return {
+        person_name_key(name)
+        for name in re.findall(r"^\* \[([^]]+)]\(https://[^)]+\)$", readme, re.MULTILINE)
+    }
+
+
+def fetch_online_file_names(online_url: str) -> set[str]:
+    """Fetch and parse exact person names from an online People Images README."""
     try:
         response = requests.get(online_url, timeout=30)
         response.raise_for_status()
     except requests.RequestException:
         print(f"Failed to fetch file names from the online URL: {online_url}")
-        return ""
+        return set()
 
-    return response.text
+    return extract_online_person_names(response.text)
 
 
 def copy_grayscale_and_color_images(
-    directory: Path, online_file_names: str, source_file_names: set[str]
+    directory: Path, online_file_names: set[str], source_file_names: set[str]
 ) -> None:
     """
     Copy grayscale and color images from a directory to their respective
-    download directories, excluding files whose names (without extensions)
-    are found in the online file names text (simple substring check).
+    download directories, excluding files whose exact normalized names are
+    present in the online People Images README.
     """
     count_total = 0
     count_gray = 0
@@ -164,8 +176,8 @@ def copy_grayscale_and_color_images(
         for filename in files:
             name, _ = os.path.splitext(filename)
 
-            # Skip copying the file if its name (without extension) is found online
-            if name and name in online_file_names:
+            # Require an exact person-name match; substrings can identify a different person.
+            if name and person_name_key(name) in online_file_names:
                 print(f"File {filename} found in the online list. Skipping.")
                 try:
                     os.remove(os.path.join(root, filename))
