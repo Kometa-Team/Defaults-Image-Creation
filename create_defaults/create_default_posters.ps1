@@ -6620,6 +6620,7 @@ Function CreateUniverse {
         '| arrow.png| +0| 1800| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | arrow| #03451A| 1| 1| 0| 1',
         '| conjuring.png| +0| 1800| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | conjuring| #8A2939| 1| 1| 0| 1',
         '| dca.png| +0| 1800| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | dca| #2832C5| 1| 1| 0| 1',
+        '| dceu.png| +0| 1800| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | dceu| #2832C6| 1| 1| 0| 1',
         '| dcu.png| +0| 1500| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | dcu| #2832C4| 1| 1| 0| 1',
         '| fast.png| +0| 1800| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | fast| #7F1FC8| 1| 1| 0| 1',
         '| marvel.png| +0| 1800| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | marvel| #ED171F| 1| 1| 0| 1',
