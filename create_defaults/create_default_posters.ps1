@@ -2847,6 +2847,7 @@ Function CreateChart {
         'TOP_250_MOST_FANS| Letterboxd.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Top 250 Most Fans| #405162| 1| 1| 0| 0',
         'TOP_250_DOCUMENTARIES| Letterboxd.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Top 250 Documentaries| #405162| 1| 1| 0| 0',
         'TOP_100_ANIMATION| Letterboxd.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Top 100 Animation| #405162| 1| 1| 0| 0',
+        'TOP_250_ANIMATION| Letterboxd.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Top 250 Animation| #405162| 1| 1| 0| 0',
         'TOP_250_HORROR| Letterboxd.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Top 250 Horror| #405162| 1| 1| 0| 0',
         'MOJO_TOP_100| Mojo.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Mojo Top 100| #B452FD| 1| 1| 0| 0',
         'IMDB_TOP_250| Letterboxd.png| -500| 1500| +850| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | IMDb Top 250 (Letterboxd)| #405162| 1| 1| 0| 0',
