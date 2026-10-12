@@ -56,6 +56,7 @@ $global:LatestImagemagickversion = $null
 $global:AutoUpdateIM = $true
 $global:HeaderWritten = $false
 $CurrentScriptVersion = "2.6"
+$ImageMagickArchiveBase = "https://download.imagemagick.org/archive/binaries"
 
 #################################
 # collect paths
@@ -415,12 +416,18 @@ function SetMagickLocation {
     }
   }
   Elseif ($global:OSType -eq "Win32NT") {
-    $Url = "https://imagemagick.org/archive/binaries/?C=M;O=D"
-    $result = Invoke-WebRequest -Uri $Url
+    $Url = "$ImageMagickArchiveBase/?C=M;O=D"
+    try {
+      $result = Invoke-WebRequest -Uri $Url -ErrorAction Stop
+    }
+    catch {
+      Write-Host "Could not query latest ImageMagick version, Error: $($_.Exception.Message)"
+      $result = $null
+    }
 
     # Prefer HDRI, then fallback to non-HDRI; allow .zip, .7z.zip, or plain .7z
     $links = @()
-    if ($result.Links) { $links = @($result.Links.href) }
+    if ($result -and $result.Links) { $links = @($result.Links.href) }
 
     $imFile = ($links |
       Where-Object { $_ -match 'ImageMagick-.*-portable-Q16-HDRI-(?:x64|win64)(?:\.7z)?\.zip$|ImageMagick-.*-portable-Q16-HDRI-(?:x64|win64)\.7z$' } |
@@ -432,7 +439,7 @@ function SetMagickLocation {
         Sort-Object -Descending | Select-Object -First 1)
     }
 
-    if (-not $imFile) {
+    if (-not $imFile -and $result) {
       # Fallback to parsing raw HTML if .Links is null/empty
       $rx = 'href="([^"]*ImageMagick-[^"]*-portable-Q16-(?:HDRI-)?(?:x64|win64)(?:\.7z)?\.zip)"|href="([^"]*ImageMagick-[^"]*-portable-Q16-(?:HDRI-)?(?:x64|win64)\.7z)"'
       $m = [regex]::Matches($result.Content, $rx, 'IgnoreCase')
@@ -475,7 +482,7 @@ function SetMagickLocation {
     if ($global:OSType -ne "Win32NT") {
       if ($global:OSType -ne "Docker") {
         Write-Host "Downloading the latest Imagemagick portable version for you..."
-        $magickUrl = "https://imagemagick.org/archive/binaries/magick"
+        $magickUrl = "$ImageMagickArchiveBase/magick"
         Invoke-WebRequest -Uri $magickUrl -OutFile "$global:ScriptRoot/magick"
         chmod +x "$global:ScriptRoot/magick"
         Write-Host "Made the portable Magick executable..."
@@ -483,7 +490,7 @@ function SetMagickLocation {
     }
     else {
       Write-Host "Downloading the latest Imagemagick portable version for you..."
-      $result = Invoke-WebRequest "https://imagemagick.org/archive/binaries/?C=M;O=D"
+      $result = Invoke-WebRequest "$ImageMagickArchiveBase/?C=M;O=D" -ErrorAction Stop
 
       $links = @()
       if ($result.Links) { $links = @($result.Links.href) }
@@ -508,7 +515,7 @@ function SetMagickLocation {
       $tempDir = Join-Path $global:ScriptRoot 'temp'
       New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
       $DownloadPath = Join-Path -Path $tempDir -ChildPath $LatestRelease
-      Invoke-WebRequest "https://imagemagick.org/archive/binaries/$LatestRelease" -OutFile $DownloadPath
+      Invoke-WebRequest "$ImageMagickArchiveBase/$LatestRelease" -OutFile $DownloadPath -ErrorAction Stop
 
       # Extract depending on extension
       if ($LatestRelease -match '\.7z\.zip$') {
@@ -536,7 +543,7 @@ function SetMagickLocation {
         Write-Host "Placed Portable ImageMagick here: $magickinstalllocation"
       }
       else {
-        Write-Host "Error During extraction, please manually install/copy portable Imagemagick from here: https://imagemagick.org/archive/binaries/$LatestRelease"
+        Write-Host "Error During extraction, please manually install/copy portable Imagemagick from here: $ImageMagickArchiveBase/$LatestRelease"
       }
       # Re-check ImageMagick version after install/update
       if (Test-Path $magick) {
@@ -578,7 +585,7 @@ function CheckImageMagick {
     if ($global:OSType -ne "Win32NT") {
       if ($global:OSType -ne "Docker") {
         Write-Host "ImageMagick missing, downloading the portable version for you..."
-        $magickUrl = "https://imagemagick.org/archive/binaries/magick"
+        $magickUrl = "$ImageMagickArchiveBase/magick"
         Invoke-WebRequest -Uri $magickUrl -OutFile "$global:ScriptRoot/magick"
         chmod +x "$global:ScriptRoot/magick"
         Write-Host "Made the portable Magick executable..."
@@ -588,7 +595,7 @@ function CheckImageMagick {
       Write-Host "ImageMagick missing, downloading it for you..."
       $errorCount++
 
-      $result = Invoke-WebRequest "https://imagemagick.org/archive/binaries/?C=M;O=D"
+      $result = Invoke-WebRequest "$ImageMagickArchiveBase/?C=M;O=D" -ErrorAction Stop
 
       # Prefer HDRI first, then non-HDRI; handle .zip, .7z.zip, and .7z
       $links = @()
@@ -622,7 +629,7 @@ function CheckImageMagick {
 
       # Download
       $DownloadPath = Join-Path -Path $tempDir -ChildPath $LatestRelease
-      Invoke-WebRequest "https://imagemagick.org/archive/binaries/$LatestRelease" -OutFile $DownloadPath
+      Invoke-WebRequest "$ImageMagickArchiveBase/$LatestRelease" -OutFile $DownloadPath -ErrorAction Stop
 
       # Extract (.zip, .7z.zip, or .7z)
       if ($LatestRelease -match '\.7z\.zip$') { Expand-NestedArchive -ArchivePath $DownloadPath -DestinationPath $magickinstalllocation }
@@ -642,7 +649,7 @@ function CheckImageMagick {
         Write-Host "Placed Portable ImageMagick here: $magickinstalllocation"
       }
       else {
-        Write-Host "Error During extraction, please manually install/copy portable Imagemagick from here: https://imagemagick.org/archive/binaries/$LatestRelease"
+        Write-Host "Error During extraction, please manually install/copy portable Imagemagick from here: $ImageMagickArchiveBase/$LatestRelease"
       }
     }
   }
