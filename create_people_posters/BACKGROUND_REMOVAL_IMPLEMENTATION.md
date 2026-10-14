@@ -1,6 +1,7 @@
 # Local Background Removal Implementation and Validation
 
-Validation date: 2026-10-14. Local snapshot for `main`; online publication is deferred.
+Validation date: 2026-10-14. Portrait rollout to `main` approved after local testing.
+Community Adobe-default rollback tag: `adobe-express-snapshot-2026-10-14` at `90f477a`.
 Approved trial default: **BiRefNet Portrait**, with Adobe retained for rollback.
 Source confidence: **source-unverified**, as requested for the available clones.
 
@@ -245,7 +246,9 @@ selectable with `REMOVE_BG_ENGINE=adobe`; its code, profiles and dependencies
 are retained. After local testing, the owner requested merging all work into
 local `main`. The snapshot includes the implementation, tests and documentation;
 private configuration, environments, model caches and benchmark images remain
-untracked. Online publication remains deferred.
+untracked. The owner subsequently approved publishing the Adobe-default rollback
+tag before pushing the Portrait version to `main`. Adobe remains selectable in
+the new version, and the published tag preserves the previous default version.
 
 The owner's 100-image review and explicit approval support this trial default
 switch. The source-unverified run can guide inspection but cannot prove

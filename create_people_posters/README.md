@@ -1248,6 +1248,11 @@ over existing valid files during inference validation.
 
 To roll back, set `REMOVE_BG_ENGINE=adobe`, restage the desired originals and run
 `python orchestrator.py --redo remove_bg`. Adobe login/profile settings are retained.
+For a full version rollback, the community can use the
+[Adobe Express/Selenium snapshot](https://github.com/Kometa-Team/Defaults-Image-Creation/tree/adobe-express-snapshot-2026-10-14),
+tagged at `90f477a`, the last Adobe-default version before the Portrait rollout.
+Private `.env` files, browser profiles and generated assets are not stored in Git;
+preserve those separately when changing versions.
 Adobe code, dependencies and configuration are retained for this trial snapshot.
 Remove them only after the production trial succeeds and removal is approved.
 
