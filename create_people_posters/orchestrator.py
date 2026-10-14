@@ -17,7 +17,7 @@ Core steps (order is enforced; do not reorder):
   4) tmdb                      -> tmdb_people.py                      (checkpointed)
   5) truncate                  -> truncate_tmdb_people_names.py       (checkpointed)
   6) audit_people_images       -> audit_people_images.py              (checkpointed)
-  7) colorize_noncolor         -> colorize_noncolor.py                (checkpointed)
+  7) colorize_noncolor         -> selected COLORIZE_ENGINE script     (checkpointed)
   8) prep_dirs                 -> prep_people_dirs.py                 (checkpointed)
   9) remove_bg                 -> sel_remove_bg.py                    (checkpointed)
  11) recover_edge_chops        -> recover_edge_chops.py               (checkpointed; non-blocking)
@@ -185,17 +185,70 @@ def _colorize_candidates_exist() -> bool:
         return False
 
 
-def _python_probe(argv_prefix: List[str], require_colorize_deps: bool) -> Tuple[bool, str]:
+def _colorize_engine() -> str:
+    engine = os.getenv("COLORIZE_ENGINE", "ddcolor").strip().lower() or "ddcolor"
+    if engine not in {"ddcolor", "deoldify"}:
+        raise ValueError("COLORIZE_ENGINE must be one of: ddcolor, deoldify")
+    return engine
+
+
+def _colorize_script_for_engine(engine: str) -> str:
+    return "colorize_noncolor_ddcolor.py" if engine == "ddcolor" else "colorize_noncolor.py"
+
+
+def _colorize_python_candidates(engine: str, default_python: str) -> list[tuple[str, List[str]]]:
+    configured = _python_spec_to_argv(os.getenv("COLORIZE_PYTHON", ""))
+    candidates: list[tuple[str, List[str]]] = []
+    if configured:
+        candidates.append(("COLORIZE_PYTHON", configured))
+
+    if engine == "ddcolor":
+        local_venv = SCRIPT_DIR / ".venv-ddcolor" / ("Scripts/python.exe" if sys.platform.startswith("win") else "bin/python")
+        candidates.append(("local .venv-ddcolor", [str(local_venv)]))
+        if sys.platform.startswith("win"):
+            candidates.append(("Python launcher 3.13", ["py", "-3.13"]))
+            candidates.append(("Python launcher 3", ["py", "-3"]))
+        candidates.append(("python3.13", ["python3.13"]))
+        candidates.append(("python3", ["python3"]))
+        candidates.append(("orchestrator Python", [default_python]))
+    else:
+        local_venv = SCRIPT_DIR / ".venv-colorize" / ("Scripts/python.exe" if sys.platform.startswith("win") else "bin/python")
+        candidates.append(("local .venv-colorize", [str(local_venv)]))
+        if sys.platform.startswith("win"):
+            candidates.append(("Python launcher 3.10", ["py", "-3.10"]))
+        candidates.append(("python3.10", ["python3.10"]))
+        candidates.append(("orchestrator Python", [default_python]))
+
+    seen: set[tuple[str, ...]] = set()
+    unique: list[tuple[str, List[str]]] = []
+    for label, prefix in candidates:
+        key = tuple(prefix)
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append((label, prefix))
+    return unique
+
+
+def _python_probe(argv_prefix: List[str], engine: str, require_colorize_deps: bool) -> Tuple[bool, str]:
     if not argv_prefix:
         return False, "empty interpreter command"
     probe = "import sys; print(sys.executable)"
     if require_colorize_deps:
-        probe = (
-            "import sys; import numpy as np; "
-            "ver=tuple(int(x) for x in np.__version__.split('.', 2)[:2]); "
-            "assert ver < (2, 0), 'NumPy '+np.__version__+' detected; requires NumPy < 2'; "
-            "import fastai, torch, torchvision; print(sys.executable)"
-        )
+        if engine == "deoldify":
+            probe = (
+                "import sys; import numpy as np; "
+                "ver=tuple(int(x) for x in np.__version__.split('.', 2)[:2]); "
+                "assert ver < (2, 0), 'NumPy '+np.__version__+' detected; requires NumPy < 2'; "
+                "import fastai, torch, torchvision; print(sys.executable)"
+            )
+        else:
+            probe = (
+                "import sys; "
+                "import torch, cv2, numpy, PIL, huggingface_hub; "
+                "assert sys.version_info >= (3, 10), 'Python 3.10+ required for DDColor'; "
+                "print(sys.executable)"
+            )
     try:
         cp = subprocess.run(
             argv_prefix + ["-c", probe],
@@ -215,6 +268,39 @@ def _python_probe(argv_prefix: List[str], require_colorize_deps: bool) -> Tuple[
         return True, (cp.stdout or "").strip()
     combined = ((cp.stdout or "") + ("\n" if cp.stdout and cp.stderr else "") + (cp.stderr or "")).strip()
     return False, combined or f"exit code {cp.returncode}"
+
+
+def build_colorize_command(default_python: str) -> List[str]:
+    try:
+        engine = _colorize_engine()
+    except ValueError as exc:
+        print(f"[ERROR] {exc}", file=sys.stderr)
+        sys.exit(2)
+
+    require_deps = _colorize_candidates_exist()
+    script = _colorize_script_for_engine(engine)
+    failures: list[str] = []
+
+    for label, prefix in _colorize_python_candidates(engine, default_python):
+        ok, detail = _python_probe(prefix, engine=engine, require_colorize_deps=require_deps)
+        if ok:
+            if label != "COLORIZE_PYTHON":
+                print(f"[WARN] COLORIZE_PYTHON is not usable; using {label}: {' '.join(prefix)}")
+            print(f"[INFO] COLORIZE_ENGINE={engine}; script={script}")
+            return prefix + [script]
+        failures.append(f"{label} ({' '.join(prefix)}): {detail}")
+
+    print("[ERROR] No usable Python interpreter found for the colorize step.", file=sys.stderr)
+    if require_deps:
+        if engine == "deoldify":
+            print("[ERROR] Grayscale files are waiting in config/Downloads/other, so DeOldify deps are required.", file=sys.stderr)
+        else:
+            print("[ERROR] Grayscale files are waiting in config/Downloads/other, so DDColor deps are required.", file=sys.stderr)
+    else:
+        print("[ERROR] Even the no-op colorize check could not start any Python interpreter.", file=sys.stderr)
+    for failure in failures:
+        print(f"[ERROR]   {failure}", file=sys.stderr)
+    sys.exit(2)
 
 
 # ---------- helpers: run, markers, fs/log counting, lock ----------
@@ -524,44 +610,7 @@ def main():
     py = sys.executable
 
     def _colorize():
-        # Prefer a separate DeOldify venv, but do not let a stale copied venv
-        # stop the no-op case where there are no grayscale files to colorize.
-        require_deps = _colorize_candidates_exist()
-        configured = _python_spec_to_argv(os.getenv("COLORIZE_PYTHON", ""))
-        local_venv = (
-            SCRIPT_DIR / ".venv-colorize" / ("Scripts/python.exe" if sys.platform.startswith("win") else "bin/python")
-        )
-        candidates: list[tuple[str, List[str]]] = []
-        if configured:
-            candidates.append(("COLORIZE_PYTHON", configured))
-        candidates.append(("local .venv-colorize", [str(local_venv)]))
-        if sys.platform.startswith("win"):
-            candidates.append(("Python launcher 3.10", ["py", "-3.10"]))
-        candidates.append(("python3.10", ["python3.10"]))
-        candidates.append(("orchestrator Python", [py]))
-
-        seen: set[tuple[str, ...]] = set()
-        failures: list[str] = []
-        for label, prefix in candidates:
-            key = tuple(prefix)
-            if key in seen:
-                continue
-            seen.add(key)
-            ok, detail = _python_probe(prefix, require_colorize_deps=require_deps)
-            if ok:
-                if label != "COLORIZE_PYTHON":
-                    print(f"[WARN] COLORIZE_PYTHON is not usable; using {label}: {' '.join(prefix)}")
-                return prefix + ["colorize_noncolor.py"]
-            failures.append(f"{label} ({' '.join(prefix)}): {detail}")
-
-        print("[ERROR] No usable Python interpreter found for the colorize step.", file=sys.stderr)
-        if require_deps:
-            print("[ERROR] Grayscale files are waiting in config/Downloads/other, so DeOldify deps are required.", file=sys.stderr)
-        else:
-            print("[ERROR] Even the no-op colorize check could not start any Python interpreter.", file=sys.stderr)
-        for failure in failures:
-            print(f"[ERROR]   {failure}", file=sys.stderr)
-        sys.exit(2)
+        return build_colorize_command(py)
 
     def _require_repo_or_die():
         if not repo_root or not repo_root.exists():

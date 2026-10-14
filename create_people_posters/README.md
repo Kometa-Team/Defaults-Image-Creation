@@ -106,7 +106,7 @@ ORCH_CONTINUE_IF_EMPTY=false                          # continue run even if 0 P
 EDGE_CHOP_PRECHECK_REMBG=true                         # prefilter retry candidates locally before Adobe
 REMBG_HOME=./config/models/rembg                       # rembg model cache for recovery
 EDGE_CHOP_REJECT_GRAYSCALE=true                       # do not accept B/W TMDB alternates during recovery
-EDGE_CHOP_COLORIZE_GRAYSCALE=true                     # try DeOldify before rejecting B/W alternates
+EDGE_CHOP_COLORIZE_GRAYSCALE=true                     # try selected colorizer before rejecting B/W alternates
 EDGE_CHOP_RECOVER_WARNINGS=headchop                   # headchop,grayscale,face-chin,face-side,all
 EDGE_CHOP_COVERAGE_THRESHOLD=0.015                    # foreground edge coverage threshold for headchop checks
 EDGE_CHOP_PRECHECK_THRESHOLD=0.03                     # stricter local rembg alpha-mean threshold before Adobe
@@ -127,9 +127,16 @@ ORCH_REQUIRE_POWERSHELL=false
 ORCH_REQUIRE_BG_OUTPUT=false
 
 # Colorizer (optional)
-# If you keep a separate venv just for DeOldify, point to its python here:
-COLORIZE_PYTHON=D:/Defaults-Image-Creation/create_people_posters/.venv-colorize/Scripts/python.exe
-COLORIZE_PYTHON=/absolute/path/to/.venv-colorize/bin/python
+# Select DDColor by default; set deoldify to roll back to the legacy script.
+COLORIZE_ENGINE=ddcolor
+COLORIZE_MODEL=ddcolor_modelscope
+COLORIZE_DEVICE=cpu
+COLORIZE_INPUT_SIZE=512
+COLORIZE_JPEG_QUALITY=95
+
+# If you keep a separate venv just for colorization, point to its python here:
+COLORIZE_PYTHON=D:/Defaults-Image-Creation/create_people_posters/.venv-ddcolor/Scripts/python.exe
+COLORIZE_PYTHON=/absolute/path/to/.venv-ddcolor/bin/python
 
 # Original resolver (optional)
 PEOPLE_IMPORT_DIR=/absolute/path/to/people_dirs        # defaults to ./config/people_dirs
@@ -233,48 +240,56 @@ SEL_WINDOW_SIZE=1400,1000
 
 ---
 
-## Optional (but recommended): DeOldify colorizer setup (separate venv)
+## Optional (but recommended): colorizer setup (separate venv)
 
-DeOldify (fastai v1) is pinned to stable, CPU‑only packages for maximum compatibility.
-We recommend a **dedicated venv** (Python **3.10**) for this step.
+DDColor is the default colorizer (`COLORIZE_ENGINE=ddcolor`). It supports CPU
+inference on Python 3.13, auto-vendors the official `piddnad/DDColor` source,
+and caches Hugging Face model weights under `./config/models/ddcolor`.
+
+DeOldify remains available for rollback with `COLORIZE_ENGINE=deoldify`.
+Keep using `requirements-colorize.txt` and Python 3.10 for that legacy path.
 
 ## Install (base environment)
 
 ```bash
 # Windows:
 # 1) Create & activate a dedicated venv
-py -3.10 -m venv .venv-colorize
-.\.venv-colorize\Scripts\Activate.ps1   # or Activate.bat
+py -3.13 -m venv .venv-ddcolor
+.\.venv-ddcolor\Scripts\Activate.ps1   # or Activate.bat
 
 # 2) Upgrade pip and install base requirements
 pip install -U pip setuptools wheel
-pip install -r requirements-colorize.txt
+pip install -r requirements-ddcolor.txt
 
 # 3) Tell orchestrator where that Python lives (add to .env)
-# COLORIZE_PYTHON=C:\path\to\create_people_posters\.venv-colorize\Scripts\python.exe
+# COLORIZE_ENGINE=ddcolor
+# COLORIZE_PYTHON=C:\path\to\create_people_posters\.venv-ddcolor\Scripts\python.exe
 ```
 
 ```bash
 # macOS/Linux:
-# Install Python 3.10 (on 22.04 it’s in the archive; on 24.04 use deadsnakes)
+# Install Python 3.13 from your OS packages, pyenv, uv, or deadsnakes.
 sudo add-apt-repository ppa:deadsnakes/ppa -y
 sudo apt update
-sudo apt install -y python3.10 python3.10-venv
+sudo apt install -y python3.13 python3.13-venv
 
-# New venv *with 3.10*
+# New venv with 3.13
 cd Defaults-Image-Creation/create_people_posters
-python3.10 -m venv .venv-colorize
-source .venv-colorize/bin/activate
+python3.13 -m venv .venv-ddcolor
+source .venv-ddcolor/bin/activate
 
-# Upgrade tooling and install the pinned reqs
+# Upgrade tooling and install the DDColor reqs
 pip install -U pip setuptools wheel
-pip install -r requirements-colorize.txt
+pip install -r requirements-ddcolor.txt
 
 # 3) Tell orchestrator where that Python lives (add to .env)
-# COLORIZE_PYTHON=/path/to/create_people_posters/.venv-colorize/Scripts/python3
+# COLORIZE_ENGINE=ddcolor
+# COLORIZE_PYTHON=/path/to/create_people_posters/.venv-ddcolor/bin/python
 ```
 
-> The colorizer will auto‑vendor DeOldify source and auto‑download the `ColorizeArtistic_gen.pth` weights on first run.
+> DDColor auto-downloads the configured model on first run. The default is
+> `ddcolor_modelscope`. For DeOldify rollback, create the old `.venv-colorize`
+> with Python 3.10 and install `requirements-colorize.txt`.
 
 ---
 
@@ -351,7 +366,7 @@ The orchestrator enforces the single correct order and writes checkpoints so you
 4. **tmdb** → `tmdb_people.py` — download posters via TMDB API  
 5. **truncate** → `truncate_tmdb_people_names.py` — normalize/shorten person names  
 6. **audit_people_images** → `audit_people_images.py` — directory‑based discovery to catch stragglers  
-7. **colorize** → `colorize_noncolor.py` — **DeOldify**: move non‑color → color (keeps basenames, JPG)  
+7. **colorize** → selected `COLORIZE_ENGINE` script — move non‑color → color (keeps basenames, JPG)  
 8. **prep_dirs** → `prep_people_dirs.py` — ensure local `./config/people_dirs` scaffolds exist  
 9. **remove_bg** → `sel_remove_bg.py` — background removal via Selenium (Adobe Express)  
 10. **poster_ps1** → `create_people_poster.ps1` — poster generation (PowerShell)  
@@ -684,7 +699,7 @@ when you intentionally want to reset the Adobe browser profile and sign in again
 Occasional helpers:
 
 - `resolve_original_images.py` — recover original JPGs by matching transparent/rainier outputs against TMDB first, then Google Custom Search when configured.
-- `grayscale_sweeper.py` — scan an arbitrary folder tree for non-color images and stage them for DeOldify.
+- `grayscale_sweeper.py` — scan an arbitrary folder tree for non-color images and stage them for the selected colorizer.
 - `adobe_express_cleanup.py` — delete old Adobe Express remove-background projects when the account storage is full.
 - `clean_people_config.py` — prune old generated logs, reports, review artifacts, and candidate previews from `config`.
 - `bulk_extract_configs.py` — extract redacted config sections from mess/meta logs and nested archives.
@@ -756,9 +771,12 @@ The orchestrator now continues past zero-result log scans when `people_overrides
 ### Run the colorizer standalone
 ```bash
 # With the colorizer venv activated:
-python colorize_noncolor.py
+python colorize_noncolor_ddcolor.py
 # Reads from:  ./config/Downloads/other
 # Writes to:   ./config/Downloads/color
+
+# Legacy rollback:
+# COLORIZE_ENGINE=deoldify python colorize_noncolor.py
 ```
 
 ### Sweep any tree for non‑color images (helper)
@@ -801,7 +819,7 @@ The orchestrator runs `recover_edge_chops.py` after `poster_ps1` by default,
 scoped to transparent PNGs generated in that same `poster_ps1` run. It retries
 top-edge head chops only unless `EDGE_CHOP_RECOVER_WARNINGS` or
 `--recover-warnings` says otherwise. By default, black-and-white or near-grayscale TMDB
-alternates are sent through DeOldify first, then rechecked; an alternate is
+alternates are sent through the selected `COLORIZE_ENGINE` first, then rechecked; an alternate is
 skipped only if it is still non-color afterward. Each remaining alternate first
 runs through `rembg` locally; alternates that still have selected recovery
 warnings are skipped before the Selenium/Adobe step. The head/top edge check
@@ -834,7 +852,7 @@ Local `rembg` precheck is intentionally stricter than final QA by default:
 `EDGE_CHOP_PRECHECK_THRESHOLD=0.03` and
 `EDGE_CHOP_PRECHECK_COVERAGE_THRESHOLD=0.005`, while final repo/audit checks keep
 using `EDGE_CHOP_THRESHOLD=0.06` and `EDGE_CHOP_COVERAGE_THRESHOLD=0.015`.
-Set `EDGE_CHOP_COLORIZE_GRAYSCALE=false` to skip the DeOldify attempt, or set
+Set `EDGE_CHOP_COLORIZE_GRAYSCALE=false` to skip the colorizer attempt, or set
 `EDGE_CHOP_REJECT_GRAYSCALE=false` / pass `--allow-grayscale` only for a manual
 exception.
 `--recover-warnings` accepts `headchop`, `grayscale`, `face-chin`,
@@ -1024,6 +1042,7 @@ create_people_posters/
 ├─ truncate_tmdb_people_names.py
 ├─ audit_people_images.py
 ├─ colorize_noncolor.py
+├─ colorize_noncolor_ddcolor.py
 ├─ prep_people_dirs.py
 ├─ sel_remove_bg.py
 ├─ adobe_express_cleanup.py      # optional Adobe Express remote storage cleanup
@@ -1043,7 +1062,9 @@ create_people_posters/
    ├─ .env.example
    ├─ .env
    ├─ .orch/                     # checkpoints
-   ├─ vendor/deoldify/           # auto-vendored package (colorizer)
+   ├─ vendor/DDColor/            # auto-vendored DDColor package
+   ├─ vendor/deoldify/           # auto-vendored package (DeOldify rollback)
+   ├─ models/ddcolor/            # DDColor Hugging Face model cache
    ├─ models/deoldify/           # ColorizeArtistic_gen.pth
    ├─ Downloads/
    │  ├─ other/                  # non‑color inputs for colorizer

@@ -653,16 +653,45 @@ def noncolor_summary(
     return ""
 
 
-def colorize_python_candidates() -> list[list[str]]:
+def colorize_engine() -> str:
+    engine = os.getenv("COLORIZE_ENGINE", "ddcolor").strip().lower() or "ddcolor"
+    if engine not in {"ddcolor", "deoldify"}:
+        raise ValueError("COLORIZE_ENGINE must be one of: ddcolor, deoldify")
+    return engine
+
+
+def colorize_engine_label(engine: str | None = None) -> str:
+    selected = engine or colorize_engine()
+    return "DDColor" if selected == "ddcolor" else "DeOldify"
+
+
+def colorize_script_name(engine: str | None = None) -> str:
+    selected = engine or colorize_engine()
+    return "colorize_noncolor_ddcolor.py" if selected == "ddcolor" else "colorize_noncolor.py"
+
+
+def colorize_python_candidates(engine: str | None = None) -> list[list[str]]:
+    selected = engine or colorize_engine()
     configured = os.getenv("COLORIZE_PYTHON", "").strip().strip("\"'")
-    local_venv = SCRIPT_DIR / ".venv-colorize" / ("Scripts/python.exe" if sys.platform.startswith("win") else "bin/python")
     candidates: list[list[str]] = []
     if configured:
         candidates.append([configured])
-    candidates.append([str(local_venv)])
-    if sys.platform.startswith("win"):
-        candidates.append(["py", "-3.10"])
-    candidates.append(["python3.10"])
+    if selected == "ddcolor":
+        local_venv = SCRIPT_DIR / ".venv-ddcolor" / ("Scripts/python.exe" if sys.platform.startswith("win") else "bin/python")
+        candidates.append([str(local_venv)])
+        if sys.platform.startswith("win"):
+            candidates.append(["py", "-3.13"])
+            candidates.append(["py", "-3"])
+        candidates.append(["python3.13"])
+        candidates.append(["python3"])
+        candidates.append([sys.executable])
+    else:
+        local_venv = SCRIPT_DIR / ".venv-colorize" / ("Scripts/python.exe" if sys.platform.startswith("win") else "bin/python")
+        candidates.append([str(local_venv)])
+        if sys.platform.startswith("win"):
+            candidates.append(["py", "-3.10"])
+        candidates.append(["python3.10"])
+        candidates.append([sys.executable])
 
     seen: set[tuple[str, ...]] = set()
     unique: list[list[str]] = []
@@ -674,7 +703,10 @@ def colorize_python_candidates() -> list[list[str]]:
     return unique
 
 
-def deoldify_candidate(staged_jpg: Path, work_root: Path) -> tuple[bool, str]:
+def colorize_candidate(staged_jpg: Path, work_root: Path) -> tuple[bool, str]:
+    engine = colorize_engine()
+    engine_label = colorize_engine_label(engine)
+    script_name = colorize_script_name(engine)
     color_in = work_root / "colorize_other"
     color_out = work_root / "colorize_color"
     color_in.mkdir(parents=True, exist_ok=True)
@@ -694,10 +726,10 @@ def deoldify_candidate(staged_jpg: Path, work_root: Path) -> tuple[bool, str]:
     env["COLORIZE_OUTPUT_COLOR"] = str(color_out)
 
     failures: list[str] = []
-    for argv_prefix in colorize_python_candidates():
+    for argv_prefix in colorize_python_candidates(engine):
         try:
             cp = subprocess.run(
-                argv_prefix + ["colorize_noncolor.py"],
+                argv_prefix + [script_name],
                 cwd=SCRIPT_DIR,
                 env=env,
                 text=True,
@@ -717,12 +749,16 @@ def deoldify_candidate(staged_jpg: Path, work_root: Path) -> tuple[bool, str]:
         output = (cp.stdout or "").strip()
         if cp.returncode == 0 and output_path.exists() and output_path.stat().st_size > 0:
             normalize_to_download(output_path, staged_jpg)
-            return True, f"DeOldify colorized with {' '.join(argv_prefix)}"
+            return True, f"{engine_label} colorized with {' '.join(argv_prefix)}"
 
         tail = "\n".join(output.splitlines()[-6:])
         failures.append(f"{' '.join(argv_prefix)} exit {cp.returncode}: {tail}")
 
-    return False, "DeOldify failed: " + " | ".join(failures)
+    return False, f"{engine_label} failed: " + " | ".join(failures)
+
+
+def deoldify_candidate(staged_jpg: Path, work_root: Path) -> tuple[bool, str]:
+    return colorize_candidate(staged_jpg, work_root)
 
 
 def build_rembg_session(model: str):
@@ -1008,8 +1044,8 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                     raise RuntimeError(f"{name} {candidate.label}: grayscale candidate check failed: {exc}") from exc
                 if noncolor:
                     if args.colorize_grayscale:
-                        log(f"[candidate] {name} {candidate.label}: non-color candidate; trying DeOldify: {noncolor}")
-                        ok, note = deoldify_candidate(staged_jpg, Path(tmp) / "deoldify")
+                        log(f"[candidate] {name} {candidate.label}: non-color candidate; trying {colorize_engine_label()}: {noncolor}")
+                        ok, note = colorize_candidate(staged_jpg, Path(tmp) / colorize_engine())
                         if ok:
                             try:
                                 noncolor = noncolor_summary(
@@ -1026,7 +1062,7 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                                 log(f"[candidate] {name} {candidate.label}: {note}")
                             else:
                                 row.grayscale_rejected += 1
-                                log(f"[candidate] {name} {candidate.label}: DeOldify output still non-color; skipped before rembg/Adobe: {noncolor}")
+                                log(f"[candidate] {name} {candidate.label}: {colorize_engine_label()} output still non-color; skipped before rembg/Adobe: {noncolor}")
                                 continue
                         else:
                             row.grayscale_rejected += 1
@@ -1102,7 +1138,7 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                 row.final_issues = ""
                 row.note = "accepted TMDB alternate"
                 if row.grayscale_colorized:
-                    row.note += f"; DeOldify colorized {row.grayscale_colorized} candidates"
+                    row.note += f"; {colorize_engine_label()} colorized {row.grayscale_colorized} candidates"
                 if row.grayscale_rejected:
                     row.note += f"; non-color checks rejected {row.grayscale_rejected} candidates"
                 if row.precheck_rejected:
@@ -1118,7 +1154,7 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
         row.status = "exhausted"
         row.note = "no TMDB alternate cleared selected recovery warnings; restored previous local outputs"
         if row.grayscale_colorized:
-            row.note += f"; DeOldify colorized {row.grayscale_colorized} candidates"
+            row.note += f"; {colorize_engine_label()} colorized {row.grayscale_colorized} candidates"
         if row.grayscale_rejected:
             row.note += f"; non-color checks rejected {row.grayscale_rejected} candidates"
         if row.precheck_rejected:
@@ -1199,8 +1235,8 @@ def stage_one_for_orchestrator(
                     raise RuntimeError(f"{name} {candidate.label}: grayscale candidate check failed: {exc}") from exc
                 if noncolor:
                     if args.colorize_grayscale:
-                        log(f"[candidate] {name} {candidate.label}: non-color candidate; trying DeOldify: {noncolor}")
-                        ok, note = deoldify_candidate(staged_jpg, Path(tmp) / "deoldify")
+                        log(f"[candidate] {name} {candidate.label}: non-color candidate; trying {colorize_engine_label()}: {noncolor}")
+                        ok, note = colorize_candidate(staged_jpg, Path(tmp) / colorize_engine())
                         if ok:
                             try:
                                 noncolor = noncolor_summary(
@@ -1216,7 +1252,7 @@ def stage_one_for_orchestrator(
                                 log(f"[candidate] {name} {candidate.label}: {note}")
                             else:
                                 row.grayscale_rejected += 1
-                                note = f"DeOldify output still non-color: {noncolor}"
+                                note = f"{colorize_engine_label()} output still non-color: {noncolor}"
                                 log(f"[candidate] {name} {candidate.label}: {note}")
                                 record_attempt("grayscale_rejected", note)
                                 continue
@@ -1260,7 +1296,7 @@ def stage_one_for_orchestrator(
     row.status = "exhausted"
     row.note = "no untried TMDB alternate cleared selected local recovery prechecks"
     if row.grayscale_colorized:
-        row.note += f"; DeOldify colorized {row.grayscale_colorized} candidates"
+        row.note += f"; {colorize_engine_label()} colorized {row.grayscale_colorized} candidates"
     if row.grayscale_rejected:
         row.note += f"; non-color checks rejected {row.grayscale_rejected} candidates"
     if row.precheck_rejected:
@@ -1572,7 +1608,7 @@ def main() -> int:
             f"colorfulness<{args.grayscale_colorfulness_cutoff:.1f})"
         )
         if args.colorize_grayscale:
-            log("[info] non-color recovery candidates are sent through DeOldify before rejection")
+            log(f"[info] non-color recovery candidates are sent through {colorize_engine_label()} before rejection")
     else:
         log("[info] non-color recovery candidates allowed")
 
