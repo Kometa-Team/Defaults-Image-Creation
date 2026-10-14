@@ -175,7 +175,7 @@ def image_quality_findings(
             if category == "transparent" and not has_any_transparency(img):
                 blocking.append("not transparent; send through remove_bg")
             if category in COLOR_REQUIRED_CATEGORIES and is_grayscale(img):
-                warnings.append("grayscale; send original through DeOldify before remove_bg")
+                warnings.append("grayscale; send original through DDColor before remove_bg")
     except Exception as exc:
         blocking.append(f"unreadable image: {exc}")
     return blocking, warnings

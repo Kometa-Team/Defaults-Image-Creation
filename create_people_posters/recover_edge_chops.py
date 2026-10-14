@@ -655,43 +655,29 @@ def noncolor_summary(
 
 def colorize_engine() -> str:
     engine = os.getenv("COLORIZE_ENGINE", "ddcolor").strip().lower() or "ddcolor"
-    if engine not in {"ddcolor", "deoldify"}:
-        raise ValueError("COLORIZE_ENGINE must be one of: ddcolor, deoldify")
+    if engine != "ddcolor":
+        raise ValueError("Only DDColor is supported; set COLORIZE_ENGINE=ddcolor")
     return engine
 
 
-def colorize_engine_label(engine: str | None = None) -> str:
-    selected = engine or colorize_engine()
-    return "DDColor" if selected == "ddcolor" else "DeOldify"
+def colorize_engine_label() -> str:
+    colorize_engine()
+    return "DDColor"
 
 
-def colorize_script_name(engine: str | None = None) -> str:
-    selected = engine or colorize_engine()
-    return "colorize_noncolor_ddcolor.py" if selected == "ddcolor" else "colorize_noncolor.py"
-
-
-def colorize_python_candidates(engine: str | None = None) -> list[list[str]]:
-    selected = engine or colorize_engine()
+def colorize_python_candidates() -> list[list[str]]:
     configured = os.getenv("COLORIZE_PYTHON", "").strip().strip("\"'")
     candidates: list[list[str]] = []
     if configured:
         candidates.append([configured])
-    if selected == "ddcolor":
-        local_venv = SCRIPT_DIR / ".venv-ddcolor" / ("Scripts/python.exe" if sys.platform.startswith("win") else "bin/python")
-        candidates.append([str(local_venv)])
-        if sys.platform.startswith("win"):
-            candidates.append(["py", "-3.13"])
-            candidates.append(["py", "-3"])
-        candidates.append(["python3.13"])
-        candidates.append(["python3"])
-        candidates.append([sys.executable])
-    else:
-        local_venv = SCRIPT_DIR / ".venv-colorize" / ("Scripts/python.exe" if sys.platform.startswith("win") else "bin/python")
-        candidates.append([str(local_venv)])
-        if sys.platform.startswith("win"):
-            candidates.append(["py", "-3.10"])
-        candidates.append(["python3.10"])
-        candidates.append([sys.executable])
+    local_venv = SCRIPT_DIR / ".venv-ddcolor" / ("Scripts/python.exe" if sys.platform.startswith("win") else "bin/python")
+    candidates.append([str(local_venv)])
+    if sys.platform.startswith("win"):
+        candidates.append(["py", "-3.13"])
+        candidates.append(["py", "-3"])
+    candidates.append(["python3.13"])
+    candidates.append(["python3"])
+    candidates.append([sys.executable])
 
     seen: set[tuple[str, ...]] = set()
     unique: list[list[str]] = []
@@ -704,9 +690,8 @@ def colorize_python_candidates(engine: str | None = None) -> list[list[str]]:
 
 
 def colorize_candidate(staged_jpg: Path, work_root: Path) -> tuple[bool, str]:
-    engine = colorize_engine()
-    engine_label = colorize_engine_label(engine)
-    script_name = colorize_script_name(engine)
+    engine_label = colorize_engine_label()
+    script_name = "colorize_noncolor_ddcolor.py"
     color_in = work_root / "colorize_other"
     color_out = work_root / "colorize_color"
     color_in.mkdir(parents=True, exist_ok=True)
@@ -726,7 +711,7 @@ def colorize_candidate(staged_jpg: Path, work_root: Path) -> tuple[bool, str]:
     env["COLORIZE_OUTPUT_COLOR"] = str(color_out)
 
     failures: list[str] = []
-    for argv_prefix in colorize_python_candidates(engine):
+    for argv_prefix in colorize_python_candidates():
         try:
             cp = subprocess.run(
                 argv_prefix + [script_name],
@@ -755,10 +740,6 @@ def colorize_candidate(staged_jpg: Path, work_root: Path) -> tuple[bool, str]:
         failures.append(f"{' '.join(argv_prefix)} exit {cp.returncode}: {tail}")
 
     return False, f"{engine_label} failed: " + " | ".join(failures)
-
-
-def deoldify_candidate(staged_jpg: Path, work_root: Path) -> tuple[bool, str]:
-    return colorize_candidate(staged_jpg, work_root)
 
 
 def build_rembg_session(model: str):

@@ -15,7 +15,7 @@ It’s designed to be **cross‑platform**, **fixed‑order**, and **resumable**
 ---
 
 ## Prerequisites
-- **Python 3.10+** (3.10 recommended for the colorizer venv)
+- A [supported version of Python](https://devguide.python.org/versions/) (**3.11-3.15** as of **October 12, 2026**).
 - **pip** to install dependencies
 - **Chrome/Edge** installed — required by the Selenium step
 - **PowerShell** for the poster script step:
@@ -127,7 +127,7 @@ ORCH_REQUIRE_POWERSHELL=false
 ORCH_REQUIRE_BG_OUTPUT=false
 
 # Colorizer (optional)
-# Select DDColor by default; set deoldify to roll back to the legacy script.
+# DDColor is the supported colorizer.
 COLORIZE_ENGINE=ddcolor
 COLORIZE_MODEL=ddcolor_modelscope
 COLORIZE_DEVICE=cpu
@@ -246,8 +246,13 @@ DDColor is the default colorizer (`COLORIZE_ENGINE=ddcolor`). It supports CPU
 inference on Python 3.13, auto-vendors the official `piddnad/DDColor` source,
 and caches Hugging Face model weights under `./config/models/ddcolor`.
 
-DeOldify remains available for rollback with `COLORIZE_ENGINE=deoldify`.
-Keep using `requirements-colorize.txt` and Python 3.10 for that legacy path.
+DDColor is the only supported colorizer. Leave `COLORIZE_PYTHON` blank to
+automatically select `.venv-ddcolor`, or set it to a custom interpreter with
+`requirements-ddcolor.txt` installed. Other `COLORIZE_ENGINE` values are rejected.
+
+The previous DeOldify implementation is preserved in Git commit `5fdded4`.
+Restore that version in a separate checkout to recover its code, configuration,
+and installation instructions. Removed environments and caches must be recreated.
 
 ## Install (base environment)
 
@@ -288,8 +293,8 @@ pip install -r requirements-ddcolor.txt
 ```
 
 > DDColor auto-downloads the configured model on first run. The default is
-> `ddcolor_modelscope`. For DeOldify rollback, create the old `.venv-colorize`
-> with Python 3.10 and install `requirements-colorize.txt`.
+> `ddcolor_modelscope`. Model weights are cached under `./config/models/ddcolor`
+> and reused on subsequent runs.
 
 ---
 
@@ -378,7 +383,7 @@ The orchestrator enforces the single correct order and writes checkpoints so you
 16. **push** → `update_people_repos.py --op push` — commit & push changes (**always runs**)
 
 > Optional QA tools: `image_check.py`, `compare_image_trees.py` — ad hoc reporting for grayscale, dimensions, transparency, edge chops, face-crop risk, and repo/tree consistency.
-> Optional helper (outside the orchestrator): `grayscale_sweeper.py` — scan any folder tree for non‑color images and copy them into `config/Downloads/other` so `colorize_noncolor.py` can convert them.
+> Optional helper (outside the orchestrator): `grayscale_sweeper.py` — scan any folder tree for non‑color images and copy them into `config/Downloads/other` so `colorize_noncolor_ddcolor.py` can convert them.
 > Optional helper (outside the orchestrator): `bulk_extract_configs.py` — scan mess/meta logs, including nested archives, and export redacted config sections as `parsed_*.yml`.
 
 README generation for the People image repos is owned by each repo's
@@ -775,8 +780,6 @@ python colorize_noncolor_ddcolor.py
 # Reads from:  ./config/Downloads/other
 # Writes to:   ./config/Downloads/color
 
-# Legacy rollback:
-# COLORIZE_ENGINE=deoldify python colorize_noncolor.py
 ```
 
 ### Sweep any tree for non‑color images (helper)
@@ -940,8 +943,9 @@ Set `PEOPLE_IMAGES_DIR` in `.env` (or pass `--repo-root`) and ensure the repo ex
 Double‑check `TMDB_KEY` and your network. Try re‑running with `--redo tmdb`.
 
 **Colorizer errors**  
-- Use a dedicated venv (Python 3.10).  
-- The first run will download ResNet34 weights and `ColorizeArtistic_gen.pth` automatically.
+- Use `.venv-ddcolor` with Python 3.13 and install `requirements-ddcolor.txt`.
+- Keep `COLORIZE_ENGINE=ddcolor` and `COLORIZE_DEVICE=cpu` for CPU inference.
+- The first run downloads the official source and model weights; later runs reuse the cache.
 
 **Selenium step fails / element not found**  
 Adobe Express may change the UI. Update selectors or timeouts in `sel_remove_bg.py` or run with `-v` for detailed logs.
@@ -1041,7 +1045,6 @@ create_people_posters/
 ├─ tmdb_people.py
 ├─ truncate_tmdb_people_names.py
 ├─ audit_people_images.py
-├─ colorize_noncolor.py
 ├─ colorize_noncolor_ddcolor.py
 ├─ prep_people_dirs.py
 ├─ sel_remove_bg.py
@@ -1063,9 +1066,7 @@ create_people_posters/
    ├─ .env
    ├─ .orch/                     # checkpoints
    ├─ vendor/DDColor/            # auto-vendored DDColor package
-   ├─ vendor/deoldify/           # auto-vendored package (DeOldify rollback)
    ├─ models/ddcolor/            # DDColor Hugging Face model cache
-   ├─ models/deoldify/           # ColorizeArtistic_gen.pth
    ├─ Downloads/
    │  ├─ other/                  # non‑color inputs for colorizer
    │  └─ color/                  # colorized outputs (JPG)

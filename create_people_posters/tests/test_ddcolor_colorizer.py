@@ -263,10 +263,10 @@ def test_orchestrator_selects_ddcolor_backend(monkeypatch, tmp_path):
     monkeypatch.setenv("COLORIZE_ENGINE", "ddcolor")
     monkeypatch.setenv("COLORIZE_PYTHON", "C:/Python313/python.exe")
     monkeypatch.setattr(orchestrator, "_colorize_candidates_exist", lambda: True)
-    probes: list[tuple[tuple[str, ...], str, bool]] = []
+    probes: list[tuple[tuple[str, ...], bool]] = []
 
-    def fake_probe(prefix, engine, require_colorize_deps):
-        probes.append((tuple(prefix), engine, require_colorize_deps))
+    def fake_probe(prefix, require_colorize_deps):
+        probes.append((tuple(prefix), require_colorize_deps))
         return True, "ok"
 
     monkeypatch.setattr(orchestrator, "_python_probe", fake_probe)
@@ -274,30 +274,61 @@ def test_orchestrator_selects_ddcolor_backend(monkeypatch, tmp_path):
     argv = orchestrator.build_colorize_command("current-python")
 
     assert argv == ["C:/Python313/python.exe", "colorize_noncolor_ddcolor.py"]
-    assert probes == [(("C:/Python313/python.exe",), "ddcolor", True)]
+    assert probes == [(("C:/Python313/python.exe",), True)]
 
 
-def test_orchestrator_selects_deoldify_backend(monkeypatch):
-    monkeypatch.setenv("COLORIZE_ENGINE", "deoldify")
-    monkeypatch.setenv("COLORIZE_PYTHON", "C:/Python310/python.exe")
-    monkeypatch.setattr(orchestrator, "_colorize_candidates_exist", lambda: True)
+def test_orchestrator_rejects_unsupported_backend_before_launch(monkeypatch):
+    monkeypatch.setenv("COLORIZE_ENGINE", "legacy")
 
-    def fake_probe(prefix, engine, require_colorize_deps):
-        assert engine == "deoldify"
-        assert require_colorize_deps is True
-        return True, "ok"
+    def fake_probe(*args, **kwargs):
+        raise AssertionError("an unsupported backend must not launch an interpreter")
 
     monkeypatch.setattr(orchestrator, "_python_probe", fake_probe)
 
-    assert orchestrator.build_colorize_command("current-python") == [
-        "C:/Python310/python.exe",
-        "colorize_noncolor.py",
-    ]
+    with pytest.raises(SystemExit) as exc:
+        orchestrator.build_colorize_command("current-python")
+    assert exc.value.code == 2
+
+
+@pytest.mark.parametrize("setting", [None, "", " DDColor "])
+def test_ddcolor_is_the_default_and_only_backend(monkeypatch, setting):
+    if setting is None:
+        monkeypatch.delenv("COLORIZE_ENGINE", raising=False)
+    else:
+        monkeypatch.setenv("COLORIZE_ENGINE", setting)
+    assert orchestrator._colorize_engine() == "ddcolor"
+    assert recover_edge_chops.colorize_engine() == "ddcolor"
+
+
+def test_both_runners_prefer_local_ddcolor_environment(monkeypatch):
+    monkeypatch.delenv("COLORIZE_PYTHON", raising=False)
+    suffix = "Scripts/python.exe" if sys.platform.startswith("win") else "bin/python"
+    expected = str(SCRIPT_DIR / ".venv-ddcolor" / suffix)
+    assert orchestrator._colorize_python_candidates("pipeline-python")[0][1] == [expected]
+    assert recover_edge_chops.colorize_python_candidates()[0] == [expected]
+
+
+def test_orchestrator_dependency_failure_propagates(monkeypatch):
+    monkeypatch.setenv("COLORIZE_ENGINE", "ddcolor")
+    monkeypatch.setattr(orchestrator, "_colorize_candidates_exist", lambda: True)
+    monkeypatch.setattr(orchestrator, "_colorize_python_candidates", lambda python: [("test", [python])])
+    monkeypatch.setattr(orchestrator, "_python_probe", lambda *args, **kwargs: (False, "missing dependencies"))
+    with pytest.raises(SystemExit) as exc:
+        orchestrator.build_colorize_command("pipeline-python")
+    assert exc.value.code == 2
+
+
+def test_recovery_rejects_unsupported_backend_before_staging(monkeypatch, tmp_path):
+    monkeypatch.setenv("COLORIZE_ENGINE", "legacy")
+    work_root = tmp_path / "work"
+    with pytest.raises(ValueError, match="Only DDColor is supported"):
+        recover_edge_chops.colorize_candidate(tmp_path / "Person.jpg", work_root)
+    assert not work_root.exists()
 
 
 def test_recover_edge_chops_uses_ddcolor_script(monkeypatch, tmp_path):
     monkeypatch.setenv("COLORIZE_ENGINE", "ddcolor")
-    monkeypatch.setattr(recover_edge_chops, "colorize_python_candidates", lambda engine=None: [["python313"]])
+    monkeypatch.setattr(recover_edge_chops, "colorize_python_candidates", lambda: [["python313"]])
     staged = tmp_path / "Person.jpg"
     make_image(staged, size=(40, 60))
     seen = {}
@@ -315,6 +346,22 @@ def test_recover_edge_chops_uses_ddcolor_script(monkeypatch, tmp_path):
     assert ok is True
     assert seen["argv"] == ["python313", "colorize_noncolor_ddcolor.py"]
     assert "DDColor colorized" in note
+
+
+def test_recovery_ddcolor_failure_preserves_staged_source(monkeypatch, tmp_path):
+    monkeypatch.setenv("COLORIZE_ENGINE", "ddcolor")
+    monkeypatch.setattr(recover_edge_chops, "colorize_python_candidates", lambda: [["python313"]])
+    staged = tmp_path / "Person.jpg"
+    make_image(staged)
+    original = staged.read_bytes()
+    monkeypatch.setattr(
+        recover_edge_chops.subprocess, "run",
+        lambda *args, **kwargs: SimpleNamespace(returncode=1, stdout="model failure"),
+    )
+    ok, note = recover_edge_chops.colorize_candidate(staged, tmp_path / "work")
+    assert ok is False
+    assert "DDColor failed" in note
+    assert staged.read_bytes() == original
 
 
 def test_checkpoint_clear_from_preserves_upstream_and_clears_downstream(monkeypatch, tmp_path):

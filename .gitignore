@@ -4,7 +4,7 @@
 # Ignore Python virtual environments
 venv/
 env/
-.venv-colorize
+.venv*/
 
 # Ignore environment variables file
 .env

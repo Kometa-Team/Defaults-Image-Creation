@@ -187,37 +187,25 @@ def _colorize_candidates_exist() -> bool:
 
 def _colorize_engine() -> str:
     engine = os.getenv("COLORIZE_ENGINE", "ddcolor").strip().lower() or "ddcolor"
-    if engine not in {"ddcolor", "deoldify"}:
-        raise ValueError("COLORIZE_ENGINE must be one of: ddcolor, deoldify")
+    if engine != "ddcolor":
+        raise ValueError("Only DDColor is supported; set COLORIZE_ENGINE=ddcolor")
     return engine
 
 
-def _colorize_script_for_engine(engine: str) -> str:
-    return "colorize_noncolor_ddcolor.py" if engine == "ddcolor" else "colorize_noncolor.py"
-
-
-def _colorize_python_candidates(engine: str, default_python: str) -> list[tuple[str, List[str]]]:
+def _colorize_python_candidates(default_python: str) -> list[tuple[str, List[str]]]:
     configured = _python_spec_to_argv(os.getenv("COLORIZE_PYTHON", ""))
     candidates: list[tuple[str, List[str]]] = []
     if configured:
         candidates.append(("COLORIZE_PYTHON", configured))
 
-    if engine == "ddcolor":
-        local_venv = SCRIPT_DIR / ".venv-ddcolor" / ("Scripts/python.exe" if sys.platform.startswith("win") else "bin/python")
-        candidates.append(("local .venv-ddcolor", [str(local_venv)]))
-        if sys.platform.startswith("win"):
-            candidates.append(("Python launcher 3.13", ["py", "-3.13"]))
-            candidates.append(("Python launcher 3", ["py", "-3"]))
-        candidates.append(("python3.13", ["python3.13"]))
-        candidates.append(("python3", ["python3"]))
-        candidates.append(("orchestrator Python", [default_python]))
-    else:
-        local_venv = SCRIPT_DIR / ".venv-colorize" / ("Scripts/python.exe" if sys.platform.startswith("win") else "bin/python")
-        candidates.append(("local .venv-colorize", [str(local_venv)]))
-        if sys.platform.startswith("win"):
-            candidates.append(("Python launcher 3.10", ["py", "-3.10"]))
-        candidates.append(("python3.10", ["python3.10"]))
-        candidates.append(("orchestrator Python", [default_python]))
+    local_venv = SCRIPT_DIR / ".venv-ddcolor" / ("Scripts/python.exe" if sys.platform.startswith("win") else "bin/python")
+    candidates.append(("local .venv-ddcolor", [str(local_venv)]))
+    if sys.platform.startswith("win"):
+        candidates.append(("Python launcher 3.13", ["py", "-3.13"]))
+        candidates.append(("Python launcher 3", ["py", "-3"]))
+    candidates.append(("python3.13", ["python3.13"]))
+    candidates.append(("python3", ["python3"]))
+    candidates.append(("orchestrator Python", [default_python]))
 
     seen: set[tuple[str, ...]] = set()
     unique: list[tuple[str, List[str]]] = []
@@ -230,25 +218,17 @@ def _colorize_python_candidates(engine: str, default_python: str) -> list[tuple[
     return unique
 
 
-def _python_probe(argv_prefix: List[str], engine: str, require_colorize_deps: bool) -> Tuple[bool, str]:
+def _python_probe(argv_prefix: List[str], require_colorize_deps: bool) -> Tuple[bool, str]:
     if not argv_prefix:
         return False, "empty interpreter command"
     probe = "import sys; print(sys.executable)"
     if require_colorize_deps:
-        if engine == "deoldify":
-            probe = (
-                "import sys; import numpy as np; "
-                "ver=tuple(int(x) for x in np.__version__.split('.', 2)[:2]); "
-                "assert ver < (2, 0), 'NumPy '+np.__version__+' detected; requires NumPy < 2'; "
-                "import fastai, torch, torchvision; print(sys.executable)"
-            )
-        else:
-            probe = (
-                "import sys; "
-                "import torch, torchvision, cv2, numpy, PIL, huggingface_hub; "
-                "assert sys.version_info >= (3, 10), 'Python 3.10+ required for DDColor'; "
-                "print(sys.executable)"
-            )
+        probe = (
+            "import sys; "
+            "import torch, torchvision, cv2, numpy, PIL, huggingface_hub; "
+            "assert sys.version_info >= (3, 10), 'Python 3.10+ required for DDColor'; "
+            "print(sys.executable)"
+        )
     try:
         cp = subprocess.run(
             argv_prefix + ["-c", probe],
@@ -278,24 +258,24 @@ def build_colorize_command(default_python: str) -> List[str]:
         sys.exit(2)
 
     require_deps = _colorize_candidates_exist()
-    script = _colorize_script_for_engine(engine)
+    script = "colorize_noncolor_ddcolor.py"
     failures: list[str] = []
 
-    for label, prefix in _colorize_python_candidates(engine, default_python):
-        ok, detail = _python_probe(prefix, engine=engine, require_colorize_deps=require_deps)
+    for label, prefix in _colorize_python_candidates(default_python):
+        ok, detail = _python_probe(prefix, require_colorize_deps=require_deps)
         if ok:
             if label != "COLORIZE_PYTHON":
-                print(f"[WARN] COLORIZE_PYTHON is not usable; using {label}: {' '.join(prefix)}")
+                if _clean_env_value(os.getenv("COLORIZE_PYTHON")):
+                    print(f"[WARN] COLORIZE_PYTHON is not usable; using {label}: {' '.join(prefix)}")
+                else:
+                    print(f"[INFO] Using {label}: {' '.join(prefix)}")
             print(f"[INFO] COLORIZE_ENGINE={engine}; script={script}")
             return prefix + [script]
         failures.append(f"{label} ({' '.join(prefix)}): {detail}")
 
     print("[ERROR] No usable Python interpreter found for the colorize step.", file=sys.stderr)
     if require_deps:
-        if engine == "deoldify":
-            print("[ERROR] Grayscale files are waiting in config/Downloads/other, so DeOldify deps are required.", file=sys.stderr)
-        else:
-            print("[ERROR] Grayscale files are waiting in config/Downloads/other, so DDColor deps are required.", file=sys.stderr)
+        print("[ERROR] Grayscale files are waiting in config/Downloads/other, so DDColor deps are required.", file=sys.stderr)
     else:
         print("[ERROR] Even the no-op colorize check could not start any Python interpreter.", file=sys.stderr)
     for failure in failures:
