@@ -245,7 +245,7 @@ def _python_probe(argv_prefix: List[str], engine: str, require_colorize_deps: bo
         else:
             probe = (
                 "import sys; "
-                "import torch, cv2, numpy, PIL, huggingface_hub; "
+                "import torch, torchvision, cv2, numpy, PIL, huggingface_hub; "
                 "assert sys.version_info >= (3, 10), 'Python 3.10+ required for DDColor'; "
                 "print(sys.executable)"
             )

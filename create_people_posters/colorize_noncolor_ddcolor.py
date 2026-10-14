@@ -13,6 +13,7 @@ colorize_noncolor_ddcolor.py - Colorize non-color images with DDColor.
 from __future__ import annotations
 
 import gc
+import importlib
 import io
 import json
 import logging
@@ -87,8 +88,14 @@ def ensure_ddcolor_on_path() -> None:
     try:
         import ddcolor  # noqa: F401
         return
-    except Exception:
-        pass
+    except ModuleNotFoundError as exc:
+        if exc.name != "ddcolor":
+            log.error("DDColor dependency import failed: %s", exc)
+            log.error("Install deps with: pip install -r requirements-ddcolor.txt")
+            sys.exit(2)
+    except Exception as exc:
+        log.error("DDColor import failed: %s", exc)
+        sys.exit(2)
 
     urls = [
         "https://codeload.github.com/piddnad/DDColor/zip/refs/heads/master",
@@ -129,6 +136,7 @@ def ensure_ddcolor_on_path() -> None:
                 if DDCOLOR_VENDOR_DIR.exists():
                     shutil.rmtree(DDCOLOR_VENDOR_DIR, ignore_errors=True)
                 tmp.replace(DDCOLOR_VENDOR_DIR)
+                importlib.invalidate_caches()
                 log.info("DDColor vendored into: %s (%d files)", DDCOLOR_VENDOR_DIR, extracted)
                 break
         except Exception as exc:
@@ -211,6 +219,20 @@ def resolve_device(device_name: str):
     return torch.device(requested)
 
 
+def load_cached_model(model_cls, model_dir: Path):
+    import torch
+
+    config = json.loads((model_dir / "config.json").read_text(encoding="utf-8"))
+    state_dict = torch.load(
+        model_dir / "pytorch_model.bin", map_location="cpu", weights_only=True, mmap=True
+    )
+    if "params" in state_dict:
+        state_dict = state_dict["params"]
+    model = model_cls(**config)
+    model.load_state_dict(state_dict, strict=True)
+    return model
+
+
 class DDColorBatchColorizer:
     def __init__(self, model_name: str, device_name: str, input_size: int):
         ensure_ddcolor_on_path()
@@ -218,7 +240,6 @@ class DDColorBatchColorizer:
         import cv2
         import numpy as np
         import torch
-        from huggingface_hub import PyTorchModelHubMixin
         from ddcolor import ColorizationPipeline, DDColor
 
         self.cv2 = cv2
@@ -227,19 +248,15 @@ class DDColorBatchColorizer:
         self.device = resolve_device(device_name)
         self.input_size = int(input_size)
 
-        class DDColorHF(DDColor, PyTorchModelHubMixin):
-            def __init__(self, config=None, **kwargs):
-                if isinstance(config, dict):
-                    kwargs = {**config, **kwargs}
-                super().__init__(**kwargs)
-
         model_dir = download_model_snapshot(model_name)
         try:
-            model = DDColorHF.from_pretrained(str(model_dir))
+            model = load_cached_model(DDColor, model_dir)
+        except ModuleNotFoundError:
+            raise
         except Exception as exc:
             log.warning("Cached DDColor model failed to load, redownloading once: %s", exc)
             model_dir = download_model_snapshot(model_name, force=True)
-            model = DDColorHF.from_pretrained(str(model_dir))
+            model = load_cached_model(DDColor, model_dir)
 
         model = model.to(self.device)
         model.eval()

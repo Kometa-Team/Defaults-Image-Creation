@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import os
+import io
+import json
 import sys
+import zipfile
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -44,6 +47,86 @@ class FakeColorizer:
             image = image.convert("RGB")
             tinted = Image.new("RGB", image.size, (10, 80, 160))
         ddcolor.save_jpeg(tinted, dst, quality)
+
+
+def test_first_vendor_download_is_importable_and_reused(monkeypatch, tmp_path):
+    vendor_dir = tmp_path / "vendor"
+    package_dir = vendor_dir / "DDColor"
+    monkeypatch.setattr(ddcolor, "VENDOR_DIR", vendor_dir)
+    monkeypatch.setattr(ddcolor, "DDCOLOR_VENDOR_DIR", package_dir)
+    monkeypatch.setattr(sys, "path", list(sys.path))
+    monkeypatch.delitem(sys.modules, "ddcolor", raising=False)
+    archive = io.BytesIO()
+    with zipfile.ZipFile(archive, "w") as source:
+        source.writestr("DDColor-master/", "")
+        source.writestr("DDColor-master/ddcolor/__init__.py", "VENDORED = True\n")
+    downloads = []
+
+    def download(url, timeout):
+        downloads.append(url)
+        return archive.getvalue()
+
+    monkeypatch.setattr(ddcolor, "http_get", download)
+    try:
+        ddcolor.ensure_ddcolor_on_path()
+        assert sys.modules["ddcolor"].VENDORED is True
+        assert Path(sys.modules["ddcolor"].__file__).parent == package_dir / "ddcolor"
+        ddcolor.ensure_ddcolor_on_path()
+        assert len(downloads) == 1
+    finally:
+        sys.modules.pop("ddcolor", None)
+
+
+def test_missing_vendor_dependency_does_not_redownload_source(monkeypatch, tmp_path):
+    vendor_dir = tmp_path / "vendor"
+    package_dir = vendor_dir / "DDColor"
+    module_dir = package_dir / "ddcolor"
+    module_dir.mkdir(parents=True)
+    (module_dir / "__init__.py").write_text(
+        "import missing_ddcolor_inference_dependency\n", encoding="utf-8"
+    )
+    monkeypatch.setattr(ddcolor, "VENDOR_DIR", vendor_dir)
+    monkeypatch.setattr(ddcolor, "DDCOLOR_VENDOR_DIR", package_dir)
+    monkeypatch.setattr(sys, "path", list(sys.path))
+    monkeypatch.delitem(sys.modules, "ddcolor", raising=False)
+
+    def download(*args, **kwargs):
+        raise AssertionError("missing dependencies must not trigger source downloads")
+
+    monkeypatch.setattr(ddcolor, "http_get", download)
+    with pytest.raises(SystemExit) as exc:
+        ddcolor.ensure_ddcolor_on_path()
+    assert exc.value.code == 2
+
+
+@pytest.mark.parametrize("wrapped", [False, True])
+def test_cached_bin_weights_load_with_official_config(monkeypatch, tmp_path, wrapped):
+    config = {"encoder_name": "convnext-l", "num_output_channels": 2}
+    (tmp_path / "config.json").write_text(json.dumps(config), encoding="utf-8")
+    state_dict = {"encoder.weight": object()}
+    calls = {}
+
+    def load(path, **kwargs):
+        calls["load"] = (path, kwargs)
+        return {"params": state_dict} if wrapped else state_dict
+
+    monkeypatch.setitem(sys.modules, "torch", SimpleNamespace(load=load))
+
+    class Model:
+        def __init__(self, **kwargs):
+            calls["config"] = kwargs
+
+        def load_state_dict(self, weights, strict):
+            assert weights is state_dict
+            calls["strict"] = strict
+
+    assert isinstance(ddcolor.load_cached_model(Model, tmp_path), Model)
+    assert calls["config"] == config
+    assert calls["load"] == (
+        tmp_path / "pytorch_model.bin",
+        {"map_location": "cpu", "weights_only": True, "mmap": True},
+    )
+    assert calls["strict"] is True
 
 
 def test_successful_single_image_preserves_name_and_dimensions(monkeypatch, tmp_path):
