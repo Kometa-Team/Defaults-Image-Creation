@@ -1,8 +1,8 @@
 --extra-index-url https://download.pytorch.org/whl/cpu
-torch>=2.6,<3
-torchvision>=0.21,<1
+torch>=2.14.1
+torchvision>=0.29.1
 
-Pillow>=10.0.0
-numpy>=1.26,<3
-opencv-python-headless>=4.10.0
-huggingface-hub>=0.24.0
+Pillow>=12.3.0
+numpy>=2.5.4
+opencv-python-headless>=5.0.0.93
+huggingface-hub>=2.2.0
