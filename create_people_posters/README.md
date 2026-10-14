@@ -1080,3 +1080,184 @@ create_people_posters/
 - Keep new scripts **idempotent** and **log‑rich**.
 - Use the same logging/progress template (see other scripts for reference).
 - Avoid adding step reordering; propose new steps and we’ll place them explicitly.
+
+## Local Background Removal (BiRefNet)
+
+BiRefNet Portrait is the default after the owner's review of all 100 benchmark
+portraits as the same as or better than Adobe. `REMOVE_BG_ENGINE=birefnet` selects local
+ONNX inference through [rembg](https://github.com/danielgatis/rembg), avoiding
+Adobe login, browser automation and cloud image processing for this step.
+Adobe remains selectable for manual rollback during this trial snapshot.
+The review used source-unverified clones; successful inference alone does not
+establish better quality, and no exact per-image win/tie split is claimed.
+
+### Python 3.13 CPU Installation
+
+Run these commands from `create_people_posters`. Keep inference dependencies in
+a separate environment to avoid changing the orchestrator or DDColor environment.
+
+```powershell
+py -3.13 -m venv .venv-rembg
+.\.venv-rembg\Scripts\python.exe -m pip install -r requirements-rembg.txt
+.\.venv-rembg\Scripts\python.exe -m pip check
+```
+
+```bash
+python3.13 -m venv .venv-rembg
+.venv-rembg/bin/python -m pip install -r requirements-rembg.txt
+.venv-rembg/bin/python -m pip check
+```
+
+The orchestrator discovers `.venv-rembg` automatically. Set `REMOVE_BG_PYTHON`
+to an absolute Python executable for another environment. It accepts an executable
+path, not a shell command. Windows x64 Python 3.13 is tested; Linux/macOS and
+other architectures require compatible dependency wheels and remain unverified
+by this implementation's local validation. The base poster workflow still needs
+PowerShell and ImageMagick. Browser dependencies remain required for Adobe.
+
+BiRefNet Portrait and General each download roughly 973 MB of weights. Allow
+several GB of disk space for all benchmark models and substantial additional RAM
+for inference. The benchmark measures process RSS peak and runtime on your
+machine; it loads one model at a time. ISNet General is a smaller comparison
+baseline, not a guaranteed faster or better portrait model.
+
+### Configuration and Batch Processing
+
+Add to `config/.env`:
+
+```ini
+REMOVE_BG_ENGINE=birefnet
+REMOVE_BG_MODEL=birefnet-portrait
+REMOVE_BG_DEVICE=cpu
+REMOVE_BG_DECONTAMINATE=true
+REMOVE_BG_ALPHA_MATTING=false
+REMOVE_BG_OVERWRITE=false
+REMOVE_BG_PYTHON=
+REMBG_HOME=./config/models/rembg
+```
+
+Supported model names are `birefnet-portrait`, `birefnet-general` and
+`isnet-general-use`. Soft masks are retained; binary mask postprocessing is
+disabled. Decontamination estimates foreground edge colors. Optional alpha
+matting refines alpha and decontaminates internally, can be slow, and may fail
+on difficult images. Failures are reported rather than silently changing modes.
+
+Weights download once and are reused under `REMBG_HOME`. Both downloaded and
+cached weights are checked against the upstream model checksums and recorded
+with SHA-256 identifiers. `MODEL_CHECKSUM_DISABLED` is rejected. These publisher
+checksums detect corruption, not independent cryptographic certification.
+
+Set `REMOVE_BG_ENGINE=birefnet` to select the local backend, then:
+
+```powershell
+# Single image: preserves the photograph in place.
+.\.venv-rembg\Scripts\python.exe remove_bg_birefnet.py --input portrait.jpg --output config/test/portrait.png
+# Existing staged batch, then resume only through poster generation.
+.\.venv-rembg\Scripts\python.exe remove_bg_birefnet.py
+python orchestrator.py --redo remove_bg --no-recover-edge-chops --stop-after poster_ps1
+```
+
+```bash
+.venv-rembg/bin/python remove_bg_birefnet.py --input portrait.jpg --output config/test/portrait.png
+.venv-rembg/bin/python remove_bg_birefnet.py
+python3 orchestrator.py --redo remove_bg --no-recover-edge-chops --stop-after poster_ps1
+```
+
+The batch reads `SEL_SRC_DIR`, writes validated `stem.png` files to
+`SEL_DOWNLOAD_DIR`, and stages copies in `SEL_SRC_DIR` for the existing poster
+script. Only after validation and an intact archived copy in `SEL_ORIG_DIR` does
+it remove the completed source from the input queue. It preserves stored pixel
+dimensions, including JPEG/PNG/WebP/BMP/TIFF inputs. Animated or multipage files
+are rejected. An already-transparent staged PNG is treated as a cutout, not a
+new photograph. PNG photographs without meaningful transparency are supported.
+The PowerShell poster script still uses its fixed `config/people_dirs` paths
+and normalizes the generated styles and transparent presentation to 2000x3000.
+Local inference and archived photographs retain their native dimensions. With
+the local engine selected, Original-style sync creates validated 2000x3000 RGB
+JPEG presentation copies, leaving archived bytes unchanged. Already-compliant
+JPEGs are copied exactly. Flat native archives are mapped to
+`firstLetter/Images/name.jpg`; ambiguous publication targets fail preflight.
+Reserved recovery `.history` directories are not published. The local
+single-image tool never resizes its output.
+
+Existing cutouts require matching source, model and settings provenance to skip
+successfully. To rerun, restage the specific archived source photographs, set
+`REMOVE_BG_OVERWRITE=true`, and use `--redo remove_bg`. Reset overwrite afterward.
+A conflicting preserved original causes a failure; move it to a safe archival
+location before deliberately retrying. Do not restage the entire original library
+just to rerun a small batch. `.png.bg.json` files record provenance alongside
+cutouts. Logs and machine-readable summaries are in `config/logs`.
+
+Exit 0 means full success or no work (distinguished in the JSON summary), exit 1
+means unresolved per-image failures, and exit 2 means a fatal configuration/model
+initialization problem. A failed image stays available for retry. The orchestrator
+stops on unresolved failures and does not fall back to Adobe automatically.
+Changing engine, model or inference settings invalidates background-removal and
+downstream checkpoints. It requires queued originals before recording success
+under the new configuration; an old Adobe checkpoint is insufficient.
+
+Local edge-chop recovery reuses a single remover for screening and accepted
+candidate cutouts, retaining the existing crop checks and retry ordering.
+An exhausted TMDB search is a nonfatal warning, matching Adobe: existing posters
+are retained, quality warnings remain in the report, and other accepted candidates
+can proceed. Actual processing errors or unresolved recovery failures still stop
+the local pipeline. Exhaustion does not mean the portrait passed quality checks.
+Adobe-selected recovery retains its existing Selenium path. A dedicated local
+interpreter is also used by recovery when needed.
+Local recovery uses `REMOVE_BG_*` model options and accepts `--rembg-home` as
+a cache override. `EDGE_CHOP_REMBG_*` options configure the Adobe candidate
+precheck only, not the primary local remover.
+
+### Optional Acceleration
+
+CPU requires no CUDA. For NVIDIA, create another isolated environment, install
+the pinned CPU profile, uninstall `onnxruntime`, then install a compatible
+`onnxruntime-gpu` version and its required CUDA/cuDNN runtime. Set
+`REMOVE_BG_PYTHON` to that interpreter and `REMOVE_BG_DEVICE=cuda`. Consult the
+[ONNX Runtime installation matrix](https://onnxruntime.ai/docs/install/).
+Do not install CPU and GPU runtime packages together. `rocm` and `coreml` require
+their corresponding ONNX providers. Requested acceleration fails explicitly when
+the provider cannot load. Accelerator combinations have not been tested here.
+
+### Benchmark and Human Review
+
+Use read-only local clones of People-Images original and transparent repositories.
+The comparison command never updates or pushes them. Benchmark outputs must be
+outside every reference/source directory. Default sampling is deterministic and
+limited to 100; full-library inference requires `--all`. See
+[BACKGROUND_REMOVAL_IMPLEMENTATION.md](BACKGROUND_REMOVAL_IMPLEMENTATION.md)
+for executed validation, remaining acceptance work and benchmark commands.
+
+Adobe is a baseline, not segmentation ground truth. IoU and alpha disagreement
+flag differences for inspection. Foreground coverage, soft-alpha distribution,
+suspected clipping and potential halos are heuristics, not quality scores.
+Source-unverified comparisons and unreviewed portraits must not be counted as
+evidence of a model's quality advantage. Preserve the exact photograph submitted
+to Adobe, including colorization and resizing, when constructing a verified set.
+
+### Troubleshooting, Rollback and Licensing
+
+For missing dependencies, install `requirements-rembg.txt` using the executable
+selected by `REMOVE_BG_PYTHON`. For unavailable downloads, prepopulate the model
+cache on a connected machine using the same pinned models, then copy it locally.
+For a checksum mismatch, move the corrupt weight file aside and redownload.
+For memory pressure, close other workloads and run one model at a time. For
+invalid/empty masks, inspect the source and try the other supported model with
+explicit overwrite in a separate output folder. Failed outputs are not published
+over existing valid files during inference validation.
+
+To roll back, set `REMOVE_BG_ENGINE=adobe`, restage the desired originals and run
+`python orchestrator.py --redo remove_bg`. Adobe login/profile settings are retained.
+Adobe code, dependencies and configuration are retained for this trial snapshot.
+Remove them only after the production trial succeeds and removal is approved.
+
+[rembg code](https://github.com/danielgatis/rembg/blob/main/LICENSE.txt) and
+[BiRefNet code](https://github.com/ZhengPeng7/BiRefNet/blob/main/LICENSE) use MIT
+licenses. The official [Portrait](https://huggingface.co/ZhengPeng7/BiRefNet-portrait)
+and [General](https://huggingface.co/ZhengPeng7/BiRefNet) model cards also identify
+MIT licensing. [DIS/ISNet code](https://github.com/xuebinqin/DIS/blob/main/LICENSE.md)
+uses Apache-2.0.
+Check the model publishers' terms and training-data restrictions for your use;
+code licenses do not license the photographs. BRIA RMBG 2.0 is excluded from
+required models because its [model terms](https://huggingface.co/briaai/RMBG-2.0)
+restrict the openly available weights to noncommercial use.

@@ -23,7 +23,7 @@ import subprocess
 import sys
 import tempfile
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Iterable
 
@@ -31,6 +31,14 @@ import numpy as np
 import requests
 from dotenv import load_dotenv
 from PIL import Image, ImageChops, ImageOps
+
+from orchestrator import (
+    background_engine,
+    background_fingerprint,
+    background_python,
+    clear_from,
+    write_marker,
+)
 
 from edge_chop import detect_edge_chops, has_any_issue, issue_summary, parse_edges
 from face_crop import (
@@ -751,22 +759,80 @@ def build_rembg_session(model: str):
     return new_session(model)
 
 
+def local_candidate(args: argparse.Namespace, source: Path, destination: Path) -> None:
+    # Overwrite is limited to outputs inside a TemporaryDirectory owned by recovery.
+    root = getattr(args, "local_work_root", None)
+    if root is None or not destination.resolve().is_relative_to(root.resolve()):
+        raise RuntimeError("Local recovery inference overwrite is restricted to its temporary work directory")
+    try:
+        if getattr(args, "local_remover", None) is None:
+            from remove_bg_birefnet import LocalRemover, Settings
+            settings = Settings.from_env()
+            settings = replace(settings, home=getattr(args, "rembg_home", settings.home), overwrite=True)
+            args.local_remover = LocalRemover(settings)
+        result = args.local_remover.process(source, destination)
+    except Exception as exc:
+        raise RuntimeError(f"Local background removal failed for {source}: {exc}") from exc
+    if not isinstance(result, dict) or result.get("status") not in {"processed", "skipped"} or not destination.is_file():
+        raise RuntimeError(f"Local background removal failed for {source}: {result}")
+
+
+def copy_local_output(source: Path, destination: Path) -> None:
+    from remove_bg_birefnet import atomic_copy, sidecar
+    atomic_copy(source, destination)
+    if sidecar(source).is_file():
+        atomic_copy(sidecar(source), sidecar(destination))
+
+
+def stage_local_output(args: argparse.Namespace, source: Path, cutout: Path, name: str) -> Path:
+    target = args.downloads_dir / f"{name}.png"
+    download = env_path("SEL_DOWNLOAD_DIR") or (CONFIG_DIR / "sel_downloads")
+    mirror = download / target.name
+    if not env_bool("REMOVE_BG_OVERWRITE", False):
+        for destination in {target, mirror}:
+            if destination.exists():
+                raise RuntimeError(f"Existing background output requires REMOVE_BG_OVERWRITE=true: {destination}")
+    archive_recovery_source(source)
+    copy_local_output(cutout, target)
+    if mirror.resolve() != target.resolve():
+        copy_local_output(cutout, mirror)
+    return target
+
+
+def archive_recovery_source(source: Path) -> Path:
+    from remove_bg_birefnet import atomic_copy, sha256
+    original = env_path("SEL_ORIG_DIR") or (CONFIG_DIR / "people_dirs" / "original")
+    target = original / source.name
+    sorted_target = original / source.stem[:1].upper() / "Images" / source.name
+    for prior in (target, sorted_target):
+        if prior.is_file() and sha256(prior) != sha256(source):
+            history = original / ".history" / sha256(prior) / prior.name
+            if history.exists() and sha256(history) != sha256(prior):
+                raise RuntimeError(f"Preserved recovery history is inconsistent: {history}")
+            atomic_copy(prior, history)
+    atomic_copy(source, target)
+    return target
+
+
 def rembg_precheck_candidate(args: argparse.Namespace, staged_jpg: Path, precheck_png: Path) -> tuple[bool, str, str]:
     try:
-        from rembg import remove
+        if getattr(args, "bg_engine", "adobe") == "birefnet":
+            local_candidate(args, staged_jpg, precheck_png)
+        else:
+            from rembg import remove
 
-        with Image.open(staged_jpg) as img:
-            img = ImageOps.exif_transpose(img).convert("RGB")
-            output = remove(
-                img,
-                session=args.rembg_session,
-                alpha_matting=args.rembg_alpha_matting,
-                post_process_mask=args.rembg_post_process_mask,
-            )
-        precheck_png.parent.mkdir(parents=True, exist_ok=True)
-        if output.mode != "RGBA":
-            output = output.convert("RGBA")
-        output.save(precheck_png)
+            with Image.open(staged_jpg) as img:
+                img = ImageOps.exif_transpose(img).convert("RGB")
+                output = remove(
+                    img,
+                    session=args.rembg_session,
+                    alpha_matting=args.rembg_alpha_matting,
+                    post_process_mask=args.rembg_post_process_mask,
+                )
+            precheck_png.parent.mkdir(parents=True, exist_ok=True)
+            if output.mode != "RGBA":
+                output = output.convert("RGBA")
+            output.save(precheck_png)
     except Exception as exc:
         raise RuntimeError(f"rembg precheck failed for {staged_jpg}: {exc}") from exc
 
@@ -806,6 +872,19 @@ def style_file_paths(people_root: Path, name: str) -> list[Path]:
         ]
     )
     return paths
+
+
+def generated_work_paths(people_root: Path, name: str) -> list[Path]:
+    original_roots = [(people_root / "original").resolve()]
+    configured_original = env_path("SEL_ORIG_DIR")
+    if configured_original:
+        original_roots.append(configured_original.resolve())
+    source_jpg = (people_root / "Downloads" / f"{name}.jpg").resolve()
+    return [
+        path for path in style_file_paths(people_root, name)
+        if path.resolve() != source_jpg
+        and not any(path.resolve().is_relative_to(root) for root in original_roots)
+    ]
 
 
 def backup_existing(paths: Iterable[Path], backup_root: Path, people_root: Path) -> list[tuple[Path, Path]]:
@@ -868,8 +947,9 @@ def run_step(title: str, argv: list[str], env: dict[str, str]) -> int:
     return cp.returncode
 
 
-def run_orchestrator_from_remove_bg(stop_after: str | None = None) -> int:
-    argv = [sys.executable, "orchestrator.py", "--redo", "remove_bg", "--no-recover-edge-chops"]
+def run_orchestrator_from_remove_bg(stop_after: str | None = None, background_ready: bool = False) -> int:
+    python = background_python(sys.executable) if background_engine() == "birefnet" else sys.executable
+    argv = [python, "orchestrator.py", "--redo", "poster_ps1" if background_ready else "remove_bg", "--no-recover-edge-chops"]
     if stop_after:
         argv.extend(["--stop-after", stop_after])
     return run_step("orchestrator recovery batch", argv, os.environ.copy())
@@ -927,7 +1007,8 @@ def remove_unresolved_work_outputs(rows: list[RecoveryRow], people_root: Path) -
     for row in rows:
         if row.status != "unresolved" or not row.name or not row.chosen_url:
             continue
-        for path in style_file_paths(people_root, row.name):
+        paths = generated_work_paths(people_root, row.name) if background_engine() == "birefnet" else style_file_paths(people_root, row.name)
+        for path in paths:
             try:
                 if path.exists() and path.is_file():
                     path.unlink()
@@ -957,8 +1038,9 @@ def downloads_pngs_are_clear(name: str, downloads_dir: Path) -> bool:
 
 def recover_one(args: argparse.Namespace, session: requests.Session, api_key: str, name: str, initial_issues: str) -> RecoveryRow:
     row = RecoveryRow(name=name, status="unresolved", initial_issues=initial_issues)
-    paths = style_file_paths(args.people_root, name)
+    paths = generated_work_paths(args.people_root, name) if getattr(args, "bg_engine", "adobe") == "birefnet" else style_file_paths(args.people_root, name)
     with tempfile.TemporaryDirectory(prefix=f"edge_chop_{safe_name(name)}_") as tmp:
+        args.local_work_root = Path(tmp)
         backup_root = Path(tmp) / "backup"
         backups = backup_existing(paths, backup_root, args.people_root)
 
@@ -1054,8 +1136,9 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                         log(f"[candidate] {name} {candidate.label}: non-color candidate skipped before rembg/Adobe: {noncolor}")
                         continue
 
+            precheck_png = None
             if args.precheck_rembg:
-                precheck_png = candidate_dir / f"{candidate.label}.rembg.png"
+                precheck_png = (Path(tmp) if getattr(args, "bg_engine", "adobe") == "birefnet" else candidate_dir) / f"{candidate.label}.rembg.png"
                 try:
                     should_try, precheck_summary, precheck_metrics = rembg_precheck_candidate(args, staged_jpg, precheck_png)
                 except RuntimeError as exc:
@@ -1069,11 +1152,27 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                 if precheck_summary:
                     log(f"[precheck] {name} {candidate.label}: rembg cleared selected warning(s); {precheck_summary}; {precheck_metrics}")
 
-            rc = run_step(f"remove-bg retry {name} {candidate.label}", [sys.executable, "sel_remove_bg.py"], env)
+            if getattr(args, "bg_engine", "adobe") == "birefnet":
+                try:
+                    if precheck_png is not None:
+                        copy_local_output(precheck_png, generated_png)
+                    else:
+                        local_candidate(args, staged_jpg, generated_png)
+                    copy_local_output(generated_png, sel_download_dir / generated_png.name)
+                    shutil.copy2(staged_jpg, sel_orig_dir / staged_jpg.name)
+                    rc = 0
+                except Exception as exc:
+                    restore_backups(backups, paths)
+                    raise RuntimeError(f"{name} {candidate.label}: local remove-bg failed: {exc}") from exc
+            else:
+                rc = run_step(f"remove-bg retry {name} {candidate.label}", [sys.executable, "sel_remove_bg.py"], env)
             if rc != 0:
                 log(f"[warn] {name} {candidate.label}: remove-bg failed")
                 continue
             if not generated_png.exists():
+                if getattr(args, "bg_engine", "adobe") == "birefnet":
+                    restore_backups(backups, paths)
+                    raise RuntimeError(f"{name} {candidate.label}: local remove-bg did not produce {generated_png}")
                 log(f"[warn] {name} {candidate.label}: remove-bg did not produce {generated_png}")
                 continue
 
@@ -1085,6 +1184,9 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                 env,
             )
             if rc != 0:
+                if getattr(args, "bg_engine", "adobe") == "birefnet":
+                    restore_backups(backups, paths)
+                    raise RuntimeError(f"{name} {candidate.label}: poster generation failed with exit code {rc}")
                 log(f"[warn] {name} {candidate.label}: poster generation failed")
                 continue
 
@@ -1113,6 +1215,12 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
             row.final_metrics = edge_metric_summary(transparent, args)
 
             if not final_issues:
+                if getattr(args, "bg_engine", "adobe") == "birefnet":
+                    try:
+                        archive_recovery_source(staged_jpg)
+                    except Exception as exc:
+                        restore_backups(backups, paths)
+                        raise RuntimeError(f"{name}: accepted source could not be preserved: {exc}") from exc
                 row.status = "recovered"
                 row.chosen_label = candidate.label
                 row.chosen_url = candidate.url
@@ -1139,7 +1247,8 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
         if row.grayscale_rejected:
             row.note += f"; non-color checks rejected {row.grayscale_rejected} candidates"
         if row.precheck_rejected:
-            row.note += f"; rembg precheck rejected {row.precheck_rejected} candidates before Adobe"
+            next_stage = "poster generation" if getattr(args, "bg_engine", "adobe") == "birefnet" else "Adobe"
+            row.note += f"; rembg precheck rejected {row.precheck_rejected} candidates before {next_stage}"
         return row
 
 
@@ -1166,6 +1275,7 @@ def stage_one_for_orchestrator(
 
     candidate_dir = args.out_root / "candidates" / safe_name(name)
     with tempfile.TemporaryDirectory(prefix=f"edge_chop_stage_{safe_name(name)}_") as tmp:
+        args.local_work_root = Path(tmp)
         staged_jpg = Path(tmp) / f"{name}.jpg"
         for candidate in candidates:
             key = attempted_key(name, candidate.file_path)
@@ -1248,8 +1358,9 @@ def stage_one_for_orchestrator(
                         record_attempt("grayscale_rejected", noncolor)
                         continue
 
+            precheck_png = None
             if args.precheck_rembg:
-                precheck_png = candidate_dir / f"{candidate.label}.rembg.png"
+                precheck_png = (Path(tmp) if getattr(args, "bg_engine", "adobe") == "birefnet" else candidate_dir) / f"{candidate.label}.rembg.png"
                 try:
                     should_try, precheck_summary, precheck_metrics = rembg_precheck_candidate(args, staged_jpg, precheck_png)
                 except RuntimeError as exc:
@@ -1264,9 +1375,18 @@ def stage_one_for_orchestrator(
                 if precheck_summary:
                     log(f"[precheck] {name} {candidate.label}: rembg cleared selected warning(s); {precheck_summary}; {precheck_metrics}")
 
-            target = args.downloads_dir / f"{name}.jpg"
-            args.downloads_dir.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(staged_jpg, target)
+            if getattr(args, "bg_engine", "adobe") == "birefnet":
+                if precheck_png is None:
+                    precheck_png = Path(tmp) / f"{candidate.label}.local.png"
+                    local_candidate(args, staged_jpg, precheck_png)
+                try:
+                    target = stage_local_output(args, staged_jpg, precheck_png, name)
+                except Exception as exc:
+                    raise RuntimeError(f"{name}: local candidate could not be staged: {exc}") from exc
+            else:
+                target = args.downloads_dir / f"{name}.jpg"
+                args.downloads_dir.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(staged_jpg, target)
             row.status = "staged"
             row.chosen_label = candidate.label
             row.chosen_url = candidate.url
@@ -1281,7 +1401,8 @@ def stage_one_for_orchestrator(
     if row.grayscale_rejected:
         row.note += f"; non-color checks rejected {row.grayscale_rejected} candidates"
     if row.precheck_rejected:
-        row.note += f"; rembg precheck rejected {row.precheck_rejected} candidates before Adobe"
+        next_stage = "poster generation" if getattr(args, "bg_engine", "adobe") == "birefnet" else "Adobe"
+        row.note += f"; rembg precheck rejected {row.precheck_rejected} candidates before {next_stage}"
     return row
 
 
@@ -1425,8 +1546,15 @@ def parser() -> argparse.ArgumentParser:
     return ap
 
 
-def main() -> int:
-    args = parser().parse_args()
+def local_recovery_status_code(rows: list[RecoveryRow]) -> int:
+    if any(row.status == "error" for row in rows):
+        return 2
+    if any(row.status == "unresolved" for row in rows):
+        return 1
+    return 0
+
+
+def _main(args: argparse.Namespace) -> int:
     args.people_root = args.people_root.resolve()
     args.transparent_root = args.transparent_root.resolve()
     args.downloads_dir = args.downloads_dir.resolve()
@@ -1476,8 +1604,6 @@ def main() -> int:
 
     modified_since = args.modified_since
     if args.modified_within_hours > 0:
-        import time
-
         modified_since = max(modified_since or 0.0, time.time() - (args.modified_within_hours * 3600.0))
 
     if not (args.all or args.names or modified_since is not None):
@@ -1538,9 +1664,13 @@ def main() -> int:
         return 0
 
     if args.stage_for_orchestrator:
+        input_exts = {".jpg", ".jpeg", ".png"}
+        if args.bg_engine == "birefnet":
+            from remove_bg_birefnet import INPUT_EXTS
+            input_exts = INPUT_EXTS
         existing_inputs = sorted(
             path for path in args.downloads_dir.iterdir()
-            if path.is_file() and path.suffix.lower() in {".jpg", ".jpeg", ".png"}
+            if path.is_file() and path.suffix.lower() in input_exts
         ) if args.downloads_dir.exists() else []
         if existing_inputs:
             rows = [
@@ -1565,7 +1695,9 @@ def main() -> int:
             log("[next] Only clear Downloads manually if you intentionally want to discard those staged inputs.")
             return 2
 
-    if args.precheck_rembg:
+    if args.bg_engine == "birefnet":
+        log("[info] BiRefNet recovery uses one local remover for screening and accepted cutouts")
+    elif args.precheck_rembg:
         args.rembg_home.mkdir(parents=True, exist_ok=True)
         os.environ["REMBG_HOME"] = str(args.rembg_home)
         try:
@@ -1594,11 +1726,13 @@ def main() -> int:
         log("[info] non-color recovery candidates allowed")
 
     rows: list[RecoveryRow] = []
+    if args.bg_engine == "birefnet" and not args.stage_for_orchestrator:
+        args.people_root = CONFIG_DIR / "people_dirs"
     attempted_candidates = load_attempted_candidates(args.attempted_file)
     attempted_records: list[AttemptedCandidate] = []
     if args.stage_for_orchestrator and attempted_candidates:
         log(f"[info] skipping {len(attempted_candidates)} attempted TMDB candidate(s) from {args.attempted_file}")
-    session = requests.Session()
+    session = args.http_session = requests.Session()
     exit_code = 0
     for idx, (name, path, issues) in enumerate(chopped, start=1):
         log(f"[{idx}/{len(chopped)}] {name}: {issues}")
@@ -1636,24 +1770,53 @@ def main() -> int:
     if added_exhausted:
         log(f"Added exhausted names: {added_exhausted} -> {args.exhausted_file}")
     staged = sum(1 for row in rows if row.status == "staged")
+    if args.bg_engine == "birefnet":
+        exit_code = exit_code or local_recovery_status_code(rows)
+        if any(row.status == "exhausted" for row in rows):
+            log("[warn] No acceptable TMDB alternate for exhausted names; retained existing local outputs. "
+                "Quality warnings remain in the report; exhaustion does not block the pipeline.")
+    if args.bg_engine == "birefnet" and exit_code:
+        log_status_counts(rows, prefix="Final")
+        log(f"[error] Local recovery failed with exit code {exit_code}; staged cutouts and source archives preserved. No orchestrator launch or success checkpoint written.")
+        return exit_code
     if args.stage_for_orchestrator and staged:
-        command = "python orchestrator.py --redo remove_bg --no-recover-edge-chops --stop-after poster_ps1"
+        background_ready = args.bg_engine == "birefnet"
+        if background_ready:
+            import orchestrator
+            orchestrator.acquire_lock()
+            try:
+                clear_from(["poster_ps1", "recover_edge_chops", "sync_images", "readme", "sync_md"], "poster_ps1")
+                write_marker(orchestrator.STATE_DIR / "remove_bg.done.json", {
+                    "at": time.time(), "background_fingerprint": background_fingerprint(),
+                    "argv": [sys.executable, "recover_edge_chops.py"],
+                })
+                (orchestrator.STATE_DIR / "remove_bg.pending.json").unlink(missing_ok=True)
+            finally:
+                orchestrator.release_lock()
+        command = f"python orchestrator.py --redo {'poster_ps1' if background_ready else 'remove_bg'} --no-recover-edge-chops --stop-after poster_ps1"
         continue_command = "python orchestrator.py --redo update --no-recover-edge-chops"
         if args.run_orchestrator:
             log(f"Running next command: {command}")
-            exit_code = run_orchestrator_from_remove_bg(stop_after="poster_ps1")
-            if exit_code == 4:
+            if background_ready:
+                exit_code = run_orchestrator_from_remove_bg(stop_after="poster_ps1", background_ready=True)
+            else:
+                exit_code = run_orchestrator_from_remove_bg(stop_after="poster_ps1")
+            if exit_code == 4 and args.bg_engine == "adobe":
                 log("[auth] Adobe login stopped the orchestrator recovery batch.")
                 log("[next] Run: python sel_remove_bg.py --login-only")
                 log("[next] Then resume: python orchestrator.py --redo remove_bg --no-recover-edge-chops --stop-after poster_ps1")
             elif exit_code == 0:
-                checked = postcheck_staged_outputs(rows, args)
+                check_args = args
+                if background_ready:
+                    check_args = argparse.Namespace(**vars(args))
+                    check_args.people_root = CONFIG_DIR / "people_dirs"
+                checked = postcheck_staged_outputs(rows, check_args)
                 if checked:
                     write_report(args.out_root, rows)
                     log_status_counts(rows, prefix="Postcheck")
                     unresolved_after = sum(1 for row in rows if row.status == "unresolved")
                     if unresolved_after:
-                        remove_unresolved_work_outputs(rows, args.people_root)
+                        remove_unresolved_work_outputs(rows, check_args.people_root)
                         write_report(args.out_root, rows)
                         log("[next] Some staged candidates still failed selected warning QA after Adobe.")
                         log("[next] Removed unresolved generated work outputs before repo sync.")
@@ -1676,8 +1839,34 @@ def main() -> int:
         log("Next command: no staged candidates; remove names from the exhausted/attempted files only if you want to retry them.")
     else:
         log("Next command: python orchestrator.py --redo update")
+    if args.bg_engine == "birefnet":
+        exit_code = exit_code or local_recovery_status_code(rows)
+        log_status_counts(rows, prefix="Final")
+        log(f"[info] Local recovery exit code: {exit_code}")
     log("#### END recover_edge_chops ####")
     return exit_code
+
+
+def main() -> int:
+    args = parser().parse_args()
+    try:
+        args.bg_engine = background_engine()
+        if args.bg_engine == "birefnet" and not args.audit_only:
+            python = background_python(sys.executable)
+            if Path(python).resolve() != Path(sys.executable).resolve():
+                return run_step("local recovery interpreter", [python, str(Path(__file__).resolve()), *sys.argv[1:]], os.environ.copy())
+    except ValueError as exc:
+        print(f"[ERROR] {exc}", file=sys.stderr)
+        return 2
+    args.local_remover = None
+    args.http_session = None
+    try:
+        return _main(args)
+    finally:
+        if args.local_remover is not None:
+            args.local_remover.close()
+        if args.http_session is not None:
+            args.http_session.close()
 
 
 if __name__ == "__main__":

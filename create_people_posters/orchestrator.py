@@ -85,6 +85,7 @@ import json
 import time
 import subprocess
 import re
+import shutil
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional, Tuple
@@ -171,6 +172,101 @@ def ps_exe() -> Optional[str]:
 def _python_spec_to_argv(spec: str) -> List[str]:
     cleaned = _clean_env_value(spec).strip().strip("\"'")
     return [cleaned] if cleaned else []
+
+
+def background_engine() -> str:
+    engine = os.getenv("REMOVE_BG_ENGINE", "birefnet").strip().lower()
+    if engine not in {"adobe", "birefnet"}:
+        raise ValueError("REMOVE_BG_ENGINE must be adobe or birefnet")
+    return engine
+
+
+def background_python(default_python: str) -> str:
+    configured = _python_spec_to_argv(os.getenv("REMOVE_BG_PYTHON", ""))
+    if configured:
+        executable = configured[0]
+        path = Path(executable).expanduser()
+        if path.is_file():
+            return str(path.resolve())
+        resolved = shutil.which(executable)
+        if resolved:
+            return str(Path(resolved).resolve())
+        raise ValueError(f"REMOVE_BG_PYTHON executable is unavailable: {executable}")
+    local = SCRIPT_DIR / ".venv-rembg" / ("Scripts/python.exe" if sys.platform.startswith("win") else "bin/python")
+    return str(local) if local.is_file() else default_python
+
+
+def background_fingerprint() -> dict:
+    engine = background_engine()
+    fingerprint = {"engine": engine}
+    if engine == "birefnet":
+        from remove_bg_birefnet import Settings
+        settings = Settings.from_env()
+        fingerprint = settings.fingerprint()
+        fingerprint.update({
+            "python": background_python(sys.executable),
+            "rembg_home": str(settings.home),
+        })
+    return fingerprint
+
+
+def build_background_command(default_python: str, script: str | None = None) -> List[str]:
+    engine = background_engine()
+    python = background_python(default_python) if engine == "birefnet" else default_python
+    return [python, script or ("remove_bg_birefnet.py" if engine == "birefnet" else "sel_remove_bg.py")]
+
+
+def background_checkpoint_changed(fingerprint: dict) -> bool:
+    pending = STATE_DIR / "remove_bg.pending.json"
+    if pending.exists():
+        return True
+    marker = STATE_DIR / "remove_bg.done.json"
+    if not marker.exists():
+        return False
+    try:
+        meta = json.loads(marker.read_text(encoding="utf-8"))
+        previous = meta.get("background_fingerprint", {"engine": "adobe"})
+    except (OSError, ValueError, AttributeError):
+        return True
+    if previous != fingerprint:
+        return True
+    return (
+        fingerprint["engine"] == "birefnet"
+        and meta.get("outcome") == "no_work"
+        and background_inputs_exist()
+    )
+
+
+def background_inputs_exist() -> bool:
+    source = env_path("SEL_SRC_DIR") or (CONFIG_DIR / "people_dirs" / "Downloads")
+    exts = {".jpg", ".jpeg", ".webp", ".bmp", ".tif", ".tiff", ".png"}
+    if not source.exists():
+        return False
+    for path in source.iterdir():
+        if not path.is_file() or path.suffix.lower() not in exts:
+            continue
+        # A staged cutout is not a preserved source photograph.
+        if path.suffix.lower() == ".png":
+            from PIL import Image
+            try:
+                with Image.open(path) as image:
+                    if "A" in image.getbands() and image.getchannel("A").getextrema()[0] < 255:
+                        continue
+            except OSError:
+                pass  # Let the backend report corrupt inputs.
+        return True
+    return False
+
+
+def local_background_summary(started: float) -> dict:
+    path = CONFIG_DIR / "logs" / "remove_bg_birefnet.json"
+    try:
+        if path.stat().st_mtime < started - 1.0:
+            return {}
+        summary = json.loads(path.read_text(encoding="utf-8"))
+        return summary if isinstance(summary, dict) else {}
+    except (OSError, ValueError):
+        return {}
 
 
 def _colorize_candidates_exist() -> bool:
@@ -370,7 +466,7 @@ def run_cmd(
 
 def print_abort_recovery(step_key: str, rc: int) -> None:
     print(f"[ABORT] Orchestrator stopped at step '{step_key}' with exit code {rc}.", file=sys.stderr)
-    if step_key == "remove_bg" and rc == 4:
+    if step_key == "remove_bg" and rc == 4 and background_engine() == "adobe":
         print(
             "[ABORT] Adobe login is required. Completed downloads were kept; "
             "remaining JPGs are still queued for retry.",
@@ -379,6 +475,8 @@ def print_abort_recovery(step_key: str, rc: int) -> None:
         print("[NEXT] Run: python sel_remove_bg.py --login-only", file=sys.stderr)
         print("[NEXT] Then resume: python orchestrator.py --redo remove_bg --no-recover-edge-chops", file=sys.stderr)
         return
+    if step_key == "remove_bg" and background_engine() == "birefnet":
+        print("[NEXT] Check REMOVE_BG_PYTHON, requirements-rembg.txt, REMOVE_BG_MODEL and REMBG_HOME; fix the backend error above. Existing outputs require REMOVE_BG_OVERWRITE=true to replace.", file=sys.stderr)
     print(f"[NEXT] Resume after fixing the issue: python orchestrator.py --redo {step_key}", file=sys.stderr)
 
 
@@ -498,7 +596,7 @@ def parsed_files_processed_from_remove_bg(logfile: Path) -> Optional[int]:
         text = logfile.read_text(encoding="utf-8", errors="ignore")
     except Exception:
         return None
-    m = re.search(r"Files processed:\s*(\d+)", text, flags=re.I)
+    m = re.search(r"(?:Files processed:\s*|Summary:\s*processed\s*=\s*)(\d+)", text, flags=re.I)
     return int(m.group(1)) if m else None
 
 
@@ -525,7 +623,11 @@ class Step:
 
 def main():
     import argparse
-    load_env_or_bootstrap()
+    if "--list" in sys.argv[1:]:
+        if load_dotenv:
+            load_dotenv(CONFIG_DIR / ".env")
+    else:
+        load_env_or_bootstrap()
     people_override_file = Path(os.getenv("PEOPLE_OVERRIDE_LIST") or (CONFIG_DIR / "people_overrides.txt"))
     manual_override_count = count_manual_people_overrides(people_override_file)
 
@@ -554,6 +656,11 @@ def main():
                         help="Skip non-blocking TMDB alternate retries for top-edge transparent chops.")
 
     args = parser.parse_args()
+    try:
+        bg_fingerprint = background_fingerprint()
+    except ValueError as exc:
+        parser.error(str(exc))
+    bg_changed = background_checkpoint_changed(bg_fingerprint)
 
     # Resolve env/args
     logs_dir = Path(args.logs_dir).expanduser().resolve() if args.logs_dir else env_path("ORCH_LOGS_DIR")
@@ -634,7 +741,7 @@ def main():
         if REQUIRE_BG_OUTPUT and not bg_output_dir:
             print("[ERROR] ORCH_REQUIRE_BG_OUTPUT is true but SEL_DOWNLOAD_DIR is not set.", file=sys.stderr)
             sys.exit(2)
-        return [py, "sel_remove_bg.py"]
+        return build_background_command(py)
 
     def _poster_ps1():
         ps = ps_exe()
@@ -652,9 +759,7 @@ def main():
             print("[INFO] recover_edge_chops disabled - skipping.")
             return None
         local_people_root = CONFIG_DIR / "people_dirs"
-        args2 = [
-            py,
-            "recover_edge_chops.py",
+        args2 = build_background_command(py, "recover_edge_chops.py") + [
             "--inline",
             "--people-root",
             str(local_people_root.resolve()),
@@ -719,7 +824,7 @@ def main():
         Step("audit_people_images",       "Dir-based missing discovery",                _audit_people_images,       marker="audit_people_images.done.json"),
         Step("colorize",                  "Colorize non-color images",                  _colorize,                  marker="colorize_noncolor.done.json"),
         Step("prep_dirs",                 "Ensure local people_dirs scaffolds",         _prep_dirs,                 marker="prep_dirs.done.json"),
-        Step("remove_bg",                 "Remove backgrounds (Selenium)",              _remove_bg,                 marker="remove_bg.done.json"),
+        Step("remove_bg",                 f"Remove backgrounds ({bg_fingerprint['engine']})", _remove_bg,              marker="remove_bg.done.json"),
         Step("poster_ps1",                "Generate posters via PowerShell",            _poster_ps1,                marker="poster_ps1.done.json"),
         Step("recover_edge_chops",        "Retry top-edge chops from TMDB alternates",   _recover_edge_chops,        marker="recover_edge_chops.done.json"),
         Step("update",                    "git fetch/reset category repos",             _update_repos,              marker=None,              always_run=True),
@@ -737,10 +842,10 @@ def main():
 
     # Status mode
     if args.list:
-        STATE_DIR.mkdir(parents=True, exist_ok=True)
         print("Step status:")
         for s in steps:
-            status = "ALWAYS" if s.always_run else ("DONE" if marker_exists(s.marker_path) else "PENDING")
+            invalid = bg_changed and step_index[s.key] >= step_index["remove_bg"]
+            status = "ALWAYS" if s.always_run else ("DONE" if marker_exists(s.marker_path) and not invalid else "PENDING")
             print(f" - {s.key:12} : {status}")
         for s in steps:
             if s.always_run or not marker_exists(s.marker_path):
@@ -748,13 +853,12 @@ def main():
                 break
         return
 
-    # Handle --redo
+    # Handle --redo (mutations happen only after acquiring the lock).
     if args.redo:
         if args.redo not in step_index:
             print(f"[ERROR] Unknown step key for --redo: {args.redo}", file=sys.stderr)
             print("Valid keys:", ", ".join(step_index.keys()), file=sys.stderr)
             sys.exit(2)
-        clear_from(list(step_index.keys()), args.redo)
 
     # Compute start index
     start_i = 0
@@ -762,6 +866,8 @@ def main():
         start_i = 0
     elif args.redo:
         start_i = step_index[args.redo]
+        if bg_changed:
+            start_i = min(start_i, step_index["remove_bg"])
     else:
         for i, s in enumerate(steps):
             if s.always_run or not marker_exists(s.marker_path):
@@ -775,8 +881,21 @@ def main():
     acquire_lock()
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     try:
+        if bg_changed:
+            clear_from(list(step_index.keys()), "remove_bg")
+            write_marker(STATE_DIR / "remove_bg.pending.json", {"background_fingerprint": bg_fingerprint})
+            if not background_inputs_exist():
+                print("[ERROR] Background engine/config changed but no source photographs are queued. Restage specific preserved inputs from SEL_ORIG_DIR into SEL_SRC_DIR, then run --redo remove_bg. Set REMOVE_BG_OVERWRITE=true explicitly to replace existing local/Adobe outputs.", file=sys.stderr)
+                sys.exit(2)
+        if args.redo:
+            clear_from(list(step_index.keys()), args.redo)
         step_started_at: dict[str, float] = {}
         for s in steps[start_i:]:
+            if not args.force and not s.always_run and marker_exists(s.marker_path):
+                print(f"[INFO] {s.key} already completed - skipping.")
+                if s.key == args.stop_after:
+                    return
+                continue
             step_started_at[s.key] = time.time()
 
             # Special multi-style steps handle inside the loop
@@ -934,16 +1053,27 @@ def main():
 
             # remove_bg: verify outputs and possibly stop
             elif s.key == "remove_bg":
+                local_summary = local_background_summary(started) if bg_fingerprint["engine"] == "birefnet" else {}
+                if bg_changed and local_summary.get("outcome") == "no_work":
+                    print("[ERROR] Changed background configuration processed no source photographs; restage specific preserved inputs before retrying.", file=sys.stderr)
+                    sys.exit(2)
                 if REQUIRE_BG_OUTPUT and not bg_output_dir:
                     print("[ERROR] ORCH_REQUIRE_BG_OUTPUT=true but SEL_DOWNLOAD_DIR is unknown.", file=sys.stderr)
                     sys.exit(2)
                 processed = count_recent_files([bg_output_dir] if bg_output_dir else [], started, bg_exts)
                 if processed == 0 and not continue_if_empty:
                     # If fs says 0, but the tool log shows >0, continue (saves you from dir mismatch).
-                    rb_log = log_path_for("sel_remove_bg.py")
+                    rb_log = log_path_for("remove_bg_birefnet.py" if bg_fingerprint["engine"] == "birefnet" else "sel_remove_bg.py")
                     log_n = parsed_files_processed_from_remove_bg(rb_log)
-                    if (log_n is None) or (log_n == 0):
-                        print(f"[INFO] sel_remove_bg produced 0 files in {bg_output_dir} - stopping.")
+                    source = env_path("SEL_SRC_DIR") or (CONFIG_DIR / "people_dirs" / "Downloads")
+                    ready = bg_fingerprint["engine"] == "birefnet" and source.exists() and any(source.glob("*.png"))
+                    if ((log_n is None) or (log_n == 0)) and not ready:
+                        if local_summary.get("outcome") == "no_work" and local_summary.get("exit_code") == 0:
+                            write_marker(s.marker_path, {
+                                "at": time.time(), "argv": argv, "background_fingerprint": bg_fingerprint,
+                                "outcome": "no_work", "model_verified": False,
+                            })
+                        print(f"[INFO] {bg_fingerprint['engine']} produced 0 files in {bg_output_dir} - stopping.")
                         sys.exit(0)
 
             # sync_images: if copied nothing, stop before readme/sync_md/push (parse its log)
@@ -956,7 +1086,15 @@ def main():
 
             # Write checkpoint if applicable (and not always_run)
             if s.marker_path and not s.always_run:
-                write_marker(s.marker_path, {"at": time.time(), "argv": argv})
+                meta = {"at": time.time(), "argv": argv}
+                if s.key == "remove_bg":
+                    meta["background_fingerprint"] = bg_fingerprint
+                    if bg_fingerprint["engine"] == "birefnet" and local_summary:
+                        meta["outcome"] = local_summary.get("outcome")
+                        meta["model_verified"] = local_summary.get("processed", 0) > 0
+                write_marker(s.marker_path, meta)
+                if s.key == "remove_bg":
+                    (STATE_DIR / "remove_bg.pending.json").unlink(missing_ok=True)
             if s.key == args.stop_after:
                 print(f"[INFO] Stop requested after {s.key}; exiting before downstream steps.")
                 return

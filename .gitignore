@@ -46,6 +46,9 @@ uploads/
 create_people_posters/chrome-profile/
 create_people_posters/chrome-profile-headless/
 config/
+# Local background-removal reports, benchmark portraits and model weights.
+create_people_posters/config/benchmarks/
+create_people_posters/config/models/
 defaults-ar/
 defaults-bu/
 defaults-da/

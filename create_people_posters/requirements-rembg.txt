@@ -1,0 +1,36 @@
+# CPU inference profile validated in a clean Windows x64 Python 3.13 environment.
+# Production dependencies only; pytest is installed separately for tests.
+rembg[cpu]==2.0.85
+onnxruntime==1.31.0
+pillow==12.3.0
+numpy==2.5.4
+python-dotenv==1.2.4
+psutil==7.2.2
+
+# Pin inference transitive dependencies for repeatable installation.
+attrs==26.1.0
+certifi==2026.7.22
+charset-normalizer==3.5.2
+colorama==0.4.6
+flatbuffers==25.12.19
+idna==3.20
+imageio==2.38.1
+jsonschema==4.26.0
+jsonschema-specifications==2025.9.1
+lazy-loader==0.6
+llvmlite==0.50.0
+networkx==3.7
+numba==0.68.0
+packaging==26.3
+platformdirs==4.13.0
+pooch==1.9.0
+protobuf==7.36.2
+pymatting==1.1.16
+referencing==0.37.0
+requests==2.34.2
+rpds-py==2026.9.1
+scikit-image==0.26.0
+scipy==1.18.1
+tifffile==2026.9.20
+tqdm==4.70.1
+urllib3==2.8.0
