@@ -167,6 +167,7 @@ def test_existing_valid_output_is_skipped_without_loading_model(monkeypatch, tmp
     output_dir = tmp_path / "color"
     make_image(input_dir / "skip.bmp", size=(25, 31))
     make_image(output_dir / "skip.jpg", size=(25, 31), color=(40, 90, 140))
+    existing_output = (output_dir / "skip.jpg").read_bytes()
 
     def loader():
         raise AssertionError("model should not load when every output is valid")
@@ -174,7 +175,48 @@ def test_existing_valid_output_is_skipped_without_loading_model(monkeypatch, tmp
     code, _, _ = run_ddcolor_main(monkeypatch, tmp_path, loader)
 
     assert code == 0
-    assert (input_dir / "skip.bmp").exists()
+    assert not (input_dir / "skip.bmp").exists()
+    assert (output_dir / "skip.jpg").read_bytes() == existing_output
+
+
+def test_rerun_removes_grayscale_copy_for_existing_colorized_jpeg(monkeypatch, tmp_path):
+    input_dir = tmp_path / "other"
+    make_image(input_dir / "rerun.jpg", size=(25, 31))
+    code, _, output_dir = run_ddcolor_main(monkeypatch, tmp_path, lambda: FakeColorizer())
+    assert code == 0
+    existing_output = (output_dir / "rerun.jpg").read_bytes()
+    make_image(input_dir / "rerun.jpg", size=(25, 31))
+
+    def loader():
+        raise AssertionError("rerun must reuse the validated output")
+
+    code, _, _ = run_ddcolor_main(monkeypatch, tmp_path, loader)
+
+    assert code == 0
+    assert not (input_dir / "rerun.jpg").exists()
+    assert (output_dir / "rerun.jpg").read_bytes() == existing_output
+
+
+@pytest.mark.parametrize("existing_output", [False, True])
+def test_source_removal_failure_stops_downstream_processing(monkeypatch, tmp_path, existing_output):
+    src = tmp_path / "other" / "locked.jpg"
+    dst = tmp_path / "color" / "locked.jpg"
+    make_image(src)
+    if existing_output:
+        make_image(dst, color=(40, 90, 140))
+    original_unlink = Path.unlink
+
+    def unlink(path, *args, **kwargs):
+        if path == src:
+            raise PermissionError("source is locked")
+        return original_unlink(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "unlink", unlink)
+    code, _, _ = run_ddcolor_main(monkeypatch, tmp_path, lambda: FakeColorizer())
+
+    assert code == 1
+    assert src.exists()
+    assert ddcolor.valid_output(dst, expected_size=(32, 48))
 
 
 def test_corrupt_existing_output_is_regenerated(monkeypatch, tmp_path):

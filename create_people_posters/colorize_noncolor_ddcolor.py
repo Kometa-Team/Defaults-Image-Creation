@@ -333,7 +333,8 @@ def colorize_one(src: Path, dst: Path, colorizer, quality: int) -> bool:
             src.unlink()
             log.info("Removed original B/W: %s", src.name)
         except Exception as exc:
-            log.warning("Colorized but could not remove original '%s': %s", src.name, exc)
+            log.error("Colorized but could not remove original '%s': %s", src.name, exc)
+            return False
         return True
     except Exception as exc:
         log.error("Colorize failed for %s: %s", src.name, exc)
@@ -366,6 +367,14 @@ def main() -> None:
             if valid_output(dst, expected_size=expected_size):
                 log.info("Skip (exists): %s", dst.name)
                 skipped += 1
+                # A leftover grayscale copy would overwrite the colorized file in prep_dirs.
+                try:
+                    src.unlink()
+                    removed += 1
+                    log.info("Removed original B/W after validating existing output: %s", src.name)
+                except Exception as exc:
+                    log.error("Could not remove original '%s' for existing output: %s", src.name, exc)
+                    failed += 1
                 continue
             log.warning("Existing output is invalid and will be regenerated: %s", dst.name)
         pending.append((src, dst))
