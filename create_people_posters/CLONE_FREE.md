@@ -5,6 +5,11 @@ Clone-free publishing is the default. The public example and orchestrator use
 `local_git` / `persistent` remains an explicit fallback. Both modes remain
 supported, and the Adobe/Selenium background-removal option is unchanged.
 
+Historical diiivoy/diiivoycolor font replacement is a separate maintenance flow:
+[Diiivoy Jost Migration](JOST_MIGRATION.md). It reads the existing local transparent
+collection, reuses two-style API publishing with its own state/workspaces, and
+cannot write to the other five repositories. Normal batch cleanup is unchanged.
+
 ## Dependency audit
 
 The code repository stays on `main`. On 2026-10-14, read-only GitHub checks

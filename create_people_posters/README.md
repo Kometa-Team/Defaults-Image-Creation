@@ -42,6 +42,10 @@ platform setup examples, dry-run, recovery, retention and maintenance limits.
 
 See [Native Poster Renderer](POSTER_RENDERER.md) for the seven-style audit,
 font licensing/provenance, direct usage, visual comparisons, and known differences.
+For resumable Diiivoy/Diiivoycolor maintenance runs (Jost replacement and later
+approved artwork changes), see
+[Diiivoy Jost Migration](JOST_MIGRATION.md). It never runs automatically with
+the orchestrator and requires explicit approval before image publication.
 
 ---
 

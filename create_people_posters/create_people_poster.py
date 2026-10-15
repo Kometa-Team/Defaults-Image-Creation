@@ -195,7 +195,7 @@ class Renderer:
             return " ".join(words[:2]) + "\n" + " ".join(words[2:]), 183 if self.width(" ".join(words[1:]), FONTS[0], 183) <= 1600 else None
         return title, None
 
-    def render(self, source: Image.Image, name: str):
+    def prepare_cutout(self, source: Image.Image):
         cutout = normalize_cutout(source)
         alpha = cutout.getchannel("A")
         if not alpha.getbbox() or alpha.getextrema()[0] == 255:
@@ -206,6 +206,32 @@ class Renderer:
         rgb = cutout.convert("RGB")
         if rgb.getchannel("R").tobytes() == rgb.getchannel("G").tobytes() == rgb.getchannel("B").tobytes():
             warnings.append("grayscale: use a color photograph or DDColor")
+        return cutout, warnings
+
+    def diiivoy_styles(self, cutout, shifted, title, styles):
+        # Preserve the reference's gray intermediate for high-margin portraits,
+        # even when only diiivoycolor is requested.
+        gray_subject = gray(shifted) if "diiivoy" in styles or cutout.getchannel("A").getbbox()[1] >= 500 else None
+        color_subject = gray_subject if cutout.getchannel("A").getbbox()[1] >= 500 else shifted
+        outputs = {}
+        for style in styles:
+            subject = gray_subject if style == "diiivoy" else color_subject
+            poster = Image.alpha_composite(Image.alpha_composite(self.art[ARTWORK[0]], subject), self.art[ARTWORK[3]])
+            size = DIIIVOY_POINT_SIZE if self.width(title, FONTS[2], DIIIVOY_POINT_SIZE) <= 1900 else None
+            poster.alpha_composite(self.label(title, FONTS[2], (1900, 580), size), (50, 80))
+            outputs[style] = poster.convert("RGB")
+        return outputs
+
+    def render_styles(self, source: Image.Image, name: str, styles=("diiivoy", "diiivoycolor")):
+        styles = tuple(styles)
+        if not styles or len(set(styles)) != len(styles) or set(styles) - {"diiivoy", "diiivoycolor"}:
+            raise ValueError("Selective rendering supports only diiivoy and diiivoycolor")
+        cutout, warnings = self.prepare_cutout(source)
+        shifted = shifted_cutout(cutout)
+        return self.diiivoy_styles(cutout, shifted, label_name(name).upper(), styles), warnings
+
+    def render(self, source: Image.Image, name: str):
+        cutout, warnings = self.prepare_cutout(source)
         shifted = shifted_cutout(cutout)
         base = self.art[ARTWORK[0]]
         color = Image.alpha_composite(base, shifted)
@@ -221,12 +247,8 @@ class Renderer:
         outputs["signature"] = signature.convert("RGB")
         # The reference reuses diiivoy's gray temporary when Push-Down makes
         # no new image. Preserve that high-margin portrait quirk for parity.
-        later_subject = gray(shifted) if alpha.getbbox()[1] >= 500 else shifted
-        for style, subject in (("diiivoy", gray(shifted)), ("diiivoycolor", later_subject)):
-            poster = Image.alpha_composite(Image.alpha_composite(base, subject), self.art[ARTWORK[3]])
-            size = DIIIVOY_POINT_SIZE if self.width(title, FONTS[2], DIIIVOY_POINT_SIZE) <= 1900 else None
-            poster.alpha_composite(self.label(title, FONTS[2], (1900, 580), size), (50, 80))
-            outputs[style] = poster.convert("RGB")
+        later_subject = gray(shifted) if cutout.getchannel("A").getbbox()[1] >= 500 else shifted
+        outputs.update(self.diiivoy_styles(cutout, shifted, title, ("diiivoy", "diiivoycolor")))
         rainier = Image.alpha_composite(Image.alpha_composite(base, later_subject), self.art[ARTWORK[1]])
         rain_title, rain_size = self.rainier_label(title)
         rainier.alpha_composite(self.label(rain_title, FONTS[0], (1600, 580), rain_size, align="west"), (200, 80))
