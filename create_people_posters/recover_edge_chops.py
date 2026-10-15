@@ -48,7 +48,7 @@ from face_crop import (
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-CONFIG_DIR = SCRIPT_DIR / "config"
+CONFIG_DIR = Path(os.getenv("PEOPLE_CONFIG_DIR") or SCRIPT_DIR / "config")
 LOGS_DIR = CONFIG_DIR / "logs"
 PEOPLE_ROOT = CONFIG_DIR / "people_dirs"
 DOWNLOADS_DIR = PEOPLE_ROOT / "Downloads"
@@ -93,6 +93,8 @@ def default_people_root() -> Path:
     if explicit:
         return explicit
 
+    if os.getenv("PEOPLE_PUBLISH_MODE", "local_git") == "github_api":
+        return PEOPLE_ROOT
     repo_root = env_path("PEOPLE_IMAGES_DIR")
     if repo_root:
         return repo_root

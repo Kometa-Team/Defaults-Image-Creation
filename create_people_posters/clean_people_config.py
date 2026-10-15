@@ -49,6 +49,8 @@ PRESERVE_ROOT_NAMES = {
     "people_list.txt",
     "people_overrides.txt",
     "vendor",
+    "jobs",
+    "state",
 }
 
 AGE_PRUNE_ROOT_NAMES = {

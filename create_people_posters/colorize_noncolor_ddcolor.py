@@ -32,7 +32,7 @@ from PIL import Image, ImageOps, UnidentifiedImageError
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-CONFIG_DIR = SCRIPT_DIR / "config"
+CONFIG_DIR = Path(os.getenv("PEOPLE_CONFIG_DIR") or SCRIPT_DIR / "config")
 LOGS_DIR = CONFIG_DIR / "logs"
 VENDOR_DIR = Path(os.getenv("COLORIZE_VENDOR_DIR", CONFIG_DIR / "vendor"))
 DDCOLOR_VENDOR_DIR = Path(os.getenv("COLORIZE_DDCOLOR_VENDOR_DIR", VENDOR_DIR / "DDColor"))

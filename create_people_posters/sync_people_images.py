@@ -28,7 +28,7 @@ from alive_progress import alive_bar
 # ---------- paths + logging (same template) ----------
 SCRIPT_PATH = Path(__file__).resolve()
 SCRIPT_DIR = SCRIPT_PATH.parent
-CONFIG_DIR = SCRIPT_DIR / "config"
+CONFIG_DIR = Path(os.getenv("PEOPLE_CONFIG_DIR") or SCRIPT_DIR / "config")
 LOGS_DIR = CONFIG_DIR / "logs"
 for d in (CONFIG_DIR, LOGS_DIR):
     d.mkdir(parents=True, exist_ok=True)

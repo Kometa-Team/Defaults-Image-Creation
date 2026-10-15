@@ -96,7 +96,7 @@ except Exception:
     load_dotenv = None
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-CONFIG_DIR = SCRIPT_DIR / "config"
+CONFIG_DIR = Path(os.getenv("PEOPLE_CONFIG_DIR") or SCRIPT_DIR / "config")
 STATE_DIR = CONFIG_DIR / ".orch"           # checkpoint folder
 LOCK_FILE = STATE_DIR / "run.lock"         # run lock to prevent concurrent runs
 
@@ -482,11 +482,23 @@ def print_abort_recovery(step_key: str, rc: int) -> None:
 
 def acquire_lock() -> None:
     STATE_DIR.mkdir(parents=True, exist_ok=True)
+    LOCK_FILE.parent.mkdir(parents=True, exist_ok=True)
     if LOCK_FILE.exists():
-        print("[ERROR] Another orchestrator run appears to be in progress (lock file present).", file=sys.stderr)
-        print(f"If you're sure no other run is active, delete: {LOCK_FILE}", file=sys.stderr)
+        from people_workspaces import process_alive
+        try:
+            pid = int(LOCK_FILE.read_text(encoding="utf-8").split()[0])
+        except (ValueError, OSError, IndexError):
+            pid = -1
+        if pid < 0 or process_alive(pid):
+            print(f"[ERROR] Another run or an unrecognized lock exists: {LOCK_FILE}", file=sys.stderr)
+            sys.exit(3)
+        LOCK_FILE.unlink()
+    try:
+        descriptor = os.open(LOCK_FILE, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+    except FileExistsError:
         sys.exit(3)
-    LOCK_FILE.write_text(f"{os.getpid()} @ {datetime.now().isoformat()}", encoding="utf-8")
+    with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+        handle.write(f"{os.getpid()} @ {datetime.now().isoformat()}")
 
 
 def release_lock() -> None:
@@ -622,6 +634,9 @@ class Step:
 
 
 def main():
+    global CONFIG_DIR, STATE_DIR
+    os.environ.setdefault("PYTHONIOENCODING", "utf-8:replace")
+    os.environ.setdefault("PYTHONUNBUFFERED", "1")
     import argparse
     if "--list" in sys.argv[1:]:
         if load_dotenv:
@@ -636,6 +651,12 @@ def main():
     parser.add_argument("--redo", help="Clear checkpoint for this step (and downstream) and restart at that step.")
     parser.add_argument("--stop-after", help="Stop cleanly after this step completes; useful for recovery QA gates.")
     parser.add_argument("--list", action="store_true", help="List step status and exit.")
+    parser.add_argument("--publish-mode", choices=["local_git", "github_api"], default=os.getenv("PEOPLE_PUBLISH_MODE", "local_git"))
+    parser.add_argument("--workspace-mode", choices=["persistent", "batch"], default=os.getenv("PEOPLE_WORKSPACE_MODE", "persistent"))
+    parser.add_argument("--batch-id", help="Resume a particular managed batch")
+    parser.add_argument("--new-batch", action="store_true", help="Create an isolated batch instead of resuming")
+    parser.add_argument("--people-list", type=Path, help="Explicit input list; skip log discovery for this run")
+    parser.add_argument("--dry-run", action="store_true", help="API publication preview; generation may write local outputs, never publishes or cleans")
     parser.add_argument("--logs-dir", help="Kometa logs folder for steps scan_kometa_logs/find_and_download_missing (env ORCH_LOGS_DIR otherwise).")
     parser.add_argument("--repo-root", help="Kometa-People-Images repository root (env PEOPLE_IMAGES_DIR otherwise).")
     parser.add_argument("--branch", help="Git branch for update/push (env PEOPLE_BRANCH or auto-detect).")
@@ -656,6 +677,43 @@ def main():
                         help="Skip non-blocking TMDB alternate retries for top-edge transparent chops.")
 
     args = parser.parse_args()
+    from people_github import sandbox_settings
+    if sandbox_settings() and (args.publish_mode != "github_api" or args.workspace_mode != "batch"):
+        parser.error("Sandbox requires github_api + batch; local_git/persistent are blocked")
+    if args.publish_mode not in {"local_git", "github_api"} or args.workspace_mode not in {"persistent", "batch"}:
+        parser.error("Invalid PEOPLE_PUBLISH_MODE or PEOPLE_WORKSPACE_MODE")
+    if args.dry_run and args.publish_mode != "github_api":
+        parser.error("--dry-run is for github_api publishing; use the legacy tools' dry-run options for local_git")
+    if args.people_list and not args.people_list.is_file():
+        parser.error("--people-list must be an existing file")
+    os.environ["PEOPLE_PUBLISH_MODE"] = args.publish_mode
+    os.environ["PEOPLE_WORKSPACE_MODE"] = args.workspace_mode
+    manager = None
+    batch = None
+    if args.workspace_mode == "batch":
+        from people_workspaces import Workspaces
+        manager = Workspaces(CONFIG_DIR)
+        if args.list:
+            rows = manager.db.execute("SELECT id,status FROM jobs ORDER BY created DESC").fetchall()
+            for row in rows:
+                print(f"Batch {row['id']}: {row['status']}")
+            manager.close()
+            return
+        try:
+            batch = manager.select(args.batch_id, args.new_batch, args.people_list, cleanup=not args.dry_run)
+            CONFIG_DIR = manager.configure(batch)
+            STATE_DIR = CONFIG_DIR / ".orch"
+            _, batch_manifest = manager.record(batch)
+            args.people_list = (CONFIG_DIR / "people_list.txt") if batch_manifest.get("explicit_people_list") else None
+            print(f"[INFO] Batch: {batch}; workspace: {CONFIG_DIR}")
+        except (OSError, ValueError) as error:
+            manager.close()
+            parser.error(str(error))
+    elif args.batch_id or args.new_batch:
+        parser.error("--batch-id and --new-batch require --workspace-mode batch")
+    if args.people_list:
+        os.environ["PEOPLE_LIST"] = str(args.people_list.resolve())
+        manual_override_count += count_manual_people_overrides(args.people_list)
     try:
         bg_fingerprint = background_fingerprint()
     except ValueError as exc:
@@ -666,6 +724,12 @@ def main():
     logs_dir = Path(args.logs_dir).expanduser().resolve() if args.logs_dir else env_path("ORCH_LOGS_DIR")
     repo_root = Path(args.repo_root).expanduser().resolve() if args.repo_root else env_path("PEOPLE_IMAGES_DIR")
     branch = _clean_env_value(args.branch or os.getenv("PEOPLE_BRANCH", ""))
+    if args.publish_mode == "github_api":
+        from people_github import branch_name
+        branch = branch_name(branch)
+        os.environ["PEOPLE_BRANCH"] = branch
+        if args.generate_readmes or _bool_env("ORCH_GENERATE_READMES", False):
+            parser.error("API mode uses destination README Actions; disable ORCH_GENERATE_READMES")
     default_style = args.style or os.getenv("ORCH_STYLE", "transparent")
     styles_env = os.getenv("ORCH_STYLES", "")
     if args.styles:
@@ -705,6 +769,8 @@ def main():
             sys.exit(2)
 
     def _ensure_repo():
+        if args.publish_mode == "github_api":
+            return _api_command("validate")
         # Let ensure_people_repo.py figure things out (clone/validate)
         args2 = ["--repo-root", str(repo_root)] if repo_root else []
         return [py, "ensure_people_repo.py"] + args2
@@ -775,6 +841,8 @@ def main():
         return args2
 
     def _update_repos():
+        if args.publish_mode == "github_api":
+            return _api_command("refresh")
         _require_repo_or_die()
         args2 = ["--repo-root", str(repo_root)]
         if branch:
@@ -783,6 +851,8 @@ def main():
         return [py, "update_people_repos.py"] + args2
 
     def _sync_images():
+        if args.publish_mode == "github_api":
+            return _api_command("prepare")
         _require_repo_or_die()
         return [py, "sync_people_images.py", "--dest_root", str(repo_root)]
 
@@ -801,6 +871,8 @@ def main():
         return [py, "sync_md.py", "--src", src, "--dst", dst, "--pattern", "*.md"]
 
     def _push_repos():
+        if args.publish_mode == "github_api":
+            return _api_command("push")
         _require_repo_or_die()
         now = datetime.now().strftime("%Y-%m-%d %H:%M")
         msg = (commit_template or f"chore: sync posters - {now}").strip()
@@ -813,6 +885,14 @@ def main():
         if git_user_email:
             args2 += ["--git-user-email", git_user_email]
         return [py, "update_people_repos.py"] + args2
+
+    def _api_command(operation):
+        command = [py, "publish_people_github.py", "--op", operation, "--config", str(CONFIG_DIR), "--branch", branch]
+        if batch:
+            command += ["--batch-id", batch]
+        if args.dry_run:
+            command.append("--dry-run")
+        return command
 
     # Fixed, enforced order
     steps: List[Step] = [
@@ -880,7 +960,19 @@ def main():
     # Run
     acquire_lock()
     STATE_DIR.mkdir(parents=True, exist_ok=True)
+    activated = False
     try:
+        if manager:
+            manager.activate(batch)
+            activated = True
+            manager.set_status(batch, "processing")
+            if _bool_env("PEOPLE_AUTO_CLEANUP", True) and not args.dry_run:
+                for old_batch, outcome in manager.cleanup(dry_run=False):
+                    print(f"[CLEANUP] {old_batch}: {outcome}")
+        if args.publish_mode == "github_api" and start_i > 0:
+            rc, _, _ = run_cmd("Validate GitHub destinations", _api_command("validate"))
+            if rc:
+                sys.exit(rc)
         if bg_changed:
             clear_from(list(step_index.keys()), "remove_bg")
             write_marker(STATE_DIR / "remove_bg.pending.json", {"background_fingerprint": bg_fingerprint})
@@ -891,6 +983,11 @@ def main():
             clear_from(list(step_index.keys()), args.redo)
         step_started_at: dict[str, float] = {}
         for s in steps[start_i:]:
+            if manager:
+                manager.check_budget()
+            if args.people_list and s.key in {"scan_kometa_logs", "find_and_download_missing"}:
+                write_marker(s.marker_path, {"skipped": True, "reason": "explicit --people-list"})
+                continue
             if not args.force and not s.always_run and marker_exists(s.marker_path):
                 print(f"[INFO] {s.key} already completed - skipping.")
                 if s.key == args.stop_after:
@@ -987,7 +1084,7 @@ def main():
                 return CONFIG_DIR / "logs" / f"{Path(script_filename).stem}.log"
 
             # 1) ensure_repo extra sanity
-            if s.key == "ensure_repo":
+            if s.key == "ensure_repo" and args.publish_mode == "local_git":
                 if not repo_root or not repo_root.exists():
                     print("[ERROR] ensure_repo finished but PEOPLE_IMAGES_DIR is not set/valid.", file=sys.stderr)
                     sys.exit(2)
@@ -1027,6 +1124,8 @@ def main():
             elif s.key == "tmdb":
                 created = count_recent_files([CONFIG_DIR], started, {"jpg", "jpeg", "png"})
                 if created == 0:
+                    if manager:
+                        manager.set_status(batch, "no_work")
                     print("[INFO] tmdb downloaded 0 posters - stopping.")
                     sys.exit(0)
 
@@ -1034,6 +1133,8 @@ def main():
             elif s.key == "audit_people_images":
                 md_count = parsed_processed_from_audit_people_images(log_path_for("audit_people_images.py"))
                 if md_count is not None and md_count == 0:
+                    if manager:
+                        manager.set_status(batch, "no_work")
                     print("[INFO] audit_people_images sorted/moved 0 items - stopping.")
                     sys.exit(0)
 
@@ -1077,15 +1178,19 @@ def main():
                         sys.exit(0)
 
             # sync_images: if copied nothing, stop before readme/sync_md/push (parse its log)
-            elif s.key == "sync_images":
+            elif s.key == "sync_images" and args.publish_mode == "local_git":
                 sync_log = log_path_for("sync_people_images.py")
                 copied_sum = sum_copied_from_sync_log(sync_log)
-                if copied_sum is not None and copied_sum == 0:
+                if copied_sum is not None and copied_sum == 0 and not manager:
                     print("[INFO] sync_images copied 0 files - stopping before readme/sync_md/push.")
                     sys.exit(0)
 
             # Write checkpoint if applicable (and not always_run)
-            if s.marker_path and not s.always_run:
+            if manager and s.key == "poster_ps1":
+                manager.set_status(batch, "generated")
+            if manager and s.key == "sync_images":
+                manager.set_status(batch, "validated")
+            if s.marker_path and not s.always_run and not args.dry_run:
                 meta = {"at": time.time(), "argv": argv}
                 if s.key == "remove_bg":
                     meta["background_fingerprint"] = bg_fingerprint
@@ -1095,12 +1200,40 @@ def main():
                 write_marker(s.marker_path, meta)
                 if s.key == "remove_bg":
                     (STATE_DIR / "remove_bg.pending.json").unlink(missing_ok=True)
-            if s.key == args.stop_after:
+            if s.key == args.stop_after and s.key != "push":
                 print(f"[INFO] Stop requested after {s.key}; exiting before downstream steps.")
                 return
 
-        print("\nAll steps completed.")
+        if manager and not args.dry_run:
+            from people_publication_state import PublicationState
+            ledger = PublicationState(manager.state)
+            try:
+                if args.publish_mode == "local_git":
+                    from publish_people_github import prepare, verify_local_publication
+                    prepare(CONFIG_DIR, batch, ledger, branch or "master")
+                    verify_local_publication(batch, ledger, repo_root, branch or "master")
+                manager.confirm_published(batch, ledger)
+            finally:
+                ledger.close()
+        elif args.publish_mode == "github_api" and not args.dry_run:
+            # A completed persistent run gets a new receipt ID on its next generation run.
+            (CONFIG_DIR / ".orch" / "api-batch.json").unlink(missing_ok=True)
+        print("\nPublication dry-run completed; files retained." if args.dry_run else "\nAll steps completed.")
+    except BaseException as error:
+        if manager and activated and not (isinstance(error, SystemExit) and error.code in {None, 0}):
+            from people_publication_state import PublicationState
+            ledger = PublicationState(manager.state)
+            try:
+                partial = any(row["status"] == "published" for row in ledger.rows(batch))
+                manager.set_status(batch, "partially_published" if partial else "failed",
+                                   "Interrupted" if isinstance(error, KeyboardInterrupt) else str(error))
+            finally:
+                ledger.close()
+        raise
     finally:
+        if manager:
+            manager.deactivate(batch)
+            manager.close()
         release_lock()
 
 

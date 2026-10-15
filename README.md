@@ -13,20 +13,29 @@ Choose the path that matches your task.
 
 ### A) Build / refresh People posters (Python orchestrator)
 
+The opt-in clone-free publisher and temporary batch workspaces avoid downloading
+seven image repositories that can occupy hundreds of gigabytes. Legacy local Git
+publishing remains the default. See [clone-free setup, retention and migration](create_people_posters/CLONE_FREE.md)
+and the [People Posters guide](create_people_posters/README.md).
+
 1. Python 3.10+ and `pip` installed
 2. Install dependencies:
    ```bash
-   pip install -r requirements.txt
+   cd create_people_posters
+   python -m pip install -r requirements.txt
    ```
 3. First‑run bootstraps `./config/.env` from the example:
    ```bash
-   python orchestrator.py --all
+   python orchestrator.py
    # then edit ./config/.env and set at least: TMDB_KEY=your_api_key
    ```
 4. Typical runs:
    ```bash
    # Full publish flow (includes final push)
-   python orchestrator.py --steps ensure_repo,update,sync_images,readme,sync_md,push      --repo-root "/path/to/Kometa-People-Images" --style transparent
+   python orchestrator.py --repo-root "/path/to/Kometa-People-Images"
+
+   # Clone-free preview: generate locally, but do not publish
+   python orchestrator.py --publish-mode github_api --workspace-mode batch --people-list config/people_list.txt --dry-run
    ```
 
 **Highlights**

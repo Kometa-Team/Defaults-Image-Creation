@@ -39,7 +39,7 @@ except Exception:
 # ---------------- paths & logs under <scriptdir>/config/* ----------------
 SCRIPT_PATH = Path(__file__).resolve()
 SCRIPT_DIR = SCRIPT_PATH.parent
-CONFIG_DIR = SCRIPT_DIR / "config"
+CONFIG_DIR = Path(os.getenv("PEOPLE_CONFIG_DIR") or SCRIPT_DIR / "config")
 LOGS_DIR = CONFIG_DIR / "logs"
 DOWNLOADS_DIR = CONFIG_DIR / "Downloads"
 OTHER_DIR = DOWNLOADS_DIR / "other"
@@ -179,10 +179,12 @@ def copy_grayscale_and_color_images(
             # Require an exact person-name match; substrings can identify a different person.
             if name and person_name_key(name) in online_file_names:
                 print(f"File {filename} found in the online list. Skipping.")
-                try:
-                    os.remove(os.path.join(root, filename))
-                except OSError:
-                    pass
+                if (os.getenv("PEOPLE_WORKSPACE_MODE", "persistent") != "batch"
+                        and os.getenv("PEOPLE_PUBLISH_MODE", "local_git") != "github_api"):
+                    try:
+                        os.remove(os.path.join(root, filename))
+                    except OSError:
+                        pass
                 count_skipped += 1
                 continue
 
@@ -242,7 +244,11 @@ if __name__ == "__main__":
 
     # Fetch online content (kept minimal to match your current logic)
     online_file_url = "https://raw.githubusercontent.com/Kometa-Team/People-Images-bw/master/README.md"
-    online_file_names = fetch_online_file_names(online_file_url)
+    if os.getenv("PEOPLE_PUBLISH_MODE", "local_git") == "github_api":
+        from people_remote_inventory import online_complete_names
+        online_file_names = online_complete_names()
+    else:
+        online_file_names = fetch_online_file_names(online_file_url)
 
     # Extract file names from the source directory (currently unused, kept for parity with original signature)
     source_file_names = extract_filenames_from_source_directory(input_directory)

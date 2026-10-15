@@ -15,9 +15,23 @@ It’s designed to be **cross‑platform**, **fixed‑order**, and **resumable**
 ---
 
 ## Prerequisites
+
+### Optional Clone-Free Publishing
+
+The legacy defaults remain `PEOPLE_PUBLISH_MODE=local_git` and
+`PEOPLE_WORKSPACE_MODE=persistent`. Full local clones can require hundreds of
+gigabytes, including history and working copies. The opt-in `github_api` mode
+does not require any of the seven clones. Combine it with `batch` workspaces to
+retain only active/retryable processing images and small persistent metadata.
+Models, dependencies and active batches still need local disk space.
+
+See [Clone-Free Setup and Migration](CLONE_FREE.md) for authentication, both
+platform setup examples, dry-run, recovery, retention and maintenance limits.
+
 - A [supported version of Python](https://devguide.python.org/versions/) (**3.11-3.15** as of **October 12, 2026**).
 - **pip** to install dependencies
-- **Chrome/Edge** installed — required by the Selenium step
+- **Chrome/Edge** installed only when using Adobe/Selenium background removal;
+  the local BiRefNet engine does not need a browser.
 - **PowerShell** for the poster script step:
   - Preferred: **PowerShell 7+** (`pwsh`, cross‑platform)
   - Windows fallback: `powershell` / `powershell.exe`

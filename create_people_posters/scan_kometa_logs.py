@@ -33,7 +33,7 @@ def ensure_config_dir(script_file: str | Path) -> Path:
     base_dir = Path(script_file).resolve().parent
     if getattr(sys, "frozen", False):
         base_dir = Path(sys.executable).resolve().parent
-    cfg = base_dir / "config"
+    cfg = Path(os.getenv("PEOPLE_CONFIG_DIR") or base_dir / "config")
     cfg.mkdir(parents=True, exist_ok=True)
     return cfg
 
@@ -646,8 +646,16 @@ def scan_text_files(folder_path):
             f.write(f"{name}\n")
             candidate_names.add(name)
 
-    online_content, online_source = fetch_online_readme()
-    if online_content is None:
+    if os.getenv("PEOPLE_PUBLISH_MODE", "local_git") == "github_api":
+        from people_remote_inventory import name_key, online_complete_names
+        online = online_complete_names()
+        not_found_names = {name for name in candidate_names if name_key(name) not in online}
+        online_content, online_source = "remote inventory", "GitHub trees"
+    else:
+        online_content, online_source = fetch_online_readme()
+    if os.getenv("PEOPLE_PUBLISH_MODE", "local_git") == "github_api":
+        pass
+    elif online_content is None:
         not_found_names = set(candidate_names)
         logging.warning(
             "Unable to verify against the online README; writing %d unverified candidate name(s).",

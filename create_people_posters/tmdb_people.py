@@ -13,7 +13,7 @@ from tmdbapis import TMDbAPIs
 # ---------- paths + logging ----------
 SCRIPT_PATH = Path(__file__).resolve()
 SCRIPT_DIR = SCRIPT_PATH.parent
-CONFIG_DIR = SCRIPT_DIR / "config"
+CONFIG_DIR = Path(os.getenv("PEOPLE_CONFIG_DIR") or SCRIPT_DIR / "config")
 LOGS_DIR = CONFIG_DIR / "logs"
 POSTERS_DIR = Path(os.getenv("POSTER_DIR") or (CONFIG_DIR / "posters"))
 for d in (CONFIG_DIR, LOGS_DIR, POSTERS_DIR):
@@ -92,6 +92,14 @@ def parse_people_item(item: str) -> tuple[str, str | None]:
 def save_image(person, file_label: str | None = None) -> bool:
     if not person or not getattr(person, "profile_url", None):
         return False
+    base_name = file_label or person.name
+    if os.getenv("PEOPLE_PUBLISH_MODE", "local_git") == "github_api":
+        from people_remote_inventory import name_key, online_complete_names
+        if not hasattr(save_image, "complete_names"):
+            save_image.complete_names = online_complete_names()
+        if name_key(safe_filename(base_name)) in save_image.complete_names:
+            logging.info("All seven styles already exist: %s", base_name)
+            return False
     try:
         r = requests.get(person.profile_url, timeout=30)
         r.raise_for_status()
@@ -99,12 +107,25 @@ def save_image(person, file_label: str | None = None) -> bool:
         logging.warning("Download failed for %s (%s): %s", person.name, person.id, e)
         return False
 
-    base_name = file_label or person.name
     file_root = f"{base_name}-{person.id}"
     filepath = POSTERS_DIR / f"{safe_filename(file_root)}.jpg"
     filepath.parent.mkdir(parents=True, exist_ok=True)
     with filepath.open("wb") as f:
         f.write(r.content)
+    if (os.getenv("PEOPLE_PUBLISH_MODE", "local_git") == "github_api"
+            or os.getenv("PEOPLE_WORKSPACE_MODE", "persistent") == "batch"):
+        import json
+        from people_workspaces import atomic_json
+        from people_remote_inventory import name_key
+        receipt = CONFIG_DIR / "tmdb_identities.json"
+        identities = json.loads(receipt.read_text(encoding="utf-8")) if receipt.exists() else {}
+        identity_name = safe_filename(base_name)
+        previous = next((value for name, value in identities.items() if name_key(name) == name_key(identity_name)), None)
+        if previous is not None and str(previous) != str(person.id):
+            atomic_json(CONFIG_DIR / "tmdb_conflicts.json", {"name": base_name, "ids": [previous, str(person.id)]})
+            raise SystemExit(f"Multiple TMDb people map to the same output name: {base_name}; assign distinct aliases")
+        identities[identity_name] = str(person.id)
+        atomic_json(receipt, identities)
     logging.info("Saved %s", filepath)
     return True
 

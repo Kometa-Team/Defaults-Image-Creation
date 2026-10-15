@@ -130,7 +130,7 @@ def heartbeat(label: str, every_sec: float = 1.0) -> None:
 # ---------------- paths + logging ----------------
 SCRIPT_PATH = Path(__file__).resolve()
 SCRIPT_DIR = SCRIPT_PATH.parent
-CONFIG_DIR = SCRIPT_DIR / "config"
+CONFIG_DIR = Path(os.getenv("PEOPLE_CONFIG_DIR") or SCRIPT_DIR / "config")
 LOGS_DIR = CONFIG_DIR / "logs"
 DOWNLOADS_DIR = CONFIG_DIR / "Downloads"
 for d in (CONFIG_DIR, LOGS_DIR, DOWNLOADS_DIR):
@@ -845,6 +845,9 @@ def fetch_online_names(styles: List[str], branch: str = "master") -> Set[str]:
     Parse README.md(s) for Kometa-Team People-Images-* repos and collect names already online.
     Default keeps legacy behavior: styles=["bw"] unless overridden.
     """
+    if os.getenv("PEOPLE_PUBLISH_MODE", "local_git") == "github_api":
+        from people_remote_inventory import online_complete_names
+        return {_normalize_name(name) for name in online_complete_names()}
     online: Set[str] = set()
     tried = set()
     total_checks = len(styles) * 2  # branch + fallback
@@ -1005,7 +1008,9 @@ def main():
     missing_no_url: List[str] = []
 
     for n in sorted(candidate_names):
-        if n in online_names:
+        from people_remote_inventory import name_key
+        online_key = name_key(n) if os.getenv("PEOPLE_PUBLISH_MODE", "local_git") == "github_api" else n
+        if online_key in online_names:
             continue
         url = name_to_url.get(n)
         if url:

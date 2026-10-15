@@ -1,5 +1,6 @@
 # rename_and_move_posters.py
 import re
+import os
 import sys
 import shutil
 import logging
@@ -9,7 +10,7 @@ from typing import Iterable
 # ---------- paths + logging ----------
 SCRIPT_PATH = Path(__file__).resolve()
 SCRIPT_DIR = SCRIPT_PATH.parent
-CONFIG_DIR = SCRIPT_DIR / "config"
+CONFIG_DIR = Path(os.getenv("PEOPLE_CONFIG_DIR") or SCRIPT_DIR / "config")
 LOGS_DIR = CONFIG_DIR / "logs"
 DEFAULT_SRC = CONFIG_DIR / "posters"  # where tmdb_people.py wrote files
 DEFAULT_DST = DEFAULT_SRC  # keep-in-place by default (you can override)

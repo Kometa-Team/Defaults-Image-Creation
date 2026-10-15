@@ -111,6 +111,7 @@ $scriptBaseName = [IO.Path]::GetFileNameWithoutExtension($scriptName)
 
 # ── Config roots ────────────────────────────────────────────────────────────────
 $cfgRoot = Join-Path $script_path 'config'
+if ($env:PEOPLE_CONFIG_DIR) { $cfgRoot = $env:PEOPLE_CONFIG_DIR }
 $logsDir = Join-Path $cfgRoot 'logs'
 $peopleRoot = Join-Path $cfgRoot 'people_dirs'   # <- NEW: all “other” dirs live here
 

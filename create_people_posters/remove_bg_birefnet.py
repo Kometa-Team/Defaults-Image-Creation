@@ -22,7 +22,7 @@ import warnings
 from PIL import Image
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-CONFIG_DIR = SCRIPT_DIR / "config"
+CONFIG_DIR = Path(os.getenv("PEOPLE_CONFIG_DIR") or SCRIPT_DIR / "config")
 MODEL_NAMES = ("birefnet-portrait", "birefnet-general", "isnet-general-use")
 # Checksums published in the pinned rembg 2.0.85 session implementations.
 MODEL_CHECKSUMS = {
