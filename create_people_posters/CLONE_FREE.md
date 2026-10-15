@@ -70,9 +70,11 @@ model caches inside jobs. Never run legacy `clean_people_config --include-stagin
 against a batch workspace; use the receipt-aware cleanup command below.
 
 Install the existing requirements and model environments as described in the
-main README. There are no new mandatory Python dependencies or paid services.
-PowerShell and ImageMagick are still required for poster generation, including
-on Linux/macOS (`pwsh`). DDColor/BiRefNet inference and poster designs are unchanged.
+main README. The clone-free publisher adds no paid services or extra packages.
+Native poster generation uses Pillow and the documented fontTools layout helper;
+PowerShell/ImageMagick are required only for `POSTER_ENGINE=powershell` or the
+comparison utility's reference run. See [native rendering](POSTER_RENDERER.md).
+DDColor/BiRefNet inference and poster designs are unchanged.
 
 Legacy full clones, including their Git history, can require hundreds of
 gigabytes. API mode stores tree metadata instead of those image libraries, but

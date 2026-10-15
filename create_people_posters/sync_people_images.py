@@ -49,8 +49,9 @@ def setup_logging(level=logging.INFO, console=True):
     return log_file
 
 
-setup_logging()
-load_dotenv(CONFIG_DIR / ".env")
+if __name__ == "__main__":
+    setup_logging()
+    load_dotenv(CONFIG_DIR / ".env")
 
 # ---------- core ----------
 CATEGORIES = [

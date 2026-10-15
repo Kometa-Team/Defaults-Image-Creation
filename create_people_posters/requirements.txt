@@ -1,6 +1,8 @@
 # Common requirements for your scripts
 requests
 Pillow
+# Portable font metrics/kerning for Pillow builds without RAQM (no system DLLs).
+fonttools>=4.67.0
 numpy
 # The pipeline uses rembg's Python API. CLI/server extras introduce unrelated
 # Gradio/FastAPI constraints that conflict with the DDColor dependency profile.

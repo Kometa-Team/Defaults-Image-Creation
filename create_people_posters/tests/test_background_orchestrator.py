@@ -62,6 +62,7 @@ def isolated(monkeypatch, tmp_path):
     monkeypatch.setenv("PEOPLE_IMAGES_DIR", str(repo))
     monkeypatch.setenv("PEOPLE_PUBLISH_MODE", "local_git")
     monkeypatch.setenv("PEOPLE_WORKSPACE_MODE", "persistent")
+    monkeypatch.setenv("POSTER_ENGINE", "powershell")
     monkeypatch.setenv("ORCH_CONTINUE_IF_EMPTY", "true")
     monkeypatch.setenv("TMDB_KEY", "mock-key")
 
@@ -354,6 +355,19 @@ def recovery_args(monkeypatch, tmp_path):
     args.local_remover = None
     args.rembg_session = None
     return args
+
+
+def test_python_recovery_uses_pillow_without_external_renderers(monkeypatch, recovery_args):
+    monkeypatch.setenv("POSTER_ENGINE", "python")
+    monkeypatch.setenv("REMOVE_BG_ENGINE", "birefnet")
+    monkeypatch.setattr(recovery, "ps_exe", lambda: pytest.fail("PowerShell lookup in Python mode"))
+    monkeypatch.setattr(recovery, "run_step", lambda *args: pytest.fail("External rendering in Python mode"))
+    result = recovery.recover_one(recovery_args, SimpleNamespace(), "key", "Person", "headchop")
+    assert result.status == "recovered"
+    from create_people_poster import STYLES, output_path
+    for style in STYLES:
+        assert output_path(recovery_args.people_root, style, "Person").is_file()
+    assert not (recovery_args.downloads_dir / "Person.png").exists()
 
 
 def test_orchestrator_local_batch_hands_valid_cutouts_and_originals_to_poster(monkeypatch, recovery_args):

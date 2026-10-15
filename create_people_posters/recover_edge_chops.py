@@ -1,7 +1,7 @@
 """Retry chopped transparent portraits using alternate TMDB profile images.
 
-This runs after create_people_poster.ps1. It scans the local cloned People image
-repos for warning targets, then finds alternate TMDB profile images.
+This runs after the selected poster renderer. It scans the current batch or
+explicit local library for warning targets, then finds alternate TMDB profiles.
 
 Default mode writes one viable alternate per person into the normal Downloads
 input folder, then runs orchestrator.py from remove_bg so the Selenium/poster
@@ -1073,8 +1073,10 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
         env["SEL_ORIG_DIR"] = str(sel_orig_dir)
         env["SEL_DOWNLOAD_DIR"] = str(sel_download_dir)
 
-        ps = ps_exe()
-        if not ps:
+        from poster_renderer import poster_engine
+        selected_renderer = poster_engine()
+        ps = ps_exe() if selected_renderer == "powershell" else None
+        if selected_renderer == "powershell" and not ps:
             row.note = "PowerShell is unavailable"
             return row
 
@@ -1180,11 +1182,20 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
 
             shutil.copy2(generated_png, staged_png)
 
-            rc = run_step(
-                f"poster retry {name} {candidate.label}",
-                [ps, "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(SCRIPT_DIR / "create_people_poster.ps1")],
-                env,
-            )
+            if selected_renderer == "python":
+                from create_people_poster import render_recovery_candidate
+                try:
+                    render_recovery_candidate(Path(tmp) / "render", args.people_root, name, staged_png, staged_jpg)
+                    rc = 0
+                except (OSError, ValueError) as error:
+                    log(f"[warn] {name} {candidate.label}: Pillow rendering failed: {error}")
+                    rc = 1
+            else:
+                rc = run_step(
+                    f"poster retry {name} {candidate.label}",
+                    [ps, "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(SCRIPT_DIR / "create_people_poster.ps1")],
+                    env,
+                )
             if rc != 0:
                 if getattr(args, "bg_engine", "adobe") == "birefnet":
                     restore_backups(backups, paths)
@@ -1217,13 +1228,22 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
             row.final_metrics = edge_metric_summary(transparent, args)
 
             if not final_issues:
-                if getattr(args, "bg_engine", "adobe") == "birefnet":
+                if getattr(args, "bg_engine", "adobe") == "birefnet" or selected_renderer == "python":
                     try:
-                        archive_recovery_source(staged_jpg)
+                        archived = archive_recovery_source(staged_jpg)
+                        if selected_renderer == "python":
+                            from create_people_poster import output_path
+                            target = output_path(args.people_root, "original", name)
+                            from remove_bg_birefnet import atomic_copy
+                            atomic_copy(archived, target)
+                            if archived.resolve() != target.resolve():
+                                archived.unlink()
                     except Exception as exc:
                         restore_backups(backups, paths)
                         raise RuntimeError(f"{name}: accepted source could not be preserved: {exc}") from exc
                 row.status = "recovered"
+                if selected_renderer == "python":
+                    staged_png.unlink(missing_ok=True)
                 row.chosen_label = candidate.label
                 row.chosen_url = candidate.url
                 row.final_issues = ""
@@ -1852,6 +1872,8 @@ def _main(args: argparse.Namespace) -> int:
 def main() -> int:
     args = parser().parse_args()
     try:
+        from poster_renderer import poster_fingerprint
+        poster_fingerprint()
         args.bg_engine = background_engine()
         if args.bg_engine == "birefnet" and not args.audit_only:
             python = background_python(sys.executable)

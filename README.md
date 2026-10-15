@@ -18,7 +18,10 @@ of the seven image repositories, which can occupy hundreds of gigabytes.
 Full local Git clones remain an explicit fallback. See [clone-free setup, retention and migration](create_people_posters/CLONE_FREE.md)
 and the [People Posters guide](create_people_posters/README.md).
 
-1. Python 3.10+ and `pip` installed
+People poster rendering is native Python/Pillow. PowerShell and ImageMagick are
+needed only for the optional legacy renderer, not the normal People workflow.
+
+1. Python 3.13 recommended, with `pip` installed
 2. Install dependencies:
    ```bash
    cd create_people_posters

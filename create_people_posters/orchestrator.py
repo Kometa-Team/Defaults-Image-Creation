@@ -21,6 +21,7 @@ Core steps (order is enforced; do not reorder):
   7) colorize_noncolor         -> selected COLORIZE_ENGINE script     (checkpointed)
   8) prep_dirs                 -> prep_people_dirs.py                 (checkpointed)
   9) remove_bg                 -> sel_remove_bg.py                    (checkpointed)
+ 10) poster_ps1                -> selected POSTER_ENGINE renderer     (checkpointed)
  11) recover_edge_chops        -> recover_edge_chops.py               (checkpointed; non-blocking)
  12) update                    -> update_people_repos.py --op update  (ALWAYS runs when reached)
  13) sync_images               -> sync_people_images.py               (checkpointed)
@@ -32,7 +33,7 @@ Fail-fast points
 ----------------
 - Exit 2 if any repo-required step runs without a valid repo path.
 - Exit 2 if TMDB_KEY is missing before tmdb.
-- Exit 2 if ORCH_REQUIRE_POWERSHELL=true and no PowerShell is available.
+- Exit 2 if POSTER_ENGINE=powershell and no PowerShell is available.
 - Exit 2 if ORCH_REQUIRE_BG_OUTPUT=true and SEL_DOWNLOAD_DIR is unknown.
 - Exit 0 if sync_images copied 0 files (skip readme/sync_md/push).
 - Exit 0 when confidently detected:
@@ -75,7 +76,8 @@ Environment (./config/.env or process environment)
   ORCH_CONTINUE_IF_EMPTY — if "true", continue even when zero BG files were produced [default: false]
 
   # Hard requirements (not optional once set to true)
-  ORCH_REQUIRE_POWERSHELL=true        — fail if PowerShell isn't available
+  POSTER_ENGINE=python               - native Pillow; powershell requires PS/ImageMagick
+  ORCH_REQUIRE_POWERSHELL=false      - legacy compatibility; engine selection controls requirements
   ORCH_REQUIRE_BG_OUTPUT=true         — fail if SEL_DOWNLOAD_DIR isn't set/visible
   ORCH_RECOVER_EDGE_CHOPS=true        — after poster generation, retry top-edge transparent chops from TMDB alternates
 """
@@ -680,6 +682,11 @@ def main():
                         help="Skip non-blocking TMDB alternate retries for top-edge transparent chops.")
 
     args = parser.parse_args()
+    from poster_renderer import poster_engine, poster_fingerprint, checkpoint_changed, prepare_inputs, renderer_command
+    try:
+        selected_poster_engine = poster_engine()
+    except ValueError as error:
+        parser.error(str(error))
     from people_github import sandbox_settings
     if sandbox_settings() and (args.publish_mode != "github_api" or args.workspace_mode != "batch"):
         parser.error("Sandbox requires github_api + batch; local_git/persistent are blocked")
@@ -719,9 +726,11 @@ def main():
         manual_override_count += count_manual_people_overrides(args.people_list)
     try:
         bg_fingerprint = background_fingerprint()
+        poster_fp = poster_fingerprint(SCRIPT_DIR)
     except ValueError as exc:
         parser.error(str(exc))
     bg_changed = background_checkpoint_changed(bg_fingerprint)
+    poster_changed = checkpoint_changed(STATE_DIR, poster_fp)
 
     # Resolve env/args
     logs_dir = Path(args.logs_dir).expanduser().resolve() if args.logs_dir else env_path("ORCH_LOGS_DIR")
@@ -757,7 +766,6 @@ def main():
     continue_if_empty = args.continue_if_empty or _bool_env("ORCH_CONTINUE_IF_EMPTY", False)
     recover_edge_chops = (not args.no_recover_edge_chops) and _bool_env("ORCH_RECOVER_EDGE_CHOPS", True)
 
-    REQUIRE_POWERSHELL = _bool_env("ORCH_REQUIRE_POWERSHELL", False)
     REQUIRE_BG_OUTPUT = _bool_env("ORCH_REQUIRE_BG_OUTPUT", False)
 
     # Build step builders
@@ -813,15 +821,12 @@ def main():
         return build_background_command(py)
 
     def _poster_ps1():
-        ps = ps_exe()
-        if not ps:
-            if REQUIRE_POWERSHELL:
-                print("[ERROR] ORCH_REQUIRE_POWERSHELL=true but PowerShell (pwsh) not found.", file=sys.stderr)
-                sys.exit(2)
-            print("[WARN] PowerShell (pwsh) not found - skipping create_people_poster.ps1", file=sys.stderr)
-            return None
-        ps1 = str((SCRIPT_DIR / "create_people_poster.ps1").resolve())
-        return [ps, "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ps1]
+        try:
+            prepare_inputs(CONFIG_DIR, require_retained=poster_changed)
+            return renderer_command(py, SCRIPT_DIR, ps_exe)
+        except (OSError, ValueError) as error:
+            print(f"[ERROR] {error}", file=sys.stderr)
+            sys.exit(2)
 
     def _recover_edge_chops():
         if not recover_edge_chops:
@@ -908,7 +913,7 @@ def main():
         Step("colorize",                  "Colorize non-color images",                  _colorize,                  marker="colorize_noncolor.done.json"),
         Step("prep_dirs",                 "Ensure local people_dirs scaffolds",         _prep_dirs,                 marker="prep_dirs.done.json"),
         Step("remove_bg",                 f"Remove backgrounds ({bg_fingerprint['engine']})", _remove_bg,              marker="remove_bg.done.json"),
-        Step("poster_ps1",                "Generate posters via PowerShell",            _poster_ps1,                marker="poster_ps1.done.json"),
+        Step("poster_ps1",                f"Generate posters ({selected_poster_engine})", _poster_ps1,               marker="poster_ps1.done.json"),
         Step("recover_edge_chops",        "Retry top-edge chops from TMDB alternates",   _recover_edge_chops,        marker="recover_edge_chops.done.json"),
         Step("update",                    "git fetch/reset category repos",             _update_repos,              marker=None,              always_run=True),
         Step("sync_images",               "Sync images to repo folders",                _sync_images,               marker="sync_images.done.json"),
@@ -927,7 +932,8 @@ def main():
     if args.list:
         print("Step status:")
         for s in steps:
-            invalid = bg_changed and step_index[s.key] >= step_index["remove_bg"]
+            invalid = ((bg_changed and step_index[s.key] >= step_index["remove_bg"])
+                       or (poster_changed and step_index[s.key] >= step_index["poster_ps1"]))
             status = "ALWAYS" if s.always_run else ("DONE" if marker_exists(s.marker_path) and not invalid else "PENDING")
             print(f" - {s.key:12} : {status}")
         for s in steps:
@@ -951,6 +957,8 @@ def main():
         start_i = step_index[args.redo]
         if bg_changed:
             start_i = min(start_i, step_index["remove_bg"])
+        if poster_changed:
+            start_i = min(start_i, step_index["poster_ps1"])
     else:
         for i, s in enumerate(steps):
             if s.always_run or not marker_exists(s.marker_path):
@@ -982,6 +990,9 @@ def main():
             if not background_inputs_exist():
                 print("[ERROR] Background engine/config changed but no source photographs are queued. Restage specific preserved inputs from SEL_ORIG_DIR into SEL_SRC_DIR, then run --redo remove_bg. Set REMOVE_BG_OVERWRITE=true explicitly to replace existing local/Adobe outputs.", file=sys.stderr)
                 sys.exit(2)
+        if poster_changed:
+            clear_from(list(step_index.keys()), "poster_ps1")
+            write_marker(STATE_DIR / "poster_ps1.pending.json", {"poster_fingerprint": poster_fp})
         if args.redo:
             clear_from(list(step_index.keys()), args.redo)
         step_started_at: dict[str, float] = {}
@@ -1061,8 +1072,8 @@ def main():
                 sys.exit(2)
             argv = builder()
             if argv is None:
-                # Allowed skips: poster_ps1 when pwsh missing, or optional recovery disabled.
-                if s.key in {"poster_ps1", "recover_edge_chops"}:
+                # Recovery is optional; a selected renderer must actually run.
+                if s.key == "recover_edge_chops":
                     if s.marker_path:
                         write_marker(s.marker_path, {"skipped": True, "at": time.time()})
                     if s.key == args.stop_after:
@@ -1200,7 +1211,11 @@ def main():
                     if bg_fingerprint["engine"] == "birefnet" and local_summary:
                         meta["outcome"] = local_summary.get("outcome")
                         meta["model_verified"] = local_summary.get("processed", 0) > 0
+                if s.key == "poster_ps1":
+                    meta["poster_fingerprint"] = poster_fp
                 write_marker(s.marker_path, meta)
+                if s.key == "poster_ps1":
+                    (STATE_DIR / "poster_ps1.pending.json").unlink(missing_ok=True)
                 if s.key == "remove_bg":
                     (STATE_DIR / "remove_bg.pending.json").unlink(missing_ok=True)
             if s.key == args.stop_after and s.key != "push":

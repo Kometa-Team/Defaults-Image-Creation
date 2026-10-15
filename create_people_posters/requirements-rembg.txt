@@ -3,6 +3,11 @@
 rembg[cpu]==2.0.85
 onnxruntime==1.31.0
 pillow==12.3.0
+fonttools==4.67.0
+# Shared poster preflight is also used by Python-mode inline recovery.
+alive-progress==3.3.0
+about-time==4.2.1
+graphemeu==0.7.2
 numpy==2.5.4
 python-dotenv==1.2.4
 psutil==7.2.2

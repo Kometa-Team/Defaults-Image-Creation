@@ -9,7 +9,7 @@ It’s designed to be **cross‑platform**, **fixed‑order**, and **resumable**
 - **One command** to run the whole pipeline: `python orchestrator.py`
 - **Fixed order** (no reordering) to keep outputs consistent
 - **Resume after crash/CTRL‑C** via automatic checkpoints
-- Works on **Windows / macOS / Linux** (PowerShell step uses `pwsh` where available)
+- Works on **Windows / macOS / Linux** with native Python/Pillow poster rendering
 - Consistent **logging & progress** across scripts
 
 ---
@@ -32,11 +32,16 @@ platform setup examples, dry-run, recovery, retention and maintenance limits.
 - **pip** to install dependencies
 - **Chrome/Edge** installed only when using Adobe/Selenium background removal;
   the local BiRefNet engine does not need a browser.
-- **PowerShell** for the poster script step:
-  - Preferred: **PowerShell 7+** (`pwsh`, cross‑platform)
-  - Windows fallback: `powershell` / `powershell.exe`
+- **Pillow and fontTools**, installed with the Python requirements, plus the
+  existing repository artwork and fonts. No system font installation is needed.
+- **Jost weight 260** is bundled with its OFL license for diiivoy/diiivoycolor;
+  both engines use a 190px preferred size and auto-fit long names. No runtime
+  font download or Futura installation is required.
+- **PowerShell and ImageMagick are optional legacy dependencies** only for
+  `POSTER_ENGINE=powershell`; Python mode never executes them.
 
-> The orchestrator will **skip** the PowerShell step if no PS executable is found; you can re‑run just that step later (see _Resume & checkpoints_).
+See [Native Poster Renderer](POSTER_RENDERER.md) for the seven-style audit,
+font licensing/provenance, direct usage, visual comparisons, and known differences.
 
 ---
 
@@ -114,6 +119,7 @@ ORCH_STYLE=transparent
 # Local README generation is disabled by default because GitHub Actions owns
 # README generation in the People image repos.
 ORCH_GENERATE_READMES=false
+POSTER_ENGINE=python                               # native Pillow; powershell is optional legacy fallback
 
 # Multi-style local README run (comma list). Used only when ORCH_GENERATE_READMES=true.
 # This does not limit poster generation, image sync, or repo pushes.
@@ -419,7 +425,7 @@ fallback; step names and ordering are the same in both modes.
 7. **colorize** → selected `COLORIZE_ENGINE` script — move non‑color → color (keeps basenames, JPG)  
 8. **prep_dirs** → `prep_people_dirs.py` — ensure local `./config/people_dirs` scaffolds exist  
 9. **remove_bg** → `sel_remove_bg.py` — background removal via Selenium (Adobe Express)  
-10. **poster_ps1** → `create_people_poster.ps1` — poster generation (PowerShell)  
+10. **poster_ps1** → `create_people_poster.py` — native Pillow poster generation; `create_people_poster.ps1` only with `POSTER_ENGINE=powershell`
 11. **recover_edge_chops** → `recover_edge_chops.py` — non-blocking TMDB alternate retry for top-edge head chops
 12. **update** → `update_people_repos.py --op update` — fetch/reset style repos (**always runs**)
 13. **sync_images** → `sync_people_images.py` — copy new images into the repo style folders; skips markdown by default
@@ -980,9 +986,9 @@ python bulk_extract_configs.py --input_directory "C:/temp"
 ---
 
 ## Cross‑platform notes
-- The orchestrator prefers **PowerShell 7 (`pwsh`)** for the `poster_ps1` step.  
-  On Windows, it will fall back to `powershell.exe` if `pwsh` isn’t present.  
-  On macOS/Linux, install PowerShell from Microsoft’s package if you need that step.
+- The default `poster_ps1` step is Python/Pillow and does not need `pwsh` or
+  ImageMagick. The explicit `POSTER_ENGINE=powershell` fallback uses `pwsh`, or
+  `powershell.exe` on Windows. Only that fallback needs the legacy installations.
 - All Python steps use `sys.executable` so your **virtualenv** is honored on every OS.
 
 ---
@@ -1008,11 +1014,13 @@ Double‑check `TMDB_KEY` and your network. Try re‑running with `--redo tmdb`.
 **Selenium step fails / element not found**  
 Adobe Express may change the UI. Update selectors or timeouts in `sel_remove_bg.py` or run with `-v` for detailed logs.
 
-**PowerShell step skipped**  
-Install PowerShell 7+ (`pwsh`) or run on Windows. Then rerun just that step:
+**Legacy PowerShell renderer unavailable**
+Select `POSTER_ENGINE=python` for the native renderer, or install PowerShell 7+
+and ImageMagick to keep using `POSTER_ENGINE=powershell`. Then rerun that step:
 ```bash
 python orchestrator.py --redo poster_ps1
 ```
+The following installation instructions are only for the optional legacy renderer.
 Install PowerShell 7+ (`pwsh`) in Linux:
 ```bash
 # 1) Add Microsoft’s repo
@@ -1170,8 +1178,9 @@ The orchestrator discovers `.venv-rembg` automatically. Set `REMOVE_BG_PYTHON`
 to an absolute Python executable for another environment. It accepts an executable
 path, not a shell command. Windows x64 Python 3.13 is tested; Linux/macOS and
 other architectures require compatible dependency wheels and remain unverified
-by this implementation's local validation. The base poster workflow still needs
-PowerShell and ImageMagick. Browser dependencies remain required for Adobe.
+by this implementation's local validation. The native poster workflow uses
+Pillow/fontTools without PowerShell or ImageMagick. Browser dependencies remain
+required for Adobe.
 
 BiRefNet Portrait and General each download roughly 973 MB of weights. Allow
 several GB of disk space for all benchmark models and substantial additional RAM
@@ -1228,8 +1237,9 @@ it remove the completed source from the input queue. It preserves stored pixel
 dimensions, including JPEG/PNG/WebP/BMP/TIFF inputs. Animated or multipage files
 are rejected. An already-transparent staged PNG is treated as a cutout, not a
 new photograph. PNG photographs without meaningful transparency are supported.
-The PowerShell poster script still uses its fixed `config/people_dirs` paths
-and normalizes the generated styles and transparent presentation to 2000x3000.
+Both poster engines honor `PEOPLE_CONFIG_DIR` and its `people_dirs` layout,
+including isolated batch jobs. Generated styles and transparent presentation
+are normalized to 2000x3000.
 Local inference and archived photographs retain their native dimensions. With
 the local engine selected, Original-style sync creates validated 2000x3000 RGB
 JPEG presentation copies, leaving archived bytes unchanged. Already-compliant
