@@ -89,6 +89,8 @@ import time
 import subprocess
 import re
 import shutil
+import sqlite3
+from contextlib import ExitStack
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional, Tuple
@@ -102,6 +104,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 CONFIG_DIR = Path(os.getenv("PEOPLE_CONFIG_DIR") or SCRIPT_DIR / "config")
 STATE_DIR = CONFIG_DIR / ".orch"           # checkpoint folder
 LOCK_FILE = STATE_DIR / "run.lock"         # run lock to prevent concurrent runs
+_RUN_LOCK_ACQUIRED = False
 
 # For basic repo sanity after ensure_repo
 CATEGORY_DIRS = ["bw", "diiivoy", "diiivoycolor", "rainier", "original", "signature", "transparent"]
@@ -484,6 +487,7 @@ def print_abort_recovery(step_key: str, rc: int) -> None:
 
 
 def acquire_lock() -> None:
+    global _RUN_LOCK_ACQUIRED
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     LOCK_FILE.parent.mkdir(parents=True, exist_ok=True)
     if LOCK_FILE.exists():
@@ -502,14 +506,34 @@ def acquire_lock() -> None:
         sys.exit(3)
     with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
         handle.write(f"{os.getpid()} @ {datetime.now().isoformat()}")
+    _RUN_LOCK_ACQUIRED = True
 
 
 def release_lock() -> None:
+    global _RUN_LOCK_ACQUIRED
+    if not _RUN_LOCK_ACQUIRED:
+        return
     try:
         if LOCK_FILE.exists():
             LOCK_FILE.unlink()
     except Exception:
         pass
+    finally:
+        _RUN_LOCK_ACQUIRED = False
+
+
+def cleanup_on_launch(manager):
+    try:
+        for batch, outcome in manager.cleanup(dry_run=False):
+            print(f"[CLEANUP] {batch}: {outcome}")
+    except (OSError, ValueError, sqlite3.Error) as error:
+        print(f"[WARN] Launch cleanup incomplete; retained jobs can be retried: {error}", file=sys.stderr)
+    finally:
+        counts = getattr(manager, "last_cleanup_counts", None)
+        if counts is not None:
+            print("[CLEANUP] eligible={eligible} deleted={deleted} retained={retained}".format(**counts))
+        else:
+            print("[CLEANUP] Counts unavailable; cleanup did not finish its initial checks.")
 
 
 def count_recent_files(paths: list[Path], since_ts: float, suffixes: set[str] | None = None) -> int:
@@ -636,8 +660,8 @@ class Step:
         return (STATE_DIR / self.marker) if self.marker else None
 
 
-def main():
-    global CONFIG_DIR, STATE_DIR
+def _main(resources):
+    global CONFIG_DIR, STATE_DIR, LOCK_FILE
     os.environ.setdefault("PYTHONIOENCODING", "utf-8:replace")
     os.environ.setdefault("PYTHONUNBUFFERED", "1")
     import argparse
@@ -703,21 +727,32 @@ def main():
     if args.workspace_mode == "batch":
         from people_workspaces import Workspaces
         manager = Workspaces(CONFIG_DIR)
+        resources.callback(manager.close)
         if args.list:
             rows = manager.db.execute("SELECT id,status FROM jobs ORDER BY created DESC").fetchall()
             for row in rows:
                 print(f"Batch {row['id']}: {row['status']}")
-            manager.close()
             return
+        LOCK_FILE = manager.state / "orchestrator.lock"
+        acquire_lock()
         try:
-            batch = manager.select(args.batch_id, args.new_batch, args.people_list, cleanup=not args.dry_run)
+            # Protect an explicitly resumed workspace before considering older jobs.
+            if args.batch_id:
+                batch = manager.select(args.batch_id, args.new_batch, args.people_list, cleanup=False)
+                manager.activate(batch)
+                resources.callback(manager.deactivate, batch)
+            if _bool_env("PEOPLE_AUTO_CLEANUP", True) and not args.dry_run:
+                cleanup_on_launch(manager)
+            if batch is None:
+                batch = manager.select(None, args.new_batch, args.people_list, cleanup=False)
+                manager.activate(batch)
+                resources.callback(manager.deactivate, batch)
             CONFIG_DIR = manager.configure(batch)
             STATE_DIR = CONFIG_DIR / ".orch"
             _, batch_manifest = manager.record(batch)
             args.people_list = (CONFIG_DIR / "people_list.txt") if batch_manifest.get("explicit_people_list") else None
             print(f"[INFO] Batch: {batch}; workspace: {CONFIG_DIR}")
         except (OSError, ValueError) as error:
-            manager.close()
             parser.error(str(error))
     elif args.batch_id or args.new_batch:
         parser.error("--batch-id and --new-batch require --workspace-mode batch")
@@ -969,17 +1004,14 @@ def main():
         return
 
     # Run
-    acquire_lock()
+    if not manager:
+        acquire_lock()
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     activated = False
     try:
         if manager:
-            manager.activate(batch)
             activated = True
             manager.set_status(batch, "processing")
-            if _bool_env("PEOPLE_AUTO_CLEANUP", True) and not args.dry_run:
-                for old_batch, outcome in manager.cleanup(dry_run=False):
-                    print(f"[CLEANUP] {old_batch}: {outcome}")
         if args.publish_mode == "github_api" and start_i > 0:
             rc, _, _ = run_cmd("Validate GitHub destinations", _api_command("validate"))
             if rc:
@@ -1248,10 +1280,13 @@ def main():
             finally:
                 ledger.close()
         raise
+
+
+def main():
+    try:
+        with ExitStack() as resources:
+            return _main(resources)
     finally:
-        if manager:
-            manager.deactivate(batch)
-            manager.close()
         release_lock()
 
 

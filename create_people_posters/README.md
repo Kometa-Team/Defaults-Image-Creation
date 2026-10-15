@@ -28,6 +28,10 @@ Models, dependencies and active batches still need local disk space.
 See [Clone-Free Setup and Migration](CLONE_FREE.md) for authentication, both
 platform setup examples, dry-run, recovery, retention and maintenance limits.
 
+For an opt-in offline DDColor, BiRefNet Portrait and Pillow integration check,
+see [Model Smoke Test](MODEL_SMOKE_TEST.md). It uses isolated local files and
+does not publish images.
+
 - A [supported version of Python](https://devguide.python.org/versions/) (**3.11-3.15** as of **October 12, 2026**).
 - **pip** to install dependencies
 - **Chrome/Edge** installed only when using Adobe/Selenium background removal;

@@ -154,3 +154,145 @@ def test_default_api_failure_never_falls_back_to_cloning(isolated, monkeypatch):
     assert len(calls) == 1 and "publish_people_github.py" in calls[0]
     manifest = json.loads((orch.CONFIG_DIR / "manifest.json").read_text(encoding="utf-8"))
     assert manifest["status"] == "failed"
+
+
+@pytest.fixture
+def launch_jobs(isolated,monkeypatch):
+    import time
+    from people_workspaces import Workspaces
+    from test_people_workspaces import published_job
+    manager=Workspaces(isolated)
+    old=published_job(manager,monkeypatch)
+    resume=manager.create(cleanup=False)
+    manager.set_status(resume,"failed","recoverable")
+    with manager.db:
+        manager.db.execute("UPDATE jobs SET published=? WHERE id=?",(time.time()-4*86400,old))
+    monkeypatch.setattr(orch,"run_cmd",lambda *a,**k:(0,None,None))
+    yield manager,old,resume
+    manager.close()
+
+
+@pytest.mark.parametrize("selection",["new","implicit","explicit"])
+def test_launch_cleanup_runs_once_under_shared_lock_including_resume(launch_jobs,monkeypatch,selection,capsys):
+    from people_workspaces import Workspaces
+    manager,old,resume=launch_jobs
+    actual=Workspaces.cleanup
+    calls=[]
+    def cleanup(workspaces,**kwargs):
+        assert orch._RUN_LOCK_ACQUIRED
+        assert orch.LOCK_FILE==manager.state/'orchestrator.lock'
+        assert orch.LOCK_FILE.is_file()
+        if selection=='explicit':
+            assert (manager.path(resume)/'.active').exists()
+        calls.append(kwargs)
+        return actual(workspaces,**kwargs)
+    monkeypatch.setattr(Workspaces,'cleanup',cleanup)
+    args=['--new-batch'] if selection=='new' else ['--batch-id',resume] if selection=='explicit' else []
+    invoke(monkeypatch,*args,'--stop-after','ensure_repo')
+    assert calls==[{'dry_run':False}]
+    assert manager.record(old)[0]['status']=='complete'
+    assert not (manager.path(old)/'prepared').exists()
+    assert (manager.path(resume)/'input').exists()
+    assert not orch.LOCK_FILE.exists()
+    assert not list(manager.jobs.glob('*/.active'))
+    assert '[CLEANUP] eligible=1 deleted=1 retained=1' in capsys.readouterr().out
+
+
+@pytest.mark.parametrize('args',[['--dry-run'],['--new-batch','--dry-run'],['--list']])
+def test_launch_preview_and_list_never_cleanup(launch_jobs,monkeypatch,args):
+    from people_workspaces import Workspaces
+    manager,old,resume=launch_jobs
+    monkeypatch.setattr(Workspaces,'cleanup',lambda *a,**k:pytest.fail('Cleanup in preview/list'))
+    invoke(monkeypatch,*args,'--stop-after','ensure_repo')
+    assert (manager.path(old)/'prepared').exists()
+    assert manager.record(old)[0]['status']=='cleanup_eligible'
+
+
+def test_launch_auto_cleanup_can_be_disabled(launch_jobs,monkeypatch):
+    from people_workspaces import Workspaces
+    manager,old,resume=launch_jobs
+    monkeypatch.setenv('PEOPLE_AUTO_CLEANUP','false')
+    monkeypatch.setattr(Workspaces,'cleanup',lambda *a,**k:pytest.fail('Auto cleanup disabled'))
+    invoke(monkeypatch,'--new-batch','--stop-after','ensure_repo')
+    assert (manager.path(old)/'prepared').exists()
+
+
+def test_launch_cleanup_frees_expired_data_before_new_batch_budget_check(launch_jobs,monkeypatch):
+    manager,old,resume=launch_jobs
+    (manager.path(old)/'logs/large.log').write_bytes(b'x'*100000)
+    monkeypatch.setenv('PEOPLE_JOBS_MAX_GIB',str(50*1024/1024**3))
+    invoke(monkeypatch,'--new-batch','--stop-after','ensure_repo')
+    assert manager.record(old)[0]['status']=='complete'
+    assert (manager.path(old)/'logs/large.log').stat().st_size==32768
+
+
+def test_launch_cleanup_preserves_incomplete_active_and_external_data(launch_jobs,monkeypatch):
+    import time
+    from test_people_workspaces import published_job
+    manager,old,resume=launch_jobs
+    statuses=['pending','processing','failed','partially_published','validated','validation_only']
+    protected=[]
+    for status in statuses:
+        batch=manager.create(cleanup=False)
+        manager.set_status(batch,status)
+        image=manager.path(batch)/'posters/only-copy.jpg'
+        image.write_bytes(b'only-copy')
+        protected.append(image)
+    unverified=manager.create(cleanup=False)
+    manager.set_status(unverified,'cleanup_eligible')
+    with manager.db:
+        manager.db.execute('UPDATE jobs SET updated=? WHERE status!=?',(time.time()-100*86400,'complete'))
+        manager.db.execute('UPDATE jobs SET published=? WHERE id=?',(time.time()-4*86400,unverified))
+    active=published_job(manager,monkeypatch)
+    with manager.db:
+        manager.db.execute('UPDATE jobs SET published=? WHERE id=?',(time.time()-4*86400,active))
+    manager.activate(active)
+    for relative in ('people_dirs/historical.jpg','models/cached-model.bin','clone/.git/marker','source.jpg'):
+        path=manager.config/relative
+        path.parent.mkdir(parents=True,exist_ok=True)
+        path.write_bytes(b'external')
+        protected.append(path)
+    try:
+        invoke(monkeypatch,'--new-batch','--stop-after','ensure_repo')
+        assert (manager.path(active)/'prepared').exists()
+        assert manager.record(unverified)[0]['status']=='cleanup_eligible'
+        assert all(p.read_bytes() in {b'only-copy',b'external'} for p in protected)
+    finally:
+        manager.deactivate(active)
+
+
+def test_launch_cleanup_error_is_visible_without_failing_resumed_job(launch_jobs,monkeypatch,capsys):
+    import people_workspaces
+    manager,old,resume=launch_jobs
+    actual=people_workspaces.shutil.rmtree
+    def fail(path,*a,**kw):
+        if Path(path).is_relative_to(manager.path(old)):
+            raise OSError('cleanup denied')
+        return actual(path,*a,**kw)
+    monkeypatch.setattr(people_workspaces.shutil,'rmtree',fail)
+    invoke(monkeypatch,'--batch-id',resume,'--stop-after','ensure_repo')
+    output=capsys.readouterr()
+    assert 'Launch cleanup incomplete' in output.err and 'cleanup denied' in output.err
+    assert 'eligible=1 deleted=0 retained=2' in output.out
+    assert manager.record(resume)[0]['status']=='processing'
+    assert manager.record(old)[0]['status']=='cleanup_eligible'
+    assert (manager.path(resume)/'input').exists()
+    assert not orch.LOCK_FILE.exists()
+
+
+def test_concurrent_launch_does_not_cleanup_create_or_remove_other_lock(launch_jobs,monkeypatch):
+    from people_workspaces import Workspaces
+    manager,old,resume=launch_jobs
+    lock=manager.state/'orchestrator.lock'
+    lock.write_text(str(os.getpid()),encoding='ascii')
+    before=set(manager.jobs.iterdir())
+    monkeypatch.setattr(Workspaces,'cleanup',lambda *a,**k:pytest.fail('Concurrent cleanup'))
+    try:
+        with pytest.raises(SystemExit) as error:
+            invoke(monkeypatch,'--new-batch','--stop-after','ensure_repo')
+        assert error.value.code==3
+        assert lock.read_text(encoding='ascii')==str(os.getpid())
+        assert set(manager.jobs.iterdir())==before
+        assert (manager.path(old)/'prepared').exists()
+    finally:
+        lock.unlink()

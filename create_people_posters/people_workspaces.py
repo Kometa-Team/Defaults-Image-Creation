@@ -247,12 +247,16 @@ class Workspaces:
 
     def cleanup(self, dry_run=True, now=None):
         now = time.time() if now is None else now
+        self.last_cleanup_counts = None
+        rows = self.db.execute("SELECT * FROM jobs").fetchall()
+        self.last_cleanup_counts = {"eligible": 0, "deleted": 0,
+                                    "retained": sum(row["status"] != "complete" for row in rows)}
         retention = float(os.getenv("PEOPLE_BATCH_RETENTION_DAYS", "3"))
         failed_retention = float(os.getenv("PEOPLE_FAILED_BATCH_RETENTION_DAYS", "14"))
         if retention < 0 or failed_retention < 0:
             raise ValueError("Retention days cannot be negative")
         results = []
-        for row in self.db.execute("SELECT * FROM jobs").fetchall():
+        for row in rows:
             batch = row["id"]
             _, manifest = self.record(batch)
             path = self.path(batch)
@@ -290,6 +294,7 @@ class Workspaces:
                 if changed:
                     results.append((batch, "retained: local image changed after publication"))
                     continue
+                self.last_cleanup_counts["eligible"] += 1
                 results.append((batch, "eligible" if dry_run else "cleaned"))
                 if dry_run:
                     continue
@@ -310,6 +315,8 @@ class Workspaces:
                             tail = handle.read()
                         log.write_bytes(tail)
                 self.set_status(batch, "complete")
+                self.last_cleanup_counts["deleted"] += 1
+                self.last_cleanup_counts["retained"] -= 1
             finally:
                 ledger.close()
         return results

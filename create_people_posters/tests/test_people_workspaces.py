@@ -83,8 +83,10 @@ def test_successful_cleanup_retains_receipts_models_and_logs(manager, monkeypatc
     log.write_bytes(b"x" * 100000)
     future = time.time() + 4 * 86400
     assert manager.cleanup(dry_run=True, now=future) == [(batch, "eligible")]
+    assert manager.last_cleanup_counts == {"eligible":1,"deleted":0,"retained":1}
     assert (manager.path(batch) / "prepared").exists()
     assert manager.cleanup(dry_run=False, now=future) == [(batch, "cleaned")]
+    assert manager.last_cleanup_counts == {"eligible":1,"deleted":1,"retained":0}
     assert not (manager.path(batch) / "prepared").exists()
     assert model.read_bytes() == b"persistent"
     assert (manager.state / "publication_state.db").exists()
@@ -121,6 +123,7 @@ def test_cleanup_interrupt_resumes(manager, monkeypatch):
     monkeypatch.setattr(people_workspaces.shutil, "rmtree", fail)
     with pytest.raises(OSError, match="interrupted"):
         manager.cleanup(dry_run=False, now=time.time() + 4 * 86400)
+    assert manager.last_cleanup_counts == {"eligible":1,"deleted":0,"retained":1}
     assert manager.record(batch)[0]["status"] == "cleanup_eligible"
     monkeypatch.setattr(people_workspaces.shutil, "rmtree", original)
     manager.cleanup(dry_run=False, now=time.time() + 4 * 86400)

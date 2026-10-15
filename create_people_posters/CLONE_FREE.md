@@ -223,7 +223,12 @@ retryable. Dead-process locks can be recovered; malformed locks require manual
 inspection. Never remove a live run's lock.
 
 After all mandatory publication checks, successful files are retained for three
-days by default, then cleaned at a subsequent batch run or with:
+days by default. Each batch-mode orchestrator launch, including resume, checks
+for eligible cleanup once under `config/state/orchestrator.lock` (or the configured
+state directory). Explicitly resumed jobs are protected before cleanup; new jobs
+are admitted after cleanup so reclaimed space counts toward the budget.
+`PEOPLE_AUTO_CLEANUP=false`, `--dry-run` and `--list` skip launch cleanup. No
+scheduler or background service is needed. Manual maintenance remains available:
 
 ```bash
 python people_workspaces.py          # cleanup dry-run
@@ -234,6 +239,15 @@ Cleanup preserves manifests, SQLite metadata, models and compact logs. It accept
 only known job IDs with matching managed manifests and verified receipts, and
 rejects traversal, symlinks and Windows reparse points. Interrupted cleanup can
 be retried. Active jobs are excluded.
+
+The launch summary logs `eligible`, `deleted` and `retained` batch counts.
+Eligible means the retention and existing receipt/hash checks passed; deleted
+means payload cleanup completed, not that durable manifests were removed.
+Retained counts jobs not marked complete, including active, young and incomplete
+jobs. Cleanup errors produce a visible warning and counts without marking the
+current recoverable batch failed; retry cleanup after resolving the problem.
+Historical `config/people_dirs`, Git clones, model caches and sources outside
+managed jobs are never part of this cleanup.
 
 **Unpublished files are never automatically expired**, even after the default
 14-day failed-job retention threshold. Old failures are reported for recovery,
