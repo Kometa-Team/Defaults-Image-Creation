@@ -13,9 +13,9 @@ Choose the path that matches your task.
 
 ### A) Build / refresh People posters (Python orchestrator)
 
-The opt-in clone-free publisher and temporary batch workspaces avoid downloading
-seven image repositories that can occupy hundreds of gigabytes. Legacy local Git
-publishing remains the default. See [clone-free setup, retention and migration](create_people_posters/CLONE_FREE.md)
+Clone-free publishing and temporary batch workspaces are the default: no downloads
+of the seven image repositories, which can occupy hundreds of gigabytes.
+Full local Git clones remain an explicit fallback. See [clone-free setup, retention and migration](create_people_posters/CLONE_FREE.md)
 and the [People Posters guide](create_people_posters/README.md).
 
 1. Python 3.10+ and `pip` installed
@@ -27,20 +27,25 @@ and the [People Posters guide](create_people_posters/README.md).
 3. First‑run bootstraps `./config/.env` from the example:
    ```bash
    python orchestrator.py
-   # then edit ./config/.env and set at least: TMDB_KEY=your_api_key
+   # then edit ./config/.env and set TMDB_KEY=your_api_key
+   gh auth login  # needs access to the seven destination repositories
    ```
 4. Typical runs:
    ```bash
-   # Full publish flow (includes final push)
-   python orchestrator.py --repo-root "/path/to/Kometa-People-Images"
+   # Clone-free batch from an explicit list (includes final publication)
+   python orchestrator.py --new-batch --people-list config/people_list.txt
 
    # Clone-free preview: generate locally, but do not publish
-   python orchestrator.py --publish-mode github_api --workspace-mode batch --people-list config/people_list.txt --dry-run
+   python orchestrator.py --new-batch --people-list config/people_list.txt --dry-run
+
+   # Optional full-clone fallback, with existing local repositories
+   python orchestrator.py --publish-mode local_git --workspace-mode persistent --repo-root "/path/to/Kometa-People-Images"
    ```
 
 **Highlights**
-- Update step performs `git fetch` + `reset --hard` + `clean -fdx` so **remote always wins** (no local merge tangle).
-- Optional final **push** step commits and pushes only if there are changes.
+- Default updates refresh GitHub metadata; publication uploads only changed images without cloning the libraries.
+- Successful batches are retained for three days, then eligible for receipt-verified cleanup; unpublished images are retained.
+- Full-clone fallback uses the existing `git fetch` + `reset --hard` + `clean -fdx` workflow.
 - QA helpers include `image_check.py` (single‑tree) and `compare_image_trees.py` (7‑tree matrix).
 
 > For full details of steps, env vars, and QA utilities, see the orchestrator README in this repo.

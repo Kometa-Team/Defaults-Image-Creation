@@ -220,7 +220,9 @@ def test_budget_rejects_more_work_without_deleting(manager, monkeypatch):
     assert image.exists()
 
 
-def test_local_git_default_is_unchanged(monkeypatch):
-    import orchestrator
-    assert "ensure_people_repo.py" in Path(orchestrator.__file__).read_text(encoding="utf-8")
-    assert os.getenv("PEOPLE_PUBLISH_MODE", "local_git") == "local_git"
+def test_public_example_defaults_to_clone_free_batches():
+    from dotenv import dotenv_values
+    settings = dotenv_values(Path(__file__).resolve().parents[1] / ".env.example")
+    assert settings["PEOPLE_PUBLISH_MODE"] == "github_api"
+    assert settings["PEOPLE_WORKSPACE_MODE"] == "batch"
+    assert not settings["PEOPLE_IMAGES_DIR"]

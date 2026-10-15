@@ -7,6 +7,7 @@ Key behavior
 - Enforces a single, correct step order. Users CANNOT reorder steps.
 - Checkpoints each step to allow resume after Ctrl-C/crash.
 - Default mode: resume from the first step that isn't completed.
+- Uses clone-free GitHub publishing and isolated batch jobs by default.
 - Tools read defaults from ./config/.env; override some paths via CLI.
 - Uses sys.executable so it works the same on Windows/macOS/Linux.
 
@@ -651,8 +652,10 @@ def main():
     parser.add_argument("--redo", help="Clear checkpoint for this step (and downstream) and restart at that step.")
     parser.add_argument("--stop-after", help="Stop cleanly after this step completes; useful for recovery QA gates.")
     parser.add_argument("--list", action="store_true", help="List step status and exit.")
-    parser.add_argument("--publish-mode", choices=["local_git", "github_api"], default=os.getenv("PEOPLE_PUBLISH_MODE", "local_git"))
-    parser.add_argument("--workspace-mode", choices=["persistent", "batch"], default=os.getenv("PEOPLE_WORKSPACE_MODE", "persistent"))
+    parser.add_argument("--publish-mode", choices=["local_git", "github_api"], default=os.getenv("PEOPLE_PUBLISH_MODE", "github_api"),
+                        help="Publishing backend (default: github_api; local_git requires full image clones)")
+    parser.add_argument("--workspace-mode", choices=["persistent", "batch"], default=os.getenv("PEOPLE_WORKSPACE_MODE", "batch"),
+                        help="Processing workspace (default: batch; persistent uses legacy staging)")
     parser.add_argument("--batch-id", help="Resume a particular managed batch")
     parser.add_argument("--new-batch", action="store_true", help="Create an isolated batch instead of resuming")
     parser.add_argument("--people-list", type=Path, help="Explicit input list; skip log discovery for this run")

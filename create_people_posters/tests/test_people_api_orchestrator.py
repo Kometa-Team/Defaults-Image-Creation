@@ -39,7 +39,7 @@ def invoke(monkeypatch, *args):
 def test_api_mode_without_clones_preserves_step_names(isolated, monkeypatch):
     calls = []
     monkeypatch.setattr(orch, "run_cmd", lambda title, argv, **kw: (calls.append(argv) or (0, None, None)))
-    invoke(monkeypatch, "--publish-mode", "github_api", "--redo", "sync_images")
+    invoke(monkeypatch, "--publish-mode", "github_api", "--workspace-mode", "persistent", "--redo", "sync_images")
     api = [call for call in calls if "publish_people_github.py" in call]
     assert [call[call.index("--op") + 1] for call in api] == ["validate", "prepare", "push"]
     assert all(call[call.index("--branch") + 1] == "master" for call in api)
@@ -50,7 +50,7 @@ def test_api_mode_without_clones_preserves_step_names(isolated, monkeypatch):
 def test_api_dry_run_not_checkpointed_as_publication(isolated, monkeypatch):
     calls = []
     monkeypatch.setattr(orch, "run_cmd", lambda title, argv, **kw: (calls.append(argv) or (0, None, None)))
-    invoke(monkeypatch, "--publish-mode", "github_api", "--redo", "sync_images", "--dry-run")
+    invoke(monkeypatch, "--publish-mode", "github_api", "--workspace-mode", "persistent", "--redo", "sync_images", "--dry-run")
     assert all("--dry-run" in call for call in calls)
     assert not (isolated / ".orch/sync_images.done.json").exists()
 
@@ -103,13 +103,54 @@ def test_batch_model_failure_preserves_sources(isolated, monkeypatch):
     assert (workspace / "input/people_list.txt").exists()
 
 
-def test_legacy_mode_still_invokes_local_tools(isolated, monkeypatch):
+@pytest.mark.parametrize("selection", ["cli", "environment"])
+def test_legacy_mode_still_invokes_local_tools(isolated, monkeypatch, selection):
     repo = isolated / "repos"
     (repo / "transparent").mkdir(parents=True)
     monkeypatch.setenv("PEOPLE_IMAGES_DIR", str(repo))
     calls = []
     monkeypatch.setattr(orch, "run_cmd", lambda title, argv, **kw: (calls.append(argv) or (0, None, None)))
-    invoke(monkeypatch, "--redo", "sync_images")
+    args = []
+    if selection == "cli":
+        args = ["--publish-mode", "local_git", "--workspace-mode", "persistent"]
+    else:
+        monkeypatch.setenv("PEOPLE_PUBLISH_MODE", "local_git")
+        monkeypatch.setenv("PEOPLE_WORKSPACE_MODE", "persistent")
+    invoke(monkeypatch, *args, "--redo", "sync_images")
     assert any("sync_people_images.py" in call for call in calls)
     assert any("update_people_repos.py" in call and "push" in call for call in calls)
     assert not any("publish_people_github.py" in call for call in calls)
+
+
+def test_default_run_uses_api_batch_without_clones(isolated, monkeypatch):
+    calls = []
+    monkeypatch.setattr(orch, "run_cmd", lambda title, argv, **kw: (calls.append(argv) or (0, None, None)))
+    invoke(monkeypatch, "--stop-after", "ensure_repo")
+    assert os.environ["PEOPLE_PUBLISH_MODE"] == "github_api"
+    assert os.environ["PEOPLE_WORKSPACE_MODE"] == "batch"
+    assert orch.CONFIG_DIR.parent == isolated / "jobs"
+    assert (orch.CONFIG_DIR / "manifest.json").is_file()
+    assert len(calls) == 1 and "publish_people_github.py" in calls[0]
+    assert calls[0][calls[0].index("--op") + 1] == "validate"
+    assert not (orch.CONFIG_DIR / ".active").exists()
+
+
+def test_cli_can_override_legacy_configuration(isolated, monkeypatch):
+    monkeypatch.setenv("PEOPLE_PUBLISH_MODE", "local_git")
+    monkeypatch.setenv("PEOPLE_WORKSPACE_MODE", "persistent")
+    calls = []
+    monkeypatch.setattr(orch, "run_cmd", lambda title, argv, **kw: (calls.append(argv) or (0, None, None)))
+    invoke(monkeypatch, "--publish-mode", "github_api", "--workspace-mode", "batch", "--stop-after", "ensure_repo")
+    assert orch.CONFIG_DIR.parent == isolated / "jobs"
+    assert "publish_people_github.py" in calls[0]
+
+
+def test_default_api_failure_never_falls_back_to_cloning(isolated, monkeypatch):
+    calls = []
+    monkeypatch.setattr(orch, "run_cmd", lambda title, argv, **kw: (calls.append(argv) or (7, None, None)))
+    with pytest.raises(SystemExit) as error:
+        invoke(monkeypatch)
+    assert error.value.code == 7
+    assert len(calls) == 1 and "publish_people_github.py" in calls[0]
+    manifest = json.loads((orch.CONFIG_DIR / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["status"] == "failed"

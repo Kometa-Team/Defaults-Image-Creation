@@ -16,12 +16,12 @@ It’s designed to be **cross‑platform**, **fixed‑order**, and **resumable**
 
 ## Prerequisites
 
-### Optional Clone-Free Publishing
+### Default Clone-Free Publishing
 
-The legacy defaults remain `PEOPLE_PUBLISH_MODE=local_git` and
-`PEOPLE_WORKSPACE_MODE=persistent`. Full local clones can require hundreds of
-gigabytes, including history and working copies. The opt-in `github_api` mode
-does not require any of the seven clones. Combine it with `batch` workspaces to
+The defaults are `PEOPLE_PUBLISH_MODE=github_api` and
+`PEOPLE_WORKSPACE_MODE=batch`: none of the seven image repositories needs to be
+cloned. Full local clones can require hundreds of gigabytes, including history
+and working copies, and are available only as an explicit fallback. Batch workspaces
 retain only active/retryable processing images and small persistent metadata.
 Models, dependencies and active batches still need local disk space.
 
@@ -80,16 +80,30 @@ pip install -r requirements.txt
 
 Create `./config/.env` (the orchestrator will auto‑create it from `.env.example` and exit once, prompting you to edit).
 
-**Minimum required:**
+**Required configuration:**
 ```ini
 TMDB_KEY=your_tmdb_api_key_here
 ```
+
+Authenticate with `gh auth login`, or provide `GITHUB_TOKEN` in the process
+environment. Publishing needs Contents write access to all seven destination
+repositories and Actions write access for README dispatch. A token for only this
+code repository is insufficient. Community contributors without destination
+write access still need an authorized fork/PR workflow; automatic fork creation
+is not implemented. See [authentication and publication](CLONE_FREE.md#authentication-and-publication).
+
+Existing `.env` files are preserved. To migrate an installation that explicitly
+selects the old modes, set `PEOPLE_PUBLISH_MODE=github_api` and
+`PEOPLE_WORKSPACE_MODE=batch`. Authentication/API errors never trigger large
+clone downloads automatically.
 
 **Recommended:**
 ```ini
 # Orchestrator
 ORCH_LOGS_DIR=/absolute/path/to/kometa/logs          # used by steps 2–3
-PEOPLE_IMAGES_DIR=/absolute/path/to/Kometa-People-Images
+PEOPLE_PUBLISH_MODE=github_api                        # no full image clones
+PEOPLE_WORKSPACE_MODE=batch                           # isolated jobs with retention
+# PEOPLE_IMAGES_DIR=/absolute/path/to/Kometa-People-Images  # full-clone fallback only
 PEOPLE_BRANCH=master                                  # optional; branch for update/push
 SYNC_PREFLIGHT=true                                   # optional; source QA before sync
 SYNC_MARKDOWN=false                                   # keep local sync from overwriting GitHub-generated READMEs
@@ -312,9 +326,19 @@ pip install -r requirements-ddcolor.txt
 
 ---
 
-# People Images: One-Time Repository Setup
+# Optional Full-Clone Fallback Setup
 
-The orchestrator expects **seven** repos under one root folder (the path is read from `PEOPLE_IMAGES_DIR`). Clone them as follows.
+Skip this entire section for normal clone-free operation. Only full-clone mode
+expects **seven** repos under `PEOPLE_IMAGES_DIR`; these clones and their history
+can consume hundreds of gigabytes. To deliberately select this fallback, set
+the following in `config/.env`, then clone the repositories as shown below:
+
+```dotenv
+PEOPLE_PUBLISH_MODE=local_git
+PEOPLE_WORKSPACE_MODE=persistent
+```
+
+For a single run, use `python orchestrator.py --publish-mode local_git --workspace-mode persistent`.
 
 ```
 <PEOPLE_IMAGES_DIR>/
@@ -379,6 +403,13 @@ ls -1 "$PEOPLE_IMAGES_DIR"
 
 The orchestrator enforces the single correct order and writes checkpoints so you can resume later:
 
+In default API/batch mode, `ensure_repo` validates GitHub access, `update`
+refreshes remote tree metadata, `sync_images` validates/prepares canonical
+files, and `push` publishes through the Git Data API. No image clones are used.
+Processing paths live under `config/jobs/ID/`, and background removal uses
+BiRefNet Portrait by default. The script mapping below describes the full-clone
+fallback; step names and ordering are the same in both modes.
+
 1. **ensure_repo** → `ensure_people_repo.py` — validate Kometa‑People‑Images repo directory (**always runs**)  
 2. **scan_kometa_logs** → `scan_kometa_logs.py` — scan Kometa logs for missing names  
 3. **find_and_download_missing** → `find_and_download_missing_people.py` — build missing‑people lists from logs  
@@ -435,8 +466,16 @@ python orchestrator.py
 ### Most used commands
 
 Use this section for normal day-to-day operation. These commands assume you are
-in `create_people_posters` with the venv activated and `PEOPLE_IMAGES_DIR`
-pointing at the folder that contains the seven local People image repos.
+in `create_people_posters` with the venv activated, a TMDb key, and authenticated
+GitHub access. No `PEOPLE_IMAGES_DIR` or full image clones are needed by default.
+
+Start a fresh batch directly from your list, bypassing log discovery:
+
+```bash
+python orchestrator.py --new-batch --people-list config/people_list.txt
+# Preview without publishing:
+python orchestrator.py --new-batch --people-list config/people_list.txt --dry-run
+```
 
 Resume the pipeline from the first incomplete checkpoint:
 
@@ -752,7 +791,8 @@ If you want to begin at the TMDB step, use `python orchestrator.py --redo tmdb`.
 The orchestrator now continues past zero-result log scans when `people_overrides.txt` contains entries.
 
 ### Resume & checkpoints
-- **Checkpoints** are JSON files in `./config/.orch/*.done.json`.
+- **Checkpoints** are per batch in `./config/jobs/ID/.orch/*.done.json`.
+  Full-clone/persistent fallback retains `./config/.orch/*.done.json`.
 - **Run status**:
   ```bash
   python orchestrator.py --list
@@ -773,6 +813,8 @@ The orchestrator now continues past zero-result log scans when `people_overrides
   python orchestrator.py --redo prep_dirs
   ```
 - Just run **readme** and **sync_md** locally for **multiple styles**:
+  These local-library commands require the full-clone/persistent fallback
+  selected in `.env`; default API mode uses destination README workflows.
   ```bash
   # Local README generation is normally disabled because GitHub Actions owns it.
   # Enable it explicitly only for a deliberate local README pass.
@@ -951,7 +993,9 @@ python bulk_extract_configs.py --input_directory "C:/temp"
 The orchestrator will create one from `.env.example` and exit; edit it and re‑run.
 
 **People‑Images repo not found**  
-Set `PEOPLE_IMAGES_DIR` in `.env` (or pass `--repo-root`) and ensure the repo exists on disk.
+This requirement applies only to the explicit `local_git` fallback. Default
+`github_api` mode does not need `PEOPLE_IMAGES_DIR`. For full-clone mode, set it
+in `.env` (or pass `--repo-root`) and ensure all seven clones exist on disk.
 
 **TMDB errors / invalid key**  
 Double‑check `TMDB_KEY` and your network. Try re‑running with `--redo tmdb`.

@@ -1,8 +1,8 @@
 # Clone-free people publishing
 
-Clone-free publishing is available as an opt-in mode. The public example keeps
-`local_git` / `persistent` for existing installations; explicitly select
-`github_api` / `batch` to avoid the seven local image clones. Both modes remain
+Clone-free publishing is the default. The public example and orchestrator use
+`github_api` / `batch`, avoiding all seven local image clones. Full-clone
+`local_git` / `persistent` remains an explicit fallback. Both modes remain
 supported, and the Adobe/Selenium background-removal option is unchanged.
 
 ## Dependency audit
@@ -44,9 +44,9 @@ update master using non-forced Git Data API refs. They are not rewritten here.
 ## Setup and migration
 
 No existing clone, staging image or checkpoint is deleted during migration.
-Keep your existing libraries until you have tested the new mode. The production
-defaults remain `local_git` / `persistent`. Enable API/batch explicitly in
-`config/.env`:
+Keep your existing libraries until you have tested the new mode. New installations
+default to API/batch. Existing `.env` files are not overwritten: if yours selects
+`local_git` / `persistent`, change these settings in `config/.env` to migrate:
 
 ```dotenv
 PEOPLE_PUBLISH_MODE=github_api
@@ -58,6 +58,10 @@ PEOPLE_FAILED_BATCH_RETENTION_DAYS=14
 PEOPLE_AUTO_CLEANUP=true
 PEOPLE_JOBS_MAX_GIB=20
 ```
+
+Without an explicit mode setting, the orchestrator also defaults to API/batch.
+The default never falls back to cloning automatically if authentication or an API
+request fails. Fix access or explicitly select full-clone mode instead.
 
 `PEOPLE_IMAGES_DIR` is ignored by ordinary API-mode orchestration; it may remain
 configured for legacy maintenance. Set `PEOPLE_JOBS_DIR` and `PEOPLE_STATE_DIR`
@@ -312,13 +316,19 @@ and persistent-workspace orchestration are blocked in sandbox mode.
 
 Before returning to production, unset `PEOPLE_SANDBOX_CONFIG` and sandbox-specific
 `PEOPLE_STATE_DIR`/`PEOPLE_JOBS_DIR`, and choose `PEOPLE_GITHUB_TARGET=production`.
-The public example continues to default to production targeting with
-**local_git + persistent**, not automatic API publication. A maintainer's ignored
-private `.env` may opt in independently; it is never included in the release.
+The public example defaults to production targeting with **github_api + batch**.
+An ordinary run includes publication; use `--dry-run` or `--stop-after poster_ps1`
+to review first. Private `.env` files are never included in the release.
 
 ## Verification boundary
 
-Release preflight on 2026-10-14: **472 passed, 4 skipped**, with 20 existing
+Clone-free-default follow-up on 2026-10-14: **476 passed, 4 skipped**, with
+20 existing Pillow deprecation warnings. Regression coverage verifies the
+no-settings API/batch defaults, explicit CLI/environment full-clone fallback,
+CLI override of old configuration, matching public-example defaults, and no
+automatic cloning after an API access failure.
+
+Initial release preflight on 2026-10-14: **472 passed, 4 skipped**, with 20 existing
 Pillow deprecation warnings. Run from the repository root:
 
 ```powershell
@@ -351,10 +361,13 @@ production trials against all seven image repositories on `master`:
   live; Linux/macOS model execution and new grayscale DDColor inference still
   require deployment-specific validation.
 
-The maintainer's local configuration is now opted into `github_api` / `batch`.
-Community defaults remain unchanged. To return to local Git, set
+The community and maintainer defaults now use `github_api` / `batch`.
+To select the full-clone fallback, set
 `PEOPLE_PUBLISH_MODE=local_git` and `PEOPLE_WORKSPACE_MODE=persistent`; existing
-clones and legacy checkpoints remain available. The separate online
+clones and legacy checkpoints remain available. The equivalent one-run override
+is `python orchestrator.py --publish-mode local_git --workspace-mode persistent`.
+Full clones can consume hundreds of gigabytes; this fallback is not selected
+automatically. The separate online
 [Adobe rollback snapshot](https://github.com/Kometa-Team/Defaults-Image-Creation/tree/adobe-express-snapshot-2026-10-14)
 is preserved.
 
@@ -392,7 +405,7 @@ The durable local report is `config/sandboxes/live-20261014/report.json`, with
 workflow-run links, hashes, mutation counts, cleanup results and before/after
 production refs. `provisioning.json` lists the seven created private repos.
 At the sandbox stage the private `.env` still selected `local_git` / `persistent`;
-the later maintainer-only opt-in is recorded above.
+the later production trials and community default change are recorded above.
 
 ### Local validation on 2026-10-14
 
@@ -450,8 +463,8 @@ Integration: `orchestrator.py`, `tmdb_people.py`, `truncate_tmdb_people_names.py
 `remove_bg_birefnet.py`, `sel_remove_bg.py`, `recover_edge_chops.py`,
 `sync_people_images.py`, `create_people_poster.ps1`, `clean_people_config.py`.
 
-Configuration/documentation: `.env.example` (legacy defaults), private ignored
-`config/.env` (maintainer opt-in), `README.md`, `CLONE_FREE.md`, and the root
+Configuration/documentation: `.env.example` (clone-free batch defaults), private
+ignored `config/.env`, `README.md`, `CLONE_FREE.md`, and the root
 `../README.md` quick-start links/commands.
 
 New tests: `tests/test_people_github.py`, `tests/test_people_workspaces.py`,

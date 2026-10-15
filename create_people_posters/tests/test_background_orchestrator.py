@@ -60,6 +60,8 @@ def isolated(monkeypatch, tmp_path):
     repo = tmp_path / "repo"
     (repo / "transparent").mkdir(parents=True)
     monkeypatch.setenv("PEOPLE_IMAGES_DIR", str(repo))
+    monkeypatch.setenv("PEOPLE_PUBLISH_MODE", "local_git")
+    monkeypatch.setenv("PEOPLE_WORKSPACE_MODE", "persistent")
     monkeypatch.setenv("ORCH_CONTINUE_IF_EMPTY", "true")
     monkeypatch.setenv("TMDB_KEY", "mock-key")
 
