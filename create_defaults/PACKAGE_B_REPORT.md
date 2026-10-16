@@ -182,8 +182,10 @@ Package A (35), Package B (75 passed / one Windows-only junction skip), and both
 baseline validators. People regressions had 126 passes, one Windows-only junction
 skip and three failures, all caused by missing `python-dotenv` on the clean runner.
 No auth/publication logic failure was observed. CI requirements now pin the
-existing People dependency `python-dotenv==1.2.4`, matching its existing rembg
-requirements and the tested Windows environment. No test was removed or skipped
+existing People dependencies `python-dotenv==1.2.4` and `alive-progress==3.3.0`,
+matching their existing rembg requirements and tested Windows environment. The
+second import was identified by inspecting the sync helper's complete imports.
+No test was removed or skipped
 to hide those failures. The updated run must pass before gate sign-off.
 
 ### Worker and Scope Review
