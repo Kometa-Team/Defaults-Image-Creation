@@ -4490,7 +4490,7 @@ Function CreateFranchise {
         '| Reacher.png| +0| 1600| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Reacher| #4E0345| 1| 1| 0| 0',
         '| Inspector Morse.png| +0| 1600| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Inspector Morse| #30FA20| 1| 1| 0| 0',
         '| Father Brown.png| +0| 1600| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Father Brown| #825445| 1| 1| 0| 0',
-        '| Death in Paradise (2011).png| +0| 1600| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Death in Paradise (2911)| #9034AF| 1| 1| 0| 0',
+        '| Death in Paradise (2011).png| +0| 1600| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Death in Paradise (2011)| #9034AF| 1| 1| 0| 0',
         '| John Wick.png| +0| 1600| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | John Wick| #1A1F2B| 1| 1| 0| 0',
         '| John Wick2.png| +0| 1600| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | John Wick2| #1A1F2B| 1| 1| 0| 0',
         '| Bosch.png| +0| 1600| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Bosch| #2C2C2C| 1| 1| 0| 0',
