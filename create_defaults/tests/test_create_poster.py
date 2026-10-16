@@ -26,6 +26,21 @@ OPTIONS = PosterOptions(logo=LOGO, base_color="#387DBF", font="ComfortAa-Medium"
 
 
 class ParameterTests(unittest.TestCase):
+    def test_compound_legacy_negative_offsets_preserve_reference_placement(self):
+        for name, value in (("logo_offset", 500), ("text_offset", 850)):
+            expected, _ = render_poster(replace(OPTIONS, **{name: -value}))
+            actual, _ = render_poster(replace(OPTIONS, **{name: f"+-{value}"}))
+            self.assertEqual(actual.tobytes(), expected.tobytes())
+        for value in ("--500", "++500", "+--500", "+-1501"):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                render_poster(replace(OPTIONS, logo_offset=value))
+
+    def test_cli_accepts_exact_compound_offsets_without_changing_other_numeric_fields(self):
+        with patch("create_defaults.create_poster.create_poster", return_value={}) as render:
+            self.assertEqual(main(["--logo-offset", "+-500", "--text-offset", "+-850"]), 0)
+            self.assertEqual(render.call_args.args[0].logo_offset, -500)
+            self.assertEqual(render.call_args.args[0].text_offset, -850)
+
     def test_public_parameter_inventory_matches_legacy_declaration(self):
         text = (ROOT / "create_poster.ps1").read_text(encoding="utf-8-sig")
         declaration = next(line for line in text.splitlines() if line.startswith("param ("))
@@ -48,7 +63,9 @@ class ParameterTests(unittest.TestCase):
         self.assertEqual(output_filename(replace(OPTIONS, out_name="Caf\u00e9"), "#387DBF"), "Caf\u00e9.jpg")
         self.assertEqual(output_filename(replace(OPTIONS, out_name="\\blue\\genre"), "#387DBF"), "blue/genre.jpg")
         self.assertEqual(output_filename(replace(OPTIONS, base_color="#abcdef"), "#ABCDEF"), "Action-#abcdef.jpg")
-        for value in ("../source", "dir/../file", "//server/file", "CON", "NUL.txt", "bad:", "bad.", "bad ", "a\x00b"):
+        for stem in ("A.C.G.T.", "asread.", "feel.", "P.I.C.S.", "Production +h.", "SILVER LINK.", "Studio Blanc."):
+            self.assertEqual(output_filename(replace(OPTIONS, out_name=stem), "#387DBF"), stem + ".jpg")
+        for value in ("../source", "dir/../file", "//server/file", "CON", "NUL.txt", "bad:", "bad./file", "bad ", "a\x00b"):
             with self.subTest(value=value), self.assertRaises(ValueError):
                 output_filename(replace(OPTIONS, out_name=value), "#387DBF")
 
@@ -393,8 +410,40 @@ class ComparisonTests(unittest.TestCase):
         self.assertNotIn("Bebas-Regular.ttf", items)
         self.assertIn("SIL OFL 1.1", items["PlusJakartaSans-Bold.ttf"]["license_status"])
         self.assertNotIn("Helvetica-Bold.ttf", items)
-        for filename in ("BoecklinsUniverse.ttf", "Monoton-Regular.ttf"):
-            self.assertIn("remains unverified", items[filename]["license_status"])
+        self.assertIn("exact archived official", items["BoecklinsUniverse.ttf"]["license_status"])
+        self.assertIn("exact official Google Fonts", items["Monoton-Regular.ttf"]["license_status"])
+
+    def test_approved_monoton_font_notice_names_and_production_checksum(self):
+        from fontTools.ttLib import TTFont
+        expected = "951c4cea65ffede784a7c9672feec5d329a7e1e12216c42d53ecf36c90d04dea"
+        evidence = json.loads((ROOT / "font_provenance.json").read_text())["fonts"]["Monoton-Regular.ttf"]
+        path = ROOT / "fonts/Monoton-Regular.ttf"
+        self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), expected)
+        self.assertEqual(evidence["sha256"], expected)
+        notice = ROOT / evidence["bundled_notices"] / "OFL.txt"
+        self.assertEqual(hashlib.sha256(notice.read_bytes()).hexdigest(),
+                         "585c6d2da8bcd8ffa651e0016f2e992a6891b625143a46a1dacf00699a817d9a")
+        self.assertIn(b'with Reserved Font Names "Monoton"', notice.read_bytes())
+        self.assertIn(b"Copyright (c) 2011 by vernon adams", notice.read_bytes())
+        self.assertIn("OFL.txt -text -whitespace", notice.with_name(".gitattributes").read_text())
+        self.assertIn(f'$expectedChecksum_ttf9 = "{expected.upper()}"',
+                      (ROOT / "create_default_posters.ps1").read_text(encoding="utf-8-sig"))
+        with TTFont(path) as font:
+            self.assertEqual(font["maxp"].numGlyphs, 373)
+            self.assertEqual({name.toUnicode() for name in font["name"].names if name.nameID == 1}, {"Monoton"})
+            self.assertEqual({name.toUnicode() for name in font["name"].names if name.nameID == 6}, {"Monoton-Regular"})
+        self.assertEqual(Path(resolve_font("Monoton", ROOT / "fonts")), path)
+
+    def test_boecklin_exact_historical_license_notices_are_preserved(self):
+        evidence = json.loads((ROOT / "font_provenance.json").read_text())["fonts"]["BoecklinsUniverse.ttf"]
+        self.assertEqual(hashlib.sha256((ROOT / "fonts/BoecklinsUniverse.ttf").read_bytes()).hexdigest(), evidence["sha256"])
+        notices = ROOT / evidence["bundled_notices"]
+        self.assertEqual(hashlib.sha256((notices / evidence["license_member"]).read_bytes()).hexdigest(), evidence["license_sha256"])
+        self.assertEqual(hashlib.sha256((notices / "OFL-FAQ.txt").read_bytes()).hexdigest(), evidence["original_faq_sha256"])
+        original = (notices / evidence["license_member"]).read_bytes()
+        self.assertIn(b"Copyright (c) 2013, Peter Wiegel", original)
+        self.assertIn(b"SIL OPEN FONT LICENSE Version 1.1", original)
+        self.assertTrue(any("20150321100356id_" in item["url"] for item in evidence["sources"]))
 
     def test_changed_font_hash_cannot_inherit_curated_license_evidence(self):
         from create_defaults import poster_fixtures

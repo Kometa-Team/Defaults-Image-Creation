@@ -157,7 +157,7 @@ replacements bundle unchanged official OFL assets and their original notices.
 | Plus Jakarta Sans Bold | PlusJakartaSans-Bold.ttf | Decade (2020s), Year (2020-2029) | 721 | Exact official OFL 1.1 asset; original notices bundled |
 | Jura-Bold | Jura-Bold.ttf | Decade, Year | 1052 | Embedded SIL OFL 1.1 |
 | Limelight-Regular | Limelight-Regular.ttf | Decade, Year | 413 | Embedded SIL OFL 1.1 |
-| Monoton | Monoton-Regular.ttf | Decade, Year | 371 | Official OFL family evidence; exact bundled release unverified |
+| Monoton | Monoton-Regular.ttf | Decade, Year | 371 | Approved exact official Google Fonts release; original OFL notice bundled |
 | Press-Start-2P | Press-Start-2P.ttf | Decade, Year | 556 | Embedded SIL OFL 1.1 |
 | Righteous | Righteous-Regular.ttf | Decade, Year | 369 | Embedded SIL OFL 1.1 |
 | Rye-Regular | Rye-Regular.ttf | Decade, Year | 258 | Embedded SIL OFL 1.1 |

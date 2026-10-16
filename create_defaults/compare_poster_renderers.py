@@ -35,7 +35,7 @@ def json_file(path, value):
     Path(path).write_text(json.dumps(value, indent=2, ensure_ascii=True), encoding="utf-8")
 
 
-def measured(command, cwd, log, timeout=120):
+def measured(command, cwd, log, timeout=120, sample_interval=.02):
     """Sample process-tree RSS and write counters; never launch through a shell."""
     started = time.perf_counter()
     peak, counters, timed_out = 0, {}, False
@@ -70,9 +70,10 @@ def measured(command, cwd, log, timeout=120):
                         pass
                 process.kill()
                 break
-            time.sleep(.02)
+            time.sleep(sample_interval)
         code = process.wait()
     return {"seconds": time.perf_counter() - started, "returncode": code, "timed_out": timed_out,
+            "sampling_interval_seconds": sample_interval,
             "sampled_peak_tree_rss_bytes": peak or None, "sampled_write_bytes": sum(counters.values()) or None,
             "command": [str(v) for v in command]}
 
@@ -190,11 +191,13 @@ def compare_images(first, second, directory, label, text_offset=0):
             left, right = left.convert("RGB"), right.convert("RGB")
     total = 0
     changed = 0
+    histogram = np.zeros(256, dtype=np.int64)
     for y in range(0, left.height, 128):
         bounds = (0, y, left.width, min(left.height, y + 128))
         difference = np.abs(np.asarray(left.crop(bounds), dtype=np.int16) - np.asarray(right.crop(bounds), dtype=np.int16))
         total += int(difference.sum())
         changed += int(np.any(difference, axis=2).sum())
+        histogram += np.bincount(difference.ravel(), minlength=256)
     mae = total / (left.width * left.height * 3)
     # Explicitly named global luminance SSIM screen, not local/windowed SSIM.
     a = np.asarray(left.resize((400, 600)).convert("L"), dtype=np.float64)
@@ -211,11 +214,18 @@ def compare_images(first, second, directory, label, text_offset=0):
     margin = min(50, left.width // 40)
     crop = (margin, top, left.width - margin, top + crop_height)
     crop_names = []
+    text_difference = ImageChops.difference(left.crop(crop), right.crop(crop))
+    text_histogram = text_difference.histogram()
+    text_mae = sum((i % 256) * count for i, count in enumerate(text_histogram)) / (text_difference.width * text_difference.height * 3)
     for index, image in enumerate((left, right)):
         name = f"{label}-text-{index}.png"
         image.crop(crop).resize((760, 400)).save(directory / name)
         crop_names.append(name)
     return {"comparable": True, "mean_absolute_error_0_255": mae, "global_luminance_ssim_400x600": float(ssim),
+            "maximum_channel_difference_0_255": int(np.flatnonzero(histogram)[-1]),
+            "channel_difference_p99_0_255": int(np.searchsorted(histogram.cumsum(), histogram.sum() * .99)),
+            "meaningful_difference_definition": "p99 is the 99th percentile absolute RGB channel error; raw maximum is also retained",
+            "text_region": {"bounds": crop, "mean_absolute_error_0_255": text_mae},
             "changed_pixel_fraction": changed / (left.width * left.height), "difference": diff_name,
             "text_crops": crop_names, "flag_for_review": bool(mae > 1.5 or ssim < .995 or alpha_metrics.get("mean_absolute_alpha_error_0_255", 0) > 1.5),
             "comparison_space": "RGBA source-over on #808080; hidden RGB excluded" if transparent else "RGB",
@@ -246,12 +256,16 @@ def page(title, content):
 
 
 def case_html(result, directory):
+    try:
+        from .validation_review import review_summary
+    except ImportError:
+        from validation_review import review_summary
     content = f'<a href="../index.html">All comparisons</a><h1>{html.escape(result["id"])}</h1><p class="{result["status"]}">{html.escape(result["status"])}: {html.escape("; ".join(result["notes"]))}</p><div class="images">'
     for engine in ("legacy", "python", "published"):
         if engine in result["images"]:
             name = result["images"][engine]["report_file"]
             content += f'<figure><figcaption>{engine}</figcaption><a href="{name}"><img src="{name}" alt="{engine} poster"></a></figure>'
-    content += "</div>"
+    content += "</div>" + review_summary(result)
     if result.get("caption_diagnostics"):
         content += '<h2>Isolated Caption and Glyph Placement</h2><div class="images">'
         for engine in ("legacy", "python"):
@@ -260,13 +274,14 @@ def case_html(result, directory):
                 content += f'<figure><figcaption>{engine} caption</figcaption><img src="{name}" alt="{engine} isolated caption" style="background:#333"></figure>'
         content += '</div>'
     for label, comparison in result["comparisons"].items():
-        content += f"<h2>{html.escape(label)}</h2><pre>{html.escape(json.dumps(comparison, indent=2))}</pre>"
+        content += f"<h2>{html.escape(label)}</h2>"
         if comparison.get("comparable"):
             content += '<div class="images">'
             for name in [comparison["difference"], *comparison["text_crops"], *([comparison["alpha_difference"]] if comparison.get("alpha_difference") else [])]:
                 content += f'<figure><figcaption>{html.escape(name)}</figcaption><img src="{name}" alt="{html.escape(name)}"></figure>'
             content += "</div>"
-    content += "<h2>Parameters, Fonts, Hashes and Measurements</h2><pre>" + html.escape(json.dumps(result, indent=2)) + "</pre>"
+        content += '<details><summary>Technical comparison metrics</summary><pre>' + html.escape(json.dumps(comparison, indent=2)) + '</pre></details>'
+    content += '<details><summary>Parameters, fonts, hashes and measurements</summary><pre>' + html.escape(json.dumps(result, indent=2)) + '</pre></details>'
     (directory / "index.html").write_text(page(result["id"], content), encoding="utf-8")
 
 
@@ -455,6 +470,8 @@ def run_overlay_probe(case, args):
 
 
 def index_report(args, results, inventory, audit, startup):
+    for result in results:
+        result["classification"] = classify_result(result)
     counts = {status: sum(r["status"] == status for r in results) for status in ("pass", "warning", "failure")}
     benchmarks = {}
     common = [r for r in results if not r.get("legacy_reused_from") and r.get("kind") != "overlay-reference" and {"legacy", "python"}.issubset(r["images"])]
@@ -491,6 +508,21 @@ def index_report(args, results, inventory, audit, startup):
     content += '</table>'
     (args.report_dir / "index.html").write_text(page("Default Poster Renderer Comparison", content), encoding="utf-8")
     return summary
+
+
+def classify_result(result):
+    comparisons = result.get("comparisons", {})
+    a = comparisons.get("A-legacy-python", {})
+    if not a.get("comparable"):
+        return "unresolved discrepancy"
+    if a.get("flag_for_review"):
+        return "Python migration difference"
+    if "published" not in result.get("images", {}):
+        return "missing published counterpart" if result.get("expected_destination") else "synthetic stress case; no published counterpart expected"
+    if any(comparisons.get(name, {}).get("flag_for_review") for name in ("B-legacy-published", "C-python-published")):
+        font = Path(result.get("resolved_font", {}).get("path", "")).name
+        return "approved font replacement" if font in {"BebasNeue-Regular.ttf", "PlusJakartaSans-Bold.ttf"} else "existing historical artwork difference"
+    return "expected image-encoding difference"
 
 
 def refresh_report(directory, recompute_metrics=False):
@@ -531,6 +563,12 @@ def refresh_report(directory, recompute_metrics=False):
             if result["status"] != "failure":
                 missing = result.get("expected_destination") and "published" not in result["images"]
                 result["status"] = "warning" if missing or "A-legacy-python" not in result["comparisons"] or any(not c.get("comparable") or c.get("flag_for_review") for c in result["comparisons"].values()) else "pass"
+        result["classification"] = classify_result(result)
+        if result["classification"] == "approved font replacement":
+            result["notes"] = [note for note in result["notes"] if not note.startswith("Both fresh engines differ from published artwork")]
+            note = "Fresh engines agree; published artwork predates the approved Bebas Neue or fixed-size Jakarta replacement"
+            if note not in result["notes"]:
+                result["notes"].append(note)
         json_file(case_directory / "result.json", result)
         case_html(result, case_directory)
     args = SimpleNamespace(report_dir=directory, published_repo=summary.get("published_repo"))

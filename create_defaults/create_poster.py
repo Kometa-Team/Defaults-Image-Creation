@@ -70,7 +70,14 @@ def hex_color(rgb):
     return "#" + bytes(rgb).hex().upper()
 
 
+def legacy_offset(value):
+    # The reference accepts '+-500'; ImageMagick places it identically to '-500'.
+    return value[1:] if isinstance(value, str) and re.fullmatch(r"\+-\d+", value) else value
+
+
 def integer(value, name, minimum, maximum):
+    if name in {"logo_offset", "text_offset"}:
+        value = legacy_offset(value)
     if isinstance(value, bool) or not re.fullmatch(r"[+-]?\d+", str(value)):
         raise ValueError(f"{name} must be an integer")
     value = int(value)
@@ -221,8 +228,10 @@ def output_filename(options, base_color):
     # Join-Path treats the bulk separator's single leading slash as a child
     # path. Keep those subfolders under output_dir, never as absolute paths.
     parts = normalized.lstrip("/").split("/")
-    for part in parts:
-        if not part or part in {".", ".."} or part.rstrip(". ") != part or re.search(r'[<>:"|?*\x00-\x1f]', part):
+    for index, part in enumerate(parts):
+        # The final stem may end in a period: the appended .jpg makes it safe.
+        invalid_tail = part.endswith(" ") or (index < len(parts) - 1 and part.endswith("."))
+        if not part or part in {".", ".."} or invalid_tail or re.search(r'[<>:"|?*\x00-\x1f]', part):
             raise ValueError("out_name must contain safe relative filename components without traversal")
         if part.upper().split(".")[0] in {"CON", "PRN", "AUX", "NUL", *(f"COM{i}" for i in range(1, 10)), *(f"LPT{i}" for i in range(1, 10))}:
             raise ValueError("out_name is a reserved Windows filename")
@@ -287,7 +296,9 @@ def main(argv=None):
         arguments = {"dest": name, "default": field.default}
         if name in {"avg_color", "dom_color", "border", "white_wash", "clean"}:
             arguments.update(type=boolean, nargs="?", const=True)
-        elif name in {"logo_offset", "logo_resize", "gradient", "text_offset", "font_size", "border_width"}:
+        elif name in {"logo_offset", "text_offset"}:
+            arguments.update(type=lambda value: int(legacy_offset(value)))
+        elif name in {"logo_resize", "gradient", "font_size", "border_width"}:
             arguments.update(type=int)
         parser.add_argument(*switches, **arguments)
     parser.add_argument("--output-path", type=Path)
