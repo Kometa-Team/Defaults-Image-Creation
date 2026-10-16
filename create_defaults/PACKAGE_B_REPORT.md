@@ -113,11 +113,10 @@ verified blobs, rate limits and failures. No write-capable Defaults API is expos
 
 ## Outstanding Gates
 
-- Native Linux worker/atomic-file tests have not run locally. WSL lists only the
-  Docker Desktop internal distribution and the Docker daemon is unavailable. No
-  distribution, container image or dependency was installed or service started.
-  The Linux PR workflow includes B and relevant People compatibility tests. Its
-  run/results will be recorded in the final gate evidence below.
+- Native Linux worker/atomic-file tests now pass in GitHub Actions, including
+  relevant People compatibility regressions; exact evidence is recorded below.
+  Local WSL/Docker remains unavailable, but is no longer a Linux-validation blocker.
+  No local distribution/container image was installed or service started.
 - RSS enforcement is sampled, not an OS allocation limit. Metadata is bounded but
   held in a capped catalog. Production parent/worker sizing and soak testing need
   actual category workloads in C/E; no production performance claim is made.
@@ -134,13 +133,14 @@ verified blobs, rate limits and failures. No write-capable Defaults API is expos
   operator action. No force/overwrite/publication capability is implemented.
 
 Definitions, configuration, planning, inventory, color/state/translation services
-and worker infrastructure are ready for Package C integration review. Native
-Linux evidence remains outstanding for the cross-platform worker acceptance item.
-Do not call the full production system validated or begin C without authorization.
+and worker infrastructure are available for Package C integration review. Linux
+CI closes the cross-platform infrastructure-test gap; live inventory integration
+remains limited as specified below. Do not call the full production system
+validated or begin C without authorization.
 
 ## Final Gate Verification
 
-Status: **in progress; Gate B is not yet ready for approval until Linux CI passes**.
+Status: **Linux CI passed; ready for maintainer Gate B review, not automatically approved**.
 The updated workflow runs only on pull requests targeting `main`, on
 `ubuntu-latest` with Python 3.13 and read-only repository permissions. It includes
 Phase 1 tests, both intended baseline validators, Package A/B tests and the four
@@ -185,8 +185,43 @@ No auth/publication logic failure was observed. CI requirements now pin the
 existing People dependencies `python-dotenv==1.2.4` and `alive-progress==3.3.0`,
 matching their existing rembg requirements and tested Windows environment. The
 second import was identified by inspecting the sync helper's complete imports.
-No test was removed or skipped
-to hide those failures. The updated run must pass before gate sign-off.
+No test was removed or skipped to hide those failures.
+The [intermediate run](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/38974657351)
+on `d176055bc35e9eff710a0cb3cedfc9bf1f8ce49e` confirmed the remaining two
+`alive_progress` import failures (127 People passes / one Windows-only skip).
+Both dependency fixes are included in the successful run below; no production
+People code or validated rendering behavior was changed to obtain green CI.
+
+### Successful Linux Evidence
+
+[Passing run 38974842240](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/38974842240),
+job `117221671737`, tested commit `9fb6db372a5637b7902611d21e69395fba90cfa1`.
+Completed 2026-10-16 at 18:18 EDT (America/Toronto). Actual runner:
+`ubuntu-24.04`, runner image `20261012.334`, CPython `3.13.16`.
+
+| Linux check | Result |
+| --- | --- |
+| Install pinned dependencies / compile | Passed. |
+| Phase 1 / approved font and fixture tests | 120 passed, 23.271 s. |
+| Historical Phase 1 validator | Passed against exact reconstructed historical source identity; historical fixture unchanged. |
+| Corrected current-source validator | Passed: 9,958 effective jobs / 3,352 literal definitions. |
+| Package A | 35 passed, 2.006 s. |
+| Package B, including persistent spawn/recovery/atomic-output proof | 75 passed / one skipped, 18.10 s. |
+| Relevant People GitHub/sandbox/workspace/orchestrator regressions | 129 passed / one skipped, 4.33 s. |
+| Full-PR whitespace check / job cleanup | Passed. |
+
+Total: **359 passed, two platform-specific skips, zero failures**. Both Linux
+skips are native Windows junction tests; ordinary Linux symlink protections run
+and pass. Windows junction protection was tested successfully locally. The
+optional original-helper PowerShell reference probe also passed on this runner;
+PowerShell is not a production-worker dependency. Tests do not publish artwork.
+
+The successful CI validates the implementation and dependency fixes. The follow-up
+report-only commit is checked by the same PR workflow; current head results are
+available through [PR #12 checks](https://github.com/Kometa-Team/Defaults-Image-Creation/pull/12/checks).
+No failed run is being relabelled as successful, and synthetic timing is not
+production rendering performance. `ubuntu-latest` announced a future runner-image
+migration; this evidence specifically covers Ubuntu 24.04, not untested releases.
 
 ### Worker and Scope Review
 
@@ -220,6 +255,21 @@ explicit authorization, not deliberate rate-limit exhaustion. E owns broader
 published-image comparison and remote-cache/performance acceptance. Maintainer
 approval must explicitly accept this live-integration limitation or require the
 limited B3 check before closing Gate B.
+
+### Gate B Recommendation
+
+The required Linux CI, Windows compatibility evidence, both baseline validators,
+direct-composer adapter review and bounded-worker proof pass. There are no
+unresolved test failures after the clean-runner dependency fixes. The draft PR
+is ready for maintainer review; it must not be marked ready, merged or deployed.
+
+Gate B is **not unconditionally closed**: the maintainer must explicitly accept
+the documented live GitHub integration coverage limitation or request the limited
+B3 follow-up before final approval. That follow-up must precede relying on remote
+inventory for C decisions. Full poster workloads/parity (C), overlays/multilingual
+review (D) and production performance acceptance (E) remain deliberately deferred,
+not represented as missing synthetic-test failures or work completed in B.
+Stop here for Gate B approval; Package C has not begun.
 
 ## Exact File Inventory
 
