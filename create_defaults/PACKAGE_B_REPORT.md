@@ -166,6 +166,25 @@ publication state/commit/ref/README-dispatch flow remain unchanged. The shared
 nonrecursive-truncation diagnostic is shorter, omitting the old trailing phrase
 `refusing publication`; exception type/status and fail-closed behavior are preserved.
 Regression publication tests use fake GitHub services, not actual uploads.
+An AST comparison against the base commit confirmed all eight People auth/
+transport functions and 15 unaffected inventory/helper methods unchanged; the
+moved `GitHubError` class is AST-identical. A fresh Windows regression run passed
+129 tests with one account symlink-permission skip in 113.39 seconds.
+
+### Linux Run History
+
+Draft PR: [#12](https://github.com/Kometa-Team/Defaults-Image-Creation/pull/12),
+target `main`; it must remain draft and unmerged.
+
+The [initial Linux run](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/38974361064)
+on `64f497527c0c034aeecb420c1522c267449d20a7` passed Phase 1 (120 tests),
+Package A (35), Package B (75 passed / one Windows-only junction skip), and both
+baseline validators. People regressions had 126 passes, one Windows-only junction
+skip and three failures, all caused by missing `python-dotenv` on the clean runner.
+No auth/publication logic failure was observed. CI requirements now pin the
+existing People dependency `python-dotenv==1.2.4`, matching its existing rembg
+requirements and the tested Windows environment. No test was removed or skipped
+to hide those failures. The updated run must pass before gate sign-off.
 
 ### Worker and Scope Review
 

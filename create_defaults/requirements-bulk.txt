@@ -3,3 +3,5 @@
 jsonschema==4.26.0
 requests==2.34.2
 pytest==9.1.1
+# Existing People regression helpers import dotenv; include it on clean CI runners.
+python-dotenv==1.2.4
