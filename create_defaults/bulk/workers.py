@@ -232,11 +232,26 @@ class PersistentWorkers:
             raise BulkError("corrupt_artifact", "Staged/deduplicated bytes changed before output promotion")
         if self.renderer is compose:
             _check_image(source)
-        if target.exists():
-            if sha256(target) != checksum:
-                raise BulkError("output_collision", "Owned output differs; explicit replacement policy required")
-        else:
-            atomic_bytes(target, data)
+        # The same SQLite writer lock serializes reservation and promotion. A
+        # replacement can only consume the exact bytes verified at reservation.
+        with self.store.transaction() as db:
+            claim = db.execute("SELECT * FROM output_claims WHERE root=? AND path_key=?",
+                               (fingerprint(str(self.config.output_dir)), path_key(task.local_relative))).fetchone()
+            state = db.execute("SELECT * FROM jobs WHERE id=?", (state_id,)).fetchone()
+            if not claim or claim["state_id"] != state_id or state["status"] != "running" or state["owner"] != self.owner or state["expires"] <= self.store.clock():
+                raise Conflict("Output promotion no longer owns its reservation and live lease")
+            if target.exists():
+                current = sha256(target)
+                if current != checksum:
+                    if current != claim["previous_sha256"]:
+                        raise BulkError("output_collision", "Output differs from the verified replacement precondition")
+                    atomic_bytes(target, data, replace=True)
+                    self.store.event(db, "output_replaced", state_id,
+                                     {"previous_state_id": claim["previous_state_id"], "previous_sha256": current, "sha256": checksum})
+            elif claim["previous_sha256"] is not None:
+                raise BulkError("corrupt_artifact", "Previously verified output disappeared before replacement")
+            else:
+                atomic_bytes(target, data)
         row = self.store.job(state_id)
         receipt = {"schema_version": 1, "job_id": state_id, "logical_id": task.id, "job_fingerprint": row["fingerprint"],
                    "render_fingerprint": task.render_fingerprint, "renderer_identity": self.renderer_identity,
@@ -262,6 +277,8 @@ class PersistentWorkers:
         if not self.active:
             raise BulkError("inactive_pool", "Use PersistentWorkers as a context manager")
         started, initial_starts = time.monotonic(), self.starts
+        initial_recycles = self.recycles
+        self.pids = [slot["process"].pid for slot in self.slots.values()]
         catalog, destinations, materials, metadata_bytes = {}, set(), {}, 0
         for task in tasks:
             encoded = canonical(task.spec())
@@ -295,6 +312,13 @@ class PersistentWorkers:
         metrics = {"executed": 0, "cache_hits": 0, "dedup_reuses": 0, "max_inflight": 0, "peak_worker_rss": 0,
                    "peak_workers_rss_sum": 0, "peak_parent_rss": 0, "read_bytes": 0, "write_bytes": 0}
         io_samples = {}
+        initial_io = {}
+        for slot in self.slots.values():
+            try:
+                counters = psutil.Process(slot["process"].pid).io_counters()
+                initial_io[slot["process"].pid] = (counters.read_bytes, counters.write_bytes)
+            except psutil.Error:
+                pass
         self.store.recover()
         root_id = fingerprint(str(self.config.output_dir))
         states = {}
@@ -306,15 +330,36 @@ class PersistentWorkers:
                     raise Conflict("Workspace cleanup began before scheduling")
                 for task in page:
                     state_id = self._state_id(task)
-                    states[task.id] = state_id
                     target = confined(self.config.output_dir, task.local_relative)
                     claim = db.execute("SELECT * FROM output_claims WHERE root=? AND path_key=?", (root_id, path_key(task.local_relative))).fetchone()
+                    if claim is not None and claim["state_id"] != state_id:
+                        bound = db.execute("SELECT * FROM jobs WHERE id=?", (claim["state_id"],)).fetchone()
+                        bound_spec = json.loads(bound["spec"]) if bound else {}
+                        expected_spec = {"task": task.spec(), "renderer_identity": self.renderer_identity}
+                        if bound and canonical(bound_spec) == canonical(expected_spec):
+                            state_id = claim["state_id"]
+                        elif db.execute("SELECT 1 FROM jobs WHERE id=?", (state_id,)).fetchone():
+                            # A return to an older fingerprint is a new output
+                            # generation, not mutation of its terminal receipt.
+                            state_id = "render." + fingerprint({"base": state_id, "previous": claim["state_id"]})
+                    states[task.id] = state_id
                     if claim is None:
                         if target.exists():
                             raise BulkError("output_collision", "Refusing to adopt an unowned existing output")
-                        db.execute("INSERT INTO output_claims VALUES (?,?,?,?,?)", (root_id, path_key(task.local_relative), task.local_relative, state_id, task.render_fingerprint))
+                        db.execute("INSERT INTO output_claims(root,path_key,relative,state_id,fingerprint) VALUES (?,?,?,?,?)", (root_id, path_key(task.local_relative), task.local_relative, state_id, task.render_fingerprint))
                     elif claim["state_id"] != state_id:
-                        raise BulkError("output_collision", "Output is reserved by another specification/job")
+                        old = db.execute("SELECT * FROM jobs WHERE id=?", (claim["state_id"],)).fetchone()
+                        old_spec = json.loads(old["spec"]) if old else {}
+                        if not old or old["status"] != "verified" or fingerprint(old_spec) != old["fingerprint"] or old_spec["task"]["id"] != task.id or claim["relative"] != task.local_relative:
+                            raise BulkError("output_collision", "Output is reserved by another job or unfinished replacement")
+                        previous = RenderTask(**old_spec["task"])
+                        receipt = self._cached(previous, claim["state_id"])
+                        if receipt is None or old["receipt"] != canonical(receipt).decode():
+                            raise BulkError("corrupt_artifact", "Cannot replace an unverified or corrupted owned output")
+                        db.execute("UPDATE output_claims SET state_id=?,fingerprint=?,previous_sha256=?,previous_state_id=? WHERE root=? AND path_key=?",
+                                   (state_id, task.render_fingerprint, receipt["sha256"], claim["state_id"], root_id, path_key(task.local_relative)))
+                        self.store.event(db, "output_replacement_reserved", state_id,
+                                         {"previous_state_id": claim["state_id"], "previous_sha256": receipt["sha256"]})
                     self.store.add_job_in_transaction(db, state_id, {"task": task.spec(), "renderer_identity": self.renderer_identity})
                     db.execute("INSERT OR IGNORE INTO workspace_jobs VALUES (?,?)", (self.workspace["identity"], state_id))
                     self.store.event(db, "workspace_job_bound", self.workspace["identity"], {"job": state_id})
@@ -470,8 +515,11 @@ class PersistentWorkers:
                 self._stop(index, terminate=True)
             raise
         metrics.update(wall_seconds=time.monotonic() - started, worker_starts=self.starts - initial_starts,
-                       worker_pids=list(self.pids), worker_recycles=self.recycles, process_start="spawn",
-                       read_bytes=sum(value[0] for value in io_samples.values()), write_bytes=sum(value[1] for value in io_samples.values()))
+                       worker_pids=list(self.pids), worker_recycles=self.recycles - initial_recycles, process_start="spawn",
+                       read_bytes=sum(max(0, value[0] - initial_io.get(pid, (0, 0))[0]) for pid, value in io_samples.items()),
+                       write_bytes=sum(max(0, value[1] - initial_io.get(pid, (0, 0))[1]) for pid, value in io_samples.items()))
         metrics["jobs_per_second"] = len(completed) / metrics["wall_seconds"] if metrics["wall_seconds"] else 0
         metrics["cache_hit_rate"] = metrics["cache_hits"] / len(catalog) if catalog else 0
+        metrics["retry_attempts"] = sum(max(0, count - 1) for count in attempts.values())
+        metrics["failures"] = sum(item["status"] in {"failed", "failed_not_retried", "blocked_dependency"} for item in completed.values())
         return {"jobs": completed, "metrics": metrics, "scope": "infrastructure execution; not publication approval or production benchmark"}

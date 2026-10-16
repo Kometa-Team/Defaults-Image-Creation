@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "category": "Awards",
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "definitions": 4847,
+  "legacy_effective_jobs": 4847,
+  "active_jobs": 4847,
+  "discrepancies": [],
+  "contract_parity": true,
+  "normalizations": [
+    "HEX letter case only",
+    "Bind actual bundled asset/font paths instead of Windows case-insensitive aliases",
+    "Destination directories are separate from composer basenames"
+  ],
+  "approved_exceptions": [],
+  "private_intermediates": [
+    "_intermediates/award/choice/2016-2.jpg",
+    "_intermediates/award/oscars/1930-2.jpg"
+  ],
+  "scope": "Resolved English contract parity; generated inputs require separately verified real parent artifacts before render planning"
+}

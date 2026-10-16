@@ -534,3 +534,27 @@ configuration conflicts and repository allowlists. Python callers pass typed
 records and receive the same result/error contracts, without parsing CLI text.
 A later Flask service can supply identity/cancellation/configuration to these
 services; it must not invoke subprocess CLI wrappers or duplicate business logic.
+
+## Package C Implementation Note
+
+The inactive local generator now implements staged category rendering in
+`bulk/generation.py`. Parent artifacts are verified before dependent planning;
+the persistent pool remains alive between stages. Full selected-graph collision
+checks happen before rendering, including cross-stage paths. A combined canonical
+manifest preserves all staged jobs and actual dependency identities.
+
+State schema 6 extends output claims with previous state/SHA preconditions.
+Changed output replacement is limited to the same logical owner, a verified
+previous receipt and exact retained bytes. Reservation/promotion serialize under
+SQLite write transactions; historical verified receipts remain immutable. A
+rollback to old parameters is a new generation, not resurrection of a stale
+terminal job record. Corrupt/unowned outputs still block rather than being adopted.
+
+Category data, named generators, schema checks and explicit English fitting
+evidence live separately from the validated composer. Generator origins contain
+bounded specification hashes rather than repeating entire year-fitting tables
+inside every expanded job. Small successful schema validations are cached with
+an explicit entry/byte bound; no rendered-image collection is held in RAM.
+
+This implements Package C only. Overlay production, complete multilingual fitting,
+review approval and production cutover remain outside the implemented boundary.

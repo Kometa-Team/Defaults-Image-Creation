@@ -1,0 +1,3618 @@
+{
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "active": [
+    {
+      "poster_id": "year.year-other.122f9ae6",
+      "legacy_id": "year-09657-a711d435eab2",
+      "job_sha256": "93ff7e8987c1df071d378eb8f7c592e90eede8596469451a9e38965d5f0d9015",
+      "source": {
+        "definition_line": 6700,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6712
+      },
+      "row_sha256": "969db10da8f55ae977493995c1eaf6aafec5561705f8b23889be1a910f784ae7",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1880.3409b074",
+      "legacy_id": "year-09658-5740fe67ad1e",
+      "job_sha256": "a77210aa2999086472ce019627ecb46d8efd825a887b59407c1dd07fdfe77bd2",
+      "source": {
+        "definition_line": 6724,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "00dd3e07140ea1294eafb1b4be4cc75d07d91bebcba0ff06a64c136351fd8e75",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1881.677b529a",
+      "legacy_id": "year-09659-5978756755a9",
+      "job_sha256": "093961e6413056178f9188e753634f0585b7397e206e7e0b6719e74ecd657ca3",
+      "source": {
+        "definition_line": 6725,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "5ec48da99aab4b88275ca010ee2e291ea72a8a123a68691466db64cb19948ab8",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1882.d0366d8f",
+      "legacy_id": "year-09660-10cfab7a56d6",
+      "job_sha256": "d2c810f9a2c9f95e5c83696ef37684817076a6592d64ce14a72dc39351caef20",
+      "source": {
+        "definition_line": 6726,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "82150c55095f919a33761c4012dc3258e6f9a2cc019d876f181537791b065189",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1883.a62dbdf7",
+      "legacy_id": "year-09661-7638663005d1",
+      "job_sha256": "d24d0c177f0e65f9ff2642eaf92d400e01e404c8c3da55a338c0afc9c4c4ee4e",
+      "source": {
+        "definition_line": 6727,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "f0ace7537b33567d58a4ea56f2d3d491ae7837756003dfe1b9272e50b238df0b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1884.0fb58f3a",
+      "legacy_id": "year-09662-c0e241688792",
+      "job_sha256": "3d0e0b94ef6622f26d4ec201ec1f4943a2170e4f495cd0492ce622a2f69c0f3b",
+      "source": {
+        "definition_line": 6728,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "e6dde9b7597968d99d1fd2fb192d22b089dae43ba161915447afc658e601fffd",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1885.d7435c71",
+      "legacy_id": "year-09663-4f3bc156f056",
+      "job_sha256": "7cb4bdfc4a05ecb19613ed0851e6ea209bfc72fd5603ada204fb0296ef5d94bd",
+      "source": {
+        "definition_line": 6729,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "84d348e5c34bc985decf263b7c575a164ef6a8d49814a4bab09bc2a22db56ab0",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1886.b7a1fb3d",
+      "legacy_id": "year-09664-90bff7231f58",
+      "job_sha256": "128d70c7c7ae0fbbd1fd87f0041c49bf7cb92ab0240bd2070f8b0d2b3e01e2be",
+      "source": {
+        "definition_line": 6730,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "bed57c4aad67e75c6919cca6ebe43af24410ad96859686024b2a10fc706a83e2",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1887.0c2cd7f5",
+      "legacy_id": "year-09665-a02388ca3fbf",
+      "job_sha256": "c3b3c6757ad90b3f07b9fe2a6bc9ba9a9b827d9ca10152983e2003a716f03e96",
+      "source": {
+        "definition_line": 6731,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "30c0bfd325aca28a7e1fbb5cdfdb2396b951bd67d145bfc0be1816c04b633333",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1888.18589595",
+      "legacy_id": "year-09666-e3b9bfa3862c",
+      "job_sha256": "4485a059a4e0922bd5ce43916c5f40bcee158364cdf482a0057938c29d7af376",
+      "source": {
+        "definition_line": 6732,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "f0251bdead157c1fd46fa334f7abe97a8a02d999c702881a8a3f6baffe3be655",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1889.b961eb2e",
+      "legacy_id": "year-09667-23b9d8285e81",
+      "job_sha256": "8574068a72a9da4cdd6bbcac545d2c54edddb012c013dcf84619cd08254b1c1f",
+      "source": {
+        "definition_line": 6733,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "3a6ea7bc8974924ac5a15b8155bf8e6eb6f7fdd663bee77a2514f63d4c96c8c6",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1890.b1e26d86",
+      "legacy_id": "year-09668-15a7ef114384",
+      "job_sha256": "3255e46010c938ee18aff805171dd5b54412add28a159fc4e68f80f8d02dc804",
+      "source": {
+        "definition_line": 6734,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "20deceb5d79a74fd54787f7a7f20402f656da849ff58b9ee83138221b3cfce49",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1891.3223ca29",
+      "legacy_id": "year-09669-340b4f793f8a",
+      "job_sha256": "7a7973264af415f2b629cc9ce6936103cf9f0b9c503f5f1e23f1895e6658b12a",
+      "source": {
+        "definition_line": 6735,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "737d8f05d1c050a9dfb952ad5b8122a6d4631f66a732c1d9344e00a3ae99ed24",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1892.456434f3",
+      "legacy_id": "year-09670-d67fb31249bc",
+      "job_sha256": "db92e5c087a84e2273d44968e2d3ee2fea608cc2bbd7fce92ff44f4830bfbe9b",
+      "source": {
+        "definition_line": 6736,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "95b4a8831e2f5d4323b64f98f6f6246fbf7096b74fa87a5acce28098b7a883eb",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1893.dce6504b",
+      "legacy_id": "year-09671-26503808fb50",
+      "job_sha256": "8b72927142a2748ceef72343b82337ff6b550009f7588863987c83fcf8c4c681",
+      "source": {
+        "definition_line": 6737,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "cf1dd4aa92bb52a069a4e428c2fedba030b83a7a486c1bebc2e8310cce4570b9",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1894.ac942d61",
+      "legacy_id": "year-09672-6c62fc694767",
+      "job_sha256": "2c139e08f7d867baf1bbc5663cf755980ee8026200fa5778c4ec0c2a6de9477a",
+      "source": {
+        "definition_line": 6738,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "50850deba8b1682e675cdb21f7fae854e4e027f02945db615c8b078b8e2cf7e0",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1895.88849bb0",
+      "legacy_id": "year-09673-21490e90502e",
+      "job_sha256": "6b91ecbeebd66b077184036561c7da5000331c6459b246641769c08e17a8d0e4",
+      "source": {
+        "definition_line": 6739,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "830085624dad0d7ee7e2054ec4f73afd8b78e1979ed6fa21a6451ebea81fa456",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1896.be55bf77",
+      "legacy_id": "year-09674-7de7b8958785",
+      "job_sha256": "924c506ce2aea7615038f09c5bcff487292244e0fa5d9e4d567b8c36dddc613b",
+      "source": {
+        "definition_line": 6740,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "fc6bd722ad7a4231b1f391ab74696d655d5432ed3074031021fab26077fb6c6e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1897.51662434",
+      "legacy_id": "year-09675-4879c6a76884",
+      "job_sha256": "e3b1c4a83e50a260c0146b0bd268503a6b6d2567a84bbf13faadc67a058ea140",
+      "source": {
+        "definition_line": 6741,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "63db5cd45b93dd1ea131ca21df7a8dd045951fe6f68edd075a62ee193750fdac",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1898.fe50448d",
+      "legacy_id": "year-09676-da1fcaa48794",
+      "job_sha256": "aab4f690af16f7ed7053f3705dbd7d2f883f8605bb2b05287061e3706b881d29",
+      "source": {
+        "definition_line": 6742,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "6e5342071e65750d475ea4ac29bf7b60d83f426d02c13aba603ff61830bfae6e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1899.8f63feda",
+      "legacy_id": "year-09677-4eeeea82cbbe",
+      "job_sha256": "c203e6d2046f08a6e098c42b22c79804d33b6ec7a4b60e0c7b593d77bec5f40d",
+      "source": {
+        "definition_line": 6743,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "9f8d93708b1074eb0a7611063110d5cb6d32080828005f60d1cd72eaa4d1e19a",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1900.4be6ac53",
+      "legacy_id": "year-09678-5a37b3306f8c",
+      "job_sha256": "278c6bf240a692d9e43704241bb03ba02bc4d0449f6ec1ed486f21c8b64aa6cd",
+      "source": {
+        "definition_line": 6744,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "db4f8ff55b0c0017d9766626c3272497d2cf807afe2503eab5b06dd203b1de4e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1901.c4c5dcfe",
+      "legacy_id": "year-09679-6b00cfdcef13",
+      "job_sha256": "9b1f5a9d7ff1acd59d04f620caa37a137179fbe604b844275d488e236acfc7b6",
+      "source": {
+        "definition_line": 6745,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "572bba33fa2d5f41d2fb9b8dac2ab9fc342f6f191546afc7ccf8b6ff89e0e727",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1902.ab5a0069",
+      "legacy_id": "year-09680-e928ce050802",
+      "job_sha256": "9dce2e14f62a2ddce90700ea6de89d9068bb5fec03927782da687211112382fa",
+      "source": {
+        "definition_line": 6746,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "1aeefebc4f6805cdb12256eac9366b7a20e11cb851da81dfd5f646cf17961828",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1903.644df894",
+      "legacy_id": "year-09681-c6c3b24779e4",
+      "job_sha256": "5747e53808a9fd5703cd5486142b64cc7db8ba34e7e406d1fd5dea65bf3070b6",
+      "source": {
+        "definition_line": 6747,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "a978864a46e7336ef62ddeafddfce7aa4b36ea62217b886c9de04e4c22cbf149",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1904.ea81fffb",
+      "legacy_id": "year-09682-67d75f8658a5",
+      "job_sha256": "61f5bb7c033e06eca60898c86c0cc450258b14c630c60c78f148ab54d0c4247a",
+      "source": {
+        "definition_line": 6748,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "e7fd22c00f239c4e355051fda969f7a68f89a75cbc98fbfbc84a00f5ce08537d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1905.02150979",
+      "legacy_id": "year-09683-8d5ac8b7dd47",
+      "job_sha256": "bf281cb158059d7fcc7ef07958c99e3db828e31c8dc1290e7890cf515c9e7371",
+      "source": {
+        "definition_line": 6749,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "6eb532383fe4ce9b1220b77f5d3bb7029fc9625cc4c93bf295b2e029815fe320",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1906.c6a402af",
+      "legacy_id": "year-09684-b7416bada0d1",
+      "job_sha256": "94fcc25b7cc57050407903956b66f2cbdbd144a4f5c610df4798462ac8e32982",
+      "source": {
+        "definition_line": 6750,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "d43cfd41675d0c885afa3169f1fc9372f60d5da39206a6350701c540d236c0ea",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1907.422d0841",
+      "legacy_id": "year-09685-b28a97292da7",
+      "job_sha256": "fc4bcaebc8c1fda85822c7c0ebdaf0e4677484a747dbb47166a679c69484380a",
+      "source": {
+        "definition_line": 6751,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "b9620ac577da64a8f1f1110efea75ed4da16a6c847ef35eb01da527031fbd0f4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1908.a439c153",
+      "legacy_id": "year-09686-ede915db1e4d",
+      "job_sha256": "d0c114c7e7fd97cd786b5e3f85f479a79c37d36d1d23136c0dee0d6a5a5d13ea",
+      "source": {
+        "definition_line": 6752,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "d3593215ac61005fc97936858b530f3203a9a6c8b762af239b96bac7685a8e0e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1909.d9fd6057",
+      "legacy_id": "year-09687-c824b793f4e9",
+      "job_sha256": "33c1db18c6321ec825797ee1befe3b8515a85a98eb0f0a8c528bc08a1c2e36a0",
+      "source": {
+        "definition_line": 6753,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "c36e3dbe2aae3080c785679b98d86aa8f219e6753183bcb2c18b809db87672ee",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1910.41ba9020",
+      "legacy_id": "year-09688-5cd78b9181fc",
+      "job_sha256": "459614e14fd8864abf22c2afbd337473d924bf2fd2e69c6807f277ea0d23c4e1",
+      "source": {
+        "definition_line": 6754,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "64146eb945901fcff238909874c1b389ba7823fb10dd2b02076c07d0d762c139",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1911.5e09793d",
+      "legacy_id": "year-09689-e60051b84479",
+      "job_sha256": "d1960bdffa3049a0fed9c7dc34a3f75784e0a8ed37b0f0a4c0b79fc73cb8626c",
+      "source": {
+        "definition_line": 6755,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "62c38a5b7a31bba7c00ad66bf96a30949345bb821442030a9678fdc1ee4f7b3f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1912.5a519764",
+      "legacy_id": "year-09690-8c1b538ede8e",
+      "job_sha256": "18dca98355598e475d602137f2041396d52d7050457ca85e782253f074d96820",
+      "source": {
+        "definition_line": 6756,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "567bd5bea59c9146abab9a4d941569dc3f24e883f06ad17ea6fe59fb2f60cb2b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1913.482c6435",
+      "legacy_id": "year-09691-3c8d9f655f7e",
+      "job_sha256": "4fff03653594a0f71bba68be88dff21a9f7845d56f85a2ac2d0f8815c68e2a57",
+      "source": {
+        "definition_line": 6757,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "79ca99e50f455212fea852aa7fefdad410bd1252b656a0a3d9bbed502270bee1",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1914.0c111b5e",
+      "legacy_id": "year-09692-23e7345cf3db",
+      "job_sha256": "b51183c9a784f0945c725be3b0100e9c452278722d4c313a456964a997da8f62",
+      "source": {
+        "definition_line": 6758,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "1b779c19ef212599569f79458a16364e561c35da7e1c3e89b76aee743d5c5e8f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1915.9b1db394",
+      "legacy_id": "year-09693-f9b308facab0",
+      "job_sha256": "3b174157c7b0fd341d06a00469448fa66b58df21c8f3a5da27ebd518ab4c0245",
+      "source": {
+        "definition_line": 6759,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "63a692f9d35e8f07db614c0bda5c89f2435da717077c361ef2a9d719a39b2830",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1916.a858665c",
+      "legacy_id": "year-09694-184ffb716b2b",
+      "job_sha256": "22d8f8fc5270746bfa58fbbe5f2119d0d558ef510c28981a4d96031e83b50b94",
+      "source": {
+        "definition_line": 6760,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "5f0e0816e1ec57d428990e305557d398e6de89cbe5c4bd1675ca4790c82f864f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1917.b7a1088f",
+      "legacy_id": "year-09695-25809ac5b76b",
+      "job_sha256": "6751e644dded77a64b31d3d142554a1b6a278be96faca2f18777266cfcf44585",
+      "source": {
+        "definition_line": 6761,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "8ba713285518282cc4707019ac0950c00ec05dc1c66604c670a17f480192b844",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1918.f444f0a7",
+      "legacy_id": "year-09696-d0c5c1f39cf6",
+      "job_sha256": "c8fa8105edc48d5754b80b22870d852fe3c4ac2c3d1d113b27e9af7a73923e86",
+      "source": {
+        "definition_line": 6762,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "43520f7bf7b718a6d5b7ec27742d2050883248ca157f25b938c4b9b0268fd6e8",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1919.3aee1c52",
+      "legacy_id": "year-09697-8d57f72aadbc",
+      "job_sha256": "d5cce0eda611738f0108b215c2214f2d7b4f13d5d758fd5ef4459727bc2c94de",
+      "source": {
+        "definition_line": 6763,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "3c86fb358ff051cff9bedc9306406bbc7aad1d52ff8ab9fbac0b30ade7750732",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1920.6d51f943",
+      "legacy_id": "year-09698-a3da72740904",
+      "job_sha256": "9661068eb15fd6d07a36a72b83db9cde76f163995ca6734891324e4657949d3b",
+      "source": {
+        "definition_line": 6764,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "419f7d177d0eb080fa5369348510fa72d6d1d7080b5d725d285684c90e3a03be",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1921.8e68c9ef",
+      "legacy_id": "year-09699-7e0fa7da3d05",
+      "job_sha256": "94010923e0e41c02294fb3f5961b286c9325d33d3ece68e54ce643df97e01c7f",
+      "source": {
+        "definition_line": 6765,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "d9695e1c7eda8f073655d17a18c8ed880df110de7b3165e730840b4d92450fca",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1922.61640345",
+      "legacy_id": "year-09700-3a29194fe917",
+      "job_sha256": "405b90ae9b49ae02519c43b4a4a0381022d8f970de3cc4b2bed8f3465fce399d",
+      "source": {
+        "definition_line": 6766,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "b50cdfae6c1bfe53488c2f1e145cb1771e2782508278fc0207a86303de18c14a",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1923.a48ae01a",
+      "legacy_id": "year-09701-d2bedfd710e9",
+      "job_sha256": "55401050491af8c756ff9a51cf6eda04e2efee5bc4c00dcdb07cb9187a52d231",
+      "source": {
+        "definition_line": 6767,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "dc05aa898bd2d107bf7996f66fac20e97ec73ed25401a3818f23b86bfcbed01d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1924.12cdaa4e",
+      "legacy_id": "year-09702-47ec3b0d257e",
+      "job_sha256": "d8a4f20bd6fd73b42e7f6a74a1ccd47c330d26c974ed39444f87439a8a5fdace",
+      "source": {
+        "definition_line": 6768,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "af1a812858c29981dc947d75f1489cfe715e0309622fb4939b3155c9ba672ac7",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1925.1b15a0ce",
+      "legacy_id": "year-09703-ee68f92587f4",
+      "job_sha256": "a1fd33606e3809a6ccb1297cf26c10105664e10345a30e1b0afe8d1aedc3af40",
+      "source": {
+        "definition_line": 6769,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "4fbc87cab0972422240a576be5a387b734a99c1f9aea32d5078e1fd312f26093",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1926.9368270c",
+      "legacy_id": "year-09704-5fcf6326ecef",
+      "job_sha256": "c8e28f7b1a269426407a801e3c141c3da4f00eefefcb3d8e37c238b2f9b773fb",
+      "source": {
+        "definition_line": 6770,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "2b5ecb30fd0555ac8048fc1ae6d92107d691d726a353a12516c41105bec60ead",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1927.d0dcd477",
+      "legacy_id": "year-09705-7f50e04fd54b",
+      "job_sha256": "5067f629c04fa9c735827a4ad47137ac0c932a6eb5c917ea6f8d394fe04b7f98",
+      "source": {
+        "definition_line": 6771,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "68401cd703d65307dd503bca9bf5d320dabf828589fecdd143d119a90dacceac",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1928.2fb08250",
+      "legacy_id": "year-09706-ca499c02b731",
+      "job_sha256": "216802403765b3f01dc3eb1e15f573d24b40854f76d312b7d808f639eb162635",
+      "source": {
+        "definition_line": 6772,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "7b251793db2f391ca503f0b0497cde7b33a5bb1d843404851fa19c60361461ed",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1929.ceb95dbe",
+      "legacy_id": "year-09707-f5859c434d35",
+      "job_sha256": "4a7ac1377a66dceb8b7a307a180f79ccfb35ae288d27a346b67adb3c10cba5bc",
+      "source": {
+        "definition_line": 6773,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "eefbc573d526bc74cc7e72eee2c62f268b8068f6d6725f327cc27e023018b1b4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1930.a5a17d57",
+      "legacy_id": "year-09708-2d597760cfbd",
+      "job_sha256": "86f4dec5594246f96898165f83a6f6c37a449886f7514d33801ce4aff9f0fe06",
+      "source": {
+        "definition_line": 6774,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "93d1d0b845a5b96fd306a9d4874f9afd38f74521cf2a6083152903d4ac2fc56d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1931.d422a3cf",
+      "legacy_id": "year-09709-1eb745a49f94",
+      "job_sha256": "db2cc3fd50ebfabeea0d75ea3e99797797151662324ce9e480bbd3555680a967",
+      "source": {
+        "definition_line": 6775,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "f25bb9d0ceceb5071bc2503d8ddd9b9b91fbb4e35c1a7d9cbe0e12404bd13288",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1932.1a33ed14",
+      "legacy_id": "year-09710-49158361320d",
+      "job_sha256": "5629fd26c7487f7cef95c2eb7a4ca87d817da1d725a55e76206d0988f52a7ef7",
+      "source": {
+        "definition_line": 6776,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "a36e1b03a097f379cecf0f43b8e810d076bc6c7b8fdaccc1bc20e97a58fdeb68",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1933.a2c006f3",
+      "legacy_id": "year-09711-122b7d96b338",
+      "job_sha256": "0af905b38a7063b5f822047682dfa3e72dd1daa0b9025611ec00bd70a9b926fc",
+      "source": {
+        "definition_line": 6777,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "a0146b8c1b54a97eb5557c43a684bcdd8cf986720d0572fd58e432d61a8fca56",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1934.e3627b6a",
+      "legacy_id": "year-09712-3182c47a3675",
+      "job_sha256": "20e1d8ac84267071820d4e0004e5e70e82b6c307c1521e297ab184ab3a649484",
+      "source": {
+        "definition_line": 6778,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "3b6d2e360048a01ffa79efeba5a65b60d5d03236e5bbd3129d0e01fee30ed31b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1935.d01e0ce0",
+      "legacy_id": "year-09713-f505f8a82b8f",
+      "job_sha256": "eb2201e6b4f3433ddc16d44683e548f744aaac76fcccc8598d906a62721701b6",
+      "source": {
+        "definition_line": 6779,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "02950da741319640743a0c22bf8530e4be36e965b0d899a44e8dd25db7142ccb",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1936.0b89b509",
+      "legacy_id": "year-09714-d811d1b91fb2",
+      "job_sha256": "c221f118ba6ee6de3f4d0d87d56aa0a0c1773b5ac417f234369145a69c81ee55",
+      "source": {
+        "definition_line": 6780,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "015579d75da1772dcf20b6ae4d649f219550b91f216a5c950da590c80ef07336",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1937.bae0933f",
+      "legacy_id": "year-09715-65df700ce3bc",
+      "job_sha256": "96550ab803b50a566aa846587916bd1e154a69ebee1b40ba29e96b76faee8daf",
+      "source": {
+        "definition_line": 6781,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "47460267c9abab61c63ed6d8f03d6c09b87ac1f04a0f7490cca4596305c297ed",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1938.809a3cc7",
+      "legacy_id": "year-09716-0976bb429119",
+      "job_sha256": "fd90e47683de55d8a921cdd40e661c20e09ef7a84b6d92daab94ebf40540a2d0",
+      "source": {
+        "definition_line": 6782,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "d9f1650aaa18de50cc2b9622af71ff19d99238c9f05433d48cf219d4de0811c9",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1939.8d40a365",
+      "legacy_id": "year-09717-07da88f285ce",
+      "job_sha256": "d25a70425e36d6fc4010b72e7187e22c95122abffdf440eb3f35563465aed51c",
+      "source": {
+        "definition_line": 6783,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "f55895c5bf5bf27cb2ebe75a702e5647ae4e2ae215f6dfaf4372a6336075d781",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1940.3a988ac1",
+      "legacy_id": "year-09718-da9dee12fda1",
+      "job_sha256": "97df3dfab49635ffafe38deef4e7b276d75492f78be1aa0919afe3ca48cec190",
+      "source": {
+        "definition_line": 6784,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "44fcd193d357c3649e2463475d8ad4da7e6f2d984161bef9228d969bfd5d3949",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1941.4e80681e",
+      "legacy_id": "year-09719-6b1f8a2d6c8b",
+      "job_sha256": "e37aaeb8b12bad329819f97fbb46fa843372a4798b79badedb4867aac40176c8",
+      "source": {
+        "definition_line": 6785,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "adf46400986c1b9836e4274d12b83e7d6ea1e7259acccee57e6e5b5cbbaf5ee0",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1942.b8fce189",
+      "legacy_id": "year-09720-f465697aa64f",
+      "job_sha256": "e51656e627282871711dff18d7a99e56aaed3be555445b0b2a7a1b5a8147356d",
+      "source": {
+        "definition_line": 6786,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "f4c8cbafa5835b83d6776b799f0a244a8626a2c2b1a0dc4f3858702cba21ae73",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1943.f4698727",
+      "legacy_id": "year-09721-8bf9f5476b92",
+      "job_sha256": "70db6e9af6e8c3ff23f275b8164e5a9e76a1e893786662b90d450e96e5fc8e7c",
+      "source": {
+        "definition_line": 6787,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "7a2111a6d1695ee72b2e66a99834dd62816256c0c4664ab7c5a0b8c380729aae",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1944.593a0bf4",
+      "legacy_id": "year-09722-590e4fcb3401",
+      "job_sha256": "cb704adf8ecdb881d50197276e56e3f1d32e8c260c87dd732cb416cf4758475f",
+      "source": {
+        "definition_line": 6788,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "79f2f11b6fbbd0612a9b86b12e2d503239902cf372a7d8d6a52d340428a4b0fa",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1945.002ca255",
+      "legacy_id": "year-09723-0246d1dcffe0",
+      "job_sha256": "7a46009c65a72b78190d3c9b2776b64fd6498fb58a5d1d7ece970a66f5f8c012",
+      "source": {
+        "definition_line": 6789,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "cb595bfcc444c2af55ffae5480a73378c721cdcd82dbad4300391cd9dfd4af5d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1946.ad589f71",
+      "legacy_id": "year-09724-eccf32f92a37",
+      "job_sha256": "1a75fd90627b910e64a04b5d8fbd5546d545f68e1e057274699e0dac265c2ae9",
+      "source": {
+        "definition_line": 6790,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "2992279f45a17b4ab84b94a76cfccbedd534c149fd1d31a73c44663ae130f673",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1947.46b8734a",
+      "legacy_id": "year-09725-fc1c5cdc2980",
+      "job_sha256": "3f78a24c7c908c740638a062f4a769580316d963498d7de4d848c8c65d3c4f4b",
+      "source": {
+        "definition_line": 6791,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "5182862e41a2c45ef17e4d2d83071095ce56a31e0e55bf42c9bb27af72b8b78a",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1948.32968e52",
+      "legacy_id": "year-09726-4e0e10090c54",
+      "job_sha256": "e33c751eef38f868566578a970601ef708cb7fff90cbe58c201aee22c7241241",
+      "source": {
+        "definition_line": 6792,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "0e05931f14b8be6a936a0616ccc06360be3fecd65580a9913fa34be923ce9dbd",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1949.920d6d9a",
+      "legacy_id": "year-09727-9c2724bffd6f",
+      "job_sha256": "3236cdf4684c4862329c99dabbf7c998dd891b1b7ea58205a42a76b10afcdc80",
+      "source": {
+        "definition_line": 6793,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "8706e8a2fc5e03277ea051add27834c905a5c01e9d132c13432cde0af552855a",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1950.aed3562c",
+      "legacy_id": "year-09728-2f9963dcea83",
+      "job_sha256": "6bc2be707ade589b7ad49280037fe250e6d60c0e541b023b1966dc9239be895c",
+      "source": {
+        "definition_line": 6794,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "709621f7cdefb2265877ffe7c73ed383afa06f89437dc58a0ff66090ed5365fd",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1951.265ce916",
+      "legacy_id": "year-09729-1de946fc93a0",
+      "job_sha256": "5d18b6521de731d981e24a8fe05ff206e305ebfef4619779a36174cd99cf2c69",
+      "source": {
+        "definition_line": 6795,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "92b32fa78aecfad805439386892dca2b105412f236c3824f477c4bb80f6396bc",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1952.020b7f93",
+      "legacy_id": "year-09730-dde74622c20a",
+      "job_sha256": "340a0a5e6553e77fbf13b44694fe2e961abbc8f242f3b95aff1298adfcec3f0e",
+      "source": {
+        "definition_line": 6796,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "b0bddedf45965c4649c1257f221a7781d8faa7d3b8e0c18dd9a2475a96a97433",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1953.80994b78",
+      "legacy_id": "year-09731-7d7010bded0b",
+      "job_sha256": "9cadf3071f944e6eec4370ea2a3b20dc99828ffee785670fddc68eaf6a8a1c5d",
+      "source": {
+        "definition_line": 6797,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "40213a4a26b582b1eadd16a1cc386707829f1b8f6a64b9c49adeb1e6db789e78",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1954.090f1521",
+      "legacy_id": "year-09732-56da9c11ca27",
+      "job_sha256": "bd179c03e67ce1e361b8b0168c530cdff98cfcc7bc9b3d1a18514de16ac5be45",
+      "source": {
+        "definition_line": 6798,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "a6351daed0db7b42a5ab2d1559abc57cb609ab92998b013883f814b6c4942696",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1955.dee5cdc9",
+      "legacy_id": "year-09733-31b2981a4d02",
+      "job_sha256": "c15466936ee15ecfc8a28a49f9a38df05f6e842a51062f42d4e6202577f61fa9",
+      "source": {
+        "definition_line": 6799,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "d633963c444ed3690761a360b459fcef6e85d1069ccfbc82cd9458666dab2d0b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1956.527ca595",
+      "legacy_id": "year-09734-43dcabe1db35",
+      "job_sha256": "7090753ead67f37e49d1e4039bf6da0d3aef97e44b6648fe75bc70ec20910e9a",
+      "source": {
+        "definition_line": 6800,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "b32a95f7bf551c1808eace672606755a463f69871da0c66fd4803368777860f6",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1957.1ff9bd5a",
+      "legacy_id": "year-09735-652790774b5d",
+      "job_sha256": "6b62e01b665aa67d6517397a64243802d8c933c3f32afca197552f85bd52a243",
+      "source": {
+        "definition_line": 6801,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "e687418cfb9f19dd153f50daa8a99d95f22c92e9128bb55b429f0c3457d5c71c",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1958.6d5171af",
+      "legacy_id": "year-09736-ac6e3cb3b514",
+      "job_sha256": "0ddfb6d644861325e9ceb138dc4faf2ef7f0eae08a39e9d076d2d8aa490be514",
+      "source": {
+        "definition_line": 6802,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "556c19ef97c131710fadfb04692fca922e3996a4e2c43960928071e3f18f3ef0",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1959.fc12a19d",
+      "legacy_id": "year-09737-ca8d36018759",
+      "job_sha256": "c20aed0139278aad18b3022e04f121d580d4cdd4bc6031308c47fdcb371ec79f",
+      "source": {
+        "definition_line": 6803,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "75c5b14725ab7af435864ae41ce8b6df01f69eeffe1d067dfe3117e2275acc8c",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1960.c8d33c35",
+      "legacy_id": "year-09738-6b17990dff5e",
+      "job_sha256": "f013cfd53fed1ac30b835703299cf561a3d590c277698d9ea873928f84ab3e22",
+      "source": {
+        "definition_line": 6804,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "aef0a6500a08b01307bba169502a68131b1ff1a5869c92ecc88236e8b2fbe929",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1961.072bf562",
+      "legacy_id": "year-09739-1ba40fbb46d1",
+      "job_sha256": "eb96984bdc82b165904cdf8f93867df3c9288bff43806237f92edbfa1db55c13",
+      "source": {
+        "definition_line": 6805,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "bb9e721718c22b34415c212d1b97380fee901c840736618aaf4153bf6468cb9c",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1962.327f9c2c",
+      "legacy_id": "year-09740-5f88f377f32b",
+      "job_sha256": "793c84a10a9d3dc8f3e602d8c67bd1121ff646ad99ddf041a25955043ed1465a",
+      "source": {
+        "definition_line": 6806,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "9bfb6cc274397a3e2ad8d124d463e19807b0f93b72ceb2341b32dcd2c608b51b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1963.c1412189",
+      "legacy_id": "year-09741-59a857a5bce3",
+      "job_sha256": "250fe00aa7729e2bb477c21f2c89ffe5353271d19d85ccb40fb739ba096b23c3",
+      "source": {
+        "definition_line": 6807,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "d4c75d42a879f45ece4020ddc669780ca448c626fd174a0ed47ef18c3243f6fb",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1964.b5023531",
+      "legacy_id": "year-09742-f944f184c87d",
+      "job_sha256": "7374d9367a642ef9870f4f19bf93f9588c8ea6c1af156a7b644ca39a1cbb70b8",
+      "source": {
+        "definition_line": 6808,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "3ea048fc811b927273a41b4f7e0463b95846d3858beb87dcf4940e9a1fb0535a",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1965.bc7ef226",
+      "legacy_id": "year-09743-1f971f9fbaa4",
+      "job_sha256": "20b24b501c5dbfd6950720cc060f021cc9dc00b4c4fd1116e5cc2356f2e52bfd",
+      "source": {
+        "definition_line": 6809,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "b130b7731b1fee428d3df1f663fd3eab12939e7d708522bc04262b1f69a47ede",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1966.72ece364",
+      "legacy_id": "year-09744-aa935ad1f689",
+      "job_sha256": "5c72c9e2726bb86bda65f7e4e23fc2871a91aedb02aa68f9f710564243487e26",
+      "source": {
+        "definition_line": 6810,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "0a892f4325574a063eaa08861d6779327afbfa69a36a68d6bb87d425a63eefb0",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1967.e9c1dab7",
+      "legacy_id": "year-09745-94a337f00076",
+      "job_sha256": "05dac410b4fdb4673b44d70a355a7022c63683ce7e51549e59657a6d0132dfbd",
+      "source": {
+        "definition_line": 6811,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "c17de628b0e36aacc56c267ce0c50458366e9829456be159bece70fbefb3947b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1968.b6e12082",
+      "legacy_id": "year-09746-e80f3cb545f0",
+      "job_sha256": "84dee7022d925b3613bff1c70b0e139a3ec2441e0fbaa25da75a9ba4ca89b55f",
+      "source": {
+        "definition_line": 6812,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "ca44933a60335cf0643e6956ae5772e8355f53af7702a559c109c6b4f5255ac5",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1969.73af0ff6",
+      "legacy_id": "year-09747-ba8f360cb86f",
+      "job_sha256": "cf671192cd21334eda57aba3d4ddda4f05424bfe931f7e02e31dc01a1bf77d32",
+      "source": {
+        "definition_line": 6813,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "f2b2f14bce0fd5e933f01ec3da7dee6d8806a2ef40e4ecbf4318935802166e73",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1970.b3ecc3c5",
+      "legacy_id": "year-09748-64029cf27eca",
+      "job_sha256": "d809a13e4da3ec0442ed4ddbe8ac78b3312e8825cd225b198cd394ae75d1e56c",
+      "source": {
+        "definition_line": 6814,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "6cba87b72f7f01f398e341fdbe4efe225e727e2f41f311e13ca0c5ecad882e53",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1971.2f614a24",
+      "legacy_id": "year-09749-cdf4d30dc06d",
+      "job_sha256": "23e58782ec56c0abf5aabbd2f999e01cb8ebcfb49c50c456d8d304f8fb3d82b5",
+      "source": {
+        "definition_line": 6815,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "c4fe4fda70742536d023aa7a92d11a5f4ad5e6e98982a8bb4112c2b4905c3323",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1972.74546254",
+      "legacy_id": "year-09750-063402fbcc25",
+      "job_sha256": "e0f8e9df34367864917cca19069f256859eca410c433512ec834bfc60f6b8fcc",
+      "source": {
+        "definition_line": 6816,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "da7de39752ff1370c71c8f74f29bb333b37f9cfa5796325ae063b0a1a17eecc2",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1973.d59e0d84",
+      "legacy_id": "year-09751-5688bea53c23",
+      "job_sha256": "78cb996410259dd1d306ddfde6bf03f24bf701c9255a9cc769e2d3589fd6fea7",
+      "source": {
+        "definition_line": 6817,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "6822611c56fcdb43fc796d0fae6027581a987423f26bb7ce541625cebf588301",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1974.8b704cfb",
+      "legacy_id": "year-09752-81f45707dab2",
+      "job_sha256": "9c0d1394edcfcab837375ea5ed27d1b2e22f779504f2cfcc69de0d3a6b4451ab",
+      "source": {
+        "definition_line": 6818,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "a67e9d16147e1ad79bf06c4a2c7f8a27018dc9b0e703acc5f0b73eb12b2b1058",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1975.d08f01dc",
+      "legacy_id": "year-09753-6b1e5e920cc1",
+      "job_sha256": "eff755ed5d0a1fc4d1a204ee1fe27b1c98af67e2e98927349d703e666cea7191",
+      "source": {
+        "definition_line": 6819,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "77243d1b34732415670b12524c3c65917179b161e57c5936d2d33068582b76f4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1976.0aa2b55c",
+      "legacy_id": "year-09754-b9264f5b5a0a",
+      "job_sha256": "1417a2552f1a3dfd63f9b73f71ee91505ebc942c886cba405c6517a1c6531766",
+      "source": {
+        "definition_line": 6820,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "b27c6681e0c765e6e7dcaa52a91b3dffd0e9d37a8f8c087b42855073376f47b8",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1977.0d88d5e9",
+      "legacy_id": "year-09755-55bce80e78e0",
+      "job_sha256": "96e81a68c3f8556f10d1d7b891421a54d10da67796ac24a7e9322806bbfe1ffc",
+      "source": {
+        "definition_line": 6821,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "3224f5762507b133b89dbf09293338a933fcb0e8ad736d24f216899209ab70e4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1978.5ae02765",
+      "legacy_id": "year-09756-954ff7794b8e",
+      "job_sha256": "d073003e75705c563fee0d8f03c3b2c4862936b207042524ec40c1ba9521050a",
+      "source": {
+        "definition_line": 6822,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "862967146eb570836e1fb9c39f847694d944d9e1efc267399e78e5671e88bfea",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1979.12d5a697",
+      "legacy_id": "year-09757-7193469c56bd",
+      "job_sha256": "792ea27a201d8892cea847c38c8485d0cc2a37723998e81b92107386942a36de",
+      "source": {
+        "definition_line": 6823,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "084096662d59609fa54b917fc28c9709025cf98bc4e2cb2509f4ae788e32ae58",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1980.dc3ee518",
+      "legacy_id": "year-09758-61e7914e2de0",
+      "job_sha256": "209fd1bc6d1a365e058957b325ec7bc80d417617f9d7fe89b8277f128597bd84",
+      "source": {
+        "definition_line": 6824,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "c1297a2e79266ff5c5f4145fd8fcf2cd6577f09b816d53f7a9abb506819e77e1",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1981.ac7ebe08",
+      "legacy_id": "year-09759-518a27bb07f1",
+      "job_sha256": "0da21097123ca0bb3f44d74a0743ddaecee4a99570fed67c4d0c02d34e017c48",
+      "source": {
+        "definition_line": 6825,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "7460bb041d62804c8e4f2819b4b6db880a7fdbd1fc73a26e26adbb59c2a1ee91",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1982.3be17814",
+      "legacy_id": "year-09760-704aa2310beb",
+      "job_sha256": "fae5e54b79c05dfb3dd11b33df03cac8aa4afea8f01f61dc5af3e088ef91bb9c",
+      "source": {
+        "definition_line": 6826,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "f64f138432093d6536d5b3bd4ea1b2cc940c78b775248d609c406c2801c480e3",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1983.123687eb",
+      "legacy_id": "year-09761-595dbc0b8f1d",
+      "job_sha256": "d72e98025ca46c3fcc664fa178451a386b68ed7f449d6dc610f9c298058eea34",
+      "source": {
+        "definition_line": 6827,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "de4bc6e657356c231ee8ad71c5d571c99dde587fcb41d1e87fce199ffcba74ad",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1984.85d35b0f",
+      "legacy_id": "year-09762-d48688bfa217",
+      "job_sha256": "1835caaff95d4d3af9f6eeba4b5179a7c4bcd63381e91b3370644d8933e4387c",
+      "source": {
+        "definition_line": 6828,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "6a3286a386d9bf6674faf503cb4251c0610e4f7588a50cffb6ac7500739a8949",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1985.49958803",
+      "legacy_id": "year-09763-4a6b070f043a",
+      "job_sha256": "9d2cd43c69e0ba52a55fd4ec812ffb4d663964877411d0a5cfe2b1bb6858f367",
+      "source": {
+        "definition_line": 6829,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "cc327598505b57c39169a14cb96c3094a48a40544554b8aa6e9ab4fbbe3b3683",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1986.aa9b2c48",
+      "legacy_id": "year-09764-4e45863d0dd2",
+      "job_sha256": "1e9eb62d2414d4f59aacedc0c909f3c1db5eaf6704a01ca00b9d4034719b0e2d",
+      "source": {
+        "definition_line": 6830,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "ff82e246b05a2e6bb8492e62212eb4ddb9c8fa85add50182f245791e21ccf279",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1987.d8392969",
+      "legacy_id": "year-09765-402233a606e5",
+      "job_sha256": "5dc0e9a1323d027d51966a4ad4ad240d67c37928b2422a31f4eb96f2f102468a",
+      "source": {
+        "definition_line": 6831,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "ba72395ded3199cb88c2dcaebb5932ea6ca6d035974973438df1bc3c44ae1a8f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1988.ece39d28",
+      "legacy_id": "year-09766-3d8c61611be9",
+      "job_sha256": "7c9fcdd544df0b6cd8f681f55cdb4cc1bf5b4bb6b7753a825ce9702a01e53cbe",
+      "source": {
+        "definition_line": 6832,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "147026c48c0b54b62f904b8580252da0de166c8345ef5a4037e136d1bea3be06",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1989.609f4abb",
+      "legacy_id": "year-09767-ebf410b5254f",
+      "job_sha256": "2b0d7b3b15131189c3d8cc15f2c98470003a03f857788a73ab0d746b25a14551",
+      "source": {
+        "definition_line": 6833,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "67a68266fefca5a821c7160a4b501ae56243d6be5244ddd37da18c62e74de32f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1990.f82ec797",
+      "legacy_id": "year-09768-a7af77758817",
+      "job_sha256": "ce6451c0a95af8828545ec8d80ca58f99e702a84464e71d8d5199cf520f5b3e4",
+      "source": {
+        "definition_line": 6834,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "82766cad3f6f0da20435fc6a50ce54a192bc8a96d67e1b2d19b69c17150feb40",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1991.4e598ffd",
+      "legacy_id": "year-09769-1271c92906c2",
+      "job_sha256": "4f1e7519935c7f41a218fa65cdb4cdf9f8662f8ec51d4077a9608a5eb81b072e",
+      "source": {
+        "definition_line": 6835,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "1d98aa7cbb3b1cb5c3ff0ee2dd676dff754a84caaa3c34d6a3e01ee3b3e4d507",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1992.849f9ace",
+      "legacy_id": "year-09770-61bf6a5e6c1a",
+      "job_sha256": "2fe18dcf936c9ab2df286060552a8211047da5865996afb65e46b9c66c101586",
+      "source": {
+        "definition_line": 6836,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "4196e6cd072cffd0ec539f7cf441fdf65b5c284d6a97240c806cfb45b27c50ef",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1993.ced8a706",
+      "legacy_id": "year-09771-35501e7ea520",
+      "job_sha256": "a86bcc2e1c8bfb279f48d2c305c8f5ff7ce0a5881b535a98c9affe0fdc383d7c",
+      "source": {
+        "definition_line": 6837,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "1db65426049667c4c95d6455262c1ae356dbcb1d27b931767c9ea5ab7edefefc",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1994.9c5ae18d",
+      "legacy_id": "year-09772-65563acf6b42",
+      "job_sha256": "0677fadf814d7cad49f7fb4b5097de822a46151e02fa27f3654fc90556355fc4",
+      "source": {
+        "definition_line": 6838,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "858d660a074e75350ba12ac1e6a3c0232d9ce50afeb884a66e2999a0b6aaed5f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1995.747896ef",
+      "legacy_id": "year-09773-e397080987eb",
+      "job_sha256": "fa85efd7151422ca73217b403a0c7e8cc63785df733eb780c1edb51fb5811aa3",
+      "source": {
+        "definition_line": 6839,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "83960567a4e2d562d848ba91b8ed8742c00451ad0923c1619aaa94c283c5dc75",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1996.5684189f",
+      "legacy_id": "year-09774-2499fa1b43e2",
+      "job_sha256": "de42c99b5e376a1c3d1dfdc6228d98c3d7a7d81be953cb07941f51bb1be75f85",
+      "source": {
+        "definition_line": 6840,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "81ae53a756d6a5d36f68793eeda62b27c16aa135ce82a67ac4d6420a329ff657",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1997.3a273ada",
+      "legacy_id": "year-09775-f8cb55174fdf",
+      "job_sha256": "2bca7d8df073f2b96944eb599ba639c291a681568e31305106275f0881d3f5af",
+      "source": {
+        "definition_line": 6841,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "779663ee3ea7d62935cd1649da5c87b1879f9f78ee14c0e05f22c480e66c3d43",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1998.3a78f4f1",
+      "legacy_id": "year-09776-b1526f24b889",
+      "job_sha256": "f180deaff5af1cafc1af99771293b7c9352dda695368dec3e638f635dd6b2a14",
+      "source": {
+        "definition_line": 6842,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "e179c965d2948343789d64ec73581338f3edb7b87ef919ca91fd7e41aaeaf5af",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-1999.84ad7403",
+      "legacy_id": "year-09777-0da6d30eb4bd",
+      "job_sha256": "d3cb9dae5f24e8ba0b346e88d48710a9d29532fd7f3694b23e0a376c23526f7a",
+      "source": {
+        "definition_line": 6843,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "3d3d0c52edbef058ee5a92ccf572e8a661710f1bd47bbb3ba9efbe1336f6b29c",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2000.45107e64",
+      "legacy_id": "year-09778-88242804a17c",
+      "job_sha256": "f9271834fe52dec5f07d69beabed845df79b036dcc76e6b55023df98f5caa5dd",
+      "source": {
+        "definition_line": 6844,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "2783d167af9577a78f31b257c0ab8ed2fbdf755f101c10b281733e4e38780394",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2001.89355809",
+      "legacy_id": "year-09779-7ca791e34935",
+      "job_sha256": "9a185d3c938a3bb17a1e91ae99f6e97d548362633929d090535be84e80126fae",
+      "source": {
+        "definition_line": 6845,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "982f3c2c4081ddd071231e1e44559ab486fda10c379066ba2fa32afeec0a61b5",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2002.280dec57",
+      "legacy_id": "year-09780-7946191ca585",
+      "job_sha256": "6d2a3684fdaa5ec15656dfb36c5e4b3374ca844602c90af1decaeb338f6f2f8f",
+      "source": {
+        "definition_line": 6846,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "284ca4df7760096bb999f5f4419128bd0e33b211cccdcc8b3de8d26ff30d4b4e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2003.d2b4633f",
+      "legacy_id": "year-09781-721abed75f12",
+      "job_sha256": "c1065916eaed43e5a9a4dccf344ad8e3995e46529ddba3072cc7a4b6454422d6",
+      "source": {
+        "definition_line": 6847,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "bfab90a1471c475dc0b5631e19f724e2f6f6edd91547b7af731e95611b112386",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2004.100e2fda",
+      "legacy_id": "year-09782-332cdaf5bfc4",
+      "job_sha256": "3a26fa2b9548579696720bd0a0e7d04fc913f77664ffb468a3405fe04a814ad1",
+      "source": {
+        "definition_line": 6848,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "eeef4330f41fa758ae73f97748775fd3f6274f1208115df72dc5375b6cd89923",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2005.8e98884e",
+      "legacy_id": "year-09783-0852b543378b",
+      "job_sha256": "4cd12510210b89db290084c19254578a9ca49e3edcb45de4c8f91c666cd43acf",
+      "source": {
+        "definition_line": 6849,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "673a35a28a02090e61434f602f7e3c7044ed15492767ed62ba48be83f4944d39",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2006.c65d7001",
+      "legacy_id": "year-09784-d392b9b22afa",
+      "job_sha256": "f42380323145cc6a9023ea150cc160ba297df32c14e057442afafb365e4b1b89",
+      "source": {
+        "definition_line": 6850,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "6a92937bcdd4744228e402ccb60187a6e3707fc372e3c0a69c01301791ca1ee7",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2007.e5128b2a",
+      "legacy_id": "year-09785-6de4c522fbfb",
+      "job_sha256": "0360c7e83a150724c8a8b464e7eb34c3df18bc5ecaed29816ef2f9e3c60999c6",
+      "source": {
+        "definition_line": 6851,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "644c3dcaefb64f4c7cd33e213bd749baf1f6585433ef257cdc9165fd6fb4f3fc",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2008.3fa7162b",
+      "legacy_id": "year-09786-43050a08d2b5",
+      "job_sha256": "e1844aeee7cbc8f5546ccd79a6660dd0137fab6f36fe1d530734ebd270bca800",
+      "source": {
+        "definition_line": 6852,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "c60c7e5c7eb3cd11f31781716f5c0fd84672014e0e7cbaebe700f511a4dd04d5",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2009.e5fdbc58",
+      "legacy_id": "year-09787-bff761ecc94d",
+      "job_sha256": "a6cd761e4c6d890b3618d59870f1a61badd4f2fa6802e26536696b8b64746109",
+      "source": {
+        "definition_line": 6853,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "c9a4e987a87efaeb98fbb6d04d40f199f5567b0fb76c1fa5b62cb0fb6a3085a8",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2010.90994e53",
+      "legacy_id": "year-09788-855844efad1a",
+      "job_sha256": "baff8cbe7c6fd10ea803998940e67ec6a10f59e655bfa37814e27d2b53884ab2",
+      "source": {
+        "definition_line": 6854,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "c570437005f1d86bf79ec418ada5c49b6ded29bcdd9c6aec1f9ac97f31e91a5b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2011.75033883",
+      "legacy_id": "year-09789-021b7eb7bcd1",
+      "job_sha256": "985a8f1eaa52075de64372985c77dd91456b1578d880419383d3f599c6577a9e",
+      "source": {
+        "definition_line": 6855,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "45bdda964d784a3772c8a1c0acf7c857695bb785c5f183de0dc9a417c8610820",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2012.93c85fd8",
+      "legacy_id": "year-09790-4c0013c3d65c",
+      "job_sha256": "53d333a7ff70d6be38102a8918229d5ac1e64d01d3db00a11944d8a4b0d0a9fa",
+      "source": {
+        "definition_line": 6856,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "0dbeb2386bed80f94f9c899d717d1aed959b1126545aa793bd37e024219f17ef",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2013.9c460d3d",
+      "legacy_id": "year-09791-27717b200d30",
+      "job_sha256": "54253e7eda42b18573c0bb733dcd2b5a615f29a460e87f6b91c9a6f2a4c55285",
+      "source": {
+        "definition_line": 6857,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "a87d3be174a717e5e58da9c540fdff17878f6c14f232dc6101c00f4745352a47",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2014.36d5de47",
+      "legacy_id": "year-09792-981805bb267e",
+      "job_sha256": "8d75d2923894bd21a78dc8f80681ee845c9f742b04ffb874bea53c7aad9a269b",
+      "source": {
+        "definition_line": 6858,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "9d929e959f1e6bec6df7fa96fc9e751c9fd9edb8143b863d876fa4df8d76ffc9",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2015.c26f986f",
+      "legacy_id": "year-09793-651908726e48",
+      "job_sha256": "c6549313c84c6246a38ccc74b03419128575ee946869c676b41e27c20f6ce787",
+      "source": {
+        "definition_line": 6859,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "0472462106856941ff514c64271c9a78f3731b0f4cb60fb06e94958dd69708f4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2016.9392c723",
+      "legacy_id": "year-09794-e6fa269fb40e",
+      "job_sha256": "0041805b0d0e8b727a63e7576dbfd9f158a03265750251d2590746b040d43c8d",
+      "source": {
+        "definition_line": 6860,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "4c5960e0cfc5fed817ff27e238397ec04d72dc3b348becb404bac56f9e29af4a",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2017.6da63c9b",
+      "legacy_id": "year-09795-bdd066fa27e1",
+      "job_sha256": "3de505111ad8aa0c733fd672e8befece5dc5efc500f85ca566be7b1567109eae",
+      "source": {
+        "definition_line": 6861,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "1cef1ce7802abe08d8a99f6c668678d97bfa79308b009d1668e3f8ed12d46787",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2018.2b65b5b3",
+      "legacy_id": "year-09796-88bf97d82766",
+      "job_sha256": "2e36ec35efc52d1f46361520cbb707c785384d1464fffc99b887ef2d4280b7f2",
+      "source": {
+        "definition_line": 6862,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "e13f73c3a8982ae4cf4296f92b2a787858ba7a4c09a2924464b3b137f6cb065f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2019.88ab466d",
+      "legacy_id": "year-09797-13329fa47d59",
+      "job_sha256": "898627fc516392d16eae9dd9a83a768feb378a716886914af5a2dfa33c0d026f",
+      "source": {
+        "definition_line": 6863,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "8edcfaf86d6bae5197cc5448902ee05acd9e4ab79a110903e3f414e113a98a9e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2020.83bfe96a",
+      "legacy_id": "year-09798-84e0b72a512b",
+      "job_sha256": "621c34e419409f5fb607189716b04b0403ed5f78cc677c99a128521a517e170d",
+      "source": {
+        "definition_line": 6864,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "814a5961cb051c14d341aed4677234fba00e34f1912dc409561e348dbac018b3",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2021.42e06fe9",
+      "legacy_id": "year-09799-3dd3f514ec43",
+      "job_sha256": "edee0ad9ad6450a7d31a6cf2439b9bc1931d2628874ef08fd92db4521e3eaf14",
+      "source": {
+        "definition_line": 6865,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "778fa764497eeba22c5a3424521a4cf38578997f6c2720c3ee5524595a12814d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2022.5c0e146e",
+      "legacy_id": "year-09800-13421fa3ff6f",
+      "job_sha256": "a121a55aef7570ff0437863f1997dc2fe5dc9728558f4dcaf68242a8e273f7d1",
+      "source": {
+        "definition_line": 6866,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "a007a261d990f57d0a6bb20963f0dd0309f3913e7cb9f6cdba90e5d5dd70a17a",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2023.db858a6c",
+      "legacy_id": "year-09801-31385fa17ccc",
+      "job_sha256": "b96ff0e395ec4ff6b9e438c166fdf366f9351d63c8ad18994b18b37bfb437b94",
+      "source": {
+        "definition_line": 6867,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "656d723370ef561e992e84e4042cf2445e0d81a5bdf9658b44d85efe3e7301fe",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2024.11aeb912",
+      "legacy_id": "year-09802-8df624363e02",
+      "job_sha256": "ba0d9783e3259888443c7577a1d6a9bcffa3ee056d2f0ea6452d91e1f33d0304",
+      "source": {
+        "definition_line": 6868,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "fee937f395f73390254265c272227dc23861937d8f3a983d6652b289007ff8f1",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2025.151ecd4f",
+      "legacy_id": "year-09803-956544905e73",
+      "job_sha256": "7ad487b8914fb2520b1e93c255c3d750babfbc2f61dd87a680033007c330dd70",
+      "source": {
+        "definition_line": 6869,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "e05c892b6794a0ff5f893df8d5e8872cf86334bd884adb03758e47f0ab6221ea",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2026.dea93149",
+      "legacy_id": "year-09804-3cdcafac75e2",
+      "job_sha256": "e7e7420e059d5813cdecab8e36365be4bd6c736a59086ede63c06dd5eac8c039",
+      "source": {
+        "definition_line": 6870,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "4c2b30a5835edbd1ca8f08d14d9dec9f16604960257e1987332e0bd4f8d9a1f9",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2027.54246ed0",
+      "legacy_id": "year-09805-a59050ef8921",
+      "job_sha256": "8b29d6cc721e78d2a3453d6a81c4e61e6290c701122d90d36c532b58a1a51ae5",
+      "source": {
+        "definition_line": 6871,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "3ee24ffc1334b8e855559fad6d99f79d6a0bdf88543c3a70bd26e850f6645a33",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2028.6f9ca027",
+      "legacy_id": "year-09806-d79ce0e9e336",
+      "job_sha256": "0ef511735447d7148a7043b0ba4fd8c58ee4b274a0c5a4f41f417695d74c923b",
+      "source": {
+        "definition_line": 6872,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "b5685fcb022b8557ed26f45fce538faaa1d63043f7d9ad9239839ff6e54b425b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-2029.f74841d3",
+      "legacy_id": "year-09807-1ae19e07e827",
+      "job_sha256": "c1fdac5c551a608765af4c10816fda87a98deb898b2dc96f8c274b8c7379a933",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6885
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1880.857a43e2",
+      "legacy_id": "year-09808-dd4c2b38e00a",
+      "job_sha256": "9f31c105c245c2bd5930722dab7a4d88606a7ce95f8a9fbccc57072d977bc064",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1881.74bc08df",
+      "legacy_id": "year-09809-8a641b06d40b",
+      "job_sha256": "2264633250267245eed42e3491a454801756eab8e37b40a8a8de08725f3ac846",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1882.1f908f7a",
+      "legacy_id": "year-09810-7f46ef8fc1ac",
+      "job_sha256": "b3d9195ab0ec5db3b84fcc9eb16c737d0e2028fcf4a9be358d788824866a451a",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1883.e6584b0b",
+      "legacy_id": "year-09811-d9e8713992ea",
+      "job_sha256": "300a32d7a7af2cef9644431ba4fdf17506561479d28509dca81e4fe11c5352b2",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1884.ff221a19",
+      "legacy_id": "year-09812-9438b50850cb",
+      "job_sha256": "0b18a4dba421e0bdcb3545f90b92671ea0a8fa8f017e99b609e3e93c82f3a4f1",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1885.d768787f",
+      "legacy_id": "year-09813-c0af895d8b1f",
+      "job_sha256": "5c677d5ab0f17825c0bd1ac8ab64b406c91aa7b24881ce6607af016763e2b46d",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1886.d3610bf6",
+      "legacy_id": "year-09814-a5ad98418985",
+      "job_sha256": "468baf0f1252d1372054305bde6794a737f04889a02cee6f39a91ee84ad2f173",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1887.80fe409b",
+      "legacy_id": "year-09815-bf34f94d8040",
+      "job_sha256": "31970dff5d7b80d451ebb88b74238555d5e96c7da4b04f000cf59236a319b55a",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1888.ade521e3",
+      "legacy_id": "year-09816-362ddd9444c8",
+      "job_sha256": "1b579c1652d5986af0475b9e4be9d1f86f5dc6d6f63d8e309e75b87549454825",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1889.a94f6bf3",
+      "legacy_id": "year-09817-d5183eb0d0ab",
+      "job_sha256": "9524a7eb705f034680107bc43299f6e2ca4f5be41157277c687a004be2bd86a2",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1890.97d5735a",
+      "legacy_id": "year-09818-49e7bcadeb96",
+      "job_sha256": "06e7fd4d1b853b6036b8c6e6d5f5c80b2284eeca917b7fda40c29fac2fb7d502",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1891.82b1f49e",
+      "legacy_id": "year-09819-a94b67d97d9a",
+      "job_sha256": "8e96e625e75ca75c82a6c9f1799b96173c8feb2a5031ff60e1f71eb6dabf3369",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1892.c496d7b8",
+      "legacy_id": "year-09820-27039aacf03f",
+      "job_sha256": "069be98be0f9f7375ced9e882fc9b79fcb1cf502f6cd3f7049f844243d0a2dcc",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1893.2fead664",
+      "legacy_id": "year-09821-79151df47950",
+      "job_sha256": "44b4a23a3dbdeae45e48d48bb1a8e69a6d1214e9dd82ed54ccf5c91693ba6eaa",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1894.45724ddc",
+      "legacy_id": "year-09822-0b65361f99f1",
+      "job_sha256": "83974e71a01d83f599abe765b5f1b6a79b5db07da0f420c0815f419dfab797cd",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1895.58612223",
+      "legacy_id": "year-09823-a5d5fce10ee3",
+      "job_sha256": "620729fbb465255fad83db9b9f7288ce8b8f4c018b2af6f123a9defc2821e064",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1896.ab24eb1b",
+      "legacy_id": "year-09824-56cdabf4968e",
+      "job_sha256": "b4364f112f01a36404ecb72da6c50b5657dbe971ee492e19b68e49c964871bf4",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1897.0eed8f4b",
+      "legacy_id": "year-09825-3caacbdd280e",
+      "job_sha256": "76a1c52f1d49fd38fd4d3f0ff1d542432450c156212212112008bdaa7d874a70",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1898.b481de1d",
+      "legacy_id": "year-09826-9e128a68af4c",
+      "job_sha256": "120136af11a88c394202543c1532a937c609bb3c89da942184155b3ba0bee20a",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1899.37555e6e",
+      "legacy_id": "year-09827-819832f44d96",
+      "job_sha256": "37d5875e6066c1cc3d25bec9edd0f32e47fe6bca787bba03abd1717d13be82c4",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1900.25eee903",
+      "legacy_id": "year-09828-284d640406fd",
+      "job_sha256": "da1732f3b739287f01c819cb40c41a8c61fe6a7b59d9b145901ee67897be9776",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1901.c563bc40",
+      "legacy_id": "year-09829-a4e5007b65c2",
+      "job_sha256": "5f872e8b7da3c20ee44f22b091f8ee9f736b01227e32d84be725c529a0121b28",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1902.273d98e1",
+      "legacy_id": "year-09830-891204954f37",
+      "job_sha256": "52f22624d20e6db995d54edb606196962c17bb1a7c1184015bf45bdafaa3e981",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1903.c6bd590f",
+      "legacy_id": "year-09831-a394457ae6d4",
+      "job_sha256": "156e727ed4ba574c5566ec75012da3d0570fe89af8e9046af34c52b4958df7ce",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1904.656aefbd",
+      "legacy_id": "year-09832-79d727675a97",
+      "job_sha256": "e0c1b316f097f1b5242e145851b1890b7a985427a84fdd23282cc49f23423430",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1905.01ff6b81",
+      "legacy_id": "year-09833-c7dc7b1a578a",
+      "job_sha256": "126608994d0dba8d406a697069513fb28b84feea1a832702e8d911a7479f6adb",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1906.56475a2c",
+      "legacy_id": "year-09834-f36e1531b922",
+      "job_sha256": "455aefc63a397549c8d21cab9cff0cfe127523b6d67fd808c924b0abcfef1108",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1907.0557096e",
+      "legacy_id": "year-09835-58d10788c879",
+      "job_sha256": "274224b7ad1d70e4464f215209579a1f7219cc3eec0de1fc455c90c9fbdb549e",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1908.f948b004",
+      "legacy_id": "year-09836-2d5063fceefc",
+      "job_sha256": "c9c844915605065a96f73460ab2a33f458ea24264f8ef052e63f9f39755e0065",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1909.e3252b8d",
+      "legacy_id": "year-09837-c0306dc369c7",
+      "job_sha256": "56c2980a23eb4ecc2e9d04edcc9ee1673789a79fadb21a90f66f5e3f9f59554b",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1910.233772b7",
+      "legacy_id": "year-09838-0631ba82afc8",
+      "job_sha256": "a112eb01c0fd15899d2cb7cdd66df5870fe39f8a9e4cc64728bedd8848030812",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1911.9ce51789",
+      "legacy_id": "year-09839-6a08b01e116e",
+      "job_sha256": "26e42c58a46e218882960a1968ea7a6286997366cdaf497e4d369b1313406cbd",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1912.c87c5d50",
+      "legacy_id": "year-09840-af543c3e871c",
+      "job_sha256": "8e9741536d199c0f540cf8dd31aab5279be31fad5909a4160a7229412ca7866c",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1913.6674d771",
+      "legacy_id": "year-09841-f7eadcd07e28",
+      "job_sha256": "6d78adc9ee1549c029b9aeba4b37de0f77045931194abb0e7665cbd7f1cf8d82",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1914.a6c79efc",
+      "legacy_id": "year-09842-5529463d97b3",
+      "job_sha256": "61029d81e340937413ad008d3b752bb70c055a450322d0f1e164bcfbee11cd70",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1915.33c1bf7d",
+      "legacy_id": "year-09843-642bacb76a3d",
+      "job_sha256": "7ca8893685a2a62ee429eb558ed522f4b363ee8c3322ec28cd2f8592c5f1bea4",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1916.d6006bfc",
+      "legacy_id": "year-09844-89537e633cae",
+      "job_sha256": "4e88ea0e7b382aa0a2eab8ec1ff4afac1e3ec393cfa32703bffa3d0efcc35b2c",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1917.d9aa2480",
+      "legacy_id": "year-09845-21945e07efdd",
+      "job_sha256": "925c5ab32bde8ebae34590979c6980488b9094cc7eb4b8a16cb2ae24ad506251",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1918.ba02102d",
+      "legacy_id": "year-09846-cec32064184b",
+      "job_sha256": "4c416750ba7a7792fa1eababdf53436970173da484c59710e94ae04c65a8569b",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1919.630d7fa6",
+      "legacy_id": "year-09847-594028313b28",
+      "job_sha256": "88bf1036ee79aefc2cc18d5b972ef0b86f5812739eb9f118ca17e87ef176d844",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1920.2ead5113",
+      "legacy_id": "year-09848-0b7428a25db9",
+      "job_sha256": "972cf7572c15bfefe305f1c68bd1b4d93374a849aa635f97734696359e9b6b36",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1921.6d03c69a",
+      "legacy_id": "year-09849-7b777102758c",
+      "job_sha256": "9edcb2b424371d44b5a1db1425c7c9f87e6752ce302d86c9994c0977ce0694e5",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1922.08146f8d",
+      "legacy_id": "year-09850-475254ec6beb",
+      "job_sha256": "eb8429cc1fc790826a982d43adc826d6d114d813ac312f9f3d95ed525ea8f5e9",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1923.d9b0dd20",
+      "legacy_id": "year-09851-c0095e46dda9",
+      "job_sha256": "9c0d417fd391c1d043563a37db3d98a25254a884b7721ac41f917d9e2b43ca46",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1924.2088f0a4",
+      "legacy_id": "year-09852-ceccb1668b76",
+      "job_sha256": "f61d665e0e33444f730b58d47208427b2b7e52801f6789b8f4c1d16994b205dd",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1925.1def16e3",
+      "legacy_id": "year-09853-18570aedc105",
+      "job_sha256": "d251bc2bf938d52df7957436ac9d4a13c67667502ac6c3e10a5c51b2a328232f",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1926.e98563a9",
+      "legacy_id": "year-09854-bf8a7cb35fa6",
+      "job_sha256": "012b6e22d6cdea335d5597ff75c125a312b823e32ce8a161624950db9f58d392",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1927.ea0081db",
+      "legacy_id": "year-09855-f70d1c1049de",
+      "job_sha256": "10cd9e2a84179e7990d7a6603cc29adbacda2c94b96cc548de5c5ff0ca7dd150",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1928.ecfa34ba",
+      "legacy_id": "year-09856-3b4437485a28",
+      "job_sha256": "48b3ee35577726bb7fc05dea4738ac465a960ca24000cb545dd62d7fadaea532",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1929.8a743a63",
+      "legacy_id": "year-09857-1f85ee27d73e",
+      "job_sha256": "70d082ebd90255c1d9bff6de8543874c3fac07f0349b6d3edc116d9b984a6acb",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1930.bc7d7962",
+      "legacy_id": "year-09858-57b30fb5fa56",
+      "job_sha256": "66bf684c1d5524552c04112f906a9c037b8281954f383a99bef236c851f9e63a",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1931.327700b7",
+      "legacy_id": "year-09859-6771ea7fc390",
+      "job_sha256": "365530e9184c58ce483f87de2022a543dd2f23130b712363e41cb883bbc09a0b",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1932.10f52bcf",
+      "legacy_id": "year-09860-6290429fcdcc",
+      "job_sha256": "72c5fba6ea084e79a38f68e27c9b0b0679f342185d703fe2e5654248b1faf1f7",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1933.e93c3a14",
+      "legacy_id": "year-09861-9b889c476718",
+      "job_sha256": "f7fdd12b6cd2446e7a4a365b9af25018ce8401d39cf7d8487095592cb278e5b7",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1934.81a3389e",
+      "legacy_id": "year-09862-6181b419fa5f",
+      "job_sha256": "681c9c4e3d352c1b57350280e513600a63feb670049b3dc70350fe6fc78eb70d",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1935.b4c5cb88",
+      "legacy_id": "year-09863-b14a46fd9525",
+      "job_sha256": "09aa6cec4121b944a8e9a9cfcfb27316e7cad7b7454c28c0dfb545c03b7e28f7",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1936.059e4a67",
+      "legacy_id": "year-09864-a4eae80832bf",
+      "job_sha256": "9d359d0c2283226e5c149b47ed414bae53ae93ebebd52ca0a8d6bbfd36c73b59",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1937.c4cf5104",
+      "legacy_id": "year-09865-224a91528d9c",
+      "job_sha256": "33ee4d7079c47bc6773691ff57d4e7cbd81a4d09b7c8cf76cf870d00a4c565cc",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1938.2c2b9104",
+      "legacy_id": "year-09866-ee2657a40c1e",
+      "job_sha256": "7d41eb742e3cbd2b46fb8167fb0a01381d08cfadfed31849a830bcd29f5843b5",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1939.49f2e858",
+      "legacy_id": "year-09867-e9c76affe947",
+      "job_sha256": "2512b3eaa4bac8ceebc5d5c434c27fe06e8a87d212e6afb43c6947bd95ef26f2",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1940.cd988f44",
+      "legacy_id": "year-09868-49bf10f4ceb4",
+      "job_sha256": "39e2f1c08ef40583a6e09253575c18b77fabdde973bf2446469647ad1e04e783",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1941.3d550440",
+      "legacy_id": "year-09869-dcb4c401db02",
+      "job_sha256": "0abaad3122ed3a6344dc7116f71a5fbc946ebafc72cadbd650c65ce4577c13e5",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1942.a65181ee",
+      "legacy_id": "year-09870-57ff3d77f85b",
+      "job_sha256": "84d7850fa517d516eda8bf0b11193c8a5ac67621c0782e017053988a17165782",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1943.104f1b64",
+      "legacy_id": "year-09871-4102f7d50cab",
+      "job_sha256": "b3fc726116c4da50a11eccf1813b671de0725e57866e53d174e648a3d7912181",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1944.3ea8e2ee",
+      "legacy_id": "year-09872-45ce93c19a55",
+      "job_sha256": "b86b102ca15b59246598c7764ea092154dcab0d22ce5c0a9cf65d5a24668ca33",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1945.c312bc1a",
+      "legacy_id": "year-09873-2d7467c78fdf",
+      "job_sha256": "5a4df7855134a11faf675b9cb9c36a0d6bfe480704825159912a0b6db734c05b",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1946.455398b7",
+      "legacy_id": "year-09874-c592ec9c7f82",
+      "job_sha256": "1b18293b676b7527d83092e75052455ee33ef8e16f397e9ba5e0388b26486d7b",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1947.1d943638",
+      "legacy_id": "year-09875-094ee1aa31a8",
+      "job_sha256": "6c23c9ff82055e8e9cbb247365a4a51a302d50169a3b7bba4fde9932c6b58690",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1948.591141b2",
+      "legacy_id": "year-09876-c6702a1451da",
+      "job_sha256": "fe4db465ad142aeffe175c54d002ab18f2a6199fdb897eca2fbee1a6aabd68bf",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1949.99bfb875",
+      "legacy_id": "year-09877-ab1e02b76f36",
+      "job_sha256": "94a95bdec4250ca1b5a26fb38356141d3c55f142f10ae11ec1158715b70cbd48",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1950.6623845d",
+      "legacy_id": "year-09878-4419bfad058e",
+      "job_sha256": "a1fcfcba72b709d77393a2a90edfb3552540167ff020dd4f7d9cd2778bd4881c",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1951.a079ae69",
+      "legacy_id": "year-09879-13f7243c19a7",
+      "job_sha256": "a1baf87874ce467a5ccd5623ff7b2bf063b397031c9a16083a1c014826b70819",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1952.3e7a32ef",
+      "legacy_id": "year-09880-3a5503343439",
+      "job_sha256": "b5e44086640ff57be3cd6a19bd9ff886c2c3bb1b50236cc7d4e7142a32291892",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1953.2b8dcf03",
+      "legacy_id": "year-09881-01fbab98a8a6",
+      "job_sha256": "d06462c4008c2a90013cfa53e933a65098ba3cc6bba276412ae4be5da3ee084d",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1954.fabe27d6",
+      "legacy_id": "year-09882-cbadca2fa761",
+      "job_sha256": "fee76a812fcc96dc0456da5d7618536b97a852b8b47a801947fac777b63aa3fb",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1955.98f5e00d",
+      "legacy_id": "year-09883-d32695c0e0cc",
+      "job_sha256": "48dd16e8504fc0781a3ee82c02d3eb769a15c7f79450849680d2df79e4b44830",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1956.1db0a826",
+      "legacy_id": "year-09884-a92c6f4110a8",
+      "job_sha256": "0bfbb00771d19931026e72f211e8235406f7be0d22fe73cfe2c351f669e48c30",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1957.f11e7b88",
+      "legacy_id": "year-09885-712502ba0fb0",
+      "job_sha256": "d6d78a16f70d77dd284e75a0c5821dcf4c71a38a84fc07ada75a1ce5e7ce294b",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1958.d5eb19c6",
+      "legacy_id": "year-09886-968af15cb749",
+      "job_sha256": "bd1501bf4b507b6b4279d664bd6c25ebb04ce4276a79ccd4b26ec646c0ffcb40",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1959.2ee0dbb1",
+      "legacy_id": "year-09887-694b7a08ccbb",
+      "job_sha256": "a8d0bc772c67a863aa609d011793fa7a3d3b1336165e8d949bad364097dfda3c",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1960.0fa35bc0",
+      "legacy_id": "year-09888-af45cf6ca1b5",
+      "job_sha256": "d0c414028da8b86b5152c93fb07732348d9a9a205451f108756d552ccc2b7cf1",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1961.7df52c13",
+      "legacy_id": "year-09889-6fa31172cd82",
+      "job_sha256": "c330c0b470b38b7cdcc0da24d8d9e1cb6cecd10118232b966aad1d782107a8e8",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1962.ea629f93",
+      "legacy_id": "year-09890-6f3e77e7b795",
+      "job_sha256": "7a01566b59b42236b4f2089bffd0c87b9db8d7a70e39b15e707101b507da574a",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1963.783470a0",
+      "legacy_id": "year-09891-090eded29f83",
+      "job_sha256": "a1d71f42add8a0d356bbdb9256f12816c07a10e09d88d39afffd64cb4d212584",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1964.f4aca39e",
+      "legacy_id": "year-09892-db39f5f6d554",
+      "job_sha256": "cd15379491bd2d140a5eadee13cfc0229afdd45f3024fc7a05a1ceaae2e60b7f",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1965.e22890fb",
+      "legacy_id": "year-09893-5fb044f873c7",
+      "job_sha256": "0a85c97745588e4b64441f2b46a35e7381143f74ec28359707d2165c92d60e6e",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1966.5aee20bb",
+      "legacy_id": "year-09894-042383f15089",
+      "job_sha256": "259b391d56ac5c03df566e69f3afe5928115d1c38b8740a42298e9ce6fb928d7",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1967.83ff0cc6",
+      "legacy_id": "year-09895-0b1fb0f5dde3",
+      "job_sha256": "430ca855e94cb4ab2d17ab7f636302e170a8cea7896074242d3e39485de540c8",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1968.c81138ca",
+      "legacy_id": "year-09896-945054a067bc",
+      "job_sha256": "f06f9f92ce19e4d2c5db963cb3849adff0ed390c142af815cd061d3132f43ab2",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1969.7049c39d",
+      "legacy_id": "year-09897-86478f92012c",
+      "job_sha256": "97578ea4296b8b1f4bc976b2090530a9ff2c1e3b6e13ff09e8b1744383a8274d",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1970.3ae34f56",
+      "legacy_id": "year-09898-52a199ae4ce5",
+      "job_sha256": "489b40cf0654afd096a461414e208cdb25248490dcd8bd1a9a54bab09d331427",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1971.3e887bb3",
+      "legacy_id": "year-09899-fd2b0f919525",
+      "job_sha256": "e607d813ced80a91673df10da16aa5c11983cbfb76674cae3ecb37252fd59479",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1972.95c79372",
+      "legacy_id": "year-09900-332a9f132871",
+      "job_sha256": "c9b184009bf6e691cedf9ec3a4dba987b929174b5d155d557660d5492eeea936",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1973.1adc1b43",
+      "legacy_id": "year-09901-ceadfda29c22",
+      "job_sha256": "65d8776a5aba53eae0d5f904c8cf02f296a9d88bae227cf9c5f04bf6f5dd60a0",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1974.ef4ec22f",
+      "legacy_id": "year-09902-1b67b98d8a77",
+      "job_sha256": "2ae73f2b774fa3ba9c872f18f02248a07dd069ce0e4d147ecf64c51778f0ca72",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1975.eb79ebb1",
+      "legacy_id": "year-09903-92834ea54d9f",
+      "job_sha256": "0cd46a1d2ca28c23b447dfef68be7aedf4cb1330c366d54a730068fb4155f8af",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1976.4cbe0bc6",
+      "legacy_id": "year-09904-c802b42f6123",
+      "job_sha256": "1dedf9b3bfa8e89da015577aaae7d43c61664a6129c9c3f76ebf787fdd95363e",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1977.cc36319a",
+      "legacy_id": "year-09905-6d71a0ed6ca8",
+      "job_sha256": "27fd557083f212126083a7b6f0813874b21312decc10defcedfe1aa7fa00ce96",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1978.e97ed527",
+      "legacy_id": "year-09906-2a34aeab5eb5",
+      "job_sha256": "cf63bc3bbc208042fba2a360184fad7d8af7be21c0186031c99612c98251aa23",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1979.ddb1ca54",
+      "legacy_id": "year-09907-82a75288b3b1",
+      "job_sha256": "c70ed59cbf3d975424d6b06d42e88e8ff807c8fc5d77e25860421f7a61fd35d2",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1980.4cd5471c",
+      "legacy_id": "year-09908-2a1d0c4ca28b",
+      "job_sha256": "7c2f9df2507770c8cf7dfbc962210728300a63e0d18077fc2584860871cabaf2",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1981.ab1533eb",
+      "legacy_id": "year-09909-6e67983556e1",
+      "job_sha256": "60f31bdbc724952487fc19dd4e07ce281d499d106892455fb594d124a6b4c536",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1982.f5f5a9de",
+      "legacy_id": "year-09910-a5e386f89929",
+      "job_sha256": "a89360e1b6b81baa9698827a8ed1b96c73aff793aad74497b44683b4b72046f2",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1983.9698a7a4",
+      "legacy_id": "year-09911-8bb7f2addb5d",
+      "job_sha256": "131c34a6717f43593bf31bd251075d10d1f67ad84552e7f8564eaa78c32ecb10",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1984.6f1f9309",
+      "legacy_id": "year-09912-22802f67ad9a",
+      "job_sha256": "6b83d96361614ed505e91680004d52527b5525dfdf7755d37f22e95b0a028b84",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1985.dc5ea7df",
+      "legacy_id": "year-09913-a215c1ef344f",
+      "job_sha256": "c2a40e6614be7eb7619669a93aeb9ccd539292ab1545a7710d5614a39e38603a",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1986.b523fe56",
+      "legacy_id": "year-09914-de068fdb523b",
+      "job_sha256": "ba23c58cc3da5c66f4ad0347b43855d1e32ccad5009866b2777e5efee283aa20",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1987.723c5dbf",
+      "legacy_id": "year-09915-f24f610fc806",
+      "job_sha256": "af1384c42fcd5bf7d4f981b82b11d8783097813a39c52f6baa3ac87ea6738c79",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1988.eb0f8819",
+      "legacy_id": "year-09916-cef806a1c063",
+      "job_sha256": "ee709336cf6919f5b72ab27d7f4e3e3f6ed95c37ad264fc63af743bd9b0f5d50",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1989.2c5448ae",
+      "legacy_id": "year-09917-38e8dffcd796",
+      "job_sha256": "4f51c44dcb1d30cc6bec40c78d63dc1187a78d5e5c42f466e292f8597790f021",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1990.fedd9fb4",
+      "legacy_id": "year-09918-6a1a89806f68",
+      "job_sha256": "bb9aff90c7bba63105a30cbc4ffa749dd3a6d64139f9c6e3d769a1a7162ba4c6",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1991.4f0be9d4",
+      "legacy_id": "year-09919-87f8b00fa551",
+      "job_sha256": "6be4e16ca66005ee1f6d51cd3d451d44e34d8bf3631eeb1be7160768cadcd597",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1992.6afb5858",
+      "legacy_id": "year-09920-1bff9fd2f70c",
+      "job_sha256": "ebd998c80e3f85f08688e996197c5f80ab559fd6fc54a528940dcbaec9f5f4f6",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1993.19d2aabf",
+      "legacy_id": "year-09921-ce2187b6cf7c",
+      "job_sha256": "fee0b13bfd4f6900adfce934007f713a301b20e46950bdd2469932a6dd5e480c",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1994.e78030e4",
+      "legacy_id": "year-09922-943e6e5ffd55",
+      "job_sha256": "866635ffe193a7515b4d4533d85d89844a6b1b1dd46bfb31fa6c2f0c63f7f172",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1995.c795fe68",
+      "legacy_id": "year-09923-9359e403a9d7",
+      "job_sha256": "4a7cc28b45a2348236c7f1fdba48e8075dec5342994768185ca38d7825ca36ea",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1996.807bd647",
+      "legacy_id": "year-09924-59de5a34cbc4",
+      "job_sha256": "bb5124d6753e22f63f29038386477ac8d3343248c2ef4bbd822a8ef513dd3705",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1997.b0d7a9fc",
+      "legacy_id": "year-09925-2358062838bc",
+      "job_sha256": "50b5a46b20e804f210bca458dd0352265f289c94a884ce474f0bd55c11246e3a",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1998.1f6524cc",
+      "legacy_id": "year-09926-ac2dd666b675",
+      "job_sha256": "dcd7f05ad66a5cdb09b8a83fd61dd4a97cf892a36f17600d4b3357b3b39695dc",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-1999.fc433433",
+      "legacy_id": "year-09927-b4288e8fc784",
+      "job_sha256": "468585e7e626ad617d0f285ed77f7860fd1ad8dd8f9331ec1556722fc3a187a5",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2000.aa2c8f32",
+      "legacy_id": "year-09928-4d1945b1eae0",
+      "job_sha256": "85f4e08c471db3c2c571310f048d2db21dccdd3a507eb3bf48df5c722bfda656",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2001.58696d92",
+      "legacy_id": "year-09929-e681f3acba9f",
+      "job_sha256": "7698944f59f64c264628ebb7a5a8c06ea080bd656521e9c0510cb6993cb7b416",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2002.3d7aaaf2",
+      "legacy_id": "year-09930-6cdbfad093da",
+      "job_sha256": "3270b98ccc4f7fa9c777f109a42dbc4bf647f9a6f75ab3a2272df819b40b5bc0",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2003.7f1935a7",
+      "legacy_id": "year-09931-11d3cb74912a",
+      "job_sha256": "5b04a6af30d9dafc2de5429c912ff448bdc3a61d36e981433635049254e20263",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2004.b5bab507",
+      "legacy_id": "year-09932-c3fc9fc2294d",
+      "job_sha256": "8ae731ded5ab91a15ccdeef4b43403d9cb1d014df3d10876a8befd815185500c",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2005.b16051a2",
+      "legacy_id": "year-09933-bf0f2e3845e0",
+      "job_sha256": "61df8525c3c39a5a2f4446c1057a936fc0de7927446d27236975eb8118075bbd",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2006.03690cdf",
+      "legacy_id": "year-09934-e32ebf0fb93d",
+      "job_sha256": "a8b0596427821eece99bf50ddcde83dc293877bf8f5cab9cc73369aa25e16306",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2007.e397c207",
+      "legacy_id": "year-09935-70434d274ce8",
+      "job_sha256": "86f06c5bcac4d203ce310b337613d4ff83e5d98e793c8d7866f71704f4f6bcc7",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2008.39c968f3",
+      "legacy_id": "year-09936-eba1a33d54d0",
+      "job_sha256": "6a0de051a6298804b54bf1feabb95e00a07db9300ed771aecb16ae36e31aff46",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2009.f1539fa0",
+      "legacy_id": "year-09937-bd55a2deee67",
+      "job_sha256": "878d2829a12c5a9409f421dbb2a187a4f081707fc122c3a9ce97f023223d9988",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2010.b399db01",
+      "legacy_id": "year-09938-6d9f425015ad",
+      "job_sha256": "ed96db8a2187e3ec03ba12c16687b8cecdf9e26e1771e3e33c6ca782d6649821",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2011.d188d65f",
+      "legacy_id": "year-09939-02fcb92658b4",
+      "job_sha256": "bca2341bab89888f2718c5cbc4e7cf5316796ecd4e7d97e5c4e4e6251c1e8f15",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2012.e870d643",
+      "legacy_id": "year-09940-24d46b3d9303",
+      "job_sha256": "6846c4371ddc5bf6c9afe4122449f5ff3bf6d2765f9e5dc13d55391b6c5df24b",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2013.75bf1b56",
+      "legacy_id": "year-09941-922779121b2e",
+      "job_sha256": "88bd6d11386fcc8c5a285452016626c5559b13a1b78021d51ba7116c79829920",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2014.feae0584",
+      "legacy_id": "year-09942-40dc19394d64",
+      "job_sha256": "d73627a632a3d4986be23f46c856810f0590ef3749919a179274ee47229505ea",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2015.33d213ae",
+      "legacy_id": "year-09943-7fb796215995",
+      "job_sha256": "acb98d69f422bae2d41488a0ecc9db0cec71d69152c9266a1d5597529312c8e4",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2016.1de7c6b5",
+      "legacy_id": "year-09944-b61aed586e84",
+      "job_sha256": "64f1d08a4f687a2ae5dd5915261e463b30a1dda26aed1fac486f0b3ed28ca09b",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2017.88e4a754",
+      "legacy_id": "year-09945-df8e82c2c76e",
+      "job_sha256": "714cdc22c888340cbd4961142de9e80e18c1ce04674ca22c9985ee15b1bc82b8",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2018.18f7a6e8",
+      "legacy_id": "year-09946-8368b5a39288",
+      "job_sha256": "32066fb95c1ea7bf166ede32e1c6407336fa1bccad52f198dae9c8e0f977b5c8",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2019.c14e036c",
+      "legacy_id": "year-09947-d82d43260a13",
+      "job_sha256": "dc167ffce7a72016a732eec3326b031a0d7e7ae20674bf83b8d3e859258f5a1e",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2020.85b6933b",
+      "legacy_id": "year-09948-99cd6b2726cf",
+      "job_sha256": "829fe3ac0307ba83ff45a92033d561b81a6d8e5e439a3ba73a8c9c79352a0776",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2021.a6fe60dd",
+      "legacy_id": "year-09949-2d2f3737ea0e",
+      "job_sha256": "d0746f4dbbbbccf32d61f40361e63bac6948e38c9d070be0232a9ad50f89efe9",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2022.e9583a3b",
+      "legacy_id": "year-09950-185e8da4f248",
+      "job_sha256": "4b3a8afde4c2834a7ff39d0cc2a14c9bc12d49dedc825b16cffa9ec9cdab1e4d",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2023.4b3133d2",
+      "legacy_id": "year-09951-f5750d1f51af",
+      "job_sha256": "b09a14ce99c15452f5124028dd07d03e32df86e61351ad30faeb675e807cb236",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2024.d204948a",
+      "legacy_id": "year-09952-70efcfc91410",
+      "job_sha256": "51ccc89fb50b40fe795d4b195cfeefbe5b37068be4ae93e0c253c033c4d97c48",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2025.1a5530c8",
+      "legacy_id": "year-09953-5f7ff947ac37",
+      "job_sha256": "2caf6f2f50f29f679463f89aee1f52c78c0b7f55f586e136ee410e1e1ac8136b",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2026.f0102fd1",
+      "legacy_id": "year-09954-0bf4f01e8dba",
+      "job_sha256": "2cd18019ba6d8709cca8b3df5f18a027d714dba08a4a5f7f49428a7a318979e3",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2027.06621aec",
+      "legacy_id": "year-09955-2f0432c192c5",
+      "job_sha256": "6a9fe90ef0e795b8d4236d4a4bd0d9f4e56064974d40dbcfc0228a625fc8e092",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2028.89bf8acd",
+      "legacy_id": "year-09956-f30c76278df1",
+      "job_sha256": "2c3700be63137f702790964926485860f71f38bc74597762dea0c12bc5616f17",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "year.year-best-2029.a0da52eb",
+      "legacy_id": "year-09957-b3b9b59e8961",
+      "job_sha256": "3f96e4d68937edaf5eaa5f92ef6b32f27d1b4b30ce17b3e672e5c94eb9aada6d",
+      "source": {
+        "definition_line": 6873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6907
+      },
+      "row_sha256": "6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816",
+      "frozen_choices": []
+    }
+  ],
+  "retired": []
+}

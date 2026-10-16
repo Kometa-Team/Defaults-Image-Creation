@@ -1,0 +1,2636 @@
+{
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "active": [
+    {
+      "poster_id": "audiolanguage.audio-language-other.413e11be",
+      "legacy_id": "audiolanguage-00009-0a928fca2eda",
+      "job_sha256": "0ffc7886918b4006043e0c68814295ac2771c54f5ed6c82ff2da3e8712676495",
+      "source": {
+        "definition_line": 896,
+        "path": "create_default_posters.ps1",
+        "producer_line": 908
+      },
+      "row_sha256": "9b96a82758ca18b27d26977a69d7263bdc1ba4618e1b6ca11d146240e6e29f25",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ab.73ef4697",
+      "legacy_id": "audiolanguage-00010-ebcf724308d0",
+      "job_sha256": "e8eee9ce34993ba06e07ed93ddc4e07b9173deef5849605ac696e0c5ac150073",
+      "source": {
+        "definition_line": 916,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "a22cfc4e23f75493f3e000c89e112daa4b6fe05275ccc3d78c240a81f336181b",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-aa.6fff4c1d",
+      "legacy_id": "audiolanguage-00011-3b1bb7145e3d",
+      "job_sha256": "4e375eae9f43b592717cb408238076dda8b9bfc8f1007e4f405ad28fe622ca48",
+      "source": {
+        "definition_line": 917,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "183e7082a55e5afdf8ed94d9aff59ca8c0f96efa5fa4f57ecf5d6fc62a790a27",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-af.3f7dd2ea",
+      "legacy_id": "audiolanguage-00012-9869000e02ed",
+      "job_sha256": "025ab6103517906c1a443a6e40360cc8a2c4ed65cdd2ea3a7b7850c12afbcd88",
+      "source": {
+        "definition_line": 918,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "6bb3114501f483bdd35bea3643e14b876a6662b810da8b9b69b1f0b27457bd2d",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ak.97ecfb85",
+      "legacy_id": "audiolanguage-00013-441640f0bcbd",
+      "job_sha256": "04c11d5664cacec38b44261e2ab3da9dbd5c41bf19fb9d93877e43c70b1561c8",
+      "source": {
+        "definition_line": 919,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "2b5bce68b34c7bb0042488ad037c336f822baa8c6574f5c6061fde71d58f81e6",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-sq.d9189155",
+      "legacy_id": "audiolanguage-00014-c9cd15301e88",
+      "job_sha256": "b96cb51b8a8d1fd0bb60688fe3d4386c94a6c621bb513d7df01ecec6131aecec",
+      "source": {
+        "definition_line": 920,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "4e3ba0ebad62aa612b63f355d094944d5cf3fc554d006caf634ecd360d72af54",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-am.563a4131",
+      "legacy_id": "audiolanguage-00015-e2c3b6b4be88",
+      "job_sha256": "15d95ed3a6dd449ea74aaa454d9fd46da3b7632fb25daa1d504040d82cf4695b",
+      "source": {
+        "definition_line": 921,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "aa622c6a0df25fd510b3a4ebd73c1440240f64a9c86a7afbd23b1350ab1a0d17",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ar.35c7576d",
+      "legacy_id": "audiolanguage-00016-5ce943583178",
+      "job_sha256": "ef5c1d1125ff79af5586aeae7f415bf40aab0696553e2104884b5befa6fddbcd",
+      "source": {
+        "definition_line": 922,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "138b43192d144c0f29791797e3f23495b132db66572fa0665dfcc329f63d6543",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-an.593c6a1c",
+      "legacy_id": "audiolanguage-00017-b9911d30a92e",
+      "job_sha256": "dbff45375038c89c52aaec4ae5670eecae93df6dde2feb7b06953b6631b39495",
+      "source": {
+        "definition_line": 923,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "408e04fc02a04815bde262aa66d4528060f79ca96aa5d1eaec077d2618c2ad83",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-hy.a6d3c3bb",
+      "legacy_id": "audiolanguage-00018-52c045600a37",
+      "job_sha256": "488daf2265ba67ea6ae175ee2fb7509ee6f05b4d7706e9bf5bd56781ef48d18c",
+      "source": {
+        "definition_line": 924,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "f09c922ca4313263c33e646862708f74068dfc76ba5f3607ccc9dfa15cb2825f",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-as.0e3d3685",
+      "legacy_id": "audiolanguage-00019-84ee4182926b",
+      "job_sha256": "ea0cd6587fc0674ef0ad804276383ea80d5bd7576f8810451f92ad8ff255e7b4",
+      "source": {
+        "definition_line": 925,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "0e6a2b81b8bc1aad1e82a9795ffad485840134c3c97c998bcab7ed211e990d08",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-av.114a6f30",
+      "legacy_id": "audiolanguage-00020-c4daca26c7bd",
+      "job_sha256": "3badae352036ade854e6a8e30b67ce8622008a66b4e94a949d8bd8265495e1fe",
+      "source": {
+        "definition_line": 926,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "5620a155cf09653690aa7621380b38c955665c15ce1a7072c176cba241c6335f",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ae.49716fc7",
+      "legacy_id": "audiolanguage-00021-4089be5428a0",
+      "job_sha256": "46d954f4234b65b41ab20ffab4b8471a78503b97e205eb4eb01ba98becb9ad32",
+      "source": {
+        "definition_line": 927,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "25f9ab36985b7565e25966b2a1c04e011c9f6b7392eac291aeb6346fd3f4ce5c",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ay.d5693b28",
+      "legacy_id": "audiolanguage-00022-57ea902de348",
+      "job_sha256": "95dfa811ec49cb434ac191dd2439b73c07a6e62d64fef999a6f7ad81a7a15c18",
+      "source": {
+        "definition_line": 928,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "fd587e7b495808f5dc85f2d35ea00f6b9fa7cf6481be9d55251d0843991ffcad",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-az.a43a2be3",
+      "legacy_id": "audiolanguage-00023-2acec258edc5",
+      "job_sha256": "6a0096d8abeb6f2e583b3d5a465e6c8d31d570a45645fdddec414c964c9f2b73",
+      "source": {
+        "definition_line": 929,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "ef861c630ca34ecd2a2e6b6443072350448497f817f631924dc4ed2adb7436fd",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-bm.95313014",
+      "legacy_id": "audiolanguage-00024-f4502ad7fc56",
+      "job_sha256": "919c57ee84aebd105c7099177b317fc4f424420afcdcfc0704b3f50659dbfc86",
+      "source": {
+        "definition_line": 930,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "55372cbba70ec68f6a37f985dc7d8a72cf8d489de9412e2afa6514280718de4d",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ba.02864712",
+      "legacy_id": "audiolanguage-00025-4a1151e1cc87",
+      "job_sha256": "60183a65e85eab51c36fc1e62b41e75c25a94eff55e73c72b1d6dc900f7ae9b9",
+      "source": {
+        "definition_line": 931,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "1bed4fba9f60aef283d29294e7707bb3ed447c7c831efa5bbd70ae158a29e416",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-eu.f17a4b1e",
+      "legacy_id": "audiolanguage-00026-a03b72cbf271",
+      "job_sha256": "645de9966534dce77e2c928d4d69fc29915fea3f5c759c84ef032944014f8c31",
+      "source": {
+        "definition_line": 932,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "3ee78eb650c503845dc3d3dd9858cea6803fb1ba84f7596e6f11893fd4d3976d",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-be.8b2b250b",
+      "legacy_id": "audiolanguage-00027-137c9e58438a",
+      "job_sha256": "d9568df648d7bf7d4ebd5bc07f659df5acfa57881e0ae2b7f0cd8d30cb2e5e10",
+      "source": {
+        "definition_line": 933,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "3e533344067855637e6f3358b6f9da46af34b446037aa9896e6761cda4351bac",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-bn.7131c8d9",
+      "legacy_id": "audiolanguage-00028-1dd3bee93c03",
+      "job_sha256": "301b135bffc52e6b699806d22075a32ff09da25dbb570d1e053d02d7af5b5d07",
+      "source": {
+        "definition_line": 934,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "902167d07389d3f295faf9a73f31bd11ddc582c094e76e3fa6a7ff16d245a05f",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-bi.d973c394",
+      "legacy_id": "audiolanguage-00029-e4472e6c8ec4",
+      "job_sha256": "cb671d8be16fdf4c4cf90beb409039a68634c0a09560294d2227f653a0ddd7c0",
+      "source": {
+        "definition_line": 935,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "6914fb28f4874424abf38fe9a86e614e1124145d81633608b4bd926b758e4070",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-bs.0571e889",
+      "legacy_id": "audiolanguage-00030-4d092e4d97a3",
+      "job_sha256": "fb8dfdda0f670e501d1ba97471871e25b4320043e10dc0366f74dc0352536587",
+      "source": {
+        "definition_line": 936,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "886abe89659fad41dd5cf5292b4e8d30a449016ca3e576739f083f8fd35d1ba9",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-br.d9a8f173",
+      "legacy_id": "audiolanguage-00031-a943fe6ab78a",
+      "job_sha256": "3031c7ae04626e035f1a93463c364484be540356ba8dfe483c24752cf3fcc358",
+      "source": {
+        "definition_line": 937,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "15dcbaf32e502c76ca845e2558c2b8814d82bbdd662b74ce7ad2e14b65dff8ee",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-bg.747fa610",
+      "legacy_id": "audiolanguage-00032-6d7a985535db",
+      "job_sha256": "841b0365d2eb4b6ee48304d13141037a4cd553d25db018c789ad6b582072ec87",
+      "source": {
+        "definition_line": 938,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "74ea9bb1d49b6da823e7c44f99c3f905b9b2552747cc853e4d4df0b726df582a",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-my.5aada788",
+      "legacy_id": "audiolanguage-00033-112b7853e0ef",
+      "job_sha256": "ffa1b3096d63a530c32b4a0021403831a6ec7a37f630acd362c058f2c52f62d2",
+      "source": {
+        "definition_line": 939,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "63a68e3466334e7a23c990827224d6df46c2fd4a4c644a0c8acd87dfce970567",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ca.dbfed65d",
+      "legacy_id": "audiolanguage-00034-8b31e2cc08c7",
+      "job_sha256": "7b38c4c1bdcc7e1435a3f5c35750f71145cceda1cd155d8ad0a1d8e8983a8961",
+      "source": {
+        "definition_line": 940,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "e50dc8e091d9cd926e19b886c37cd53d5525f924f8d9912159fc0f8ebf324820",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-km.5fac9cb7",
+      "legacy_id": "audiolanguage-00035-3e247a8deec4",
+      "job_sha256": "add92f976b1387261e84d437addae857e211ee8e004946af3eea85755e954c55",
+      "source": {
+        "definition_line": 941,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "33030f93af81333e4b7c17e91319c3a81285847447524cc162e67450cee7987e",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ch.2fbae639",
+      "legacy_id": "audiolanguage-00036-779cf3c25597",
+      "job_sha256": "427df7c1c97e6f3b54f32dd04459e176114196461c9875e1509083f63645f3f6",
+      "source": {
+        "definition_line": 942,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "93c1921f00f4c20d485a72317078ccde9aa75f4d26876a20d66478e94e590d7f",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ce.54d43838",
+      "legacy_id": "audiolanguage-00037-24c246cecff9",
+      "job_sha256": "264a532a7d06e495d999d5a34968d53445fb02eaf98fc83298879af0759d818b",
+      "source": {
+        "definition_line": 943,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "734d3c41a2332e37dbe95f6f5ae1e148c001a9757c92095a1a4bdaabf582b77d",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ny.55fb6b77",
+      "legacy_id": "audiolanguage-00038-abdd66eb4071",
+      "job_sha256": "cefacf75729a0681d72b5a053d58a6c53cd72fbf11471c4c54ace259aa9581c8",
+      "source": {
+        "definition_line": 944,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "1b23028d049f696568e2c639c7cfc360fc1726299e9701ed5abb158f76603d9e",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-zh.b6769a84",
+      "legacy_id": "audiolanguage-00039-9a456471b459",
+      "job_sha256": "e1693944485cadbfb85ac02456d7d436fe9b4fdbf075497ad4940e7b8c7de323",
+      "source": {
+        "definition_line": 945,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "9519670282eaebe8eb54b8430d4884acd4ce80b13fadeba65e35cd263297a5c0",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-cu.0664ca70",
+      "legacy_id": "audiolanguage-00040-b8084600e70e",
+      "job_sha256": "407661079c9cab02f63607ae5f91a0d83cca7918fa67838a3b3087b561cf1f59",
+      "source": {
+        "definition_line": 946,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "529cf7b323cfe15c91ab7feabf5201fae390d14566ea123d78f584ed45594b51",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-cv.3993fdeb",
+      "legacy_id": "audiolanguage-00041-27e90db34366",
+      "job_sha256": "3dd6dcbb3436de8946db9902d93fda7a6db4d04cd6f919fc1939db5eb6df74ed",
+      "source": {
+        "definition_line": 947,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "c51d95a261d1662b6a42d34d3e2a7cbed1c2951ccb36ef6fdda119cf381034fc",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-kw.e4c4f179",
+      "legacy_id": "audiolanguage-00042-617ec4f05c59",
+      "job_sha256": "09a6912f6ea9d7cfcabaaefdb529539f340f4b5524b315f6152af7ea30b21f9e",
+      "source": {
+        "definition_line": 948,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "432388ecc98d51cfce1a0ffcb4a3a092ae6ed799de9ffd4ae72eade287e6eb51",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-co.94527729",
+      "legacy_id": "audiolanguage-00043-c6e439051c92",
+      "job_sha256": "088e2533dd7e3f9730363deb400f3579308691750a30198347cb404f24871132",
+      "source": {
+        "definition_line": 949,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "affc7d2e4716eccb1974b7b8bf89edc9d7f984a2f72c86c5b9dbe028dfdc65e2",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-cr.56a08597",
+      "legacy_id": "audiolanguage-00044-27e527626745",
+      "job_sha256": "5a871a8db7920b0c51586aaf1059383a5be213ba67db32167b45fa90ebe1d6de",
+      "source": {
+        "definition_line": 950,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "76ccaf00c59f1818b386e5a032a41f9d3a6e639bd2d53d605e04fc75a1eb6753",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-hr.70f65187",
+      "legacy_id": "audiolanguage-00045-c4f3cd632557",
+      "job_sha256": "de99acd2fa256598645e1b16b94259515c3a2e4fff219b78583da4f4ae474053",
+      "source": {
+        "definition_line": 951,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "d15269879adb53790e36f05f28f6430300761bde623df1b8963322a828289fcf",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-cs.88181e22",
+      "legacy_id": "audiolanguage-00046-6e67fe6a2125",
+      "job_sha256": "6c94166403ad54d743d2fb84ff1b4aeba72f1543f2e2faf81d2c56e040703921",
+      "source": {
+        "definition_line": 952,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "748be47c8e09f82c41b9829690c5124913da54ed28b067d58c6a2400a1f2ccbd",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-da.506420d6",
+      "legacy_id": "audiolanguage-00047-93b3a93de9b4",
+      "job_sha256": "128cdd3b690691269b79a10009ac900e8690489854cb0a7baf263f6baa72f2f3",
+      "source": {
+        "definition_line": 953,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "d791f15c9f8c071c68b4fda3ecfefa221ea7b3436e590172eeeff290da9b3d1d",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-dv.64566f1d",
+      "legacy_id": "audiolanguage-00048-09cd54c8c34b",
+      "job_sha256": "d5379e0645ff7e53a7ce34772b736e31b6694d3b9b764b9a004b988f2fe15f53",
+      "source": {
+        "definition_line": 954,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "427f9680cb60fd92616a2d6b5e73c47b18fb4606e07de4c48785969109c37d70",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-nl.913d97cb",
+      "legacy_id": "audiolanguage-00049-a5c167e80249",
+      "job_sha256": "36e10290d6906de3c6de7cea32221a3f051efd357f03381c8f19c436c1b919b1",
+      "source": {
+        "definition_line": 955,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "9813b77dc028f646b4ed39bf0400ad3c717d5beaeaa40dd4f01ded2bdbbbbb47",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-dz.aee9f326",
+      "legacy_id": "audiolanguage-00050-d7321a88ff93",
+      "job_sha256": "678b5bc4ce4324b1f8ccd326ff8f2aba467e44f8b9609bdc0aead9d15b8890b3",
+      "source": {
+        "definition_line": 956,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "3cef45933a7fc7d64a416bc53e814e494a336a90b331d2706df6e068819057e6",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-en.c07f706d",
+      "legacy_id": "audiolanguage-00051-4699cf790798",
+      "job_sha256": "77e9a4ebf17c7356ac0971d2b21ce864ce2e8115dd597907ae785b7640ca6cf6",
+      "source": {
+        "definition_line": 957,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "06fac58fdd6d9a96eba2ac025b6272190bda8ffe5fdc50576f56ad2ecdc11908",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-eo.9b458189",
+      "legacy_id": "audiolanguage-00052-7137310b4604",
+      "job_sha256": "06465c25e745032f8ec2235db1609a0ba1d3b09aa5681faf0211b28125f0d54d",
+      "source": {
+        "definition_line": 958,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "ed4d8f3e3b2a907eabbd83e91023c39b70f6f1bbc1e30105bd39e42a78d03d5b",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-et.b900df68",
+      "legacy_id": "audiolanguage-00053-bc97e9291905",
+      "job_sha256": "841089b63d606d08b1cc1c14234e2de391b6c3b31d4022cf0281d3a6f689e281",
+      "source": {
+        "definition_line": 959,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "09eb6bb3e001f13915f618d631f89791bd0018a4e0a5d8a2d84fdc4b8baddd7c",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ee.1a4e0ff3",
+      "legacy_id": "audiolanguage-00054-88e171844a70",
+      "job_sha256": "2bc17e5490816510d7d5f07d3f326e8d9f671d5053c5f619343780bb041936ba",
+      "source": {
+        "definition_line": 960,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "0dbe40004377f44b72def3fd6fabe2951ae27a00802bc8085f53e75588cdd3e0",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-fo.c1f660c6",
+      "legacy_id": "audiolanguage-00055-d4c438d64cfc",
+      "job_sha256": "574e703e4e906a33defc7776c9de8d02e8bf95eb2a4d402de878bf56cd914106",
+      "source": {
+        "definition_line": 961,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "8a24f62d7c9c3de27bdbb9d304fa9a3bac37233f0cf026cd12613bb8477f3d66",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-fj.71db9476",
+      "legacy_id": "audiolanguage-00056-4bfeef18d0e7",
+      "job_sha256": "c346bf46cc3d2e4dd0068f9bb8133b5f4df2b06f7d01c47f5c0a7c44965ee0ea",
+      "source": {
+        "definition_line": 962,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "aa13cd0eee9b5c667a593c635df0f1ad068c1f4ed99bd52282e6d132bebff777",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-fil.3bb1a9a7",
+      "legacy_id": "audiolanguage-00057-b29eed667976",
+      "job_sha256": "38553ad14a2c8245b7fc5cc95f783412b6973354b7fa68e895b36d64d25cd645",
+      "source": {
+        "definition_line": 963,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "049d1b8cb30428c9b3e36ca491986cad521abafee29dc787d42296a7cc1ae596",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-fi.08e175ac",
+      "legacy_id": "audiolanguage-00058-d184cf6b7337",
+      "job_sha256": "f8af6f682b08eef9e573002d616e3b34e431cfd026d5b2f42fdfe0aa35fa2ed1",
+      "source": {
+        "definition_line": 964,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "3e9820f6254083d0726ddb4f0cf0fac8061069b772c4caba5f574e97924d356d",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-fr.0e6780bd",
+      "legacy_id": "audiolanguage-00059-53b889d3b73b",
+      "job_sha256": "2e79a8a40591192b2d70a0c404dea104a489db9b168bd4f593d61971ba7f6501",
+      "source": {
+        "definition_line": 965,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "b1795cff3dc7b329705e354e6bf175631b000496d6ac2f5b0f5a18a751e544d6",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ff.f51aad14",
+      "legacy_id": "audiolanguage-00060-8c5a933af7cb",
+      "job_sha256": "f7295fece97176a11fc34b7cb4acd36e1d3ff065fa8f29468b98eb839aad51e7",
+      "source": {
+        "definition_line": 966,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "1df0ff702fb7720a92293cd0e3cfa3137ff935ee29354a6a3a1752eb5a5b38c5",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-gd.f9ebe9ee",
+      "legacy_id": "audiolanguage-00061-7ff99167f6be",
+      "job_sha256": "aa2056989af2d40ca534ad832061c52f803f1f5445f63c565b2a0c56745db132",
+      "source": {
+        "definition_line": 967,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "edafd2587c514d7ae78ac7aedd8c96fe1540e2f244cc069e14ded38369a0a6bc",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-gl.251d2510",
+      "legacy_id": "audiolanguage-00062-5eacbab55ea2",
+      "job_sha256": "5a32ed23aef9dc99a331600cb987b814a2c991e36e213bc6eda826a9573c17db",
+      "source": {
+        "definition_line": 968,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "1d63d8f60b814a309732eccadb57b93f586c63057e83f2e0937199dfd08953aa",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-lg.3c78b067",
+      "legacy_id": "audiolanguage-00063-310ec277cc19",
+      "job_sha256": "ddc000f5576c4fc5f5af989853e10c77b5a3152b1c2398c3e39ad0603739fa6d",
+      "source": {
+        "definition_line": 969,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "3af8a515538ab677218bec8754fccbe30a5ddc97401a8f0e5dc5d675cd7f9ee1",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ka.467a777d",
+      "legacy_id": "audiolanguage-00064-18138cb07bb5",
+      "job_sha256": "0b42c487a7b1c79d69d76b7507ca2cde1c18d1c679a6787aa4a88eaeded5479e",
+      "source": {
+        "definition_line": 970,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "e4fada9ce2f30348d3e3a48d2f3fa9f73d2002e18e411bcf126cb010f1fe8080",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-de.fa981ab3",
+      "legacy_id": "audiolanguage-00065-25f70dc252df",
+      "job_sha256": "cbcdcdcf66f70428ee3e6fd940148bdc9f08baddc6e5acdfacda03215be55c79",
+      "source": {
+        "definition_line": 971,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "bfd00d76f5596b50f4157a0bb0c912a4d1eb7dae02b5f61f4db4357b0856c926",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-el.fd7aeaa8",
+      "legacy_id": "audiolanguage-00066-756357f71359",
+      "job_sha256": "ae2227f6859f58a94308b9aae6be2bb299abe8f15ad773ace5621b587f4af08f",
+      "source": {
+        "definition_line": 972,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "162b94676d68feb133a06988e13df9c0fb77aae417080daeb722cd8bd5ae4090",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-gn.635d63f2",
+      "legacy_id": "audiolanguage-00067-e6b713652976",
+      "job_sha256": "9435b76df82f28325d3f34c272bb06b5b08d200b2a5b499d22686cb5fc51b68a",
+      "source": {
+        "definition_line": 973,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "bb5461f06725ca5baa1534ee79b545fa4430d1a199155628159f5c666a0427fa",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-gu.eefbd353",
+      "legacy_id": "audiolanguage-00068-a310315836b9",
+      "job_sha256": "9e47ab99fd31498e6938dbefefea76af19f13324c9b7438e7c44fc3dfb1f98dc",
+      "source": {
+        "definition_line": 974,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "78d0bf6e5bc35834a4102748b7ecf49a6f9d3caddaf87d371481aa30256a9ef2",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ht.cc9fd1b9",
+      "legacy_id": "audiolanguage-00069-6606293d1dfa",
+      "job_sha256": "540924968522a8bcbe0c7a0bef4795feb47f67f85036d5b22506b7f174f97035",
+      "source": {
+        "definition_line": 975,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "084eaca1b1962c75eeefa019f50ec3c97104afcb4dde3c84356f8e0b946c2cdb",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ha.b0ef08aa",
+      "legacy_id": "audiolanguage-00070-03bd17a03b73",
+      "job_sha256": "a86ab10a3f1ba88bc670e63d286639f465e2f152e00ee02e77a96cecdf9eac6a",
+      "source": {
+        "definition_line": 976,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "0125bf3fa25c60052c7c0b99cfec61e47852f0397865ec2b1726a1d81672a9cf",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-he.fe7ad471",
+      "legacy_id": "audiolanguage-00071-7297945f3dce",
+      "job_sha256": "5278ec20ed8cd384175d7900c97fd2854e6d031ba6d1e17277b5385633fd2af9",
+      "source": {
+        "definition_line": 977,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "70eecc6be173a1ee89b483d416725a9a80a131c1a36f5e5025de73b345fd5f23",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-hz.fe8f2fd7",
+      "legacy_id": "audiolanguage-00072-80ee9c3f518d",
+      "job_sha256": "48ff03647d18d1f38917ae11e1dbf9aca60173530a8e27cf69a1d00a290ec52d",
+      "source": {
+        "definition_line": 978,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "162fb2f464142b59df6491909ef3e506ab8e76d4ea4a7637e8a4058eae123eb0",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-hi.9ffda1b1",
+      "legacy_id": "audiolanguage-00073-747dd0ff25b9",
+      "job_sha256": "bdcb14799cd1d46488591df44648ed9377eaed6f7df425d9270bce0675f34d3d",
+      "source": {
+        "definition_line": 979,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "1346fb262f2c17e2c4781c7d56ee03f1fd93c3a64719bd7dde7bca3af03665e5",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ho.330198c8",
+      "legacy_id": "audiolanguage-00074-cdba49088a9d",
+      "job_sha256": "ce17b30a63c95106c5a9a5044a5129f478b2bb3743d96a3dadb49a78ca392096",
+      "source": {
+        "definition_line": 980,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "0854da60c971bb9cd4f9662d6aab3dbec90b6dd337d4533472021fb65151d271",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-hu.9491f4f2",
+      "legacy_id": "audiolanguage-00075-8be5af9ecb8f",
+      "job_sha256": "af2037a04362acd4fcebb962a72ce0429a4a24cba7a827ad4216ced5ed6d15bf",
+      "source": {
+        "definition_line": 981,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "b74355818e49d28eaba57a0cdb44afc662f62c9cfec11365d6b7ed2b0f8eef4f",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-is.115e328a",
+      "legacy_id": "audiolanguage-00076-deca06fd0e6a",
+      "job_sha256": "0bfec96c28e449c8a3a5632c7cea31a35ec7b8118f762a819f45911c7692e63a",
+      "source": {
+        "definition_line": 982,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "45cb9b1a8d6a8463af4941dd0cc065800ea44da23d2d53edebe103e5a0214e75",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-io.90893289",
+      "legacy_id": "audiolanguage-00077-b5af39b7043b",
+      "job_sha256": "a7e3b3202b93eea22aef7b7a2ef09f3d754203f57aa84ae55c3fa64d167aa9dd",
+      "source": {
+        "definition_line": 983,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "3c0be5ae26e789c636d5e76d30144984a1cee2f511b121e1d54bd436563de009",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ig.a0bc940a",
+      "legacy_id": "audiolanguage-00078-992aec432ed5",
+      "job_sha256": "c56d9e6fc7ba6bce61e7f4d7708a8c5c6b69f636aa7a1acae07111cd08eaf8a2",
+      "source": {
+        "definition_line": 984,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "406157eb498c8d9ba8fa3e9596db278b8bf32291ba99d8253682f9f15249999d",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-id.d7c3413a",
+      "legacy_id": "audiolanguage-00079-9dabd7c7a8d3",
+      "job_sha256": "8c2ce643c3c31573b662cd74f05e5a66fd2f7c876ce521a8ecc8d706c081c13d",
+      "source": {
+        "definition_line": 985,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "e2f6de1652af3e203ea8d5826a0ac79ae0d42f118c20b393da55d9bcfb4b0383",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ia.fb431a40",
+      "legacy_id": "audiolanguage-00080-890ef7fabb81",
+      "job_sha256": "4ea47b756b5b54f0cefd963a2f2d8c0346e5e9c37e80a0d5af5fe70b2e0af751",
+      "source": {
+        "definition_line": 986,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "aae5de8866be568450af7a00a426a4deebf64b5c6f26961c123e9558b3076766",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ie.3bd35e1e",
+      "legacy_id": "audiolanguage-00081-f248c9b3c319",
+      "job_sha256": "c6c46b82b69e945c9709c17a9139be439516a6cac9a360bf81729352d075f9ce",
+      "source": {
+        "definition_line": 987,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "0790908c2ae62941b7225171fae5b4dc0a8f3772f0995e45b68004a89aea5d58",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-iu.b2554bdd",
+      "legacy_id": "audiolanguage-00082-2034ef1a1761",
+      "job_sha256": "a1df4f508ab70d0f5a8967cbe54eca985bb91ae79cb83e3f15d29fbd2c08f971",
+      "source": {
+        "definition_line": 988,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "a0fb99979092b3468ae38bac4c481829d01067ca3b2dceba492ece3dd90f2356",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ik.da7b12cb",
+      "legacy_id": "audiolanguage-00083-21512bf1e92e",
+      "job_sha256": "3fad00b713856083f55f5e70e5d91b67da8957a94c58311ee614bdb65d31180c",
+      "source": {
+        "definition_line": 989,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "4734828edc2f5dd8ef835435d2f9ab9fd11b1af616935375921d91aaaf47a638",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ga.01bbda46",
+      "legacy_id": "audiolanguage-00084-d02d7eeb8c8b",
+      "job_sha256": "bbaf42d97d20c756cd3d7ad865e183720c4b5ccbd94251575686ac481fc9d3f5",
+      "source": {
+        "definition_line": 990,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "f6df1c32e21af53fe82a9b97e1326248bea729fc45f80efe16a284c40088dd86",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-it.957a7b2e",
+      "legacy_id": "audiolanguage-00085-647c02b12844",
+      "job_sha256": "fcd60301bd747fe725c55131b82409e160b1a40d882872ace022c8a203220e25",
+      "source": {
+        "definition_line": 991,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "c89839a11dda2656382291aeb38df604dbf80feb6e88e473622c0798831abb48",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ja.03befedd",
+      "legacy_id": "audiolanguage-00086-86c571925b31",
+      "job_sha256": "a60b243d8724c2653191c2e78f5c8d3bf4641a250dc0aadacb7aef4043725923",
+      "source": {
+        "definition_line": 992,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "dba00594c8e63f94d284a4b0e307bcd31bb0923ede7e6ab1e27434f438766f91",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-jv.33e19aa4",
+      "legacy_id": "audiolanguage-00087-24ff7acf4908",
+      "job_sha256": "f90246cee41b41d7ccaacf9f2167f5d89e3ea464c3e6e1792a496b2798437190",
+      "source": {
+        "definition_line": 993,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "166405e1481426e76c0aeb504c153cdae24ef7bdfa4da69a6300416f4bf4552e",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-kl.538dd231",
+      "legacy_id": "audiolanguage-00088-73b808895942",
+      "job_sha256": "e2d2401429a164e4a7eeff018f0bb4e5112436751a36ab1a7175ae95b9c0821c",
+      "source": {
+        "definition_line": 994,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "c2816d9de27270309c4c2a1b18615f40cd5277e389b1964407fbb5eee9e70ab2",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-kn.540ef61a",
+      "legacy_id": "audiolanguage-00089-a3ae5d1eaa78",
+      "job_sha256": "529069695ebc9043b2d88e396c26fa9edec1d913e58d275cdffee2960a8c368a",
+      "source": {
+        "definition_line": 995,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "57f9eb44aa8aa28065e2d617563dea808a2689bcae24f9ac9b6a305428aad37d",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-kr.53226740",
+      "legacy_id": "audiolanguage-00090-b9811b29748f",
+      "job_sha256": "1e3e35980ccfd6de562c2d6de5032f5533baaf96cfdeeaa6c3bfd10315e4fb1d",
+      "source": {
+        "definition_line": 996,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "df74f11aa358aabf48c00daa125139a843c1eac435c971046ffec281a4a480e6",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ks.99446e6f",
+      "legacy_id": "audiolanguage-00091-29f7b4528c9d",
+      "job_sha256": "c5791af3783c3bc3e3949c8cbd74417a18793b738ce970ecd8847596558ae833",
+      "source": {
+        "definition_line": 997,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "ba8313438ebdda3c185404b90fddbeb408225abf83976cfd60c840afcafb1c72",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-kk.0e39b95b",
+      "legacy_id": "audiolanguage-00092-7d5945f58606",
+      "job_sha256": "6148ea990cd2cfbba1613002b982f1e136b74e8ce34b834e7156a997e7c3c43d",
+      "source": {
+        "definition_line": 998,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "d118712bacaf27fad79fce686d51207b0af6228e86eb9c46dacca590ffdf828f",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ki.02e9e996",
+      "legacy_id": "audiolanguage-00093-4d1412aad4aa",
+      "job_sha256": "5e63ee3996aa9c4be0db9eb8096c80257ffec33e2e4f6a489a678335390d9752",
+      "source": {
+        "definition_line": 999,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "22e4e42ef988a64e5b88d2626c0cea7c02808820e35cbcbe7911686c7154b9f1",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-rw.f271ff14",
+      "legacy_id": "audiolanguage-00094-f58cb063d0e9",
+      "job_sha256": "fd34d7793cb2873753f9774f14cd5842d76c3d78796280db50c957ac219d1b52",
+      "source": {
+        "definition_line": 1000,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "20b2e15d7823c436a03ae32a3f75676c730b12476d53e792b0ed13dea7d56843",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ky.a90a801b",
+      "legacy_id": "audiolanguage-00095-7cd2336962d8",
+      "job_sha256": "3aae0b94d765286a997e85c6fc35eddb98305e166170bff14f2ce0546bd98263",
+      "source": {
+        "definition_line": 1001,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "0560e84a9a55e544a7ac745e639d06ce5a09dc50d5bcd9e15d4f3bb1cc50ac28",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-kv.2562dea9",
+      "legacy_id": "audiolanguage-00096-143006abfb7f",
+      "job_sha256": "94d76b6376b73f486fead737e42913fc86e158549538d268a4b69f7f06202565",
+      "source": {
+        "definition_line": 1002,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "edd1a8501dd8366d89297093f5427de485f1da781322d4dae9db5fff8d6ba88e",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-kg.f6e1d824",
+      "legacy_id": "audiolanguage-00097-b6924362a503",
+      "job_sha256": "f7c8edbe0d0ac3a5f89d65e8e4f37b2944b38537f5d29612758e9327abff3a53",
+      "source": {
+        "definition_line": 1003,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "ff0370e729a3e6f13861558bc1a40b3e07a00eef37740ecc9be853fb1e0463b2",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ko.3352fb6a",
+      "legacy_id": "audiolanguage-00098-d462fbb78bed",
+      "job_sha256": "86954be1008702578cdac4d727756551bcb669cae50bb61fa982dd65476430d3",
+      "source": {
+        "definition_line": 1004,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "05768d963e271644f90635f43bdbfc8a1eaba4338cf360bbdafd7186ae18b6a2",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-kj.ba199d71",
+      "legacy_id": "audiolanguage-00099-5dc85391515d",
+      "job_sha256": "964fd62ca57ab3780836baf9f34f8e2465e4978bb663c332acffaf23f71196e1",
+      "source": {
+        "definition_line": 1005,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "1ddd50d0ba42f5826d676cdcf485f3acfbe46d2c1dce5816c6186f14205cc77b",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ku.2860eecc",
+      "legacy_id": "audiolanguage-00100-38c893a0272f",
+      "job_sha256": "c53440fcd3af2f8da5d852b18392c5ad9052e10c380a72e88a6f5dfdab7aaea5",
+      "source": {
+        "definition_line": 1006,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "eb6a64b89053584d1aa9c3d6e2b60e17df3547b074ff6d2c8e95dd23f1fd650f",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-lo.86816471",
+      "legacy_id": "audiolanguage-00101-e38ee8edb544",
+      "job_sha256": "48236053c699cd04c96c0d6323a1a4802379ba7d237df3e43af86cadcb12d870",
+      "source": {
+        "definition_line": 1007,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "a6fedf06012f2fa3967de24086cd4b068f86890a542d29c170921ab6b64f23f5",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-la.c2cce9fe",
+      "legacy_id": "audiolanguage-00102-dbdee3a3ec3b",
+      "job_sha256": "800b7d0430cde2b97b089773b4c8f9c6a657edfea8a3839304029d6738b60099",
+      "source": {
+        "definition_line": 1008,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "bc00ada4fb20017b0a0561605f2440723f049b688f29a70754cab3f962df20a0",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-lv.dc2ede4c",
+      "legacy_id": "audiolanguage-00103-f85662c8dea1",
+      "job_sha256": "55d95925487da965f9ca321f2b3621fa9ff9bbf206574e6a9c79f3a40f560900",
+      "source": {
+        "definition_line": 1009,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "deec0addc9a04fd6f61f15f286377e863019b12e2bd214e13b2344054b002739",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-li.a3a43431",
+      "legacy_id": "audiolanguage-00104-6df928e3225f",
+      "job_sha256": "7d25a0457b4f32629f1d937538a659af43834ec363472b1e7fd15cdb590fd099",
+      "source": {
+        "definition_line": 1010,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "a59c0ac3365a6d007e2c29e44cc71d2f0b28cb4a63fea7ed16cb51d96a55c5af",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ln.8ce5622a",
+      "legacy_id": "audiolanguage-00105-b101d14ff087",
+      "job_sha256": "98e7da963c087f6a2d0c5aaf11e3f5038dd4851b51fcef4904fe0e5d6e4fca89",
+      "source": {
+        "definition_line": 1011,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "1f12f302e5c0f5fa200cbaf16f5d9579cfa3c4a097a42462bf26f8345de45694",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-lt.83c0af28",
+      "legacy_id": "audiolanguage-00106-912ca24dd19b",
+      "job_sha256": "c82fa4e8d3e425d726d1448c42d4d22753c5fcdbd2098bea557606f91f3199ca",
+      "source": {
+        "definition_line": 1012,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "3c74b9e6479ef5fc61d710aacddec3300ea18db7e5d49c1329cff78b3185bf70",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-lu.3bc9dea4",
+      "legacy_id": "audiolanguage-00107-39f9c273ed8f",
+      "job_sha256": "7ca42df2e3349317345c4e08536f1e3db93f5edbc2176a2f6580c9522042a25a",
+      "source": {
+        "definition_line": 1013,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "fca5e661f3d1ffce3f20a027e030cfc9623aa1c808a732920ff60c3db1f196b2",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-lb.42aff4fa",
+      "legacy_id": "audiolanguage-00108-d96de3de24b1",
+      "job_sha256": "2d04a7bd46e590a0c846a3e92c9b7a3e45ea5c34a36a80d31eabf34a13ffb0d9",
+      "source": {
+        "definition_line": 1014,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "c922a68f7cac28ffd73bf7a33136ea17baeac0d6ff059f5d16b7e79bfd6906b2",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-mk.7e0d78b0",
+      "legacy_id": "audiolanguage-00109-8514342894ff",
+      "job_sha256": "c9a94661e452739df2466af760547f547693668f749325e20eb6ded1396e8ce5",
+      "source": {
+        "definition_line": 1015,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "4e13ee1aa9ef68f6350f19b24fff0e28db2f51469a48e2c7427e1c00e8e62943",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-mg.a4c97f1d",
+      "legacy_id": "audiolanguage-00110-ca22cba6a910",
+      "job_sha256": "c9e1e1aa1c6f524f237b0592bc6a9ce6d82262a5a9ae466f5b792bc87f5a13a7",
+      "source": {
+        "definition_line": 1016,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "d962d5fb8bbff191d3da692fe780548115933943cfa7f288a20a61a28ee19a17",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ms.52bd2137",
+      "legacy_id": "audiolanguage-00111-a5acea139132",
+      "job_sha256": "ac8a30023af482f51479f3cb6c2ebe1c4a7a3e975cbb386589dda1b825d80caa",
+      "source": {
+        "definition_line": 1017,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "d048d190cce056af1fb775f199d053c94213cdce0fd8b68bfbe8db264e0d3045",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ml.a9f9a2cb",
+      "legacy_id": "audiolanguage-00112-3d2dd2c51f4c",
+      "job_sha256": "d08aa4520240eb2b5fc1a54e7d059b3f29d9e3f694eac10cd401b789fafc6225",
+      "source": {
+        "definition_line": 1018,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "c4cf706b16de5497ebd192f9cce92200edb98dd966f737f47f15e78ce1fd3313",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-mt.f759fa83",
+      "legacy_id": "audiolanguage-00113-9cefcb8004ef",
+      "job_sha256": "554ca60faff8aeed4281ae35b966ba4323987e0f1ef8ceacb80922042d613767",
+      "source": {
+        "definition_line": 1019,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "4d0989abf580cdd0aaf321295cea79324fce2bbc4c21bd4eccaabe1a4a682f6c",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-gv.008b8eb8",
+      "legacy_id": "audiolanguage-00114-51eedf8a8b0d",
+      "job_sha256": "7a03c3723c0a944395503ebe91c7299f32fd1dad7a0f006e0af9f41b7eff31ad",
+      "source": {
+        "definition_line": 1020,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "9a595671547a34bcd7ecfd542e4cd46445bd91083e7d40716c2e4487c902245f",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-mi.1a25f75a",
+      "legacy_id": "audiolanguage-00115-6b7bb29813d0",
+      "job_sha256": "c7aa96a7f2d08cf226e476317a048044206b770c9e4e67454722929be1f79bea",
+      "source": {
+        "definition_line": 1021,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "bdca14205cc9a89b4aefd03a7b8a4d381f5ca288080258c50552999cce8e9c9c",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-mr.33a15736",
+      "legacy_id": "audiolanguage-00116-7aaa118e1bb0",
+      "job_sha256": "4aef31decf91edae75faebf94cee53fa5a91e05781f7a5fdc02fb58ac3f4b11e",
+      "source": {
+        "definition_line": 1022,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "c44e33af66133b3e02d4fb007ebb0679964b9346b1f239f6c2854a60bec87bd7",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-mh.f3e29d30",
+      "legacy_id": "audiolanguage-00117-12f812d74ffb",
+      "job_sha256": "97275557823de163dc0804051b296292c798ec4a6bb04ef99caab6331ee18b2a",
+      "source": {
+        "definition_line": 1023,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "d9b345dfd6aa068126796151ba6fb8641dfc93d6cd6f969c0129e4dd4a3706ce",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-myn.ef355186",
+      "legacy_id": "audiolanguage-00118-423ae06186fe",
+      "job_sha256": "4eaf02980adf6bbb3db916e37844b551d0aaf27bfc41d979c107f1bb770aa635",
+      "source": {
+        "definition_line": 1024,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "a902135b60b9312d2702aac5cdcb46567035c564d1045974be23364bfb5d4a69",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-mn.3e5054f1",
+      "legacy_id": "audiolanguage-00119-742123ec0f2c",
+      "job_sha256": "29eb38ffad8a8ccc6ee82ce2c3a78ee7a3cdd5e5725a6138ab2201d4acca25c8",
+      "source": {
+        "definition_line": 1025,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "427a48aa62184bf5bf2b194ae4c770ccced03da6c9f674bf7dfd5aa63feef40b",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-na.1abbb6b0",
+      "legacy_id": "audiolanguage-00120-148b87738d86",
+      "job_sha256": "ddd1039b74416d40ac97d734d1c4aec6fe4654837483aeafd14bb5ae0226148e",
+      "source": {
+        "definition_line": 1026,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "ea07d95e3a252f233ede4eb1d2682274c7ebd5249dd959e065543a5dbbb28d8d",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-nv.21c1af92",
+      "legacy_id": "audiolanguage-00121-720f03e7cfc6",
+      "job_sha256": "3902abc5d9d719475b4f8522a68212629babd9e75b9e87f9b29947b50aba0ad7",
+      "source": {
+        "definition_line": 1027,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "c51a1b50f8c8fc32bde9ccfa123f5e4d9ceb7b380061dccc0a99faf9844e2f36",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ng.86cf4b23",
+      "legacy_id": "audiolanguage-00122-e1ee6b413073",
+      "job_sha256": "e689723642e12d25ce53788091039a802ee3dc5d1de997eae98cbc5991c947d0",
+      "source": {
+        "definition_line": 1028,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "acffc15813b3c3ee15894219995fa0e2aab5606ff2a5fa7cabe9e92e2c3b852e",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ne.847ecc4e",
+      "legacy_id": "audiolanguage-00123-4aabb624b69a",
+      "job_sha256": "2c4f59a0e5f08d30411d7964448e04c3478346cc1821077591d222f02b20b50d",
+      "source": {
+        "definition_line": 1029,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "409f81f5f419de1b63ba7418e017e3c92df48aa32b40c4a0d4e5e23f3a76b9fe",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-nd.ad648c36",
+      "legacy_id": "audiolanguage-00124-0b1c5510a979",
+      "job_sha256": "1c9eed25400aab0c22a1a959a16840da28ec8523f430f3e03590e146baf6e9d4",
+      "source": {
+        "definition_line": 1030,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "7799fb8b6bac219d2169e725fb164cfc5b3d8190f49be07ce9a0b57ededcde44",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-se.407b49b0",
+      "legacy_id": "audiolanguage-00125-ecd7ecc13904",
+      "job_sha256": "9eb330d2830eefa996fa124e34790549994f9d0b6f86ed2fe22763b0a474d4e3",
+      "source": {
+        "definition_line": 1031,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "af0f1e9233b79332b9723b09d911288c16f0438654e23a05f0f4ac40e4ebd459",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-nb.8dd818cd",
+      "legacy_id": "audiolanguage-00126-16b22aa2cdb3",
+      "job_sha256": "4ddf1399e748709fe5666e3e7274e3d50a8b0f40512a3f4ec4bf4b77742f342f",
+      "source": {
+        "definition_line": 1032,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "3e534e82624c64f7afa1e9af5cd70a2719c6702ec5da7913046d459bb0d21bf0",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-nn.49745240",
+      "legacy_id": "audiolanguage-00127-53d055d3dbc4",
+      "job_sha256": "d8d51b7e60c01572da827b9e12f9d07c563acd908224de253491542b553bd0cd",
+      "source": {
+        "definition_line": 1033,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "40dd9da2a1a60afc258e95b8ed9458554322caa35b53cd4a821eb3e5feae471b",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-no.3e59a10a",
+      "legacy_id": "audiolanguage-00128-8f6a022de45e",
+      "job_sha256": "e2d16b24ad0e1bcd99334f2068d1d3514426815ce7d9f6bf5ec643951a139340",
+      "source": {
+        "definition_line": 1034,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "ada7689151c714bb198698ff8067ad17d3c144a96433ab578fcdd15a4397918a",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-oc.451de6c0",
+      "legacy_id": "audiolanguage-00129-4b4c4fb192af",
+      "job_sha256": "3bf0ad719f2ba612f4a6cbbd3714b51d71323500ce3e1ef3ef7044e0c4365da0",
+      "source": {
+        "definition_line": 1035,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "e17d67741bb50e0d6ece81810d71cdb572c7345457bb29fa27c577946a0407a3",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-oj.f2e3004a",
+      "legacy_id": "audiolanguage-00130-4588c1da2e04",
+      "job_sha256": "4f59022eadae2d6137f0177ffa691c2466c3a6f31724bd17248540b4ce8e53b3",
+      "source": {
+        "definition_line": 1036,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "111d4a8a99e143d41f65775d61ef40a2603bed8ad53ec738c07e989cb2b2a575",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-or.30d6fc42",
+      "legacy_id": "audiolanguage-00131-fb2a7ab76d0f",
+      "job_sha256": "dcb99de5df97ce4c9fe18cf4ce4ae3faf157c8e95d0a27716c07e23e03a6f70f",
+      "source": {
+        "definition_line": 1037,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "9de18eb2561f7d86d31477fa203fdf2646a91dc86e6a22b9d9674c51aee1d02b",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-om.dc1fd9af",
+      "legacy_id": "audiolanguage-00132-f3bf979e4120",
+      "job_sha256": "a809e573660698528b8e4e0047dcb98f60862a1d497c5a018419c1e119df94ce",
+      "source": {
+        "definition_line": 1038,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "4186f9043f6266c4aea7423a7e516515326cd95d8787cc380132bf843bf6978e",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-os.a5346ffe",
+      "legacy_id": "audiolanguage-00133-12ca97f5d1ff",
+      "job_sha256": "eb381ab7c16c9e5396e2e561d033fdee1473d3f4521ce7591713de823319ed1c",
+      "source": {
+        "definition_line": 1039,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "16c2a35e6ef78d2fe672f71e97907bca76801b68c15f1985924407926bffd813",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-pi.609a0d69",
+      "legacy_id": "audiolanguage-00134-2120f62f9acb",
+      "job_sha256": "cb96ffe21a3b754e50f28af903b42b108a0ee1431ab9bad6f9355ea4b3f967b6",
+      "source": {
+        "definition_line": 1040,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "245a2ce638507190808247747dfff85fb64ff4e13f88ee98b5cd4e2f3eb3c127",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ps.050020d8",
+      "legacy_id": "audiolanguage-00135-165e46e4ca2c",
+      "job_sha256": "0bce74c235356ddabef91588a6b102975ed98340925bbb2b285e72cfc2d668bf",
+      "source": {
+        "definition_line": 1041,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "a55c2055aeb21469007bca0df188f2f10748adacc8b6a7b609dbd37cd69ab3ff",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-fa.88920861",
+      "legacy_id": "audiolanguage-00136-71203233871f",
+      "job_sha256": "53103d432eaa0b8397c1037f2663a1b9f4762bbe074e82c907506970306052e5",
+      "source": {
+        "definition_line": 1042,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "9d5a5c98ac2e8ef769ad78983a6793b17320f65628cd08348db1f6ee42cb0360",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-pl.f74cd720",
+      "legacy_id": "audiolanguage-00137-c67d5205978c",
+      "job_sha256": "a5a2dee10ae664827029beb315f47029c994dcc3a9b48a4e023605bd4a8d64e8",
+      "source": {
+        "definition_line": 1043,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "ed3cecba429d8f6c2d431fa461b13e0c4f20c9e93d6e4cf71239b2759fa3f359",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-pt.21a69b90",
+      "legacy_id": "audiolanguage-00138-996656223a88",
+      "job_sha256": "ce55cc458940d9892f6f0f9d9d25e3c4f3a1f39b2ff7a0d7193a473b086d001d",
+      "source": {
+        "definition_line": 1044,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "ec7cb77eee8648f5bd523536d1b036b017867bb6502489c5181d82a7d7c75b45",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-pa.530b11c0",
+      "legacy_id": "audiolanguage-00139-85a6935bfe63",
+      "job_sha256": "33607f747d79e1b346611bac2f565961fbfef423698e5d25c77fbca03be78f2c",
+      "source": {
+        "definition_line": 1045,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "8c04711ca9a12e85818d0d7801c342820d9b76b0a02ba3b6a2a31a47e63c23ae",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-qu.256e8ff1",
+      "legacy_id": "audiolanguage-00140-f9dba6f4db00",
+      "job_sha256": "be0b0461e34b59124093079b8256b3a297c67c8df9ad1943e1ec24d669e819d5",
+      "source": {
+        "definition_line": 1046,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "38bcedac4f21533d5332f85c56fa3e481995eb156356af5084f8aebc73515648",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ro.63ebcd24",
+      "legacy_id": "audiolanguage-00141-c1cf0ad2b3de",
+      "job_sha256": "85c5fa45d18671dec6ff33b4f3976b362963f170ba045d9480e19ea0b8529fe8",
+      "source": {
+        "definition_line": 1047,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "c486fa36aa5ca0ba612c7532a137fb934c84666492765171d6cd8abc3ab4d777",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-rm.bf0faa56",
+      "legacy_id": "audiolanguage-00142-aff61617fffc",
+      "job_sha256": "f68c27639084a34773a000d58f60760e34c7f8d5da96fdee82e088a16fcb45be",
+      "source": {
+        "definition_line": 1048,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "b1268bb8eac5930eff2a05374cfabb54ea685ea6eb0d74eb669b4456f0304d30",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-rom.392f81d5",
+      "legacy_id": "audiolanguage-00143-db1bedba07b9",
+      "job_sha256": "cd67e4fbbe7690e856612cdc92fb88707e40d548c99ea0403ad86d7d49297c94",
+      "source": {
+        "definition_line": 1049,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "556d5427ac5415c1d032b711ea1feac9c9668d53c37c453fd66f96197dee12af",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-rn.3c23bc11",
+      "legacy_id": "audiolanguage-00144-b0f563f6bf74",
+      "job_sha256": "8dbc9426ce9101e654793962e896bfb6c5fbea3d640936155449921326cf26b5",
+      "source": {
+        "definition_line": 1050,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "52c4dfb528b68e6c0bff94722529c4e54893dd40b31815ba527f381cd0891d57",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ru.f407d6a1",
+      "legacy_id": "audiolanguage-00145-74189e71104d",
+      "job_sha256": "082c0ab94220958b2097ee7870d02f7db013d6bdfd8eb4aa2e99cde0469901ef",
+      "source": {
+        "definition_line": 1051,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "a57ee760addb68904338d0159ce1319902a866ecf1bd5de58af9e1615642d91a",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-sm.f98e74a8",
+      "legacy_id": "audiolanguage-00146-6a38c65242dd",
+      "job_sha256": "1f23ef4d1a01b53acbf55ec27960253488347fcec49cb6c6eff19abbe14e670c",
+      "source": {
+        "definition_line": 1052,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "239c7857e7b68d6fe0dc328bdd97e3fd23418d2add4edfd5b3ba645f8d3773da",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-sg.1c0d4fe9",
+      "legacy_id": "audiolanguage-00147-6d2c53d5b1e3",
+      "job_sha256": "a93c3a83c43c253f1a4cfc4ae2d7d4394a5885107b260e2715fa984ea5743b7b",
+      "source": {
+        "definition_line": 1053,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "58b8eaafbfd0f94587d4b317aef101f9e2794e99eab1286937ee4e59db3cb613",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-sa.44dd230e",
+      "legacy_id": "audiolanguage-00148-f88d51a5325f",
+      "job_sha256": "08a16f3dbc03cfc1ed1cd5db0639321d8cf8a15d85e50502459cd22ac65c271f",
+      "source": {
+        "definition_line": 1054,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "d41ef96480fd8c0a2313b347bb3c773ffbb435715832be4b534286100613936c",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-sc.3b03719f",
+      "legacy_id": "audiolanguage-00149-d96df59fdd67",
+      "job_sha256": "f70b1640c0e5420daa664dd879569628c37b7a558ade00b02dd0cda411057cfe",
+      "source": {
+        "definition_line": 1055,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "c3313364356cacc4e252a5e0fc981ebe33cc0a4d538438a55036ed8b4399c8b2",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-sr.5f98b165",
+      "legacy_id": "audiolanguage-00150-d874d912015a",
+      "job_sha256": "db2ba8c143262a1ede89ea7136437ebe30d3a2e046d0e19cb592a7e1d4d861f5",
+      "source": {
+        "definition_line": 1056,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "de0718d4f915a51f6b4c546d74bb7de4cd5753df22b989c5502ef59dd6aefeb7",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-sn.cc1f5b3a",
+      "legacy_id": "audiolanguage-00151-5aa862d2cb5c",
+      "job_sha256": "a9c75acb26eb0542a7eca5a0620c172660a5fa752f77ac9bb09c39c784e975bc",
+      "source": {
+        "definition_line": 1057,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "70326f855fcbc03879db298b3ae368b8b0afc324a333a6c73f10a274f514b1f7",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ii.d4f58c7e",
+      "legacy_id": "audiolanguage-00152-ea16cc251fb1",
+      "job_sha256": "d6510e53221bb1196f05f0ca767adbe2b17e04f7493fd373d18475284cf04e50",
+      "source": {
+        "definition_line": 1058,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "9189f3a8f0c8603f499740aaa85b042c58a3321c4e0049fddd7547cd04b85167",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-sd.4b2f2677",
+      "legacy_id": "audiolanguage-00153-ea90c810efa0",
+      "job_sha256": "77cbede04ec6823877da69721bdf9923ac7033c1d2e00efa802a19e01f715454",
+      "source": {
+        "definition_line": 1059,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "c6d9b1b31de33a94daaff7a0a871618c74a63e7e1c508b4b9df1dd061d098178",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-si.5a3925fa",
+      "legacy_id": "audiolanguage-00154-a9c6d74f6456",
+      "job_sha256": "863d69cca6d2ac7c52efdcf745d455d7ccd0a469f32c0f832334f80dc3651653",
+      "source": {
+        "definition_line": 1060,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "28ddb2674d5d8734f43cc2b676d0a2e59c318ec32f5b1d19e05f1607b95d8989",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-sk.403fa10a",
+      "legacy_id": "audiolanguage-00155-dda972c722cc",
+      "job_sha256": "9367e761ef0d62e05b7fcbda3241124d84f78d561b3152f14ce93167b8113c21",
+      "source": {
+        "definition_line": 1061,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "5e167f08ab71424cf99c7f9edc0f7f0f37802ab9efb5dced8bd783a60591d7bc",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-sl.dcd3ed5f",
+      "legacy_id": "audiolanguage-00156-b7574e244042",
+      "job_sha256": "3a6d11e04a385a7b6d1ea04b3d4ab554a823a23cefbce10d5244a475aef96ab3",
+      "source": {
+        "definition_line": 1062,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "fd5a3c29189580e065b333c3288ae840f22271fd453d505c63d6e4923e6f6360",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-so.7bcdf56f",
+      "legacy_id": "audiolanguage-00157-36a04e42a5c3",
+      "job_sha256": "548e2facea14f86daeeb5378d8c71aa7dccf5e5c3d2def9c1b18e9eccb85e385",
+      "source": {
+        "definition_line": 1063,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "bd1a55f46d98d2837ef793d07437f3f02653c20dec31e22d27dcc6197612c07d",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-nr.dfbe3a5b",
+      "legacy_id": "audiolanguage-00158-bf15ae41d14d",
+      "job_sha256": "39bb7dd13a474e2e416f40f456c72c21f419bbe026514c42b2a35d84de825373",
+      "source": {
+        "definition_line": 1064,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "0790492095df8810dd4b8e81666a3c814eccbb4db87f78f4d06ac43966a6cc1d",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-st.b02a4448",
+      "legacy_id": "audiolanguage-00159-b0bed681b25b",
+      "job_sha256": "4d091e044c7b83711b23e755f2e0ec88681dce3ebb9cb96a82950496d7cd4228",
+      "source": {
+        "definition_line": 1065,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "e8968ca5ccbf4912296a59298d017764c8180acca06e9d36a7f040a42019e70a",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-es.32d7909b",
+      "legacy_id": "audiolanguage-00160-e4c166dbb230",
+      "job_sha256": "0aba8121ceebc8b1b19f8fac0a8035430e6d7eaeb15bc43f3fcd0b6f140f86de",
+      "source": {
+        "definition_line": 1066,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "f3af6c327e8623d688ad820704bd271d248489d822f82ddd7a0ba080a02efe41",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-su.e0cd7b71",
+      "legacy_id": "audiolanguage-00161-c5e4a1770702",
+      "job_sha256": "903820e47759789ffec917847b12be6c177a1a9f87b54e39b6c662649c86c857",
+      "source": {
+        "definition_line": 1067,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "542a0fbc8f77b2d474cccf10cc939220e03b85b96a6750de019d154890dd1577",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-sw.a0436ee3",
+      "legacy_id": "audiolanguage-00162-296364a2efc5",
+      "job_sha256": "5dc184d2392c85dbaeedaf1b160e4873faddd39aee068a75f1a4d109f627b6cf",
+      "source": {
+        "definition_line": 1068,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "44826f97c46982ae2525fc694d4412c07804b6417d1b1295230b262d25be3d8e",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ss.1612a977",
+      "legacy_id": "audiolanguage-00163-fb2f08f6b338",
+      "job_sha256": "1d0bb4999370521b735bfe91804ce8b70e258ba41a0becd2577074b18b980a17",
+      "source": {
+        "definition_line": 1069,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "5c14b4197989da5a00fd47493c1060db78e25ad252b34ccd10fe55f1a9ace7a4",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-sv.0e5f4a26",
+      "legacy_id": "audiolanguage-00164-e8f5e6cecb77",
+      "job_sha256": "a03c7c2d60688851f60a0564a29ee34aa1d6dfdfa3c6b66452d22c556d37fc1c",
+      "source": {
+        "definition_line": 1070,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "9ede8223d75f0255c55a9470dbb9e5face9f5161d0666b8541a5584a1318a39a",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-tl.903dd272",
+      "legacy_id": "audiolanguage-00165-79630e8cc595",
+      "job_sha256": "204c2ef5d4ce217727d0abfaa10c5c481eefc032fc0fcae190a0c963c58d8c07",
+      "source": {
+        "definition_line": 1071,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "6907767a89b2a083f70c4f75533e2201ad581b8e1001b9de9661f075218b5b28",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ty.d207ddbb",
+      "legacy_id": "audiolanguage-00166-a320f4ced10d",
+      "job_sha256": "7d1e0f49912e11348e87239b73cdd446e8fb3b4f1147348065c1f87254dbd128",
+      "source": {
+        "definition_line": 1072,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "ec22f754cbca2529158b80da9f014817e1abc84dafe61d3b7cf65559da66647d",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-tai.f9ee2440",
+      "legacy_id": "audiolanguage-00167-ef832b39dccf",
+      "job_sha256": "c5de3babcac37ece021ac92d9557970c52b97ef13abf469c81bd3f970ad9bc94",
+      "source": {
+        "definition_line": 1073,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "770f2635b3a68264752d82dbc788b47f1d16b6e20c9d2d0044c98ee02bac32b0",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-tg.a94f4df3",
+      "legacy_id": "audiolanguage-00168-05e9cabe80b7",
+      "job_sha256": "243614b5b34003f763caa957da019289c992ef53c6f0c50954031c4ec690b896",
+      "source": {
+        "definition_line": 1074,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "62453a7c97a4ceff222fdd7ebc291d59de96091a1de00471d9699ecdd1381a91",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ta.4c6a68f1",
+      "legacy_id": "audiolanguage-00169-5c4ba7f7be56",
+      "job_sha256": "a7e655cdf41d9ccf71db26cb64bc136f74a4d9a86e37252db5ff3ef3513b99a3",
+      "source": {
+        "definition_line": 1075,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "d9728e8dd731cd10d40ef4ab5e79b8625dc319cf9f15fb4677288b5db8545b6c",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-tt.24abb731",
+      "legacy_id": "audiolanguage-00170-407d643a4167",
+      "job_sha256": "83b80d9c7a3bd479cb2abe36e4c950d866f53f00288aeb6790f4dba85b66ae9f",
+      "source": {
+        "definition_line": 1076,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "4caf282184ff4dabb590a9c8a88fa1d90cc9a355aea4fef1957a4433096909ed",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-te.738bd49b",
+      "legacy_id": "audiolanguage-00171-cf6ee84ba91d",
+      "job_sha256": "0555e2728611bfa31d51e90369f5cdc6b362de129e0192424cfc0aaf53adaa7b",
+      "source": {
+        "definition_line": 1077,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "bd500c19bd9739e5e4e9c737d48e09e80184f6791e8d5ca8a8274f968582e73a",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-th.44e8a0e3",
+      "legacy_id": "audiolanguage-00172-345628ebbfad",
+      "job_sha256": "4a3997fd865c5f36dc852d3518543b109ff8452695ab0074262478f1a187d7de",
+      "source": {
+        "definition_line": 1078,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "87ed9853def92d1e1d43bd6a28b5e7458cbe496fd467a179f6d252646e576800",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-bo.ae49ee13",
+      "legacy_id": "audiolanguage-00173-50bd38e8ff96",
+      "job_sha256": "f859132d2910407b82f4c6807211d62d0f7ec3c72b60e333d41eda1f4dd54a5e",
+      "source": {
+        "definition_line": 1079,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "9fb7ba4354fd2c4f5956f47e356fc5fa97fa1d433a3f3d5b902585f1de38a2de",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ti.17da6a06",
+      "legacy_id": "audiolanguage-00174-be6e307bf039",
+      "job_sha256": "3330a0ce8e0ba0c688c58811fbc4fa80de3ee4052e17c5ef25ec26b08f6aeb34",
+      "source": {
+        "definition_line": 1080,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "1b97d803a1513cf1a7753e72b04c5613057f4c46c9667865413f69bc4ca9a732",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-to.ca2301d9",
+      "legacy_id": "audiolanguage-00175-b41870a5cd72",
+      "job_sha256": "cc7c45734c0f161d28d5457c983a94e6a2a63a9635cfdf595d20a22f6472e8a4",
+      "source": {
+        "definition_line": 1081,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "0363adaa90d612cdd8a34510fb0df762e43b0dd1bd1002572de5cd06a901f136",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ts.5a0a185b",
+      "legacy_id": "audiolanguage-00176-2fe10e1260bf",
+      "job_sha256": "7d08c788e6a51cae4a5cbdc9b209190db87c44df0d30c9773cf4e9d7e6673270",
+      "source": {
+        "definition_line": 1082,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "0049160e8b67eabea425822c7fa5873a4fbe6ce06536d85e841af48419aa8fc0",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-tn.9c1609c4",
+      "legacy_id": "audiolanguage-00177-b25cfedf497c",
+      "job_sha256": "d0b4c7bec274ad9c5555ac6ba833b483f4f74cd1df64c3ae6ff7a20e6c6332d1",
+      "source": {
+        "definition_line": 1083,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "a2157f303316fd13fb201dbd47f81eeb2aa9e9407e122bc3f96dd688a879b685",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-tr.54e11246",
+      "legacy_id": "audiolanguage-00178-6070f71cab4d",
+      "job_sha256": "3561131ba56d95162dbed1c2c031e8069119f32dfd09ca2556f9dce4742b6342",
+      "source": {
+        "definition_line": 1084,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "e6a8abf27ab00e8a18a7f5f987ef3ca704cbc0393a7be91844a04548d31788e1",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-tk.3e31f9e2",
+      "legacy_id": "audiolanguage-00179-50d82384dbd0",
+      "job_sha256": "f2bb304b37a1e7ca490fb18632610883b68a4629f6905a5dc673d9cdd14ef9fe",
+      "source": {
+        "definition_line": 1085,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "5531f7e8036bb22d08082e40c3770278cda5373973d829729b2c8362f9b95f10",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-tw.c7cad3dc",
+      "legacy_id": "audiolanguage-00180-36208389ce83",
+      "job_sha256": "d96d1baf56f4e376c9785a0e9baced46ba61225145171547c079d64444ba0803",
+      "source": {
+        "definition_line": 1086,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "d4fab9d38ae4263b33ce79159df4337b84b47140fca6d6f349d0d649a719c2f8",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ug.a89671ea",
+      "legacy_id": "audiolanguage-00181-1f5bfdda37d3",
+      "job_sha256": "2857f669442d741f6d7a7042eca23ac872082ebc2f8e9056ca478a690ade9032",
+      "source": {
+        "definition_line": 1087,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "b44f92b63da40a9e615f333a6ca0b3670216194bf2d060738638787f42125f86",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-uk.b483201e",
+      "legacy_id": "audiolanguage-00182-9294f4cef0f1",
+      "job_sha256": "4c0fea9a7716786a2b6f167f1767630260611a378d0cb93d7e5e8c4c9baaf009",
+      "source": {
+        "definition_line": 1088,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "e714f851c979f96fd3a771e41d05547090fb166e9531d88fe3034b8a1f3a461f",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ur.5b08528b",
+      "legacy_id": "audiolanguage-00183-a8c32d9761dc",
+      "job_sha256": "147391bba6c2e39f2f11084438256ea7ab113bf2209f27c5d547bf0f64da208d",
+      "source": {
+        "definition_line": 1089,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "31331c193d264cda8c3f114165627e07481d127d3b463b1249754441296f04be",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-uz.289073cd",
+      "legacy_id": "audiolanguage-00184-a96bb0f17c5a",
+      "job_sha256": "0c9fe84a15a89ba872119447b34771e873a73cd038e7f6a6675e8a8f3833745f",
+      "source": {
+        "definition_line": 1090,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "bf94edcffa1f1d359af591fe9fed4baca4f2ba9eb1a09f1581d215b92bb3d760",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-ve.cdece758",
+      "legacy_id": "audiolanguage-00185-ff3b1576ae4b",
+      "job_sha256": "53749cb80d1fb6f37628a8b565252759aa8b2b27d26f5bf1dc57570147e17222",
+      "source": {
+        "definition_line": 1091,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "7be4872d4f08f2b15795765ae5f39cbf465d387ff93b66ed7e89dddc5aa04c44",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-vi.96c84a4c",
+      "legacy_id": "audiolanguage-00186-4f262c3848ff",
+      "job_sha256": "4a77d7cac91e1581f9450de6b4ffd47c1b76d2011289a4916c7b1664f8f307c9",
+      "source": {
+        "definition_line": 1092,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "9c0360c731c6ec2fb3e091ae9d751deaeb4eaba5ace79edbceeca078df479564",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-vo.35fc4204",
+      "legacy_id": "audiolanguage-00187-4da226d11bbd",
+      "job_sha256": "2ffbdc4631cd9ad07dd51db0e93b3a4ed1e8db8240bf504b4f95f8985502052a",
+      "source": {
+        "definition_line": 1093,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "15c54a9fb437a5ac9814208ba1b13f1b723ed2d70b12138efc2b16f4786470a0",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-wa.677c68b7",
+      "legacy_id": "audiolanguage-00188-dbbd9317b3ad",
+      "job_sha256": "832412f3d227208857094bfc1dfa1bdf438f90d85bb1cb17d673793fdf8664f6",
+      "source": {
+        "definition_line": 1094,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "c0d12dbdc20abb658e27ced5c870d9129ac5d90fe8a3fe5f318321f6c3e270fa",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-cy.4003dbaa",
+      "legacy_id": "audiolanguage-00189-323a9ec6e41d",
+      "job_sha256": "def7071cb465c353fe38310df93078054993c2e527e14b8368a66de3b7b53a8a",
+      "source": {
+        "definition_line": 1095,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "147b7d274d90dabd89e43e34ecd60f19ca83e456d50124e153bbe195a04de9ac",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-fy.ec6f81c5",
+      "legacy_id": "audiolanguage-00190-457a01ffad7a",
+      "job_sha256": "6c4d80eb20e710e3948fcb5bc147b62567271cbdef3c5a0ef0dbbaa94460bf0c",
+      "source": {
+        "definition_line": 1096,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "a9daa1bcf7f557cb1d4ddcda3efa813c37ac65ec680396e887716d5f2363cdb2",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-wo.30990d8d",
+      "legacy_id": "audiolanguage-00191-705046623e4b",
+      "job_sha256": "024555beeec9437d4f3ba1e2d26f8ac91f2d14fdea111162e03a80c7da72f07f",
+      "source": {
+        "definition_line": 1097,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "c8488da9a4a2a3ac23299b7c605568da5b61a08d170d33b1c802dcf94155e07b",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-xh.6b49efff",
+      "legacy_id": "audiolanguage-00192-1a0d3994dd2c",
+      "job_sha256": "cb4f03ed5ad91ff983d932bd7e48078ec94549b069e6e02e0e23b3ef6bab529b",
+      "source": {
+        "definition_line": 1098,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "22ec54b4b8cc1f9da7cdff823152fbe57372db20f0295396e13fcf66253b0fbf",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-yi.1d345cc2",
+      "legacy_id": "audiolanguage-00193-5d41e9f91be9",
+      "job_sha256": "f558b2f9023c9cd414d00f1c5f7c8681c6edcfc58cb2f2c931a97973233af997",
+      "source": {
+        "definition_line": 1099,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "25f4b1d0c8b4002fd72ce2c0fecdbacca2d65f1c0012f66d58ac949ad90feb6e",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-yo.21f309e8",
+      "legacy_id": "audiolanguage-00194-555700ff29ca",
+      "job_sha256": "0f94d388b5ae574a7412a3bcdc84bfba711dbb3805ef5834111deb5296f2caf8",
+      "source": {
+        "definition_line": 1100,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "8ee70c0ccb514ba06bb95d2b17f181dddfc4a296cdcf2fabb00b9f0350700079",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-za.7f1a94d7",
+      "legacy_id": "audiolanguage-00195-7e9f4625d59c",
+      "job_sha256": "1347634019fd1ecde598182917d0ccf1ea96bfb71e8f0cda9e14162e1e0205fd",
+      "source": {
+        "definition_line": 1101,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "fea9739fb1666eaaeeb54646539d00f2f9cdb4eae9b19d5f537e12d1f7526158",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "audiolanguage.audio-language-zu.ee244664",
+      "legacy_id": "audiolanguage-00196-4b5bebb10d71",
+      "job_sha256": "a8391acc38a759c354142d7b754bf4c101ab91479a8473294d343c43d1c8fabf",
+      "source": {
+        "definition_line": 1102,
+        "path": "create_default_posters.ps1",
+        "producer_line": 1114
+      },
+      "row_sha256": "c4d0af3185aa33a8da37a7d759fa2887aaa29cfb0ec16138026a8117c3d9a1f5",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    }
+  ],
+  "retired": []
+}

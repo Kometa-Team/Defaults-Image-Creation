@@ -1,0 +1,186 @@
+{
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "active": [
+    {
+      "poster_id": "resolution.resolution-other.24d56542",
+      "legacy_id": "resolution-07912-8930e742db89",
+      "job_sha256": "27f2e75883092f730038d554013546b74acf4afd34ac5ca95d0c21f2e444ceb6",
+      "source": {
+        "definition_line": 5397,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5409
+      },
+      "row_sha256": "6db6a2d905dd9cd4ed0bec741bb82271bde0206a7813add827fb950e0dddb05a",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "resolution.resolution-4k.4eedd827",
+      "legacy_id": "resolution-07913-3dbf72f02555",
+      "job_sha256": "eedbecd9fd3a99f83cacc29e69c82cfcaf569f927641480234ba4bab45a27fa8",
+      "source": {
+        "definition_line": 5415,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5436
+      },
+      "row_sha256": "b671fe7494942d06e278292ceca7180a1144c768d38ffb9a6f2a7bedfcc73b6d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "resolution.resolution-8k.dea77b99",
+      "legacy_id": "resolution-07914-ac1ee8158c50",
+      "job_sha256": "9eb6ba9c3eb932782114b8aa6002862ad76a1b2b7ddc2aea590f7a30a2bb7872",
+      "source": {
+        "definition_line": 5416,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5436
+      },
+      "row_sha256": "673f433093a3195b70bd35f227b18cf92057ddc2529d6b25251df1351bed6dae",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "resolution.resolution-144.f09548af",
+      "legacy_id": "resolution-07915-31eb5f624fae",
+      "job_sha256": "80bf1fe8378967bbb050b1ebf2b9b9261198adb23dac2f778715e5d52da344d8",
+      "source": {
+        "definition_line": 5417,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5436
+      },
+      "row_sha256": "5bb35f3a8b0f0eec0fb5d6afd1ef594c6f2f173954b2ede483b54d2a546c2233",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "resolution.resolution-240.39f9f626",
+      "legacy_id": "resolution-07916-d12d40d417c9",
+      "job_sha256": "5ed2c06a134f1f4a5bb3c59546216459631de749f8635d541af7c2f2594d0c22",
+      "source": {
+        "definition_line": 5418,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5436
+      },
+      "row_sha256": "216c5c6be1b544d5b419a0b2a59ad29dea0e928a29ac9aa45293cb29152a77a7",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "resolution.resolution-360.02571d0b",
+      "legacy_id": "resolution-07917-01c4e162665d",
+      "job_sha256": "d8bc9bf86bfc1e07a322b94bbff01aeda1614ebd59a3c368c65a39e2b5445c16",
+      "source": {
+        "definition_line": 5419,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5436
+      },
+      "row_sha256": "05b696816ededd88d1dc230ac1e79176db19edf2c08b19bf6dac34b0fe7dcf79",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "resolution.resolution-480.790f8a22",
+      "legacy_id": "resolution-07918-dde13db1d194",
+      "job_sha256": "872f83fbd7f4982f414bfe61567098de8c7bb44c5f590c62c536b243df07088b",
+      "source": {
+        "definition_line": 5420,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5436
+      },
+      "row_sha256": "77e3677270deac1a9ce7f51f62cab6ec81150ad80c1d2f36a6386f4359fcf99b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "resolution.resolution-576.7c95bfe6",
+      "legacy_id": "resolution-07919-b3dd93ac573d",
+      "job_sha256": "fcecf637c24d69df2b73c0289c406c0ccb4a7b4c8354c38b2c9774070cceb759",
+      "source": {
+        "definition_line": 5421,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5436
+      },
+      "row_sha256": "40b690fa1bcb294c30c2ac889197a0c2358309dffd0709253be4920c4d4618de",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "resolution.resolution-720.1c0903d5",
+      "legacy_id": "resolution-07920-503dd7ec3f12",
+      "job_sha256": "8216774b3b2cfd3476bcd0681820bb08380a794fc193301d414ca246f9f1300e",
+      "source": {
+        "definition_line": 5422,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5436
+      },
+      "row_sha256": "cc636fc6a86f0998c6b8b53d16e08e51d8f96337f16dd56322485c8664c8a219",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "resolution.resolution-1080.a0235fb6",
+      "legacy_id": "resolution-07921-ad4a101b1a0c",
+      "job_sha256": "11b4871e918e9e9711e2196783027d8f65bead6fa1f55a8298b773bf37c04d3e",
+      "source": {
+        "definition_line": 5423,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5436
+      },
+      "row_sha256": "bd46cc353b847c6340d075a23768da4ae0c9943ae3fc0d70f3353e23a1aa2533",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "resolution.resolution-standards-other.acdcf2fa",
+      "legacy_id": "resolution-07922-7c3e64d03035",
+      "job_sha256": "3efba78fa0596b57345a49463113a5ebea6cd90845e370b570f4870b39ab1e47",
+      "source": {
+        "definition_line": 5445,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5457
+      },
+      "row_sha256": "6db6a2d905dd9cd4ed0bec741bb82271bde0206a7813add827fb950e0dddb05a",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "resolution.resolution-standards-4k.036040df",
+      "legacy_id": "resolution-07923-66db5049fe20",
+      "job_sha256": "a1ece4c1ddae2c6915ac4d5864b02d557053f5677fddb3599147e3a675348204",
+      "source": {
+        "definition_line": 5463,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5478
+      },
+      "row_sha256": "1f85f10f9fcd6fb4d551ceb811103b7ab434b6a188ce1b34deeac6ff83cf0a40",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "resolution.resolution-standards-480.e8c68e39",
+      "legacy_id": "resolution-07924-a0fde4ea7cd3",
+      "job_sha256": "1d996d51c28a607d9add47fefc91a347d1f019c3cc74ad9c8e9eeec823903b92",
+      "source": {
+        "definition_line": 5464,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5478
+      },
+      "row_sha256": "db4f9cc8804754ea0011f0a720a52d77961d3577a19b1f6261579af2e88c3bc7",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "resolution.resolution-standards-720.e6c5037a",
+      "legacy_id": "resolution-07925-9d7fea9ef29d",
+      "job_sha256": "e4844c83eb2f897ea501c1acde199e038c0ec41aca601f5088b2fed3d37b9d6c",
+      "source": {
+        "definition_line": 5465,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5478
+      },
+      "row_sha256": "a6f75c1a8c58ac232b14f10d979217b84fe10d794edddccc27b1aea561c92c70",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "resolution.resolution-standards-1080.bae0a151",
+      "legacy_id": "resolution-07926-a681fec0b901",
+      "job_sha256": "21f9827600f64e9b33b94e3c9c11686cf80ed692a03da1c1ca43ed9d472fa29d",
+      "source": {
+        "definition_line": 5466,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5478
+      },
+      "row_sha256": "63291efb87db4bb7009e277b8dda21596c966895b39aa1e5600581e7b523c3e6",
+      "frozen_choices": []
+    }
+  ],
+  "retired": []
+}

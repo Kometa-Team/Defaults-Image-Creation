@@ -1,0 +1,218 @@
+{
+  "active_jobs": 6,
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "category": "VideoFormat",
+  "cold_metrics": [
+    {
+      "cache_hit_rate": 0.0,
+      "cache_hits": 0,
+      "dedup_reuses": 0,
+      "executed": 2,
+      "jobs_per_second": 1.0352808173343142,
+      "max_inflight": 2,
+      "peak_parent_rss": 49856512,
+      "peak_worker_rss": 151437312,
+      "peak_workers_rss_sum": 276541440,
+      "process_start": "spawn",
+      "read_bytes": 18063183,
+      "wall_seconds": 1.93184299999848,
+      "worker_pids": [
+        60548,
+        77920
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 2,
+      "write_bytes": 2302970
+    }
+  ],
+  "contract_parity": true,
+  "definitions": 6,
+  "discrepancies": [],
+  "human_visual_approval": false,
+  "incremental_metrics": [
+    {
+      "cache_hit_rate": 0.5,
+      "cache_hits": 1,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 1.2025916568902406,
+      "max_inflight": 1,
+      "peak_parent_rss": 126525440,
+      "peak_worker_rss": 146513920,
+      "peak_workers_rss_sum": 146513920,
+      "process_start": "spawn",
+      "read_bytes": 8664252,
+      "wall_seconds": 1.6630749003961682,
+      "worker_pids": [
+        54544
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 880752
+    }
+  ],
+  "legacy_effective_jobs": 6,
+  "limitations": [
+    "Fresh direct Pillow parity, not a new legacy ImageMagick comparison",
+    "English only; full multilingual layout belongs to D",
+    "Representative sample, not every category output rendered"
+  ],
+  "restore_metrics": [
+    {
+      "cache_hit_rate": 0.5,
+      "cache_hits": 1,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 1.3305789464053848,
+      "max_inflight": 1,
+      "peak_parent_rss": 126627840,
+      "peak_worker_rss": 140455936,
+      "peak_workers_rss_sum": 140455936,
+      "process_start": "spawn",
+      "read_bytes": 9025515,
+      "wall_seconds": 1.5031050997786224,
+      "worker_pids": [
+        55924
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 1121594
+    }
+  ],
+  "resume_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 8.227324259500602,
+      "max_inflight": 0,
+      "peak_parent_rss": 126418944,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.24309240002185106,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ],
+  "sample_comparisons": [
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#A66321",
+        "border_color": "#FFFFFF",
+        "engine": "python",
+        "font": null,
+        "gradient": 1,
+        "logo_size": [
+          1800,
+          352
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#A66321",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 250,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\logos_video_format\\bluray.png",
+          "logo_offset": 0,
+          "logo_resize": 1800,
+          "out_name": "bluray",
+          "text": "",
+          "text_offset": 0,
+          "white_wash": false
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\videoformat\\reference\\poster.9e4a6d65ac47fb49613970a2.jpg",
+        "sha256": "7e9c170f8010b1deadab84c8690d0041518d640e292bbf72a3fd63739e572d03",
+        "size_bytes": 560667
+      },
+      "output": "video_format/bluray.jpg",
+      "poster_id": "videoformat.video-format-bluray.e477ac75",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "7e9c170f8010b1deadab84c8690d0041518d640e292bbf72a3fd63739e572d03",
+      "sha256": "7e9c170f8010b1deadab84c8690d0041518d640e292bbf72a3fd63739e572d03"
+    },
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#E4CB63",
+        "border_color": "#FFFFFF",
+        "engine": "python",
+        "font": null,
+        "gradient": 1,
+        "logo_size": [
+          1600,
+          719
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#E4CB63",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 250,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\logos_video_format\\dvd.png",
+          "logo_offset": 0,
+          "logo_resize": 1600,
+          "out_name": "dvd",
+          "text": "",
+          "text_offset": 0,
+          "white_wash": false
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\videoformat\\reference\\poster.399f8abb768fe7c4b546111b.jpg",
+        "sha256": "b50781a91f538fcf0242ca9a79dc2529f789b67e7019dc7b1c60058d93c35585",
+        "size_bytes": 590558
+      },
+      "output": "video_format/dvd.jpg",
+      "poster_id": "videoformat.video-format-dvd.a5204bbe",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "b50781a91f538fcf0242ca9a79dc2529f789b67e7019dc7b1c60058d93c35585",
+      "sha256": "b50781a91f538fcf0242ca9a79dc2529f789b67e7019dc7b1c60058d93c35585"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Resolved English contract parity; generated inputs require separately verified real parent artifacts before render planning",
+  "status": "automated_sample_passed",
+  "wall_seconds": 13.790051499847323,
+  "warm_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 8.610357222765245,
+      "max_inflight": 0,
+      "peak_parent_rss": 50085888,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.2322784001007676,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ]
+}

@@ -188,3 +188,55 @@ def test_memory_and_metadata_limits_are_enforced(setup):
         with pytest.raises(BulkError, match="metadata"):
             pool.run([task(2)])
         assert pool.starts == 0
+
+
+def test_changed_owned_output_is_replaced_and_unchanged_output_is_cached(setup):
+    store, config = setup
+    before = [task(0), task(1)]
+    after = [task(0, {"number": 42}), task(1)]
+    with PersistentWorkers(store, config, renderer=probe_renderer) as pool:
+        pool.run(before)
+        changed = pool.run(after)
+        warm = pool.run(after)
+        restored = pool.run(before)
+        restored_warm = pool.run(before)
+    assert changed["metrics"]["executed"] == 1
+    assert changed["metrics"]["cache_hits"] == 1
+    assert warm["metrics"]["cache_hits"] == 2
+    assert restored["metrics"]["executed"] == 1
+    assert restored_warm["metrics"]["cache_hits"] == 2
+    assert (config.output_dir / "proof/0.bin").read_bytes() == canonical({"number": 0})
+    with store.connection() as db:
+        assert db.execute("SELECT count(*) FROM events WHERE kind='output_replaced'").fetchone()[0] == 2
+        assert db.execute("SELECT count(*) FROM jobs WHERE status='verified'").fetchone()[0] == 4
+
+
+def test_replacement_rejects_changed_bytes_and_other_logical_owner(setup):
+    store, config = setup
+    with PersistentWorkers(store, config, renderer=probe_renderer) as pool:
+        pool.run([task(0)])
+        with pytest.raises(BulkError, match="another job"):
+            pool.run([replace(task(1), local_relative="proof/0.bin")])
+        (config.output_dir / "proof/0.bin").write_bytes(b"external edit")
+        with pytest.raises(BulkError, match="corrupt"):
+            pool.run([task(0, {"number": 42})])
+
+
+def test_interrupted_replacement_resumes_without_adopting_external_bytes(setup, monkeypatch):
+    store, config = setup
+    before, after = task(0), task(0, {"number": 42})
+    transition = store.transition
+    with PersistentWorkers(store, config, renderer=probe_renderer) as pool:
+        pool.run([before])
+        def interrupt(identity, version, status, **kwargs):
+            if status == "verified":
+                raise RuntimeError("replacement interrupted after promotion")
+            return transition(identity, version, status, **kwargs)
+        monkeypatch.setattr(store, "transition", interrupt)
+        with pytest.raises(RuntimeError, match="interrupted"):
+            pool.run([after])
+    monkeypatch.setattr(store, "transition", transition)
+    with PersistentWorkers(store, config, renderer=probe_renderer) as pool:
+        result = pool.run([after])
+    assert result["jobs"][after.id]["status"] == "rendered"
+    assert (config.output_dir / after.local_relative).read_bytes() == canonical(after.payload)

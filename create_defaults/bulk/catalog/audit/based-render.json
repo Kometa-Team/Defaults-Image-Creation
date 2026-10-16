@@ -1,0 +1,198 @@
+{
+  "active_jobs": 4,
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "category": "Based",
+  "cold_metrics": [
+    {
+      "cache_hit_rate": 0.0,
+      "cache_hits": 0,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 0.5478426013858511,
+      "max_inflight": 1,
+      "peak_parent_rss": 49274880,
+      "peak_worker_rss": 159027200,
+      "peak_workers_rss_sum": 159027200,
+      "process_start": "spawn",
+      "read_bytes": 9720906,
+      "wall_seconds": 1.8253417997621,
+      "worker_pids": [
+        74428
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 986970
+    }
+  ],
+  "contract_parity": true,
+  "definitions": 4,
+  "discrepancies": [],
+  "human_visual_approval": false,
+  "incremental_metrics": [
+    {
+      "cache_hit_rate": 0.0,
+      "cache_hits": 0,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 0.5812206446628353,
+      "max_inflight": 1,
+      "peak_parent_rss": 132378624,
+      "peak_worker_rss": 156770304,
+      "peak_workers_rss_sum": 156770304,
+      "process_start": "spawn",
+      "read_bytes": 9694233,
+      "wall_seconds": 1.720517000183463,
+      "worker_pids": [
+        68512
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 969188
+    }
+  ],
+  "legacy_effective_jobs": 4,
+  "limitations": [
+    "Fresh direct Pillow parity, not a new legacy ImageMagick comparison",
+    "English only; full multilingual layout belongs to D",
+    "Representative sample, not every category output rendered"
+  ],
+  "restore_metrics": [
+    {
+      "cache_hit_rate": 0.0,
+      "cache_hits": 0,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 0.5855725921559758,
+      "max_inflight": 1,
+      "peak_parent_rss": 132866048,
+      "peak_worker_rss": 162930688,
+      "peak_workers_rss_sum": 162930688,
+      "process_start": "spawn",
+      "read_bytes": 9720906,
+      "wall_seconds": 1.7077302001416683,
+      "worker_pids": [
+        84296
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 986970
+    }
+  ],
+  "resume_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 1,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 10.984882599432897,
+      "max_inflight": 0,
+      "peak_parent_rss": 132739072,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.09103420004248619,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ],
+  "sample_comparisons": [
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#131CA1",
+        "border_color": "#FFFFFF",
+        "caption": {
+          "advances": [
+            1638.0,
+            791.25
+          ],
+          "glyph_bounds_source": "original font outline bounds",
+          "ink_bounds": [
+            156,
+            243,
+            1766,
+            723
+          ],
+          "line_height": 280,
+          "line_widths": [
+            1638,
+            792
+          ],
+          "lines": [
+            "BASED ON A",
+            "BOOK"
+          ],
+          "point_size": 250
+        },
+        "engine": "python",
+        "font": {
+          "path": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+        },
+        "gradient": 1,
+        "logo_size": [
+          2000,
+          2000
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#131CA1",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 250,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\transparent.png",
+          "logo_offset": 0,
+          "logo_resize": 2000,
+          "out_name": "Book",
+          "text": "BASED ON A BOOK",
+          "text_offset": 0,
+          "white_wash": true
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\based\\reference\\poster.f2085c6d67f7f4e48804ac6b.jpg",
+        "sha256": "366a97b27d8e9d637297113f26fd567bed5289fcfaf65ccfb6ac4cd6181e0ce5",
+        "size_bytes": 493355
+      },
+      "output": "based/Book.jpg",
+      "poster_id": "based.based-book.217e49bd",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "366a97b27d8e9d637297113f26fd567bed5289fcfaf65ccfb6ac4cd6181e0ce5",
+      "sha256": "366a97b27d8e9d637297113f26fd567bed5289fcfaf65ccfb6ac4cd6181e0ce5"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Resolved English contract parity; generated inputs require separately verified real parent artifacts before render planning",
+  "status": "automated_sample_passed",
+  "wall_seconds": 8.382487999740988,
+  "warm_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 1,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 7.084721937309944,
+      "max_inflight": 0,
+      "peak_parent_rss": 50020352,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.14114880003035069,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ]
+}

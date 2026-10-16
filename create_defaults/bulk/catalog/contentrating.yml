@@ -1,0 +1,1447 @@
+schema_version: 1
+category: ContentRating
+definitions:
+- extends: legacy-poster
+  id: contentrating.content-rating-other.3106afa2
+  category: ContentRating
+  display_name: other
+  source:
+    path: create_default_posters.ps1
+    line: 3486
+    row_sha256: 9c3ad1befb35fd2fd061e58eb356ccee352bc025119c9e6f1954715d0451e8f8
+  composer:
+    base_color: '#FF2000'
+    logo_resize: 1600
+    out_name: other
+  caption:
+    mode: translation
+    key: collections.content_ratings_other.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: OTHER RATINGS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: affd8a436cdf6b09b8cd88dfaeb373925fa837dc8a9442ea363f8aedefe1ff92
+  output:
+    directory: content_rating
+    filename: other.jpg
+    remote_paths:
+      en: content_rating/other.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-other.3106afa2.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-cs-nr.bcc58b7a
+  category: ContentRating
+  display_name: NR
+  source:
+    path: create_default_posters.ps1
+    line: 3486
+    row_sha256: 9c3ad1befb35fd2fd061e58eb356ccee352bc025119c9e6f1954715d0451e8f8
+  composer:
+    base_color: '#1AA931'
+    logo: logos_content_rating/cs.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: NR
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.NOT_RATED
+  layout:
+    kind: captured_fit
+    measurement:
+      text: NOT RATED
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 67b9762034b85740f0f08658dd46b542815a27af476622ca4c6f32a21a2d65ec
+  output:
+    directory: content_rating/cs
+    filename: NR.jpg
+    remote_paths:
+      en: content_rating/cs/NR.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-cs-nr.bcc58b7a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-mal-nr.446d8061
+  category: ContentRating
+  display_name: NR
+  source:
+    path: create_default_posters.ps1
+    line: 3486
+    row_sha256: 9c3ad1befb35fd2fd061e58eb356ccee352bc025119c9e6f1954715d0451e8f8
+  composer:
+    base_color: '#2444D1'
+    logo: logos_content_rating/mal.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: NR
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.NOT_RATED
+  layout:
+    kind: captured_fit
+    measurement:
+      text: NOT RATED
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: a21775f40203e88d4d8d7dddf15e6df5210efca8ed597f7ed84e425f59aec38e
+  output:
+    directory: content_rating/mal
+    filename: NR.jpg
+    remote_paths:
+      en: content_rating/mal/NR.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-mal-nr.446d8061.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-uk-12.7a72f034
+  category: ContentRating
+  display_name: '12'
+  source:
+    path: create_default_posters.ps1
+    line: 3537
+    row_sha256: 039f84a4a17fd8600fd799a4b199e748fa097a220b80d47478eef94aafcfd8b8
+  composer:
+    base_color: '#FF7D13'
+    logo: logos_content_rating/uk12.png
+    logo_resize: 1500
+    out_name: '12'
+  output:
+    directory: content_rating/uk
+    filename: 12.jpg
+    remote_paths:
+      en: content_rating/uk/12.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-uk-12.7a72f034.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-uk-12a.4303bb32
+  category: ContentRating
+  display_name: 12A
+  source:
+    path: create_default_posters.ps1
+    line: 3538
+    row_sha256: dedd3e1ec9329948ece8c3db2f7727f1e29f7db3805ed8be659b2b0b815bcb9c
+  composer:
+    base_color: '#FF7D13'
+    logo: logos_content_rating/uk12a.png
+    logo_resize: 1500
+    out_name: 12A
+  output:
+    directory: content_rating/uk
+    filename: 12A.jpg
+    remote_paths:
+      en: content_rating/uk/12A.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-uk-12a.4303bb32.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-uk-15.ed6fdd44
+  category: ContentRating
+  display_name: '15'
+  source:
+    path: create_default_posters.ps1
+    line: 3539
+    row_sha256: 58defdd4cd11f434a3a053a575285f7b01b3229e3144831135d00fc2c8c53341
+  composer:
+    base_color: '#FC4E93'
+    logo: logos_content_rating/uk15.png
+    logo_resize: 1500
+    out_name: '15'
+  output:
+    directory: content_rating/uk
+    filename: 15.jpg
+    remote_paths:
+      en: content_rating/uk/15.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-uk-15.ed6fdd44.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-uk-18.faed7c23
+  category: ContentRating
+  display_name: '18'
+  source:
+    path: create_default_posters.ps1
+    line: 3540
+    row_sha256: 9d372d5865b9021edc3e719a0a1e60cdc09333cc94316b084d90c99a55d8009a
+  composer:
+    base_color: '#DC0A0B'
+    logo: logos_content_rating/uk18.png
+    logo_resize: 1500
+    out_name: '18'
+  output:
+    directory: content_rating/uk
+    filename: 18.jpg
+    remote_paths:
+      en: content_rating/uk/18.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-uk-18.faed7c23.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-uk-nr.d67e7bfb
+  category: ContentRating
+  display_name: NR
+  source:
+    path: create_default_posters.ps1
+    line: 3541
+    row_sha256: 1e6a3554bd0c4e02ffd432ff0166eb5fafc597ee58c04f8cfb6d79aad3a7855f
+  composer:
+    base_color: '#0E84A3'
+    logo: logos_content_rating/uknr.png
+    logo_resize: 1500
+    out_name: NR
+  output:
+    directory: content_rating/uk
+    filename: NR.jpg
+    remote_paths:
+      en: content_rating/uk/NR.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-uk-nr.d67e7bfb.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-uk-pg.a1462195
+  category: ContentRating
+  display_name: PG
+  source:
+    path: create_default_posters.ps1
+    line: 3542
+    row_sha256: 93d51cf64f4d7860792db1e81a920dad705cfb51c49f3aa5dbc4540153af4cba
+  composer:
+    base_color: '#FBAE00'
+    logo: logos_content_rating/ukpg.png
+    logo_resize: 1500
+    out_name: PG
+  output:
+    directory: content_rating/uk
+    filename: PG.jpg
+    remote_paths:
+      en: content_rating/uk/PG.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-uk-pg.a1462195.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-uk-r18.1ac7c09e
+  category: ContentRating
+  display_name: R18
+  source:
+    path: create_default_posters.ps1
+    line: 3543
+    row_sha256: 8ddad998e5c3f857e1c33fe038f9933d74c6bb3b110a9d3f9115e9ee75b39685
+  composer:
+    base_color: '#016ED3'
+    logo: logos_content_rating/ukr18.png
+    logo_resize: 1500
+    out_name: R18
+  output:
+    directory: content_rating/uk
+    filename: R18.jpg
+    remote_paths:
+      en: content_rating/uk/R18.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-uk-r18.1ac7c09e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-uk-u.9c36c74c
+  category: ContentRating
+  display_name: U
+  source:
+    path: create_default_posters.ps1
+    line: 3544
+    row_sha256: 1424f9776a1423b4cac19971000e30430704ea11b975e8936cac2ef592dafafd
+  composer:
+    base_color: '#0BC700'
+    logo: logos_content_rating/uku.png
+    logo_resize: 1500
+    out_name: U
+  output:
+    directory: content_rating/uk
+    filename: U.jpg
+    remote_paths:
+      en: content_rating/uk/U.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-uk-u.9c36c74c.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-de-0.f8412b92
+  category: ContentRating
+  display_name: '0'
+  source:
+    path: create_default_posters.ps1
+    line: 3564
+    row_sha256: 46aa4c525603fc299a46a14443c032285d59d7cbcfaa1fcacaa2084a3520f03b
+  composer:
+    base_color: '#868786'
+    logo: logos_content_rating/de0c.png
+    logo_resize: 1500
+    out_name: '0'
+  output:
+    directory: content_rating/de
+    filename: 0.jpg
+    remote_paths:
+      en: content_rating/de/0.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-de-0.f8412b92.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-de-6.5a65801b
+  category: ContentRating
+  display_name: '6'
+  source:
+    path: create_default_posters.ps1
+    line: 3565
+    row_sha256: 5047aa968db3df337a219a898990f6b47ee2bb818fcec0a0747f27c812e0c10a
+  composer:
+    base_color: '#FFEA3E'
+    logo: logos_content_rating/de6c.png
+    logo_resize: 1500
+    out_name: '6'
+  output:
+    directory: content_rating/de
+    filename: 6.jpg
+    remote_paths:
+      en: content_rating/de/6.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-de-6.5a65801b.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-de-12.9b3d1f70
+  category: ContentRating
+  display_name: '12'
+  source:
+    path: create_default_posters.ps1
+    line: 3566
+    row_sha256: 734502b09a0deaefd7fbc54548f0313856b4fee29232bcf9be3397500488cd33
+  composer:
+    base_color: '#37B653'
+    logo: logos_content_rating/de12c.png
+    logo_resize: 1500
+    out_name: '12'
+  output:
+    directory: content_rating/de
+    filename: 12.jpg
+    remote_paths:
+      en: content_rating/de/12.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-de-12.9b3d1f70.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-de-16.64bd31db
+  category: ContentRating
+  display_name: '16'
+  source:
+    path: create_default_posters.ps1
+    line: 3567
+    row_sha256: 166430f8fb7d5c93ede59b37852d6cd8bebc77088619e857e97cecc4f148a780
+  composer:
+    base_color: '#3CA9E7'
+    logo: logos_content_rating/de16c.png
+    logo_resize: 1500
+    out_name: '16'
+  output:
+    directory: content_rating/de
+    filename: 16.jpg
+    remote_paths:
+      en: content_rating/de/16.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-de-16.64bd31db.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-de-18.97ff0db0
+  category: ContentRating
+  display_name: '18'
+  source:
+    path: create_default_posters.ps1
+    line: 3568
+    row_sha256: 4d2b6e1e821a068abfe8b9e1f623f7e562d9a2dae73d1ac4b9f17979497f931b
+  composer:
+    base_color: '#F51924'
+    logo: logos_content_rating/de18c.png
+    logo_resize: 1500
+    out_name: '18'
+  output:
+    directory: content_rating/de
+    filename: 18.jpg
+    remote_paths:
+      en: content_rating/de/18.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-de-18.97ff0db0.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-de-bpjm.d18d8a12
+  category: ContentRating
+  display_name: BPjM
+  source:
+    path: create_default_posters.ps1
+    line: 3569
+    row_sha256: fa89d3da523f8964501fc4d6c1fb2f9bf1feb61720cf42df49e2b4ec54f3300b
+  composer:
+    base_color: '#DC1924'
+    logo: logos_content_rating/debpjmc.png
+    logo_resize: 1500
+    out_name: BPjM
+  output:
+    directory: content_rating/de
+    filename: BPjM.jpg
+    remote_paths:
+      en: content_rating/de/BPjM.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-de-bpjm.d18d8a12.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-de-nr.dd20bb82
+  category: ContentRating
+  display_name: NR
+  source:
+    path: create_default_posters.ps1
+    line: 3570
+    row_sha256: d1d32eed5e272de4929778f66729b90c91ecd2fdf316d031840a32b01d58f812
+  composer:
+    base_color: '#0E84A3'
+    logo: logos_content_rating/denr.png
+    logo_resize: 1500
+    out_name: NR
+  output:
+    directory: content_rating/de
+    filename: NR.jpg
+    remote_paths:
+      en: content_rating/de/NR.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-de-nr.dd20bb82.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-au-g.53551146
+  category: ContentRating
+  display_name: G
+  source:
+    path: create_default_posters.ps1
+    line: 3590
+    row_sha256: 6f0ca000ab3e8fa8ede4bd17d80ef26b96657339d9d9a897b957b2397c8f1ae0
+  composer:
+    base_color: '#0DB14B'
+    logo: logos_content_rating/au_g.png
+    logo_resize: 1500
+    out_name: G
+  output:
+    directory: content_rating/au
+    filename: G.jpg
+    remote_paths:
+      en: content_rating/au/G.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-au-g.53551146.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-au-ma15.b2bdb559
+  category: ContentRating
+  display_name: MA15+
+  source:
+    path: create_default_posters.ps1
+    line: 3591
+    row_sha256: 1e578b0001fc41e80f902821f1c9b185a29b274c826c70c57ae7db1ee27b40fa
+  composer:
+    base_color: '#ED1C24'
+    logo: logos_content_rating/au_ma.png
+    logo_resize: 1500
+    out_name: MA15+
+  output:
+    directory: content_rating/au
+    filename: MA15+.jpg
+    remote_paths:
+      en: content_rating/au/MA15+.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-au-ma15.b2bdb559.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-au-m.65111235
+  category: ContentRating
+  display_name: M
+  source:
+    path: create_default_posters.ps1
+    line: 3592
+    row_sha256: 220d7423db4920b3ed001d5684efa2950522826ee7cf8b329d786cf254c600a4
+  composer:
+    base_color: '#00AEEF'
+    logo: logos_content_rating/au_m.png
+    logo_resize: 1500
+    out_name: M
+  output:
+    directory: content_rating/au
+    filename: M.jpg
+    remote_paths:
+      en: content_rating/au/M.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-au-m.65111235.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-au-pg.42c41e4d
+  category: ContentRating
+  display_name: PG
+  source:
+    path: create_default_posters.ps1
+    line: 3593
+    row_sha256: ac2adbdef7d4012c253fbbbba5535d73f12bc214db4d9ff51eed4e65ce63a75e
+  composer:
+    base_color: '#FFF200'
+    logo: logos_content_rating/au_pg.png
+    logo_resize: 1500
+    out_name: PG
+  output:
+    directory: content_rating/au
+    filename: PG.jpg
+    remote_paths:
+      en: content_rating/au/PG.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-au-pg.42c41e4d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-au-r18.0e6fcb8f
+  category: ContentRating
+  display_name: R18+
+  source:
+    path: create_default_posters.ps1
+    line: 3594
+    row_sha256: 9a826be622b0aaa8b22756d03d73252f0cd9844f45ac6e66d71e46eb3972e167
+  composer:
+    base_color: '#231F20'
+    logo: logos_content_rating/au_r.png
+    logo_resize: 1500
+    out_name: R18+
+  output:
+    directory: content_rating/au
+    filename: R18+.jpg
+    remote_paths:
+      en: content_rating/au/R18+.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-au-r18.0e6fcb8f.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-au-x18.67b646d9
+  category: ContentRating
+  display_name: X18+
+  source:
+    path: create_default_posters.ps1
+    line: 3595
+    row_sha256: dd105c4b778cd12c3e7ed5a62d36da91ac095434d8aafd8ae9a9d8093aaddb15
+  composer:
+    base_color: '#221f20'
+    logo: logos_content_rating/au_x.png
+    logo_resize: 1500
+    out_name: X18+
+  output:
+    directory: content_rating/au
+    filename: X18+.jpg
+    remote_paths:
+      en: content_rating/au/X18+.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-au-x18.67b646d9.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-au-nr.00aa0957
+  category: ContentRating
+  display_name: NR
+  source:
+    path: create_default_posters.ps1
+    line: 3596
+    row_sha256: 549cebef1c8e1d1896c749669953d8741f05ed1dde57835b66de43360dc9ea4c
+  composer:
+    base_color: '#0D3843'
+    logo: logos_content_rating/au_nr.png
+    logo_resize: 1500
+    out_name: NR
+  output:
+    directory: content_rating/au
+    filename: NR.jpg
+    remote_paths:
+      en: content_rating/au/NR.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-au-nr.00aa0957.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-nz-g.a48ac1b8
+  category: ContentRating
+  display_name: G
+  source:
+    path: create_default_posters.ps1
+    line: 3616
+    row_sha256: 8b973bcb9ae71c8dc92df126e636b8a4a3930b52f329c2a8a2c7c7f5995c9a3c
+  composer:
+    base_color: '#04934F'
+    logo: logos_content_rating/nz_g.png
+    logo_resize: 1500
+    out_name: G
+  output:
+    directory: content_rating/nz
+    filename: G.jpg
+    remote_paths:
+      en: content_rating/nz/G.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-nz-g.a48ac1b8.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-nz-m.9fe98872
+  category: ContentRating
+  display_name: M
+  source:
+    path: create_default_posters.ps1
+    line: 3617
+    row_sha256: ae526d414ec631213bf95c9dc2070ee4faccb06ec3c585c30c031f48d8bc4264
+  composer:
+    base_color: '#FFEC00'
+    logo: logos_content_rating/nz_m.png
+    logo_resize: 1500
+    out_name: M
+  output:
+    directory: content_rating/nz
+    filename: M.jpg
+    remote_paths:
+      en: content_rating/nz/M.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-nz-m.9fe98872.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-nz-pg.b8be981d
+  category: ContentRating
+  display_name: PG
+  source:
+    path: create_default_posters.ps1
+    line: 3618
+    row_sha256: f12caed8ee08059787241fc9b88f775ba82efa821912751e20420b21ed858ff3
+  composer:
+    base_color: '#FFEC00'
+    logo: logos_content_rating/nz_pg.png
+    logo_resize: 1500
+    out_name: PG
+  output:
+    directory: content_rating/nz
+    filename: PG.jpg
+    remote_paths:
+      en: content_rating/nz/PG.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-nz-pg.b8be981d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-nz-r13.4c60aac1
+  category: ContentRating
+  display_name: R13
+  source:
+    path: create_default_posters.ps1
+    line: 3619
+    row_sha256: b91a8cb28e932be84a4de72e68b2b7c6adafc06a93af56756e35f18ac3b6d8f4
+  composer:
+    base_color: '#FF0000'
+    logo: logos_content_rating/nz_r13.png
+    logo_resize: 1500
+    out_name: R13
+  output:
+    directory: content_rating/nz
+    filename: R13.jpg
+    remote_paths:
+      en: content_rating/nz/R13.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-nz-r13.4c60aac1.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-nz-r15.95d9549d
+  category: ContentRating
+  display_name: R15
+  source:
+    path: create_default_posters.ps1
+    line: 3620
+    row_sha256: eeb413e6155ff16d3a97a398ca7cab952ad6cf10c7e80b038f7dda74a9c218bd
+  composer:
+    base_color: '#FF0000'
+    logo: logos_content_rating/nz_r15.png
+    logo_resize: 1500
+    out_name: R15
+  output:
+    directory: content_rating/nz
+    filename: R15.jpg
+    remote_paths:
+      en: content_rating/nz/R15.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-nz-r15.95d9549d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-nz-r16.0bd0c92d
+  category: ContentRating
+  display_name: R16
+  source:
+    path: create_default_posters.ps1
+    line: 3621
+    row_sha256: cc93f9f112becffcc9c15a23ecd8ca933636b58e8f4e5d43c1c2cb8d77cf3e3d
+  composer:
+    base_color: '#FF0000'
+    logo: logos_content_rating/nz_r16.png
+    logo_resize: 1500
+    out_name: R16
+  output:
+    directory: content_rating/nz
+    filename: R16.jpg
+    remote_paths:
+      en: content_rating/nz/R16.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-nz-r16.0bd0c92d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-nz-r18.10641506
+  category: ContentRating
+  display_name: R18
+  source:
+    path: create_default_posters.ps1
+    line: 3622
+    row_sha256: 2e7f357a8c0ef224a2cbe0af7f10acb103400d0368b08c032e65afb6cd0edd51
+  composer:
+    base_color: '#FF0000'
+    logo: logos_content_rating/nz_r18.png
+    logo_resize: 1500
+    out_name: R18
+  output:
+    directory: content_rating/nz
+    filename: R18.jpg
+    remote_paths:
+      en: content_rating/nz/R18.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-nz-r18.10641506.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-nz-r.a11d6dc0
+  category: ContentRating
+  display_name: R
+  source:
+    path: create_default_posters.ps1
+    line: 3623
+    row_sha256: f6b745fedf3646f21a90828bbf1713afc48462f46ee24e72c1c5df3afb5779b7
+  composer:
+    base_color: '#FF0000'
+    logo: logos_content_rating/nz_r.png
+    logo_resize: 1500
+    out_name: R
+  output:
+    directory: content_rating/nz
+    filename: R.jpg
+    remote_paths:
+      en: content_rating/nz/R.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-nz-r.a11d6dc0.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-nz-rp13.03ebf46b
+  category: ContentRating
+  display_name: RP13
+  source:
+    path: create_default_posters.ps1
+    line: 3624
+    row_sha256: 1a5fcd0ce17a1884822c43151e8fb77fa8103b963f0543447abe3585eb4f1a7b
+  composer:
+    base_color: '#FF0000'
+    logo: logos_content_rating/nz_rp13.png
+    logo_resize: 1500
+    out_name: RP13
+  output:
+    directory: content_rating/nz
+    filename: RP13.jpg
+    remote_paths:
+      en: content_rating/nz/RP13.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-nz-rp13.03ebf46b.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-nz-rp16.db640417
+  category: ContentRating
+  display_name: RP16
+  source:
+    path: create_default_posters.ps1
+    line: 3625
+    row_sha256: 96601f23cd6d28c7aaeaa3c8586dc48f5cd69324767bdda2ac835816f33e6215
+  composer:
+    base_color: '#FF0000'
+    logo: logos_content_rating/nz_rp16.png
+    logo_resize: 1500
+    out_name: RP16
+  output:
+    directory: content_rating/nz
+    filename: RP16.jpg
+    remote_paths:
+      en: content_rating/nz/RP16.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-nz-rp16.db640417.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-nz-rp18.c5702403
+  category: ContentRating
+  display_name: RP18
+  source:
+    path: create_default_posters.ps1
+    line: 3626
+    row_sha256: 65d37444bf6694456055103ad5af75f2681ca0dd82b29273597179c3ed59388d
+  composer:
+    base_color: '#FF0000'
+    logo: logos_content_rating/nz_rp18.png
+    logo_resize: 1500
+    out_name: RP18
+  output:
+    directory: content_rating/nz
+    filename: RP18.jpg
+    remote_paths:
+      en: content_rating/nz/RP18.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-nz-rp18.c5702403.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-nz-nr.009fe42a
+  category: ContentRating
+  display_name: NR
+  source:
+    path: create_default_posters.ps1
+    line: 3627
+    row_sha256: cbc188cec52daaba578e66f1535399d676200d61161b992b0a5b402cc27dcdbd
+  composer:
+    base_color: '#0D3843'
+    logo: logos_content_rating/nz_nr.png
+    logo_resize: 1500
+    out_name: NR
+  output:
+    directory: content_rating/nz
+    filename: NR.jpg
+    remote_paths:
+      en: content_rating/nz/NR.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-nz-nr.009fe42a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-us-g.66d27756
+  category: ContentRating
+  display_name: G
+  source:
+    path: create_default_posters.ps1
+    line: 3647
+    row_sha256: b89f1a2fe8b75a41364c5e82995984c1b97ffc47a54a532a0ca4f9c526903fa1
+  composer:
+    base_color: '#79EF06'
+    logo: logos_content_rating/usg.png
+    logo_resize: 1500
+    out_name: G
+  output:
+    directory: content_rating/us
+    filename: G.jpg
+    remote_paths:
+      en: content_rating/us/G.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-us-g.66d27756.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-us-nc-17.62c6891d
+  category: ContentRating
+  display_name: NC-17
+  source:
+    path: create_default_posters.ps1
+    line: 3648
+    row_sha256: 96657c9385490cd9465dd950161bf7e38655461fa7e3772bac0c42b5127eb473
+  composer:
+    base_color: '#EE45A4'
+    logo: logos_content_rating/usnc-17.png
+    logo_resize: 1500
+    out_name: NC-17
+  output:
+    directory: content_rating/us
+    filename: NC-17.jpg
+    remote_paths:
+      en: content_rating/us/NC-17.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-us-nc-17.62c6891d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-us-nr.61841583
+  category: ContentRating
+  display_name: NR
+  source:
+    path: create_default_posters.ps1
+    line: 3649
+    row_sha256: 9f7f9724eafdef05a2220ae6a98520155b391b8eaf768a4a68a2ecf97ec7fbb8
+  composer:
+    base_color: '#0E84A3'
+    logo: logos_content_rating/usnr.png
+    logo_resize: 1500
+    out_name: NR
+  output:
+    directory: content_rating/us
+    filename: NR.jpg
+    remote_paths:
+      en: content_rating/us/NR.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-us-nr.61841583.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-us-pg.c87f6b40
+  category: ContentRating
+  display_name: PG
+  source:
+    path: create_default_posters.ps1
+    line: 3650
+    row_sha256: 8d82bafec3d88a035c1ba06929931ee365d7891e5cfa25fb5b3b325a4c3207f7
+  composer:
+    base_color: '#918CE2'
+    logo: logos_content_rating/uspg.png
+    logo_resize: 1500
+    out_name: PG
+  output:
+    directory: content_rating/us
+    filename: PG.jpg
+    remote_paths:
+      en: content_rating/us/PG.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-us-pg.c87f6b40.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-us-pg-13.8ece5705
+  category: ContentRating
+  display_name: PG-13
+  source:
+    path: create_default_posters.ps1
+    line: 3651
+    row_sha256: 92f567f2caef95680e27580451c437b8235049d9249762130a2eefc55e443cf7
+  composer:
+    base_color: '#A124CC'
+    logo: logos_content_rating/uspg-13.png
+    logo_resize: 1500
+    out_name: PG-13
+  output:
+    directory: content_rating/us
+    filename: PG-13.jpg
+    remote_paths:
+      en: content_rating/us/PG-13.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-us-pg-13.8ece5705.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-us-r.15d449c4
+  category: ContentRating
+  display_name: R
+  source:
+    path: create_default_posters.ps1
+    line: 3652
+    row_sha256: dd2ca027e89fedc2bb183afbca776525280e844ddc69c6019db9faeff466739d
+  composer:
+    base_color: '#FB5226'
+    logo: logos_content_rating/usr.png
+    logo_resize: 1500
+    out_name: R
+  output:
+    directory: content_rating/us
+    filename: R.jpg
+    remote_paths:
+      en: content_rating/us/R.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-us-r.15d449c4.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-us-tv-14.f2543e52
+  category: ContentRating
+  display_name: TV-14
+  source:
+    path: create_default_posters.ps1
+    line: 3653
+    row_sha256: 859342b47c62b49d8d4ae9404c3c4d94b8a3853d88d8e272a613e7b44a613ef2
+  composer:
+    base_color: '#C29CC1'
+    logo: logos_content_rating/ustv-14.png
+    logo_resize: 1500
+    out_name: TV-14
+  output:
+    directory: content_rating/us
+    filename: TV-14.jpg
+    remote_paths:
+      en: content_rating/us/TV-14.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-us-tv-14.f2543e52.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-us-tv-g.3b903433
+  category: ContentRating
+  display_name: TV-G
+  source:
+    path: create_default_posters.ps1
+    line: 3654
+    row_sha256: baaaefda14c5a7c151f79819ee9659a02a9ff38f2f80977e94db7e6f9c77bbf1
+  composer:
+    base_color: '#98A5BB'
+    logo: logos_content_rating/ustv-g.png
+    logo_resize: 1500
+    out_name: TV-G
+  output:
+    directory: content_rating/us
+    filename: TV-G.jpg
+    remote_paths:
+      en: content_rating/us/TV-G.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-us-tv-g.3b903433.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-us-tv-ma.bd50d6b8
+  category: ContentRating
+  display_name: TV-MA
+  source:
+    path: create_default_posters.ps1
+    line: 3655
+    row_sha256: c9159e4b43870aa18ea06a29c66bba61b57488e3e8542acac3adf3556cd6a29d
+  composer:
+    base_color: '#DB8689'
+    logo: logos_content_rating/ustv-ma.png
+    logo_resize: 1500
+    out_name: TV-MA
+  output:
+    directory: content_rating/us
+    filename: TV-MA.jpg
+    remote_paths:
+      en: content_rating/us/TV-MA.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-us-tv-ma.bd50d6b8.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-us-tv-pg.00bf0a73
+  category: ContentRating
+  display_name: TV-PG
+  source:
+    path: create_default_posters.ps1
+    line: 3656
+    row_sha256: 17ef6ad9c4bfc8733a043f73cf1d49cef73282b032195608f523605b2554247f
+  composer:
+    base_color: '#5B0EFD'
+    logo: logos_content_rating/ustv-pg.png
+    logo_resize: 1500
+    out_name: TV-PG
+  output:
+    directory: content_rating/us
+    filename: TV-PG.jpg
+    remote_paths:
+      en: content_rating/us/TV-PG.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-us-tv-pg.00bf0a73.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.content-rating-us-tv-y.7f3c8d4c
+  category: ContentRating
+  display_name: TV-Y
+  source:
+    path: create_default_posters.ps1
+    line: 3657
+    row_sha256: d32d9012f9787a043fe52ef489e5b83acc8a10377b17912bbe4d646b0e2c3c28
+  composer:
+    base_color: '#3EB3C1'
+    logo: logos_content_rating/ustv-y.png
+    logo_resize: 1500
+    out_name: TV-Y
+  output:
+    directory: content_rating/us
+    filename: TV-Y.jpg
+    remote_paths:
+      en: content_rating/us/TV-Y.jpg
+  generator: null
+  color_assignment:
+    id: contentrating.content-rating-us-tv-y.7f3c8d4c.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.series.c079d8ef11214d1db46ffccc
+  category: ContentRating
+  display_name: '1'
+  source:
+    path: create_default_posters.ps1
+    line: 3486
+    row_sha256: 9c3ad1befb35fd2fd061e58eb356ccee352bc025119c9e6f1954715d0451e8f8
+  composer:
+    base_color: '#1AA931'
+    logo: logos_content_rating/cs.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: '1'
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.age
+    suffix: ' 1+'
+  layout:
+    kind: captured_fit
+    measurement:
+      text: AGE 1+
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: a2aef65b180e61705fac21b38e72372e566e2d6e74765e98f5d5431063c9eb8d
+  output:
+    directory: content_rating/cs
+    filename: 1.jpg
+    remote_paths:
+      en: content_rating/cs/1.jpg
+  generator:
+    name: content-rating-series
+    version: 1
+    parameters:
+      values:
+      - '1'
+      - '2'
+      - '3'
+      - '4'
+      - '5'
+      - '6'
+      - '7'
+      - '8'
+      - '9'
+      - '10'
+      - '11'
+      - '12'
+      - '13'
+      - '14'
+      - '15'
+      - '16'
+      - '17'
+      - '18'
+      directory: content_rating/cs
+      caption_suffix: +
+      measurements:
+        '1':
+          point_size: 250
+          evidence_sha256: a2aef65b180e61705fac21b38e72372e566e2d6e74765e98f5d5431063c9eb8d
+        '2':
+          point_size: 250
+          evidence_sha256: 376348456a72aceffa08102e26804a1791813bb16acf1e50d7e9762d8bb37e3d
+        '3':
+          point_size: 250
+          evidence_sha256: b78e8c0e6efa7fddd64859b36ff6601344cf02719cb14b6118e8076d20deff71
+        '4':
+          point_size: 250
+          evidence_sha256: cd3afcba437e85d90914ffd495f4ebd26acfa14312ca257e50b716eacbeb173e
+        '5':
+          point_size: 250
+          evidence_sha256: 51dd39bc821629da0f3c1070adbe6e3ff84e3cc99895ed66506c480a78e130fe
+        '6':
+          point_size: 250
+          evidence_sha256: 091792a18e6f9045edee0a878d7946259f529fbec41296bf4b28ff7d18f7fada
+        '7':
+          point_size: 250
+          evidence_sha256: 7c41bfcda56232c8789eb19ff45d7f3113e5ebf76f5893834c687c2d89961424
+        '8':
+          point_size: 250
+          evidence_sha256: 381f2fe77798aafbc0aa55543d8ec6806a8cf73c2eb1e415f5d8935f74605691
+        '9':
+          point_size: 250
+          evidence_sha256: 4d7f3d6f285fbf4d59b280e73c078b298960ceed280188f94a88f02ab264f11d
+        '10':
+          point_size: 250
+          evidence_sha256: 82e7d0a0b9d645e44c73534e5c90d2d2dc38e8277fb29daf2745fe0f9bddc87d
+        '11':
+          point_size: 250
+          evidence_sha256: 6984c95937e57081cb6d273cac6f1fcc884e095ee986a6d227f69a99a546612f
+        '12':
+          point_size: 250
+          evidence_sha256: 582a83187d312128a69d2992a998284371702bd60466dab01b2f8fd5515817f2
+        '13':
+          point_size: 250
+          evidence_sha256: be5ca783b8a88ff96ec2044a24c1fd03abbbce8a201886e438271409fb227baf
+        '14':
+          point_size: 250
+          evidence_sha256: 2f1b631be75509f9b591b8fd18eec5f9db68c0631406cf8c752afb4e3a9366f9
+        '15':
+          point_size: 250
+          evidence_sha256: b678f249491c2ded7e2323732d60e2066846c579df2784bf2c868165711d5e32
+        '16':
+          point_size: 250
+          evidence_sha256: a8a542b229a9e98735af5f2c5e33c2a5936057f42a15eeff2755456b94626c06
+        '17':
+          point_size: 250
+          evidence_sha256: 1a1335bd7cb8772fb0b2e2577e4316480ebd076cfb6454cb708114220f2a7045
+        '18':
+          point_size: 250
+          evidence_sha256: 4f75a29d4e055904e0a2fe729a6f7cf44d7d21f64e914728e5b65f8d5474fe33
+  color_assignment:
+    id: contentrating.series.c079d8ef11214d1db46ffccc.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: contentrating.series.df990e96ab429187c2e95c60
+  category: ContentRating
+  display_name: G
+  source:
+    path: create_default_posters.ps1
+    line: 3486
+    row_sha256: 9c3ad1befb35fd2fd061e58eb356ccee352bc025119c9e6f1954715d0451e8f8
+  composer:
+    base_color: '#2444D1'
+    logo: logos_content_rating/mal.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: G
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.RATED
+    suffix: ' G'
+  layout:
+    kind: captured_fit
+    measurement:
+      text: RATED G
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 60041cc68cbc25de5646428fc9db00992f807fb7e788f7b7fe13cbd640eb5e08
+  output:
+    directory: content_rating/mal
+    filename: G.jpg
+    remote_paths:
+      en: content_rating/mal/G.jpg
+  generator:
+    name: content-rating-series
+    version: 1
+    parameters:
+      values:
+      - G
+      - PG
+      - PG-13
+      - R
+      - R+
+      - Rx
+      directory: content_rating/mal
+      caption_suffix: ''
+      measurements:
+        G:
+          point_size: 250
+          evidence_sha256: 60041cc68cbc25de5646428fc9db00992f807fb7e788f7b7fe13cbd640eb5e08
+        PG:
+          point_size: 250
+          evidence_sha256: 711b8ad3b9c9182767c7a23a69a886229a1eeee7736c72409e8b61d1dc83bd49
+        PG-13:
+          point_size: 250
+          evidence_sha256: 9de4935a2898744c1272ee1394eca45a553a8dd09250ceb229b58917a78f5997
+        R:
+          point_size: 250
+          evidence_sha256: 1fbd44f097f906c1e8ae23260d401f7370f0b054a093370085999969fa5a3291
+        R+:
+          point_size: 250
+          evidence_sha256: d376ac45f4fcf3def067169802a954b59bb3dc2a1c55d1a28e8e45bce1ec602f
+        Rx:
+          point_size: 250
+          evidence_sha256: 3d3f503c6cd5f2d9497e9917d13cc7f20699b759fd0829fae3e02ec1aa7d4a1d
+  color_assignment:
+    id: contentrating.series.df990e96ab429187c2e95c60.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null

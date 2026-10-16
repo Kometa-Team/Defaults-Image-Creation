@@ -2,6 +2,7 @@
 
 from copy import deepcopy
 from dataclasses import dataclass
+from functools import lru_cache
 import json
 from pathlib import Path
 import re
@@ -27,15 +28,49 @@ def _safe_path(value):
         return False
 
 
-def validate_schema(value, name):
+@FORMATS.checks("poster-stem")
+def _safe_stem(value):
+    # A source name such as A.C.G.T. is a safe stem: the actual destination is
+    # A.C.G.T..jpg, not a Windows path ending in a period.
+    return isinstance(value, str) and bool(value) and not value.endswith(" ") and all(part not in {".", ".."} for part in value.split("/")) and _safe_path(value + ".jpg")
+
+
+@lru_cache(maxsize=16)
+def schema_validator(name):
     schema = json.loads((HERE / "schemas" / name).read_text(encoding="utf-8"))
     Draft202012Validator.check_schema(schema)
     registry = Registry().with_resources((item["$id"], Resource.from_contents(item)) for item in
         (json.loads(path.read_text(encoding="utf-8")) for path in (HERE / "schemas").glob("*.json")))
-    errors = sorted(StrictValidator(schema, registry=registry, format_checker=FORMATS).iter_errors(value), key=lambda error: str(error.path))
+    return StrictValidator(schema, registry=registry, format_checker=FORMATS)
+
+
+def _check_schema(value, name):
+    errors = sorted(schema_validator(name).iter_errors(value), key=lambda error: str(error.path))
     if errors:
         error = errors[0]
         raise BulkError("invalid_schema", f"{'.'.join(map(str, error.path))}: {error.message}")
+
+
+@lru_cache(maxsize=12000)
+def _validated_small_json(encoded, name):
+    _check_schema(json.loads(encoded), name)
+
+
+def validate_schema(value, name):
+    # Expanded definitions are immutable JSON and recur during staged/warm
+    # planning. Cache successful checks only; at most 12000 * 4096 input bytes.
+    try:
+        encoded = canonical(value)
+    except (TypeError, ValueError):
+        return _check_schema(value, name)
+    if len(encoded) <= 4096:
+        return _validated_small_json(encoded, name)
+    return _check_schema(value, name)
+
+
+@lru_cache(maxsize=1)
+def migration_policy():
+    return json.loads((HERE / "migration-policy.json").read_text(encoding="utf-8"))
 
 
 def merge(base, override):
@@ -54,6 +89,8 @@ class Definition:
     @classmethod
     def create(cls, value):
         validate_schema(value, "definition-v1.json")
+        if value["generator"] is not None:
+            validate_schema(value["generator"], "generator-v1.json")
         if value["category"] not in CATEGORIES or value["category"] == "Overlays" or any(language not in LANGUAGES for language in value["languages"]):
             raise BulkError("invalid_selector", "Unsupported poster category or language")
         if value["composer"]["text"] != "":
@@ -69,10 +106,10 @@ class Definition:
             raise BulkError("invalid_definition", "New authored definitions must identify their provenance explicitly")
         if value["caption"]["mode"] != "translation" and value["caption"]["fallback"] is not None:
             raise BulkError("invalid_fallback", "Only translated captions can have fallbacks")
-        policy = json.loads((HERE / "migration-policy.json").read_text(encoding="utf-8"))["splatter"]
+        policy = migration_policy()["splatter"]
         if value["source"]["row_sha256"] == policy["retired"]["row_sha256"]:
             raise BulkError("retired_definition", "D02 retires the green Splatter source row; audit only")
-        target = value["output"]["directory"] + "/" + value["output"]["filename"]
+        target = "/".join(filter(None, (value["output"]["directory"], value["output"]["filename"])))
         if path_key(target) == path_key(policy["output"]) and (target != policy["output"] or normalize_hex(value["composer"]["base_color"]) != policy["authoritative"]["hex"] or value["composer"]["white_wash"] is not False):
             raise BulkError("unapproved_splatter", "D02 permits only the unchanged red Splatter output with white-wash disabled")
         if value["layout"]["kind"] == "captured_fit" and value["layout"]["measurement"] is None:
@@ -94,7 +131,8 @@ class Definition:
             raise BulkError("invalid_definition", "Ambiguous language overrides")
         if matching:
             data = merge(data, matching[0]["changes"])
-        return Definition.create(data)
+            return Definition.create(data)
+        return self
 
 
 def load_definitions(paths, *, profiles_path=None):

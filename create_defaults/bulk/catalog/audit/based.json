@@ -1,0 +1,62 @@
+{
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "active": [
+    {
+      "poster_id": "based.based-book.217e49bd",
+      "legacy_id": "based-05044-2ad8bc55f1d9",
+      "job_sha256": "e3fd5414607524fabb70e97881540cab7c10f957ad9ba192461cf36d2b49afbb",
+      "source": {
+        "definition_line": 2788,
+        "path": "create_default_posters.ps1",
+        "producer_line": 2803
+      },
+      "row_sha256": "8be1ea042f4a5c36637912df6e776a744f138aa1329aea2f24677f589f4abfff",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "based.based-comic.a8c42da9",
+      "legacy_id": "based-05045-e474a894440a",
+      "job_sha256": "ca53a85baaf37900c01cc962f2b0adbef0a45e71671f2e59577c1432346a1ddd",
+      "source": {
+        "definition_line": 2789,
+        "path": "create_default_posters.ps1",
+        "producer_line": 2803
+      },
+      "row_sha256": "b1cb3205151ba537aead3681a02a26fa62942eb9d8fdc163caaca2c2159db1b3",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "based.based-true-story.b7922d94",
+      "legacy_id": "based-05046-38e5b177705c",
+      "job_sha256": "541d5ccd8e9790bea65d1796ddbd2cd5820ebf50cbc77bd592203951e449848b",
+      "source": {
+        "definition_line": 2790,
+        "path": "create_default_posters.ps1",
+        "producer_line": 2803
+      },
+      "row_sha256": "ca0b09a0badd6d5e887bf82bc340168fcbe484cc04f1ae87fbfc9c1b64d1b4d1",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "based.based-video-game.6cbef0b1",
+      "legacy_id": "based-05047-3448dc3036d1",
+      "job_sha256": "433d36fc16d11aa1e4b343c6017ac785aed3f51f97df932bb8d12a774c3ccbb5",
+      "source": {
+        "definition_line": 2791,
+        "path": "create_default_posters.ps1",
+        "producer_line": 2803
+      },
+      "row_sha256": "534c8a0b7c51c8557b9ac92352ea0678b32a0fd36d73e838329ef5d1e1fb93d3",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    }
+  ],
+  "retired": []
+}

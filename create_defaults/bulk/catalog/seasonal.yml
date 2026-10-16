@@ -1,0 +1,974 @@
+schema_version: 1
+category: Seasonal
+definitions:
+- extends: legacy-poster
+  id: seasonal.seasonal-420.6eef3c61
+  category: Seasonal
+  display_name: '420'
+  source:
+    path: create_default_posters.ps1
+    line: 5505
+    row_sha256: 2ef7675b20c115476eea12f9d56d6ebea7c2224b1ba20ddfa8765597c4e29101
+  composer:
+    base_color: '#43C32F'
+    logo: logos_seasonal/420.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: '420'
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.4/20
+  layout:
+    kind: captured_fit
+    measurement:
+      text: 4/20
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: cbcb32d3b606a018a9773bb42c530a2f17174bbadef99d3fce161ecb88703ac7
+  output:
+    directory: seasonal
+    filename: 420.jpg
+    remote_paths:
+      en: seasonal/420.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-420.6eef3c61.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-aapi.24f40f3a
+  category: Seasonal
+  display_name: aapi
+  source:
+    path: create_default_posters.ps1
+    line: 5506
+    row_sha256: 04ff75bb7f758dd74bea4fd9bbb56a2e72ae2a7a250c2a9b5836ba736a523e35
+  composer:
+    base_color: '#0EC26B'
+    font_size: 184
+    logo: logos_seasonal/APAC month.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: aapi
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.ASIAN_AMERICAN_PACIFIC_ISLANDER_HERITAGE_MONTH
+  layout:
+    kind: captured_fit
+    measurement:
+      text: ASIAN AMERICAN & PACIFIC ISLANDER HERITAGE MONTH
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 184
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 0712bb702603915f427b8783adf417358804aa94398ef571b737d9fa53f55db6
+  output:
+    directory: seasonal
+    filename: aapi.jpg
+    remote_paths:
+      en: seasonal/aapi.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-aapi.24f40f3a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-black-history.d8a83a03
+  category: Seasonal
+  display_name: black_history
+  source:
+    path: create_default_posters.ps1
+    line: 5507
+    row_sha256: faa1bb519a285b0d8f581e5ff02fce4d1ab3f04873966ee48b111e1f285d670c
+  composer:
+    base_color: '#D86820'
+    logo: logos_seasonal/Black History.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: black_history
+    text_offset: 850
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.BLACK_HISTORY_MONTH
+  layout:
+    kind: captured_fit
+    measurement:
+      text: BLACK HISTORY MONTH
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 364e92fef442994d49f4c0c641a4944830a63d9ff807a877ad005c801bfdc854
+  output:
+    directory: seasonal
+    filename: black_history.jpg
+    remote_paths:
+      en: seasonal/black_history.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-black-history.d8a83a03.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-black-history2.4849a4c5
+  category: Seasonal
+  display_name: black_history2
+  source:
+    path: create_default_posters.ps1
+    line: 5508
+    row_sha256: 26ad3dcb690a8bb2cb909c854ee0257c074da7d43a93a41260d7a9111cf99807
+  composer:
+    base_color: '#D86820'
+    logo: logos_seasonal/Black History2.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: black_history2
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.BLACK_HISTORY_MONTH
+  layout:
+    kind: captured_fit
+    measurement:
+      text: BLACK HISTORY MONTH
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 71d4462398c2cfbe150109d79d08c474611af7a1f4f9c6ce03f553b3b3cffd57
+  output:
+    directory: seasonal
+    filename: black_history2.jpg
+    remote_paths:
+      en: seasonal/black_history2.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-black-history2.4849a4c5.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-christmas.835f0965
+  category: Seasonal
+  display_name: christmas
+  source:
+    path: create_default_posters.ps1
+    line: 5509
+    row_sha256: 2f9fb1b86effd2033292c712c29369b133f23adeb3020b875eb71c6524ef5096
+  composer:
+    base_color: '#D52414'
+    logo: logos_seasonal/christmas.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: christmas
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.CHRISTMAS
+  layout:
+    kind: captured_fit
+    measurement:
+      text: CHRISTMAS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: c0fe3a9e0230f2dc3b4e84d6bf98fa8ee4d364a2b94f25a327a51e006f74102c
+  output:
+    directory: seasonal
+    filename: christmas.jpg
+    remote_paths:
+      en: seasonal/christmas.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-christmas.835f0965.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-christmas-cartoons.58f84762
+  category: Seasonal
+  display_name: christmas_cartoons
+  source:
+    path: create_default_posters.ps1
+    line: 5510
+    row_sha256: 97d6913d6dc9e1d7a77730c9c4579599a60974e5bb9caac7e1841068dcfaedc2
+  composer:
+    base_color: '#D52414'
+    logo: logos_seasonal/christmas.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: christmas_cartoons
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.CHRISTMAS_CARTOONS
+  layout:
+    kind: captured_fit
+    measurement:
+      text: CHRISTMAS CARTOONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 802b290d0d0fb51d2047079494361bff97a03ead70cc240930dc7bbdbc192c28
+  output:
+    directory: seasonal
+    filename: christmas_cartoons.jpg
+    remote_paths:
+      en: seasonal/christmas_cartoons.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-christmas-cartoons.58f84762.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-christmas-episodes.7c3e474e
+  category: Seasonal
+  display_name: christmas_episodes
+  source:
+    path: create_default_posters.ps1
+    line: 5511
+    row_sha256: 87bbc91a3f5049345ffe9ee551fbad519c92600536f6d1633ba8da00241ba061
+  composer:
+    base_color: '#D52414'
+    logo: logos_seasonal/christmas.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: christmas_episodes
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.CHRISTMAS_EPISODES
+  layout:
+    kind: captured_fit
+    measurement:
+      text: CHRISTMAS EPISODES
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: ec8fce4d14d6dfd52e25828a022b7b36c2b16083f6d5fc1e875ac6b73c706fcf
+  output:
+    directory: seasonal
+    filename: christmas_episodes.jpg
+    remote_paths:
+      en: seasonal/christmas_episodes.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-christmas-episodes.7c3e474e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-disabilities.d81423ef
+  category: Seasonal
+  display_name: disabilities
+  source:
+    path: create_default_posters.ps1
+    line: 5512
+    row_sha256: dfaea2afb70b8b93653fc93a4d8ed6fd13c762609e07058b5e2b041dbd24b7d8
+  composer:
+    base_color: '#40B9FE'
+    font_size: 223
+    logo: logos_seasonal/Disabilities.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: disabilities
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.DAY_OF_PERSONS_WITH_DISABILITIES
+  layout:
+    kind: captured_fit
+    measurement:
+      text: DAY OF PERSONS WITH DISABILITIES
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 223
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: f1416897e799ede8149d3af387da541e98f330ef22476a43fef46a89b87eed99
+  output:
+    directory: seasonal
+    filename: disabilities.jpg
+    remote_paths:
+      en: seasonal/disabilities.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-disabilities.d81423ef.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-easter.4808b636
+  category: Seasonal
+  display_name: easter
+  source:
+    path: create_default_posters.ps1
+    line: 5513
+    row_sha256: 9bb2c0eae4d9e2d649a170b560ccd90235924673a592b5e6d3da249e25ec6b7d
+  composer:
+    base_color: '#46D69D'
+    logo: logos_seasonal/easter.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: easter
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.EASTER
+  layout:
+    kind: captured_fit
+    measurement:
+      text: EASTER
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: da295fb243b95737c9e2fe1ca8e2c441378ee4faf3f82282064787c55bf5943b
+  output:
+    directory: seasonal
+    filename: easter.jpg
+    remote_paths:
+      en: seasonal/easter.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-easter.4808b636.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-father.ba0d124a
+  category: Seasonal
+  display_name: father
+  source:
+    path: create_default_posters.ps1
+    line: 5514
+    row_sha256: 727d26d31d7dfe74acfa14bdce5dbcf8c55df51dce6a2b69c050bccbaa72f568
+  composer:
+    base_color: '#7CDA83'
+    logo: logos_seasonal/father.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: father
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.FATHERS_DAY
+  layout:
+    kind: captured_fit
+    measurement:
+      text: FATHER'S DAY
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 3ce86c844eec0536a53f6eff1549642a445969f70892b1976222bf5793fddd8e
+  output:
+    directory: seasonal
+    filename: father.jpg
+    remote_paths:
+      en: seasonal/father.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-father.ba0d124a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-halloween.4aed3419
+  category: Seasonal
+  display_name: halloween
+  source:
+    path: create_default_posters.ps1
+    line: 5515
+    row_sha256: 70948389a515e5f114dde558f9c2cf0617ef53b3cdb92458eca48d0f2145de6e
+  composer:
+    base_color: '#DA8B25'
+    logo: logos_seasonal/halloween.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: halloween
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.HALLOWEEN
+  layout:
+    kind: captured_fit
+    measurement:
+      text: HALLOWEEN
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 730b0616866503008227d6a8d1478140aa440d048a081278960dcfe57d23d384
+  output:
+    directory: seasonal
+    filename: halloween.jpg
+    remote_paths:
+      en: seasonal/halloween.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-halloween.4aed3419.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-independence.8cad01d7
+  category: Seasonal
+  display_name: independence
+  source:
+    path: create_default_posters.ps1
+    line: 5516
+    row_sha256: 2e78e36aed6ae0c3657b988ac866c718266d843563a3f3a2c5a4bb5019491ba3
+  composer:
+    base_color: '#2931CB'
+    font_size: 211
+    logo: logos_seasonal/independence.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: independence
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.INDEPENDENCE_DAY
+  layout:
+    kind: captured_fit
+    measurement:
+      text: INDEPENDENCE DAY
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 211
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: a699d47eb590ce3e28d4302f7788d5f046c84ebddad94d7f068db31e8295ab19
+  output:
+    directory: seasonal
+    filename: independence.jpg
+    remote_paths:
+      en: seasonal/independence.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-independence.8cad01d7.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-labor.4a84b87a
+  category: Seasonal
+  display_name: labor
+  source:
+    path: create_default_posters.ps1
+    line: 5517
+    row_sha256: 491c128a3f073ffb09f7ab984a123334cad98dc29d84fef729ea2069c8b13e9a
+  composer:
+    base_color: '#DA5C5E'
+    logo: logos_seasonal/labor.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: labor
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.LABOR_DAY
+  layout:
+    kind: captured_fit
+    measurement:
+      text: LABOR DAY
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: e9363c603f03d217bd4c302547076f9914d66fc395a8bfa4279851d1876c3db3
+  output:
+    directory: seasonal
+    filename: labor.jpg
+    remote_paths:
+      en: seasonal/labor.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-labor.4a84b87a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-latinx.70d732e8
+  category: Seasonal
+  display_name: latinx
+  source:
+    path: create_default_posters.ps1
+    line: 5518
+    row_sha256: 2217a774ab7f6bdb4c0f676e2a5781918431365761d1339c7c3fe5bc14d632e7
+  composer:
+    base_color: '#FF5F5F'
+    logo: logos_seasonal/LatinX Month.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: latinx
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.LATINX_HERITAGE_MONTH
+  layout:
+    kind: captured_fit
+    measurement:
+      text: LATINX HERITAGE MONTH
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 6ba56e8554dfce499dcd4b8ce1b567fcc6898449193c50f769df74ad401aae11
+  output:
+    directory: seasonal
+    filename: latinx.jpg
+    remote_paths:
+      en: seasonal/latinx.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-latinx.70d732e8.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-lgbtq.2e35274d
+  category: Seasonal
+  display_name: lgbtq
+  source:
+    path: create_default_posters.ps1
+    line: 5519
+    row_sha256: 7445f8c5072871b702862b5786710d770eb98c49c8d9772df7519a4598f3570d
+  composer:
+    base_color: '#FF3B3C'
+    logo: logos_seasonal/LGBTQ+ Month.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: lgbtq
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.LGBTQ_PRIDE_MONTH
+  layout:
+    kind: captured_fit
+    measurement:
+      text: LGBTQ+ PRIDE MONTH
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: f67550a30614e1568f94535be0c3b291382dd21ab3d694252d824f2242974995
+  output:
+    directory: seasonal
+    filename: lgbtq.jpg
+    remote_paths:
+      en: seasonal/lgbtq.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-lgbtq.2e35274d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-memorial.e8199a5a
+  category: Seasonal
+  display_name: memorial
+  source:
+    path: create_default_posters.ps1
+    line: 5520
+    row_sha256: 5040300d314baa72143e013e561543fc63c94abd2a571c5b93e1beea1d03b64c
+  composer:
+    base_color: '#917C5C'
+    logo: logos_seasonal/memorial.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: memorial
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.MEMORIAL_DAY
+  layout:
+    kind: captured_fit
+    measurement:
+      text: MEMORIAL DAY
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 60dc34664c794fb8faa9b20e3fc712ff10946a3446d4796106fc06f280a06ce1
+  output:
+    directory: seasonal
+    filename: memorial.jpg
+    remote_paths:
+      en: seasonal/memorial.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-memorial.e8199a5a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-mother.71fdcbad
+  category: Seasonal
+  display_name: mother
+  source:
+    path: create_default_posters.ps1
+    line: 5521
+    row_sha256: 07af5d16f27a3881bbd6d30c3edf291134133ee9c6851e784d8cb702ee4ee548
+  composer:
+    base_color: '#DB81D6'
+    logo: logos_seasonal/mother.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: mother
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.MOTHERS_DAY
+  layout:
+    kind: captured_fit
+    measurement:
+      text: MOTHER'S DAY
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 2fce8f9403aee956ae526790de0ea305a48648fff438461612fe6c2c100cc30e
+  output:
+    directory: seasonal
+    filename: mother.jpg
+    remote_paths:
+      en: seasonal/mother.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-mother.71fdcbad.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-patrick.cb1e6a10
+  category: Seasonal
+  display_name: patrick
+  source:
+    path: create_default_posters.ps1
+    line: 5522
+    row_sha256: ae3a07ca97c2ed6f0eb542e228dcd151b7d43cfefad066bb434a492e38dd4a5c
+  composer:
+    base_color: '#26A53E'
+    logo: logos_seasonal/patrick.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: patrick
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.ST_PATRICKS_DAY
+  layout:
+    kind: captured_fit
+    measurement:
+      text: ST. PATRICK'S DAY
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 67755dba7617f3335383d834385e80fdab64a520454dc46233d63f4f03d0dbfd
+  output:
+    directory: seasonal
+    filename: patrick.jpg
+    remote_paths:
+      en: seasonal/patrick.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-patrick.cb1e6a10.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-thanksgiving.5f193251
+  category: Seasonal
+  display_name: thanksgiving
+  source:
+    path: create_default_posters.ps1
+    line: 5523
+    row_sha256: 011be85c4ea7e27bb7f147156e7ab11cd9ea629951b49a82ba7a693e6cc24f87
+  composer:
+    base_color: '#A1841E'
+    font_size: 224
+    logo: logos_seasonal/thanksgiving.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: thanksgiving
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.THANKSGIVING
+  layout:
+    kind: captured_fit
+    measurement:
+      text: THANKSGIVING
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 224
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: ed419fc885249789573687bc829cb971fef3f112eb4c9c965ee53ccd31460054
+  output:
+    directory: seasonal
+    filename: thanksgiving.jpg
+    remote_paths:
+      en: seasonal/thanksgiving.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-thanksgiving.5f193251.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-valentine.7b635a36
+  category: Seasonal
+  display_name: valentine
+  source:
+    path: create_default_posters.ps1
+    line: 5524
+    row_sha256: e3fc93e6c068b9e79595a8601e73b70966bcb218d2373b0f9733083b5b0f0eca
+  composer:
+    base_color: '#D12AAE'
+    logo: logos_seasonal/valentine.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: valentine
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.VALENTINES_DAY
+  layout:
+    kind: captured_fit
+    measurement:
+      text: VALENTINE'S DAY
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 33bc344c831f81d01fa4b92d38346390781c1bf2940a4578f2ed82b7c60546b0
+  output:
+    directory: seasonal
+    filename: valentine.jpg
+    remote_paths:
+      en: seasonal/valentine.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-valentine.7b635a36.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-veteran.4c1ae612
+  category: Seasonal
+  display_name: veteran
+  source:
+    path: create_default_posters.ps1
+    line: 5525
+    row_sha256: ac9b31b75443a19efaa8ff7f31e10ff1fb92353e3439c38f3e8fd8398a2c5cb3
+  composer:
+    base_color: '#B6AD93'
+    logo: logos_seasonal/veteran.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: veteran
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.VETERANS_DAY
+  layout:
+    kind: captured_fit
+    measurement:
+      text: VETERAN'S DAY
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 3b38bae8e627fd5e1656d53a1708158fe946322d32b0a01fdaa686d98661a31f
+  output:
+    directory: seasonal
+    filename: veteran.jpg
+    remote_paths:
+      en: seasonal/veteran.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-veteran.4c1ae612.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-women.3dca44d4
+  category: Seasonal
+  display_name: women
+  source:
+    path: create_default_posters.ps1
+    line: 5526
+    row_sha256: b3f1e7b8639ec9659ec8e2a42a1bb5a23d16471b1e2a14368d8c5a75de6da022
+  composer:
+    base_color: '#874E83'
+    logo: logos_seasonal/Womens History.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: women
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.WOMENS_HISTORY_MONTH
+  layout:
+    kind: captured_fit
+    measurement:
+      text: WOMEN'S HISTORY MONTH
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: f119ff026956f4379237e5410315641b304910987be59469d91c5adf139bcfbd
+  output:
+    directory: seasonal
+    filename: women.jpg
+    remote_paths:
+      en: seasonal/women.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-women.3dca44d4.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: seasonal.seasonal-years.f913667d
+  category: Seasonal
+  display_name: years
+  source:
+    path: create_default_posters.ps1
+    line: 5527
+    row_sha256: 4a1a8d4d6fe9b77803ec8705977d3ddd992ff766cefd49a0e72acee2f60cd4cf
+  composer:
+    base_color: '#444444'
+    logo: logos_seasonal/years.png
+    logo_offset: -500
+    logo_resize: 1800
+    out_name: years
+    text_offset: 850
+  caption:
+    mode: translation
+    key: key_names.NEW_YEAR
+  layout:
+    kind: captured_fit
+    measurement:
+      text: NEW YEAR
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 2dae060ed923fc99e3fe93b049af52864eaab313b9d1f7133ddbfc556555faed
+  output:
+    directory: seasonal
+    filename: years.jpg
+    remote_paths:
+      en: seasonal/years.jpg
+  generator: null
+  color_assignment:
+    id: seasonal.seasonal-years.f913667d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null

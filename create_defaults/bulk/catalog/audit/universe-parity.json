@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "category": "Universe",
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "definitions": 20,
+  "legacy_effective_jobs": 20,
+  "active_jobs": 20,
+  "discrepancies": [],
+  "contract_parity": true,
+  "normalizations": [
+    "HEX letter case only",
+    "Bind actual bundled asset/font paths instead of Windows case-insensitive aliases",
+    "Destination directories are separate from composer basenames"
+  ],
+  "approved_exceptions": [],
+  "private_intermediates": [],
+  "scope": "Resolved English contract parity; generated inputs require separately verified real parent artifacts before render planning"
+}

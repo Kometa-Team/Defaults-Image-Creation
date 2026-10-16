@@ -1,8 +1,9 @@
-# Defaults Bulk Infrastructure (Package B)
+# Defaults Bulk Generator (Packages B/C)
 
 Run from the repository root using Python 3.13 on Windows. No command below
 publishes artwork. Dependencies are pinned in `create_defaults/requirements-bulk.txt`.
-Category migration and production batch execution are not implemented here.
+The checked-in English category catalog and local Python rendering flow are
+implemented in Package C. The production PowerShell workflow is unchanged.
 
 ```powershell
 py -3.13 -m create_defaults.bulk list-categories
@@ -53,7 +54,7 @@ if __name__ == "__main__":
     pass
 ```
 
-No worker-render CLI or full-category generator is provided in B. The default
+No worker-render CLI or full-category generator was provided in B. The default
 adapter uses the existing composer without changing fonts/layout/encoding. B tests
 exercise orchestration with small deterministic byte artifacts plus an injected
 composer API check, not actual poster throughput or new visual parity evidence.
@@ -87,3 +88,53 @@ parent/worker RSS, worker I/O counters and verified-cache hit rate. Disk counter
 are OS-level worker counters, not complete physical-disk profiling. Native Linux
 execution, actual poster workloads and comparison with legacy execution remain
 unclaimed until their respective validation gates.
+
+## Package C Local Generation
+
+All 21 poster categories are in `catalog/*.yml`, with one explicit profile layer
+in `catalog/profiles.yml`. Stable IDs are stored in the data, not source-line
+numbers. Named generators expand Awards years, Best Of years, Separator variants
+and Content Rating codes. Production generation never reads the legacy capture
+or PowerShell source. `migration.py` is a development-only extraction/comparison
+tool and refuses replacement unless explicitly requested.
+
+```powershell
+py -3.13 -m create_defaults.bulk --output-dir config/my-posters/output --cache-dir config/my-posters/cache --workspace-dir config/my-posters/work generate --category Based --workers 2 --report config/my-posters/run-01.json
+```
+
+Use `--category All` to explicitly request all English poster categories, not
+overlays. Do not run a full batch merely to preview a category. Repeat a run with
+a new report filename: outputs reuse their verified receipts automatically.
+`--poster <stable-id>` narrows the selected category and includes real parents.
+Timeouts, retries and recycling are configurable; failed retained jobs require
+`--retry-failed`. An incomplete generation returns exit code 3.
+
+`generation.generate(...)` stages parents before dependent planning and uses one
+persistent spawn pool across stages. It returns per-stage execution evidence and
+a combined canonical manifest. Successful runs clean only their token-owned
+scratch directory; SQLite, receipts and final outputs remain for resume. Failed
+and interrupted workspaces remain available for diagnosis/owned cleanup.
+
+Changed specifications may replace only their own exact, previously verified
+bytes. SQLite reservations prevent a second unfinished version or different
+logical job from taking the destination. Atomic replacement checks the prior
+SHA under the reservation lock. Restoring an older fingerprint creates a new
+receipt generation; historical verified job records are never rewritten.
+
+English fitting sizes are pinned to the approved captured caption/font/size.
+A changed fitted caption must supply new hash-bound fitting evidence or an
+explicit fixed-layout definition; no silent refitting or fallback is performed.
+Other-language catalog applicability/layout approval remains Package D work.
+
+Generate an independent local sample review without changing tracked summaries:
+
+```powershell
+py -3.13 -m create_defaults.bulk.category_check Playlist --evidence-root config/my-review --samples 2
+```
+
+Use a fresh evidence directory. `--refresh-summary` explicitly updates the compact
+tracked summary after fresh validation; it is not required just to view samples.
+
+See `../PACKAGE_C_REPORT.md` and `catalog/audit/package-c-evidence.json` for exact
+coverage, real-workload measurements and review limitations. No artwork is
+published, no legacy speedup is assumed, and no production cutover is enabled.

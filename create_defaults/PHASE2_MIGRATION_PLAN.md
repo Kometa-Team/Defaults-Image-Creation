@@ -234,7 +234,7 @@ in normal fast validation. Expensive full parity runs are separately invoked,
 input-version-pinned and resumable; their reports must state exact coverage and
 imports/reuse rather than imply every comparison was freshly rendered.
 
-## Package B Gate and Stop
+## Historical Package B Gate
 
 Review [Package B Report](PACKAGE_B_REPORT.md) for actual test results, exact
 file inventory, worker proof measurements and outstanding platform/workload limits.
@@ -245,3 +245,28 @@ demonstrated at their gates. No measured production speedup is claimed.
 Stop for maintainer review and explicit Package C authorization. Do not commit,
 push, open a PR, merge, deploy or publish. Keep the legacy generator available
 until all later gates and separate cutover authorization are satisfied.
+
+## Package C Authorized Implementation
+
+Gate B was approved and Package C separately authorized. The original B stop
+above records its historical boundary; it does not authorize D/E or cutover.
+
+The English poster catalog now uses per-category YAML, a shared profile and
+named Python generators. `bulk/generation.py` integrates direct composer calls
+with the persistent pool and stages verified Year/Decade parents before children.
+`bulk/migration.py` remains development-only; rendering never imports it.
+
+D02 removes exactly one active green Splatter job (276 -> 275, 9,958 -> 9,957).
+Both source rows remain in the immutable historical capture and the new Genre
+audit. Two legacy overwritten Awards calls remain explicit private intermediates
+with null remote destinations; they are not silently erased from effective-job
+counts. The `(2011)` Death in Paradise output correction is retained.
+
+Per-category acceptance evidence, canonical plan identities and sample results
+are in `bulk/catalog/audit/`. Sample and benchmark images/databases stay under
+ignored `config/package-c/`, not source or Default-Images. Review the exact
+matrix and remaining limits in [Package C Report](PACKAGE_C_REPORT.md).
+
+Package C does not enable overlays, complete multilingual fitting/Arabic
+approval, review UI, publishing or production cutover. Stop for maintainer Gate C
+approval; Packages D/E remain unauthorized.

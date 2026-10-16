@@ -174,6 +174,7 @@ class Translations:
                 trace.append(evidence)
         if mode != "translation":
             text = legacy_case(text, caption["case"])
+        text += caption.get("suffix", "")
         if "<<" in text or ">>" in text or "TRANSLATION NOT FOUND" in text or len(text) > 16384:
             raise BulkError("unresolved_caption", "Caption contains unresolved placeholders/sentinel or exceeds its limit")
         return ResolvedCaption(text, mode, tuple(trace))

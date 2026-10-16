@@ -37,6 +37,10 @@ MIGRATIONS = (
     (
         "CREATE TABLE output_claims (root TEXT, path_key TEXT, relative TEXT NOT NULL, state_id TEXT NOT NULL, fingerprint TEXT NOT NULL, PRIMARY KEY(root,path_key))",
     ),
+    (
+        "ALTER TABLE output_claims ADD COLUMN previous_sha256 TEXT",
+        "ALTER TABLE output_claims ADD COLUMN previous_state_id TEXT",
+    ),
 )
 
 

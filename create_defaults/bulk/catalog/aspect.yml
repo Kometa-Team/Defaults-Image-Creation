@@ -1,0 +1,242 @@
+schema_version: 1
+category: Aspect
+definitions:
+- extends: legacy-poster
+  id: aspect.aspect-other.141aed4b
+  category: Aspect
+  display_name: other
+  source:
+    path: create_default_posters.ps1
+    line: 831
+    row_sha256: 4e425168e805115824a0b02d9efcd1a72c0c93181af2dbdcfda3470bebf1fba2
+  composer:
+    base_color: '#FF2000'
+    logo_resize: 1600
+    out_name: other
+  caption:
+    mode: translation
+    key: collections.aspect_ratio_other.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: OTHER ASPECT RATIOS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 8da2ebc9954892905de7bfb7640609813ccc5731fc63de33fbdbff407947451a
+  output:
+    directory: aspect
+    filename: other.jpg
+    remote_paths:
+      en: aspect/other.jpg
+  generator: null
+  color_assignment:
+    id: aspect.aspect-other.141aed4b.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: aspect.aspect-1-33.f23e8bae
+  category: Aspect
+  display_name: '1.33'
+  source:
+    path: create_default_posters.ps1
+    line: 849
+    row_sha256: 8de871b4c1ac9ae68fdaba96e5f2425d91b772e538b6bd1c22467288f0beab04
+  composer:
+    base_color: '#93B69F'
+    logo: logos_aspect/1.33.png
+    logo_resize: 1800
+    out_name: '1.33'
+  output:
+    directory: aspect
+    filename: 1.33.jpg
+    remote_paths:
+      en: aspect/1.33.jpg
+  generator: null
+  color_assignment:
+    id: aspect.aspect-1-33.f23e8bae.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: aspect.aspect-1-65.f7d5b971
+  category: Aspect
+  display_name: '1.65'
+  source:
+    path: create_default_posters.ps1
+    line: 850
+    row_sha256: 96d1ef56cc43052d73b0bffc99245c3c363c980542d8b6324f88ce9a1731b4fd
+  composer:
+    base_color: '#FB0AA1'
+    logo: logos_aspect/1.65.png
+    logo_resize: 1800
+    out_name: '1.65'
+  output:
+    directory: aspect
+    filename: 1.65.jpg
+    remote_paths:
+      en: aspect/1.65.jpg
+  generator: null
+  color_assignment:
+    id: aspect.aspect-1-65.f7d5b971.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: aspect.aspect-1-66.63fbfc6c
+  category: Aspect
+  display_name: '1.66'
+  source:
+    path: create_default_posters.ps1
+    line: 851
+    row_sha256: d95c57d481656321c42155c290e7eaca431547f1531557e7185143f7eea3baaf
+  composer:
+    base_color: '#FFA500'
+    logo: logos_aspect/1.66.png
+    logo_resize: 1800
+    out_name: '1.66'
+  output:
+    directory: aspect
+    filename: 1.66.jpg
+    remote_paths:
+      en: aspect/1.66.jpg
+  generator: null
+  color_assignment:
+    id: aspect.aspect-1-66.63fbfc6c.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: aspect.aspect-1-78.77cd3af1
+  category: Aspect
+  display_name: '1.78'
+  source:
+    path: create_default_posters.ps1
+    line: 852
+    row_sha256: 164c32ea90b0f644aa4cf0b3abb64059cf4646dc8d88c0f79cd84ae422a4e76d
+  composer:
+    base_color: '#B96EE9'
+    logo: logos_aspect/1.78.png
+    logo_resize: 1800
+    out_name: '1.78'
+  output:
+    directory: aspect
+    filename: 1.78.jpg
+    remote_paths:
+      en: aspect/1.78.jpg
+  generator: null
+  color_assignment:
+    id: aspect.aspect-1-78.77cd3af1.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: aspect.aspect-1-85.6dc70aed
+  category: Aspect
+  display_name: '1.85'
+  source:
+    path: create_default_posters.ps1
+    line: 853
+    row_sha256: ef43732e231300552cbbad0ffcc4940c51dc09bdb3ff9ada09b4faf20f40a39e
+  composer:
+    base_color: '#43F6EF'
+    logo: logos_aspect/1.85.png
+    logo_resize: 1800
+    out_name: '1.85'
+  output:
+    directory: aspect
+    filename: 1.85.jpg
+    remote_paths:
+      en: aspect/1.85.jpg
+  generator: null
+  color_assignment:
+    id: aspect.aspect-1-85.6dc70aed.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: aspect.aspect-2-2.9daf5484
+  category: Aspect
+  display_name: '2.2'
+  source:
+    path: create_default_posters.ps1
+    line: 854
+    row_sha256: eb3a23441cfa75bca46ef59d4a253996112485e32002c61e55fcac716d32241d
+  composer:
+    base_color: '#133CD8'
+    logo: logos_aspect/2.2.png
+    logo_resize: 1800
+    out_name: '2.2'
+  output:
+    directory: aspect
+    filename: 2.2.jpg
+    remote_paths:
+      en: aspect/2.2.jpg
+  generator: null
+  color_assignment:
+    id: aspect.aspect-2-2.9daf5484.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: aspect.aspect-2-35.2b7eda2b
+  category: Aspect
+  display_name: '2.35'
+  source:
+    path: create_default_posters.ps1
+    line: 855
+    row_sha256: c79e0b6aacc8663c810cdcc1e6103a688ca9458c252ca38a34edd6a5d8712552
+  composer:
+    base_color: '#0B8D4E'
+    logo: logos_aspect/2.35.png
+    logo_resize: 1800
+    out_name: '2.35'
+  output:
+    directory: aspect
+    filename: 2.35.jpg
+    remote_paths:
+      en: aspect/2.35.jpg
+  generator: null
+  color_assignment:
+    id: aspect.aspect-2-35.2b7eda2b.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: aspect.aspect-2-77.d9c63a28
+  category: Aspect
+  display_name: '2.77'
+  source:
+    path: create_default_posters.ps1
+    line: 856
+    row_sha256: f80cbf4bf3ae2993fa2e8b9613206e6d5e4bd76cc166c18915e879edc7b3f9cf
+  composer:
+    base_color: '#8890C8'
+    logo: logos_aspect/2.77.png
+    logo_resize: 1800
+    out_name: '2.77'
+  output:
+    directory: aspect
+    filename: 2.77.jpg
+    remote_paths:
+      en: aspect/2.77.jpg
+  generator: null
+  color_assignment:
+    id: aspect.aspect-2-77.d9c63a28.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
