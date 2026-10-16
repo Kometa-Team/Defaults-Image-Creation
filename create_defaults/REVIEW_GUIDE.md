@@ -72,6 +72,13 @@ deployment and artwork publishing remain outside scope.
 
 ### Font Coverage and Warning Review
 
+Publication-time Linux CI also found a Unicode cmap collision in an optional
+system-font shaping probe. The loader fix preserves byte-identical in-memory
+font data for all 17 bundled fonts, verified by tests and
+`fixtures/cmap-compatibility.json`. Current-source validation uses the separate
+`fixtures/effective-jobs-en-cmap-compat.json.gz`; the completed batch's original
+manifest/results remain unchanged. No repeat full-batch render is claimed.
+
 The first 6,631 bulk cases used only Comfortaa because those categories execute
 first. The 126-case representative matrix covers all 17 fonts independently.
 The full English inventory contains 9,784 Comfortaa jobs, 11 jobs for each of

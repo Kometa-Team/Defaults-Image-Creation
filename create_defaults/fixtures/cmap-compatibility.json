@@ -1,0 +1,94 @@
+{
+  "original_manifest_sha256": "b88b6da4e84faa1afc4cdfedd8fa064eed1415916b9133e9546319bf88faca33",
+  "current_manifest_sha256": "153d76169f4244c0af190aabdf4dad9118acf7d70035f76afa33a174651a173e",
+  "unchanged_jobs": 9958,
+  "bundled_fonts": [
+    {
+      "font": "Barlow-Regular.ttf",
+      "source_sha256": "77fb1ac54d2ceb980e3ebdfa7a9d0f64e85a66e4fdfb7f914a7b0aa08fb33a5d",
+      "bridge_bytes_identical": true
+    },
+    {
+      "font": "BebasNeue-Regular.ttf",
+      "source_sha256": "08e4623805102d819f58601e46e345648846075e363b2ceb23313c2d1c83ec73",
+      "bridge_bytes_identical": true
+    },
+    {
+      "font": "BoecklinsUniverse.ttf",
+      "source_sha256": "5f6f6396edee3fa1fe9443258d7463f82e6b2512a03c5102a90295a095339fb5",
+      "bridge_bytes_identical": true
+    },
+    {
+      "font": "Boogaloo-Regular.ttf",
+      "source_sha256": "6aa7c9f7096b090a6783e31278abf907ec84a4bd98f280c925ab033d1fe91eb7",
+      "bridge_bytes_identical": true
+    },
+    {
+      "font": "CherryCreamSoda-Regular.ttf",
+      "source_sha256": "d70eafe96abbaad50d94538b11077d88bb91ac3538dd0e70f0bdc0ce04e410e9",
+      "bridge_bytes_identical": true
+    },
+    {
+      "font": "Comfortaa-Medium.ttf",
+      "source_sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c",
+      "bridge_bytes_identical": true
+    },
+    {
+      "font": "PlusJakartaSans-Bold.ttf",
+      "source_sha256": "5f5342ef76862b5b5365d1dff1a667629dfa484e388dd602552f647219c3870f",
+      "bridge_bytes_identical": true
+    },
+    {
+      "font": "Jura-Bold.ttf",
+      "source_sha256": "1a3b4d7412f10cc17c34289c357e00c5e91bb2ec61b123c2a72cb975e0cbe94d",
+      "bridge_bytes_identical": true
+    },
+    {
+      "font": "Limelight-Regular.ttf",
+      "source_sha256": "5d2c9f43d8cb4d49481a39a33cdc2a9157b1fcbfb381063a11617ede209a105c",
+      "bridge_bytes_identical": true
+    },
+    {
+      "font": "Monoton-Regular.ttf",
+      "source_sha256": "951c4cea65ffede784a7c9672feec5d329a7e1e12216c42d53ecf36c90d04dea",
+      "bridge_bytes_identical": true
+    },
+    {
+      "font": "Press-Start-2P.ttf",
+      "source_sha256": "17ec7d250ff590971a6d966b4fdc5aa04d5e39a7694f4a0becb515b6a70a7228",
+      "bridge_bytes_identical": true
+    },
+    {
+      "font": "Righteous-Regular.ttf",
+      "source_sha256": "4c3cdc5de2d70c4ee75fc9c1723a6b8f2d7316f49b383335fd8257a17dd88ade",
+      "bridge_bytes_identical": true
+    },
+    {
+      "font": "Rye-Regular.ttf",
+      "source_sha256": "722825f800cf7ceae4791b274d45da9df517db7cf7a07bfafd34452b787c5354",
+      "bridge_bytes_identical": true
+    },
+    {
+      "font": "SpecialElite-Regular.ttf",
+      "source_sha256": "14780ea85064dcb150c23c9a87e2b870439c38668b6d8f1dad5c6db701ab9520",
+      "bridge_bytes_identical": true
+    },
+    {
+      "font": "Trochut-Regular.ttf",
+      "source_sha256": "ec48b8641254bdcacc417b77992f7776a747a14f8a16c5d5af9d1b75f4bec17d",
+      "bridge_bytes_identical": true
+    },
+    {
+      "font": "UnifrakturCook-Bold.ttf",
+      "source_sha256": "b9ed8da80463792a29675199b0f6580871025c35b2c539cad7d5de050d216a0c",
+      "bridge_bytes_identical": true
+    },
+    {
+      "font": "Yesteryear-Regular.ttf",
+      "source_sha256": "b9d7736030dca2b5849f4fa565a75f91065cc5ded8b6023444bd74445a263c77",
+      "bridge_bytes_identical": true
+    }
+  ],
+  "timestamp_note": "Both in-memory fonts serialized with the same fixed head timestamp for byte comparison",
+  "scope": "Only existing matching cmap identity is replaced; none of the bundled fonts has that identity. Original full-run records remain unchanged."
+}

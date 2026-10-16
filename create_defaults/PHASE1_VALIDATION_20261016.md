@@ -71,7 +71,30 @@ does not introduce a Python renderer regression. This is not a Phase 1 behavior
 change or a claim that its overwrite winner was resolved. Phase 2 will use a
 separate draft PR; it is not implemented here.
 
-### Approved Monoton and Authorized Continuation
+### Publication-Time Font-Loader Compatibility Revision
+
+Linux CI exposed a duplicate cmap identity in the optional DejaVu Arabic-font
+probe. The in-memory glyph bridge now replaces an existing matching Unicode cmap
+identity before installation instead of appending a duplicate. It never changes
+the font on disk. A generated-font regression reproduces the original problem.
+
+None of the 17 bundled fonts contains that identity before bridge installation.
+For every bundled font, serialization with a fixed head timestamp proves the
+legacy append path and corrected path produce **byte-identical in-memory font
+data**. The same property is asserted by the unit suite. Thus all original
+bundled-font render evidence and visual approvals remain applicable; no fresh
+9,958-job rerender is claimed for this source-only revision.
+
+The original run manifest and all result records remain unchanged. Current CI
+checks the separate immutable `fixtures/effective-jobs-en-cmap-compat.json.gz`,
+canonical SHA-256
+`153d76169f4244c0af190aabdf4dad9118acf7d70035f76afa33a174651a173e`.
+Only `poster_text.py` source hashes differ from the approved-Monoton fixture;
+all 9,958 job records, font/asset hashes and parameters are identical. Compact
+proof is in `fixtures/cmap-compatibility.json`; tests assert both source-only
+manifest differences and bundled-font byte equivalence.
+
+### Historical Approved Monoton and Authorized Continuation
 
 The user subsequently approved the official Monoton replacement and explicitly
 authorized resuming the remaining bulk tests. The original 6,631-job checkpoint

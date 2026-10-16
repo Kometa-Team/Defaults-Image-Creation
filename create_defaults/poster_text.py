@@ -78,6 +78,14 @@ def directional_runs(text):
     return [("".join(runs[index][1]), "rtl" if runs[index][0] % 2 else "ltr") for index in order]
 
 
+def install_unicode_bridge(font, bridge):
+    # FontTools cannot sort two cmap entries with the same identity and differing maps.
+    key = (bridge.platformID, bridge.platEncID, bridge.language)
+    font["cmap"].tables = [table for table in font["cmap"].tables
+                           if (table.platformID, table.platEncID, table.language) != key]
+    font["cmap"].tables.append(bridge)
+
+
 class FontLayout:
     """Expose original glyphs through an in-memory cmap, as the People renderer does.
 
@@ -99,7 +107,7 @@ class FontLayout:
             bridge.platformID, bridge.platEncID, bridge.language = 3, 10, 0
             bridge.cmap = dict(self.cmap)
             bridge.cmap.update({ord(c): g for c, g in zip(self.characters, self.glyph_order)})
-            font["cmap"].tables.append(bridge)
+            install_unicode_bridge(font, bridge)
             buffer = BytesIO()
             # Preserve raw outline tables before attempting optional bounds
             # parsing; strict FontTools failures must not affect FreeType input.

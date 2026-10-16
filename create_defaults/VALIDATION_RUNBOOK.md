@@ -50,7 +50,7 @@ comparison does not bypass either renderer's numeric fallback behavior.
 
 ```powershell
 $env:DEFAULT_IMAGES_LOCAL_REPO = 'C:\repos\Default-Images'
-py -3.13 create_defaults/validation_batch.py --manifest create_defaults/fixtures/effective-jobs-en-monoton-ofl.json.gz --report-dir config/full-validation --workers 4 --timeout 120
+py -3.13 create_defaults/validation_batch.py --manifest create_defaults/fixtures/effective-jobs-en-cmap-compat.json.gz --report-dir config/full-validation --workers 4 --timeout 120
 ```
 
 Repeat the identical command to resume. Add `--retry-failed` to explicitly retry
@@ -58,6 +58,14 @@ failed jobs. `--limit N` is a smoke test, never a full-coverage certificate.
 `--report-only` regenerates HTML from persistent results without rendering.
 
 ### Current User-Requested Stop
+
+For current-source runs, use `fixtures/effective-jobs-en-cmap-compat.json.gz`.
+This source-only revision fixes an existing Unicode-map collision for optional
+system fonts; its job/asset records are identical to the completed Monoton run.
+`fixtures/cmap-compatibility.json` and the unit tests prove identical in-memory
+font bytes for all 17 bundled fonts. Original manifests/results remain immutable.
+Historical continuation commands below require their frozen source snapshots;
+do not bypass source-identity checks to resume them with the newer font loader.
 
 This section describes the historical checkpoint. The user subsequently
 authorized continuing with the approved official Monoton file. The new frozen

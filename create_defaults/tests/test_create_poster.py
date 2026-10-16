@@ -11,6 +11,8 @@ import unittest
 from unittest.mock import patch
 
 from PIL import Image
+from fontTools.ttLib import TTFont
+from fontTools.ttLib.tables._c_m_a_p import CmapSubtable
 
 from create_defaults.create_poster import (FADES, ROOT, SIZE, PosterOptions, average_color,
                                           create_poster, load_image, main,
@@ -217,6 +219,35 @@ class PixelTests(unittest.TestCase):
 
 
 class FontTests(unittest.TestCase):
+    def test_existing_windows_unicode_cmap_is_replaced_without_changing_font_file(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "existing-ucs4.ttf"
+            with TTFont(ROOT / "fonts/Comfortaa-Medium.ttf") as font:
+                table = CmapSubtable.newSubtable(12)
+                table.platformID, table.platEncID, table.language = 3, 10, 0
+                table.cmap = dict(font.getBestCmap())
+                font["cmap"].tables.append(table)
+                font.save(path)
+            before = path.read_bytes()
+            layout = FontLayout(path)
+            with TTFont(BytesIO(layout.font_data)) as font:
+                tables = [table for table in font["cmap"].tables
+                          if (table.platformID, table.platEncID, table.language) == (3, 10, 0)]
+                self.assertEqual(len(tables), 1)
+                self.assertIn(ord(layout.characters[-1]), tables[0].cmap)
+            image, _ = layout.caption("TV 2026", 200, "white")
+            self.assertIsNotNone(image.getchannel("A").getbbox())
+            self.assertEqual(path.read_bytes(), before)
+
+    def test_unicode_bridge_fix_preserves_all_bundled_font_bytes(self):
+        for filename in FONT_FILES:
+            with self.subTest(font=filename), patch("fontTools.ttLib.tables._h_e_a_d.timestampNow", return_value=3800000000):
+                path = ROOT / "fonts" / filename
+                with patch("create_defaults.poster_text.install_unicode_bridge",
+                           side_effect=lambda font, bridge: font["cmap"].tables.append(bridge)):
+                    previous = FontLayout(path).font_data
+                self.assertEqual(FontLayout(path).font_data, previous)
+
     def test_optional_outline_parser_error_uses_the_same_native_face(self):
         from fontTools.ttLib import TTFont, TTLibError
         from create_defaults import poster_text

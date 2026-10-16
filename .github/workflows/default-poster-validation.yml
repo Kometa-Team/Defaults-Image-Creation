@@ -32,6 +32,6 @@ jobs:
       - name: Unit tests and approved font hash/license checks
         run: python -m unittest discover -s create_defaults/tests -v
       - name: Verify frozen effective-job manifest and fixtures
-        run: python create_defaults/validation_manifest.py --check create_defaults/fixtures/effective-jobs-en-monoton-ofl.json.gz
+        run: python create_defaults/validation_manifest.py --check create_defaults/fixtures/effective-jobs-en-cmap-compat.json.gz
       - name: Whitespace checks
         run: git diff --check "${{ github.event.pull_request.base.sha }}" HEAD

@@ -188,7 +188,7 @@ class FrozenInventoryTests(unittest.TestCase):
         self.assertEqual(norwegian["parameters"]["text"], "NORWEGIAN BOKM\u00c5L AUDIO")
 
     def test_frozen_manifest_covers_all_literal_rows_and_dynamic_jobs(self):
-        path = ROOT / "fixtures/effective-jobs-en-monoton-ofl.json.gz"
+        path = ROOT / "fixtures/effective-jobs-en-cmap-compat.json.gz"
         self.assertTrue(path.is_file(), "Generate the frozen manifest before accepting validation")
         value = manifest.load_manifest(path)
         self.assertTrue(manifest.validate_manifest(value))
@@ -204,6 +204,28 @@ class FrozenInventoryTests(unittest.TestCase):
         self.assertTrue(all(job["parameters"]["text"] and "<<" not in job["parameters"]["text"] for job in separators))
         self.assertNotIn("TRANSLATION NOT FOUND", json.dumps(value))
         self.assertNotIn(str(ROOT), json.dumps(value))
+
+    def test_cmap_compatibility_manifest_preserves_all_jobs_and_assets(self):
+        previous = manifest.load_manifest(ROOT / "fixtures/effective-jobs-en-monoton-ofl.json.gz")
+        current = manifest.load_manifest(ROOT / "fixtures/effective-jobs-en-cmap-compat.json.gz")
+        proof = json.loads((ROOT / "fixtures/cmap-compatibility.json").read_text())
+        self.assertEqual(proof["original_manifest_sha256"], previous["sha256"])
+        self.assertEqual(proof["current_manifest_sha256"], current["sha256"])
+        self.assertEqual(proof["unchanged_jobs"], len(current["jobs"]))
+        self.assertEqual({row["font"] for row in proof["bundled_fonts"]},
+                         {Path(font["path"]).name for font in current["fonts"].values()})
+        for row in proof["bundled_fonts"]:
+            self.assertTrue(row["bridge_bytes_identical"])
+            self.assertEqual(row["source_sha256"], digest(ROOT / "fonts" / row["font"]))
+        self.assertEqual(previous["sha256"], "b88b6da4e84faa1afc4cdfedd8fa064eed1415916b9133e9546319bf88faca33")
+        for field in ("source_hashes", "source_text_hashes"):
+            before, after = previous.pop(field), current.pop(field)
+            self.assertNotEqual(before["poster_text.py"], after["poster_text.py"])
+            self.assertEqual({k: v for k, v in before.items() if k != "poster_text.py"},
+                             {k: v for k, v in after.items() if k != "poster_text.py"})
+        previous.pop("sha256")
+        current.pop("sha256")
+        self.assertEqual(current, previous)
 
     def test_approved_font_invocations_survive_real_bulk_capture(self):
         value = manifest.load_manifest(ROOT / "fixtures/effective-jobs-en-monoton-ofl.json.gz")
