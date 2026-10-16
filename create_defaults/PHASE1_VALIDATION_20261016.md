@@ -647,9 +647,13 @@ The user subsequently authorized publication and merge subject to CI. Current
 check results are tracked on PR #10 rather than inferred from local tests.
 The first remote attempt stopped during checkout, before tests, because the
 repository already contains an unrelated `People-Auto-Readme` gitlink without a
-`.gitmodules` URL mapping. This workflow now sparsely checks out only `.github`
-and `create_defaults`, excluding unrelated submodules while retaining full Git
-history for whitespace checks. Repository-wide submodule metadata is unchanged.
+`.gitmodules` URL mapping. Sparse checkout alone did not avoid Git's metadata
+lookup. The missing three-line mapping is restored to the verified official
+`https://github.com/Kometa-Team/People-Auto-Readme.git` repository; its existing
+gitlink commit `002a212e09115e431341a8ec826caefbf8ecf5aa` is unchanged and was
+verified to exist there. CI does not initialize or download that submodule.
+A temporary-repository regression reproduces the original error and verifies
+that restoring the mapping permits credential cleanup without initialization.
 
 ## Files and Remaining Gates
 

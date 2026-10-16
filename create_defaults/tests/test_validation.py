@@ -1,9 +1,12 @@
 import gzip
+import configparser
 from copy import deepcopy
 from dataclasses import asdict
 from concurrent.futures import ThreadPoolExecutor
 import json
 from pathlib import Path
+import shutil
+import subprocess
 import sys
 import tempfile
 from types import SimpleNamespace
@@ -36,13 +39,44 @@ class WorkflowBoundaryTests(unittest.TestCase):
         for step in actions:
             self.assertRegex(step["uses"], r"^actions/(checkout|setup-python)@[0-9a-f]{40}$")
         self.assertEqual(actions[0]["with"]["persist-credentials"], "false")
-        self.assertEqual(actions[0]["with"]["sparse-checkout"].splitlines(), [".github", "create_defaults"])
         self.assertEqual(actions[1]["with"]["python-version"], "3.13")
         commands = "\n".join(step.get("run", "") for step in job["steps"])
         for required in ("pip install", "compileall", "unittest discover", "validation_manifest.py --check", "git diff --check"):
             self.assertIn(required, commands)
         for forbidden in ("pwsh", "magick", "validation_batch.py", "Default-Images", "git push"):
             self.assertNotIn(forbidden, commands)
+
+    @unittest.skipUnless(shutil.which("git"), "Git is required for checkout isolation")
+    def test_ci_submodule_metadata_maps_existing_gitlink_without_initializing_it(self):
+        modules = configparser.ConfigParser()
+        modules.read(ROOT.parent / ".gitmodules", encoding="utf-8")
+        entry = modules['submodule "People-Auto-Readme"']
+        self.assertEqual(entry["path"], "People-Auto-Readme")
+        self.assertEqual(entry["url"], "https://github.com/Kometa-Team/People-Auto-Readme.git")
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+
+            def git(*arguments, check=True, input=None):
+                return subprocess.run(["git", "-C", str(root), *arguments], input=input,
+                                      text=True, capture_output=True, check=check)
+
+            git("init", "--quiet")
+            for relative in ("create_defaults/probe.txt", ".github/workflows/probe.yml", "README.md"):
+                path = root / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("fixture\n", encoding="utf-8")
+            git("add", ".")
+            identity = ("-c", "user.name=Validation Fixture", "-c", "user.email=validation@example.invalid")
+            git(*identity, "commit", "--quiet", "-m", "Fixture files")
+            commit = git("rev-parse", "HEAD").stdout.strip()
+            git("update-index", "--add", "--cacheinfo", f"160000,{commit},People-Auto-Readme")
+            git(*identity, "commit", "--quiet", "-m", "Fixture unmapped gitlink")
+            (root / "People-Auto-Readme").mkdir()
+            self.assertNotEqual(git("submodule", "foreach", "--recursive", "true", check=False).returncode, 0)
+            with (root / ".gitmodules").open("w", encoding="utf-8") as stream:
+                modules.write(stream)
+            self.assertEqual(git("submodule", "foreach", "--recursive", "true").returncode, 0)
+            self.assertFalse((root / "People-Auto-Readme/.git").exists())
 
 
 class EffectiveParameterTests(unittest.TestCase):
