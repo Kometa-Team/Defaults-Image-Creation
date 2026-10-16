@@ -104,6 +104,10 @@ include local filesystem contention and are not a performance acceptance result.
 
 ### Read-Only Live Smoke
 
+This was the initial Package B metadata-only smoke. The authorized final B3
+integration below supersedes its limited end-to-end coverage, without rewriting
+the original smoke's scope or claiming it downloaded images.
+
 Three public GitHub metadata GETs verified destination `Kometa-Team/Default-Images`
 branch `master`, head `59e49ede8d41ac5991f971e66e93af596402329a`, tree
 `e1664efb92db5872db112cf18253910da77355df` and a complete 49-entry root response.
@@ -134,13 +138,13 @@ verified blobs, rate limits and failures. No write-capable Defaults API is expos
 
 Definitions, configuration, planning, inventory, color/state/translation services
 and worker infrastructure are available for Package C integration review. Linux
-CI closes the cross-platform infrastructure-test gap; live inventory integration
-remains limited as specified below. Do not call the full production system
-validated or begin C without authorization.
+CI closes the cross-platform infrastructure-test gap; the final B3 check below
+now exercises real inventory/cache/download integration. Do not call the full
+production system validated or begin C without authorization.
 
 ## Final Gate Verification
 
-Status: **Linux CI passed; ready for maintainer Gate B review, not automatically approved**.
+Status: **Linux CI and limited live B3 integration passed; ready for final maintainer Gate B approval, not automatically approved**.
 The updated workflow runs only on pull requests targeting `main`, on
 `ubuntu-latest` with Python 3.13 and read-only repository permissions. It includes
 Phase 1 tests, both intended baseline validators, Package A/B tests and the four
@@ -236,25 +240,120 @@ These tests establish infrastructure behavior only. Full Python category
 generation, actual poster worker workloads and fresh visual parity remain C;
 overlays/multilingual previews remain D, and measured production comparison is E.
 
-### Live GitHub Coverage and Planned Gates
+### Final B3 Live Read-Only Integration
 
-Live coverage is limited to the three GET metadata smoke recorded above. A complete
-real `RemoteInventory.refresh()` -> SQLite -> exact lookup -> selected image fetch
-has not been exercised end-to-end against Default-Images. Cold complete traversal,
-warm/incremental refresh on real changing trees, actual blob/cache receipt handling,
-authenticated permission boundaries and genuine rate-limit/transient failures
-remain mocked, not live-tested. They must not be represented as demonstrated by
-the metadata smoke or offline CI.
+Executed on 2026-10-16, beginning 18:29:20 EDT (America/Toronto), through the
+existing production `ReadOnlyGitHub`, `RemoteInventory` and `Store` APIs. No
+production or test implementation was changed. A local ignored harness recorded
+requests and timings and enforced GET-only access to the single allowlisted
+repository. Existing `gh` authentication was held only in memory, never recorded
+in evidence. The harness imposed a 300-request ceiling and a 100-request remaining
+quota reserve; it did not attempt to exhaust limits or provoke failures.
 
-The next limited read-only integration check is a B3 follow-up before relying on
-remote inventory for C decisions: pin a real snapshot, refresh into isolated local
-state, repeat warm refresh, check exact/known-missing/case paths and selectively
-verify a small existing image with its Git SHA/receipt. No clone, write or
-publication is needed. Controlled live failures require a dedicated sandbox and
-explicit authorization, not deliberate rate-limit exhaustion. E owns broader
-published-image comparison and remote-cache/performance acceptance. Maintainer
-approval must explicitly accept this live-integration limitation or require the
-limited B3 check before closing Gate B.
+Pinned `Kometa-Team/Default-Images` / `master`:
+
+- Commit: `59e49ede8d41ac5991f971e66e93af596402329a`.
+- Root tree: `e1664efb92db5872db112cf18253910da77355df`.
+- Inventory: **16,554 entries: 16,354 blobs and 200 trees**. These are repository
+  metadata counts, not a claim that every blob is a poster or was downloaded.
+- Canonical index SHA-256, ordered by exact path and binding path/blob-or-tree
+  SHA/size/mode/type:
+  `148c7a233efc2390a828251fbfb5fa1f4f7649c03d923b2e3f6cc63465823d5a`.
+
+All database/cache files are under a unique isolated ignored directory:
+`config/b3-live-verification/20261016T222920Z-620f94ce/`.
+The complete API request ledger and phase results are in `evidence.json` there;
+`independent-root-check.json` and `collision-control/evidence.json` retain the
+separate controls. Local SQLite files, downloaded bytes, caches and the temporary
+harness are not committed. No existing inventory/cache was reused or overwritten.
+
+| Check | Observed API requests | Elapsed | Result |
+| --- | --- | --- | --- |
+| Pin current master ref and immutable commit | 2 GETs | Included in primary sequence | Commit/tree identities resolved and pinned. |
+| Cold production inventory refresh | 23 GETs | 18.585 s | Complete root/partition traversal; 16,554 validated metadata entries committed into fresh SQLite. |
+| Warm refresh at the same pin | 2 GETs | 0.702 s | Ref/commit rechecked; **zero tree requests**, all 16,554 entries reused, identical index digest. |
+| Exact/missing/wrong-case lookups | 0 | 0.020 s | `found`, `missing`, `case_conflict` respectively; no case-insensitive alias silently accepted. |
+| One selected image fetch | 1 GET | 0.368 s | Git SHA, declared/actual size, image decoding and cache receipt verified. |
+| Repeated image/cache read | 0 | 0.057 s | Same verified bytes/receipt, no blob request. |
+| Offline read with no API client | 0 | 0.012 s | Same verified cached file; no network. |
+| Pin real first-parent commit | 1 GET | Included in primary sequence | Immutable historical commit/tree obtained from real commit ancestry. |
+| Cold first-parent inventory in second fresh SQLite DB | 23 GETs | 11.813 s | Real historical snapshot; no synthetic remote mutations. |
+| Historical-to-current incremental refresh | 2 GETs | 2.863 s | Root plus changed `franchise` subtree fetched; **21 unchanged root subtrees reused**. Final index exactly matches independent current cold refresh. |
+| Independent complete-root recursive cross-check | 1 GET | 2.445 s | `truncated=false`; all 16,554 path/SHA/size/mode/type records match production partitioned SQLite index. |
+
+The primary cold/warm/lookup/blob/history/incremental sequence took **36.332 s**.
+The independent root check and local collision control have separate timers;
+these are observed integration timings, not rendering/production benchmarks.
+
+The historical incremental check pinned actual first parent
+`d4eb01a241172337aba2bcb0848f7e16143bb512`, tree
+`1b026bad766905555cd0630baf165d236b3da1bd`. It then switched only the local
+read-only client's already-verified target to the current pinned pair. Both
+targets are real immutable GitHub objects; no commit/tree was fabricated or
+written. Unlike the normal warm check, this controlled historical transition
+does not re-resolve a moving branch. No root subtrees were removed; exactly one
+changed (`franchise`), and 21 were reused without requesting those trees.
+
+Request ledger totals, including the independent completeness cross-check:
+
+- **55 GET requests, all HTTP 200**: two ref lookups, three commit reads,
+  49 tree reads and one blob read. Complete endpoints/order/status/response-byte
+  counts are retained locally. No POST, PUT, PATCH, DELETE, clone or push to
+  Default-Images was issued.
+- **12,278,110 response-body bytes** measured through the streaming transport,
+  including JSON/base64 overhead, not wire/TLS byte counts or image bytes alone.
+- Minimum observed `X-RateLimit-Remaining`: **4,943**. No rate-limit, auth,
+  transport, malformed-response or integrity errors were observed.
+- No tree response was truncated. Live fallback for truncation was therefore
+  not exercised; existing focused regression coverage still tests that branch.
+
+#### Lookup and Collision Checks
+
+Exact `genre/overlays/bigger/Experimental.png` returned `found`.
+Wrong-case `Genre/overlays/bigger/Experimental.png` returned `case_conflict`,
+not `found` or `missing`. A generated unique root path confirmed absent from the
+complete index returned authoritative `missing` without another request.
+
+There were **zero natural normalized case/Unicode collision groups** in this
+snapshot. Multi-entry ambiguity was verified separately in a clearly labelled
+local SQLite backup: add a case-variant metadata twin only in that copy, check
+both spellings return `case_conflict` with two entries, and verify image fetch
+is blocked with zero API requests. The original live-snapshot DB remained
+unchanged. This 1.072-second control is not evidence of a real repository collision.
+
+#### Selected Image and Receipt
+
+- Existing image: `genre/overlays/bigger/Experimental.png`.
+- Actual bytes and tree-declared size: **2,004**.
+- Verified Git blob SHA: `1e3ec8b44efbbd59e2cd927d5d5a061ecdb5339b`.
+- Verified SHA-256: `a5789cb6ad32b444410a35560f714abf27d3ec98a5c9d70ecb1a76b37710d55d`.
+- Independently verified and fully decoded with Pillow: **PNG, 148x100, LA,
+  one frame**. It was downloaded for inspection, not generated or modified.
+- Cache receipt matches exact path, blob SHA, SHA-256, byte size, repository,
+  `master` provenance and the pinned commit/tree. Second and offline reads
+  validate the same cached file without GitHub calls.
+
+No clone or complete image download collection was required; `.git` is absent
+from the isolated evidence directories. Only metadata plus this one small image
+were fetched. Production PowerShell/composer, historical fixtures and every
+Default-Images object/ref were left untouched.
+
+#### Regressions and Remaining Limits
+
+No genuine implementation gap was found, so no new regression test or executable
+change was needed. The existing focused inventory/assets suite was rerun:
+**10 passed, one Windows account symlink-permission skip, 5.38 s**. Its existing
+multi-entry case/Unicode collision, truncated traversal, stale/auth-failure,
+SHA/size/corruption and transport tests remain intact. The draft PR workflow also
+runs automatically for the report-only update; no production behavior changed.
+
+This closes the previously missing limited B3 inventory -> SQLite -> lookup ->
+selected-download/receipt integration evidence. Deliberate real permission
+failures, quota exhaustion, actual transport outages, naturally occurring case
+collisions and truncated trees were not provoked or observed. Such adverse cases
+remain mocked; controlled live fault tests need separate sandbox authorization.
+Broader published-image comparison, representative workload/cache performance and
+long-duration integration acceptance remain E, not claims from this bounded probe.
 
 ### Gate B Recommendation
 
@@ -263,13 +362,13 @@ direct-composer adapter review and bounded-worker proof pass. There are no
 unresolved test failures after the clean-runner dependency fixes. The draft PR
 is ready for maintainer review; it must not be marked ready, merged or deployed.
 
-Gate B is **not unconditionally closed**: the maintainer must explicitly accept
-the documented live GitHub integration coverage limitation or request the limited
-B3 follow-up before final approval. That follow-up must precede relying on remote
-inventory for C decisions. Full poster workloads/parity (C), overlays/multilingual
-review (D) and production performance acceptance (E) remain deliberately deferred,
-not represented as missing synthetic-test failures or work completed in B.
-Stop here for Gate B approval; Package C has not begun.
+The authorized limited live B3 follow-up now passes, including a real changed-tree
+incremental transition and independent completeness cross-check. **Gate B is ready
+for final maintainer approval** on the documented Package B scope; this report
+does not grant that approval or authorize C. Full poster workloads/parity (C),
+overlays/multilingual review (D), controlled live failure testing and production
+performance acceptance (E) remain deliberately deferred, not represented as work
+completed in B. Stop here for Gate B approval; Package C has not begun.
 
 ## Exact File Inventory
 
