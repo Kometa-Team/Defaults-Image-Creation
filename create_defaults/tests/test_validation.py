@@ -36,6 +36,7 @@ class WorkflowBoundaryTests(unittest.TestCase):
         for step in actions:
             self.assertRegex(step["uses"], r"^actions/(checkout|setup-python)@[0-9a-f]{40}$")
         self.assertEqual(actions[0]["with"]["persist-credentials"], "false")
+        self.assertEqual(actions[0]["with"]["sparse-checkout"].splitlines(), [".github", "create_defaults"])
         self.assertEqual(actions[1]["with"]["python-version"], "3.13")
         commands = "\n".join(step.get("run", "") for step in job["steps"])
         for required in ("pip install", "compileall", "unittest discover", "validation_manifest.py --check", "git diff --check"):
