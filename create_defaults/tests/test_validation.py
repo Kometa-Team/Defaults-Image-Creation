@@ -24,6 +24,7 @@ from create_defaults import revalidate_grayscale as grayscale
 from create_defaults.validation_review import review_summary
 from create_defaults.review_validation_groups import warning_groups, warning_rank, write_groups, write_ranked_warnings
 from create_defaults.poster_fixtures import extract_rows
+from create_defaults.bulk.baselines import verify_historical
 
 
 class WorkflowBoundaryTests(unittest.TestCase):
@@ -191,7 +192,7 @@ class FrozenInventoryTests(unittest.TestCase):
         path = ROOT / "fixtures/effective-jobs-en-cmap-compat.json.gz"
         self.assertTrue(path.is_file(), "Generate the frozen manifest before accepting validation")
         value = manifest.load_manifest(path)
-        self.assertTrue(manifest.validate_manifest(value))
+        self.assertTrue(verify_historical(value))
         self.assertEqual(value["literal_definitions"], len(extract_rows()))
         self.assertEqual(value["covered_literal_definitions"], 3352)
         self.assertEqual(value["uncovered_literal_lines"], [])

@@ -1,0 +1,60 @@
+# Package A examples only, not a migrated production category inventory.
+schema_version: 1
+profiles:
+  legacy-poster:
+    assets: {avg_color_image: null, dom_color_image: null}
+    caption: {mode: translation, key: null, template_key: null, text: '', case: upper, fallback: error, direction: auto}
+    font: {family: Comfortaa Medium, file: fonts/Comfortaa-Medium.ttf}
+    typography: {mode: fit, point_size: null, box: [1800, 1000], minimum: 100, maximum: 250, color: '#FFFFFF'}
+    background: {mode: explicit, scope: historical-unreviewed}
+    layout: {logo_offset: -500, logo_resize: 1800, text_offset: 850}
+    effects: {gradient: 1, clean: true, white_wash: true, avg_color: false, dom_color: false, border: false, border_width: 15, border_color: '#FFFFFF'}
+    languages: [en]
+    variants: []
+    dependencies: []
+    overrides: []
+definitions:
+  - id: franchise.death-in-paradise-2011
+    extends: legacy-poster
+    category: Franchise
+    display_name: Death in Paradise (2011)
+    source: {path: create_default_posters.ps1, line: 4493, row_sha256: 540a6b163e5ee4755e63efc9949ce61339cdd9c3fa43b813dc3abda589d75e40}
+    assets: {logo: 'logos_franchise/Death in Paradise (2011).png'}
+    caption: {mode: none}
+    layout: {logo_offset: 0, logo_resize: 1600, text_offset: 0}
+    background: {hex: '#9034AF'}
+    effects: {white_wash: false}
+    output: {directory: franchise, filename: 'Death in Paradise (2011).jpg'}
+  - id: genre.action
+    extends: legacy-poster
+    category: Genre
+    display_name: Action
+    source: {path: create_default_posters.ps1, line: 4681, row_sha256: 967e8b9998eec67d4e36bd75b177c6fb8347850fe9973a856a5a3306efdfb1f8}
+    assets: {logo: logos_genre/Action.png}
+    caption: {key: key_names.ACTION}
+    background: {hex: '#387DBF'}
+    output: {directory: genre, filename: Action.jpg}
+  - id: playlist.arrowverse-timeline
+    extends: legacy-poster
+    category: Playlist
+    display_name: Arrowverse (Timeline Order)
+    source: {path: create_default_posters.ps1, line: 5350, row_sha256: d223d67dc619a5955bb6fc9675a1706c78637d33c0c911348119602a05e9a495}
+    assets: {logo: logos_playlist/Arrowverse.png}
+    caption: {key: key_names.TIMELINE_ORDER}
+    font: {family: Bebas Neue, file: fonts/BebasNeue-Regular.ttf}
+    typography: {box: [1600, 1000], maximum: 154}
+    layout: {logo_offset: -200, logo_resize: 1600, text_offset: 450}
+    background: {hex: '#2B8F40'}
+    output: {directory: playlist, filename: Arrowverse (Timeline Order).jpg}
+  - id: year.2020
+    extends: legacy-poster
+    category: Year
+    display_name: '2020'
+    source: {path: create_default_posters.ps1, line: 6864, row_sha256: 814a5961cb051c14d341aed4677234fba00e34f1912dc409561e348dbac018b3}
+    assets: {logo: transparent.png}
+    caption: {mode: literal, text: '2020'}
+    font: {family: Plus Jakarta Sans, file: fonts/PlusJakartaSans-Bold.ttf}
+    typography: {mode: fixed, point_size: 409}
+    layout: {logo_offset: 0, logo_resize: 1800, text_offset: 0}
+    background: {hex: '#EF10D3'}
+    output: {directory: year, filename: '2020.jpg'}

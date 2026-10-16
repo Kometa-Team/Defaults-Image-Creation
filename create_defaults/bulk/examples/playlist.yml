@@ -1,0 +1,71 @@
+schema_version: 1
+category: Playlist
+definitions:
+- id: playlist.arrowverse-timeline
+  category: Playlist
+  display_name: Arrowverse (Timeline Order)
+  source:
+    path: create_default_posters.ps1
+    line: 5350
+    row_sha256: d223d67dc619a5955bb6fc9675a1706c78637d33c0c911348119602a05e9a495
+  composer:
+    avg_color: false
+    avg_color_image: null
+    base_color: '#2B8F40'
+    border: false
+    border_color: '#FFFFFF'
+    border_width: 15
+    clean: true
+    dom_color: false
+    dom_color_image: null
+    font: fonts/BebasNeue-Regular.ttf
+    font_color: '#FFFFFF'
+    font_size: 154
+    gradient: 1
+    logo: logos_playlist/Arrowverse.png
+    logo_offset: -200
+    logo_resize: 1600
+    out_name: Arrowverse (Timeline Order)
+    text: ''
+    text_offset: 450
+    white_wash: true
+  caption:
+    mode: translation
+    key: key_names.TIMELINE_ORDER
+    template_key: null
+    text: ''
+    case: upper
+    direction: auto
+    fallback: null
+  layout:
+    kind: captured_fit
+    measurement:
+      text: TIMELINE ORDER
+      font_sha256: 08e4623805102d819f58601e46e345648846075e363b2ceb23313c2d1c83ec73
+      point_size: 154
+      box:
+      - 1600
+      - 1000
+      minimum: 100
+      maximum: 154
+      evidence_sha256: d6b803c49440755d75be53f5fb4cbb969a4851569681cbf21e524aca1e971e38
+  languages:
+  - en
+  applicability:
+    en:
+      status: applicable
+      reason: Representative English infrastructure example only
+  output:
+    directory: playlist
+    filename: Arrowverse (Timeline Order).jpg
+    remote_paths:
+      en: playlist/Arrowverse (Timeline Order).jpg
+  color_assignment:
+    id: playlist.arrowverse-timeline.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+  dependencies: []
+  overrides: []
+  generator: null

@@ -1,0 +1,5 @@
+# Package B and its offline test suite; existing Phase 1 pins remain unchanged.
+-r requirements.txt
+jsonschema==4.26.0
+requests==2.34.2
+pytest==9.1.1

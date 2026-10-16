@@ -10,6 +10,8 @@ from urllib.parse import quote, urlsplit
 
 import requests
 
+from github_inventory_core import GitHubError
+
 
 REPOSITORIES = {
     style: "Kometa-Team/People-Images" + ("" if style == "original" else "-" + style)
@@ -68,12 +70,6 @@ def sandbox_storage():
         if value and Path(value).expanduser().resolve() != expected.resolve():
             raise ValueError(f"Sandbox {key} must use its isolated {expected.name} directory")
     return result
-
-
-class GitHubError(RuntimeError):
-    def __init__(self, message, status=0):
-        super().__init__(message)
-        self.status = status
 
 
 def branch_name(value=None):

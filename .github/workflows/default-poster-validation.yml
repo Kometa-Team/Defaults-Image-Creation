@@ -24,14 +24,30 @@ jobs:
         with:
           python-version: '3.13'
           cache: pip
-          cache-dependency-path: create_defaults/requirements.txt
+          cache-dependency-path: |
+            create_defaults/requirements.txt
+            create_defaults/requirements-bulk.txt
       - name: Install Python dependencies
-        run: python -m pip install -r create_defaults/requirements.txt
+        run: python -m pip install -r create_defaults/requirements-bulk.txt
       - name: Compile candidate and validation modules
         run: python -m compileall -q create_defaults
       - name: Unit tests and approved font hash/license checks
         run: python -m unittest discover -s create_defaults/tests -v
       - name: Verify frozen effective-job manifest and fixtures
-        run: python create_defaults/validation_manifest.py --check create_defaults/fixtures/effective-jobs-en-cmap-compat.json.gz
+        run: |
+          python -m create_defaults.bulk.baselines --check-historical
+          python create_defaults/validation_manifest.py --check create_defaults/bulk/baselines/effective-jobs-en-current.json.gz
+      - name: Package A and B infrastructure tests
+        run: |
+          python -m unittest discover -s create_defaults/phase2/tests -v
+          python -m pytest create_defaults/bulk/tests -q -rs -p no:cacheprovider
+      - name: People GitHub compatibility regressions
+        run: >-
+          python -m pytest
+          create_people_posters/tests/test_people_github.py
+          create_people_posters/tests/test_people_sandbox.py
+          create_people_posters/tests/test_people_workspaces.py
+          create_people_posters/tests/test_people_api_orchestrator.py
+          -q -rs -p no:cacheprovider
       - name: Whitespace checks
         run: git diff --check "${{ github.event.pull_request.base.sha }}" HEAD

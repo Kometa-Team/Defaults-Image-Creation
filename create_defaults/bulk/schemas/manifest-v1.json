@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kometa:bulk:manifest:1",
+  "title": "Canonical bulk plan v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "kind", "renderer", "selection", "jobs", "not_applicable", "scope", "sha256"],
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "path": {"type": "string", "format": "artwork-path"},
+    "input": {"type": "object", "additionalProperties": false, "required": ["role", "path", "sha256"], "properties": {"role": {"type": "string"}, "path": {"$ref": "#/$defs/path"}, "sha256": {"$ref": "#/$defs/sha"}}},
+    "dependency": {"type": "object", "additionalProperties": false, "required": ["job_id", "input", "sha256", "render_fingerprint"], "properties": {"job_id": {"type": "string"}, "input": {"type": "string"}, "sha256": {"$ref": "#/$defs/sha"}, "render_fingerprint": {"$ref": "#/$defs/sha"}}},
+    "overlayParameters": {"type": "object", "additionalProperties": false, "required": ["input", "box", "trim", "colorspace", "strip_metadata", "format", "resampling"], "properties": {"input": {"$ref": "#/$defs/path"}, "box": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 1}}, "trim": {"type": "boolean"}, "colorspace": {"const": "sRGB"}, "strip_metadata": {"const": true}, "format": {"const": "PNG"}, "resampling": {"type": "string", "minLength": 1}}}
+  },
+  "properties": {
+    "schema_version": {"type": "integer", "const": 1}, "kind": {"const": "bulk-plan"}, "scope": {"type": "string"}, "sha256": {"$ref": "#/$defs/sha"},
+    "renderer": {"type": "object", "additionalProperties": false, "required": ["sources", "python", "platform", "libraries", "encoding", "canvas"], "properties": {"sources": {"type": "object", "additionalProperties": {"$ref": "#/$defs/sha"}}, "python": {"type": "string"}, "platform": {"type": "string"}, "libraries": {"type": "object", "additionalProperties": {"type": "string"}}, "encoding": {"const": {"format": "JPEG", "quality": 100, "subsampling": 0}}, "canvas": {"const": [2000, 3000]}}},
+    "selection": {"type": "object", "additionalProperties": false, "required": ["categories", "posters", "languages"], "properties": {"categories": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}, "posters": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}, "languages": {"type": "array", "uniqueItems": true, "items": {"$ref": "urn:kometa:bulk:definition:1#/$defs/language"}}}},
+    "not_applicable": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["poster_id", "language", "reason"], "properties": {"poster_id": {"type": "string"}, "language": {"$ref": "urn:kometa:bulk:definition:1#/$defs/language"}, "reason": {"type": "string", "minLength": 1}}}},
+    "jobs": {"type": "array", "items": {"type": "object", "additionalProperties": false,
+      "allOf": [{"if": {"properties": {"kind": {"const": "overlay"}}}, "then": {"properties": {"raw_parameters": {"$ref": "#/$defs/overlayParameters"}, "parameters": {"$ref": "#/$defs/overlayParameters"}, "render_ready": {"const": false}}}}],
+      "required": ["id", "kind", "poster_id", "language", "variant", "definition_fingerprint", "generator_origin", "source", "raw_parameters", "parameters", "inputs", "dependencies", "translation", "language_behavior", "local_relative", "remote_relative", "layout_evidence", "color_assignment", "status", "render_ready", "render_fingerprint"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1}, "kind": {"enum": ["poster", "overlay"]}, "poster_id": {"type": "string"}, "language": {"$ref": "urn:kometa:bulk:definition:1#/$defs/language"}, "variant": {"type": "string"},
+        "definition_fingerprint": {"$ref": "#/$defs/sha"}, "render_fingerprint": {"$ref": "#/$defs/sha"}, "source": {"$ref": "urn:kometa:bulk:definition:1#/properties/source"},
+        "generator_origin": {"type": ["object", "null"]},
+        "raw_parameters": {"type": "object"}, "parameters": {"type": "object"},
+        "inputs": {"type": "array", "items": {"$ref": "#/$defs/input"}}, "dependencies": {"type": "array", "items": {"$ref": "#/$defs/dependency"}},
+        "translation": {"type": "object", "additionalProperties": false, "required": ["mode", "trace", "fingerprint"], "properties": {"mode": {"enum": ["none", "shared", "translation"]}, "trace": {"type": "array", "items": {"type": "object"}}, "fingerprint": {"$ref": "#/$defs/sha"}}},
+        "language_behavior": {"type": "object", "additionalProperties": false, "required": ["language", "direction"], "properties": {"language": {"type": "string"}, "direction": {"enum": ["auto", "ltr", "rtl"]}}},
+        "local_relative": {"$ref": "#/$defs/path"}, "remote_relative": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/path"}]},
+        "layout_evidence": {"type": "object"}, "color_assignment": {"$ref": "urn:kometa:bulk:definition:1#/properties/color_assignment"}, "status": {"const": "planned"}, "render_ready": {"type": "boolean"}
+      }
+    }}
+  }
+}
