@@ -9,6 +9,10 @@ This repository brings together **two complementary toolsets** for building and 
 
 ## Quick Start
 
+Default-poster Python migration review: see the [team review guide](create_defaults/REVIEW_GUIDE.md)
+and [current PowerShell/Python image samples](create_defaults/review/README.md).
+The single-poster Python candidate is available; the bulk workflow has not switched.
+
 Choose the path that matches your task.
 
 ### A) Build / refresh People posters (Python orchestrator)
@@ -94,7 +98,7 @@ Defaults-Image-Creation/
 ## Requirements (consolidated)
 
 - **Python path:** Python 3.10+, `pip`, network access to TMDB, optional Selenium/Chrome if you use background removal.
-- **PowerShell path:** PowerShell 7+, ImageMagick CLI (`magick`), required fonts (Comfortaa, Bebas, Jura, Limelight, Rye, etc.; Cairo for Arabic text).
+- **PowerShell path:** PowerShell 7+, ImageMagick CLI (`magick`), required fonts (Comfortaa, Bebas Neue, Jura, Limelight, Rye, etc.; Cairo for Arabic text).
 - **Git:** for People‑Images updates (SSH key or HTTPS token configured for `origin`).
 
 ---

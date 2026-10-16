@@ -117,13 +117,14 @@ function Get-NormalizedFontToken($fontName) {
 function Get-BundledFontPath($fontName) {
   $fontAliases = @{
     "barlowregular"          = "Barlow-Regular.ttf"
-    "bebasregular"           = "Bebas-Regular.ttf"
+    "bebasneue"              = "BebasNeue-Regular.ttf"
+    "bebasneueregular"       = "BebasNeue-Regular.ttf"
     "boecklinsuniverse"      = "BoecklinsUniverse.ttf"
     "boogalooregular"        = "Boogaloo-Regular.ttf"
     "cherrycreamsoda"        = "CherryCreamSoda-Regular.ttf"
     "cherrycreamsodaregular" = "CherryCreamSoda-Regular.ttf"
     "comfortaamedium"        = "Comfortaa-Medium.ttf"
-    "helveticabold"          = "Helvetica-Bold.ttf"
+    "plusjakartasansbold"    = "PlusJakartaSans-Bold.ttf"
     "jurabold"               = "Jura-Bold.ttf"
     "limelightregular"       = "Limelight-Regular.ttf"
     "monoton"                = "Monoton-Regular.ttf"
@@ -161,6 +162,15 @@ function Get-BundledFontPath($fontName) {
 function Resolve-MagickFont($fontName) {
   if ([string]::IsNullOrWhiteSpace($fontName)) {
     return $fontName
+  }
+
+  $fontToken = Get-NormalizedFontToken $fontName
+  if ($fontToken -in @("bebasneue", "bebasneueregular", "plusjakartasansbold")) {
+    $reviewedFont = Get-BundledFontPath $fontName
+    if ($null -ne $reviewedFont) {
+      return $reviewedFont.Replace('\', '/')
+    }
+    return $null
   }
 
   $visibleFonts = Get-MagickVisibleFonts

@@ -1,0 +1,37 @@
+name: Default Poster Candidate Validation
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: default-poster-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  python-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: create_defaults/requirements.txt
+      - name: Install Python dependencies
+        run: python -m pip install -r create_defaults/requirements.txt
+      - name: Compile candidate and validation modules
+        run: python -m compileall -q create_defaults
+      - name: Unit tests and approved font hash/license checks
+        run: python -m unittest discover -s create_defaults/tests -v
+      - name: Verify frozen effective-job manifest and fixtures
+        run: python create_defaults/validation_manifest.py --check create_defaults/fixtures/effective-jobs-en-cmap-compat.json.gz
+      - name: Whitespace checks
+        run: git diff --check "${{ github.event.pull_request.base.sha }}" HEAD

@@ -1,0 +1,142 @@
+{
+  "reviewed_on": "2026-10-16",
+  "scope": "Evidence for exact bundled hashes, not a legal clearance or a font replacement manifest. No network requests are made when reading this file.",
+  "fonts": {
+    "PlusJakartaSans-Bold.ttf": {
+      "sha256": "5f5342ef76862b5b5365d1dff1a667629dfa484e388dd602552f647219c3870f",
+      "version": "2.071; family Plus Jakarta Sans, style Bold",
+      "license_status": "SIL OFL 1.1; exact official Tokotype asset verified; redistribution permitted with required notices",
+      "evidence_scope": "Unmodified official static Bold face at pinned author commit 18d1cd2f7ea10481919d2f05c1f7064b7307fc26",
+      "sources": [
+        {"url": "https://raw.githubusercontent.com/tokotype/PlusJakartaSans/18d1cd2f7ea10481919d2f05c1f7064b7307fc26/fonts/ttf/PlusJakartaSans-Bold.ttf", "sha256": "5f5342ef76862b5b5365d1dff1a667629dfa484e388dd602552f647219c3870f", "role": "Exact unchanged bundled font"},
+        {"url": "https://raw.githubusercontent.com/tokotype/PlusJakartaSans/18d1cd2f7ea10481919d2f05c1f7064b7307fc26/OFL.txt", "sha256": "995c7199cab65954f545996326755daee7b63cc6b42b06c13da1f9502ab08a99", "role": "Original OFL 1.1 copyright and license notice"}
+      ],
+      "bundled_notices": "fonts/licenses/PlusJakartaSans/",
+      "follow_up": "Keep OFL.txt, AUTHORS.txt, FONTLOG.txt and README.md with the unmodified font. Font license remains OFL, not the code license."
+    },
+    "LiberationSans-Bold.ttf": {
+      "sha256": "788abee4c806d660e8aee46689dd8540cd4bb98da03dcc9d171ce3efd99a9173",
+      "version": "2.1.5; family Liberation Sans, style Bold, full name Liberation Sans Bold",
+      "retired": "Unapproved trial, superseded by the user-approved Plus Jakarta Sans Bold at fixed 409 points on 2026-10-16; not bundled",
+      "license_status": "SIL OFL 1.1; exact official Liberation Fonts 2.1.5 release asset verified; redistribution permitted with required notices",
+      "evidence_scope": "Unmodified font and original notices from the compiled archive linked by the official release",
+      "sources": [
+        {"url": "https://github.com/liberationfonts/liberation-fonts/releases/tag/2.1.5", "role": "Author's release and compiled-font archive link"},
+        {"url": "https://github.com/liberationfonts/liberation-fonts/files/7261482/liberation-fonts-ttf-2.1.5.tar.gz", "sha256": "7191c669bf38899f73a2094ed00f7b800553364f90e2637010a69c0e268f25d0", "role": "Official compiled archive; member LiberationSans-Bold.ttf matches the bundled hash"}
+      ],
+      "license_member": "liberation-fonts-ttf-2.1.5/LICENSE",
+      "license_sha256": "93fed46019c38bbe566b479d22148e2e8a1e85ada614accb0211c37b2c61c19b",
+      "bundled_notices": "fonts/licenses/LiberationSans/",
+      "follow_up": "Retain the original LICENSE, AUTHORS and README.md with the unmodified font. Preserve reserved names and the font's OFL license; do not sell the font by itself."
+    },
+    "BebasNeue-Regular.ttf": {
+      "sha256": "08e4623805102d819f58601e46e345648846075e363b2ceb23313c2d1c83ec73",
+      "version": "2.000; family Bebas Neue, style Regular",
+      "license_status": "SIL OFL 1.1; exact official Dharma Type release verified; redistribution permitted with required notices",
+      "evidence_scope": "Unmodified official 2018 Dharma Type path, pinned commit; not the separate 2014 Fontfabric family",
+      "sources": [
+        {"url": "https://raw.githubusercontent.com/dharmatype/Bebas-Neue/46e72cec95ee599f72c0de4a12cfe64828949236/fonts/BebasNeue(2018)ByDhamraType/ttf/BebasNeue-Regular.ttf", "sha256": "08e4623805102d819f58601e46e345648846075e363b2ceb23313c2d1c83ec73", "role": "Exact unchanged bundled font"},
+        {"url": "https://raw.githubusercontent.com/dharmatype/Bebas-Neue/46e72cec95ee599f72c0de4a12cfe64828949236/OFL.txt", "sha256": "72082f6cb4d04be2ecf7cc7d9e1e7d73787f0af8a5a278a47cade70c16b78341", "role": "Original OFL 1.1 license and copyright notice"}
+      ],
+      "bundled_notices": "fonts/licenses/BebasNeue/",
+      "follow_up": "Keep OFL.txt, AUTHORS.txt, CONTRIBUTORS.txt and TRADEMARKS.md with the unmodified font; do not sell the font by itself or relicense it as project source code."
+    },
+    "Bebas-Regular.ttf": {
+      "sha256": "39d2eb178fdd52b4c350ac6dee3d2090ae5a7c187225b0d161a1473ccbb6320d",
+      "version": "1.100",
+      "retired": "Replaced by Bebas Neue v2.000 after the nine-Playlist comparison; retained here as historical provenance, not an active bundled font",
+      "license_status": "Dharma Type free-font EULA v2018.03.01.1; exact author-linked archive match; commercial artwork permitted, redistribution/modification require permission review",
+      "evidence_scope": "Exact binary match to the download linked by the author's own repository; not Bebas Neue or Bebas Kai and not an OFL license",
+      "sources": [
+        {"url": "https://github.com/dharmatype/Bebas", "role": "Author's commercial-use statement and distribution link"},
+        {"url": "https://www.dafont.com/bebas.font", "role": "Author-linked release page"},
+        {"url": "https://dl.dafont.com/dl/?f=bebas", "sha256": "ad85b47ecb450d82ac9a63bd3d634912916cb2207249fce955365300858575cf", "role": "Archive containing the identical TTF and Lisense.txt"}
+      ],
+      "license_member": "Lisense.txt",
+      "license_sha256": "d7482f6aba531feb3c2228e2c58c159dc578e8ba286f5681b9a9d2e510aaab06",
+      "follow_up": "Obtain permission covering redistribution and the renderer's private in-memory cmap changes before packaging this font in a service or distributable image; do not assume commercial artwork permission grants these rights."
+    },
+    "BoecklinsUniverse.ttf": {
+      "sha256": "5f6f6396edee3fa1fe9443258d7463f82e6b2512a03c5102a90295a095339fb5",
+      "version": "1.000, 2012 initial release; copyright 2013",
+      "license_status": "SIL OFL 1.1; exact archived official author release verified; redistribution permitted with required original notices",
+      "evidence_scope": "2015-03-21 archive capture of the author's own ZIP contains the identical 2013 font and original OFL notice; current 2018 release is not used as permission for these bytes",
+      "sources": [
+        {"url": "https://www.peter-wiegel.de/Boecklin.html", "role": "Author's family page and original archive link"},
+        {"url": "https://www.peter-wiegel.de/", "role": "Author's use and distribution FAQ"},
+        {"url": "https://www.peter-wiegel.de/Fonts/BoecklinsUniverse.zip", "sha256": "602945fb203b94b00ada8fcf81f3aa7aa2497fa4d23d77362a6c0bd1c06c6320", "role": "Author's current archive; font hash differs from bundled file"},
+        {"url": "https://web.archive.org/web/20150321100356id_/http://www.peter-wiegel.de/Fonts/BoecklinsUniverse.zip", "sha256": "3bb4cce23dc108507683442a9fb8e24013e55995992f5b92bef012681c0887df", "role": "Archived official author ZIP; member Boecklins Universe.ttf matches the exact bundled font hash"}
+      ],
+      "license_member": "Open Font License.txt",
+      "license_sha256": "2d57569aa55506bb37630d35728754048d3faf961516719d2ee2fd6c6087bbad",
+      "bundled_notices": "fonts/licenses/BoecklinsUniverse/",
+      "original_faq_sha256": "7c140bfe7a997951ebd8f85667c6b921d4e35bc96a2fef3e4c6f606a47aa00e1",
+      "upstream_font_sha256": "f337d1e6e75f879f952017341c819d65df5c4b441d9bb188c104c94423832f16",
+      "candidate_validation": {
+        "date": "2026-10-16",
+        "filename": "Boecklins Universe.ttf",
+        "definitions_compared": 11,
+        "maximum_rgb_mae_0_255": 0.0029946666666666667,
+        "minimum_global_luminance_ssim_400x600": 0.9999960641708381,
+        "unchanged_fitting_line_breaks_and_centered_bounds": true,
+        "maximum_shaped_advance_delta_pixels": 0,
+        "status": "Optional newer official release; not applied. Original exact release has since been verified from the archived author ZIP, so replacement is unnecessary for provenance.",
+        "local_report": "config/phase1-validation-20261016/font-candidates-verified/index.html"
+      },
+      "follow_up": "Keep the unchanged original 2013 Open Font License.txt and OFL-FAQ.txt with the existing font. Preserve the Reserved Font Name; no replacement or internal font-name change is necessary."
+    },
+    "Monoton-Regular.ttf": {
+      "sha256": "951c4cea65ffede784a7c9672feec5d329a7e1e12216c42d53ecf36c90d04dea",
+      "version": "1.000; FontForge 19-8-2011; 373 glyphs; family Monoton, style Regular",
+      "license_status": "SIL OFL 1.1; exact official Google Fonts release verified; redistribution permitted with required original notices",
+      "evidence_scope": "Unmodified official font at pinned Google Fonts commit 90abd17b4f97671435798b6147b698aa9087612f; user-approved replacement on 2026-10-16",
+      "bundled_notices": "fonts/licenses/Monoton/",
+      "license_member": "OFL.txt",
+      "license_sha256": "585c6d2da8bcd8ffa651e0016f2e992a6891b625143a46a1dacf00699a817d9a",
+      "historical_release": {
+        "sha256": "1565b395f454d5c2642d0f411030051e7342fbaf6d5bfc5da5899c47ecd3511e",
+        "version": "1.000; FontForge 19-8-2011; 371 glyphs",
+        "status": "Exact provenance remains unverified; replaced by the approved official release. Not an active distributable font. Retained only in private historical validation inputs."
+      },
+      "candidate_validation": {
+        "date": "2026-10-16",
+        "filename": "Monoton-Regular.ttf",
+        "sha256": "951c4cea65ffede784a7c9672feec5d329a7e1e12216c42d53ecf36c90d04dea",
+        "definitions_compared": 11,
+        "maximum_rgb_mae_0_255": 0,
+        "minimum_global_luminance_ssim_400x600": 1,
+        "unchanged_fitting_line_breaks_and_centered_bounds": true,
+        "maximum_shaped_advance_delta_pixels": 0,
+        "status": "User approved and applied on 2026-10-16. All 11 numeric definitions match the old release's PowerShell pixels; the historical binary's provenance is not retrospectively verified.",
+        "local_report": "config/phase1-validation-20261016/font-candidates-verified/index.html"
+      },
+      "sources": [
+        {"url": "https://raw.githubusercontent.com/google/fonts/90abd17b4f97671435798b6147b698aa9087612f/ofl/monoton/Monoton-Regular.ttf", "sha256": "951c4cea65ffede784a7c9672feec5d329a7e1e12216c42d53ecf36c90d04dea", "role": "Exact unchanged bundled official font"},
+        {"url": "https://raw.githubusercontent.com/google/fonts/90abd17b4f97671435798b6147b698aa9087612f/ofl/monoton/OFL.txt", "sha256": "585c6d2da8bcd8ffa651e0016f2e992a6891b625143a46a1dacf00699a817d9a", "role": "Pinned official OFL license; Reserved Font Name Monoton"},
+        {"url": "https://raw.githubusercontent.com/google/fonts/main/ofl/monoton/METADATA.pb", "role": "Official author, family, license and source-history metadata"},
+        {"url": "https://raw.githubusercontent.com/googlefonts/googlefontdirectory-hg/2ff5c63ecce2d2d4f30b26806a74f1c2e9bae3c2/monoton/Monoton-Regular.ttf", "sha256": "951c4cea65ffede784a7c9672feec5d329a7e1e12216c42d53ecf36c90d04dea", "role": "Original 2011 source release matches the approved official font; differs from the retired private reference"}
+      ],
+      "follow_up": "Keep the original OFL.txt copyright and Reserved Font Name notice with the unmodified official font. Do not distribute the unverified retired binary from private validation workspaces."
+    },
+    "Helvetica-Bold.ttf": {
+      "sha256": "d19ccd4211e3caaac2c7f1ae544456f5c67cd912e2bdfb1efb6602c090c724ee",
+      "version": "1.3 (Hewlett-Packard); copyright 1992-97 Hewlett-Packard",
+      "retired": "Replaced by approved Plus Jakarta Sans Bold 2.071 at fixed 409 points after the 11-poster comparison; historical provenance only, not bundled",
+      "license_status": "Proprietary Helvetica; no bundled license or source entitlement established; do not redistribute or assume server rights",
+      "evidence_scope": "Exact local metadata and read-only diagnostics; a general Monotype license page is not an entitlement to this HP binary",
+      "sources": [
+        {"url": "https://www.monotype.com/terms-and-conditions", "role": "General vendor context only; does not license the bundled file"},
+        {"url": "https://learn.microsoft.com/en-us/typography/opentype/spec/os2#fstype", "role": "Embedding flag semantics; flags are not a license grant"}
+      ],
+      "technical_observation": {
+        "glyph_count": 385,
+        "glyf_length": 73419,
+        "final_loca_offset": 73420,
+        "parse_error": "TTLibError: not enough 'glyf' table data",
+        "diagnostic_only": "Appending one zero byte to the outline data in a separate in-memory copy allowed all 385 glyphs to parse. Existing FreeType renders the original file. No file was repaired or saved.",
+        "fsType": 14
+      },
+      "follow_up": "Supply the original authorized font package/EULA and confirm intended service, redistribution and private cmap-processing rights with the licensor. Obtain a verified authorized source file if repair is needed; never rewrite embedding flags."
+    }
+  }
+}

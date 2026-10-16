@@ -1,0 +1,2 @@
+# Preserve the original author notice bytes and legacy encoding.
+*.txt -text -whitespace
