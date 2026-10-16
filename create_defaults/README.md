@@ -5,6 +5,11 @@ This folder centers on **`create_default_posters.ps1`**, a bulk generator that p
 > Primary script: **`create_default_posters.ps1`**  
 > Helper (invoked internally): `create_poster.ps1`
 
+Native single-poster migration candidate: start with the [team review guide](REVIEW_GUIDE.md)
+and [portable image comparisons](review/README.md). See [Python Composer Phase 1](PYTHON_COMPOSER.md)
+for the callable Pillow API, parameter/font audit, and offline tests. PowerShell
+remains the production reference; the Python renderer does not publish artwork.
+
 ---
 
 ## What it makes
@@ -43,7 +48,7 @@ Run any subset, or **`All`** to generate everything.
    - macOS/Linux: `brew install --cask powershell` or your package manager
 2. **ImageMagick** (`magick` CLI) — <https://imagemagick.org/script/download.php>  
    Verify with: `magick -version`
-3. **Fonts** used by the default styles must be installed and visible to ImageMagick. If a font is missing, posters may fallback or render oddly. (Families referenced across this repo include Comfortaa, Bebas, Jura, Limelight, Rye, etc. For Arabic‑capable text, use a multi‑lingual font such as **Cairo‑Regular**.)
+3. **Fonts** used by the default styles must be installed and visible to ImageMagick or resolved from the bundled files. Playlist posters use bundled OFL-licensed **Bebas Neue Regular v2.000**; see [replacement measurements and configuration](BEBAS_REPLACEMENT.md). The 2020s decade and 2020-2029 year posters use approved OFL-licensed **Plus Jakarta Sans Bold 2.071 at fixed 409 points**; see [Helvetica replacement](HELVETICA_REPLACEMENT.md). Other families include Comfortaa, Jura, Limelight, and Rye. For Arabic-capable text, use a multi-lingual font such as **Cairo-Regular**.
 4. **Windows execution policy** (first run):  
    ```powershell
    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force

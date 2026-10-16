@@ -1,0 +1,82 @@
+FONTLOG for Plus Jakarta Sans font.
+
+This file provides detailed information on the Plus Jakarta Sans font.
+This information should be distributed along with the Plus Jakarta Sans font(s) and any
+derivative works.
+
+
+Basic Font Information
+
+Plus Jakarta Sans is a font family that takes geometric sans serif styles, designed by Gumpita Rahayu from Tokotype, the fonts were originally commissioned by 6616 Studio for Jakarta Provincial Government program's +Jakarta City of Collaboration identity in 2020.
+
+Taking part of inspiration such as Neuzit Grotesk, Futura, and 1930s grotesque sans serif with almost monoline contrast and pointy curves, the fonts consist modern and clean cut forms, the x-height dimension slight taller to provide clear spaces between caps and x-height, this also equipped with open counter and balanced spaces to preserve the legibility at a range of sizes.
+
+The beauty of diversity captured in typography. Like the city itself, the unique points of this fonts is that in some glyphs has its own diversity and characteristic of various explorations of forms that enrich the expressions and stories that coexist. The charms of Plus Jakarta Sans fonts appear when one looks closer, manifesting in a beauty that emerges once seen as a whole. Each alternate on the family contains several alternates characters, divided into three stylistic alternates which Lancip (Sharp), Lurus (Straight), and Lingkar (Swirl).
+
+As part of Plus Jakarta as a city of collaboration, fonts are made available for public and use it under the SIL Open Font License.
+
+To contribute to the project, Please see https://github.com/tokotype/PlusJakartaSans or visit https://www.tokotype.com
+
+
+ChangeLog
+
+26 May 2023 (Gumpita Rahayu) Plus Jakarta Sans v2.7.1
+
+- Fixed kerning missing in static ttf
+- Update font repository to googlefonts-project-template
+
+19 May 2023 (Gumpita Rahayu) Plus Jakarta Sans v2.700
+
+- Fixed shapeshifting glyphs on 'ohorn' and 'registered symbol'
+- Removed tail on 'æ'
+- Adjusted vertical metrics to compensate line-height issues
+- Add  two strokes on '₦' (Naira symbol)
+
+11 March 2022 (Yanone) Plus Jakarta Sans v2.600
+
+- Cleaned up file structure
+- Moved build system to `gftools builder` which is an abstract replacement
+  for many of the previous fragmented build scripts.
+  Since the fonts built with it haven't changed data-wise, 
+  a version bump and new release on the repo is unnecessary.
+- Added DESCRIPTION.html consisting of the first paragraphs of the README,
+  adjusted for grammar and spelling.
+
+12 November 2021 (Gumpita Rahayu) Plus Jakarta Sans v2.600
+
+- Adding SemiBold instance on static files
+- Fixed missing kerning values
+- Increasing quote character weight
+- Redesigned diacritics glyphs
+- Adding Tabular Figures (.tf)
+
+21 December 2020 (Gumpita Rahayu) Plus Jakarta Sans v2.500
+- Extending ascender character lowercase
+- Fixed duplicated alternates
+
+
+4 December 2020 (Gumpita Rahayu) Plus Jakarta Sans v2.400
+- Adding ExtraLight & ExtraLight Italic Master
+- Reworking weights and instance
+- Adding support for multiple languages (Incl. Vietnamese)
+- Encoding based on GF Latin Pro & GF Latin Plus
+- Variable fonts support (wght)
+- Removed Plus Jakarta Sans Text Version (In addition, Lightest weight added)
+- Adding several opentype features stylistic sets glyphs
+
+21 February 2020 (Gumpita Rahayu) Plus Jakarta Sans v1.000
+- Open sourced.
+- Fine tuning to almost all glyphs.
+- First public released.
+
+
+Acknowledgements
+
+If you make modifications be sure to add your name (N),
+email (E), web-address (if you have one) (W) and
+description (D). This list is in alphabetical order.
+
+N: Gumpita Rahayu
+E: mail@tokotype.com
+W: http://www.tokotype.com
+D: Original designer

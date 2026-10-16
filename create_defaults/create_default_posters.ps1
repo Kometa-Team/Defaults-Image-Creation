@@ -178,13 +178,14 @@ Function Get-BundledFontPath {
 
     $fontAliases = @{
         "barlowregular"        = "Barlow-Regular.ttf"
-        "bebasregular"         = "Bebas-Regular.ttf"
+        "bebasneue"            = "BebasNeue-Regular.ttf"
+        "bebasneueregular"     = "BebasNeue-Regular.ttf"
         "boecklinsuniverse"    = "BoecklinsUniverse.ttf"
         "boogalooregular"      = "Boogaloo-Regular.ttf"
         "cherrycreamsoda"      = "CherryCreamSoda-Regular.ttf"
         "cherrycreamsodaregular" = "CherryCreamSoda-Regular.ttf"
         "comfortaamedium"      = "Comfortaa-Medium.ttf"
-        "helveticabold"        = "Helvetica-Bold.ttf"
+        "plusjakartasansbold"  = "PlusJakartaSans-Bold.ttf"
         "jurabold"             = "Jura-Bold.ttf"
         "limelightregular"     = "Limelight-Regular.ttf"
         "monoton"              = "Monoton-Regular.ttf"
@@ -229,6 +230,15 @@ Function Resolve-MagickFont {
         return $FontName
     }
 
+    $fontToken = Get-NormalizedFontToken -FontName $FontName
+    if ($fontToken -in @("bebasneue", "bebasneueregular", "plusjakartasansbold")) {
+        $reviewedFont = Get-BundledFontPath -FontName $FontName
+        if ($null -ne $reviewedFont) {
+            return $reviewedFont.Replace('\', '/')
+        }
+        return $null
+    }
+
     $visibleFonts = Get-MagickVisibleFonts
     if ($visibleFonts -contains $FontName) {
         return $FontName
@@ -249,7 +259,7 @@ Function Resolve-MagickFont {
 Function InstallFontsIfNeeded {
     $fontNames = @(
         "Comfortaa-Medium",
-        "Bebas-Regular",
+        "Bebas Neue",
         "Rye-Regular",
         "Limelight-Regular",
         "BoecklinsUniverse",
@@ -264,7 +274,7 @@ Function InstallFontsIfNeeded {
         "Jura-Bold",
         "Special-Elite-Regular",
         "Barlow-Regular",
-        "Helvetica-Bold"
+        "Plus Jakarta Sans Bold"
     )
     $fontList = Get-MagickVisibleFonts
     $missingFonts = @()
@@ -4420,13 +4430,18 @@ Function CreateDecade {
         '1990s| transparent.png| +0| 0| +0| Jura-Bold| 500| #FFFFFF| 0| 15| #FFFFFF| | 1990| #44EF10| 1| 1| 0| 1',
         '2000s| transparent.png| +0| 0| +0| Special-Elite-Regular| 500| #FFFFFF| 0| 15| #FFFFFF| | 2000| #44EF10| 1| 1| 0| 1',
         '2010s| transparent.png| +0| 0| +0| Barlow-Regular| 500| #FFFFFF| 0| 15| #FFFFFF| | 2010| #44EF10| 1| 1| 0| 1',
-        '2020s| transparent.png| +0| 0| +0| Helvetica-Bold| 500| #FFFFFF| 0| 15| #FFFFFF| | 2020| #44EF10| 1| 1| 0| 1'
+        '2020s| transparent.png| +0| 0| +0| Plus Jakarta Sans Bold| 409| #FFFFFF| 0| 15| #FFFFFF| | 2020| #44EF10| 1| 1| 0| 1'
     ) | ConvertFrom-Csv -Delimiter '|'
 
     $arr = @()
     foreach ($item in $myArray) {
         $value = $($item.key_name)
-        $optimalFontSize = Get-OptimalPointSize -text $value -font $($item.font) -box_width $theMaxWidth -box_height $theMaxHeight -min_pointsize $minPointSize -max_pointsize $($item.font_size)
+        # These approved numeric Jakarta styles use a fixed size, not an auto-fit cap.
+        $optimalFontSize = if ((Get-NormalizedFontToken -FontName $item.font) -eq 'plusjakartasansbold') {
+            [int]$item.font_size
+        } else {
+            Get-OptimalPointSize -text $value -font $($item.font) -box_width $theMaxWidth -box_height $theMaxHeight -min_pointsize $minPointSize -max_pointsize $($item.font_size)
+        }
         $arr += ".\create_poster.ps1 -logo `"$script_path\$($item.logo)`" -logo_offset $($item.logo_offset) -logo_resize $($item.logo_resize) -text `"$value`" -text_offset $($item.text_offset) -font `"$($item.font)`" -font_size $optimalFontSize -font_color `"$($item.font_color)`" -border $($item.border) -border_width $($item.border_width) -border_color `"$($item.border_color)`" -avg_color_image `"$($item.avg_color_image)`" -out_name `"$($item.out_name)`" -base_color `"$($item.base_color)`" -gradient $($item.gradient) -avg_color $($item.avg_color) -clean $($item.clean) -white_wash $($item.white_wash)"
     }
     LaunchScripts -ScriptPaths $arr
@@ -5326,21 +5341,21 @@ Function CreatePlaylist {
     $theMaxWidth = 1600
     $theMaxHeight = 1000
     $minPointSize = 100
-    $maxPointSize = 140
+    $maxPointSize = 154
 
     Move-Item -Path output -Destination output-orig
 
     $myArray = @(
         'key_name| logo| logo_offset| logo_resize| text_offset| font| font_size| font_color| border| border_width| border_color| avg_color_image| out_name| base_color| gradient| clean| avg_color| white_wash',
-        'TIMELINE_ORDER| Arrowverse.png| -200| 1600| +450| Bebas-Regular| | #FFFFFF| 0| 15| #FFFFFF| | Arrowverse (Timeline Order)| #2B8F40| 1| 1| 0| 1',
-        'TIMELINE_ORDER| DragonBall.png| -200| 1600| +450| Bebas-Regular| | #FFFFFF| 0| 15| #FFFFFF| | Dragon Ball (Timeline Order)| #E39D30| 1| 1| 0| 1',
-        'TIMELINE_ORDER| Marvel Cinematic Universe.png| -200| 1600| +450| Bebas-Regular| | #FFFFFF| 0| 15| #FFFFFF| | Marvel Cinematic Universe (Timeline Order)| #AD2B2B| 1| 1| 0| 1',
-        'TIMELINE_ORDER| Star Trek.png| -200| 1600| +450| Bebas-Regular| | #FFFFFF| 0| 15| #FFFFFF| | Star Trek (Timeline Order)| #0193DD| 1| 1| 0| 1',
-        'TIMELINE_ORDER| Pokémon.png| -200| 1600| +450| Bebas-Regular| | #FFFFFF| 0| 15| #FFFFFF| | Pokémon (Timeline Order)| #FECA06| 1| 1| 0| 1',
-        'TIMELINE_ORDER| dca.png| -200| 1600| +450| Bebas-Regular| | #FFFFFF| 0| 15| #FFFFFF| | DC Animated Universe (Timeline Order)| #2832C4| 1| 1| 0| 1',
-        'TIMELINE_ORDER| X-men.png| -200| 1600| +450| Bebas-Regular| | #FFFFFF| 0| 15| #FFFFFF| | X-Men (Timeline Order)| #636363| 1| 1| 0| 1',
-        'TIMELINE_ORDER| Star Wars The Clone Wars.png| -200| 1600| +450| Bebas-Regular| | #FFFFFF| 0| 15| #FFFFFF| | Star Wars The Clone Wars (Timeline Order)| #ED1C24| 1| 1| 0| 1',
-        'TIMELINE_ORDER| Star Wars.png| -200| 1600| +450| Bebas-Regular| | #FFFFFF| 0| 15| #FFFFFF| | Star Wars (Timeline Order)| #F8C60A| 1| 1| 0| 1'
+        'TIMELINE_ORDER| Arrowverse.png| -200| 1600| +450| Bebas Neue| | #FFFFFF| 0| 15| #FFFFFF| | Arrowverse (Timeline Order)| #2B8F40| 1| 1| 0| 1',
+        'TIMELINE_ORDER| DragonBall.png| -200| 1600| +450| Bebas Neue| | #FFFFFF| 0| 15| #FFFFFF| | Dragon Ball (Timeline Order)| #E39D30| 1| 1| 0| 1',
+        'TIMELINE_ORDER| Marvel Cinematic Universe.png| -200| 1600| +450| Bebas Neue| | #FFFFFF| 0| 15| #FFFFFF| | Marvel Cinematic Universe (Timeline Order)| #AD2B2B| 1| 1| 0| 1',
+        'TIMELINE_ORDER| Star Trek.png| -200| 1600| +450| Bebas Neue| | #FFFFFF| 0| 15| #FFFFFF| | Star Trek (Timeline Order)| #0193DD| 1| 1| 0| 1',
+        'TIMELINE_ORDER| Pokémon.png| -200| 1600| +450| Bebas Neue| | #FFFFFF| 0| 15| #FFFFFF| | Pokémon (Timeline Order)| #FECA06| 1| 1| 0| 1',
+        'TIMELINE_ORDER| dca.png| -200| 1600| +450| Bebas Neue| | #FFFFFF| 0| 15| #FFFFFF| | DC Animated Universe (Timeline Order)| #2832C4| 1| 1| 0| 1',
+        'TIMELINE_ORDER| X-men.png| -200| 1600| +450| Bebas Neue| | #FFFFFF| 0| 15| #FFFFFF| | X-Men (Timeline Order)| #636363| 1| 1| 0| 1',
+        'TIMELINE_ORDER| Star Wars The Clone Wars.png| -200| 1600| +450| Bebas Neue| | #FFFFFF| 0| 15| #FFFFFF| | Star Wars The Clone Wars (Timeline Order)| #ED1C24| 1| 1| 0| 1',
+        'TIMELINE_ORDER| Star Wars.png| -200| 1600| +450| Bebas Neue| | #FFFFFF| 0| 15| #FFFFFF| | Star Wars (Timeline Order)| #F8C60A| 1| 1| 0| 1'
     ) | ConvertFrom-Csv -Delimiter '|'
 
     $arr = @()
@@ -6846,22 +6861,27 @@ Function CreateYear {
         '2017| transparent.png| +0| 1800| +0|  Barlow-Regular| 500| #FFFFFF| 0| 15| #FFFFFF| | 2017|  #8D848E| 1| 1| 0| 1',
         '2018| transparent.png| +0| 1800| +0|  Barlow-Regular| 500| #FFFFFF| 0| 15| #FFFFFF| | 2018|  #992C2E| 1| 1| 0| 1',
         '2019| transparent.png| +0| 1800| +0|  Barlow-Regular| 500| #FFFFFF| 0| 15| #FFFFFF| | 2019|  #131CA1| 1| 1| 0| 1',
-        '2020| transparent.png| +0| 1800| +0|  Helvetica-Bold| 500| #FFFFFF| 0| 15| #FFFFFF| | 2020|  #EF10D3| 1| 1| 0| 1',
-        '2021| transparent.png| +0| 1800| +0|  Helvetica-Bold| 500| #FFFFFF| 0| 15| #FFFFFF| | 2021|  #EF102A| 1| 1| 0| 1',
-        '2022| transparent.png| +0| 1800| +0|  Helvetica-Bold| 500| #FFFFFF| 0| 15| #FFFFFF| | 2022|  #EF6210| 1| 1| 0| 1',
-        '2023| transparent.png| +0| 1800| +0|  Helvetica-Bold| 500| #FFFFFF| 0| 15| #FFFFFF| | 2023|  #EFC910| 1| 1| 0| 1',
-        '2024| transparent.png| +0| 1800| +0|  Helvetica-Bold| 500| #FFFFFF| 0| 15| #FFFFFF| | 2024|  #10EFA3| 1| 1| 0| 1',
-        '2025| transparent.png| +0| 1800| +0|  Helvetica-Bold| 500| #FFFFFF| 0| 15| #FFFFFF| | 2025|  #108FEF| 1| 1| 0| 1',
-        '2026| transparent.png| +0| 1800| +0|  Helvetica-Bold| 500| #FFFFFF| 0| 15| #FFFFFF| | 2026|  #A900EF| 1| 1| 0| 1',
-        '2027| transparent.png| +0| 1800| +0|  Helvetica-Bold| 500| #FFFFFF| 0| 15| #FFFFFF| | 2027|  #8D848E| 1| 1| 0| 1',
-        '2028| transparent.png| +0| 1800| +0|  Helvetica-Bold| 500| #FFFFFF| 0| 15| #FFFFFF| | 2028|  #992C2E| 1| 1| 0| 1',
-        '2029| transparent.png| +0| 1800| +0|  Helvetica-Bold| 500| #FFFFFF| 0| 15| #FFFFFF| | 2029|  #131CA1| 1| 1| 0| 1'
+        '2020| transparent.png| +0| 1800| +0|  Plus Jakarta Sans Bold| 409| #FFFFFF| 0| 15| #FFFFFF| | 2020|  #EF10D3| 1| 1| 0| 1',
+        '2021| transparent.png| +0| 1800| +0|  Plus Jakarta Sans Bold| 409| #FFFFFF| 0| 15| #FFFFFF| | 2021|  #EF102A| 1| 1| 0| 1',
+        '2022| transparent.png| +0| 1800| +0|  Plus Jakarta Sans Bold| 409| #FFFFFF| 0| 15| #FFFFFF| | 2022|  #EF6210| 1| 1| 0| 1',
+        '2023| transparent.png| +0| 1800| +0|  Plus Jakarta Sans Bold| 409| #FFFFFF| 0| 15| #FFFFFF| | 2023|  #EFC910| 1| 1| 0| 1',
+        '2024| transparent.png| +0| 1800| +0|  Plus Jakarta Sans Bold| 409| #FFFFFF| 0| 15| #FFFFFF| | 2024|  #10EFA3| 1| 1| 0| 1',
+        '2025| transparent.png| +0| 1800| +0|  Plus Jakarta Sans Bold| 409| #FFFFFF| 0| 15| #FFFFFF| | 2025|  #108FEF| 1| 1| 0| 1',
+        '2026| transparent.png| +0| 1800| +0|  Plus Jakarta Sans Bold| 409| #FFFFFF| 0| 15| #FFFFFF| | 2026|  #A900EF| 1| 1| 0| 1',
+        '2027| transparent.png| +0| 1800| +0|  Plus Jakarta Sans Bold| 409| #FFFFFF| 0| 15| #FFFFFF| | 2027|  #8D848E| 1| 1| 0| 1',
+        '2028| transparent.png| +0| 1800| +0|  Plus Jakarta Sans Bold| 409| #FFFFFF| 0| 15| #FFFFFF| | 2028|  #992C2E| 1| 1| 0| 1',
+        '2029| transparent.png| +0| 1800| +0|  Plus Jakarta Sans Bold| 409| #FFFFFF| 0| 15| #FFFFFF| | 2029|  #131CA1| 1| 1| 0| 1'
     ) | ConvertFrom-Csv -Delimiter '|'
 
     $arr = @()
     foreach ($item in $myArray) {
         $value = $($item.key_name)
-        $optimalFontSize = Get-OptimalPointSize -text $value -font $($item.font) -box_width $theMaxWidth -box_height $theMaxHeight -min_pointsize $minPointSize -max_pointsize $($item.font_size)
+        # These approved numeric Jakarta styles use a fixed size, not an auto-fit cap.
+        $optimalFontSize = if ((Get-NormalizedFontToken -FontName $item.font) -eq 'plusjakartasansbold') {
+            [int]$item.font_size
+        } else {
+            Get-OptimalPointSize -text $value -font $($item.font) -box_width $theMaxWidth -box_height $theMaxHeight -min_pointsize $minPointSize -max_pointsize $($item.font_size)
+        }
         $arr += ".\create_poster.ps1 -logo `"$script_path\$($item.logo)`" -logo_offset $($item.logo_offset) -logo_resize $($item.logo_resize) -text `"$value`" -text_offset $($item.text_offset) -font `"$($item.font)`" -font_size $optimalFontSize -font_color `"$($item.font_color)`" -border $($item.border) -border_width $($item.border_width) -border_color `"$($item.border_color)`" -avg_color_image `"$($item.avg_color_image)`" -out_name `"$($item.out_name)`" -base_color `"$($item.base_color)`" -gradient $($item.gradient) -avg_color $($item.avg_color) -clean $($item.clean) -white_wash $($item.white_wash)"
     }
     LaunchScripts -ScriptPaths $arr
@@ -7015,11 +7035,11 @@ Function Get-Checksum-Files {
 
     $ttf1 = "Boogaloo-Regular.ttf"
     $ttf2 = "Righteous-Regular.ttf"
-    $ttf3 = "Bebas-Regular.ttf"
+    $ttf3 = "BebasNeue-Regular.ttf"
     $ttf4 = "BoecklinsUniverse.ttf"
     $ttf5 = "Comfortaa-Medium.ttf"
     $ttf6 = "UnifrakturCook-Bold.ttf"
-    $ttf7 = "Helvetica-Bold.ttf"
+    $ttf7 = "PlusJakartaSans-Bold.ttf"
     $ttf8 = "Limelight-Regular.ttf"
     $ttf9 = "Monoton-Regular.ttf"
     $ttf10 = "Jura-Bold.ttf"
@@ -7064,11 +7084,11 @@ Function Get-Checksum-Files {
 
     $expectedChecksum_ttf1 = "6AA7C9F7096B090A6783E31278ABF907EC84A4BD98F280C925AB033D1FE91EB7"
     $expectedChecksum_ttf2 = "4C3CDC5DE2D70C4EE75FC9C1723A6B8F2D7316F49B383335FD8257A17DD88ADE"
-    $expectedChecksum_ttf3 = "39D2EB178FDD52B4C350AC6DEE3D2090AE5A7C187225B0D161A1473CCBB6320D"
+    $expectedChecksum_ttf3 = "08E4623805102D819F58601E46E345648846075E363B2CEB23313C2D1C83EC73"
     $expectedChecksum_ttf4 = "5F6F6396EDEE3FA1FE9443258D7463F82E6B2512A03C5102A90295A095339FB5"
     $expectedChecksum_ttf5 = "992F89F3C26BE37CCEBF784B294D36F40B96ED96AD9A3CC1396F4D389FC69D0C"
     $expectedChecksum_ttf6 = "B9ED8DA80463792A29675199B0F6580871025C35B2C539CAD7D5DE050D216A0C"
-    $expectedChecksum_ttf7 = "D19CCD4211E3CAAAC2C7F1AE544456F5C67CD912E2BDFB1EFB6602C090C724EE"
+    $expectedChecksum_ttf7 = "5F5342EF76862B5B5365D1DFF1A667629DFA484E388DD602552F647219C3870F"
     $expectedChecksum_ttf8 = "5D2C9F43D8CB4D49481A39A33CDC2A9157B1FCBFB381063A11617EDE209A105C"
     $expectedChecksum_ttf9 = "1565B395F454D5C2642D0F411030051E7342FBAF6D5BFC5DA5899C47ECD3511E"
     $expectedChecksum_ttf10 = "1A3B4D7412F10CC17C34289C357E00C5E91BB2EC61B123C2A72CB975E0CBE94D"

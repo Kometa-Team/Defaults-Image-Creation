@@ -1,0 +1,5 @@
+# Keep the original upstream notices byte-identical on every checkout.
+OFL.txt -text -whitespace
+AUTHORS.txt -text
+FONTLOG.txt -text -whitespace
+README.md -text

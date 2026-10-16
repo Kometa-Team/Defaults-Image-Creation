@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-16",
+  "scope": "Three focused current-font samples, not full-batch acceptance",
+  "samples": [
+    {
+      "sample": "playlist",
+      "files": {
+        "legacy": {
+          "file": "playlist-legacy.jpg",
+          "sha256": "50dbe5cbc8dff7004e122748fdf902900b71878675b7eba5739cbf076842d5b8"
+        },
+        "python": {
+          "file": "playlist-python.jpg",
+          "sha256": "c793c1320b66f94d445828c5709f806c935739679b5d1c35d04de65dd758d8d3"
+        }
+      },
+      "mae": 0.08099544444444444,
+      "ssim": 0.9998661389999451,
+      "review_flag": false
+    },
+    {
+      "sample": "year-2020",
+      "files": {
+        "legacy": {
+          "file": "year-2020-legacy.jpg",
+          "sha256": "04436e88e0bbb5487819d0c6a4bd487d1a732bc6734691669469052805a10312"
+        },
+        "python": {
+          "file": "year-2020-python.jpg",
+          "sha256": "c7be058188e042d4b7b7d001ee9848e7c2995592a7d76c0e55b76d8863d0f9f4"
+        }
+      },
+      "mae": 0.024789,
+      "ssim": 0.999898986316557,
+      "review_flag": false
+    },
+    {
+      "sample": "year-2021",
+      "files": {
+        "legacy": {
+          "file": "year-2021-legacy.jpg",
+          "sha256": "5b699a564cc81346a7cdcd402d64962e2001cfc1463682a333bb64449feb6eea"
+        },
+        "python": {
+          "file": "year-2021-python.jpg",
+          "sha256": "9e434db872f8a08511f3fdf85975a5580fb2181d09b8b5f04a5f7f56e53c907f"
+        }
+      },
+      "mae": 0.07031838888888889,
+      "ssim": 0.9991367085202562,
+      "review_flag": false
+    }
+  ],
+  "source_hashes": {
+    "create_poster.py": "de5850fb027966c395bf28b7dab787bd86955df67c8369afb8b7a48bbd4b6f32",
+    "poster_text.py": "8555412db233784d2ae26dd7e337e23ec03457f26e1b1957d9f90eece8c61316",
+    "create_poster.ps1": "41e5695b52382238cb9c8b3c6c540de504c7ec6e3ea4a0a3c065a37c87d7467b",
+    "create_default_posters.ps1": "39122c239570a5971b8f168feb99da0bc5793afe456f4d64dfa70a1ea139fdf9"
+  }
+}

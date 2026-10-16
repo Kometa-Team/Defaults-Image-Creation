@@ -1,0 +1,5 @@
+# Preserve original upstream notice bytes on every checkout.
+OFL.txt -text -whitespace
+AUTHORS.txt -text
+CONTRIBUTORS.txt -text -whitespace
+TRADEMARKS.md -text

@@ -1,0 +1,3 @@
+# Preserve the pinned upstream fixture and license bytes.
+en.yml -text -whitespace
+LICENSE -text

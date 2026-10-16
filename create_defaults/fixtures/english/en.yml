@@ -1,0 +1,1560 @@
+variables:
+  library_translation:
+    movie: movie
+    show: show
+    artist: artist
+    video: video
+    item: item
+  library_translation2:
+    movie: movie
+    show: show
+    artist: artist
+    video: video
+    item: item
+  library_translation3:
+    movie: movie
+    show: show
+    artist: artist
+    video: video
+    item: item
+key_names:
+  4/20: 4/20
+  abkhazian: Abkhazian
+  action: Action
+  action_adventure: Action & Adventure
+  actor: Actor
+  actors: Actors
+  adult: Adult
+  adventure: Adventure
+  afar: Afar
+  afrikaans: Afrikaans
+  age: Age
+  airing_today: Airing Today
+  akan: Akan
+  albanian: Albanian
+  amharic: Amharic
+  animation: Animation
+  anime: Anime
+  arabic: Arabic
+  aragonese: Aragonese
+  argentina: Argentina
+  armenian: Armenian
+  asian_american_pacific_islander_heritage_month: Asian American & Pacific 
+    Islander Heritage Month
+  assamese: Assamese
+  assassin: Assassin
+  audio_language: Audio Language
+  australia: Australia
+  austria: Austria
+  avaric: Avaric
+  avestan: Avestan
+  award: Award
+  aymara: Aymara
+  azerbaijani: Azerbaijani
+  bambara: Bambara
+  bahamas: Bahamas
+  based_on: Based on...
+  based_on_a_book: Based on a Book
+  based_on_a_comic: Based on a Comic
+  based_on_a_true_story: Based on a True Story
+  based_on_a_video_game: Based on a Video Game
+  basque: Basque
+  bashkir: Bashkir
+  belarusian: Belarusian
+  belgium: Belgium
+  bengali: Bengali
+  best_director_winners: Best Director Winners
+  best_picture_winner: Best Picture Winner
+  best_picture_winners: Best Picture Winners
+  best_of: Best of
+  biography: Biography
+  biopic: Biopic
+  bislama: Bislama
+  black_history_month: Black History Month
+  book: Book
+  bosnian: Bosnian
+  bottom_rated: Bottom Rated
+  box_office: Box office
+  boys_love: Boys Love
+  brazil: Brazil
+  breton: Breton
+  bulgaria: Bulgaria
+  bulgarian: Bulgarian
+  burmese: Burmese
+  canada: Canada
+  cars: Cars
+  catalan: Catalan
+  central_khmer: Central Khmer
+  chamorro: Chamorro
+  chart: Chart
+  chechen: Chechen
+  chichewa: Chichewa
+  children: Children
+  chile: Chile
+  china: China
+  chinese: Chinese
+  christmas: Christmas
+  church_slavic: Church Slavic
+  chuvash: Chuvash
+  collected: Collected
+  collectionless: Collectionless
+  comedy: Comedy
+  comic: Comic
+  competition: Competition
+  con_artist: Con Artist
+  content_ratings: Content Ratings
+  cornish: Cornish
+  corsican: Corsican
+  costa_rica: Costa Rica
+  country: Country
+  creature_horror: Creature Horror
+  cree: Cree
+  crime: Crime
+  croatia: Croatia
+  croatian: Croatian
+  czech: Czech
+  czech_republic: Czech Republic
+  danish: Danish
+  day_of_persons_with_disabilities: Day of Persons With Disabilities
+  decade: Decade
+  demons: Demons
+  denmark: Denmark
+  director: Director
+  directors: Directors
+  divehi: Divehi
+  documentary: Documentary
+  dominican_republic: Dominican Republic
+  drama: Drama
+  dzongkha: Dzongkha
+  dutch: Dutch
+  easter: Easter
+  ecchi: Ecchi
+  egypt: Egypt
+  english: English
+  erotica: Erotica
+  esperanto: Esperanto
+  estonia: Estonia
+  estonian: Estonian
+  ewe: Ewe
+  family: Family
+  families: Families
+  fantasy: Fantasy
+  faroese: Faroese
+  fathers_day: Father's Day
+  favorited: Favorited
+  fijian: Fijian
+  filipino: Filipino
+  film_noir: Film Noir
+  finland: Finland
+  finnish: Finnish
+  food: Food
+  found_footage_horror: Found Footage Horror
+  france: France
+  franchise: Franchise
+  french: French
+  fulah: Fulah
+  gaelic: Gaelic
+  galician: Galician
+  game: Game
+  game_show: Game Show
+  ganda: Ganda
+  gangster: Gangster
+  genre: Genre
+  georgian: Georgian
+  german: German
+  germany: Germany
+  girls_love: Girl's Love
+  gourmet: Gourmet
+  grand_jury_winners: Grand Jury Winners
+  greece: Greece
+  greek: Greek
+  guarani: Guarani
+  gujarati: Gujarati
+  haitian: Haitian
+  halloween: Halloween
+  harem: Harem
+  hausa: Hausa
+  hebrew: Hebrew
+  heist: Heist
+  hentai: Hentai
+  herero: Herero
+  hindi: Hindi
+  hiri_motu: Hiri Motu
+  history: History
+  home_and_garden: Home and Garden
+  hong_kong: Hong Kong
+  horror: Horror
+  hungarian: Hungarian
+  hungary: Hungary
+  iceland: Iceland
+  icelandic: Icelandic
+  ido: Ido
+  igbo: Igbo
+  independence_day: Independence Day
+  india: India
+  indie: Indie
+  indonesia: Indonesia
+  indonesian: Indonesian
+  interlingua: Interlingua
+  interlingue: Interlingue
+  inuktitut: Inuktitut
+  inupiaq: Inupiaq
+  iran: Iran
+  ireland: Ireland
+  irish: Irish
+  israel: Israel
+  italian: Italian
+  italy: Italy
+  japan: Japan
+  japanese: Japanese
+  javanese: Javanese
+  kalaallisut: Kalaallisut
+  kannada: Kannada
+  kanuri: Kanuri
+  kashmiri: Kashmiri
+  kazakh: Kazakh
+  kids: Kids
+  kids_network: Kids Network
+  kikuyu: Kikuyu
+  kinyarwanda: Kinyarwanda
+  kirghiz: Kirghiz
+  komi: Komi
+  kongo: Kongo
+  korea: Korea
+  korean: Korean
+  kuanyama: Kuanyama
+  kurdish: Kurdish
+  lgbtq: LGBTQ+
+  lgbtq_pride_month: LGBTQ+ Pride Month
+  labor_day: Labor Day
+  lao: Lao
+  latin: Latin
+  latinx_heritage_month: Latinx Heritage Month
+  latvia: Latvia
+  latvian: Latvian
+  limburgan: Limburgan
+  lingala: Lingala
+  lithuanian: Lithuanian
+  luba-katanga: Luba-Katanga
+  luxembourg: Luxembourg
+  luxembourgish: Luxembourgish
+  lowest_rated: Lowest Rated
+  macedonian: Macedonian
+  malagasy: Malagasy
+  malay: Malay
+  malayalam: Malayalam
+  malaysia: Malaysia
+  malaysian: Malaysian
+  maltese: Maltese
+  mandarin: Mandarin
+  manx: Manx
+  maori: Maori
+  marathi: Marathi
+  martial_arts: Martial Arts
+  marshallese: Marshallese
+  mecha: Mecha
+  memorial_day: Memorial Day
+  mexico: Mexico
+  military: Military
+  mind_bend: Mind-Bend
+  mind_fuck: Mind-Fuck
+  mind_f**k: Mind-F**k
+  mini_series: Mini-Series
+  mongolian: Mongolian
+  morocco: Morocco
+  mothers_day: Mother's Day
+  movie_chart: Movie Chart
+  music: Music
+  musical: Musical
+  mystery: Mystery
+  nauru: Nauru
+  navajo: Navajo
+  ndonga: Ndonga
+  nepal: Nepal
+  nepali: Nepali
+  netherlands: Netherlands
+  network: Network
+  new_episodes: New Episodes
+  new_premieres: New Premieres
+  new_year: New Year
+  new_years_day: New Year's Day
+  new_zealand: New Zealand
+  newly_released_episodes: Newly Released Episodes
+  newly_released: Newly Released
+  news: News
+  news_politics: News & Politics
+  nominations: Nominations
+  not_rated: Not Rated
+  now_playing: Now Playing
+  north_ndebele: North Ndebele
+  northern_sami: Northern Sami
+  norway: Norway
+  norwegian: Norwegian
+  norwegian_bokmål: Norwegian Bokmål
+  norwegian_nynorsk: Norwegian Nynorsk
+  occitan: Occitan
+  ojibwa: Ojibwa
+  on_the_air: On the air
+  oriya: Oriya
+  oromo: Oromo
+  ossetian: Ossetian
+  other: Other
+  outdoor_adventure: Outdoor Adventure
+  pakistan: Pakistan
+  pali: Pali
+  panama: Panama
+  parody: Parody
+  pashto: Pashto
+  persian: Persian
+  personal: Personal
+  peru: Peru
+  philippines: Philippines
+  pilots: Pilots
+  plex_people_watching: Plex People Watching
+  plex_pilots: Plex Pilots
+  plex_popular: Plex Popular
+  plex_watched: Plex Watched
+  poland: Poland
+  police: Police
+  polish: Polish
+  politics: Politics
+  popular: Popular
+  portugal: Portugal
+  portugese: Portugese
+  portuguese: Portuguese
+  producer: Producer
+  producers: Producers
+  psychedelic: Psychedelic
+  psychological: Psychological
+  psychological_horror: Psychological Horror
+  punjabi: Punjabi
+  qatar: Qatar
+  quechua: Quechua
+  rated: Rated
+  ratings: Ratings
+  reality: Reality
+  recommended: Recommended
+  recently_added: Recently Added
+  recently_aired: Recently Aired
+  resolution: Resolution
+  romance: Romance
+  romania: Romania
+  romanian: Romanian
+  romantic_comedy: Romantic Comedy
+  romantic_drama: Romantic Drama
+  romansh: Romansh
+  rundi: Rundi
+  russia: Russia
+  russian: Russian
+  samoan: Samoan
+  samurai: Samurai
+  sango: Sango
+  sanskrit: Sanskrit
+  sardinian: Sardinian
+  saudi_arabia: Saudi Arabia
+  school: School
+  sci-fi_&_fantasy: Sci-Fi & Fantasy
+  science_fiction: Science Fiction
+  season: Season
+  seasonal: Seasonal
+  serbia: Serbia
+  serbian: Serbian
+  serial_killer: Serial Killer
+  shona: Shona
+  short: Short
+  shoujo: Shoujo
+  shounen: Shounen
+  sichuan_yi: Sichuan Yi
+  sindhi: Sindhi
+  singapore: Singapore
+  sinhala: Sinhala
+  slasher: Slasher
+  slice_of_life: Slice of life
+  slovak: Slovak
+  slovenian: Slovenian
+  soap: Soap
+  somali: Somali
+  south_africa: South Africa
+  south_ndebele: South Ndebele
+  southern_sotho: Southern Sotho
+  space: Space
+  spain: Spain
+  spanish: Spanish
+  sport: Sport
+  spy: Spy
+  sri_lanka: Sri Lanka
+  st_patricks_day: St. Patrick's Day
+  stand-up_comedy: Stand-Up Comedy
+  stevenlu's_popular_movies: StevenLu's Popular Movies
+  stoner_comedy: Stoner Comedy
+  streaming: Streaming
+  studio: Studio
+  studio_animation: Studio Animation
+  subtitle: Subtitle
+  subtitle_language: Subtitle Language
+  sundanese: Sundanese
+  superhero: Superhero
+  super_power: Super Power
+  supernatural: Supernatural
+  survival: Survival
+  suspense: Suspense
+  swahili: Swahili
+  swati: Swati
+  sweden: Sweden
+  swedish: Swedish
+  switzerland: Switzerland
+  sword_sorcery: Sword & Sorcery
+  tv_chart: TV Chart
+  tv_movie: TV Movie
+  tagalog: Tagalog
+  tahitian: Tahitian
+  tajik: Tajik
+  talk_show: Talk Show
+  tamil: Tamil
+  tatar: Tatar
+  telugu: Telugu
+  thai: Thai
+  thailand: Thailand
+  thanksgiving: Thanksgiving
+  thriller: Thriller
+  tibetan: Tibetan
+  tigrinya: Tigrinya
+  timeline_order: Timeline Order
+  tonga: Tonga
+  top_10: Top 10
+  top_10_pirated: Top 10 Pirated
+  top_250: Top 250
+  top_airing: Top Airing
+  top_rated: Top Rated
+  travel: Travel
+  true_story: True Story
+  trending: Trending
+  tsonga: Tsonga
+  tswana: Tswana
+  turkey: Turkey
+  turkish: Turkish
+  turkmen: Turkmen
+  twi: Twi
+  uighur: Uighur
+  uk_network: UK Network
+  uk_streaming: UK Streaming
+  ukraine: Ukraine
+  ukrainian: Ukrainian
+  united_arab_emirates: United Arab Emirates
+  united_kingdom: United Kingdom
+  united_states_of_america: United States of America
+  universe: Universe
+  urdu: Urdu
+  us_network: US Network
+  us_streaming: US Streaming
+  uzbek: Uzbek
+  valentines_day: Valentine's Day
+  vampire: Vampire
+  venda: Venda
+  video_game: Video Game
+  vietnam: Vietnam
+  vietnamese: Vietnamese
+  volapük: Volapük
+  walloon: Walloon
+  war: War
+  war_politics: War & Politics
+  watched: Watched
+  watchlist: Watchlist
+  welsh: Welsh
+  western: Western
+  western_frisian: Western Frisian
+  winners: Winners
+  wolof: Wolof
+  womens_history_month: Women's History Month
+  writer: Writer
+  writers: Writers
+  xhosa: Xhosa
+  year: Year
+  yiddish: Yiddish
+  yoruba: Yoruba
+  zhuang: Zhuang
+  zombie_horror: Zombie Horror
+  zulu: Zulu
+  taiwan: Taiwan
+  nordic: Nordic
+  latin_america: Latin America
+  mma: MMA
+  leaving_soon: Leaving Soon
+  new: New
+  ended: Ended
+  ufo: UFO
+  veterans_day: Veteran's Day
+  aspect_ratio: Aspect Ratio
+  andean: Andean
+  balkans: Balkans
+  benelux: Benelux
+  caribbean: Caribbean
+  caucasus: Caucasus
+  central_africa: Central Africa
+  central_americas: Central Americas
+  central_asia: Central Asia
+  eastern_africa: Eastern Africa
+  eastern_europe: Eastern Europe
+  iberia: Iberia
+  middle_east: Middle East
+  northern_africa: Northern Africa
+  pacific_islands: Pacific Islands
+  south_asia: South Asia
+  south-east_asia: South-East Asia
+  southern_africa: Southern Africa
+  southern_cone: Southern Cone
+  western_africa: Western Africa
+  mongolia: Mongolia
+  afghanistan: Afghanistan
+  åland_islands: Åland Islands
+  albania: Albania
+  algeria: Algeria
+  andorra: Andorra
+  angola: Angola
+  anguilla: Anguilla
+  antarctica: Antarctica
+  antigua: Antigua
+  armenia: Armenia
+  aruba: Aruba
+  azerbaijan: Azerbaijan
+  bahrain: Bahrain
+  bangladesh: Bangladesh
+  barbados: Barbados
+  belarus: Belarus
+  belize: Belize
+  benin: Benin
+  bermuda: Bermuda
+  bhutan: Bhutan
+  bolivia: Bolivia
+  bonaire: Bonaire
+  bosnia_and_herzegovina: Bosnia and Herzegovina
+  botswana: Botswana
+  bouvet_island: Bouvet Island
+  brunei: Brunei
+  burkina_faso: Burkina Faso
+  burundi: Burundi
+  cabo_verde: Cabo Verde
+  cambodia: Cambodia
+  cameroon: Cameroon
+  cayman_islands: Cayman Islands
+  central_african_republic: Central African Republic
+  chad: Chad
+  christmas_island: Christmas Island
+  cocos_(keeling)_islands: Cocos (Keeling) Islands
+  colombia: Colombia
+  comoros: Comoros
+  congo: Congo
+  cook_islands: Cook Islands
+  cuba: Cuba
+  curaçao: Curaçao
+  cyprus: Cyprus
+  djibouti: Djibouti
+  dominica: Dominica
+  ecuador: Ecuador
+  el_salvador: El Salvador
+  equatorial_guinea: Equatorial Guinea
+  eritrea: Eritrea
+  eswatini: Eswatini
+  ethiopia: Ethiopia
+  falkland_islands: Falkland Islands
+  faroe_islands: Faroe Islands
+  fiji: Fiji
+  french_guiana: French Guiana
+  french_polynesia: French Polynesia
+  gabon: Gabon
+  gambia: Gambia
+  georgia: Georgia
+  ghana: Ghana
+  gibraltar: Gibraltar
+  greenland: Greenland
+  grenada: Grenada
+  guadeloupe: Guadeloupe
+  guam: Guam
+  guatemala: Guatemala
+  guernsey: Guernsey
+  guinea: Guinea
+  guinea-bissau: Guinea-Bissau
+  guyana: Guyana
+  haiti: Haiti
+  holy_see: Holy See
+  honduras: Honduras
+  iraq: Iraq
+  isle_of_man: Isle of Man
+  jamaica: Jamaica
+  jersey: Jersey
+  jordan: Jordan
+  kazakhstan: Kazakhstan
+  kenya: Kenya
+  kiribati: Kiribati
+  kuwait: Kuwait
+  kyrgyzstan: Kyrgyzstan
+  lebanon: Lebanon
+  lesotho: Lesotho
+  liberia: Liberia
+  libya: Libya
+  liechtenstein: Liechtenstein
+  lithuania: Lithuania
+  macao: Macao
+  macedonia: Macedonia
+  madagascar: Madagascar
+  malawi: Malawi
+  maldives: Maldives
+  mali: Mali
+  malta: Malta
+  marshall_islands: Marshall Islands
+  martinique: Martinique
+  mauritania: Mauritania
+  mauritius: Mauritius
+  mayotte: Mayotte
+  micronesia: Micronesia
+  moldova: Moldova
+  monaco: Monaco
+  montenegro: Montenegro
+  montserrat: Montserrat
+  mozambique: Mozambique
+  myanmar: Myanmar
+  namibia: Namibia
+  new_caledonia: New Caledonia
+  new_guinea: New Guinea
+  nicaragua: Nicaragua
+  niger: Niger
+  nigeria: Nigeria
+  niue: Niue
+  norfolk_island: Norfolk Island
+  oman: Oman
+  palau: Palau
+  palestine: Palestine
+  paraguay: Paraguay
+  pitcairn: Pitcairn
+  puerto_rico: Puerto Rico
+  réunion: Réunion
+  rwanda: Rwanda
+  saint_barthélemy: Saint Barthélemy
+  saint_lucia: Saint Lucia
+  samoa: Samoa
+  san_marino: San Marino
+  sao_tome_and_principe: Sao Tome and Principe
+  senegal: Senegal
+  seychelles: Seychelles
+  sierra_leone: Sierra Leone
+  slovakia: Slovakia
+  slovenia: Slovenia
+  solomon_islands: Solomon Islands
+  somalia: Somalia
+  south_sudan: South Sudan
+  sudan: Sudan
+  suriname: Suriname
+  syria: Syria
+  tajikistan: Tajikistan
+  tanzania: Tanzania
+  timor-leste: Timor-Leste
+  togo: Togo
+  tokelau: Tokelau
+  trinidad_and_tobago: Trinidad and Tobago
+  tunisia: Tunisia
+  turkmenistan: Turkmenistan
+  turks_and_caicos: Turks and Caicos
+  tuvalu: Tuvalu
+  uganda: Uganda
+  uruguay: Uruguay
+  uzbekistan: Uzbekistan
+  vanuatu: Vanuatu
+  venezuela: Venezuela
+  yemen: Yemen
+  zambia: Zambia
+  zimbabwe: Zimbabwe
+  côte_divoire: Côte d'Ivoire
+  africa: Africa
+  oceania: Oceania
+  asia: Asia
+  north_america: North America
+  south_america: South America
+  Europe: Europe
+  region: Region
+  continent: 'Continent '
+  antarctica_region: Antarctica Region
+  australian: Australian
+  balkan: Balkan
+  brazilian: Brazilian
+  canadian: Canadian
+  caucasian: Caucasian
+  central_african: Central African
+  central_american: Central American
+  central_asian: Central Asian
+  central_european: Central European
+  chinese_and_mongolian: Chinese and Mongolian
+  eastern_african: Eastern African
+  eastern_european: Eastern European
+  hong_kong_and_macao: Hong Kong and Macao
+  iberian: Iberian
+  mexican: Mexican
+  middle_eastern: Middle Eastern
+  northern_african: Northern African
+  pacific_island: Pacific Island
+  south_asian: South Asian
+  south-east_asian: South-East Asian
+  southern_african: Southern African
+  taiwanese: Taiwanese
+  uk: UK
+  usa: USA
+  western_african: Western African
+  svalbard_and_jan_mayen: Svalbard and Jan Mayen
+  mayan: Mayan
+  tai: Tai
+  romany: Romany
+  1001_movies_you_must_see_before_you_die: 1001 Movies You Must See Before You 
+    Die
+  adult_cartoons: Adult Cartoons
+  america: America
+  animals: Animals
+  animated_shorts: Animated Shorts
+  apocalypse: Apocalypse
+  astronaut: Astronaut
+  building: Building
+  childrens_cartoons: Children's Cartoons
+  colorado: Colorado
+  comedy_horror: Comedy Horror
+  conspiracy: Conspiracy
+  criterion_collection: Criterion Collection
+  dark_comedy: Dark Comedy
+  dinosaurs: Dinosaurs
+  dystopian: Dystopian
+  engineering_disasters: Engineering Disasters
+  engineering: Engineering
+  first_responder: First Responder
+  football: Football
+  fringe: Fringe
+  funny_sci-fi: Funny Sci-Fi
+  human_body: Human Body
+  inspirational: Inspirational
+  louisiana: Louisiana
+  manufacturing: Manufacturing
+  medical: Medical
+  mystery_box: Mystery Box
+  natural_disaster: Natural Disaster
+  nature: Nature
+  pandemic: Pandemic
+  paranormal: Paranormal
+  plants: Plants
+  prison: Prison
+  seductive: Seductive
+  stephen_king: Stephen King
+  technology: Technology
+  the_arts: The Arts
+  top_grossing_films_annually: Top Grossing Films Annually
+  top_grossing_films_of_all-time: Top Grossing Films of All-Time
+  unexpectedly_amazing: Unexpectedly Amazing
+  weather: Weather
+  witch: Witch
+  south_korea: South Korea
+  united_states: United States
+  returning_soon: Returning Soon
+  americas: Americas
+  central_america: Central America
+  australia_and_new_zealand: Australia and New Zealand
+  democratic_republic_of_the_congo: Democratic Republic of the Congo
+  eastern_asia: Eastern Asia
+  melanesia: Melanesia
+  northern_europe: Northern Europe
+  polynesia: Polynesia
+  southeastern_asia: South-Eastern Asia
+  southern_asia: Southern Asia
+  southern_europe: Southern Europe
+  sub-saharan_africa: Sub-Saharan Africa
+  western_asia: Western Asia
+  western_europe: Western Europe
+  northern_america: Northern America
+  christmas_cartoons: Christmas Cartoons
+  christmas_episodes: Christmas Episodes
+  absurdism: Absurdism
+  adult_cartoon: Adult Cartoon
+  alien: Alien
+  alternate_history: Alternate History
+  animal: Animal
+  animated_short: Animated Short
+  anthology: Anthology
+  anti-hero: Anti-Hero
+  artificial_intelligence: Artificial Intelligence
+  betrayal: Betrayal
+  boxing: Boxing
+  bug: Bug
+  caper: Caper
+  chick_flick: Chick Flick
+  childrens_cartoon: Children's Cartoon
+  coming_of_age: Coming of Age
+  cop: Cop
+  costume_drama: Costume Drama
+  courtroom: Courtroom
+  cyberpunk: Cyberpunk
+  dark_fantasy: Dark Fantasy
+  detective: Detective
+  dinosaur: Dinosaur
+  dragon: Dragon
+  dramedy: Dramedy
+  engineering_disaster: Engineering Disaster
+  epic: Epic
+  espionage: Espionage
+  experimental: Experimental
+  fairy_tale: Fairy Tale
+  foreign: Foreign
+  fugitive: Fugitive
+  ghost: Ghost
+  gothic: Gothic
+  heartbreak: Heartbreak
+  historical_event: Historical Event
+  historical_fiction: Historical Fiction
+  hostage: Hostage
+  hustle: Hustle
+  melodrama: Melodrama
+  mockumentary: Mockumentary
+  monster: Monster
+  mythology: Mythology
+  naval: Naval
+  ninja: Ninja
+  occult: Occult
+  outlaw: Outlaw
+  period_drama: Period Drama
+  philosophy: Philosophy
+  plant: Plant
+  prehistoric: Prehistoric
+  religion: Religion
+  remake: Remake
+  revenge: Revenge
+  robot: Robot
+  satire: Satire
+  space_opera: Space Opera
+  spaghetti_western: Spaghetti Western
+  splatter: Splatter
+  steampunk: Steampunk
+  stop-motion: Stop-Motion
+  surrealism: Surrealism
+  swashbuckler: Swashbuckler
+  sword_sandal: Sword & Sandal
+  time_travel: Time Travel
+  treasure_hunt: Treasure Hunt
+  true_crime: True Crime
+  urban_fantasy: Urban Fantasy
+  utopia: Utopia
+  werewolf: Werewolf
+  whodunit: Whodunit
+  wizardry_witchcraft: Wizardry & Witchcraft
+  world_war: World War
+  plex_must_see_movies: Must See Movies
+  plex_must_watch_movies: Must Watch Movies
+  plex_must_see_shows: Must See Shows
+  plex_must_watch_shows: Must Watch Shows
+  plex_personal_movies_picks: My Personal Movie Picks
+  plex_personal_shows_picks: My Personal Show Picks
+  buddy_comedy: Buddy Comedy
+  cyber_thriller: Cyber-Thriller
+  jungle_adventure: Jungle Adventure
+  post_apocalyptic: Post-Apocalyptic
+  medieval: Medieval
+  ultimate_bass: Ultimate Bass
+  best_of_britain: Best of Britain
+  based_on_books_and_games: Based on Books and Games
+  heroes_and_wizards: Heroes and Wizards
+  throwback_thursday: Throwback Thursday
+  the_justice_system: The Justice System
+  mystery_and_drama: Mystery and Drama
+  family_favourites: Family Favourites
+  this_day_in_history: This Day in History
+  this_week_in_history: This Week in History
+  this_month_in_history: This Month in History
+  north_korea: North Korea
+  north_macedonia: North Macedonia
+  absurd_comedy: Absurd Comedy
+  arthouse: Arthouse
+  action_comedy: Action Comedy
+  exploitation: Exploitation
+  neo-noir: Neo-Noir
+  body_horror: Body Horror
+  crime_comedy: Crime Comedy
+  sexploitation: Sexploitation
+  cannibal: Cannibal
+  extreme: Extreme
+  creature_feature: Creature Feature
+  folk_horror: Folk Horror
+  elevated_horror: Elevated Horror
+  fantasy_horror: Fantasy Horror
+  foreign_giallo: Foreign Giallo
+  foreign_noir: Foreign Noir
+  horror_parody: Horror Parody
+  found_footage: Found Footage
+  gaijinsploitation: Gaijinsploitation
+  lovecraftian: Lovecraftian
+  silent: Silent
+  slapstick: Slapstick
+  surreal_comedy: Surreal Comedy
+  sci-fi_horror: Sci-Fi Horror
+  pinku: Pinku
+  zombie_comedy: Zombie Comedy
+  sleazy: Sleazy
+  surreal: Surreal
+  video_nasty: Video Nasty
+  surreal_horror: Surreal Horror
+  zombie: Zombie
+  wuxia: Wuxia
+  blaxploitation: Blaxploitation
+  east_timor: East Timor
+  turks_and_caicos_islands: Turks and Caicos Islands
+  kosovo: Kosovo
+  papua_new_guinea: Papua New Guinea
+  saint_kitts_and_nevis: Saint Kitts and Nevis
+  top_1: Top 1
+  top_2: Top 2
+  top_3: Top 3
+  top_4: Top 4
+  top_8: Top 8
+  top_5: Top 5
+  top_6: Top 6
+  top_7: Top 7
+  top_9: Top 9
+  top_11: Top 11
+  top_13: Top 13
+  top_12: Top 12
+  top_16: Top 16
+  top_15: Top 15
+  top_21: Top 21
+  top_14: Top 14
+  top_19: Top 19
+  top_20: Top 20
+  top_18: Top 18
+  top_17: Top 17
+  top_22: Top 22
+  top_27: Top 27
+  top_23: Top 23
+  top_24: Top 24
+  top_25: Top 25
+  top_30: Top 30
+  top_26: Top 26
+  top_28: Top 28
+  top_29: Top 29
+  letterboxd_top_250: Letterboxd Top 250
+  box_office_mojo_all_time_100: Box Office Mojo All Time 100
+  oscars_best_picture_winners: Oscar Best Picture Winners
+  sight_and_sound_greatest_films: Sight & Sound Greatest Films
+  afi_100_years_100_movies: AFI 100 Years 100 Movies
+  roger_eberts_great_movies: Roger Ebert's Great Movies
+  edgar_wrights_1000_favorites: Edgar Wright's 1,000 Favorites
+  top_250_most_fans: Top 250 Most Fans
+  top_250_women_directed: Top 250 Women Directed
+  top_250_documentaries: Top 250 Documentaries
+  imdb_top_250: IMDb Top 250
+  top_100_black_directed: Top 100 Black Directed
+  top_100_animation: Top 100 Animation
+  top_250_horror: Top 250 Horror
+  cannes_palmes_dor_winners: Cannes Palme d'Or Winners
+  1001_movies_to_see_before_you_die: 1,001 To See Before You Die
+  oscars_picture_nomination: Best Picture Nominees
+  oscars_director_nomination: Best Director Nominees
+  best_director_nomination: Best Director Nominees
+  best_picture_nomination: Best Picture Nominees
+  all_time: All Time
+  guilty_pleasure: Guilty Pleasure
+  visually_insane: Visually Insane
+  lost_treasure: Lost Treasure
+  mojo_top_100: Top 100 of All Time
+  shows: Shows
+  movies: Movies
+  originals: Originals
+  cult_classics: Cult Classics
+  must_see: Must See
+  certified_fresh: Certified Fresh
+  rated_100: Rated 100%
+  time_loop: Time Loop
+  next_airing: Next Airing
+  laos: Laos
+  republic_of_the_congo: Republic of the Congo
+  saint_pierre_and_miquelon: Saint Pierre and Miquelon
+  president: President
+  best_live_action_short_film_nomination: Best Live Action Short Film Nominees
+  best_live_action_short_film_winners: Best Live Action Short Film Winners
+  best_animated_feature_film_nomination: Best Animated Feature Film Nominees
+  best_animated_feature_film_winners: Best Animated Feature Film Winners
+  trains: Trains
+  disney: Disney
+  pixar: Pixar
+  dreamworks: Dreamworks
+  disney_pixar_dreamworks: Disney Pixar Dreamworks
+  new_years_eve: New Years Eve
+  may_the_fourth: May the fourth be with you
+  popular_movies: Popular Movies
+  movies_leaving_soon: Movies Leaving Soon
+  shows_leaving_soon: Shows Leaving Soon
+  episodes_leaving_soon: Episodes Leaving Soon
+  backroads_horror: Backroads Horror
+  movies_that_defined_our_childhood: Movies That Defined Our Childhood
+  wedding: Wedding
+  bottle: Bottle
+  award_shows: Award Shows
+  sinister_screens: Sinister Screens
+  top_250_international: Top 250 International
+  top_250_sci-fi_films: Top 250 Sci-Fi Films
+  top_100_western_films: Top 100 Western Films
+  top_100_silent_films: Top 100 Silent Films
+  one_million_watched_club: One Million Watched Club
+  top_250_black_directed: Top 250 Black Directed
+  plex_random: Plex Random
+  letterboxd_top_500: Letterboxd Top 500
+  top_500: Top 500
+  simkl_trending_today: Trending Today
+  simkl_trending_week: Trending Week
+  simkl_trending_month: Trending Month
+  simkl_dvd: DVD Release
+  binged: binged
+  rewatched: rewatched
+  most_transcoded: Most Transcoded
+  completed: completed
+  top_250_animation: Top 250 Animation
+collections:
+  bafta_best:
+    name: BAFTA Best Films
+    summary: British Academy of Film and Television Arts Best Film Winners.
+  bafta_year:
+    name: BAFTA <<key_name>>
+    summary: <<key_name>> BAFTA Awards.
+  cannes_best:
+    name: Cannes Golden Palm Winners
+    summary: Cannes Golden Palm Winners.
+  cannes_year:
+    name: Cannes <<key_name>>
+    summary: <<key_name>> Cannes Awards.
+  choice_year:
+    name: Critics Choice Awards <<key_name>>
+    summary: <<key_name>> Critics Choice Awards.
+  emmy_year:
+    name: Emmys <<key_name>>
+    summary: <<key_name>> Emmy Winners.
+  golden_picture:
+    name: Golden Globes Best Picture Winners
+    summary: Golden Globes Best Picture Winners.
+  golden_director:
+    name: Golden Globes Best Director Winners
+    summary: Golden Globes Best Director Winners.
+  golden_year:
+    name: Golden Globe <<key_name>>
+    summary: <<key_name>> Golden Globe Winners.
+  oscars_picture:
+    name: Oscars Best Picture Winners
+    summary: The Academy Award for Best Picture is one of the Academy Awards 
+      presented annually by the Academy of Motion Picture Arts and Sciences 
+      since the awards debuted in 1929.
+  oscars_director:
+    name: Oscars Best Director Winners
+    summary: The Academy Award for Best Director is one of the Academy Awards 
+      presented annually by the Academy of Motion Picture Arts and Sciences 
+      since the awards debuted in 1929.
+  oscars_year:
+    name: Oscars Winners <<key_name>>
+    summary: Academy Awards (Oscars) Winners for <<key_name>>.
+  berlinale_best:
+    name: Berlinale Golden Bears
+    summary: Up to 400 films are shown every year as part of the Berlinale's 
+      (Berlin International Film Festival) public programme, the vast majority 
+      of which are world or European premieres. Films of every genre, length and
+      format can be submitted for consideration. The Golden Bear (German 
+      Goldener Bär) is the highest prize awarded for the best film shown during 
+      this festival.
+  cesar_best:
+    name: César Best Film Winners
+    summary: The César Award is the national film award of France, first given 
+      out in 1975. The nominations are selected by the members of the Académie 
+      des Arts et Techniques du Cinéma. The name of the award comes from the 
+      sculptor César Baldaccini. They are considered to be the French equivalent
+      of the American Academy Awards.
+  razzie_worst:
+    name: Razzies Golden Raspberry Winners
+    summary: The Golden Raspberry Award for Worst Picture is an award given out 
+      at the annual Golden Raspberry Awards to the worst film of the past year.
+  venice_best:
+    name: Venice Golden Lions
+    summary: The Venice Film Festival is the oldest film festival in the world. 
+      Founded 1932, the festival has since taken place every year in Venice, 
+      Italy. It is part of the Venice Biennale, a major biennial exhibition and 
+      festival for contemporary art. The festival's Leone d'Oro (Golden Lion) 
+      prize is awarded to the best film screened at the festival.
+  spirit_year:
+    name: Independent Spirit Awards <<key_name>>
+    summary: <<key_name>> Independent Spirit Awards.
+  sundance_best:
+    name: Sundance Grand Jury Winners
+    summary: The Sundance Film Festival is a film festival that takes place 
+      annually in the state of Utah, in the United States. It is the largest 
+      independent cinema festival in the U.S. Held in January, the festival is 
+      the premier showcase for new work from American and international 
+      independent filmmakers. The festival comprises competitive sections for 
+      American and international dramatic and documentary films, both 
+      feature-length films and short films, and a group of non-competitive 
+      showcase sections.
+  sundance_year:
+    name: Sundance Film Festival <<key_name>>
+    summary: Sundance Film Festival of <<key_name>>.
+  anilist_popular:
+    name: AniList Popular
+    summary: A collection of the most popular Anime according to AniList.
+  anilist_top_rated:
+    name: AniList Top Rated
+    summary: A collection of the top rated Anime according to AniList.
+  anilist_trending:
+    name: AniList Trending
+    summary: A collection of trending Anime according to AniList.
+  anilist_season:
+    name: AniList Season
+    summary: A collection of Anime from the Current Season according to AniList.
+  basic_released:
+    name: Newly Released
+    summary: A collection of newly-released <<library_translation>>s.
+  basic_episodes:
+    name: New Episodes
+    summary: A collection of newly-released Episodes.
+  flixpatrol:
+    name: <<key_name>> Top <<limit>>
+    summary: Top <<limit>> <<library_translation>>s on <<key_name>> according to
+      FlixPatrol.
+  imdb_popular:
+    name: IMDb Popular
+    summary: List of IMDb Popular <<library_translation>>s.
+  imdb_top:
+    name: IMDb Top 250
+    summary: List of IMDb Top 250 <<library_translation>>s.
+  imdb_lowest:
+    name: IMDb Lowest Rated
+    summary: List of IMDb Lowest Rated <<library_translation>>s.
+  mal_popular:
+    name: MyAnimeList Popular
+    summary: A collection of the most popular Anime according to MyAnimeList.
+  mal_favorited:
+    name: MyAnimeList Favorited
+    summary: A collection of the Most Favorited Anime according to MyAnimeList.
+  mal_top:
+    name: MyAnimeList Top Rated
+    summary: A collection of the Top Rated Anime according to MyAnimeList.
+  mal_airing:
+    name: MyAnimeList Top Airing
+    summary: A collection of the Top Rated Anime Currently Airing according to 
+      MyAnimeList.
+  mal_season:
+    name: MyAnimeList Season
+    summary: A collection of Anime from the Current Season according to 
+      MyAnimeList.
+  anidb_popular:
+    name: AniDB Popular
+    summary: A collection of Popular Anime on AniDB.
+  commonsense_selection:
+    name: Common Sense Selection
+    summary: A collection of Common Sense <<library_translation>>s. Common Sense
+      recognizes outstanding entertainment with an official seal for quality and
+      impact. Common Sense Selections include age-appropriate media with the 
+      potential to spark family conversations, entertain families of all kinds, 
+      and have a positive, lasting effect on society.
+  metacritic_must_see:
+    name: Metacritic Must See
+    summary: A collection of Metacritic's Must See Movies.
+  stevenlu_popular:
+    name: StevenLu's Popular Movies
+    summary: A collection of StevenLu's Most Popular Movies.
+  pirated_popular:
+    name: Top 10 Pirated Movies of the Week
+    summary: TorrentFreak.com's Weekly Top Ten Pirated Movies.
+  tautulli_popular:
+    name: Plex Popular
+    summary: A collection of <<library_translation>>s Popular on Plex.
+  tautulli_watched:
+    name: Plex Watched
+    summary: A collection of Top <<library_translation>>s Watched on Plex.
+  tmdb_airing:
+    name: TMDb Airing Today
+    summary: A collection of shows with episodes airing today.
+  tmdb_air:
+    name: TMDb On The Air
+    summary: A collection of shows that are still actively airing episodes.
+  tmdb_popular:
+    name: TMDb Popular
+    summary: A collection of the most watched <<library_translation>>s according
+      to TMDb.
+  tmdb_top:
+    name: TMDb Top Rated
+    summary: A collection of the top rated <<library_translation>>s according to
+      TMDb.
+  tmdb_trending:
+    name: TMDb Trending
+    summary: A collection of <<library_translation>>s trending on TMDb.
+  trakt_collected:
+    name: Trakt Collected
+    summary: A collection of Trakt's Weekly Trakt Collected List.
+  trakt_popular:
+    name: Trakt Popular
+    summary: A collection of Trakt's Weekly Trakt Popular List.
+  trakt_recommended:
+    name: Trakt Recommended
+    summary: A collection of Trakt's Weekly Trakt Recommended List.
+  trakt_trending:
+    name: Trakt Trending
+    summary: A collection of Trakt's Weekly Trakt Trending List.
+  trakt_watched:
+    name: Trakt Watched
+    summary: A collection of Trakt's Weekly Trakt Watched List.
+  simkl_trending_today:
+    name: SIMKL Trending Today
+    summary: A collection of SIMKL's Trending Today List.
+  simkl_trending_week:
+    name: SIMKL Trending This Week
+    summary: A collection of SIMKL's Trending This Week List.
+  simkl_trending_month:
+    name: SIMKL Trending This Month
+    summary: A collection of SIMKL's Trending This Month List.
+  simkl_dvd:
+    name: SIMKL Recently Released on DVD
+    summary: A collection of SIMKL's Recently Released on DVD List.
+  separator:
+    name: <<key_name>> Collections
+    summary: Section separator for <<key_name>> Collections.
+  actor:
+    name: <<key_name>>
+    summary: <<library_translationU>>s with <<key_name>>.
+  audio_language:
+    name: <<key_name>> Audio
+    summary: <<library_translationU>>s filmed in the <<key_name>> Language.
+  audio_language_other:
+    name: Other Audio
+    summary: <<library_translationU>>s filmed in other uncommon Languages.
+  based:
+    name: Based on a <<key_name>>
+    summary: <<library_translationU>>s based on or inspired by <<key_name>>s.
+  collectionless:
+    name: Collectionless
+    summary: Collection of <<library_translationU>>s used to make Plex display 
+      items correctly.
+  content_rating:
+    name: <<key_name>> <<library_translationU>>s
+    summary: <<library_translationU>>s that are rated <<key_name>>.
+  content_rating_cs:
+    name: Age <<key_name>>+ <<library_translationU>>s
+    summary: <<library_translationU>>s that are rated <<key_name>> according to 
+      the Common Sense Rating System.
+  content_rating_other:
+    name: Not Rated <<library_translationU>>s
+    summary: <<library_translationU>>s that are Unrated, Not Rated or any other 
+      uncommon Ratings.
+  content_ratings_other:
+    name: Other Ratings
+    summary: <<library_translationU>>s that are Unrated, Not Rated or any other 
+      uncommon Ratings.
+  country:
+    name: <<key_name>>
+    summary: <<library_translationU>>s filmed in <<key_name>>.
+  country_other:
+    name: Other Countries
+    summary: <<library_translationU>>s filmed in other uncommon Countries.
+  decade:
+    name: Best of <<key_name>>
+    summary: Top <<limit>> <<library_translation>>s of the <<key_name>>.
+  decade_other:
+    name: Other Decades
+    summary: <<library_translationU>>s released in other decades.
+  director:
+    name: <<key_name>> (Director)
+    summary: <<library_translationU>>s directed by <<key_name>>.
+  genre:
+    name: <<key_name>> <<library_translationU>>s
+    summary: <<library_translationU>>s that have the genre <<key_name>>.
+  genre_other:
+    name: Other Genres
+    summary: <<library_translationU>>s that have other uncommon genres.
+  network:
+    name: <<key_name>>
+    summary: <<library_translationU>>s broadcast on <<key_name>>.
+  network_other:
+    name: Other Networks
+    summary: <<library_translationU>>s broadcast on other uncommon networks.
+  network_kids_other:
+    name: Other Kids Networks
+    summary: <<library_translationU>>s broadcast on other uncommon kids 
+      networks.
+  producer:
+    name: <<key_name>> (Producer)
+    summary: <<library_translationU>>s produced by <<key_name>>.
+  resolution:
+    name: <<key_name>> <<library_translationU>>s
+    summary: <<library_translationU>>s that have the resolution <<key_name>>.
+  resolution_other:
+    name: Other Resolution <<library_translationU>>s
+    summary: <<library_translationU>>s that have other uncommon resolutions.
+  resolutions_other:
+    name: Other Resolutions
+    summary: <<library_translationU>>s that have other uncommon resolutions.
+  seasonal:
+    name: <<key_name>> <<library_translationU>>s
+    summary: A collection of <<key_name>> <<library_translation>>s that may 
+      relate to the season.
+  streaming:
+    name: <<key_name>> <<library_translationU>>s
+    summary: <<library_translationU>>s streaming on <<key_name>>.
+  studio:
+    name: <<key_name>>
+    summary: <<library_translationU>>s produced by <<key_name>>.
+  studio_other:
+    name: Other Studios
+    summary: <<library_translationU>>s produced by other uncommon studios.
+  studio_animation_other:
+    name: Other Animation Studios
+    summary: <<library_translationU>>s produced by other uncommon animation 
+      studios.
+  subtitle_language:
+    name: <<key_name>> Subtitles
+    summary: <<library_translationU>>s with <<key_name>> Subtitles.
+  subtitle_language_other:
+    name: Other Subtitles
+    summary: <<library_translationU>>s with other uncommon Subtitles.
+  writer:
+    name: <<key_name>> (Writer)
+    summary: <<library_translationU>>s written by <<key_name>>.
+  year:
+    name: Best of <<key_name>>
+    summary: <<library_translationU>>s released in <<key_name>>.
+  year_other:
+    name: Other Years
+    summary: <<library_translationU>>s released in other years.
+  birthday:
+    summary: Born this month, here are <<library_translation>>s that 
+      <<key_name>> participated in.
+    name: <<key_name>>'s Birthday"
+  aspect_ratio_other:
+    summary: <<library_translationU>>s filmed in other uncommon aspect ratios.
+    name: Other Aspect Ratios
+  region_other:
+    name: Other Regions
+    summary: <<library_translationU>>s filmed in other uncommon Regions.
+  continent_other:
+    name: Other Continents
+    summary: <<library_translationU>>s filmed in other uncommon Continents.
+  venice_year:
+    name: Venice <<key_name>>
+    summary: <<key_name>> Venice Award Winners.
+  berlinale_year:
+    name: Berlinale <<key_name>>
+    summary: <<key_name>> Berlinale Award Winners.
+  razzie_year:
+    name: Razzie <<key_name>>
+    summary: <<key_name>> Razzie Award Winners.
+  cesar_year:
+    name: César <<key_name>>
+    summary: <<key_name>> César Award Winners.
+  tiff_year:
+    name: Toronto International Film Festival <<key_name>>
+    summary: <<key_name>> Toronto International Film Festival Award Winners.
+  nfr_year:
+    name: National Film Registry <<key_name>>
+    summary: <<key_name>> National Film Registry.
+  sag_year:
+    summary: <<key_name>> Screen Actors Guild Award Winners.
+    name: Screen Actors Guild Awards <<key_name>>
+  tiff_best:
+    name: Toronto People's Choice Award Winners
+    summary: Toronto International Film Festival People's Choice Award Winners.
+  sag_best:
+    name: Screen Actors Guild Award Winners
+    summary: Screen Actors Guild Award Winners.
+  pca_year:
+    name: People's Choice Awards <<key_name>>
+    summary: <<key_name>> People's Choice Award Winners.
+  pca_best:
+    summary: "People's Choice Award Winners."
+    name: People's Choice Award Winners
+  nfr_best:
+    name: National Film Registry All Time
+    summary: National Film Registry All Time.
+  choice_best:
+    name: Critics Choice Best Picture Winners
+    summary: Critics Choice Best Picture Winners.
+  emmy_best:
+    name: Emmys Best in Category Winners
+    summary: Emmys Best in Category Winners.
+  spirit_best:
+    name: Spirit Best Feature Winners
+    summary: Spirit Best Feature Winners.
+  oscars_picture_nomination:
+    name: Best Picture Nominees
+    summary: The Nominees for the Best Picture Oscar Award.
+  oscars_director_nomination:
+    name: Best Director Nominees
+    summary: The Nominees for the Best Director Oscar Award.
+  box_office_mojo_all_time_100:
+    summary: Based on Box Office Mojo’s all-time top 100 films by worldwide 
+      gross, unadjusted for inflation. Updated on a monthly basis.
+    name: Box Office Mojo All Time 100
+  sight_and_sound_greatest_films:
+    name: Sight & Sound Greatest Films
+    summary: Every decade the Sight and Sound team asks critics to name the 
+      greatest films of all time. Here are the results of the 2022 poll – the 
+      largest ever, with 1,639 critics, programmers, curators, archivists and 
+      academics each submitting their top ten ballot - and now updated with the 
+      complete list.
+  letterboxd_top_250:
+    summary: Letterboxd's Top 250 movies, based on the average weighted rating 
+      of all Letterboxd users. Removed all stand-up specials, stage plays, 
+      concert films, documentaries, shorts, 'collection listings' and other 
+      'rarities', so only feature length narrative movies are listed here. Films
+      should have a minimum of 5,000 ratings to be eligible to enter the list.
+    name: Letterboxd Top 250
+  1001_movies_to_see_before_you_die:
+    name: 1,001 To See Before You Die
+    summary: List made from the book 1001 Movies You Must See Before You Die. 
+      This list just from the 2021 edition, so you'll not see deleted movies as 
+      in other list. List is sorted backwards, newer movies first. By popular 
+      demand - collections that were used in the book were switched to first 
+      entry only, i.e. Toy Story and Fellowship of the Ring.
+  afi_100_years_100_movies:
+    summary: AFI’s 100 Years…100 Movies – 10th Anniversary Edition is an updated
+      edition to AFI’s 100 Years…100 Movies, a list of the top 100 greatest 
+      American films of all time.
+    name: AFI 100 Years 100 Movies
+  top_250_horror:
+    summary: An accompaniment to the Letterboxd Top 250, which sadly contains 
+      very few horror films. These are the horror films on Letterboxd with the 
+      highest average rating. No shorts, no TV series, no TV movies, no YouTube 
+      videos, no filmed stage productions, no reissues, no re-edits of existing 
+      footage, no trailer compilations, no lost movies, no behind-the-scenes 
+      documentaries, nor anything else that isn't really a full film. All 
+      entries must be at least 40 minutes in length. Direct-to-video releases 
+      are eligible, provided they are over 60 minutes in length.
+    name: Top 250 Horror
+  edgar_wrights_1000_favorites:
+    name: Edgar Wright’s 1,000 Favorites
+    summary: This list of personal favorites was assembled by Edgar Wright and 
+      Sam DiSalle in July 2016, and is semi-regularly updated. Films are ordered
+      by year, and alphabetized within each year (our list matches MUBI’s source
+      list order, but some films are listed under alternative names).
+  top_250_women_directed:
+    name: Top 250 Women-Directed
+    summary: An official list progress project on all-time stats pages for Pro 
+      and Patron users! Expanded from a top 100 to a top 250 on September 26th, 
+      2022, on the list's 3-year anniversary.
+  top_100_black_directed:
+    name: Top 100 Black-Directed
+    summary: Ranked by average user rating. The list was extracted largely 
+      thanks to this megalist of films directed by Black American filmmakers. It
+      will be updated monthly. An official list progress project on all-time 
+      stats pages for Pro and Patron users.
+  top_250_most_fans:
+    summary: A further companion piece to Dave Vis' list of Letterboxd's 
+      official top 250 films of all-time. To be updated once a month. The list 
+      is ranked by the number of fans on Letterboxd. A “fan” is a member with a 
+      particular film as one of their four favorites.
+    name: Top 250 Most Fans
+  roger_eberts_great_movies:
+    name: Roger Ebert’s Great Movies
+    summary: Every film from Roger Ebert's 'Great Movies' essays.
+  cannes_palmes_dor_winners:
+    name: Cannes Palme d’Or Winners
+    summary: The “Palme d’Or” is the highest prize award at the Cannes Film 
+      Festival.
+  top_250_documentaries:
+    summary: A companion piece to Dave Vis' list of Letterboxd's official top 
+      250 films of all-time, which excludes documentaries from consideration. 
+      Ranked by average user rating. This list is updated once a month. This is 
+      an official list progress project on all-time stats pages for Pro and 
+      Patron users. Expanded from a top 100 to a top 250 on June 27th, 2021, on 
+      the list's 3-year anniversary.
+    name: Top 250 Documentaries
+  top_100_animation:
+    summary: "100 highest-rated feature-length animated films on Letterboxd. Minimum
+      1,000 ratings. Sequels to shows or anime series—Japanese, American or from elsewhere—that
+      need greater context before watching are not included. Those that are included
+      can be enjoyed on a standalone basis—and I've taken the decision to remove films
+      that only do a brief recap (such as Steven Universe: The Movie) at the beginning
+      that may not give the quality of context necessary for enjoyment. The rationale
+      for this decision is so that viewers can finish this list without having to
+      see a multitude of other episodes and films."
+    name: Top 100 Animation
+  imdb_top_250:
+    summary: "IMDB's top 250 list: loved by some, hated by others. Of course you can
+      argue about the order of movies and the presence or absence of certain titles.
+      Fact remains that it holds a great deal of the most appreciated films of all
+      time and the overall quality is pretty high."
+    name: IMDb Top 250 (Letterboxd)
+  oscars_best_picture_winners:
+    name: Oscar Best Picture Winners
+    summary: Academy Award Winners for Best Picture.
+  aspect:
+    name: <<key_name>>
+    summary: A collection of <<library_translationU>>s with the aspect ratio of 
+      <<key_name>>.
+  top_250_black_directed:
+    name: Top 250 Black-Directed
+    summary: Ranked by average user rating. The list was extracted largely 
+      thanks to this megalist of films directed by Black American filmmakers. It
+      will be updated monthly. An official list progress project on all-time 
+      stats pages for Pro and Patron users.
+  top_250_international:
+    name: Top 250 International
+    summary: The top 250 non-English live-action films on Letterboxd. Eligible 
+      films must have at least 2,500 and excludes mini-series, documentary, 
+      animated and short films.
+  top_250_sci-fi_films:
+    name: Top 250 Sci-Fi Films
+    summary: The top 250 science fiction genre films on Letterboxd. Eligible 
+      films must be feature-length, rated by at least 3,000 users, and have at 
+      least 100 likes.
+  top_100_western_films:
+    name: Top 100 Western Films
+    summary: The top 100 narrative feature films in the Western genre on 
+      Letterboxd by average member rating.
+  top_100_silent_films:
+    name: Top 100 Silent Films
+    summary: The top 250 silent films on Letterboxd. Eligible films must be 
+      silent, rated by at least 1,000 users, and have a duration of ten minutes 
+      or greater.
+  one_million_watched_club:
+    name: One Million Watched Club
+    summary: The official list for Letterboxd's One Million Watched Club with 
+      all feature films seen by at least 1,000,000 Letterboxd members.
+  tautulli_random:
+    name: Plex Random
+    summary: A collection of <<library_translation>>s Random on Plex.
+  letterboxd_top_500:
+    name: Letterboxd Top 500
+    summary: Letterboxd's Top 500 movies, based on the average weighted rating 
+      of all Letterboxd users. Removed all stand-up specials, stage plays, 
+      concert films, documentaries, shorts, 'collection listings' and other 
+      'rarities', so only feature length narrative movies are listed here. Films
+      should have a minimum of 25,000 ratings to be eligible to enter the list.
+  tracearr_popular:
+    name: Tracearr Popular
+    summary: A collection of <<library_translation>>s watched by the most unique
+      Tracearr users.
+  tracearr_watched:
+    name: Tracearr Watched
+    summary: A collection of <<library_translation>>s with the most completed 
+      Tracearr sessions.
+  tracearr_trending:
+    name: Tracearr Trending
+    summary: A collection of the most active <<library_translation>>s from 
+      recent Tracearr watch history.
+  tracearr_rewatched:
+    name: Tracearr Rewatched
+    summary: A collection of <<library_translation>>s repeatedly played by the 
+      same Tracearr user.
+  tracearr_completed:
+    name: Tracearr Completed
+    summary: A collection of the most recently completed 
+      <<library_translation>>s from Tracearr watch history.
+  tracearr_binged:
+    name: Tracearr Binged
+    summary: A collection of shows with the most distinct completed episodes 
+      watched by a single Tracearr user.
+  tracearr_transcoded:
+    name: Tracearr Most Transcoded
+    summary: A collection of <<library_translation>>s with the most Tracearr 
+      sessions requiring audio or video transcoding.
+  top_250_animation:
+    summary: "250 highest-rated feature-length animated films on Letterboxd. Minimum
+      1,000 ratings. Sequels to shows or anime series—Japanese, American or from elsewhere—that
+      need greater context before watching are not included. Those that are included
+      can be enjoyed on a standalone basis—and I've taken the decision to remove films
+      that only do a brief recap (such as Steven Universe: The Movie) at the beginning
+      that may not give the quality of context necessary for enjoyment. The rationale
+      for this decision is so that viewers can finish this list without having to
+      see a multitude of other episodes and films."
+    name: Top 250 Animation
