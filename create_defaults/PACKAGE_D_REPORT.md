@@ -1,8 +1,8 @@
 # Package D: Gate Evidence
 
-Status: implementation and read-only integration evidence complete; final
-follow-up Linux CI pending. Gate D is not accepted automatically. Draft PR #12
-remains unmerged and Package E remains unauthorized.
+Status: ready for Gate D maintainer review. Implementation, read-only integration
+evidence and final-source Linux CI passed. Gate D is not accepted automatically.
+Draft PR #12 remains unmerged and Package E remains unauthorized.
 
 Started from the clean remote branch at approved checkpoint
 `fe55011c2cf94a7e3a8213a82735fff13d18c415`; PR #12 was open/draft against `main`
@@ -155,6 +155,17 @@ not claimed. No image files, databases, caches or complete audit output are
 committed. The focused CI artifact deliberately contains only review images,
 reports and proposal metadata, not SQLite state or secrets.
 
+The initial Windows single-poster preflight measured 0.308 seconds for three
+variants, seven hashed inputs and zero full poster renders; review querying took
+0.032 seconds. Its two actual poster stages used the same spawned worker PID:
+2.227 and 1.158 seconds, with worker starts 1 then 0. These small observations
+include startup/receipt work and are not sustained throughput claims. A later
+warm smoke reused all four verified outputs with zero worker starts. The final
+source Linux smoke measured 0.048 seconds preflight and 0.003 seconds querying;
+English/French stages took 0.468/0.256 seconds with one reused worker, and two
+overlays took 0.287 seconds using two workers. Reported worker RSS and disk I/O
+remain in the compact observations/CI artifact; no production speedup is assumed.
+
 ## Validation Status
 
 | Check | Current Result |
@@ -167,7 +178,7 @@ reports and proposal metadata, not SQLite state or secrets.
 | Package B/C/D tests | 169 passed locally; one permission skip before final guard cases |
 | Focused final Package D tests | 55 passed locally |
 | First Package D Linux CI | Passed; exact head/run below |
-| Final follow-up Linux CI | Pending scoped follow-up commit/push |
+| Final-source Linux CI | 456 passed; two Windows-only junction skips |
 | Compile and whitespace checks | Passed locally |
 
 First Package D implementation head:
@@ -177,7 +188,27 @@ passed on Ubuntu 24.04/Python 3.13.16: Phase 1 120, A 35, B/C/D 163,
 People 129: **447 passed, two platform-specific skips**. Both baselines,
 compilation and whitespace checks passed. The run also retained the
 [focused review artifact](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39005656222/artifacts/12091350600).
-Final follow-up results will be added before handoff.
+Final executable-source head:
+`ebfa162239235feabbd7d81999ea258bbd693a7b`.
+[Linux run 39025395050](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39025395050)
+passed on Ubuntu 24.04/Python 3.13.16, job duration 2m12s:
+
+- Phase 1: 120 passed (22.103 seconds).
+- Package A: 35 passed (1.930 seconds).
+- Packages B/C/D: 172 passed, one Windows-junction skip (72.53 seconds).
+- People Posters: 129 passed, one Windows-junction skip (3.83 seconds).
+- Total: **456 passed, two platform-specific skips**, zero failures.
+- Both baselines, compile, whitespace and actual offline rendering smoke passed.
+- [Focused team-review artifact](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39025395050/artifacts/12098307671):
+  606,152 bytes, retention 14 days, ZIP SHA-256
+  `935697fc2fcdfa97643cc27b8f6ab5a21538bee305add57cb1aa54526db5faed`.
+
+This report-only handoff does not change executable source. The draft PR gate
+comment records the exact latest documentation commit and its additional CI run,
+avoiding a self-referential commit hash inside the committed report. CI emitted
+non-failing upstream notices about upload-artifact's Node 20 target being forced
+to Node 24 and the scheduled ubuntu-latest transition; no action pins or runner
+policy were changed merely to suppress those notices.
 
 An intermediate regression caught the legacy non-executable overlay contract
 being rejected; executable PNG contracts are now checked separately without
@@ -221,7 +252,7 @@ write permissions and publication commands. No visual thresholds were weakened.
 | Risk, review and concurrency | Exact versions, warning acceptance, individual high risk, immutable groups/events |
 | Stale approvals | Changed inputs, bytes, generation, renderer and policy rejected |
 | Resource bounds and reuse | Persistent spawn pools; verified shared reuse across stages/new pools |
-| Existing regressions and Linux | First Linux pass; final follow-up run pending |
+| Existing regressions and Linux | Final executable-source Linux pass: 456 passed, two platform skips |
 | Scope restrictions | No production replacement, publication, merge, deployment or E work |
 
 All production PowerShell, the validated Pillow composer, original fonts,
