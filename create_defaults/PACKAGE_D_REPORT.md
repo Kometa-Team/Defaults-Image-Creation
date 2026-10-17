@@ -1,8 +1,10 @@
 # Package D: Gate Evidence
 
-Status: ready for Gate D maintainer review. Implementation, read-only integration
-evidence and final-source Linux CI passed. Gate D is not accepted automatically.
-Draft PR #12 remains unmerged and Package E remains unauthorized.
+Status: maintainer visually accepted the exact presented overlay and English/French
+Based samples on 2026-10-17. Acceptance is limited to the four recovered CI images
+and the reviewed French fitting/layout proposal; this is not blanket Gate D or
+multilingual approval. Implementation, read-only integration evidence and final-
+source Linux CI passed. Draft PR #12 remains unmerged; Package E is unauthorized.
 
 Started from the clean remote branch at approved checkpoint
 `fe55011c2cf94a7e3a8213a82735fff13d18c415`; PR #12 was open/draft against `main`
@@ -138,14 +140,17 @@ Dimensions match. Raw RGB MAE ranges 12.88-50.95, alpha MAE 0.82-3.23; the raw
 RGBA maximum remains 255. Black-composited RGB MAE is 0.81-3.23 and white-
 composited MAE 0.038-0.134. Both raw and visible-composite metrics are retained;
 hidden RGB differences do not justify claiming exact pixel parity. No accepted
-threshold was changed. Overlay differences require explicit visual review.
+threshold was changed. The presented CI overlay samples subsequently received
+explicit maintainer visual acceptance below; other overlays remain unreviewed.
 Local comparison: `config/package-d/cache/overlay-review/index.html`.
 
-The offline CI proof uses the original composer for one English and one French
-preview, records a missing Arabic resource as blocked, renders two overlays and
-creates five review records with zero approvals/publications. The French layout
-is an explicit unapproved proposal. It is not a production-language readiness
-claim. Human-readable preview artifacts are retained by CI for team inspection.
+The offline CI proof used the original composer for one English and one French
+preview, recorded a missing Arabic resource as blocked, rendered two overlays and
+created five review records with zero approvals/publications at generation time.
+The French layout was then an unapproved proposal. The later maintainer decision
+below accepts the exact French sample/proposal, without changing the original CI
+records or activating a production layout. This is not a language-readiness claim.
+Human-readable preview artifacts are retained by CI for team inspection.
 
 The actual first Linux artifact was downloaded read-only and compared with the
 Windows smoke output. Both English/French JPEGs are byte-identical. Both overlay
@@ -180,6 +185,7 @@ remain in the compact observations/CI artifact; no production speedup is assumed
 | First Package D Linux CI | Passed; exact head/run below |
 | Final-source Linux CI | 456 passed; two Windows-only junction skips |
 | Compile and whitespace checks | Passed locally |
+| Maintainer sample acceptance provenance | Verified ZIP/image/source/renderer/layout/validation bindings; four immutable audit events; historical metrics unchanged |
 
 First Package D implementation head:
 `1055c86315f7c794724b4eee5b6ed0d0398cce29`.
@@ -217,6 +223,92 @@ extending the workflow-boundary assertion: it now also checks the exact action
 SHA, retention and restricted artifact paths, and still forbids renderer CLIs,
 write permissions and publication commands. No visual thresholds were weakened.
 
+## Maintainer Visual Acceptance: Exact Reviewed Samples
+
+On **2026-10-17 (America/Toronto)** the maintainer explicitly confirmed that the
+presented overlay samples and English/French Based poster samples look good.
+This records the maintainer's reported inspection of those samples only. It does
+not infer inspection of unpresented variants or representative-group approval.
+
+The latest handoff's [focused CI artifact](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39025655177/artifacts/12098711636)
+was recovered read-only and its exact ZIP digest verified:
+
+- Run `39025655177`, artifact `12098711636`, `package-d-focused-review`, 606,146 bytes.
+- Artifact source head `c058e758fcf02a2952093f56a8ca6ef26ae10864`; executable source
+  `ebfa162239235feabbd7d81999ea258bbd693a7b`.
+- ZIP SHA-256 `3bb8675be01c3d9e86f11039a5eb431711cb5c7dcf30e0e2e5081f2b96eacb9d`.
+- Original batch `review-batch.965c6735c5d447a5af4b4a27f7a77e47`, membership
+  `33d4d7bb66cfaa5a79570f3a118ee77d1310828a8a0fa51dee6943b90c6efe50`.
+  Its original empty inspected list and zero approvals remain historical evidence;
+  the later acceptance is a separate audit record, not a rewritten CI batch.
+
+| Accepted sample (path inside artifact `output/`) | Exact image SHA-256 | Accepted warning |
+| --- | --- | --- |
+| `genre/overlays/standard/Experimental.png` | `a25ee66f60519c36a8ccf078efe6b43d9772632c8d1e1c34229b166d2c26c5e3` | `overlay_transform_review` |
+| `genre/overlays/bigger/Experimental.png` | `7734ba4b403ff5dee4eeb954f18cfa8dbd8a338b80817cbf189803001f419b74` | `overlay_transform_review` |
+| `defaults-en/based/Book.jpg` | `366a97b27d8e9d637297113f26fd567bed5289fcfaf65ccfb6ac4cd6181e0ce5` | `wrapped_caption` |
+| `defaults-fr/based/Book.jpg` | `8e258dc7a9273ea09144962d52472c9e4b1975cd7dfb418ab04e71d00590c352` | `wrapped_caption` |
+
+The [hash-bound acceptance record](bulk/evidence/package-d/maintainer-visual-acceptance-20261017.json)
+retains each original variant ID, review version **1**, exact validation fingerprint,
+preflight payload/file hashes, source image/font/translation identities, renderer
+source/library/platform identities, policy, layout and accepted warning codes.
+Its canonical payload SHA-256 is
+`8d1f295011673c1d2a64882d8e39e0731c6bb0ceebb12dfd4be3296f075b2d67`.
+The verified preflight payloads are
+`348029c94d7470d0d16bc9ce62e3c33ef9ca7bcb964bacf19b3599d41b564779`
+(overlays) and
+`724f6e8d32213719a75c3d4e02ea1d7c1464a6650af21d49b457b90f74ff2f49`
+(posters). Validation remains `preflight-d1`, layout `composer-native-metrics-d1`,
+risk `review-risk-d1`; no policy or threshold changed.
+
+**Overlays:** acceptance includes the documented Pillow-versus-ImageMagick filter,
+alpha and visible-composite differences for the presented samples. Both use
+`logos_genre/Experimental.png`, SHA-256
+`38daa50bc4f9a9d83c6f9444a56cca1ae5e7acaf8151e1fc8d27b4571f3c7766`,
+with `overlay-pillow-d1`, standard/bigger fit boxes 285x85/440x100 and the exact
+catalog trim/encoding contracts. Fonts are not applicable. Linux renderer identity:
+Python 3.13.16, Pillow 12.0.0, fonttools 4.60.1, uharfbuzz 0.56.3, python-bidi 0.6.11.
+The four ImageMagick comparison cases in
+[overlay-observations.json](bulk/evidence/package-d/overlay-observations.json)
+remain unchanged historical measurements, not four extra individually approved
+images. Their raw RGB/alpha, maximum RGBA and black/white-composite metrics remain
+as recorded above. Acceptance does not establish exact pixel parity, approve all
+38 local outputs, all 18 groups, or all **4,122** overlay contracts.
+
+**English/French Based:** only logical poster `based.based-book.217e49bd` is
+accepted, with its exact displayed captions and two-row wrapping. Both use
+Comfortaa Medium, SHA-256
+`992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c`,
+at 250 points, offset 0, using the pinned native composer/renderer identities.
+English rows are `BASED ON A` / `BOOK`; French rows are `BASÉS SUR` / `UN LIVRE`.
+The French captured-fit proposal (1900x1000 box, allowed range 100-250, selected
+250) is accepted **for this exact sample**, including its measured unclipped
+layout. Artifact `layout-proposal.json` SHA-256 is
+`dac288b0cd3e0e736e2719ad43023d250686aeb49d017e2989e4fe1488608f8e`;
+its measurement fingerprint is
+`d653dc016f37e75db0a301a267b32bd87f5c5c41adc20ebad669152cf8f237b8`.
+The proposal's original state is preserved; no catalog/YAML override is activated.
+No other English/French poster, caption, font, fitting rule or translation is approved.
+
+Four `review_external_sample_acceptance` events were appended through existing
+`bulk.state.Store.event` immutable audit infrastructure. The
+[portable event export](bulk/evidence/package-d/maintainer-visual-acceptance-20261017-events.json)
+binds each event to the acceptance record and its exact CI sample. The local
+ledger is `config/package-d/maintainer-review-20261017/state.sqlite` (ignored).
+The CI artifact intentionally contains no SQLite state or owned worker receipts,
+and its Linux renderer identity differs from local Windows state. Therefore
+`Reviews.decide` is not used to fabricate current local variant approvals; no
+`review_variants` state or batch membership is changed. This is explicit external
+artifact acceptance, not a production authorization service or group approval.
+Changes to image bytes, source/font/layout/renderer or validation identity need
+fresh review; this decision cannot transfer merely because a filename matches.
+
+Arabic sample `poster.b4d08786abb73673e4cdd600` has no image and remains blocked
+for unavailable translation in this artifact. Arabic font/RTL/layout acceptance
+and all other unreviewed multilingual variants remain pending. Full Gate D
+sign-off, publishing, merge, deployment and Package E require separate authorization.
+
 ## Limits and Decisions
 
 1. Most non-English captured-fit captions still need explicit language fitting
@@ -225,8 +317,10 @@ write permissions and publication commands. No visual thresholds were weakened.
    through an English font/layout.
 2. Arabic font and RTL/mixed-bidi/anchor acceptance remain maintainer decisions.
    The OFL candidate has not been silently approved.
-3. Pillow/ImageMagick overlay differences remain visible review evidence, not
-   accepted parity by assumption. Broader reconciliation and soak belong to E.
+3. The two presented CI overlays and English/French Based samples are visually
+   accepted as bound above, including the documented differences and French fit.
+   Unreviewed overlays/posters remain pending; no exact pixel parity is claimed.
+   Broader reconciliation and soak belong to E, which remains unauthorized.
 4. Weblate direct-key/component verification requires authenticated access not
    available in the approved anonymous check; trustworthy landing links remain.
 5. Precise invalidation requires explicit refresh/delta or scoped preflight after
@@ -240,22 +334,24 @@ write permissions and publication commands. No visual thresholds were weakened.
 
 | Criterion | Evidence |
 | --- | --- |
-| Overlay reconciliation and real Pillow processing | 36 operations, 4,122 contracts; 38 real samples, all groups/sizes |
+| Overlay reconciliation and real Pillow processing | 36 operations / 4,122 contracts; 38 rendered samples. Only the two exact CI Experimental overlays visually accepted, including documented Pillow/ImageMagick differences; remaining overlays pending |
 | Dynamic discovery and deterministic snapshot | 14 actual resources; exact Git/size/SHA checks; offline/tamper tests |
 | Complete coverage/contributor audit | 139,398 audited; accurate deduplicated IDs/counts; JSON/CSV/HTML |
 | Verified contribution links | Verified landing link; direct-key/component access explicitly unavailable |
 | Mandatory preflight, strict/partial/audit | Shared engine and CLI; reports retained; language failures isolated |
-| Scoped proposals and previews | One-poster index; explicit French fit proposal; no YAML activation |
+| Scoped proposals and previews | Exact English/French Based Book samples and reviewed French fit/layout proposal accepted; hash-bound record above; no YAML activation or wider poster acceptance |
 | Translation delta and precise invalidation | Key/template/fallback/resource indexes; unrelated/shared variants retained |
 | Glyph/shaping/Arabic | Native metrics; OFL candidate evaluated; RTL remains blocked/unapproved |
 | English compatibility | All 9,957 English contracts eligible; both baselines; byte-identical CI smoke |
-| Risk, review and concurrency | Exact versions, warning acceptance, individual high risk, immutable groups/events |
+| Risk, review and concurrency | Four sample-scoped external acceptance events bind exact CI versions/hashes and warnings; immutable audit export retained; no blanket group/current-variant approval |
 | Stale approvals | Changed inputs, bytes, generation, renderer and policy rejected |
 | Resource bounds and reuse | Persistent spawn pools; verified shared reuse across stages/new pools |
 | Existing regressions and Linux | Final executable-source Linux pass: 456 passed, two platform skips |
-| Scope restrictions | No production replacement, publication, merge, deployment or E work |
+| Scope restrictions | Sample visual acceptance only; full Gate D sign-off pending. No production replacement, publication, merge, deployment or Package E authorization |
 
 All production PowerShell, the validated Pillow composer, original fonts,
 historical fixtures and previous rendered evidence remain untouched. Default-
-Images and upstream translation systems have not been modified. Gate D remains
-a maintainer decision; font/layout/overlay visual approvals are not fabricated.
+Images and upstream translation systems have not been modified. The maintainer
+accepted only the exact samples and French fitting/layout proposal recorded above.
+Arabic and unreviewed variants remain pending; full Gate D sign-off and Package E
+are not implied.

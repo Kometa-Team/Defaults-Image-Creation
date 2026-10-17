@@ -1,0 +1,888 @@
+{
+  "schema_version": 1,
+  "record_type": "maintainer_visual_acceptance_of_external_ci_samples",
+  "decision_date": "2026-10-17",
+  "decision_timezone": "America/Toronto",
+  "recorded_at_utc": "2026-10-17T16:58:32.103711+00:00",
+  "reviewer": "maintainer",
+  "authorization_source": "Explicit maintainer visual acceptance in the user message titled Package D - Maintainer Visual Review Decision; applies to inspected samples only",
+  "artifact": {
+    "repository": "Kometa-Team/Defaults-Image-Creation",
+    "run_id": 39025655177,
+    "artifact_id": 12098711636,
+    "name": "package-d-focused-review",
+    "head_sha": "c058e758fcf02a2952093f56a8ca6ef26ae10864",
+    "executable_source_sha": "ebfa162239235feabbd7d81999ea258bbd693a7b",
+    "zip_sha256": "3bb8675be01c3d9e86f11039a5eb431711cb5c7dcf30e0e2e5081f2b96eacb9d",
+    "size_bytes": 606146,
+    "url": "https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39025655177/artifacts/12098711636",
+    "files": {
+      "cache/preflight/348029c94d7470d0d16bc9ce62e3c33ef9ca7bcb964bacf19b3599d41b564779/index.html": "f22c13fe5acc0f65febf1a18a9ccb4c6dfd6499fa495d6893b0b7fb4dc4eca3d",
+      "cache/preflight/348029c94d7470d0d16bc9ce62e3c33ef9ca7bcb964bacf19b3599d41b564779/preflight.json": "b8970548484bb285df0fc9709f604c7ec48c943cdb66609cab642703c94a2af9",
+      "cache/preflight/348029c94d7470d0d16bc9ce62e3c33ef9ca7bcb964bacf19b3599d41b564779/translations.csv": "8644c6ee93a803cc10d79aebd2f7b722280394fa948efd6125e232ff18eb2642",
+      "cache/preflight/724f6e8d32213719a75c3d4e02ea1d7c1464a6650af21d49b457b90f74ff2f49/index.html": "c9fbefc545b3c5f4aa2e486402ca25e4f3c0b24a502bf7736ebd72e0070c8ff9",
+      "cache/preflight/724f6e8d32213719a75c3d4e02ea1d7c1464a6650af21d49b457b90f74ff2f49/preflight.json": "a6ab569987ff61539a584919455870faf0985dd033fdce189cf4ab5e5faae03b",
+      "cache/preflight/724f6e8d32213719a75c3d4e02ea1d7c1464a6650af21d49b457b90f74ff2f49/translations.csv": "91c116d11310c7bf6d828dd3c41b7b8b65f5c10b10956d4a6754d541cd9e43ea",
+      "cache/preview-reports/724f6e8d32213719a75c3d4e02ea1d7c1464a6650af21d49b457b90f74ff2f49/index.html": "fb72ab5a2b4675773ab0b5fb4941ca9272175a572b62843ad10bc224f24bfa09",
+      "layout-proposal.json": "dac288b0cd3e0e736e2719ad43023d250686aeb49d017e2989e4fe1488608f8e",
+      "output/defaults-en/based/Book.jpg": "366a97b27d8e9d637297113f26fd567bed5289fcfaf65ccfb6ac4cd6181e0ce5",
+      "output/defaults-fr/based/Book.jpg": "8e258dc7a9273ea09144962d52472c9e4b1975cd7dfb418ab04e71d00590c352",
+      "output/genre/overlays/bigger/Experimental.png": "7734ba4b403ff5dee4eeb954f18cfa8dbd8a338b80817cbf189803001f419b74",
+      "output/genre/overlays/standard/Experimental.png": "a25ee66f60519c36a8ccf078efe6b43d9772632c8d1e1c34229b166d2c26c5e3",
+      "smoke-evidence.json": "6d9d11c8b762fc93fff576f74bbcd51fb3a474febd537b27158775b4c26c9f41"
+    }
+  },
+  "original_ci_batch": {
+    "attribution": "CLI development identity, not authenticated authorization",
+    "id": "review-batch.965c6735c5d447a5af4b4a27f7a77e47",
+    "inspected": [],
+    "members": [
+      {
+        "id": "overlay.348da6be724b26abbe714597",
+        "image_sha256": "a25ee66f60519c36a8ccf078efe6b43d9772632c8d1e1c34229b166d2c26c5e3",
+        "policy": "2b7b123ab1e6b82404d731095a1f4f07006eaab434230d399efc378368f283ca",
+        "validation": "d442f8599fb6517a207524c048b2f04378b4633dec0c3193c498d7bd7a2f9895",
+        "version": 1
+      },
+      {
+        "id": "overlay.5d2c27bbd7d3be20296ae9fb",
+        "image_sha256": "7734ba4b403ff5dee4eeb954f18cfa8dbd8a338b80817cbf189803001f419b74",
+        "policy": "2b7b123ab1e6b82404d731095a1f4f07006eaab434230d399efc378368f283ca",
+        "validation": "d6426dbeb74c310b01ae87a35c379837f12cf6a55089eb18479559f54a51d996",
+        "version": 1
+      },
+      {
+        "id": "poster.19c32b6b4da5479878de4230",
+        "image_sha256": "8e258dc7a9273ea09144962d52472c9e4b1975cd7dfb418ab04e71d00590c352",
+        "policy": "2b7b123ab1e6b82404d731095a1f4f07006eaab434230d399efc378368f283ca",
+        "validation": "e85f0d55ea29ab1e0942a64e7e45fbd694d9f757f5edbdfa3ff84432c7b5534d",
+        "version": 1
+      },
+      {
+        "id": "poster.b4d08786abb73673e4cdd600",
+        "image_sha256": null,
+        "policy": "2b7b123ab1e6b82404d731095a1f4f07006eaab434230d399efc378368f283ca",
+        "validation": "f874bfbd4bf205d2c5ff1d1578ad1653a4e7fa2f43e5d80177e32912498a8779",
+        "version": 0
+      },
+      {
+        "id": "poster.f2085c6d67f7f4e48804ac6b",
+        "image_sha256": "366a97b27d8e9d637297113f26fd567bed5289fcfaf65ccfb6ac4cd6181e0ce5",
+        "policy": "2b7b123ab1e6b82404d731095a1f4f07006eaab434230d399efc378368f283ca",
+        "validation": "5875462cfec48b082b2b7da37eb64f8a4482e66ff1e9a2bcc9d3fd8f25bf08f6",
+        "version": 1
+      }
+    ],
+    "membership": "33d4d7bb66cfaa5a79570f3a118ee77d1310828a8a0fa51dee6943b90c6efe50",
+    "scope": "Offline CI smoke; no images individually inspected or approved"
+  },
+  "renderer_identities": {
+    "b29ab7bf7052a5553a8382fdf378dc54096a2e635232e9fdbfc619307c4f1d67": {
+      "canvas": [
+        440,
+        100
+      ],
+      "encoding": {
+        "compress_level": 9,
+        "format": "PNG"
+      },
+      "libraries": {
+        "Pillow": "12.0.0",
+        "fonttools": "4.60.1",
+        "python-bidi": "0.6.11",
+        "uharfbuzz": "0.56.3"
+      },
+      "platform": "Linux",
+      "python": "3.13.16",
+      "sources": {
+        "bulk/overlays.py": "cc8cba50ca159716d6dbcc76287737f37838c4a7a35a2304d53992a4ab104009",
+        "create_poster.py": "ff748c9c8422a46f662f36a094a3ef523d2f9c4c23d622729f18c1f1894e0717",
+        "poster_text.py": "1eb975693eec7c4369b83dc1e5e578d515319a061fcda2cd1950920aee438584"
+      }
+    },
+    "0c60e2a6cb4ad935fef80283deb5db9c98fe20073af1f7006c314375b74a7920": {
+      "canvas": [
+        2000,
+        3000
+      ],
+      "encoding": {
+        "format": "JPEG",
+        "quality": 100,
+        "subsampling": 0
+      },
+      "libraries": {
+        "Pillow": "12.0.0",
+        "fonttools": "4.60.1",
+        "python-bidi": "0.6.11",
+        "uharfbuzz": "0.56.3"
+      },
+      "platform": "Linux",
+      "python": "3.13.16",
+      "sources": {
+        "create_poster.py": "ff748c9c8422a46f662f36a094a3ef523d2f9c4c23d622729f18c1f1894e0717",
+        "poster_text.py": "1eb975693eec7c4369b83dc1e5e578d515319a061fcda2cd1950920aee438584"
+      }
+    }
+  },
+  "preflight_reports": {
+    "348029c94d7470d0d16bc9ce62e3c33ef9ca7bcb964bacf19b3599d41b564779": {
+      "artifact_relative": "cache/preflight/348029c94d7470d0d16bc9ce62e3c33ef9ca7bcb964bacf19b3599d41b564779/preflight.json",
+      "file_sha256": "b8970548484bb285df0fc9709f604c7ec48c943cdb66609cab642703c94a2af9",
+      "policy": {
+        "layout": "composer-native-metrics-d1",
+        "near_edge_pixels": 20,
+        "risk": "review-risk-d1",
+        "rtl": "blocked-awaiting-approved-font-and-visual-review",
+        "translated_fit": "explicit-caption-font-bound-overrides-only",
+        "version": "preflight-d1"
+      },
+      "policy_sha256": "2b7b123ab1e6b82404d731095a1f4f07006eaab434230d399efc378368f283ca",
+      "registry_sha256": "988dc29b33ed2615033870fd6273326df179ce588f06ea5813d64372956f39a3",
+      "translation_hashes": {}
+    },
+    "724f6e8d32213719a75c3d4e02ea1d7c1464a6650af21d49b457b90f74ff2f49": {
+      "artifact_relative": "cache/preflight/724f6e8d32213719a75c3d4e02ea1d7c1464a6650af21d49b457b90f74ff2f49/preflight.json",
+      "file_sha256": "a6ab569987ff61539a584919455870faf0985dd033fdce189cf4ab5e5faae03b",
+      "policy": {
+        "layout": "composer-native-metrics-d1",
+        "near_edge_pixels": 20,
+        "risk": "review-risk-d1",
+        "rtl": "blocked-awaiting-approved-font-and-visual-review",
+        "translated_fit": "explicit-caption-font-bound-overrides-only",
+        "version": "preflight-d1"
+      },
+      "policy_sha256": "2b7b123ab1e6b82404d731095a1f4f07006eaab434230d399efc378368f283ca",
+      "registry_sha256": "0ac9bce7ec9b96243c8f4bd879fd84e4fd6c9a6ef700886a5d1a0fb66ea10df4",
+      "translation_hashes": {
+        "en": "5fe987030981e83c35fab37192240afd596febf7f6f4d205a9c024a272ff390f",
+        "fr": "c06659875c5131cefc72b68e0328ed16db4d870d5d8048f0dd3bacdf43e9da29"
+      }
+    }
+  },
+  "french_proposal": {
+    "artifact_file": "layout-proposal.json",
+    "file_sha256": "dac288b0cd3e0e736e2719ad43023d250686aeb49d017e2989e4fe1488608f8e",
+    "decision": "accepted_for_exact_reviewed_french_sample_only",
+    "activated": false,
+    "original_evidence": {
+      "definition": {
+        "applicability": {
+          "en": {
+            "reason": "English current-source migration; complete multilingual preflight deferred to Package D",
+            "status": "applicable"
+          },
+          "fr": {
+            "reason": "Package D defaults component policy v1; local review output only",
+            "status": "applicable"
+          }
+        },
+        "caption": {
+          "case": "upper",
+          "direction": "auto",
+          "fallback": null,
+          "key": "key_names.BASED_ON_A_BOOK",
+          "mode": "translation",
+          "template_key": null,
+          "text": ""
+        },
+        "category": "Based",
+        "color_assignment": {
+          "exception": null,
+          "id": "based.based-book.217e49bd.background",
+          "origin": "historical",
+          "parent": null,
+          "relationship": null
+        },
+        "composer": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#131CA1",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "fonts/Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 250,
+          "gradient": 1,
+          "logo": "transparent.png",
+          "logo_offset": 0,
+          "logo_resize": 2000,
+          "out_name": "Book",
+          "text": "",
+          "text_offset": 0,
+          "white_wash": true
+        },
+        "dependencies": [],
+        "display_name": "Book",
+        "generator": null,
+        "id": "based.based-book.217e49bd",
+        "languages": [
+          "en",
+          "fr"
+        ],
+        "layout": {
+          "kind": "captured_fit",
+          "measurement": {
+            "box": [
+              1800,
+              1000
+            ],
+            "evidence_sha256": "e3fd5414607524fabb70e97881540cab7c10f957ad9ba192461cf36d2b49afbb",
+            "font_sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c",
+            "maximum": 250,
+            "minimum": 100,
+            "point_size": 250,
+            "text": "BASED ON A BOOK"
+          }
+        },
+        "output": {
+          "directory": "based",
+          "filename": "Book.jpg",
+          "remote_paths": {
+            "en": "based/Book.jpg",
+            "fr": null
+          }
+        },
+        "overrides": [
+          {
+            "changes": {
+              "composer": {
+                "font_size": 250
+              },
+              "layout": {
+                "kind": "captured_fit",
+                "measurement": {
+                  "box": [
+                    1900,
+                    1000
+                  ],
+                  "evidence_sha256": "d653dc016f37e75db0a301a267b32bd87f5c5c41adc20ebad669152cf8f237b8",
+                  "font_sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c",
+                  "maximum": 250,
+                  "minimum": 100,
+                  "point_size": 250,
+                  "text": "BAS\u00c9S SUR UN LIVRE"
+                }
+              }
+            },
+            "language": "fr"
+          }
+        ],
+        "source": {
+          "line": 2788,
+          "path": "create_default_posters.ps1",
+          "row_sha256": "8be1ea042f4a5c36637912df6e776a744f138aa1329aea2f24677f589f4abfff"
+        }
+      },
+      "language": "fr",
+      "measurement": {
+        "font_sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c",
+        "metrics": {
+          "clipped": false,
+          "ink_bounds": [
+            222.0,
+            176.0,
+            1677.25,
+            725.0
+          ],
+          "line_height": 280,
+          "line_widths": [
+            1456,
+            1227
+          ],
+          "lines": [
+            "BAS\u00c9S SUR",
+            "UN LIVRE"
+          ],
+          "method": "existing-FontLayout-and-FreeType-no-poster-raster",
+          "near_edge": false
+        },
+        "policy": "composer-native-metrics-d1",
+        "size": 250,
+        "text": "BAS\u00c9S SUR UN LIVRE"
+      },
+      "state": "proposal-not-approved-or-activated"
+    }
+  },
+  "decisions": [
+    {
+      "decision": "accept_presented_sample_with_documented_warnings",
+      "scope": "Exact presented CI sample only; maintainer-reported inspection, no inferred variant/group inspection",
+      "variant_id": "overlay.348da6be724b26abbe714597",
+      "poster_id": "overlay.genre.6ec7ab704b9b",
+      "kind": "overlay",
+      "language": "en",
+      "artifact_image": "output/genre/overlays/standard/Experimental.png",
+      "image_sha256": "a25ee66f60519c36a8ccf078efe6b43d9772632c8d1e1c34229b166d2c26c5e3",
+      "dimensions": [
+        126,
+        85
+      ],
+      "mode": "RGBA",
+      "source_review_version": 1,
+      "validation_fingerprint": "d442f8599fb6517a207524c048b2f04378b4633dec0c3193c498d7bd7a2f9895",
+      "preflight_payload_sha256": "348029c94d7470d0d16bc9ce62e3c33ef9ca7bcb964bacf19b3599d41b564779",
+      "renderer_identity_sha256": "b29ab7bf7052a5553a8382fdf378dc54096a2e635232e9fdbfc619307c4f1d67",
+      "policy_sha256": "2b7b123ab1e6b82404d731095a1f4f07006eaab434230d399efc378368f283ca",
+      "definition_fingerprint": "14b5059c12fb3e899f7aa828342883385f49c1b12a613b366f51cd7000153899",
+      "inputs": {
+        "overlay_source": {
+          "path": "logos_genre/Experimental.png",
+          "sha256": "38daa50bc4f9a9d83c6f9444a56cca1ae5e7acaf8151e1fc8d27b4571f3c7766"
+        }
+      },
+      "caption": null,
+      "translation_dependencies": [],
+      "accepted_warning_codes": [
+        "overlay_transform_review"
+      ],
+      "diagnostics": [
+        {
+          "code": "overlay_transform_review",
+          "details": {
+            "transform": {
+              "colorspace": "sRGB",
+              "compress_level": 9,
+              "filter": "Pillow-LANCZOS",
+              "format": "PNG",
+              "resize": "fit-including-upscale-round-half-up",
+              "trim": "top-left-RGBA-background-exact",
+              "version": "overlay-pillow-d1"
+            }
+          },
+          "message": "Pillow filter/alpha differences require explicit overlay review",
+          "severity": "warning"
+        }
+      ],
+      "risk": {
+        "level": "high",
+        "reasons": [
+          "overlay_transform_review"
+        ],
+        "requires_individual": true,
+        "version": "review-risk-d1"
+      },
+      "runtime_review_state_changed": false,
+      "font_identity": null,
+      "layout_identity": {
+        "catalog_file_sha256": "87fecce16a921ee9fff743d2a339744d6140f792e74c04ef9c6bbba6001de441",
+        "catalog_payload_sha256": "7085533956e5b2d6a2f2ad694e17118fb5082168691bb70fe2b13b1d18403e81",
+        "group": "genre",
+        "size": "standard",
+        "trim": false,
+        "size_contract": {
+          "box": [
+            285,
+            85
+          ],
+          "destination": "genre/overlays/standard",
+          "source_line": 6939
+        },
+        "transform": {
+          "colorspace": "sRGB",
+          "compress_level": 9,
+          "filter": "Pillow-LANCZOS",
+          "format": "PNG",
+          "resize": "fit-including-upscale-round-half-up",
+          "trim": "top-left-RGBA-background-exact",
+          "version": "overlay-pillow-d1"
+        }
+      },
+      "accepted_difference": "Pillow/ImageMagick filter, alpha and visible-composite differences documented in overlay-observations.json are accepted for these presented samples; no pixel-parity claim or changed threshold. The four historical comparison cases are context, not additional individually approved images.",
+      "decision_id": "package-d.sample-acceptance.c3f4fc456bb93fc75e67a8b3"
+    },
+    {
+      "decision": "accept_presented_sample_with_documented_warnings",
+      "scope": "Exact presented CI sample only; maintainer-reported inspection, no inferred variant/group inspection",
+      "variant_id": "overlay.5d2c27bbd7d3be20296ae9fb",
+      "poster_id": "overlay.genre.6ec7ab704b9b",
+      "kind": "overlay",
+      "language": "en",
+      "artifact_image": "output/genre/overlays/bigger/Experimental.png",
+      "image_sha256": "7734ba4b403ff5dee4eeb954f18cfa8dbd8a338b80817cbf189803001f419b74",
+      "dimensions": [
+        148,
+        100
+      ],
+      "mode": "RGBA",
+      "source_review_version": 1,
+      "validation_fingerprint": "d6426dbeb74c310b01ae87a35c379837f12cf6a55089eb18479559f54a51d996",
+      "preflight_payload_sha256": "348029c94d7470d0d16bc9ce62e3c33ef9ca7bcb964bacf19b3599d41b564779",
+      "renderer_identity_sha256": "b29ab7bf7052a5553a8382fdf378dc54096a2e635232e9fdbfc619307c4f1d67",
+      "policy_sha256": "2b7b123ab1e6b82404d731095a1f4f07006eaab434230d399efc378368f283ca",
+      "definition_fingerprint": "ec34ff96db9d80587bc982fcbefe50e06baf89a8a2ec3028cf6f1929eca8152d",
+      "inputs": {
+        "overlay_source": {
+          "path": "logos_genre/Experimental.png",
+          "sha256": "38daa50bc4f9a9d83c6f9444a56cca1ae5e7acaf8151e1fc8d27b4571f3c7766"
+        }
+      },
+      "caption": null,
+      "translation_dependencies": [],
+      "accepted_warning_codes": [
+        "overlay_transform_review"
+      ],
+      "diagnostics": [
+        {
+          "code": "overlay_transform_review",
+          "details": {
+            "transform": {
+              "colorspace": "sRGB",
+              "compress_level": 9,
+              "filter": "Pillow-LANCZOS",
+              "format": "PNG",
+              "resize": "fit-including-upscale-round-half-up",
+              "trim": "top-left-RGBA-background-exact",
+              "version": "overlay-pillow-d1"
+            }
+          },
+          "message": "Pillow filter/alpha differences require explicit overlay review",
+          "severity": "warning"
+        }
+      ],
+      "risk": {
+        "level": "high",
+        "reasons": [
+          "overlay_transform_review"
+        ],
+        "requires_individual": true,
+        "version": "review-risk-d1"
+      },
+      "runtime_review_state_changed": false,
+      "font_identity": null,
+      "layout_identity": {
+        "catalog_file_sha256": "87fecce16a921ee9fff743d2a339744d6140f792e74c04ef9c6bbba6001de441",
+        "catalog_payload_sha256": "7085533956e5b2d6a2f2ad694e17118fb5082168691bb70fe2b13b1d18403e81",
+        "group": "genre",
+        "size": "bigger",
+        "trim": false,
+        "size_contract": {
+          "box": [
+            440,
+            100
+          ],
+          "destination": "genre/overlays/bigger",
+          "source_line": 6963
+        },
+        "transform": {
+          "colorspace": "sRGB",
+          "compress_level": 9,
+          "filter": "Pillow-LANCZOS",
+          "format": "PNG",
+          "resize": "fit-including-upscale-round-half-up",
+          "trim": "top-left-RGBA-background-exact",
+          "version": "overlay-pillow-d1"
+        }
+      },
+      "accepted_difference": "Pillow/ImageMagick filter, alpha and visible-composite differences documented in overlay-observations.json are accepted for these presented samples; no pixel-parity claim or changed threshold. The four historical comparison cases are context, not additional individually approved images.",
+      "decision_id": "package-d.sample-acceptance.beadf5a86cb724c3005252c6"
+    },
+    {
+      "decision": "accept_presented_sample_with_documented_warnings",
+      "scope": "Exact presented CI sample only; maintainer-reported inspection, no inferred variant/group inspection",
+      "variant_id": "poster.19c32b6b4da5479878de4230",
+      "poster_id": "based.based-book.217e49bd",
+      "kind": "poster",
+      "language": "fr",
+      "artifact_image": "output/defaults-fr/based/Book.jpg",
+      "image_sha256": "8e258dc7a9273ea09144962d52472c9e4b1975cd7dfb418ab04e71d00590c352",
+      "dimensions": [
+        2000,
+        3000
+      ],
+      "mode": "RGB",
+      "source_review_version": 1,
+      "validation_fingerprint": "e85f0d55ea29ab1e0942a64e7e45fbd694d9f757f5edbdfa3ff84432c7b5534d",
+      "preflight_payload_sha256": "724f6e8d32213719a75c3d4e02ea1d7c1464a6650af21d49b457b90f74ff2f49",
+      "renderer_identity_sha256": "0c60e2a6cb4ad935fef80283deb5db9c98fe20073af1f7006c314375b74a7920",
+      "policy_sha256": "2b7b123ab1e6b82404d731095a1f4f07006eaab434230d399efc378368f283ca",
+      "definition_fingerprint": "a40d8ca5e430c7284868e3fcfdc5134ca4df9a02374db1c108ad41034baf561d",
+      "inputs": {
+        "fades/@bottom-top-fade.png": {
+          "path": "fades/@bottom-top-fade.png",
+          "sha256": "79d93b7455a694820a4df4b27b4418ea0063af59400ed778fc66f83648daa110"
+        },
+        "fades/@bottom-up-fade.png": {
+          "path": "fades/@bottom-up-fade.png",
+          "sha256": "7ed182e395a08b4035b687e6f0661029ef938f8027923ec9434ebcbc5d144cfd"
+        },
+        "fades/@center-out-fade.png": {
+          "path": "fades/@center-out-fade.png",
+          "sha256": "6d36359197363ddc092fdaa8aa4590838b01b8a22c3bf4b6ded76d65bc85a87c"
+        },
+        "fades/@none.png": {
+          "path": "fades/@none.png",
+          "sha256": "5e89879184510e91e477d41c61bd86a0e9209e9ecc17909a7b0ee20427950cbc"
+        },
+        "fades/@top-down-fade.png": {
+          "path": "fades/@top-down-fade.png",
+          "sha256": "cbbf0b235a893410e02977419c89ee6ad97df253cbaee382e01d088d2cce6b39"
+        },
+        "font": {
+          "path": "fonts/Comfortaa-Medium.ttf",
+          "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+        },
+        "logo": {
+          "path": "transparent.png",
+          "sha256": "64a0a1d637ff0687ccbcaeca31b8e6b7235002b1ee8528e7a60be6a7d636f1fc"
+        },
+        "transparent.png": {
+          "path": "transparent.png",
+          "sha256": "64a0a1d637ff0687ccbcaeca31b8e6b7235002b1ee8528e7a60be6a7d636f1fc"
+        }
+      },
+      "caption": "BAS\u00c9S SUR UN LIVRE",
+      "translation_dependencies": [
+        {
+          "key": "key_names.BASED_ON_A_BOOK",
+          "language": "fr",
+          "value_sha256": "718362a6b0506d644f6e8723cc06dc4eaca4f71da6e3e27236b785369d019965"
+        }
+      ],
+      "accepted_warning_codes": [
+        "wrapped_caption"
+      ],
+      "diagnostics": [
+        {
+          "code": "wrapped_caption",
+          "details": {
+            "lines": [
+              "BAS\u00c9S SUR",
+              "UN LIVRE"
+            ]
+          },
+          "message": "Composer wraps caption into multiple rows",
+          "severity": "warning"
+        },
+        {
+          "code": "historical_color_preserved",
+          "details": {},
+          "message": "Existing color retained, not automatically declared an approved exception",
+          "severity": "info"
+        }
+      ],
+      "risk": {
+        "level": "high",
+        "reasons": [
+          "translated_caption",
+          "wrapped_caption"
+        ],
+        "requires_individual": true,
+        "version": "review-risk-d1"
+      },
+      "runtime_review_state_changed": false,
+      "font_identity": {
+        "path": "fonts/Comfortaa-Medium.ttf",
+        "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+      },
+      "layout_identity": {
+        "proposal_file_sha256": "dac288b0cd3e0e736e2719ad43023d250686aeb49d017e2989e4fe1488608f8e",
+        "layout_probe": {
+          "clipped": false,
+          "ink_bounds": [
+            222.0,
+            176.0,
+            1677.25,
+            725.0
+          ],
+          "line_height": 280,
+          "line_widths": [
+            1456,
+            1227
+          ],
+          "lines": [
+            "BAS\u00c9S SUR",
+            "UN LIVRE"
+          ],
+          "method": "existing-FontLayout-and-FreeType-no-poster-raster",
+          "near_edge": false
+        },
+        "point_size": 250,
+        "composer_text_offset": 0,
+        "layout": {
+          "kind": "captured_fit",
+          "measurement": {
+            "box": [
+              1900,
+              1000
+            ],
+            "evidence_sha256": "d653dc016f37e75db0a301a267b32bd87f5c5c41adc20ebad669152cf8f237b8",
+            "font_sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c",
+            "maximum": 250,
+            "minimum": 100,
+            "point_size": 250,
+            "text": "BAS\u00c9S SUR UN LIVRE"
+          }
+        }
+      },
+      "fitting_proposal_decision": "Accept this exact French captured-fit proposal and resulting reviewed sample; no catalog/YAML activation or other French-poster approval.",
+      "decision_id": "package-d.sample-acceptance.9fd5d476003f0460343c17ce"
+    },
+    {
+      "decision": "accept_presented_sample_with_documented_warnings",
+      "scope": "Exact presented CI sample only; maintainer-reported inspection, no inferred variant/group inspection",
+      "variant_id": "poster.f2085c6d67f7f4e48804ac6b",
+      "poster_id": "based.based-book.217e49bd",
+      "kind": "poster",
+      "language": "en",
+      "artifact_image": "output/defaults-en/based/Book.jpg",
+      "image_sha256": "366a97b27d8e9d637297113f26fd567bed5289fcfaf65ccfb6ac4cd6181e0ce5",
+      "dimensions": [
+        2000,
+        3000
+      ],
+      "mode": "RGB",
+      "source_review_version": 1,
+      "validation_fingerprint": "5875462cfec48b082b2b7da37eb64f8a4482e66ff1e9a2bcc9d3fd8f25bf08f6",
+      "preflight_payload_sha256": "724f6e8d32213719a75c3d4e02ea1d7c1464a6650af21d49b457b90f74ff2f49",
+      "renderer_identity_sha256": "0c60e2a6cb4ad935fef80283deb5db9c98fe20073af1f7006c314375b74a7920",
+      "policy_sha256": "2b7b123ab1e6b82404d731095a1f4f07006eaab434230d399efc378368f283ca",
+      "definition_fingerprint": "868c55d4198bc32c692be4614241fd1979f8c1ddc99d1fb6f66248646e9ed4a9",
+      "inputs": {
+        "fades/@bottom-top-fade.png": {
+          "path": "fades/@bottom-top-fade.png",
+          "sha256": "79d93b7455a694820a4df4b27b4418ea0063af59400ed778fc66f83648daa110"
+        },
+        "fades/@bottom-up-fade.png": {
+          "path": "fades/@bottom-up-fade.png",
+          "sha256": "7ed182e395a08b4035b687e6f0661029ef938f8027923ec9434ebcbc5d144cfd"
+        },
+        "fades/@center-out-fade.png": {
+          "path": "fades/@center-out-fade.png",
+          "sha256": "6d36359197363ddc092fdaa8aa4590838b01b8a22c3bf4b6ded76d65bc85a87c"
+        },
+        "fades/@none.png": {
+          "path": "fades/@none.png",
+          "sha256": "5e89879184510e91e477d41c61bd86a0e9209e9ecc17909a7b0ee20427950cbc"
+        },
+        "fades/@top-down-fade.png": {
+          "path": "fades/@top-down-fade.png",
+          "sha256": "cbbf0b235a893410e02977419c89ee6ad97df253cbaee382e01d088d2cce6b39"
+        },
+        "font": {
+          "path": "fonts/Comfortaa-Medium.ttf",
+          "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+        },
+        "logo": {
+          "path": "transparent.png",
+          "sha256": "64a0a1d637ff0687ccbcaeca31b8e6b7235002b1ee8528e7a60be6a7d636f1fc"
+        },
+        "transparent.png": {
+          "path": "transparent.png",
+          "sha256": "64a0a1d637ff0687ccbcaeca31b8e6b7235002b1ee8528e7a60be6a7d636f1fc"
+        }
+      },
+      "caption": "BASED ON A BOOK",
+      "translation_dependencies": [
+        {
+          "key": "key_names.BASED_ON_A_BOOK",
+          "language": "en",
+          "value_sha256": "a3d985b0a850a46ea66c20a6ea79a7818a1400ddb98a68e54caf083a61b4a949"
+        }
+      ],
+      "accepted_warning_codes": [
+        "wrapped_caption"
+      ],
+      "diagnostics": [
+        {
+          "code": "wrapped_caption",
+          "details": {
+            "lines": [
+              "BASED ON A",
+              "BOOK"
+            ]
+          },
+          "message": "Composer wraps caption into multiple rows",
+          "severity": "warning"
+        },
+        {
+          "code": "historical_color_preserved",
+          "details": {},
+          "message": "Existing color retained, not automatically declared an approved exception",
+          "severity": "info"
+        }
+      ],
+      "risk": {
+        "level": "high",
+        "reasons": [
+          "wrapped_caption"
+        ],
+        "requires_individual": true,
+        "version": "review-risk-d1"
+      },
+      "runtime_review_state_changed": false,
+      "font_identity": {
+        "path": "fonts/Comfortaa-Medium.ttf",
+        "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+      },
+      "layout_identity": {
+        "proposal_file_sha256": "dac288b0cd3e0e736e2719ad43023d250686aeb49d017e2989e4fe1488608f8e",
+        "layout_probe": {
+          "clipped": false,
+          "ink_bounds": [
+            131.0,
+            243.0,
+            1769.25,
+            723.0
+          ],
+          "line_height": 280,
+          "line_widths": [
+            1638,
+            792
+          ],
+          "lines": [
+            "BASED ON A",
+            "BOOK"
+          ],
+          "method": "existing-FontLayout-and-FreeType-no-poster-raster",
+          "near_edge": false
+        },
+        "point_size": 250,
+        "composer_text_offset": 0,
+        "layout": {
+          "kind": "captured_fit",
+          "measurement": {
+            "box": [
+              1800,
+              1000
+            ],
+            "evidence_sha256": "e3fd5414607524fabb70e97881540cab7c10f957ad9ba192461cf36d2b49afbb",
+            "font_sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c",
+            "maximum": 250,
+            "minimum": 100,
+            "point_size": 250,
+            "text": "BASED ON A BOOK"
+          }
+        }
+      },
+      "decision_id": "package-d.sample-acceptance.7da2c710866d6660ebcb5b2e"
+    }
+  ],
+  "historical_pixel_difference_evidence": {
+    "path": "create_defaults/bulk/evidence/package-d/overlay-observations.json",
+    "file_sha256": "6be751336f0d6721d32ba5fafe8b17fcd1f89bda96e3ec591347a66f353ff087",
+    "comparisons": [
+      {
+        "alpha_mae": 3.2336134453781513,
+        "case": "overlay-standard-genre",
+        "composited_black_rgb_mae": 3.228913787737317,
+        "composited_white_rgb_mae": 0.041300964830376596,
+        "legacy_dimensions": [
+          126,
+          85
+        ],
+        "legacy_reference": "Preserved Phase 1 representative-final, not newly rerun ImageMagick",
+        "legacy_sha256": "2806788dffd22874c4d17d841c280f88cccd2b06c885f1009afd7cb9f53a163f",
+        "maximum_rgba_difference": 255,
+        "python_dimensions": [
+          126,
+          85
+        ],
+        "python_sha256": "da89af317d93142bd4895f881359ce6c2918431ca584a9483a10f98e87caafb0",
+        "rgb_mae": 50.95378151260504,
+        "rgba_pixel_identical": false,
+        "source_sha256": "a6bdb7e9cb5cd348f1896c77df183c4c4130c2f9a0d6510ef982e494188af45a"
+      },
+      {
+        "alpha_mae": 3.026351351351351,
+        "case": "overlay-bigger-genre",
+        "composited_black_rgb_mae": 3.0213513513513512,
+        "composited_white_rgb_mae": 0.03801801801801802,
+        "legacy_dimensions": [
+          148,
+          100
+        ],
+        "legacy_reference": "Preserved Phase 1 representative-final, not newly rerun ImageMagick",
+        "legacy_sha256": "776992eecc95cbad7c540be0bc32639715ac826c2845ed4593f91352b0cd5371",
+        "maximum_rgba_difference": 255,
+        "python_dimensions": [
+          148,
+          100
+        ],
+        "python_sha256": "e023c86f275bab7756bcb4a4cc367a938c14d146a3fbad2440144a28387a74f1",
+        "rgb_mae": 44.792815315315316,
+        "rgba_pixel_identical": false,
+        "source_sha256": "a6bdb7e9cb5cd348f1896c77df183c4c4130c2f9a0d6510ef982e494188af45a"
+      },
+      {
+        "alpha_mae": 1.104740630429387,
+        "case": "overlay-standard-network",
+        "composited_black_rgb_mae": 1.0077769504426244,
+        "composited_white_rgb_mae": 0.13373045420699925,
+        "legacy_dimensions": [
+          237,
+          85
+        ],
+        "legacy_reference": "Preserved Phase 1 representative-final, not newly rerun ImageMagick",
+        "legacy_sha256": "e0bc6543d39a9e151a3121a76aae60377222693033513ed00c09063812e10756",
+        "maximum_rgba_difference": 255,
+        "python_dimensions": [
+          237,
+          85
+        ],
+        "python_sha256": "8344fc01133310362358c1d0c5f992c284e790f8317bd4963c8d8c566b0b0482",
+        "rgb_mae": 14.077521303880202,
+        "rgba_pixel_identical": false,
+        "source_sha256": "dc170aba2e68a89cfe61bd0428ae041fe742abf4110586d654c26b6a261a3791"
+      },
+      {
+        "alpha_mae": 0.815663082437276,
+        "case": "overlay-bigger-network",
+        "composited_black_rgb_mae": 0.8073835125448028,
+        "composited_white_rgb_mae": 0.07637992831541218,
+        "legacy_dimensions": [
+          279,
+          100
+        ],
+        "legacy_reference": "Preserved Phase 1 representative-final, not newly rerun ImageMagick",
+        "legacy_sha256": "6c447e9919e10c439f9c2eedd81e1fb3f24276d0fc477c123ba4442b07c3da40",
+        "maximum_rgba_difference": 255,
+        "python_dimensions": [
+          279,
+          100
+        ],
+        "python_sha256": "5c53174673ac3f207e1779b025adb59dad2d3c29554e3644a3f594750013cad4",
+        "rgb_mae": 12.88225806451613,
+        "rgba_pixel_identical": false,
+        "source_sha256": "dc170aba2e68a89cfe61bd0428ae041fe742abf4110586d654c26b6a261a3791"
+      }
+    ],
+    "scope": "Measurements remain historical and unchanged; no additional individual inspections, approvals, pixel equivalence or threshold changes are inferred"
+  },
+  "pending_variants": [
+    {
+      "id": "poster.b4d08786abb73673e4cdd600",
+      "language": "ar",
+      "source_review_version": 0,
+      "validation_fingerprint": "f874bfbd4bf205d2c5ff1d1578ad1653a4e7fa2f43e5d80177e32912498a8779",
+      "image_sha256": null,
+      "state": "blocked_not_accepted",
+      "diagnostics": [
+        {
+          "code": "unavailable_translation",
+          "details": {},
+          "message": "Pinned registry has no available defaults resource",
+          "severity": "error"
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "No approval of all 4,122 overlays or the unreviewed members of the 38-output local sample.",
+    "No approval of all English/French posters or other multilingual variants.",
+    "Arabic resource, font, shaping, RTL and layout acceptance remain pending/blocked.",
+    "No source YAML, catalog, layout proposal artifact, historical metrics or CI evidence is changed.",
+    "No publishing, merge, deployment, Package E authorization or complete Gate D sign-off."
+  ],
+  "audit_infrastructure": {
+    "api": "create_defaults.bulk.state.Store.event",
+    "event_kind": "review_external_sample_acceptance",
+    "local_database": "config/package-d/maintainer-review-20261017/state.sqlite",
+    "runtime_state": "No review_variants approvals or CI batch membership changes. The CI ZIP omits SQLite/owned worker receipts; local renderer environment differs. Reviews.decide cannot truthfully approve the external Linux artifacts against local Windows state.",
+    "export": "create_defaults/bulk/evidence/package-d/maintainer-visual-acceptance-20261017-events.json"
+  },
+  "sha256": "8d1f295011673c1d2a64882d8e39e0731c6bb0ceebb12dfd4be3296f075b2d67"
+}
