@@ -1,4 +1,4 @@
-# Package B and its offline test suite; existing Phase 1 pins remain unchanged.
+# Offline bulk validation and selected People compatibility regressions.
 -r requirements.txt
 jsonschema==4.26.0
 requests==2.34.2

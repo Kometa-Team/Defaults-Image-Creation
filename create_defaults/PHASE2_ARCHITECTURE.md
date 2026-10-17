@@ -627,3 +627,14 @@ while a single logical-child selection loads only its required definitions. The
 benchmark harness separately excludes family selectors and caps its effective graph
 at 64 outputs. These rules prevent missing-parent failures and accidental broad
 benchmark expansion without changing any poster definition or rendering parameter.
+
+Package E additionally preserves ICC source alpha separately from grayscale/RGB
+color conversion before overlay trimming/resizing. Exact renderer source hashes
+change even where a corrected transform produces identical bytes; review approval
+still requires its existing exact context. The expanded legacy comparison found
+this defect independently of Windows/Linux pixel parity. Source-mode inventory
+and before/after evidence are retained in the Package E report.
+
+[Package E usage](PACKAGE_E_USAGE.md) documents bounded reproducible commands,
+resource/ownership constraints and the retained-reference prerequisites. These
+validation helpers do not enable a publishing path or production authorization.

@@ -35,7 +35,8 @@ uses at most 15,000 jobs and recycles workers after 200 jobs. Overlay phases use
 4,122 finite contracts, a 5,000-job cap, 2 GiB output ceiling, the same disk/memory
 floors and an explicit 45-minute phase limit. The latter was revised from 30 minutes
 after observed full-inventory throughput; no unbounded benchmark is introduced.
-Resource sampling is advisory between checks; worker limits and finite selections
+Reproducible commands and retained-evidence prerequisites are in
+[Package E usage](PACKAGE_E_USAGE.md). Resource sampling is advisory between checks; worker limits and finite selections
 provide separate bounds. All outputs, SQLite state and temporary work stay in
 ignored local `config/package-e/` roots, separate from source and production.
 
@@ -89,7 +90,7 @@ not authorization to change colors or layouts.
 
 ## Full English generation and renderer comparison
 
-In progress: last recorded 2,604 verified of 9,957 required. This is incomplete evidence, not a full pass.
+In progress: last recorded 3,181 verified of 9,957 required. This is incomplete evidence, not a full pass.
 
 The full comparison requires a complete, validated manifest and matching source,
 asset, font and semantic identities for every reference. Its original Phase 1
@@ -155,7 +156,20 @@ No new visual approvals or acceptance thresholds were created. Both original and
 corrected per-image metrics are retained in
 [ICC evidence](bulk/evidence/package-e/overlay-icc-defect.json).
 
-In progress: last recorded 1,479 verified of 4,122 required. This is incomplete evidence, not a full pass.
+A second deterministic risk batch adds 64 transforms across all 18 groups and all
+five actual source mode/profile classes (LA with/without ICC, RGBA with/without ICC,
+and palette without ICC). All 64 decode as RGBA with visible alpha and match fresh
+legacy dimensions. All retain pixel differences: RGB MAE 5.153..51.795 and alpha
+MAE 0.699..7.160 (exact per-image values remain authoritative). Across both corrected
+batches, the union is 88 distinct transforms, not 102 independent images. These
+concurrent-load correctness observations do not replace isolated performance
+measurements or grant acceptance. See [risk comparison](bulk/evidence/package-e/overlay-profile-risk.json).
+The existing receipt/review service registers these 64 exact previews as
+`ready_for_review`, with an empty inspected subset and zero approval events.
+[Pending batch identities](bulk/evidence/package-e/pending-overlay-review.json)
+link its local review page and exact image/validation versions.
+
+In progress: last recorded 2,272 verified of 4,122 required. This is incomplete evidence, not a full pass.
 
 The four exact D sample approvals and their image/source/font/layout/validation
 identities remain in `bulk/evidence/package-d/maintainer-visual-acceptance-20261017*.json`.
@@ -352,6 +366,10 @@ hashes. Platform-specific renderer identities and exact artifact hashes remain
 separate; pixel parity cannot bypass approval binding. See
 [platform evidence](bulk/evidence/package-e/windows-linux.json).
 
+People results cover the selected GitHub/workspace/orchestrator regression files,
+not the independent People ML/colorization/browser pipeline or a combined dependency
+environment. That pipeline has separate requirements and is outside Package E.
+
 Both platforms exercise spawn, reuse/recycling, cancellation, crash recovery,
 atomic promotion, SQLite WAL/locking, separators/case/Unicode, font identities,
 path mapping and deterministic manifests. Linux skips Windows-junction tests.
@@ -378,9 +396,16 @@ GHSA-768j-98cg-p3fv. Pins were updated in an isolated trial to 12.3.0 / 4.60.2.
 Forty-four real Based/Decade/Playlist outputs covering all 17 font hashes match
 fresh original approved API calls byte-for-byte on identical current parents;
 ledger `7e392814005b6d4c9ab26aa453787bbeb343b3f6350e494f8db27d0515ac948f`.
-A new advisory query found no matching entries for the patched versions. The
-listed trigger APIs are not called by this bounded rendering path; no active exploit
-is claimed. This is a 12-direct-pin screen, not a complete transitive/native SBOM.
+A new normalized-name advisory query found no matching entries for the patched
+versions. Read-only repository alert reconciliation found 20 open default-branch
+alerts (19 Pillow, one fonttools); all current branch pins are outside their listed
+vulnerable ranges. Those alerts remain open on main and were not dismissed. The
+initial mixed-case Pillow query returned only a subset; normalized queries and
+repository records supersede that coverage claim. Several advisory-specific loader,
+viewer and font-build paths are outside this bounded PNG/JPEG/verified-font path;
+no active exploit is claimed. Windows `pip check` reports no broken installed
+requirements in the isolated trial environment. This is direct-pin screening, not a complete
+transitive/native SBOM. See [alert reconciliation](bulk/evidence/package-e/dependency-alert-reconciliation.json).
 Primary advisories: [Pillow](https://github.com/advisories/GHSA-6r8x-57c9-28j4),
 [fonttools](https://github.com/advisories/GHSA-768j-98cg-p3fv).
 
@@ -399,19 +424,19 @@ Final complete-PR static inventory:
 ```json
 {
   "pr_base": "57ef136833a3f54da2bf1e4ddef98addfa36d583",
-  "files": 203,
+  "files": 208,
   "groups": {
-    "implementation tests docs or workflow": 91,
+    "implementation tests docs or workflow": 92,
     "compressed immutable manifest fixtures": 1,
     "generated catalog and source-normalized migration audits": 88,
-    "compact package audit evidence": 19,
+    "compact package audit evidence": 23,
     "Package A source and inventory evidence": 4
   },
   "bytes_by_group": {
-    "implementation tests docs or workflow": 942341,
+    "implementation tests docs or workflow": 951573,
     "compressed immutable manifest fixtures": 1458149,
     "generated catalog and source-normalized migration audits": 13803206,
-    "compact package audit evidence": 411056,
+    "compact package audit evidence": 532220,
     "Package A source and inventory evidence": 2133232
   },
   "possible_credentials": [],

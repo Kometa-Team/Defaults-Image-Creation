@@ -310,3 +310,17 @@ The current work and remaining acceptance criteria are recorded in
 [Package E report](PACKAGE_E_REPORT.md). Do not infer cutover authorization from
 a successful test or readiness recommendation. Keep the PR draft, retain the
 production PowerShell implementation and stop for final maintainer review.
+
+Package E completion evidence separates exact contract reconciliation, full local
+output verification, prior approved-API byte comparisons, selective pinned remote
+comparisons and visual acceptance. A successful render or pixel comparison cannot
+substitute for current approval identities. Existing D sample decisions remain
+immutable; the ICC overlay correction and unreviewed translations require their
+reported current review decisions.
+
+Use the independent readiness matrix and unexecuted cutover/rollback checklist in
+[Package E report](PACKAGE_E_REPORT.md), with reproducible commands in
+[Package E usage](PACKAGE_E_USAGE.md). Resolve the published Action & adventure
+filename case conflict explicitly before any separately authorized cutover. Do not
+publish incomplete language collections, move private Awards inputs into public
+paths, or infer publication permission from automated acceptance.
