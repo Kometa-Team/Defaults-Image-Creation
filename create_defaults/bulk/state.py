@@ -52,6 +52,9 @@ MIGRATIONS = (
         "CREATE TABLE translation_dependencies (language TEXT, key TEXT, variant TEXT, validation TEXT NOT NULL, PRIMARY KEY(language,key,variant))",
         "CREATE INDEX translation_dependents ON translation_dependencies(language,key)",
     ),
+    (
+        "CREATE INDEX verified_render_reuse ON output_claims(root,fingerprint)",
+    ),
 )
 
 

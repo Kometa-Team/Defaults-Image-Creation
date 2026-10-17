@@ -122,6 +122,12 @@ def test_live_contract_cold_warm_offline_and_corrupt_snapshot(tmp_path):
     assert resolved.lookup("en", "key_names.book")[0] == "Book"
     with pytest.raises(BulkError, match="differ"):
         translations_from_snapshot(pinned, tmp_path)
+    selected = translations_from_snapshot(pinned, tmp_path, languages=["bg"])
+    assert selected.lookup("bg", "key_names.book")[0] == "\u041a\u043d\u0438\u0433\u0430"
+    partial = translations_from_snapshot(pinned, tmp_path, languages=["en", "bg"])
+    with pytest.raises(BulkError, match="differ"):
+        partial.lookup("en", "key_names.book")
+    assert partial.lookup("bg", "key_names.book")[0] == "\u041a\u043d\u0438\u0433\u0430"
 
 
 def test_partial_strict_audit_reports_and_language_isolation(definition, config, tmp_path):
@@ -473,10 +479,11 @@ def test_cross_category_missing_key_report_deduplicates_with_exact_mappings():
     from create_defaults.bulk.preflight import consolidate_missing
     base = {"language": "fr", "key": "key_names.book", "reason": "missing_translation", "source_snapshot": "a" * 64, "fallback": None}
     rows = [dict(base, category="Based", poster_ids=["based.book"], variant_ids=["based.fr"]),
-            dict(base, category="Playlist", poster_ids=["playlist.book"], variant_ids=["playlist.fr"])]
+            dict(base, key="KEY_NAMES.BOOK", category="Playlist", poster_ids=["playlist.book"], variant_ids=["playlist.fr"])]
     result = consolidate_missing(rows)
     assert len(result) == 1 and result[0]["logical_poster_count"] == result[0]["rendered_variant_count"] == 2
     assert result[0]["category_posters"] == {"Based": ["based.book"], "Playlist": ["playlist.book"]}
+    assert result[0]["key_aliases"] == ["KEY_NAMES.BOOK", "key_names.book"]
 
 
 def test_cli_retains_report_and_returns_distinct_strict_partial_and_audit_codes(definition, tmp_path, capsys):
@@ -499,3 +506,123 @@ def test_cli_retains_report_and_returns_distinct_strict_partial_and_audit_codes(
     assert json.loads(capsys.readouterr().out)["status"] == "partial"
     assert main(common + ["generate", "--definitions", str(file), "--poster", definition.id, "--language", "fr", "--policy", "audit"]) == 0
     assert json.loads(capsys.readouterr().out)["status"] == "audited"
+
+
+def test_compact_audit_summary_retains_counts_without_bulk_variant_records():
+    from create_defaults.bulk.d_summary import audit_summary
+    row = {"language": "fr", "category": "Based", "key": "key_names.book", "reason": "missing_translation", "source_snapshot": "a" * 64,
+           "fallback": None, "poster_ids": ["based.book"], "variant_ids": ["based.fr"]}
+    audit = {"registry_sha256": "a" * 64, "source": {}, "languages": ["fr"], "scopes": [{"language": "fr", "coverage": {"blocked": 1}, "diagnostics": {"missing_translation": 1}}],
+             "coverage": {"blocked": 1}, "missing_translations": [row], "elapsed_seconds": 1, "peak_observed_parent_rss": 100,
+             "unique_sources_hashed": 0, "poster_renders": 0, "scope": "test"}
+    summary, missing = audit_summary(audit)
+    assert summary["variants_audited"] == summary["deduplicated_missing_or_invalid_keys"] == 1
+    assert summary["by_language"]["fr"]["coverage"] == {"blocked": 1}
+    assert "variants" not in summary and missing[0]["poster_ids"] == ["based.book"]
+
+
+def test_unavailable_resource_blocks_only_translated_dependents_and_honors_reviewed_fallback(definition, config, tmp_path):
+    translated = translations(tmp_path, fr=captions(definition, "Livre"))
+    available = LanguageSnapshot.create([registry_record("fr", sha256=translated.hashes["fr"])], provenance={})
+    unavailable = LanguageSnapshot.create([registry_record("fr", availability="unavailable", sha256=None)], provenance={})
+    before = run_preflight(definition, translated, config, languages=["fr"], registry=available)
+    shared = definition.data
+    shared["id"] += ".shared"
+    shared["caption"] = dict(shared["caption"], mode="none", key=None)
+    shared["output"]["filename"] = "Shared.jpg"
+    shared["composer"]["out_name"] = "Shared"
+    shared["composer"]["base_color"] = "#010203"
+    shared["output"]["remote_paths"]["en"] = None
+    shared = Definition.create(shared)
+    shared_before = run_preflight(shared, translated, config, languages=["fr"], registry=available)
+    combined = dict(before, variants=before["variants"] + shared_before["variants"])
+    delta = translation_delta(translated, translated, old_registry=available, new_registry=unavailable)
+    assert delta["availability_changes"] == ["fr"] and delta["mapping_changes"] == []
+    assert affected_variants(delta, combined)["variant_ids"] == [variant_id(definition.id, "fr")]
+    report = run_preflight(definition, translated, config, languages=["fr"], registry=unavailable)
+    assert report["variants"][0]["status"] == "blocked"
+    assert run_preflight(shared, translated, config, languages=["fr"], registry=unavailable)["variants"][0]["status"] in ELIGIBLE
+    value = definition.data
+    value["caption"]["fallback"] = {"id": "fallback.reviewed", "language": None, "key": None, "text": "Book", "reviewer": "maintainer", "reason": "Explicit test fallback", "policy_version": "test-d1"}
+    report = run_preflight(Definition.create(value), translated, config, languages=["fr"], registry=unavailable)
+    assert report["variants"][0]["caption"] == "Book" and report["variants"][0]["status"] == "ready_with_warning"
+
+
+@pytest.mark.parametrize("bad", ["broken: [", b"\xff"])
+def test_malformed_unrelated_local_resource_does_not_block_selected_french(definition, config, tmp_path, bad):
+    from dataclasses import replace
+    from create_defaults.bulk.d_cli import source
+    translations(tmp_path, fr=captions(definition, "Livre"))
+    if isinstance(bad, bytes):
+        (tmp_path / "de.yml").write_bytes(bad)
+    else:
+        (tmp_path / "de.yml").write_text(bad, encoding="utf-8")
+    config = replace(config, translation_dir=tmp_path)
+    registry, translated = source(config, languages=["fr"], definitions=(definition,))
+    assert run_preflight(definition, translated, config, languages=["fr"], registry=registry)["variants"][0]["status"] == "ready"
+    registry, translated = source(config, languages=["fr", "de"], definitions=(definition,))
+    report = run_preflight(definition, translated, config, languages=["fr", "de"], registry=registry)
+    assert [v["status"] for v in report["variants"]] == ["ready", "blocked"]
+
+
+def test_blocked_child_does_not_render_otherwise_unneeded_parent(config):
+    from create_defaults.bulk.generators import GENERATORS
+    from create_defaults.bulk.planner import Planner
+    expanded = Planner(generators=GENERATORS).expand(load_catalog(["Decade"]))[0]
+    child = next(d for d in expanded.values() if d.data["output"]["directory"] == "decade/best" and d.data["output"]["filename"] == "2020.jpg")
+    parent = expanded[child.data["dependencies"][0]["poster_id"]]
+    result = generate((parent, child), Translations({}), config=config, posters=[child.id], languages=["de"])
+    assert result["status"] == "partial" and result["stages"] == []
+    assert any(v["status"] == "shared" for v in result["preflight"]["variants"])
+    assert not config.output_dir.exists()
+
+
+def test_shared_artwork_is_verified_reused_across_languages_and_fresh_pools(definition, config, tmp_path):
+    value = definition.data
+    value["caption"] = dict(value["caption"], mode="none", key=None)
+    shared = Definition.create(value)
+    result = generate((shared,), Translations({}), config=config, posters=[shared.id], languages=["en", "fr", "de"], limits=WorkerLimits(workers=2))
+    assert result["status"] == "verified"
+    assert sum(s["execution"]["metrics"]["executed"] for s in result["stages"]) == 1
+    assert sum(s["execution"]["metrics"]["dedup_reuses"] for s in result["stages"]) == 2
+    extra = generate((shared,), translations(tmp_path, bg={}), config=config, posters=[shared.id], languages=["bg"], limits=WorkerLimits(workers=2))
+    assert extra["stages"][0]["execution"]["metrics"]["executed"] == 0
+    assert extra["stages"][0]["execution"]["metrics"]["dedup_reuses"] == 1
+    assert len(list(config.output_dir.rglob("*.jpg"))) == 4
+    assert len({sha256(p) for p in config.output_dir.rglob("*.jpg")}) == 1
+
+
+def test_historical_separator_template_is_preserved_but_recolor_is_not():
+    from create_defaults.bulk.generators import GENERATORS
+    from create_defaults.bulk.planner import Planner
+    from create_defaults.bulk.preflight import _preserved_color
+    identity = "separators.separators-amethyst-producer.41186eb8"
+    definitions = load_catalog(posters=[identity])
+    item = Planner(generators=GENERATORS).expand(definitions)[0][identity]
+    assert item.data["color_assignment"]["origin"] == "template"
+    assert _preserved_color(item.data)
+    changed = item.data
+    changed["composer"]["base_color"] = "#010203"
+    assert not _preserved_color(changed)
+
+
+@pytest.mark.parametrize("change", ["renderer", "generation"])
+def test_old_preview_cannot_approve_new_renderer_or_same_bytes_new_generation(rendered, monkeypatch, change):
+    definition, translated, result, reviews = rendered
+    identity = result["preflight"]["variants"][0]["id"]
+    item = reviews.item(identity)
+    if change == "renderer":
+        import create_defaults.bulk.planner as module
+        current = module.renderer_identity()
+        monkeypatch.setattr(module, "renderer_identity", lambda: dict(current, python="changed"))
+        message = "Renderer changed"
+    else:
+        value = definition.data
+        # The approved legacy dominant-color flag is deliberately a visual no-op,
+        # but the changed input still creates a distinct owned render generation.
+        value["composer"]["dom_color"] = True
+        updated = generate((Definition.create(value),), translated, config=reviews.config, posters=[definition.id], limits=WorkerLimits(workers=1))
+        assert updated["stages"][0]["execution"]["jobs"][identity]["sha256"] == item["preview"]["sha256"]
+        message = "generation differs"
+    with pytest.raises(Conflict, match=message):
+        reviews.decide(identity, expected_version=item["version"], reviewer="maintainer", action="approve")

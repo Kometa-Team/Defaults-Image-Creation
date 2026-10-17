@@ -14,6 +14,7 @@ def generate(definitions, translations, *, config=None, limits=None, generators=
     planner = Planner(config, generators=generators, scope="Package D preflight-validated local output; rendering is not approval or publication")
     if registry is not None:
         languages = registry.select(languages)
+        translations = translations.pinned_for(registry)
     catalog, families, _ = planner.expand(definitions)
     categories = select_categories(categories)
     wanted = set()
@@ -77,6 +78,18 @@ def generate(definitions, translations, *, config=None, limits=None, generators=
                 return {"status": "partial", "preflight": report, "stages": []}
             raise BulkError("empty_preview", "No eligible variants match the explicit preview selection; retained preflight lists blockers")
     eligible = {v["id"] for v in report["variants"] if v["status"] in ELIGIBLE}
+    by_variant = {v["id"]: v for v in report["variants"]}
+    needed = set()
+    def include_ready(identity):
+        if identity in needed:
+            return
+        needed.add(identity)
+        for parent in by_variant[identity]["dependencies"]:
+            include_ready(parent)
+    for variant in report["variants"]:
+        if variant["selected"] and variant["id"] in eligible:
+            include_ready(variant["id"])
+    eligible &= needed
     if preview_ids is not None:
         if set(preview_ids) - eligible:
             raise BulkError("blocked_preview", "Preview selection includes blocked/obsolete variants")

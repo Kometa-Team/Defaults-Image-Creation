@@ -19,6 +19,7 @@ from .config import Config, select_categories
 from .definitions import Definition
 from .languages import CONTRIBUTION, local_snapshot
 from .planner import Planner, SHARED_ASSETS, effective_parameters, renderer_identity
+from .translations import key_token
 
 
 POLICY = {"version": "preflight-d1", "layout": "composer-native-metrics-d1", "risk": "review-risk-d1",
@@ -37,7 +38,7 @@ def _historical_index():
 
 def _preserved_color(item):
     original = _historical_index().get(item["id"], {})
-    return (item["color_assignment"]["origin"] == "historical" and item["source"].get("kind") != "authored"
+    return (item["color_assignment"]["origin"] in {"historical", "template", "inherited"} and item["source"].get("kind") != "authored"
             and original.get("source_row") == item["source"]["row_sha256"]
             and original.get("historical_background") is not None
             and normalize_hex(original["historical_background"]) == normalize_hex(item["composer"]["base_color"]))
@@ -50,19 +51,21 @@ def variant_id(poster, language):
 def consolidate_missing(records):
     groups = {}
     for row in records:
-        token = (row["language"], row["key"], row["reason"], row["source_snapshot"])
+        token = (row["language"], key_token(row["key"]), row["reason"], row["source_snapshot"])
         if token not in groups:
-            groups[token] = dict(row, poster_ids=[], variant_ids=[], categories=[], category_posters={}, fallbacks={})
+            groups[token] = dict(row, poster_ids=[], variant_ids=[], categories=[], category_posters={}, fallbacks={}, key_aliases=[], key_token=token[1])
         merged = groups[token]
         merged["poster_ids"].extend(row["poster_ids"])
         merged["variant_ids"].extend(row["variant_ids"])
         merged["categories"].extend(row.get("categories", [row["category"]]))
+        merged["key_aliases"].extend(row.get("key_aliases", [row["key"]]))
         for category, posters in row.get("category_posters", {row["category"]: row["poster_ids"]}).items():
             merged["category_posters"].setdefault(category, []).extend(posters)
         merged["fallbacks"].update(row.get("fallbacks", {poster: row["fallback"] for poster in row["poster_ids"]}))
     for row in groups.values():
         row["poster_ids"], row["variant_ids"] = sorted(set(row["poster_ids"])), sorted(set(row["variant_ids"]))
         row["categories"] = sorted(set(row["categories"]))
+        row["key_aliases"] = sorted(set(row["key_aliases"]))
         row["category"] = ", ".join(row["categories"])
         row["category_posters"] = {category: sorted(set(ids)) for category, ids in row["category_posters"].items()}
         row["logical_poster_count"], row["rendered_variant_count"] = len(row["poster_ids"]), len(row["variant_ids"])
@@ -109,7 +112,7 @@ def risk(diagnostics, *, language, caption, prior=None):
 
 
 def select_previews(report, *, explicit=(), high_risk=False, representatives=0):
-    eligible = [v for v in report["variants"] if v["status"] in ELIGIBLE]
+    eligible = [v for v in report["variants"] if v["status"] in ELIGIBLE and v["selected"] and not v["private"]]
     ids = {v["id"] for v in eligible}
     if set(explicit) - ids:
         raise BulkError("blocked_preview", "Explicit previews must be current eligible variants")
@@ -161,6 +164,7 @@ def preflight(definitions, translations, *, config=None, generators=None, catego
         resource = registry.record(code)
         if resource and resource["availability"] == "available" and resource["sha256"] != checksum:
             raise BulkError("snapshot_mismatch", "Loaded translation differs from pinned language registry: " + code)
+    translations = translations.pinned_for(registry)
     if not languages:
         raise BulkError("empty_selection", "No requested poster languages")
     planner = Planner(config, generators=generators)
@@ -254,13 +258,14 @@ def preflight(definitions, translations, *, config=None, generators=None, catego
             caption, diagnostics, inputs, key_dependencies = None, [], {}, []
             entry = {"id": variant_id(identity, language), "poster_id": identity, "language": language, "category": definition.category,
                      "selected": identity in selected, "status": "ready", "diagnostics": diagnostics,
+                     "caption_mode": item["caption"]["mode"], "shared_artwork": item["caption"]["mode"] != "translation",
                      "private": item["output"]["directory"].startswith("_intermediates/"),
                      "definition_fingerprint": fingerprint(item), "dependencies": [variant_id(d["poster_id"], language) for d in item["dependencies"]]}
             def diagnose(code, message, severity="error", **details):
                 diagnostics.append({"code": code, "severity": severity, "message": str(message), "details": details})
             def audit_key(key, error):
                 record = registry.record(language)
-                token = (language, key, error.code)
+                token = (language, key_token(key), error.code)
                 if token not in audits:
                     try:
                         english = translations.lookup("en", key)[0]
@@ -269,13 +274,14 @@ def preflight(definitions, translations, *, config=None, generators=None, catego
                     audits[token] = {"language": language, "display_name": record.get("display_name"), "category": definition.category,
                         "key": key, "english_source": english, "reason": error.code, "message": str(error),
                         "component": "defaults", "resource": record.get("resource"), "source_snapshot": registry.fingerprint,
-                        "fallback": item["caption"]["fallback"], "fallbacks": {}, "categories": [], "category_posters": {},
+                        "fallback": item["caption"]["fallback"], "fallbacks": {}, "categories": [], "category_posters": {}, "key_aliases": [],
                         "poster_ids": [], "variant_ids": [], "contribution": registry.data["contribution"]}
                 audits[token]["poster_ids"].append(identity)
                 audits[token]["variant_ids"].append(entry["id"])
                 audits[token]["categories"].append(definition.category)
                 audits[token]["category_posters"].setdefault(definition.category, []).append(identity)
                 audits[token]["fallbacks"][identity] = item["caption"]["fallback"]
+                audits[token]["key_aliases"].append(key)
             app = item["applicability"].get(language)
             record = registry.record(language)
             if item["source"].get("kind") == "authored":
@@ -294,6 +300,8 @@ def preflight(definitions, translations, *, config=None, generators=None, catego
             else:
                 for key in filter(None, (item["caption"]["key"], item["caption"]["template_key"])):
                     try:
+                        if record["availability"] != "available":
+                            raise BulkError("unavailable_translation", "Pinned registry has no available defaults resource")
                         text, trace = translations.lookup(language, key)
                         if not text.strip():
                             raise BulkError("invalid_translation", "Translation is empty")
@@ -330,7 +338,9 @@ def preflight(definitions, translations, *, config=None, generators=None, catego
                     if item["layout"]["kind"] == "captured_fit" and (measure["text"] != text or measure["font_sha256"] != font_hash or measure["point_size"] != item["composer"]["font_size"]):
                         raise BulkError("stale_measurement", "Translated fitting needs an explicit caption/font-bound language override; English fitting is not reused")
                     if metrics and metrics["clipped"]:
-                        diagnose("caption_clipping", "Native glyph bounds extend outside the fixed caption box", "warning" if language == "en" and item["source"].get("kind") != "authored" else "error")
+                        typography = {k: v for k, v in effective_parameters(dict(item["composer"], text=text)).items() if k in {"font", "font_size", "text", "text_offset"}}
+                        unchanged = language == "en" and _historical_index().get(identity, {}).get("historical_typography") == fingerprint(typography)
+                        diagnose("caption_clipping", "Native glyph bounds extend outside the fixed caption box", "warning" if unchanged else "error")
                     elif metrics and metrics["near_edge"]:
                         diagnose("caption_near_edge", "Caption approaches a fixed clipping boundary", "warning")
                     if metrics and len(metrics["lines"]) > 1:

@@ -55,6 +55,9 @@ class Reviews:
         return value
 
     def query(self, states=()):
+        aliases = {"pending": {"not_evaluated", "ready_for_review"}, "blocked": {"preflight_blocked"}, "stale": {"approval_stale"},
+                   "approved": {"approved", "approved_with_accepted_warnings"}}
+        states = {value for state in states for value in aliases.get(state, {state})}
         if set(states) - STATES:
             raise BulkError("invalid_review_state", "Unknown review state")
         with self.store.connection() as db:
@@ -117,7 +120,7 @@ class Reviews:
             raise Conflict()
         return row
 
-    def _approvable(self, row, accepted, *, individual):
+    def _approvable(self, row, accepted, *, individual, db):
         evidence = json.loads(row["evidence"])
         variant = evidence["variant"]
         preview = json.loads(row["preview"]) if row["preview"] else None
@@ -127,6 +130,18 @@ class Reviews:
             raise Conflict("No current preview or validation policy is obsolete")
         if preview["root"] != fingerprint(str(self.config.output_dir)) or sha256(confined(self.config.output_dir, preview["local_relative"], must_exist=True)) != preview["sha256"]:
             raise Conflict("Reviewed output bytes changed")
+        claim = db.execute("SELECT j.receipt FROM output_claims c JOIN jobs j ON j.id=c.state_id WHERE c.root=? AND c.path_key=? AND j.status='verified'",
+                           (preview["root"], path_key(preview["local_relative"]))).fetchone()
+        receipt = json.loads(claim["receipt"]) if claim else {}
+        if receipt.get("render_fingerprint") != preview["render_fingerprint"] or receipt.get("logical_id") != row["id"] or receipt.get("sha256") != preview["sha256"]:
+            raise Conflict("Current output generation differs from the reviewed preview")
+        from .planner import renderer_identity
+        current_renderer = renderer_identity()
+        if variant.get("kind") == "overlay":
+            from .overlays import identity
+            current_renderer = identity()
+        if evidence["renderer"] != current_renderer:
+            raise Conflict("Renderer changed; run preflight and preview again")
         # Recheck exact source files too: an old preview cannot approve changed assets.
         for source in variant["inputs"].values():
             if sha256(confined(self.config.asset_dir, source["path"], must_exist=True)) != source["sha256"]:
@@ -149,7 +164,7 @@ class Reviews:
                 raise Conflict("Requested validation policy changed")
             state = row["state"]
             if action == "approve":
-                self._approvable(row, accepted_warnings, individual=True)
+                self._approvable(row, accepted_warnings, individual=True, db=db)
                 state = "approved_with_accepted_warnings" if accepted_warnings else "approved"
             elif action == "reject":
                 state = "rejected"
@@ -172,7 +187,7 @@ class Reviews:
             payload = json.loads(batch["payload"])
             for member in payload["members"]:
                 row = self._current(db, member["id"], member["version"])
-                preview = self._approvable(row, (), individual=False)
+                preview = self._approvable(row, (), individual=False, db=db)
                 if preview["sha256"] != member["image_sha256"] or row["validation"] != member["validation"] or row["policy"] != member["policy"]:
                     raise Conflict("Group evidence changed")
             for member in payload["members"]:
@@ -182,11 +197,13 @@ class Reviews:
                     "decision_type": "representative-group", "comment": comment})
         return {"batch": batch_id, "approved": len(payload["members"]), "membership": membership}
 
-    def invalidate_keys(self, changes, *, reason, languages=()):
+    def invalidate_keys(self, changes, *, reason, languages=(), resources=()):
         affected = set()
         with self.store.transaction() as db:
             for language, key in changes:
                 affected.update(r["variant"] for r in db.execute("SELECT variant FROM translation_dependencies WHERE language=? AND key=?", (language, key_token(key))))
+            for language in resources:
+                affected.update(r["variant"] for r in db.execute("SELECT variant FROM translation_dependencies WHERE language=?", (language,)))
             if languages:
                 for row in db.execute("SELECT id,evidence FROM review_variants"):
                     if json.loads(row["evidence"])["variant"]["language"] in languages:

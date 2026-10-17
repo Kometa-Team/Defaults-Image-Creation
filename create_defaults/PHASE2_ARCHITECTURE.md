@@ -586,6 +586,13 @@ other languages. Review metadata separates private intermediates, shared
 destination mappings and final outputs. Overlay review reuses these APIs but
 requires individual acceptance of transformation warnings.
 
+Migration 8 indexes owned render fingerprints for verified shared-artifact reuse
+across language stages and new pools. Reuse checks exact payload, worker identity,
+receipt and current bytes before atomically creating each required destination.
+Unavailable-resource changes invalidate translation dependents, not unrelated
+captionless artwork. The final approval guard also verifies current output
+generation ownership and renderer identity, even when replacement bytes match.
+
 Reports remain JSON/CSV/HTML local artifacts, not a web service. No Flask,
 authentication, authorization service or publication workflow is introduced.
 Source snapshots cannot refresh a running render implicitly. A fresh explicit

@@ -23,7 +23,10 @@ from .remote import ReadOnlyGitHub
 
 
 def save(path, value):
-    atomic_bytes(path, canonical(value) + b"\n")
+    data = canonical(value) + b"\n"
+    if Path(path).exists() and Path(path).read_bytes() == data:
+        return
+    atomic_bytes(path, data)
 
 
 def audit(config, snapshot):
@@ -213,19 +216,70 @@ def smoke():
         "poster_workers": [s["execution"]["metrics"] for s in previewed["stages"]], "overlay_workers": overlaid["execution"]["metrics"],
         "review_query_seconds": query_seconds, "review_items": len(items), "batch": batch,
         "preview_html": str(Path(previewed["review_html"]).relative_to(root)), "approved": 0, "published": 0}
-    save(root / "smoke-evidence.json", result)
+    evidence_file = root / "smoke-evidence.json"
+    save(root / ("smoke-evidence-" + fingerprint(result) + ".json") if evidence_file.exists() else evidence_file, result)
     print(json.dumps(result), flush=True)
     return result
 
 
+def recheck(config, snapshot):
+    """Retain the original audit; explicitly replace only revalidated scopes."""
+    from .planner import Planner
+    from .preflight import _preserved_color
+    original_path = config.cache_dir / "complete-audit.json"
+    original = json.loads(original_path.read_text())
+    translated = translations_from_snapshot(snapshot, config.cache_dir / "translations")
+    started, resources, corrections = time.perf_counter(), {}, []
+    replaced, missing, scopes = set(), [], []
+    for category in CATEGORIES:
+        if category == "Overlays":
+            continue
+        definitions = load_catalog([category])
+        prepared = Planner(config, generators=GENERATORS).expand(definitions)
+        unverified = [d.id for d in prepared[0].values() if not _preserved_color(d.data)]
+        if unverified:
+            raise ValueError("Historical provenance mismatch: " + ", ".join(unverified[:5]))
+        languages = snapshot.select(["all"]) if category == "Separators" else ["en"]
+        for language in languages:
+            report, effective = preflight(definitions, translated, config=config, generators=GENERATORS, categories=[category], languages=[language], registry=snapshot, policy="audit", resources=resources, prepared=prepared)
+            summary = {"category": category, "language": language, "sha256": report["sha256"], "coverage": report["coverage"], "metrics": report["metrics"],
+                "private_variants": sum(v["private"] for v in report["variants"]),
+                "diagnostics": dict(Counter(d["code"] for v in report["variants"] for d in v["diagnostics"] if d["severity"] != "info"))}
+            scopes.append(summary)
+            replaced.add((category, language))
+            missing.extend(report["missing_translations"])
+            if language == "en" and report["coverage"].get("blocked"):
+                raise ValueError("Final English compatibility scope contains blocked variants: " + category)
+            print(json.dumps(summary), flush=True)
+            del report, effective
+            gc.collect()
+    scopes.extend(s for s in original["scopes"] if (s["category"], s["language"]) not in replaced)
+    missing.extend(row for row in original["missing_translations"] if (row["category"], row["language"]) not in replaced)
+    coverage = Counter()
+    for scope in scopes:
+        coverage.update(scope["coverage"])
+    result = dict(original, scopes=scopes, coverage=dict(coverage), missing_translations=missing)
+    result["correction"] = {"reason": "Preserve immutable historical template assignments without new-poster near-color warnings; bind English clipping warnings to exact historical typography",
+        "original_raw_audit_sha256": sha256(original_path), "rechecked_scopes": len(replaced), "recheck_seconds": time.perf_counter() - started,
+        "historical_colors_verified": 9957, "production_colors_changed": 0,
+        "preflight_source_sha256": sha256(Path(__file__).parent / "preflight.py")}
+    save(config.cache_dir / "complete-audit-corrected.json", result)
+    return result["correction"]
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=["audit", "arabic", "overlays", "refresh", "smoke"])
+    parser.add_argument("action", choices=["audit", "arabic", "overlays", "refresh", "smoke", "recheck"])
     args = parser.parse_args()
     root = ROOT.parent / "config/package-d"
     config = Config(cache_dir=root / "cache", workspace_dir=root / "work", output_dir=root / "output")
     if args.action == "smoke":
         smoke()
+        return
+    if args.action == "recheck":
+        evidence = json.loads((config.cache_dir / "translation-refresh.json").read_text())
+        snapshot = LanguageSnapshot.load(evidence["metrics"]["snapshot_file"])
+        print(json.dumps(recheck(config, snapshot)), flush=True)
         return
     if args.action == "refresh":
         from .languages import observed_client

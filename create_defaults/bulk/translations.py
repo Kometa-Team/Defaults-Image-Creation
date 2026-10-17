@@ -1,9 +1,10 @@
 """Offline translation snapshots, legacy casing/replacements and reviewed fallbacks."""
 
 from dataclasses import dataclass
+import json
 import re
 
-from .common import BulkError, fingerprint, load_yaml, reject_links, sha256
+from .common import BulkError, canonical, fingerprint, load_yaml, reject_links, sha256
 from .config import language_id
 
 
@@ -110,22 +111,43 @@ class ResolvedCaption:
 
 
 class Translations:
-    def __init__(self, sources):
+    def __init__(self, sources, *, failures=None, tolerant=False):
         self.sources, self.hashes = {}, {}
+        self.failures = dict(failures or {})
         for language, path in sources.items():
             language_id(language)
-            path = reject_links(path)
-            if not path.is_file():
-                raise BulkError("unavailable_translation", f"Translation file unavailable: {language}")
-            data = load_yaml(path, limit=8_000_000)
-            if not isinstance(data, dict):
-                raise BulkError("invalid_translation", "Translation snapshot must be a mapping")
-            _validate_keys(data)
+            try:
+                path = reject_links(path)
+                if not path.is_file():
+                    raise BulkError("unavailable_translation", f"Translation file unavailable: {language}")
+                data = load_yaml(path, limit=8_000_000)
+                if not isinstance(data, dict):
+                    raise BulkError("invalid_translation", "Translation snapshot must be a mapping")
+                _validate_keys(data)
+            except (BulkError, OSError, UnicodeError) as error:
+                if not tolerant:
+                    if isinstance(error, UnicodeError):
+                        raise BulkError("invalid_translation", "Translation resource is not valid UTF-8") from error
+                    raise
+                self.failures[language] = ("invalid_translation" if isinstance(error, UnicodeError) else getattr(error, "code", "unavailable_translation"), str(error))
+                continue
             self.sources[language], self.hashes[language] = data, sha256(path)
+
+    def pinned_for(self, registry):
+        value = object.__new__(Translations)
+        value.sources = json.loads(canonical(self.sources))
+        value.hashes, value.failures = dict(self.hashes), dict(self.failures)
+        for record in registry.data["languages"]:
+            if record["availability"] != "available":
+                value.failures[record["code"]] = ("unavailable_translation", "Pinned registry has no available defaults resource")
+        return value
 
     def lookup(self, language, key):
         if not isinstance(key, str) or not key or len(key) > 2048 or any(not part for part in key.split(".")):
             raise BulkError("invalid_translation", "Expected a bounded dot-separated translation key")
+        if language in self.failures:
+            code, message = self.failures[language]
+            raise BulkError(code, message)
         if language not in self.sources:
             raise BulkError("unavailable_translation", f"Translation file unavailable: {language}")
         value = self.sources[language]

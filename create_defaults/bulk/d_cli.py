@@ -59,14 +59,27 @@ def register(commands):
     sub.add_argument("--report", type=Path)
 
 
-def source(config, snapshot_path=None):
+def source(config, snapshot_path=None, *, languages=None, definitions=()):
     from .languages import LanguageSnapshot, local_snapshot, translations_from_snapshot
     from .translations import Translations
+    sources = None if snapshot_path else {p.stem: p for p in config.translation_dir.glob("*.yml")}
+    registry = LanguageSnapshot.load(snapshot_path) if snapshot_path else local_snapshot(sources)
+    if languages is not None:
+        selected = set(registry.select(languages or ["all"]))
+        if registry.record("en"):
+            selected.add("en")
+        for definition in definitions:
+            value = definition.data
+            captions = [value["caption"]] + [o["changes"].get("caption", {}) for o in value["overrides"]]
+            for caption in captions:
+                fallback = caption.get("fallback")
+                if fallback and fallback.get("language") and registry.record(fallback["language"]):
+                    selected.add(fallback["language"])
+    else:
+        selected = None
     if snapshot_path:
-        registry = LanguageSnapshot.load(snapshot_path)
-        return registry, translations_from_snapshot(registry, config.cache_dir / "translations")
-    sources = {p.stem: p for p in config.translation_dir.glob("*.yml")}
-    return local_snapshot(sources), Translations(sources)
+        return registry, translations_from_snapshot(registry, config.cache_dir / "translations", languages=sorted(selected) if selected is not None else None)
+    return registry, Translations({code: path for code, path in sources.items() if selected is None or code in selected}, tolerant=True)
 
 
 def execute(args, config):
@@ -86,8 +99,8 @@ def execute(args, config):
         from .definitions import load_definitions
         from .generators import GENERATORS
         from .preflight import preflight
-        registry, translations = source(config, args.snapshot)
         definitions = load_definitions(args.definitions, profiles_path=args.profiles) if args.definitions else load_catalog(args.category, posters=args.poster)
+        registry, translations = source(config, args.snapshot, languages=args.language or ["all"], definitions=definitions)
         options = dict(config=config, generators=GENERATORS, categories=args.category, posters=args.poster, languages=args.language or ["all"], registry=registry)
         if command == "preflight":
             result, _ = preflight(definitions, translations, policy=args.policy, **options)
@@ -109,7 +122,7 @@ def execute(args, config):
             result["affected"] = affected_variants(result, json.loads(args.preflight.read_text(encoding="utf-8")))
         if args.invalidate:
             reviews = Reviews(Store(config.cache_dir / "state.sqlite"), config)
-            result["invalidated"] = reviews.invalidate_keys([(c["language"], c["key"]) for c in result["changes"]], reason=result["sha256"])
+            result["invalidated"] = reviews.invalidate_keys([(c["language"], c["key"]) for c in result["changes"]], reason=result["sha256"], languages=result["removed_languages"] + result["mapping_changes"], resources=result["availability_changes"])
         if args.generate:
             from .catalog import load_catalog
             from .delta import regenerate

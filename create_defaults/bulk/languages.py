@@ -172,13 +172,22 @@ def refresh(cache, client):
                       "snapshot_file": str(target)}
 
 
-def translations_from_snapshot(snapshot, cache):
-    sources = {}
+def translations_from_snapshot(snapshot, cache, *, languages=None):
+    sources, failures = {}, {}
+    selected = set(snapshot.select(languages)) if languages is not None else None
     for record in snapshot.data["languages"]:
         if record["availability"] != "available" or "defaults" not in record["components"]:
             continue
-        path = confined(cache, "blobs/" + record["git_blob"] + ".yml", must_exist=True)
-        if sha256(path) != record["sha256"] or blob_sha(path.read_bytes()) != record["git_blob"]:
-            raise BulkError("corrupt_snapshot", "Offline translation bytes differ from pinned registry")
+        if selected is not None and record["code"] not in selected:
+            continue
+        try:
+            path = confined(cache, "blobs/" + record["git_blob"] + ".yml", must_exist=True)
+            if sha256(path) != record["sha256"] or blob_sha(path.read_bytes()) != record["git_blob"]:
+                raise BulkError("corrupt_snapshot", "Offline translation bytes differ from pinned registry")
+        except BulkError as error:
+            if selected is None:
+                raise
+            failures[record["code"]] = ("unavailable_translation" if error.code == "missing_input" else error.code, str(error))
+            continue
         sources[record["code"]] = path
-    return Translations(sources)
+    return Translations(sources, failures=failures)

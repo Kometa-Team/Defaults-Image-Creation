@@ -281,6 +281,24 @@ class PersistentWorkers:
         self.store.transition(state_id, row["version"], "verified", owner=self.owner, receipt=receipt)
         return receipt
 
+    def _dedup_receipt(self, task):
+        """Find owned, byte-verified identical artwork across stages/languages."""
+        with self.store.connection() as db:
+            rows = db.execute("SELECT j.id FROM output_claims c JOIN jobs j ON j.id=c.state_id WHERE c.root=? AND c.fingerprint=? AND j.status='verified' LIMIT 8",
+                              (fingerprint(str(self.config.output_dir)), task.render_fingerprint)).fetchall()
+        for candidate in rows:
+            row = self.store.job(candidate["id"])
+            spec = json.loads(row["spec"])
+            if spec["renderer_identity"] != self.renderer_identity:
+                continue
+            previous = RenderTask(**spec["task"])
+            if canonical(previous.payload) != canonical(task.payload):
+                raise BulkError("fingerprint_collision", "Cross-stage fingerprint binds a different rendering payload")
+            receipt = self._cached(previous, row["id"])
+            if receipt is not None and row["receipt"] == canonical(receipt).decode():
+                return receipt
+        return None
+
     def run(self, tasks, *, cancel=None, retry_failed=False):
         # Keep WAL open across short transactions; the last-close checkpoint must
         # not be repeated for every receipt on Windows. No transaction is held.
@@ -438,7 +456,7 @@ class PersistentWorkers:
                         completed[identity] = {"status": "failed_not_retried"}
                         waiting.remove(identity)
                         continue
-                    existing = receipts.get(task.render_fingerprint)
+                    existing = receipts.get(task.render_fingerprint) or self._dedup_receipt(task)
                     if existing:
                         claim_job(identity)
                         source = confined(self.config.output_dir, existing["relative"], must_exist=True)

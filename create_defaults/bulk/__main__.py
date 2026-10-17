@@ -93,7 +93,7 @@ def main(argv=None):
                         atomic_bytes(args.manifest, canonical(result) + b"\n")
                 else:
                     from .d_cli import source
-                    registry, translated = source(config, args.snapshot)
+                    registry, translated = source(config, args.snapshot, languages=languages, definitions=definitions)
                     from .generation import generate
                     from .workers import WorkerLimits
                     limits = WorkerLimits(workers=args.workers, timeout_seconds=args.timeout, retries=args.retries, recycle_after=args.recycle_after,

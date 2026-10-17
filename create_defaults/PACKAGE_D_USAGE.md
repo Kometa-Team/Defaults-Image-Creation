@@ -33,11 +33,15 @@ Refresh is explicit and GET-only. `Kometa-Team/Translations/master` is pinned to
 an immutable commit/tree; only immediate `defaults/*.yml` resources are discovered.
 Git blob SHA, byte size, SHA-256 and safe YAML/key parsing are verified. Blob
 cache entries and registry snapshots are content-addressed and verified offline.
-Loaded translations stay in memory for a run; refreshing files cannot change an
+Loaded translations are copied into a pinned in-memory view for a run; refreshing files cannot change an
 already loaded run. A new resource code needs no Python allowlist update.
 
 Historical `nb_NO` and `pt-br` retain exact case/punctuation. Aliases require an
 explicit registry mapping and are deduplicated, not additional destinations.
+Selected-language loaders isolate missing/corrupt cached blobs and malformed
+local YAML to their own languages. An unrelated German cache failure cannot
+block a valid French preview. Captionless/shared artwork needs no caption file;
+reviewed fallbacks still retain their provenance when a resource is unavailable.
 Unknown, unavailable and non-poster components remain distinguishable. Display
 names are null where no authoritative mapping was verified, not guessed.
 
@@ -141,6 +145,11 @@ versions, exact fingerprints, bytes, accepted warnings and inspection scope.
 SQLite migrations preserve existing jobs, claims and receipts. A changed worker
 wrapper creates a new generation only after verifying the old owned receipt;
 unowned, corrupt or unfinished outputs are never adopted.
+
+Migration 8 adds an indexed, byte-verified reuse lookup for identical owned
+artwork across language stages and fresh pools. Every required destination
+retains its own receipt and review identity; reuse never drops language mappings.
+Parents of entirely blocked/non-applicable selections are not rendered needlessly.
 
 CLI reviewer strings are development attribution, not authentication. Real
 authorization is mandatory before any production approval service. Rendering,

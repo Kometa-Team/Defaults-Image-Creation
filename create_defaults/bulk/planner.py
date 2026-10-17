@@ -130,7 +130,8 @@ class Planner:
         return catalog, families, origins
 
     def plan(self, definitions, translations, *, categories=(), posters=(), languages=("en",), dependency_artifacts=None):
-        categories, languages = select_categories(categories), select_languages(languages, available=set(LANGUAGES) | set(translations.sources))
+        declared = {language for definition in definitions for language in definition.data["languages"]}
+        categories, languages = select_categories(categories), select_languages(languages, available=set(LANGUAGES) | set(translations.sources) | declared)
         if not languages or (not categories and not posters):
             raise BulkError("empty_selection", "Select categories/poster IDs and languages explicitly")
         catalog, families, origins = self.expand(definitions)

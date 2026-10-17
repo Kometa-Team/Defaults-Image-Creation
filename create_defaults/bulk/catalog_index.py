@@ -9,8 +9,10 @@ import json
 
 def historical_records():
     from .migration import legacy, legacy_destination, stable_id
+    from .planner import effective_parameters
     return {stable_id(job["category"], legacy_destination(job)):
-            {"historical_background": job["parameters"]["base_color"], "source_row": fingerprint(job["source_row"])}
+            {"historical_background": job["parameters"]["base_color"], "source_row": fingerprint(job["source_row"]),
+             "historical_typography": fingerprint({k: v for k, v in effective_parameters(dict(job["parameters"], font=job["font"]["path"], text=job["text"])).items() if k in {"font", "font_size", "text", "text_offset"}})}
             for job in legacy()["jobs"] if not (job["category"] == "Genre" and job["source"]["definition_line"] == 4883)}
 
 
