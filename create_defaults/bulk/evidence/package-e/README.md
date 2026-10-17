@@ -69,3 +69,16 @@ controlled before/after assessment without rewriting those records.
 - `multilingual-validation.json`: current Windows/Linux regressions and exact
   sample comparisons, retained pre-correction failures and source/version identities.
   These records grant no artwork approval or typography activation.
+
+- `full-english.json`, `english-output-identities.json.gz` and
+  `full-ledger-index.json`: every verified English output/receipt/source/font/layout
+  identity, complete cold/warm observations and the recovered timeout history.
+- `english-reference-comparison.json.gz`: all 9,957 exact approved-API comparisons,
+  including fresh current-parent calls for 165 children.
+- `published-comparison.json`: 24 distinct pinned published comparisons across
+  all categories and the selected corrections/generated child; no new approvals.
+- `corrected-overlay-benchmarks.json`: quiet sequential 1/2/4-worker controls
+  matching all selected final full-run bytes, plus the fresh grouped legacy control.
+- `multilingual-cache-performance.json`: three quiet exact-input cache controls
+  and independent compact-index/raw-ledger integrity verification. The earlier
+  concurrent audit observations remain preserved.

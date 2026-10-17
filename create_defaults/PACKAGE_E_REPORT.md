@@ -9,16 +9,16 @@ Earlier reports, fixtures, original Package D/E audits and the four exact Packag
 No artwork or translation was published; no production PowerShell was replaced,
 production permissions granted, PR merged or ready transition performed.
 
-**Acceptance is still in progress.** Pending: full English generation, full renderer comparison, selective published comparison, corrected isolated overlay scaling. No final production-readiness pass is claimed. Non-English publication and broader overlay visual decisions remain pending exact maintainer review. The corrected multilingual audit makes 41,417 variants newly technically eligible; 14,899 retain final needs_layout_review status. All 9,957 English validation identities are unchanged. Technical eligibility grants no artwork approval.
+**Automated Package E acceptance is complete for the recorded scope.** Gate E remains awaiting maintainer review. Publication, deployment and cutover are not authorized; the destination case conflict and exact artwork/font/layout decisions remain pending. The corrected multilingual audit makes 41,417 variants newly technically eligible; 14,899 retain final needs_layout_review status. All 9,957 English validation identities are unchanged. Technical eligibility grants no artwork approval.
 
 ## Tested source and environment
 
-Final executable checkpoint: `690d1977b207cbbb61371a0fcb8bd02e37db85d2`, branch
+Original full-run executable checkpoint: `690d1977b207cbbb61371a0fcb8bd02e37db85d2`, branch
 `feat/default-posters-python-generator`. The English orchestration started at
 `6bb5844b4ebe1ea8b681c826105a008a8f673ede`; environment snapshots record the head
 observed when each command completed. Later changes affect overlay ICC conversion,
 overlay acceptance duration, tests and reporting; English rendering, planning,
-preflight, worker execution and catalog inputs remained unchanged for those original runs. The multilingual addendum runs in an isolated checkout while the original English run retains its exact source and receipts. Corrected typography has its own versioned evidence; it is not retroactively applied to the original audit. Source-file hashes
+preflight, worker execution and catalog inputs remained unchanged for those original runs. The multilingual addendum was implemented in an isolated checkout while the original English run retained its exact source and receipts. Corrected typography has its own versioned evidence; it is not retroactively applied to the original audit. Source-file hashes
 in the evidence distinguish executable identity from a later documentation commit.
 
 Windows 11 uses Python 3.13.15, eight logical CPUs and 32 GiB physical RAM. Linux CI
@@ -39,6 +39,16 @@ Reproducible commands and retained-evidence prerequisites are in
 [Package E usage](PACKAGE_E_USAGE.md). Resource sampling is advisory between checks; worker limits and finite selections
 provide separate bounds. All outputs, SQLite state and temporary work stay in
 ignored local `config/package-e/` roots, separate from source and production.
+
+The translated-fitting correction is introduced at executable checkpoint
+`916ded8c8e0114900924e2e4585be67dd9bf9da7`. The current validation record separates
+the complete Windows run at `d00403422b584f53013e60821f8964b4cc8c0ae9`, strengthened
+regressions and Linux validation at `18b2b7645c24e688110ec7eb336bf22f8bf43e76`,
+and later audit/documentation commits. The original full English/API/published
+pipeline remained frozen throughout. All 9,957 English validation identities and
+the 35-JPEG/38-overlay platform samples demonstrate unchanged English rendering.
+No image-producing composer, bundled font, catalog or production PowerShell was
+changed by the fitting correction.
 
 ## Complete source reconciliation
 
@@ -90,7 +100,110 @@ not authorization to change colors or layouts.
 
 ## Full English generation and renderer comparison
 
-In progress: last recorded 9,957 verified of 9,957 required. This is incomplete evidence, not a full pass.
+Recorded full workload:
+
+```json
+{
+  "runs": {
+    "cold": {
+      "actual_renders_per_second": 0.9870580979708097,
+      "cache_hits": 165,
+      "dedup_reuses": 8,
+      "executed": 9950,
+      "failures": 0,
+      "manifest_sha256": "1a28d37c96d8a5fa354b1c471c3d5651e67aeada04564c508e7ff7fcf10b67aa",
+      "max_inflight": 4,
+      "peak_parent_rss": 388136960,
+      "peak_worker_rss": 234967040,
+      "peak_workers_rss_sum": 706301952,
+      "read_bytes": 42483657524,
+      "retry_attempts": 1,
+      "status": "verified",
+      "stop_reason": null,
+      "unique_outputs": 9957,
+      "wall_seconds": 10080.46033,
+      "worker_recycles": 47,
+      "worker_starts": 52,
+      "write_bytes": 14613507218
+    },
+    "warm": {
+      "actual_renders_per_second": 0.0,
+      "cache_hits": 10122,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "failures": 0,
+      "manifest_sha256": "1a28d37c96d8a5fa354b1c471c3d5651e67aeada04564c508e7ff7fcf10b67aa",
+      "max_inflight": 0,
+      "peak_parent_rss": 561983488,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "read_bytes": 0,
+      "retry_attempts": 0,
+      "status": "verified",
+      "stop_reason": null,
+      "unique_outputs": 9957,
+      "wall_seconds": 639.0175643000002,
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  },
+  "verification": {
+    "bytes": 7310915041,
+    "decode": "final headers plus exact hashes; full decoding enforced on worker promotion",
+    "duplicates": 0,
+    "failed": 0,
+    "ledger_sha256": "05148b279018db06c4de74b712c47a9b21b69836065f4cc24130e0f2f27b63ad",
+    "missing": 0,
+    "outputs": 9957,
+    "private": 2,
+    "publishable": 9955
+  }
+}
+```
+
+Reference comparison:
+
+```json
+{
+  "classifications": {
+    "exact_approved_api_using_current_python_parents": 165,
+    "exact_approved_phase1_python_bytes": 9792
+  },
+  "ledger_sha256": "c14d1572403758668f0d99e522c73ad1bdcba6fea3c965b5ab3d93a1e64c4a6d",
+  "new_visual_approvals": 0,
+  "outputs": 9957,
+  "passed": true,
+  "scope": "Exact prior accepted Python byte evidence, with fresh direct approved API comparisons for changed generated-parent inputs. Historical legacy differences retain their classifications.",
+  "source_reference_summary": {
+    "capture_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+    "classifications": {
+      "Python migration difference": 703,
+      "approved font replacement": 18,
+      "existing historical artwork difference": 53,
+      "expected image-encoding difference": 9179,
+      "missing published counterpart": 3,
+      "unresolved discrepancy": 1
+    },
+    "jobs": 9957,
+    "ledger_sha256": "63ee0806e1c1af9b796f63478bf379765c30cb6113437701483dc6138989b0ec",
+    "reference_final_audit_sha256": "f02557884ffd34acd51b3d8fdf35c93c8c10e2fd49ed13cea8de3d0ce530c3a0",
+    "reference_manifest_sha256": "b6b1a9f189ce014ee04d0878c28cfa3cbdac6780f3a6a4b9965741e6cf8f5a6e",
+    "scope": "Read-only exact result hashes from previously accepted complete Phase 1 run; D02 green duplicate excluded, two private outputs retained"
+  }
+}
+```
+
+The cold phase verified 9,957 destination artifacts through 9,950 render attempts,
+eight deduplicated reuses and 165 parent cache checks. One timed-out attempt was
+retried successfully; the final database contains 9,957 verified jobs. Attempt,
+deduplication and output counts measure different things and are not summed as
+independent outputs. The unchanged warm phase rendered zero and started zero
+workers, with 10,122 cache checks including repeated generated-parent verification.
+The full [English identity ledger](bulk/evidence/package-e/full-ledger-index.json)
+and [English acceptance record](bulk/evidence/package-e/full-english.json) retain
+exact manifests, source/font/layout, every receipt/image hash, recovered timeout
+events and all per-output approved-API comparisons.
 
 The full comparison requires a complete, validated manifest and matching source,
 asset, font and semantic identities for every reference. Its original Phase 1
@@ -120,7 +233,23 @@ An explicit mapping/case decision is required before a future cutover; no rename
 or case-insensitive assumption was applied. Path ledger identity:
 `26bbcaf5e4f156baab8925fb31d2948ca4a3512b52ae9cb009a3e47b4502957f`.
 
-Selective published-image comparisons await the verified full English outputs. No byte/pixel result is claimed for an image not yet fetched.
+Selective comparison results:
+
+| Classification | Images |
+| --- | --- |
+| approved_D02_red_source_choice_with_preserved_published_difference | 1 |
+| explained_current_python_generated_parent_difference_pending_current_visual_review | 1 |
+| known_accepted_phase1_difference_exact_reference_bytes | 22 |
+
+9,930 exact published paths remain unexamined at pixel level. New unexplained differences require separate review.
+
+The initial 24-slot budget produced 23 distinct selections because a correction
+case was already represented. One generated Year child was added using the same
+pinned tree, making 24 distinct comparisons across all 21 categories and the
+explicit correction/dependency cases. The source summaries remain retained.
+See [published comparison evidence](bulk/evidence/package-e/published-comparison.json).
+Known historical classifications and the explained generated-parent difference
+grant no new current artwork acceptance.
 
 Remote access is GET-only, repository/host allowlisted, with redirect refusal,
 timeouts, bounded requests/rate reserve and verified Git blob caches. No full clone,
@@ -416,6 +545,8 @@ Arabic retains its approved-script-font and joining/bidi/anchor review boundary.
 
 See [corrected multilingual evidence](bulk/evidence/package-e/multilingual-correction.json) and its compressed key, measurement and variant ledgers. All new technical evidence grants zero artwork approvals or publication permissions.
 
+After the heavy acceptance work completed, three sequential controls used 512 deterministic exact-input measurements across 2 approved fonts. Median cold time was 0.603568 seconds versus 0.009707 seconds warm. Every warm control recorded 512 cache hits and zero new misses. Cold includes font loading; OS caches were not cleared. These controls isolate measurement reuse rather than rendering throughput. See [quiet cache and integrity evidence](bulk/evidence/package-e/multilingual-cache-performance.json). The compact index was independently checked against all 139,398 preserved raw rows and all 74,209 measurement bindings.
+
 ## Incremental generation, review integrity and recovery
 
 Package E integration tests compute expected changes before execution for definition,
@@ -491,7 +622,15 @@ occurred and concurrent correctness is separately tested. No full-catalog speedu
 is inferred from subset ratios. Full acceptance runs overlap other validation and
 are completion/resource observations, not isolated performance benchmarks.
 
-Corrected overlay scaling measurements are pending completion of the heavier acceptance work. Historical pre-fix 38-output timings are preserved but are not a performance result for corrected output. The fixed samples ran successfully under concurrent load; those timings are not isolated benchmarks.
+| Workers | Cold s | Warm s | Actual renders/s | Peak worker MiB | Peak combined workers MiB |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 17.548 | 1.277 | 2.165 | 173.3 | 173.3 |
+| 2 | 13.762 | 1.067 | 2.761 | 173.3 | 344.1 |
+| 4 | 13.000 | 2.024 | 2.923 | 104.2 | 283.8 |
+
+Matched fresh legacy control: 10.234 seconds elapsed, 9.784 renderer seconds for 36 grouped mogrify operations / 38 outputs. All Python worker counts match the complete corrected Windows output bytes; warm renders and starts are zero. Measurements are sequential after heavy local acceptance, with fresh generator caches and no OS cache reset. Exact metrics, current source/renderer identities and comparison rows are in [corrected overlay benchmarks](bulk/evidence/package-e/corrected-overlay-benchmarks.json). These observations grant no visual approval or complete-catalog speedup claim.
+
+The measured Python 38-image controls did not beat the grouped legacy control. The Python timings include its planning/integrity/state overhead; no overlay speedup or whole-production throughput claim is made.
 
 Year warm profiling keeps 301 unique outputs, 451 cache checks including repeated
 parent-stage verification, 4,726 SHA calls, identical manifest
@@ -524,7 +663,14 @@ See [profile evidence](bulk/evidence/package-e/warm-profiling.json).
 
 Current Linux validation totals 526 passed and two platform skips. Original 506-test evidence remains historical. Windows final bulk counts supersede the earlier run and repeated focused cases are not added to that total.
 
-[Final executable Linux CI](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39060962332)
+[Current correction Linux CI](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39070431355)
+passes at executable/test checkpoint `18b2b7645c24e688110ec7eb336bf22f8bf43e76`.
+The passing audit/documentation checkpoint is also recorded by
+[CI 39071906102](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39071906102).
+The new regression/platform evidence keeps these versions separate from the original
+full-run and historical sample checkpoints.
+
+[Original executable Linux CI - historical checkpoint](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39060962332)
 is successful at workflow head `690d1977b207cbbb61371a0fcb8bd02e37db85d2`.
 GitHub checked out synthetic PR merge `ebf327e65c6f7ff0d7220b2d3a8a18eabdd300b3`;
 this differs from the branch head and is recorded explicitly. All 35 sample JPEG
@@ -603,22 +749,22 @@ Final complete-PR static inventory:
 ```json
 {
   "pr_base": "57ef136833a3f54da2bf1e4ddef98addfa36d583",
-  "files": 225,
+  "files": 232,
   "groups": {
     "implementation tests docs or workflow": 97,
     "compressed immutable manifest fixtures": 1,
     "generated catalog and source-normalized migration audits": 88,
-    "compact package audit evidence": 30,
-    "compressed Package E exact output and comparison audit ledgers": 5,
+    "compact package audit evidence": 35,
+    "compressed Package E exact output and comparison audit ledgers": 7,
     "Package A source and inventory evidence": 4
   },
   "bytes_by_group": {
-    "implementation tests docs or workflow": 1020477,
+    "implementation tests docs or workflow": 1014902,
     "compressed immutable manifest fixtures": 1458149,
-    "generated catalog and source-normalized migration audits": 14117015,
-    "compact package audit evidence": 997447,
-    "compressed Package E exact output and comparison audit ledgers": 21361501,
-    "Package A source and inventory evidence": 2194331
+    "generated catalog and source-normalized migration audits": 13803206,
+    "compact package audit evidence": 1116668,
+    "compressed Package E exact output and comparison audit ledgers": 28253446,
+    "Package A source and inventory evidence": 2133232
   },
   "possible_credentials": [],
   "unexpected_generated_or_binary_payloads": [],
@@ -642,15 +788,15 @@ rewritten to remove failures or reduce the PR size.
 | Acceptance criterion | Classification | Evidence / limitation |
 | --- | --- | --- |
 | Complete 21-category semantics / 9957 effective contracts | Passed | Zero unexplained contract deviations; two private intermediates excluded. |
-| Full English end-to-end cold/warm / receipts | Not tested | Controlled full run still in progress. |
-| Full approved-API renderer parity | Not tested | Full exact comparison still pending. |
+| Full English end-to-end cold/warm / receipts | Passed | See exact output/count/hash/receipt evidence. |
+| Full approved-API renderer parity | Passed | Exact per-output reference classifications retained. |
 | Incremental invalidation / stale approval sets | Passed | Expected-vs-actual scoped tests and real renderer upgrade. |
 | Controlled legacy performance / 1,2,4 scaling | Passed with documented limitation | Sequential isolated composer harness; no full production launcher speedup claim. |
 | Warm analysis and safe optimization | Passed with documented limitation | Single paired profile; hashing/durability preserved. |
 | Windows / Linux compatibility | Passed with documented limitation | Account/platform skips; 35 JPEG/38 PNG sample parity, not full Linux render. |
 | Recovery / interruption / corruption / ownership | Passed | Isolated realistic failure scenarios, immutable durable state. |
 | Published path inventory | Passed with documented limitation | One case conflict needs a mapping decision. |
-| Selective published-image comparison | Not tested | Pending full outputs. |
+| Selective published-image comparison | Passed with documented limitation | Only explicitly fetched samples; classifications are scoped. |
 | Corrected overlay full transform/format/cache verification | Passed with documented limitation | 4122 verified; time-bound attempt plus one resume, exact ledger and zero-render warm check. |
 | Broader overlay visual approval | Blocked | D sample decisions retained; unreviewed transformations pending. |
 | Fresh all-language discovery/coverage/strict-partial checks | Passed | 139398 contracts, all 14 resources; no English scope differences. |
@@ -662,6 +808,15 @@ rewritten to remove failures or reduce the PR size.
 | Dependency/license and complete-PR static audit | Passed with documented limitation | Direct-pin advisory screen and source audit; no full transitive/native SBOM. |
 | CI / regressions / documentation | Passed | Detailed report, archived evidence and safe CI. |
 | Production cutover / publication / rollback execution | Not tested | Not authorized; proposed checklist only. |
+
+Readiness recommendations are scoped:
+
+| Scope | Technical assessment | Remaining decision |
+| --- | --- | --- |
+| English | All 9,957 outputs/receipts, unchanged warm reuse and exact approved-API parity pass; technically validated migration candidate. | Gate E review, destination case mapping, exact artifact acceptance and separate publication/cutover authority. |
+| Overlays | All 4,122 transforms verify; selected corrected outputs reproduce across worker counts. The small Python control did not beat grouped legacy performance. | Broader current visual acceptance and an explicit adoption/performance decision; no blanket replacement recommendation. |
+| German / Spanish / French | All 960 required keys are valid; current fits and pending typography proposals are separately enumerated. | Exact artwork review and approval of selected layout proposals before activation. |
+| Arabic / other multilingual | Use each language's independent key/geometry/glyph/RTL assessment; Arabic script-font/RTL acceptance and Bulgarian unsupported glyph cases remain explicit. | Missing-value corrections, approved fonts/layouts where needed, and current artwork review. No complete multilingual collection is automatically production-approved. |
 
 Priority maintainer decisions before any future production operation:
 
