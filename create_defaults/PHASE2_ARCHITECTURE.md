@@ -620,3 +620,10 @@ cached per process, while renderer source identities are recomputed. The worker
 scheduler checks sources before starting/dispatching and drains buffered success
 responses before classifying retiring workers as failed. All changes require
 focused regression evidence; see [Package E report](PACKAGE_E_REPORT.md).
+
+
+Scoped generated-family selection includes the dependency closure of every child,
+while a single logical-child selection loads only its required definitions. The
+benchmark harness separately excludes family selectors and caps its effective graph
+at 64 outputs. These rules prevent missing-parent failures and accidental broad
+benchmark expansion without changing any poster definition or rendering parameter.

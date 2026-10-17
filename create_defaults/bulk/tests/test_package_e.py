@@ -76,6 +76,14 @@ def test_exact_invalidation_and_actual_rerender_set(synthetic_pair, change):
     if change == "definition":
         value["composer"]["gradient"] = 2
     elif change == "color":
+        from create_defaults.bulk.colors import ColorPolicy, ColorRegistry
+        registry = ColorRegistry(Store(config.cache_dir / "state.sqlite"),
+            ColorPolicy("D01-d1", 8.0, 4.5), authorized_reviewers=["synthetic-color-test-only"])
+        reservation = registry.reserve(definitions[0].id, "Based", "#123456", owner="synthetic-test")
+        assignment = registry.approve(reservation["id"], owner="synthetic-test",
+            reviewer="synthetic-color-test-only", reason="Ephemeral integration test; no real catalog approval.")
+        selected_color = next(row for row in registry.assignments() if row["id"] == assignment)
+        assert json.loads(selected_color["source"])["reviewer"] == "synthetic-color-test-only"
         value["composer"]["base_color"] = "#123456"
     elif change == "font":
         value["composer"]["font"] = "fonts/Barlow-Regular.ttf"
@@ -554,3 +562,47 @@ def test_comparison_cli_cannot_report_success_for_unexplained_differences(tmp_pa
     monkeypatch.setattr(e_comparison, "compare", lambda *args: {"passed": False})
     with pytest.raises(BulkError, match="fail acceptance"):
         e_comparison.main(["compare", "--root", str(tmp_path / "refs"), "--generated", str(tmp_path / "generated")])
+
+
+def test_changed_overlay_input_rerenders_and_stales_only_its_two_sizes(tmp_path):
+    from create_defaults.bulk.overlays import generate as overlays, plan as overlay_plan
+    sources = ["logos_genre/Experimental.png", "logos_genre/Award Shows.png"]
+    assets = tmp_path / "assets"
+    for relative in sources:
+        target = assets / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / relative, target)
+    config = Config(asset_dir=assets, cache_dir=tmp_path / "cache", output_dir=tmp_path / "output",
+                    workspace_dir=tmp_path / "work")
+    options = dict(config=config, sources=sources, limits=WorkerLimits(workers=1))
+    first = overlays(**options)
+    assert first["status"] == "verified"
+    expected = {j["id"] for j in first["manifest"]["jobs"] if j["parameters"]["input"] == sources[0]}
+    assert len(expected) == 2
+    before = {j["id"]: j for j in first["manifest"]["jobs"]}
+    unrelated_hashes = {j["local_relative"]: sha256(config.output_dir / j["local_relative"])
+                       for j in before.values() if j["id"] not in expected}
+    reviews = Reviews(Store(config.cache_dir / "state.sqlite"), config)
+    reviews.attach(first)
+    for identity in before:
+        item = reviews.item(identity)
+        reviews.decide(identity, expected_version=item["version"], action="approve",
+            accepted_warnings=["overlay_transform_review"], reviewer="synthetic-overlay-test-only",
+            comment="Ephemeral test mechanics; no real artwork acceptance.")
+    source = assets / sources[0]
+    with Image.open(source) as image:
+        changed = image.convert("RGBA")
+    cx, cy = changed.width // 2, changed.height // 2
+    changed.paste((12, 34, 56, 255), (max(0, cx-10), max(0, cy-10), min(changed.width, cx+10), min(changed.height, cy+10)))
+    changed.save(source)
+    predicted = overlay_plan(config, sources=sources)
+    assert {j["id"] for j in predicted["jobs"] if j["render_fingerprint"] != before[j["id"]]["render_fingerprint"]} == expected
+    audit = overlays(config=config, sources=sources, audit=True)
+    reviews.ingest(audit["preflight"])
+    assert {item["id"] for item in reviews.query(["stale"])} == expected
+    result = overlays(**options)
+    assert {identity for identity, row in result["execution"]["jobs"].items() if row["status"] == "rendered"} == expected
+    assert all(sha256(config.output_dir / path) == checksum for path, checksum in unrelated_hashes.items())
+    assert all(reviews.item(identity)["state"] == "approved_with_accepted_warnings" for identity in before if identity not in expected)
+    warm = overlays(**options)
+    assert warm["execution"]["metrics"]["executed"] == warm["execution"]["metrics"]["worker_starts"] == 0
