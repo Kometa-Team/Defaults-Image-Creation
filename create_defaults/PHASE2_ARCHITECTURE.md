@@ -558,3 +558,36 @@ an explicit entry/byte bound; no rendered-image collection is held in RAM.
 
 This implements Package C only. Overlay production, complete multilingual fitting,
 review approval and production cutover remain outside the implemented boundary.
+
+## Package D: Shared Preflight and Review
+
+The previous paragraph records Package C's historical boundary. Package D is
+separately authorized; cutover and Package E remain deferred.
+
+`languages.py` provides content-addressed immutable registry snapshots, exact
+compatibility identifiers and verified offline Git/YAML resource caches.
+`preflight.py` resolves the selected graph and only required keys/dependencies,
+using the existing compositor's shaping, wrapping and FreeType glyph metrics.
+Shared per-run asset identities and bounded font/measurement caches avoid
+repeated immutable work; changes between validation scopes are detected.
+The checked-in metadata index enables scoped catalog loads without a full audit.
+
+`generation.py`, `services.preview` and `delta.regenerate` all use this engine
+before the existing persistent spawn pool. Dependencies retain staged real-byte
+verification; no fabricated parent identities or subprocess-per-poster path is
+introduced. `overlays.py` adds structured Pillow transforms to the same worker
+dispatch, bounded queues, owned output claims, atomic writes and receipts.
+
+SQLite migration 7 adds current review state, immutable revision/batch evidence
+and indexed translation dependencies. Individual and group decisions use owned
+write transactions and expected versions. Exact input/image/policy fingerprints
+prevent stale approvals; changes in one translation do not blanket-invalidate
+other languages. Review metadata separates private intermediates, shared
+destination mappings and final outputs. Overlay review reuses these APIs but
+requires individual acceptance of transformation warnings.
+
+Reports remain JSON/CSV/HTML local artifacts, not a web service. No Flask,
+authentication, authorization service or publication workflow is introduced.
+Source snapshots cannot refresh a running render implicitly. A fresh explicit
+preflight/delta is required after external translation/definition edits.
+See [Package D Usage](PACKAGE_D_USAGE.md) for the API and exit contracts.

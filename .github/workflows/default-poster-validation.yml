@@ -37,10 +37,24 @@ jobs:
         run: |
           python -m create_defaults.bulk.baselines --check-historical
           python create_defaults/validation_manifest.py --check create_defaults/bulk/baselines/effective-jobs-en-current.json.gz
-      - name: Package A and B infrastructure tests
+      - name: Packages A-D infrastructure and generation tests
         run: |
           python -m unittest discover -s create_defaults/phase2/tests -v
           python -m pytest create_defaults/bulk/tests -q -rs -p no:cacheprovider
+      - name: Focused offline Package D review artifacts
+        run: python -m create_defaults.bulk.d_evidence smoke
+      - name: Retain local-only review evidence for the team
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: package-d-focused-review
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            config/package-d-smoke/smoke-evidence.json
+            config/package-d-smoke/layout-proposal.json
+            config/package-d-smoke/cache/preview-reports/**
+            config/package-d-smoke/cache/preflight/**
+            config/package-d-smoke/output/**
       - name: People GitHub compatibility regressions
         run: >-
           python -m pytest

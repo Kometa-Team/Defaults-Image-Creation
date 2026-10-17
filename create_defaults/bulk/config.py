@@ -35,9 +35,17 @@ def select_categories(values):
     return tuple(dict.fromkeys(result))
 
 
-def select_languages(values):
-    if any(value not in LANGUAGES for value in values):
-        raise BulkError("unknown_language", "Language identifiers must match the supported codes exactly")
+def language_id(value):
+    if not isinstance(value, str) or not re.fullmatch(r"[a-z]{2,3}(?:[-_][A-Za-z0-9]{2,8}){0,2}", value):
+        raise BulkError("unknown_language", "Unsafe or malformed exact language identifier")
+    return value
+
+
+def select_languages(values, *, available=None):
+    for value in values:
+        language_id(value)
+        if value not in (LANGUAGES if available is None else available):
+            raise BulkError("unknown_language", "Language identifier absent from the selected registry; aliases require explicit mappings")
     return tuple(dict.fromkeys(values))
 
 

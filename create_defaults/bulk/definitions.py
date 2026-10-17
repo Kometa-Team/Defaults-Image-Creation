@@ -11,12 +11,21 @@ from jsonschema import Draft202012Validator, FormatChecker, validators
 from referencing import Registry, Resource
 
 from .common import BulkError, canonical, fingerprint, load_yaml, normalize_hex, path_key, relative_path
-from .config import CATEGORIES, LANGUAGES
+from .config import CATEGORIES, language_id
 
 
 HERE = Path(__file__).resolve().parent
 FORMATS = FormatChecker()
 StrictValidator = validators.extend(Draft202012Validator, type_checker=Draft202012Validator.TYPE_CHECKER.redefine("integer", lambda checker, value: type(value) is int))
+
+
+@FORMATS.checks("poster-language")
+def _language(value):
+    try:
+        language_id(value)
+        return True
+    except BulkError:
+        return False
 
 
 @FORMATS.checks("artwork-path")
@@ -91,7 +100,7 @@ class Definition:
         validate_schema(value, "definition-v1.json")
         if value["generator"] is not None:
             validate_schema(value["generator"], "generator-v1.json")
-        if value["category"] not in CATEGORIES or value["category"] == "Overlays" or any(language not in LANGUAGES for language in value["languages"]):
+        if value["category"] not in CATEGORIES or value["category"] == "Overlays":
             raise BulkError("invalid_selector", "Unsupported poster category or language")
         if value["composer"]["text"] != "":
             raise BulkError("invalid_definition", "Caption service owns effective text; composer.text must be explicitly empty")
@@ -135,7 +144,7 @@ class Definition:
         return self
 
 
-def load_definitions(paths, *, profiles_path=None):
+def load_definitions(paths, *, profiles_path=None, identities=None):
     shared = {}
     if profiles_path:
         envelope = load_yaml(profiles_path)
@@ -165,6 +174,8 @@ def load_definitions(paths, *, profiles_path=None):
         for raw in document["definitions"]:
             if not isinstance(raw, dict):
                 raise BulkError("invalid_definition", "Definition must be an object")
+            if identities is not None and raw.get("id") not in identities:
+                continue
             parent = raw.get("extends")
             if parent is not None and (not isinstance(parent, str) or parent not in shared):
                 raise BulkError("invalid_profile", "Unknown shared profile")

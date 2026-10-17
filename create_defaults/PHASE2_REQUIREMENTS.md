@@ -143,3 +143,32 @@ new manifest comparison. Full source rows and fingerprints are retained in the
 - D01-D08 and Gate A are approved; Package B has explicit implementation authorization.
 - Review [Package B Report](PACKAGE_B_REPORT.md) for actual tests and limitations before authorizing C.
 - Commits, pushes, PR creation, merging and deployment require separate authorization.
+
+## Package D Authorization and Acceptance Contract
+
+The historical gate notes above are superseded by explicit approvals of Gates
+A/B/C and authorization of Package D on the existing draft PR #12. Package E,
+production replacement, publication, deployment and PR merge remain unauthorized.
+
+The common engine must support scoped single-poster proposals, category/catalog
+audits and selective translation deltas. Dynamic language discovery is based on
+verified poster resources, not a permanent eleven-code ceiling or the assumption
+that every Weblate language has poster resources. Every generation/preview path
+must persist preflight evidence before rendering. Strict and partial outcomes
+must remain distinct; unavailable resources, deliberate non-applicability,
+shared artwork, glyph/script failures and layout blockers are separate states.
+
+Reviewed fitting is caption/font/language-bound. English compositor semantics and
+historical fixtures remain frozen. Arabic font evaluation does not constitute
+font approval; affected unsupported variants remain blocked. Overlay transforms
+use the persistent worker infrastructure with separate pixel/alpha evidence and
+review requirements. Translation changes, assets, fonts, layout and policy must
+invalidate only dependent validation/review records.
+
+Human decisions require exact current validation/image/version evidence,
+immutable audit history and explicit acceptance of warnings. Unresolved high
+risk cannot use group approval; groups enumerate exact members and actual
+inspection scope. CLI identity remains development attribution, not real
+authentication. D01 historical colors are preserved, not converted into blanket
+exceptions for authored or recolored proposals. See [Package D Usage](PACKAGE_D_USAGE.md)
+and the final gate report for implemented behavior, evidence and limitations.

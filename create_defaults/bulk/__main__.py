@@ -23,8 +23,10 @@ def main(argv=None):
     parser.add_argument("--config-file", type=Path)
     parser.add_argument("--offline", action="store_true", default=None)
     commands = parser.add_subparsers(dest="command", required=True)
+    from .d_cli import COMMANDS, register
+    register(commands)
     commands.add_parser("list-categories")
-    commands.add_parser("list-languages")
+    commands.add_parser("list-languages").add_argument("--snapshot", type=Path)
     for command in ("validate-definitions", "plan", "discover-assets", "generate"):
         sub = commands.add_parser(command)
         sub.add_argument("--definitions", nargs="+", type=Path, required=command not in {"discover-assets", "generate"})
@@ -42,6 +44,8 @@ def main(argv=None):
                 sub.add_argument("--recycle-after", type=int, default=200)
                 sub.add_argument("--retry-failed", action="store_true")
                 sub.add_argument("--report", type=Path)
+                sub.add_argument("--policy", choices=["partial", "strict", "audit"], default="partial")
+                sub.add_argument("--snapshot", type=Path)
         elif command == "discover-assets":
             sub.add_argument("--directory", action="append", required=True)
             sub.add_argument("--legacy-baseline", type=Path)
@@ -60,15 +64,20 @@ def main(argv=None):
     try:
         config = Config.load(file=args.config_file, **{name: getattr(args, name) for name in
             ("cache_dir", "workspace_dir", "output_dir", "asset_dir", "translation_dir", "offline")})
+        if args.command in COMMANDS:
+            from .d_cli import execute
+            result, status = execute(args, config)
+            print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=True, allow_nan=False))
+            return status
         if args.command == "list-categories":
             result = {"categories": CATEGORIES, "aliases": ALIASES}
         elif args.command == "list-languages":
-            result = {"languages": [{"code": language, "available": (config.translation_dir / (language + ".yml")).is_file(),
-                                      "rendering_validated": False} for language in LANGUAGES]}
+            from .d_cli import source
+            result = source(config, args.snapshot)[0].data
         elif args.command in {"validate-definitions", "plan", "discover-assets", "generate"}:
             if args.command == "generate" and not args.definitions:
                 from .catalog import load_catalog
-                definitions = load_catalog(args.category)
+                definitions = load_catalog(args.category, posters=args.poster)
             else:
                 definitions = load_definitions(args.definitions or (), profiles_path=args.profiles)
             if args.command == "validate-definitions":
@@ -83,12 +92,14 @@ def main(argv=None):
                     if args.manifest:
                         atomic_bytes(args.manifest, canonical(result) + b"\n")
                 else:
+                    from .d_cli import source
+                    registry, translated = source(config, args.snapshot)
                     from .generation import generate
                     from .workers import WorkerLimits
                     limits = WorkerLimits(workers=args.workers, timeout_seconds=args.timeout, retries=args.retries, recycle_after=args.recycle_after,
                                           total_worker_memory_bytes=max(1024 * 1024 * 1024, args.workers * 512 * 1024 * 1024))
-                    result = generate(definitions, Translations(sources), config=config, limits=limits, generators=GENERATORS,
-                                      categories=args.category, posters=args.poster, languages=languages, retry_failed=args.retry_failed)
+                    result = generate(definitions, translated, config=config, limits=limits, generators=GENERATORS, registry=registry,
+                                      categories=args.category, posters=args.poster, languages=languages, retry_failed=args.retry_failed, policy=args.policy)
                     if args.report:
                         atomic_bytes(args.report, canonical(result) + b"\n")
                     result = {"status": result["status"], "stages": [{"depth": stage["depth"], "manifest_sha256": stage["manifest"]["sha256"],
@@ -124,7 +135,8 @@ def main(argv=None):
                     raise BulkError("invalid_selection", "Download requires an explicit remote path")
                 result["download"] = inventory.fetch_image(args.path).relative_to(config.cache_dir).as_posix()
         print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=True, allow_nan=False))
-        return 3 if args.command == "generate" and result["status"] != "verified" else 0
+        from .d_cli import EXITS
+        return EXITS.get(result.get("status"), 0) if isinstance(result, dict) else 0
     except BulkError as error:
         parser.exit(5 if error.code == "stale_version" else 2, f"{error.code}: {error}\n")
     except GitHubError as error:

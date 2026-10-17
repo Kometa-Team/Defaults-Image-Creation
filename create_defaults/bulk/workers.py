@@ -27,7 +27,11 @@ from .workspaces import Workspaces
 
 def _check_inputs(payload, config):
     from .planner import renderer_identity
-    if payload["renderer"] != renderer_identity():
+    expected = renderer_identity()
+    if payload.get("kind") == "overlay":
+        from .overlays import identity
+        expected = identity()
+    if payload["renderer"] != expected:
         raise BulkError("changed_renderer", "Composer implementation/environment changed after planning")
     for item in payload["inputs"]:
         root = config.output_dir if item.get("generated") else config.asset_dir
@@ -78,6 +82,11 @@ def compose(task, target, resources):
     config = resources["config"]
     payload = task["payload"]
     _check_inputs(payload, config)
+    if payload.get("kind") == "overlay":
+        from .overlays import render
+        source = confined(config.asset_dir, payload["parameters"]["input"], must_exist=True)
+        render(payload["parameters"], source, target)
+        return
     parameters = dict(payload["parameters"])
     for item in payload["inputs"]:
         root = config.output_dir if item.get("generated") else config.asset_dir
@@ -101,13 +110,13 @@ def tasks_from_manifest(manifest):
     validate_manifest(manifest)
     by_id = {job["id"]: job for job in manifest["jobs"]}
     for job in manifest["jobs"]:
-        if job["kind"] != "poster" or not job["render_ready"]:
-            raise BulkError("unsupported_worker_job", "Only render-ready poster contracts can use the composer worker")
+        if not job["render_ready"]:
+            raise BulkError("unsupported_worker_job", "Only preflight-ready contracts can use rendering workers")
         inputs = list(job["inputs"])
         for dependency in job["dependencies"]:
             inputs.append({"role": dependency["input"], "path": by_id[dependency["job_id"]]["local_relative"], "sha256": dependency["sha256"], "generated": True})
         yield RenderTask(job["id"], job["render_fingerprint"], job["local_relative"],
-                         {"parameters": job["parameters"], "inputs": inputs, "renderer": manifest["renderer"]},
+                         {"parameters": job["parameters"], "inputs": inputs, "renderer": manifest["renderer"], **({"kind": "overlay"} if job["kind"] == "overlay" else {})},
                          tuple(item["job_id"] for item in job["dependencies"]))
 
 
@@ -140,9 +149,15 @@ def _worker_main(inbox, results, config, limits, renderer):
             return
 
 
-def _check_image(path):
+def _check_image(path, task=None):
     from PIL import Image
     with Image.open(path) as image:
+        if task is not None and task.payload.get("kind") == "overlay":
+            box = task.payload["parameters"]["box"]
+            if image.format != "PNG" or image.mode != "RGBA" or not (1 <= image.width <= box[0] and 1 <= image.height <= box[1]):
+                raise BulkError("invalid_artifact", "Overlay artifact violates its PNG/RGBA bounds")
+            image.load()
+            return
         if image.format != "JPEG" or image.mode != "RGB" or image.size != (2000, 3000):
             raise BulkError("invalid_artifact", "Composer artifact is not the approved RGB JPEG canvas")
         image.load()
@@ -199,12 +214,12 @@ class PersistentWorkers:
         self.active = False
 
     def _state_id(self, task):
-        return "render." + fingerprint({"id": task.id, "render": task.render_fingerprint, "root": fingerprint(str(self.config.output_dir)), "path": task.local_relative})
+        return "render." + fingerprint({"id": task.id, "render": task.render_fingerprint, "root": fingerprint(str(self.config.output_dir)), "path": task.local_relative, "worker_renderer": self.renderer_identity})
 
     def _receipt_path(self, state_id):
         return confined(self.config.cache_dir, "worker-receipts/" + fingerprint(state_id) + ".json")
 
-    def _cached(self, task, state_id):
+    def _cached(self, task, state_id, *, expected_renderer=None):
         path = self._receipt_path(state_id)
         target = confined(self.config.output_dir, task.local_relative)
         if not path.is_file() or not target.is_file():
@@ -216,10 +231,10 @@ class PersistentWorkers:
         except ValueError:
             return None
         payload = {key: item for key, item in value.items() if key != "receipt_sha256"}
-        if value.get("job_id") != state_id or value.get("render_fingerprint") != task.render_fingerprint or value.get("renderer_identity") != self.renderer_identity or value.get("relative") != task.local_relative or value.get("receipt_sha256") != fingerprint(payload) or value.get("size") != target.stat().st_size or value.get("sha256") != sha256(target):
+        if value.get("job_id") != state_id or value.get("render_fingerprint") != task.render_fingerprint or value.get("renderer_identity") != (expected_renderer or self.renderer_identity) or value.get("relative") != task.local_relative or value.get("receipt_sha256") != fingerprint(payload) or value.get("size") != target.stat().st_size or value.get("sha256") != sha256(target):
             return None
         if self.renderer is compose:
-            _check_image(target)
+            _check_image(target, task)
         return value
 
     def _publish(self, task, state_id, source, checksum):
@@ -231,7 +246,7 @@ class PersistentWorkers:
         if len(data) > self.limits.max_artifact_bytes or bytes_sha256(data).hexdigest() != checksum:
             raise BulkError("corrupt_artifact", "Staged/deduplicated bytes changed before output promotion")
         if self.renderer is compose:
-            _check_image(source)
+            _check_image(source, task)
         # The same SQLite writer lock serializes reservation and promotion. A
         # replacement can only consume the exact bytes verified at reservation.
         with self.store.transaction() as db:
@@ -353,7 +368,7 @@ class PersistentWorkers:
                         if not old or old["status"] != "verified" or fingerprint(old_spec) != old["fingerprint"] or old_spec["task"]["id"] != task.id or claim["relative"] != task.local_relative:
                             raise BulkError("output_collision", "Output is reserved by another job or unfinished replacement")
                         previous = RenderTask(**old_spec["task"])
-                        receipt = self._cached(previous, claim["state_id"])
+                        receipt = self._cached(previous, claim["state_id"], expected_renderer=old_spec["renderer_identity"])
                         if receipt is None or old["receipt"] != canonical(receipt).decode():
                             raise BulkError("corrupt_artifact", "Cannot replace an unverified or corrupted owned output")
                         db.execute("UPDATE output_claims SET state_id=?,fingerprint=?,previous_sha256=?,previous_state_id=? WHERE root=? AND path_key=?",

@@ -41,6 +41,17 @@ MIGRATIONS = (
         "ALTER TABLE output_claims ADD COLUMN previous_sha256 TEXT",
         "ALTER TABLE output_claims ADD COLUMN previous_state_id TEXT",
     ),
+    (
+        "CREATE TABLE review_variants (id TEXT PRIMARY KEY, version INTEGER NOT NULL, state TEXT NOT NULL, validation TEXT NOT NULL, policy TEXT NOT NULL, evidence TEXT NOT NULL, preview TEXT)",
+        "CREATE TABLE review_revisions (id TEXT NOT NULL, validation TEXT NOT NULL, evidence TEXT NOT NULL, PRIMARY KEY(id,validation))",
+        "CREATE TRIGGER review_revisions_no_update BEFORE UPDATE ON review_revisions BEGIN SELECT RAISE(ABORT,'immutable review revision'); END",
+        "CREATE TRIGGER review_revisions_no_delete BEFORE DELETE ON review_revisions BEGIN SELECT RAISE(ABORT,'immutable review revision'); END",
+        "CREATE TABLE review_batches (id TEXT PRIMARY KEY, membership TEXT NOT NULL, payload TEXT NOT NULL)",
+        "CREATE TRIGGER review_batches_no_update BEFORE UPDATE ON review_batches BEGIN SELECT RAISE(ABORT,'immutable review batch'); END",
+        "CREATE TRIGGER review_batches_no_delete BEFORE DELETE ON review_batches BEGIN SELECT RAISE(ABORT,'immutable review batch'); END",
+        "CREATE TABLE translation_dependencies (language TEXT, key TEXT, variant TEXT, validation TEXT NOT NULL, PRIMARY KEY(language,key,variant))",
+        "CREATE INDEX translation_dependents ON translation_dependencies(language,key)",
+    ),
 )
 
 

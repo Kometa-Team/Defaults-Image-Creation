@@ -4,7 +4,7 @@ from dataclasses import dataclass
 import re
 
 from .common import BulkError, fingerprint, load_yaml, reject_links, sha256
-from .config import LANGUAGES
+from .config import language_id
 
 
 def legacy_case(value, mode):
@@ -113,8 +113,7 @@ class Translations:
     def __init__(self, sources):
         self.sources, self.hashes = {}, {}
         for language, path in sources.items():
-            if language not in LANGUAGES:
-                raise BulkError("unknown_language", "Unsupported translation identifier")
+            language_id(language)
             path = reject_links(path)
             if not path.is_file():
                 raise BulkError("unavailable_translation", f"Translation file unavailable: {language}")
@@ -142,8 +141,7 @@ class Translations:
         return value, {"language": language, "key": key, "source_sha256": self.hashes[language], "value_sha256": fingerprint(value)}
 
     def resolve(self, caption, language):
-        if language not in LANGUAGES:
-            raise BulkError("unknown_language", "Unsupported language")
+        language_id(language)
         mode = caption["mode"]
         if mode not in {"none", "shared", "translation"}:
             raise BulkError("invalid_translation", "Unknown caption mode")

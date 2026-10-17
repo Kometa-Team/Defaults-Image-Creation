@@ -12,7 +12,7 @@ import platform
 from create_defaults.create_poster import PosterOptions, integer, output_filename
 from create_defaults.poster_text import load_layout
 from .common import BulkError, canonical, confined, fingerprint, normalize_hex, path_key, sha256
-from .config import Config, select_categories, select_languages
+from .config import Config, LANGUAGES, select_categories, select_languages
 from .definitions import Definition, FORMATS, StrictValidator, validate_schema
 
 
@@ -77,8 +77,12 @@ def validate_manifest(value):
                 raise BulkError("incomplete_parameters", "Raw composer types/fields are invalid")
             if set(job["raw_parameters"]) != set(PosterOptions.__dataclass_fields__) or job["parameters"] != effective_parameters(job["raw_parameters"]):
                 raise BulkError("incomplete_parameters", "Invalid raw/effective composer record")
-        elif job["render_ready"]:
-            raise BulkError("overlay_not_implemented", "Overlay contracts are not executable until Package D")
+        elif job["render_ready"] and (job["parameters"] != job["raw_parameters"] or value["renderer"]["encoding"] != {"format": "PNG", "compress_level": 9}
+                or job["parameters"]["resampling"] != "Pillow-LANCZOS" or "bulk/overlays.py" not in value["renderer"]["sources"]
+                or job["parameters"]["box"] not in ([285, 85], [440, 100])
+                or not job["local_relative"].endswith(".png")
+                or not any(i["role"] == "overlay_source" and i["path"] == job["parameters"]["input"] for i in job["inputs"])):
+            raise BulkError("invalid_overlay", "Overlay parameters/encoding differ from executable contract")
         expected = fingerprint({key: job[key] for key in ("kind", "parameters", "inputs", "dependencies", "language_behavior")} | {"renderer": value["renderer"]})
         if expected != job["render_fingerprint"]:
             raise BulkError("corrupt_manifest", "Render fingerprint mismatch")
@@ -126,7 +130,7 @@ class Planner:
         return catalog, families, origins
 
     def plan(self, definitions, translations, *, categories=(), posters=(), languages=("en",), dependency_artifacts=None):
-        categories, languages = select_categories(categories), select_languages(languages)
+        categories, languages = select_categories(categories), select_languages(languages, available=set(LANGUAGES) | set(translations.sources))
         if not languages or (not categories and not posters):
             raise BulkError("empty_selection", "Select categories/poster IDs and languages explicitly")
         catalog, families, origins = self.expand(definitions)

@@ -270,3 +270,24 @@ matrix and remaining limits in [Package C Report](PACKAGE_C_REPORT.md).
 Package C does not enable overlays, complete multilingual fitting/Arabic
 approval, review UI, publishing or production cutover. Stop for maintainer Gate C
 approval; Packages D/E remain unauthorized.
+
+## Package D Authorized Follow-Up
+
+Gate C has since been approved and Package D explicitly authorized on the same
+draft PR. Preserve the completed A/B/C evidence and all production PowerShell
+and validated Pillow behavior. The new local migration adds dynamic translation
+snapshots, mandatory scoped preflight, overlay transforms and version-bound
+human review, with small real rendering proofs and read-only live source audits.
+
+Reconcile the 36 overlay operations into 18 groups/two sizes and retain all
+4,122 destination contracts. Document Pillow/ImageMagick differences explicitly;
+never modify earlier fixtures, visual thresholds or historical counts to conceal
+them. Retain the red-only active Splatter decision and private Awards inputs.
+
+Gate D evidence must include all poster-relevant discovered language resources,
+accurate missing-key mappings/counts, blocked font/layout cases, precise delta
+invalidation, immutable decisions, existing regression results and Linux CI.
+The focused CI artifact is reviewer evidence only, not publication. New font
+and layout proposals remain unapproved until the maintainer explicitly accepts
+them. Package D may commit/push scoped work to draft PR #12, but may not merge
+or mark it ready. Stop for Gate D review; Package E requires new authorization.
