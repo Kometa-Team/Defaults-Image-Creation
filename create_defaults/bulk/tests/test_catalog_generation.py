@@ -221,3 +221,24 @@ def test_real_composer_interruption_and_new_process_resume(translations, tmp_pat
     assert len(resumed["manifest"]["jobs"]) == 2
     warm = generate(definitions, translations, **options)
     assert warm["stages"][0]["execution"]["metrics"]["executed"] == 0
+
+
+def test_action_adventure_uses_exact_published_destination_case(translations, tmp_path):
+    from create_defaults.bulk.preflight import preflight
+
+    identity = "genre.genre-action-adventure.96dd0142"
+    definitions = load_catalog(["Genre"], posters=[identity])
+    config = Config(cache_dir=tmp_path / "cache", workspace_dir=tmp_path / "work", output_dir=tmp_path / "output")
+    planner = Planner(config)
+    current = planner.plan(definitions, translations, categories=["Genre"], languages=["en"])["jobs"]
+    assert len(current) == 1
+    assert current[0]["remote_relative"] == "genre/Action & Adventure.jpg"
+    assert current[0]["local_relative"] == "defaults-en/genre/Action & adventure.jpg"
+    report, _ = preflight(definitions, translations, config=config, categories=["Genre"], languages=["en"], policy="strict")
+    assert report["variants"][0]["remote_relative"] == "genre/Action & Adventure.jpg"
+    assert report["variants"][0]["status"] in {"ready", "ready_with_warning"}
+    # The explicit public mapping changes destination metadata, not rendered bytes.
+    historical = definitions[0].data
+    historical["output"]["remote_paths"]["en"] = "genre/Action & adventure.jpg"
+    previous = planner.plan((Definition.create(historical),), translations, categories=["Genre"], languages=["en"])["jobs"][0]
+    assert current[0]["render_fingerprint"] == previous["render_fingerprint"]

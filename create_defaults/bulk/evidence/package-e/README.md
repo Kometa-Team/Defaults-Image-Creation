@@ -11,7 +11,7 @@ are in [PACKAGE_E_USAGE.md](../../../PACKAGE_E_USAGE.md).
   source consistency, contributor and fitting-group digests.
 - `snapshot-scope-consistency.json`: all 14 single/Based scope comparisons, full
   French/Arabic identity comparisons and actual strict/partial behavior.
-- `fitting-proposals.json`: six exact unapproved preview contexts plus Arabic
+- `fitting-proposals.json`: six exact originally unapproved preview contexts plus Arabic
   candidate/license/probe identities; no production font installation.
 - `poster-benchmarks-and-historical-overlay.json`: all 18 poster scaling observations,
   five isolated legacy comparisons and explicitly historical pre-ICC overlay timings.
@@ -21,7 +21,7 @@ are in [PACKAGE_E_USAGE.md](../../../PACKAGE_E_USAGE.md).
 - `overlay-profile-risk.json`: 64 additional mode/profile risk comparisons, exact
   renderer/policy/image identities and measured legacy differences, no acceptance.
 - `pending-overlay-review.json`: existing review-service batch with exact membership,
-  empty inspected subset and zero approval events; all 64 remain pending.
+  empty inspected subset and zero approval events at that checkpoint; preserved unchanged. The later acceptance record separately accepts all 64 exact samples.
 - `windows-linux.json`: final executable CI/source distinction, byte/pixel comparisons
   and separate platform artifact identities.
 - `regression-tests.json`: exact final Windows outcomes, Linux CI link, skip reasons,
@@ -82,3 +82,12 @@ controlled before/after assessment without rewriting those records.
 - `multilingual-cache-performance.json`: three quiet exact-input cache controls
   and independent compact-index/raw-ledger integrity verification. The earlier
   concurrent audit observations remain preserved.
+
+- `maintainer-visual-acceptance-20261017.json`: later explicit acceptance of all 64
+  inspected overlay previews and the six FR/DE/BG image/layout previews, bound to
+  exact bytes and historical/current validation context; mandatory canonical public
+  destination `genre/Action & Adventure.jpg`. No layout activation or publication.
+- `maintainer-visual-acceptance-20261017-events.json`: existing-service 64 individual
+  overlay approvals, fully inspected batch and 70 sample-scoped external audit
+  events plus the destination decision. Six historical-policy language samples do
+  not acquire automatic current-policy approval. Original evidence is unchanged.

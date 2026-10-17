@@ -753,7 +753,7 @@ definitions:
     directory: genre
     filename: Action & adventure.jpg
     remote_paths:
-      en: genre/Action & adventure.jpg
+      en: genre/Action & Adventure.jpg
   generator: null
   color_assignment:
     id: genre.genre-action-adventure.96dd0142.background

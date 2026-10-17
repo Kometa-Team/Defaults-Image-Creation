@@ -173,3 +173,17 @@ Any future group acceptance needs an explicit maintainer decision bound to all
 enumerated members and exact image/version identities. High-risk typography
 changes, unsupported scripts, clipping and stale decisions require individual
 review. Representatives never automatically approve uninspected members.
+
+## Recorded maintainer decisions
+
+The 2026-10-17 acceptance record covers exactly 64 presented overlay previews and
+six presented FR/DE/BG image/layout previews. It does not activate catalog layout
+changes or approve other variants. Language previews keep their original validation
+context; revalidate before any activation and do not transfer approval automatically.
+
+The canonical public English destination is **`genre/Action & Adventure.jpg`**.
+The catalog explicitly maps its captured internal `Action & adventure.jpg` output
+to this exact public path. Future operations must use the manifest's
+`remote_relative`, never derive a public filename from the local output basename
+or apply case-insensitive matching. Run fresh strict preflight for a future rollout.
+No production cutover or publication is authorized by these sample decisions.

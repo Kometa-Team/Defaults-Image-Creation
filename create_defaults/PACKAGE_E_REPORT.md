@@ -9,7 +9,36 @@ Earlier reports, fixtures, original Package D/E audits and the four exact Packag
 No artwork or translation was published; no production PowerShell was replaced,
 production permissions granted, PR merged or ready transition performed.
 
-**Automated Package E acceptance is complete for the recorded scope.** Gate E remains awaiting maintainer review. Publication, deployment and cutover are not authorized; the destination case conflict and exact artwork/font/layout decisions remain pending. The corrected multilingual audit makes 41,417 variants newly technically eligible; 14,899 retain final needs_layout_review status. All 9,957 English validation identities are unchanged. Technical eligibility grants no artwork approval.
+**Automated Package E acceptance is complete for the recorded scope.** Gate E remains awaiting maintainer review. Publication, deployment and cutover are not authorized. The maintainer has accepted 64 exact overlay previews and six exact language poster/layout previews and resolved the public destination case; all other artwork/font/layout decisions remain pending. Historical validation identities below describe the measured pre-mapping checkpoint; the destination-only correction requires fresh production preflight and does not change renderer inputs. The corrected multilingual audit makes 41,417 variants newly technically eligible; 14,899 retain final needs_layout_review status. All 9,957 English validation identities were unchanged by the multilingual correction at that audit checkpoint. The later public destination mapping changes that one poster definition/preflight identity while preserving its render fingerprint. Technical eligibility grants no artwork approval.
+
+## Maintainer decisions recorded on 2026-10-17
+
+The maintainer explicitly reports inspection and acceptance of the presented
+64-sample checkerboard overlay page and all six linked language poster previews.
+The [exact acceptance record](bulk/evidence/package-e/maintainer-visual-acceptance-20261017.json)
+binds each decision to image/source hashes, renderer, font/layout, receipt,
+validation and policy identities. The [portable audit events](bulk/evidence/package-e/maintainer-visual-acceptance-20261017-events.json)
+retain the new decisions separately from the original pending/audit evidence.
+
+| Decision | Accepted scope | Remaining boundary |
+| --- | --- | --- |
+| Overlays | All 64 exact presented previews; the maintainer accepts the documented Pillow/ImageMagick differences for those samples, including ICC-corrected transparency. Existing review service records 64 individual approvals with exact accepted warning codes and a fully inspected batch. | Other transforms among the 4,122 remain unapproved. No new global pixel threshold or performance/adoption decision. |
+| Language poster/layout previews | French Based Book, Comic, True Story and Video Game; German Based Book; Bulgarian Based Book. Exact presented images and proposed layouts accepted. | These six use their recorded historical preflight policy. Acceptance is recorded with `review_external_sample_acceptance`; no automatic current-policy approval transfer, catalog activation or wider language approval. |
+| Public destination | `genre/Action & Adventure.jpg` is the mandatory exact case and spelling. The English catalog remote mapping now uses this path. | Internal render filename and source logo retain their captured names. No published file was renamed or uploaded. |
+| Production | No cutover decision was supplied. | Gate E final sign-off, publishing, merge, deployment and subsequent phases remain pending. |
+
+Original `pending-overlay-review.json`, fitting records and pixel metrics remain
+unchanged historical observations. Statements of zero approvals, empty inspected
+subsets and pending decisions in the original audit sections below describe their
+original checkpoints; this later decision record supersedes sample status only.
+The six layout acceptances do not activate proposals or resolve the remaining
+14,899 audited `needs_layout_review` variants. Arabic and all other unreviewed
+multilingual artwork remain pending. The 64 current overlay approvals apply only
+to the recorded Windows renderer context and exact bytes; no platform transfer.
+
+Verification: all 21 existing category/captured-contract reconciliation cases pass.
+The two focused audit/destination regressions pass, including exact current preflight
+and planner destination case and an unchanged render fingerprint for the mapping.
 
 ## Tested source and environment
 
@@ -229,8 +258,9 @@ exact published paths**, **two correctly excluded private paths**, **one case
 conflict** and **zero absent paths**. Expected `genre/Action & adventure.jpg` maps
 to published `genre/Action & Adventure.jpg` (Git blob
 `a20f8bbaab0fdae2b5bd339ee680302b05621960`, 833,624 bytes).
-An explicit mapping/case decision is required before a future cutover; no rename
-or case-insensitive assumption was applied. Path ledger identity:
+This was the historical pre-decision comparison. The maintainer subsequently
+required exact `genre/Action & Adventure.jpg`; the catalog now explicitly maps to
+that public destination. No remote rename or case-insensitive assumption was applied. Path ledger identity:
 `26bbcaf5e4f156baab8925fb31d2948ca4a3512b52ae9cb009a3e47b4502957f`.
 
 Selective comparison results:
@@ -502,7 +532,7 @@ Identical values remain valid and informational. The ledger separately tags nume
 | ru | 7306 | 5773 | 1340 | 1593 | 282 | 1251 | 1251 | 1251 | 0 | 0 | 0 |
 | sv | 6829 | 313 | 1340 | 6978 | 5190 | 1326 | 1326 | 1326 | 0 | 0 | 0 |
 
-Technical counts overlap and must not be summed. The fit column counts measured text; captionless artwork needs no text measurement and remains included in overall eligibility. A caption can fit while a required value is empty, leaving the variant blocked. Current clipping and a fitting proposal can also describe the same variant. Final needs_layout_review excludes candidates with another blocking error; all proposals remain unapproved. Glyph/RTL failures prevent a reliable geometric assessment rather than counting as a successful fit. Normal wrapping is informational; four or more rows and margins under 20 pixels remain warnings.
+Technical counts overlap and must not be summed. The fit column counts measured text; captionless artwork needs no text measurement and remains included in overall eligibility. A caption can fit while a required value is empty, leaving the variant blocked. Current clipping and a fitting proposal can also describe the same variant. Final needs_layout_review excludes candidates with another blocking error; all proposals were unapproved at that audit checkpoint. The later six-preview sample/layout acceptance above does not activate or bulk-approve this ledger. Glyph/RTL failures prevent a reliable geometric assessment rather than counting as a successful fit. Normal wrapping is informational; four or more rows and margins under 20 pixels remain warnings.
 
 The correction makes 41,417 variants newly technically eligible. 14,899 have final needs_layout_review status. Existing typography is unchanged; smaller-size proposals never enter effective generation definitions automatically. Strict batches stop before rendering, while partial batches exclude these candidates.
 
@@ -795,14 +825,14 @@ rewritten to remove failures or reduce the PR size.
 | Warm analysis and safe optimization | Passed with documented limitation | Single paired profile; hashing/durability preserved. |
 | Windows / Linux compatibility | Passed with documented limitation | Account/platform skips; 35 JPEG/38 PNG sample parity, not full Linux render. |
 | Recovery / interruption / corruption / ownership | Passed | Isolated realistic failure scenarios, immutable durable state. |
-| Published path inventory | Passed with documented limitation | One case conflict needs a mapping decision. |
+| Published path inventory | Passed; case decision recorded | Historical conflict preserved; explicit remote mapping now requires `genre/Action & Adventure.jpg`. |
 | Selective published-image comparison | Passed with documented limitation | Only explicitly fetched samples; classifications are scoped. |
 | Corrected overlay full transform/format/cache verification | Passed with documented limitation | 4122 verified; time-bound attempt plus one resume, exact ledger and zero-render warm check. |
-| Broader overlay visual approval | Blocked | D sample decisions retained; unreviewed transformations pending. |
+| Broader overlay visual approval | Partial: 64 exact current samples accepted | New inspected-batch/individual audit decisions retained; other transformations pending. |
 | Fresh all-language discovery/coverage/strict-partial checks | Passed | 139398 contracts, all 14 resources; no English scope differences. |
 | Complete non-English production collections | Blocked | Translation, typography and artwork approval are assessed separately in the corrected matrix. |
 | Arabic font / RTL / mixed-script acceptance | Blocked | OFL candidate and probes preserved; no visual/font approval. |
-| Fitting proposals / scalable group analysis | Passed with documented limitation | Native translated fitting and review-only proposals; zero new artwork approvals. |
+| Fitting proposals / scalable group analysis | Passed with documented limitation | Native translated fitting and review-only proposals; six exact image/layout previews later accepted separately, without activation or current-policy transfer. |
 | Review/invalidation integrity | Passed | Exact artifacts/version-bound subsets; synthetic decisions isolated. |
 | Historical color preservation / new assignment policy | Passed | 9957 historical colors; uniqueness/concurrency/provenance regression tests. |
 | Dependency/license and complete-PR static audit | Passed with documented limitation | Direct-pin advisory screen and source audit; no full transitive/native SBOM. |
@@ -813,20 +843,17 @@ Readiness recommendations are scoped:
 
 | Scope | Technical assessment | Remaining decision |
 | --- | --- | --- |
-| English | All 9,957 outputs/receipts, unchanged warm reuse and exact approved-API parity pass; technically validated migration candidate. | Gate E review, destination case mapping, exact artifact acceptance and separate publication/cutover authority. |
-| Overlays | All 4,122 transforms verify; selected corrected outputs reproduce across worker counts. The small Python control did not beat grouped legacy performance. | Broader current visual acceptance and an explicit adoption/performance decision; no blanket replacement recommendation. |
-| German / Spanish / French | All 960 required keys are valid; current fits and pending typography proposals are separately enumerated. | Exact artwork review and approval of selected layout proposals before activation. |
+| English | All 9,957 outputs/receipts, unchanged warm reuse and exact approved-API parity pass; technically validated migration candidate. | Gate E review, fresh preflight with the resolved exact-case mapping, exact artifact acceptance and separate publication/cutover authority. |
+| Overlays | All 4,122 transforms verify; selected corrected outputs reproduce across worker counts. The small Python control did not beat grouped legacy performance. | 64 exact current samples accepted; remaining visual scope and an explicit adoption/performance decision remain pending. |
+| German / Spanish / French | All 960 required keys are valid; current fits and pending typography proposals are separately enumerated. | Six presented FR/DE/BG image/layout samples accepted separately; current-policy validation and explicit activation plus all other artwork review remain pending. |
 | Arabic / other multilingual | Use each language's independent key/geometry/glyph/RTL assessment; Arabic script-font/RTL acceptance and Bulgarian unsupported glyph cases remain explicit. | Missing-value corrections, approved fonts/layouts where needed, and current artwork review. No complete multilingual collection is automatically production-approved. |
 
 Priority maintainer decisions before any future production operation:
 
 1. Review Gate E's exact evidence and independent readiness recommendations.
-2. Resolve the Action & adventure/Action & Adventure destination case mapping.
-3. Review broader overlay behavior and the corrected ICC sample identities; existing
-   D acceptance covers its exact reviewed samples only.
-4. Review translated artwork that fits current settings and decide which exact layout
-   proposals to approve before any activation. Decide Arabic font/RTL/anchor behavior
-   and preserve high-risk individual review.
+2. Enforce the resolved exact public path `genre/Action & Adventure.jpg` in fresh preflight; no published rename is needed.
+3. Preserve the new acceptance of 64 exact overlay previews, including corrected ICC samples; review any additional transforms required for the chosen adoption scope.
+4. Preserve acceptance of the six presented language image/layout previews; validate their current context and obtain explicit activation scope before changing catalog typography. Other language artwork/proposals and Arabic font/RTL/anchor decisions remain pending.
 5. Approve any future low-risk group policy explicitly; no current group inference
    authorizes translated collections or missing content.
 6. Separately authorize a cutover plan, publishing authority and rollback ownership.
