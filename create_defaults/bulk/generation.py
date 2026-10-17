@@ -65,16 +65,16 @@ def generate(definitions, translations, *, config=None, limits=None, generators=
             destinations.add(key)
             if remote is not None:
                 remote_destinations.add(path_key(remote))
-    from .preflight import ELIGIBLE, preflight
+    from .preflight import ELIGIBLE, incomplete, preflight
     report, effective = preflight(definitions, translations, config=config, generators=generators, categories=categories,
         posters=posters, languages=languages, registry=registry, policy=policy, color_registry=color_registry, variant_ids=variant_ids)
     if policy == "audit" or report["status"] == "strict_blocked":
-        return {"status": ("partial" if report["coverage"].get("blocked") else "audited") if policy == "audit" else "strict_blocked", "preflight": report, "stages": []}
+        return {"status": ("partial" if incomplete(report["coverage"]) else "audited") if policy == "audit" else "strict_blocked", "preflight": report, "stages": []}
     if preview_selection is not None:
         from .preflight import select_previews
         preview_ids = select_previews(report, **preview_selection)
         if not preview_ids:
-            if report["coverage"].get("blocked"):
+            if incomplete(report["coverage"]):
                 return {"status": "partial", "preflight": report, "stages": []}
             raise BulkError("empty_preview", "No eligible variants match the explicit preview selection; retained preflight lists blockers")
     eligible = {v["id"] for v in report["variants"] if v["status"] in ELIGIBLE}
@@ -104,7 +104,7 @@ def generate(definitions, translations, *, config=None, limits=None, generators=
             parents(identity)
         eligible &= selected_previews
     if not eligible:
-        return {"status": "partial" if report["coverage"].get("blocked") else "verified", "preflight": report, "stages": []}
+        return {"status": "partial" if incomplete(report["coverage"]) else "verified", "preflight": report, "stages": []}
     artifacts, stages, combined_jobs = {}, [], {}
     store = Store(config.cache_dir / "state.sqlite")
     with PersistentWorkers(store, config, limits or WorkerLimits()) as pool:
@@ -136,5 +136,5 @@ def generate(definitions, translations, *, config=None, limits=None, generators=
     combined.pop("sha256")
     combined["sha256"] = fingerprint(combined)
     validate_manifest(combined)
-    return {"status": "partial" if report["coverage"].get("blocked") else "verified", "stages": stages, "manifest": combined,
+    return {"status": "partial" if incomplete(report["coverage"]) else "verified", "stages": stages, "manifest": combined,
             "preflight": report, "scope": "Local validated rendering; no publication, automatic reviewer approval or production cutover"}

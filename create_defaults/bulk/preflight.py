@@ -28,6 +28,18 @@ POLICY = {"version": "preflight-d1", "layout": "composer-native-metrics-d1", "ri
 ELIGIBLE = {"ready", "ready_with_warning", "shared"}
 
 
+def policy_for(variant):
+    # Keep frozen English and overlay policy identities stable.
+    if variant.get("language") != "en" and variant.get("caption_mode") == "translation":
+        from .typography import POLICY as translated_policy
+        return dict(POLICY, translated_fit=translated_policy)
+    return POLICY
+
+
+def incomplete(coverage):
+    return bool(coverage.get("blocked") or coverage.get("needs_layout_review"))
+
+
 @lru_cache(maxsize=1)
 def _historical_index():
     value = json.loads((Path(__file__).parent / "catalog/index-v1.json").read_text())
@@ -316,6 +328,11 @@ def preflight(definitions, translations, *, config=None, generators=None, catego
                             key_dependencies.append({k: trace[k] for k in ("language", "key", "value_sha256")})
                     if caption.mode == "translation" and not caption.text.strip():
                         raise BulkError("invalid_translation", "Resolved caption is empty")
+                    for dependency in key_dependencies:
+                        error = dependency.get("error")
+                        reviewed_fallback = any("fallback" in trace for trace in caption.trace)
+                        if error and (not reviewed_fallback or error not in {"missing_translation", "unavailable_translation"}):
+                            diagnose(error, "Required poster key is invalid or unavailable", key=dependency["key"])
                     # A valid fallback remains visible; it does not masquerade as a completed translation.
                     if any("fallback" in trace for trace in caption.trace):
                         diagnose("approved_fallback", "Using explicit reviewer-bound fallback", "warning")
@@ -329,22 +346,45 @@ def preflight(definitions, translations, *, config=None, generators=None, catego
                         raise BulkError("invalid_unicode", "Caption contains unassigned, private-use, surrogate or control characters")
                     if any(unicodedata.bidirectional(char) in {"R", "AL", "AN", "RLE", "RLO", "RLI", "LRE", "LRO", "LRI", "FSI", "PDI", "PDF"} for char in text) or item["caption"]["direction"] != "auto":
                         raise BulkError("rtl_awaiting_review", "RTL/directional variant requires approved script font and joining/bidi/anchor visual validation")
+                    translated_caption = language != "en" and item["caption"]["mode"] == "translation"
                     try:
-                        metrics = _metrics(str(font_path), stats[item["composer"]["font"]][2], text, effective_parameters(item["composer"])["font_size"]) if text else None
+                        parameters_now = effective_parameters(item["composer"])
+                        if translated_caption and text:
+                            from .typography import evaluate
+                            evidence = evaluate(font_path, font_hash, text, parameters_now["font_size"],
+                                                parameters_now["text_offset"], fingerprint(renderer))
+                            entry["typography"] = evidence
+                            metrics = evidence["current"]
+                        else:
+                            metrics = _metrics(str(font_path), stats[item["composer"]["font"]][2], text, parameters_now["font_size"]) if text else None
                     except ValueError as error:
                         raise BulkError("missing_glyph", str(error)) from error
                     entry["layout_probe"] = metrics
                     measure = item["layout"]["measurement"]
-                    if item["layout"]["kind"] == "captured_fit" and (measure["text"] != text or measure["font_sha256"] != font_hash or measure["point_size"] != item["composer"]["font_size"]):
-                        raise BulkError("stale_measurement", "Translated fitting needs an explicit caption/font-bound language override; English fitting is not reused")
-                    if metrics and metrics["clipped"]:
+                    if not translated_caption and item["layout"]["kind"] == "captured_fit" and (measure["text"] != text or measure["font_sha256"] != font_hash or measure["point_size"] != item["composer"]["font_size"]):
+                        raise BulkError("stale_measurement", "Captured fitting does not bind this exact caption/font/size")
+                    if translated_caption and entry.get("typography", {}).get("state") == "needs_layout_review":
+                        diagnose("caption_clipping", "Current typography exceeds the caption or image bounds; proposed typography has not been activated", "warning")
+                        diagnose("needs_layout_review", "Bounded fitting proposal requires exact version-bound layout review", "warning",
+                                 proposal_sha256=entry["typography"]["proposal"]["sha256"])
+                    elif metrics and (metrics["clipped"] or metrics.get("outside_image")):
                         typography = {k: v for k, v in effective_parameters(dict(item["composer"], text=text)).items() if k in {"font", "font_size", "text", "text_offset"}}
                         unchanged = language == "en" and _historical_index().get(identity, {}).get("historical_typography") == fingerprint(typography)
-                        diagnose("caption_clipping", "Native glyph bounds extend outside the fixed caption box", "warning" if unchanged else "error")
+                        diagnose("caption_clipping", "Native glyph bounds extend outside the fixed caption box" if language == "en" else "Native glyph bounds extend outside the caption or image boundary", "warning" if unchanged else "error")
                     elif metrics and metrics["near_edge"]:
                         diagnose("caption_near_edge", "Caption approaches a fixed clipping boundary", "warning")
                     if metrics and len(metrics["lines"]) > 1:
-                        diagnose("wrapped_caption", "Composer wraps caption into multiple rows", "warning", lines=metrics["lines"])
+                        unusual = translated_caption and len(metrics["lines"]) >= 4
+                        diagnose("unusual_wrapping" if unusual else "wrapped_caption",
+                                 "Composer wraps caption into multiple rows",
+                                 "warning" if not translated_caption or unusual else "info", lines=metrics["lines"])
+                    if translated_caption:
+                        try:
+                            english = translations.resolve(effective_language(definition, "en")["caption"], "en").text
+                            if text == english:
+                                diagnose("identical_to_english", "Exact English match is informational; legitimate shared strings are allowed", "info")
+                        except BulkError:
+                            pass
                     for relative in SHARED_ASSETS:
                         inputs[relative] = {"path": relative, "sha256": checked_hash(relative)}
                     generated = {d["input"] for d in item["dependencies"]}
@@ -394,6 +434,8 @@ def preflight(definitions, translations, *, config=None, generators=None, catego
                     diagnose("blocked_dependency", "Required parent variant is blocked or non-applicable", dependency=dependency)
             if any(d["severity"] == "error" for d in diagnostics):
                 entry["status"] = "blocked"
+            elif entry.get("typography", {}).get("state") == "needs_layout_review":
+                entry["status"] = "needs_layout_review"
             elif entry["status"] != "not_applicable":
                 entry["status"] = "ready_with_warning" if any(d["severity"] == "warning" for d in diagnostics) else ("shared" if item["caption"]["mode"] != "translation" else "ready")
             entry["caption"] = caption.text if caption else None
@@ -403,10 +445,15 @@ def preflight(definitions, translations, *, config=None, generators=None, catego
             exact = dict(item, overrides=[], languages=[language], applicability={language: item["applicability"].get(language)})
             exact["output"] = dict(item["output"], remote_paths={language: item["output"]["remote_paths"].get(language)})
             origin = origins.get(identity)
+            variant_policy = policy_for(entry)
+            if variant_policy != POLICY:
+                entry["validation_policy"] = variant_policy
             relevant = {"definition": exact, "generator": {k: v for k, v in origin.items() if k != "parent_fingerprint"} if origin else None, "inputs": inputs, "keys": key_dependencies,
                         "caption": entry["caption"], "language_mapping": {k: v for k, v in (registry.record(language) or {}).items() if k in {"code", "native_code", "components"}},
                         "parents": [by_key[d]["validation_fingerprint"] for d in entry["dependencies"] if d in by_key],
-                        "renderer": renderer, "policy": POLICY, "color": entry.get("color_policy")}
+                        "renderer": renderer, "policy": variant_policy, "color": entry.get("color_policy")}
+            if "typography" in entry:
+                relevant["typography"] = entry["typography"]
             entry["validation_fingerprint"] = fingerprint(relevant)
             by_key[entry["id"]] = entry
             variants.append(entry)
@@ -450,7 +497,7 @@ def preflight(definitions, translations, *, config=None, generators=None, catego
               "translation_hashes": translations.hashes, "renderer": renderer, "languages": list(languages),
               "selection": {"categories": list(categories), "posters": list(posters), "variant_ids": sorted(variant_ids) if variant_ids is not None else None}, "variants": variants,
               "coverage": counts, "missing_translations": missing,
-              "status": "strict_blocked" if counts.get("blocked") and policy == "strict" else "partial" if counts.get("blocked") else "complete"}
+              "status": "strict_blocked" if incomplete(counts) and policy == "strict" else "partial" if incomplete(counts) else "complete"}
     report["sha256"] = fingerprint(report)
     directory = config.cache_dir / "preflight" / report["sha256"]
     export_report(report, directory)

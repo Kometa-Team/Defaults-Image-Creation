@@ -195,11 +195,12 @@ def test_unicode_glyph_rtl_layout_and_placeholder_blockers(definition, config, t
     assert code in {d["code"] for d in report["variants"][0]["diagnostics"]}
 
 
-def test_captured_english_fit_is_not_reused_for_french_and_explicit_proposal_does_not_activate(config, tmp_path):
+def test_actual_french_fit_is_eligible_and_explicit_proposal_does_not_activate(config, tmp_path):
     definition = load_catalog(["Based"])[0]
     source = translations(tmp_path, fr=captions(definition, "Livre"))
     report = run_preflight(definition, source, config, languages=["fr"])
-    assert "stale_measurement" in {d["code"] for d in report["variants"][0]["diagnostics"]}
+    assert report["variants"][0]["status"] in ELIGIBLE
+    assert report["variants"][0]["typography"]["state"] == "fits_current"
     original = definition.encoded
     proposal = propose_layout(definition, source, "fr", config)
     assert proposal["state"] == "proposal-not-approved-or-activated" and definition.encoded == original

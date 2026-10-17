@@ -324,3 +324,17 @@ Use the independent readiness matrix and unexecuted cutover/rollback checklist i
 filename case conflict explicitly before any separately authorized cutover. Do not
 publish incomplete language collections, move private Awards inputs into public
 paths, or infer publication permission from automated acceptance.
+
+## Package E multilingual correction acceptance
+
+Retain the original D/E audits as historical evidence. The corrected audit must use
+the same pinned translation snapshot for its before/after comparison, count only
+poster-required keys, and distinguish missing values from actual typography
+constraints. Confirm unchanged English validation identities and output parameters.
+
+Fitting translated text becomes technically eligible without matching English.
+Proposals requiring changed typography remain pending version-bound layout review;
+no automatic font installation, layout activation, artwork acceptance or publication
+is authorized. Keep Arabic and other unreviewed variants pending artwork review
+even when their translation and technical checks pass. Reconcile exact stale review
+contexts without altering historical decisions, then stop for maintainer Gate E review.

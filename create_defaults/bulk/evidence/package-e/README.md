@@ -39,3 +39,19 @@ Full-run identity ledgers and final summaries are added only after complete veri
 runs. Images, fonts, full local workspaces, databases and full benchmark output
 collections stay in ignored local roots. These records must not be rewritten to
 fabricate individual inspection, broaden old acceptance or conceal failed attempts.
+
+The original `language-audit.json`, `snapshot-scope-consistency.json` and
+`fitting-proposals.json` are immutable historical observations under the original
+fitting rule. Their English-matching blockers do not define corrected current
+eligibility. The multilingual addendum report and separate new evidence provide the
+controlled before/after assessment without rewriting those records.
+
+- `full-overlays.json`: all 4,122 corrected transforms verified; the finite initial
+  attempt, single bounded resume and zero-render warm phase are reported separately.
+- `overlay-output-identities.json.gz` and `overlay-ledger-index.json`: every exact
+  source/transform/image/receipt/validation identity, with reconstructable manifest.
+- `overlay-grayscale-alpha-verification.json`: all 460 grayscale ICC variants
+  rechecked with zero lost-alpha outputs.
+- `overlay-retained-before-after.json.gz` and `overlay-correction-impact.json`:
+  3,571 retained outputs compared, 387 expected grayscale ICC changes and 3,184
+  unchanged other modes; no approval is transferred.

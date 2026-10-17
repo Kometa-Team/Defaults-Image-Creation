@@ -5,7 +5,7 @@ from pathlib import Path
 import uuid
 
 from .common import BulkError, Conflict, canonical, confined, fingerprint, path_key, sha256
-from .preflight import ELIGIBLE, POLICY
+from .preflight import ELIGIBLE, policy_for
 from .translations import key_token
 
 
@@ -21,11 +21,12 @@ class Reviews:
         payload = {k: v for k, v in report.items() if k not in {"sha256", "report_directory", "metrics"}}
         if fingerprint(payload) != report["sha256"]:
             raise BulkError("corrupt_preflight", "Preflight report hash mismatch")
-        policy = fingerprint(report["policy"])
         with self.store.transaction() as db:
             for variant in report["variants"]:
                 identity, validation = variant["id"], variant["validation_fingerprint"]
-                evidence = {"variant": variant, "registry_sha256": report["registry_sha256"], "policy": report["policy"],
+                validation_policy = variant.get("validation_policy", report["policy"])
+                policy = fingerprint(validation_policy)
+                evidence = {"variant": variant, "registry_sha256": report["registry_sha256"], "policy": validation_policy,
                             "renderer": report["renderer"], "preflight_sha256": report["sha256"]}
                 encoded = canonical(evidence).decode()
                 old = db.execute("SELECT * FROM review_variants WHERE id=?", (identity,)).fetchone()
@@ -50,7 +51,7 @@ class Reviews:
         value = dict(row)
         value["evidence"] = json.loads(value["evidence"])
         value["preview"] = json.loads(value["preview"]) if value["preview"] else None
-        if value["policy"] != fingerprint(POLICY) and value["state"] in {"approved", "approved_with_accepted_warnings", "ready_for_review"}:
+        if value["policy"] != fingerprint(policy_for(value["evidence"]["variant"])) and value["state"] in {"approved", "approved_with_accepted_warnings", "ready_for_review"}:
             value["stored_state"], value["state"] = value["state"], "approval_stale"
         return value
 
@@ -126,7 +127,7 @@ class Reviews:
         preview = json.loads(row["preview"]) if row["preview"] else None
         if variant["status"] not in ELIGIBLE or variant["private"]:
             raise BulkError("blocked_approval", "Blocked/non-applicable/private intermediates cannot be approved")
-        if not preview or preview["validation"] != row["validation"] or row["policy"] != fingerprint(POLICY):
+        if not preview or preview["validation"] != row["validation"] or row["policy"] != fingerprint(policy_for(variant)):
             raise Conflict("No current preview or validation policy is obsolete")
         if preview["root"] != fingerprint(str(self.config.output_dir)) or sha256(confined(self.config.output_dir, preview["local_relative"], must_exist=True)) != preview["sha256"]:
             raise Conflict("Reviewed output bytes changed")

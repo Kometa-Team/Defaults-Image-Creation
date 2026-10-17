@@ -5,11 +5,11 @@
 The maintainer formally approved Gates A-D and authorized Package E from
 `166a007c00f14b166a97be8887a4532ea42078b8` on draft PR
 [#12](https://github.com/Kometa-Team/Defaults-Image-Creation/pull/12).
-Earlier reports, fixtures and four exact Package D sample decisions remain immutable.
+Earlier reports, fixtures, original Package D/E audits and the four exact Package D sample decisions remain immutable. The multilingual addendum supersedes the English-matching fitting rule; original multilingual counts below are historical evidence.
 No artwork or translation was published; no production PowerShell was replaced,
 production permissions granted, PR merged or ready transition performed.
 
-**Acceptance is still in progress.** English full generation, corrected full overlays and selective published-image comparison are not yet complete. No final production-readiness pass is claimed. Every non-English collection remains blocked, and broader overlay visual decisions remain pending.
+**Acceptance is still in progress.** Pending: full English generation, full renderer comparison, selective published comparison, corrected isolated overlay scaling. No final production-readiness pass is claimed. Non-English publication and broader overlay visual decisions remain pending exact maintainer review.
 
 ## Tested source and environment
 
@@ -18,7 +18,7 @@ Final executable checkpoint: `690d1977b207cbbb61371a0fcb8bd02e37db85d2`, branch
 `6bb5844b4ebe1ea8b681c826105a008a8f673ede`; environment snapshots record the head
 observed when each command completed. Later changes affect overlay ICC conversion,
 overlay acceptance duration, tests and reporting; English rendering, planning,
-preflight, worker execution and catalog inputs remain unchanged. Source-file hashes
+preflight, worker execution and catalog inputs remained unchanged for those original runs. The multilingual addendum runs in an isolated checkout while the original English run retains its exact source and receipts. Corrected typography has its own versioned evidence; it is not retroactively applied to the original audit. Source-file hashes
 in the evidence distinguish executable identity from a later documentation commit.
 
 Windows 11 uses Python 3.13.15, eight logical CPUs and 32 GiB physical RAM. Linux CI
@@ -90,7 +90,7 @@ not authorization to change colors or layouts.
 
 ## Full English generation and renderer comparison
 
-In progress: last recorded 3,883 verified of 9,957 required. This is incomplete evidence, not a full pass.
+In progress: last recorded 6,386 verified of 9,957 required. This is incomplete evidence, not a full pass.
 
 The full comparison requires a complete, validated manifest and matching source,
 asset, font and semantic identities for every reference. Its original Phase 1
@@ -109,7 +109,7 @@ separate evidence; they are not blanket approval of future differences.
 
 ## Read-only published artwork reconciliation
 
-Pinned Default-Images/master inventory: commit
+Initial pinned Default-Images/master inventory: commit
 `59e49ede8d41ac5991f971e66e93af596402329a`, tree
 `e1664efb92db5872db112cf18253910da77355df`. Inventory reconciliation found **9,954
 exact published paths**, **two correctly excluded private paths**, **one case
@@ -169,7 +169,86 @@ The existing receipt/review service registers these 64 exact previews as
 [Pending batch identities](bulk/evidence/package-e/pending-overlay-review.json)
 link its local review page and exact image/validation versions.
 
-In progress: last recorded 3,232 verified of 4,122 required. This is incomplete evidence, not a full pass.
+Corrected full overlay run:
+
+```json
+{
+  "catalog_counts": {
+    "groups": 18,
+    "operations": 36,
+    "transforms": 4122,
+    "unique_inputs": 2061
+  },
+  "catalog_payload_sha256": "7085533956e5b2d6a2f2ad694e17118fb5082168691bb70fe2b13b1d18403e81",
+  "failed": 0,
+  "full_overlay_catalog": true,
+  "groups": 18,
+  "jobs": 4122,
+  "ledger_sha256": "0de153bc83670b6bc3b7f7fc52d00550f65ae027c93dda73f0b811c1a7058282",
+  "missing": 0,
+  "new_visual_approvals": 0,
+  "runs": {
+    "cold": {
+      "cache_hit_rate": 0.8396409509946627,
+      "cache_hits": 3461,
+      "dedup_reuses": 0,
+      "executed": 661,
+      "failures": 0,
+      "jobs_per_second": 7.728982482962483,
+      "max_inflight": 4,
+      "peak_parent_rss": 103383040,
+      "peak_worker_rss": 256274432,
+      "peak_workers_rss_sum": 485986304,
+      "process_start": "spawn",
+      "read_bytes": 539735281,
+      "retry_attempts": 0,
+      "stop_reason": null,
+      "total_seconds": 557.1824715999992,
+      "wall_seconds": 533.3172909999994,
+      "worker_pids": [
+        10872,
+        18728,
+        11944,
+        2532
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 4,
+      "write_bytes": 6802149
+    },
+    "warm": {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 4122,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "failures": 0,
+      "jobs_per_second": 33.086815978712195,
+      "max_inflight": 0,
+      "peak_parent_rss": 125157376,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "retry_attempts": 0,
+      "stop_reason": null,
+      "total_seconds": 141.4221452999991,
+      "wall_seconds": 124.58134390000123,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  },
+  "scope": "Automated transform/PNG/RGBA/cache verification only; Package D accepts exact CI images, not this entire catalog"
+}
+```
+
+The first attempt stopped at its finite wall-time limit with 3461 verified outputs and 661 pending. Its complete result/resource/log bytes are archived. A single bounded resume reused the exact owned receipts and rendered the remaining 661; unchanged warm verification rendered zero. The displayed `cold` metrics are the resumed phase, not one fresh complete-catalog cold measurement.
+
+| Observed phase | New renders | Cache hits | Seconds | Outcome |
+| --- | --- | --- | --- | --- |
+| Initial finite attempt | 3461 | 0 | 2710.187 | Time-bound incomplete, retained |
+| Single bounded resume | 661 | 3461 | 557.182 | All 4122 verified |
+| Unchanged warm | 0 | 4122 | 141.422 | Zero-worker reuse |
 
 The four exact D sample approvals and their image/source/font/layout/validation
 identities remain in `bulk/evidence/package-d/maintainer-visual-acceptance-20261017*.json`.
@@ -178,7 +257,7 @@ Documented D Pillow-versus-ImageMagick metrics are unchanged. Matching Experimen
 bytes do not transfer approval to a changed renderer context, and the ICC fix does
 not approve all 4,122 overlays. Remaining overlay transform reviews stay pending.
 
-## Multilingual validation and fitting
+## Original multilingual audit and fitting - historical evidence
 
 The fresh read-only translation snapshot discovers all 14 resources at commit
 `a7bddf45d0fb2cc37c794af05d5fb807880c9a80`, tree
@@ -191,20 +270,20 @@ identifiers such as `nb_NO` and `pt-br` remain exact compatibility identities.
 
 | Language | Ready | Warning | Shared | Blocked | Complete collection readiness |
 | --- | --- | --- | --- | --- | --- |
-| ar | 1 | 0 | 2650 | 7306 | Not ready; pending specified translation/font/layout review |
-| bg | 0 | 2852 | 0 | 7105 | Not ready; pending specified translation/font/layout review |
-| da | 1308 | 17 | 2650 | 5982 | Not ready; pending specified translation/font/layout review |
-| de | 1455 | 33 | 2650 | 5819 | Not ready; pending specified translation/font/layout review |
+| ar | 1 | 0 | 2650 | 7306 | Historical audit; corrected assessment below |
+| bg | 0 | 2852 | 0 | 7105 | Historical audit; corrected assessment below |
+| da | 1308 | 17 | 2650 | 5982 | Historical audit; corrected assessment below |
+| de | 1455 | 33 | 2650 | 5819 | Historical audit; corrected assessment below |
 | en | 3022 | 4285 | 2650 | 0 | English assessment above |
-| es | 1422 | 7 | 2650 | 5878 | Not ready; pending specified translation/font/layout review |
-| fr | 1432 | 1123 | 2650 | 4752 | Not ready; pending specified translation/font/layout review |
-| hu | 0 | 4088 | 0 | 5869 | Not ready; pending specified translation/font/layout review |
-| it | 1466 | 14 | 2650 | 5827 | Not ready; pending specified translation/font/layout review |
-| nb_NO | 52 | 4 | 2650 | 7251 | Not ready; pending specified translation/font/layout review |
-| nl | 25 | 1 | 2650 | 7281 | Not ready; pending specified translation/font/layout review |
-| pt-br | 42 | 0 | 2650 | 7265 | Not ready; pending specified translation/font/layout review |
-| ru | 0 | 2651 | 0 | 7306 | Not ready; pending specified translation/font/layout review |
-| sv | 463 | 15 | 2650 | 6829 | Not ready; pending specified translation/font/layout review |
+| es | 1422 | 7 | 2650 | 5878 | Historical audit; corrected assessment below |
+| fr | 1432 | 1123 | 2650 | 4752 | Historical audit; corrected assessment below |
+| hu | 0 | 4088 | 0 | 5869 | Historical audit; corrected assessment below |
+| it | 1466 | 14 | 2650 | 5827 | Historical audit; corrected assessment below |
+| nb_NO | 52 | 4 | 2650 | 7251 | Historical audit; corrected assessment below |
+| nl | 25 | 1 | 2650 | 7281 | Historical audit; corrected assessment below |
+| pt-br | 42 | 0 | 2650 | 7265 | Historical audit; corrected assessment below |
+| ru | 0 | 2651 | 0 | 7306 | Historical audit; corrected assessment below |
+| sv | 463 | 15 | 2650 | 6829 | Historical audit; corrected assessment below |
 
 These are preflight eligibility counts, not human approvals or permission to publish
 partial collections. Every non-English full collection has blockers. Arabic's one
@@ -253,6 +332,10 @@ and centered-anchor probes use the existing HarfBuzz/bidi/font-outline path.
 Coverage and probe generation do not establish visual acceptance. Font selection,
 RTL/mixed-script behavior and layout/anchor review remain pending; no font was
 installed in production. See [upstream font provenance](https://github.com/google/fonts/tree/main/ofl/notosansarabic).
+
+## Corrected multilingual audit and independent readiness
+
+The corrected all-language audit is in progress in an isolated checkout against the same pinned snapshot. Actual fitting text is technically eligible; proposed typography remains needs_layout_review. Full corrected counts are pending. No artwork approvals or layout activations are granted.
 
 ## Incremental generation, review integrity and recovery
 
@@ -329,7 +412,7 @@ occurred and concurrent correctness is separately tested. No full-catalog speedu
 is inferred from subset ratios. Full acceptance runs overlap other validation and
 are completion/resource observations, not isolated performance benchmarks.
 
-Corrected overlay scaling measurements are pending completion of the heavier acceptance work. Historical pre-fix 38-output timings are preserved but are not a performance result for corrected output. The fixed 38-output sample ran successfully under concurrent load; its timing is not an isolated benchmark.
+Corrected overlay scaling measurements are pending completion of the heavier acceptance work. Historical pre-fix 38-output timings are preserved but are not a performance result for corrected output. The fixed samples ran successfully under concurrent load; those timings are not isolated benchmarks.
 
 Year warm profiling keeps 301 unique outputs, 451 cache checks including repeated
 parent-stage verification, 4,726 SHA calls, identical manifest
@@ -476,10 +559,10 @@ rewritten to remove failures or reduce the PR size.
 | Recovery / interruption / corruption / ownership | Passed | Isolated realistic failure scenarios, immutable durable state. |
 | Published path inventory | Passed with documented limitation | One case conflict needs a mapping decision. |
 | Selective published-image comparison | Not tested | Pending full outputs. |
-| Corrected overlay full transform/format/cache verification | Not tested | Full corrected run pending. |
+| Corrected overlay full transform/format/cache verification | Passed with documented limitation | 4122 verified; time-bound attempt plus one resume, exact ledger and zero-render warm check. |
 | Broader overlay visual approval | Blocked | D sample decisions retained; unreviewed transformations pending. |
 | Fresh all-language discovery/coverage/strict-partial checks | Passed | 139398 contracts, all 14 resources; no English scope differences. |
-| Complete non-English production collections | Blocked | Every non-English language has translation/font/fitting blockers. |
+| Complete non-English production collections | Blocked | Translation, typography and artwork approval are assessed separately in the corrected matrix. |
 | Arabic font / RTL / mixed-script acceptance | Blocked | OFL candidate and probes preserved; no visual/font approval. |
 | Fitting proposals / scalable group analysis | Passed with documented limitation | Six actual previews; no policy change or new approvals. |
 | Review/invalidation integrity | Passed | Exact artifacts/version-bound subsets; synthetic decisions isolated. |

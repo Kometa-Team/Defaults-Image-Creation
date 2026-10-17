@@ -638,3 +638,25 @@ and before/after evidence are retained in the Package E report.
 [Package E usage](PACKAGE_E_USAGE.md) documents bounded reproducible commands,
 resource/ownership constraints and the retained-reference prerequisites. These
 validation helpers do not enable a publishing path or production authorization.
+
+## Package E multilingual addendum
+
+The translated-caption fitting policy is versioned separately from frozen English
+and overlay validation. Native shaping, wrapping and FreeType ink bounds measure
+the translated text itself. An exact-input bounded cache includes font bytes,
+caption, effective size/position, renderer and policy identities; caption-box and
+poster-image bounds are checked. English typography and composer sources are
+unchanged.
+
+A deterministic smaller-size search produces technical proposal evidence only.
+Candidates needing new typography receive `needs_layout_review`; they are never
+inserted into effective generation definitions. Strict and partial policies both
+exclude these unapproved layouts. Existing preview/review infrastructure retains
+exact receipts, image bytes and immutable decisions. Ingestion records each report's
+actual policy, preventing historical evidence from being silently upgraded.
+
+Poster-key auditing follows active caption keys, templates and resolved
+dependencies rather than enumerating an entire Weblate resource. Coverage,
+technical fit and artwork approval are independent dimensions. The controlled
+before/after helper preserves original D/E audit files and checks English validation
+identities against the same pinned snapshot. See [Package E usage](PACKAGE_E_USAGE.md).

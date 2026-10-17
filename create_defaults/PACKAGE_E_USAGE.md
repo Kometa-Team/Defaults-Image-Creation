@@ -118,3 +118,58 @@ links, platform skips and readiness limitations. PR CI runs the smaller offline
 `e_smoke` only. Full catalogs, databases, temporary workspaces and font/image payloads
 stay under ignored roots. A successful command is neither maintainer visual
 acceptance nor authorization to publish, merge, deploy or cut over.
+
+## Multilingual fitting correction
+
+The multilingual addendum supersedes the English-matching rule from the original
+D/E audits. Those completed files remain historical evidence. The correction
+measures each actual translated caption with the approved bundled font and native
+compositor logic. Different lengths, widths and line counts do not fail validation.
+Normal two- or three-line wrapping is informational; four or more lines and margins
+under 20 pixels remain measurable review warnings. Glyph, Unicode, directional,
+caption-box and poster-image bounds remain enforced.
+
+A fitting current layout is technically eligible. A smaller-font proposal remains
+`needs_layout_review` and is excluded from rendering under partial policy; strict
+policy refuses the whole batch. The proposal records exact caption, font, renderer,
+position, parameters, measurements and validation version. It never replaces current
+parameters or edits a definition. The existing explicit proposal/preview and review
+workflow remains available for a maintainer to inspect a candidate before a separate,
+reviewed definition change. Creating technical evidence grants no artwork approval.
+
+Use the exact retained original audit and a fresh destination for a controlled
+before/after comparison. This command stages verified pinned translation blobs
+locally and performs no network refresh or upstream writes:
+
+```powershell
+& $python -m create_defaults.bulk.e_multilingual --root config/package-e/manual-corrected-languages --previous config/package-e/manual-languages
+```
+
+The command audits only caption keys and resolved dependencies used by active,
+applicable posters. It reports unique valid, missing and invalid keys separately
+from affected logical posters and language variants, retaining exact source and
+English-reference identities. Identical English values are informational; numeric
+labels, acronym candidates and identifiable proper-name keys are tagged separately.
+It does not infer proper nouns from capitalization or flag equal character counts.
+
+The report separates key completeness, technical typography and human artwork
+review. Diagnostic counts overlap: for example, current clipping and a fitting
+proposal can describe the same variant. The cache reuses exact text/font/size/offset,
+renderer and validation-policy inputs. The compositor chooses shaping from the
+actual Unicode text; language does not alter that computation, so identical native
+inputs can safely share measurement evidence while variant validations remain
+language-bound.
+
+English and overlay review policies retain their original identities. Only
+translated-caption policy revisions invalidate the affected review context;
+old reports keep the policy they actually recorded. Caption, font, layout, renderer
+and output changes still require precise revalidation. Immutable decisions remain
+in the existing review event history.
+
+A future risk-based workflow can group exact language/font/layout/template
+combinations, inspect representatives and record the exact inspected subset.
+Current translated-caption policy still requires individual artwork review.
+Any future group acceptance needs an explicit maintainer decision bound to all
+enumerated members and exact image/version identities. High-risk typography
+changes, unsupported scripts, clipping and stale decisions require individual
+review. Representatives never automatically approve uninspected members.

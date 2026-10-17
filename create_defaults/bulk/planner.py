@@ -199,7 +199,17 @@ class Planner:
                     except ValueError as error:
                         raise BulkError("missing_glyph", str(error)) from error
                 measurement = item["layout"]["measurement"]
-                if item["layout"]["kind"] == "captured_fit" and (measurement["text"] != caption.text or measurement["font_sha256"] != font_sha or measurement["point_size"] != raw["font_size"]):
+                if language != "en" and caption.mode == "translation" and caption.text:
+                    from .typography import evaluate
+                    try:
+                        fit = evaluate(font, font_sha, caption.text, effective_parameters(raw)["font_size"],
+                                       effective_parameters(raw)["text_offset"], fingerprint(renderer),
+                                       direction=item["caption"]["direction"], proposals=False)
+                    except ValueError as error:
+                        raise BulkError("missing_glyph", str(error)) from error
+                    if fit["state"] != "fits_current":
+                        raise BulkError("needs_layout_review", "Current translated typography does not fit; no proposal has been activated")
+                elif item["layout"]["kind"] == "captured_fit" and (measurement["text"] != caption.text or measurement["font_sha256"] != font_sha or measurement["point_size"] != raw["font_size"]):
                     raise BulkError("stale_measurement", "Captured fitting does not bind this exact caption/font/size; obtain new layout evidence")
                 parameters = effective_parameters(raw)
                 filename = output_filename(PosterOptions(**parameters), parameters["base_color"])
