@@ -108,3 +108,21 @@ Windows suites, cross-platform comparison, detailed acceptance matrix, independe
 readiness recommendations and proposed cutover/rollback checklist remain pending.
 No incomplete run is labelled fully successful. Outputs remain local and the PR
 remains draft. Stop for final maintainer review after all evidence is assembled.
+
+
+## Additional ICC overlay defect found by expanded comparison
+
+The expanded legacy comparison exposed an unreviewed grayscale-with-alpha (`LA`)
+ICC path that lost alpha and misread grayscale colors. This is a real defect,
+not an accepted filtering difference. Header inventory identifies 230 affected-mode
+sources / 460 transformations. The in-progress overlay run was safely stopped;
+its receipts, outputs and original large alpha-difference metrics are retained.
+
+The fix converts grayscale/RGB color independently of alpha, then restores the
+exact source coverage before trimming/resizing. Five focused regressions now pass,
+covering synthetic LA/RGB/RGBA inputs and the actual Network #0 / Chart AMC+ white
+sources. A fresh 38-output sample completes with visible white logos; the exact
+Experimental sample bytes remain unchanged. No existing approval is transferred.
+Full corrected overlay verification and final Windows/Linux validation are pending.
+The English compositor uses a separate direct RGBA path and remains unchanged;
+its bounded full run and the multilingual audit continue independently.

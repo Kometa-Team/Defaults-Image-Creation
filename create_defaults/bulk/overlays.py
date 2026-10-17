@@ -55,8 +55,13 @@ def render(parameters, source, target):
         profile = image.info.get("icc_profile")
         image.load()
         if profile:
+            # Keep coverage separate from ICC color conversion. LA -> RGBA
+            # transforms can discard alpha and misread grayscale color channels.
+            alpha = image.convert("RGBA").getchannel("A")
+            color = image.getchannel("L") if image.mode == "LA" else image.convert("RGB") if image.mode in {"RGBA", "RGBX", "P"} else image
             try:
-                image = ImageCms.profileToProfile(image, ImageCms.ImageCmsProfile(BytesIO(profile)), ImageCms.createProfile("sRGB"), outputMode="RGBA")
+                image = ImageCms.profileToProfile(color, ImageCms.ImageCmsProfile(BytesIO(profile)), ImageCms.createProfile("sRGB"), outputMode="RGB")
+                image.putalpha(alpha)
             except (ImageCms.PyCMSError, OSError, ValueError) as error:
                 raise BulkError("invalid_colorspace", "Overlay ICC conversion failed") from error
         else:

@@ -24,7 +24,7 @@ def run(root, *, all_sources=False, workers=2):
                    total_worker_memory_bytes=workers * 512 * 1024 ** 2, max_jobs=5000))
     runs = {}
     for name in ("cold", "warm"):
-        with ResourceGuard(root, seconds=1800, max_output=2 * 1024 ** 3) as guard:
+        with ResourceGuard(root, seconds=2700 if all_sources else 1800, max_output=2 * 1024 ** 3) as guard:
             start = time.monotonic()
             result = generate(cancel=guard, **options)
             duration = time.monotonic() - start

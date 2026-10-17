@@ -606,3 +606,35 @@ def test_changed_overlay_input_rerenders_and_stales_only_its_two_sizes(tmp_path)
     assert all(reviews.item(identity)["state"] == "approved_with_accepted_warnings" for identity in before if identity not in expected)
     warm = overlays(**options)
     assert warm["execution"]["metrics"]["executed"] == warm["execution"]["metrics"]["worker_starts"] == 0
+
+
+@pytest.mark.parametrize("mode", ["LA", "RGB", "RGBA"])
+def test_overlay_icc_conversion_preserves_visible_alpha_for_each_input_mode(tmp_path, mode):
+    from PIL import ImageCms
+    from create_defaults.bulk.overlays import render
+    if mode == "LA":
+        with Image.open(ROOT / "logos_network/white/#0.png") as original:
+            profile = original.info["icc_profile"]
+        image = Image.new("LA", (20, 20), (0, 0))
+        image.paste((255, 255), (5, 5, 15, 15))
+    else:
+        profile = ImageCms.ImageCmsProfile(ImageCms.createProfile("sRGB")).tobytes()
+        image = Image.new(mode, (20, 20), (0, 0, 0) if mode == "RGB" else (0, 0, 0, 0))
+        image.paste((255, 255, 255) if mode == "RGB" else (255, 255, 255, 255), (5, 5, 15, 15))
+    source, output = tmp_path / "profiled.png", tmp_path / "overlay.png"
+    image.save(source, icc_profile=profile)
+    render({"trim": True, "box": [40, 10]}, source, output)
+    with Image.open(output) as result:
+        assert result.mode == "RGBA" and result.size == (10, 10)
+        assert result.getchannel("A").getextrema() == (255, 255)
+        assert result.getpixel((5, 5)) == (255, 255, 255, 255)
+
+
+@pytest.mark.parametrize("relative", ["logos_network/white/#0.png", "logos_chart/white/AMC+.png"])
+def test_profiled_grayscale_white_overlay_remains_visible(relative, tmp_path):
+    from create_defaults.bulk.overlays import render
+    output = tmp_path / "visible.png"
+    render({"trim": True, "box": [285, 85]}, ROOT / relative, output)
+    with Image.open(output) as image:
+        assert image.getchannel("A").getextrema()[1] == 255
+        assert min(channel[1] for channel in image.convert("RGB").getextrema()) >= 250
