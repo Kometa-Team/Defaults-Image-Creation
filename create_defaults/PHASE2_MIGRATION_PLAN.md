@@ -338,3 +338,20 @@ no automatic font installation, layout activation, artwork acceptance or publica
 is authorized. Keep Arabic and other unreviewed variants pending artwork review
 even when their translation and technical checks pass. Reconcile exact stale review
 contexts without altering historical decisions, then stop for maintainer Gate E review.
+
+## Gate E approved; English canary preparation boundary
+
+The maintainer approved Gate E's recorded scope at `83ed3d1` on draft PR #12,
+including the mandatory public path `genre/Action & Adventure.jpg`. Earlier
+stop/review language above documents prior checkpoints. The additive
+[approval record](bulk/evidence/package-e/gate-e-approval-20261017.json) preserves
+all immutable evidence. Preparation of a seven-output English-only canary is
+authorized and complete; see [the concrete canary plan](ENGLISH_CANARY_PLAN.md).
+
+The plan isolates overlays, multilingual work and unrelated artwork, and includes
+current published comparisons, a verified local backup bundle, offline rollback
+rehearsal, proposed workflow/permissions and exact later approval steps. Exact
+canary artifact acceptance, guarded workflow/setup, remote staging and production
+publication are separately gated. Nothing is published, no credentials enabled,
+PowerShell replaced, PR merged/marked ready, canary started or subsequent phase
+automatically begun. Keep PR #12 draft and stop for explicit authorization.

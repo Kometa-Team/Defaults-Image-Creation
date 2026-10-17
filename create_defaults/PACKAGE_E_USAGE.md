@@ -187,3 +187,19 @@ to this exact public path. Future operations must use the manifest's
 `remote_relative`, never derive a public filename from the local output basename
 or apply case-insensitive matching. Run fresh strict preflight for a future rollout.
 No production cutover or publication is authorized by these sample decisions.
+
+## Gate E approved; English canary preparation only
+
+Gate E approval at `83ed3d1` authorizes preparation, not execution. See the
+[English canary plan](ENGLISH_CANARY_PLAN.md) for exact seven-artifact identities,
+read-only published comparison, local review/backup bundle and the conditional
+workflow/setup/staging/publication approval sequence. A new local-only preparation:
+
+```powershell
+& 'config/package-e/dependency-trial/venv/Scripts/python.exe' -m create_defaults.bulk.e_canary --root config/english-canary/manual-review-v2 --compare-published
+```
+
+This helper has no publisher. It requires a fresh root, approved renderer/catalog
+inputs, explicit seven-English-output scope and unchanged full-run parity. It uses
+GET-only network requests and never dispatches a workflow or changes credentials.
+The original prepared v1 archive and decisions must not be overwritten.

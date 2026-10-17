@@ -27,6 +27,31 @@ documentation and pushing preparation/CI to the existing draft PR are authorized
 Canary execution, publishing credentials, production writes, PowerShell replacement,
 PR merge/ready transition and further phases remain unauthorized.
 
+## English-only canary preparation completed; execution pending
+
+The [English canary plan](ENGLISH_CANARY_PLAN.md) defines seven exact English
+outputs in five categories, including the real generated Year parent/child chain.
+[Preparation evidence](bulk/evidence/english-canary/preparation-20261017.json)
+records fresh strict validation, seven exact approved full-run render matches,
+zero-render/zero-worker warm reuse, full decoding and GET-only comparison with
+all seven exact public paths on the pinned current master. The required uppercase
+`genre/Action & Adventure.jpg` mapping passes focused planner/preflight checks.
+All seven candidate images differ from published bytes and pixels; no visual or
+publication approval is inferred. Exact canary artifact acceptance remains pending.
+
+The [local handoff/backup index](bulk/evidence/english-canary/bundle-index-20261017.json)
+binds a 7,256,318-byte review archive, all seven verified old image blobs and
+current production PowerShell/workflow backups. The
+[offline local rollback rehearsal](bulk/evidence/english-canary/rollback-rehearsal-20261017.json)
+restored all seven original hashes/tree and preserved unrelated content; it used
+no remote and did not test production permissions. No images/archive were pushed
+to Default-Images. The proposed manual protected workflow, scoped App permissions,
+PR staging, non-forced ref publication, backup/stop/rollback steps, measurable
+criteria and exact conditional operator authorization steps are documented only.
+No new publishing workflow, secret, production environment or credential was enabled.
+Gate E approval remains bound to `83ed3d1`; preparation does not extend it to new
+artwork approvals or production changes. PR #12 remains draft and unmerged.
+
 ## Maintainer decisions recorded on 2026-10-17
 
 The maintainer explicitly reports inspection and acceptance of the presented
@@ -853,20 +878,22 @@ rewritten to remove failures or reduce the PR size.
 | Historical color preservation / new assignment policy | Passed | 9957 historical colors; uniqueness/concurrency/provenance regression tests. |
 | Dependency/license and complete-PR static audit | Passed with documented limitation | Direct-pin advisory screen and source audit; no full transitive/native SBOM. |
 | CI / regressions / documentation | Passed | Detailed report, archived evidence and safe CI. |
-| Production cutover / publication / rollback execution | Not tested | Not authorized; proposed checklist only. |
+| Gate E maintainer acceptance | Approved at `83ed3d1` | Exact recorded validation scope; no blanket visual approval. |
+| English-only canary preparation | Passed; awaiting canary review/setup decisions | Seven exact full-run matches, seven current public-path comparisons, sealed local archive and offline rollback rehearsal. |
+| Production cutover / publication / rollback execution | Not tested | Not authorized; detailed canary plan only. |
 
 Readiness recommendations are scoped:
 
 | Scope | Technical assessment | Remaining decision |
 | --- | --- | --- |
-| English | All 9,957 outputs/receipts, unchanged warm reuse and exact approved-API parity pass; technically validated migration candidate. | Gate E review, fresh preflight with the resolved exact-case mapping, exact artifact acceptance and separate publication/cutover authority. |
+| English | All 9,957 outputs/receipts, unchanged warm reuse and exact approved-API parity pass; technically validated migration candidate. | Gate E approved; seven-output canary preparation passes. Exact canary artifact acceptance, reviewed workflow/setup and separate staging/publication authority remain pending. |
 | Overlays | All 4,122 transforms verify; selected corrected outputs reproduce across worker counts. The small Python control did not beat grouped legacy performance. | 64 exact current samples accepted; remaining visual scope and an explicit adoption/performance decision remain pending. |
 | German / Spanish / French | All 960 required keys are valid; current fits and pending typography proposals are separately enumerated. | Six presented FR/DE/BG image/layout samples accepted separately; current-policy validation and explicit activation plus all other artwork review remain pending. |
 | Arabic / other multilingual | Use each language's independent key/geometry/glyph/RTL assessment; Arabic script-font/RTL acceptance and Bulgarian unsupported glyph cases remain explicit. | Missing-value corrections, approved fonts/layouts where needed, and current artwork review. No complete multilingual collection is automatically production-approved. |
 
 Priority maintainer decisions before any future production operation:
 
-1. Review Gate E's exact evidence and independent readiness recommendations.
+1. Gate E is approved at `83ed3d1`. Review the seven exact English canary candidates and the separate preparation plan before any staging or production authorization.
 2. Enforce the resolved exact public path `genre/Action & Adventure.jpg` in fresh preflight; no published rename is needed.
 3. Preserve the new acceptance of 64 exact overlay previews, including corrected ICC samples; review any additional transforms required for the chosen adoption scope.
 4. Preserve acceptance of the six presented language image/layout previews; validate their current context and obtain explicit activation scope before changing catalog typography. Other language artwork/proposals and Arabic font/RTL/anchor decisions remain pending.
@@ -892,5 +919,6 @@ Priority maintainer decisions before any future production operation:
   published version under separately authorized rollback. Never delete or overwrite
   unowned work, and do not erase immutable review/history records.
 
-This checklist grants no execution authority. The PR remains draft for final
-maintainer review; no future phase begins automatically.
+This checklist grants no execution authority. Gate E is approved for the recorded
+scope; the PR remains draft for the separately authorized English canary preparation
+and subsequent explicit review/authorization. No future phase begins automatically.
