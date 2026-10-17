@@ -91,3 +91,7 @@ controlled before/after assessment without rewriting those records.
   overlay approvals, fully inspected batch and 70 sample-scoped external audit
   events plus the destination decision. Six historical-policy language samples do
   not acquire automatic current-policy approval. Original evidence is unchanged.
+
+- `gate-e-approval-20261017.json` and `gate-e-approval-20261017-events.json`: explicit
+  Gate E approval at `83ed3d1`, immutable evidence bindings and preparation-only
+  English canary authorization. No production execution or credential activation.

@@ -1,6 +1,6 @@
 # Package E - end-to-end acceptance and production readiness
 
-**Gate E: awaiting final maintainer review. Production cutover: not authorized.**
+**Gate E: approved by the maintainer for the recorded scope at `83ed3d1`. English canary preparation authorized; execution and production cutover are not authorized.**
 
 The maintainer formally approved Gates A-D and authorized Package E from
 `166a007c00f14b166a97be8887a4532ea42078b8` on draft PR
@@ -9,7 +9,23 @@ Earlier reports, fixtures, original Package D/E audits and the four exact Packag
 No artwork or translation was published; no production PowerShell was replaced,
 production permissions granted, PR merged or ready transition performed.
 
-**Automated Package E acceptance is complete for the recorded scope.** Gate E remains awaiting maintainer review. Publication, deployment and cutover are not authorized. The maintainer has accepted 64 exact overlay previews and six exact language poster/layout previews and resolved the public destination case; all other artwork/font/layout decisions remain pending. Historical validation identities below describe the measured pre-mapping checkpoint; the destination-only correction requires fresh production preflight and does not change renderer inputs. The corrected multilingual audit makes 41,417 variants newly technically eligible; 14,899 retain final needs_layout_review status. All 9,957 English validation identities were unchanged by the multilingual correction at that audit checkpoint. The later public destination mapping changes that one poster definition/preflight identity while preserving its render fingerprint. Technical eligibility grants no artwork approval.
+**Automated Package E acceptance is complete for the recorded scope.** Gate E is approved for the recorded scope at `83ed3d1`; English canary preparation only is authorized. Publication, deployment and cutover are not authorized. The maintainer has accepted 64 exact overlay previews and six exact language poster/layout previews and resolved the public destination case; all other artwork/font/layout decisions remain pending. Historical validation identities below describe the measured pre-mapping checkpoint; the destination-only correction requires fresh production preflight and does not change renderer inputs. The corrected multilingual audit makes 41,417 variants newly technically eligible; 14,899 retain final needs_layout_review status. All 9,957 English validation identities were unchanged by the multilingual correction at that audit checkpoint. The later public destination mapping changes that one poster definition/preflight identity while preserving its render fingerprint. Technical eligibility grants no artwork approval.
+
+## Gate E approval and authorized next scope
+
+The maintainer explicitly approved Gate E on draft PR #12 at full commit
+`83ed3d1b11576f8e258aed08a3ae7ff13bf4791c`. The
+[approval record](bulk/evidence/package-e/gate-e-approval-20261017.json) binds the
+accepted validation scope and original evidence identities; the separate
+[audit events](bulk/evidence/package-e/gate-e-approval-20261017-events.json) preserve
+that decision without rewriting any prior review record. This accepts 9,957 English
+outputs/parity, technical verification of 4,122 overlays, the 64 inspected overlay
+samples, six inspected translated previews, corrected multilingual reporting and
+the exact `genre/Action & Adventure.jpg` public mapping. It grants no blanket
+visual acceptance. Only English canary preparation, read-only comparison,
+documentation and pushing preparation/CI to the existing draft PR are authorized.
+Canary execution, publishing credentials, production writes, PowerShell replacement,
+PR merge/ready transition and further phases remain unauthorized.
 
 ## Maintainer decisions recorded on 2026-10-17
 
@@ -25,7 +41,7 @@ retain the new decisions separately from the original pending/audit evidence.
 | Overlays | All 64 exact presented previews; the maintainer accepts the documented Pillow/ImageMagick differences for those samples, including ICC-corrected transparency. Existing review service records 64 individual approvals with exact accepted warning codes and a fully inspected batch. | Other transforms among the 4,122 remain unapproved. No new global pixel threshold or performance/adoption decision. |
 | Language poster/layout previews | French Based Book, Comic, True Story and Video Game; German Based Book; Bulgarian Based Book. Exact presented images and proposed layouts accepted. | These six use their recorded historical preflight policy. Acceptance is recorded with `review_external_sample_acceptance`; no automatic current-policy approval transfer, catalog activation or wider language approval. |
 | Public destination | `genre/Action & Adventure.jpg` is the mandatory exact case and spelling. The English catalog remote mapping now uses this path. | Internal render filename and source logo retain their captured names. No published file was renamed or uploaded. |
-| Production | No cutover decision was supplied. | Gate E final sign-off, publishing, merge, deployment and subsequent phases remain pending. |
+| Production | Gate E validation scope approved at `83ed3d1`; English-only canary preparation authorized. | Execution, credentials, publishing, merge, deployment and subsequent phases remain pending. |
 
 Original `pending-overlay-review.json`, fitting records and pixel metrics remain
 unchanged historical observations. Statements of zero approvals, empty inspected
