@@ -291,3 +291,22 @@ The focused CI artifact is reviewer evidence only, not publication. New font
 and layout proposals remain unapproved until the maintainer explicitly accepts
 them. Package D may commit/push scoped work to draft PR #12, but may not merge
 or mark it ready. Stop for Gate D review; Package E requires new authorization.
+
+
+## Package E authorized acceptance work
+
+Gates A-D have now been formally approved. Package E is authorized on the existing
+draft PR #12 from `166a007c00f14b166a97be8887a4532ea42078b8`. Preserve all earlier
+reports, fixtures, color assignments and exact Package D sample decisions.
+
+Acceptance separately evaluates complete English generation, overlay transforms
+and every discovered language. Local full generation, controlled process-per-poster
+legacy comparisons, worker scaling, fresh read-only inventories and all-language
+preflight are opt-in bounded runs. Small offline CI proves platform contracts and
+retains focused artifacts without publishing. Evidence must distinguish automated
+verification, exact historical sample approval and still-pending human decisions.
+
+The current work and remaining acceptance criteria are recorded in
+[Package E report](PACKAGE_E_REPORT.md). Do not infer cutover authorization from
+a successful test or readiness recommendation. Keep the PR draft, retain the
+production PowerShell implementation and stop for final maintainer review.

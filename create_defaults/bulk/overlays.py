@@ -124,7 +124,7 @@ def plan(config=None, *, groups=(), sizes=("standard", "bigger"), sources=()):
     return validate_manifest(result)
 
 
-def generate(config=None, *, groups=(), sizes=("standard", "bigger"), sources=(), limits=None, audit=False):
+def generate(config=None, *, groups=(), sizes=("standard", "bigger"), sources=(), limits=None, audit=False, cancel=None):
     from .workers import PersistentWorkers, WorkerLimits, tasks_from_manifest
     config = config or Config()
     started = time.perf_counter()
@@ -152,7 +152,7 @@ def generate(config=None, *, groups=(), sizes=("standard", "bigger"), sources=()
     if audit:
         return {"status": "audited", "manifest": manifest, "preflight": report, "stages": [], "preflight_file": str(path)}
     with PersistentWorkers(Store(config.cache_dir / "state.sqlite"), config, limits or WorkerLimits()) as pool:
-        result = pool.run(tasks_from_manifest(manifest))
+        result = pool.run(tasks_from_manifest(manifest), cancel=cancel)
     success = all(v["status"] in {"rendered", "cache_reuse", "dedup_reuse"} for v in result["jobs"].values())
     if success:
         pool.workspaces.cleanup(**pool.workspace, retain_seconds=0)

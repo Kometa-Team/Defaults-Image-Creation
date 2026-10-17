@@ -36,7 +36,7 @@ class WorkflowBoundaryTests(unittest.TestCase):
         self.assertEqual(job["runs-on"], "ubuntu-latest")
         self.assertNotIn("permissions", job)
         actions = [step for step in job["steps"] if "uses" in step]
-        self.assertEqual(len(actions), 3)
+        self.assertEqual(len(actions), 4)
         for step in actions:
             self.assertRegex(step["uses"], r"^actions/(checkout|setup-python|upload-artifact)@[0-9a-f]{40}$")
         self.assertEqual(actions[0]["with"]["persist-credentials"], "false")
@@ -48,6 +48,17 @@ class WorkflowBoundaryTests(unittest.TestCase):
         self.assertTrue(paths)
         self.assertTrue(all(path.startswith("config/package-d-smoke/") for path in paths))
         self.assertFalse(any("sqlite" in path or path.endswith("cache/**") for path in paths))
+        self.assertEqual(actions[3]["uses"], actions[2]["uses"])
+        self.assertEqual(actions[3]["with"]["retention-days"], "14")
+        self.assertEqual(actions[3]["with"]["if-no-files-found"], "error")
+        self.assertEqual(actions[3]["with"]["name"], "package-e-focused-acceptance")
+        e_paths = actions[3]["with"]["path"].splitlines()
+        self.assertTrue(e_paths)
+        self.assertTrue(all(path.startswith("config/package-e-ci/") for path in e_paths))
+        self.assertFalse(any("sqlite" in path or path.endswith("cache/**") for path in e_paths))
+        smoke = [step for step in job["steps"] if step.get("name") == "Bounded offline Package E acceptance smoke"]
+        self.assertEqual(len(smoke), 1)
+        self.assertEqual(smoke[0]["run"], "python -m create_defaults.bulk.e_smoke")
         commands = "\n".join(step.get("run", "") for step in job["steps"])
         for required in ("pip install", "compileall", "unittest discover", "validation_manifest.py --check", "git diff --check"):
             self.assertIn(required, commands)

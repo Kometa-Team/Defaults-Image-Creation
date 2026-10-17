@@ -25,11 +25,19 @@ def _composer_validator():
     return StrictValidator({"$defs": definition["$defs"], "$ref": "#/$defs/composer"}, format_checker=FORMATS)
 
 
+@lru_cache(maxsize=1)
+def _loaded_library_versions():
+    # Pinned installed libraries describe one loaded Python process. Replacing
+    # dependencies requires a fresh process, not a live metadata-only upgrade.
+    # Return immutable pairs so renderer consumers cannot mutate this cache.
+    return tuple((name, version(name)) for name in ("Pillow", "fonttools", "uharfbuzz", "python-bidi"))
+
+
 def renderer_identity():
     root = Path(__file__).resolve().parents[1]
     sources = {name: fingerprint((root / name).read_text(encoding="utf-8-sig").replace("\r\n", "\n")) for name in ("create_poster.py", "poster_text.py")}
     return {"sources": sources, "python": platform.python_version(), "platform": platform.system(),
-            "libraries": {name: version(name) for name in ("Pillow", "fonttools", "uharfbuzz", "python-bidi")},
+            "libraries": dict(_loaded_library_versions()),
             "encoding": {"format": "JPEG", "quality": 100, "subsampling": 0}, "canvas": [2000, 3000]}
 
 

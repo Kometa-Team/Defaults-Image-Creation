@@ -37,7 +37,7 @@ jobs:
         run: |
           python -m create_defaults.bulk.baselines --check-historical
           python create_defaults/validation_manifest.py --check create_defaults/bulk/baselines/effective-jobs-en-current.json.gz
-      - name: Packages A-D infrastructure and generation tests
+      - name: Packages A-E infrastructure and generation tests
         run: |
           python -m unittest discover -s create_defaults/phase2/tests -v
           python -m pytest create_defaults/bulk/tests -q -rs -p no:cacheprovider
@@ -55,6 +55,25 @@ jobs:
             config/package-d-smoke/cache/preview-reports/**
             config/package-d-smoke/cache/preflight/**
             config/package-d-smoke/output/**
+      - name: Bounded offline Package E acceptance smoke
+        run: python -m create_defaults.bulk.e_smoke
+      - name: Retain focused Package E acceptance evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: package-e-focused-acceptance
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            config/package-e-ci/ci-evidence.json
+            config/package-e-ci/posters/*summary.json
+            config/package-e-ci/posters/output-verification.json
+            config/package-e-ci/posters/verified-output-ledger.json
+            config/package-e-ci/posters/output/defaults-en/based/**
+            config/package-e-ci/posters/output/defaults-en/decade/2020.jpg
+            config/package-e-ci/posters/output/defaults-en/decade/best/2020.jpg
+            config/package-e-ci/overlays/overlay-summary.json
+            config/package-e-ci/overlays/output-ledger.json
+            config/package-e-ci/overlays/output/**
       - name: People GitHub compatibility regressions
         run: >-
           python -m pytest

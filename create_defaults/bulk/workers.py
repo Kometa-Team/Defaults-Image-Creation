@@ -149,18 +149,20 @@ def _worker_main(inbox, results, config, limits, renderer):
             return
 
 
-def _check_image(path, task=None):
+def _check_image(path, task=None, *, decode=True):
     from PIL import Image
     with Image.open(path) as image:
         if task is not None and task.payload.get("kind") == "overlay":
             box = task.payload["parameters"]["box"]
             if image.format != "PNG" or image.mode != "RGBA" or not (1 <= image.width <= box[0] and 1 <= image.height <= box[1]):
                 raise BulkError("invalid_artifact", "Overlay artifact violates its PNG/RGBA bounds")
-            image.load()
+            if decode:
+                image.load()
             return
         if image.format != "JPEG" or image.mode != "RGB" or image.size != (2000, 3000):
             raise BulkError("invalid_artifact", "Composer artifact is not the approved RGB JPEG canvas")
-        image.load()
+        if decode:
+            image.load()
 
 
 class PersistentWorkers:
@@ -234,7 +236,11 @@ class PersistentWorkers:
         if value.get("job_id") != state_id or value.get("render_fingerprint") != task.render_fingerprint or value.get("renderer_identity") != (expected_renderer or self.renderer_identity) or value.get("relative") != task.local_relative or value.get("receipt_sha256") != fingerprint(payload) or value.get("size") != target.stat().st_size or value.get("sha256") != sha256(target):
             return None
         if self.renderer is compose:
-            _check_image(target, task)
+            # Exact content SHA, renderer/spec and finalized SQLite receipt are
+            # checked on every reuse. Those same bytes were fully decoded at
+            # promotion; recheck the header contract without decoding them again.
+            # Old receipts remain immutable; no mtime-based shortcut is used.
+            _check_image(target, task, decode=False)
         return value
 
     def _publish(self, task, state_id, source, checksum):
@@ -410,11 +416,50 @@ class PersistentWorkers:
             running_fingerprints.discard(catalog[identity].render_fingerprint)
             row = self.store.job(states[identity])
             self.store.transition(states[identity], row["version"], "failed", owner=self.owner)
+            with self.store.transaction() as db:
+                self.store.event(db, "worker_attempt_failed", states[identity],
+                    {"reason": reason, "attempt": attempts[identity], "pid": self.slots[index]["process"].pid})
             self._stop(index, terminate=True)
             if attempts[identity] <= self.limits.retries:
                 waiting.add(identity)
             else:
                 completed[identity] = {"status": "failed", "reason": reason}
+
+        def receive_ready(slot):
+            try:
+                if slot["results"].poll():
+                    return slot["results"].recv()
+            except (EOFError, OSError):
+                # Windows may raise BrokenPipeError even from poll after exit.
+                pass
+            return None
+
+        def accept_response(response):
+            if response is None:
+                return False
+            index = next((index for index, slot in self.slots.items() if slot["request"]
+                and slot["request"]["id"] == response["id"]
+                and slot["request"]["attempt"] == response["attempt"]
+                and slot["process"].pid == response["pid"]), None)
+            if index is None:
+                return False
+            metrics["peak_worker_rss"] = max(metrics["peak_worker_rss"], response["rss"])
+            io_samples[response["pid"]] = (response["read_bytes"], response["write_bytes"])
+            if response["status"] == "error":
+                failure(index, response["error"])
+            else:
+                request = self.slots[index]["request"]
+                task = catalog[request["id"]]
+                source = confined(self.config.workspace_dir, request["staged_relative"], must_exist=True)
+                receipt = self._publish(task, states[task.id], source, response["sha256"])
+                completed[task.id] = {"status": "rendered", "sha256": receipt["sha256"], "pid": response["pid"]}
+                receipts[task.render_fingerprint] = receipt
+                running_fingerprints.discard(task.render_fingerprint)
+                self.slots[index]["request"] = None
+                if response["retire"]:
+                    self.recycles += 1
+                    self._stop(index)
+            return True
 
         try:
             while waiting or any(slot["request"] for slot in self.slots.values()):
@@ -438,11 +483,11 @@ class PersistentWorkers:
                         continue
                     if any(parent is None for parent in parents):
                         continue
-                    if self.renderer is compose:
-                        _check_inputs(task.payload, self.config)
                     state = self.store.job(states[identity])
                     cached = self._cached(task, states[identity])
                     if cached is not None and state["status"] == "verified":
+                        if self.renderer is compose:
+                            _check_inputs(task.payload, self.config)
                         if state["receipt"] != canonical(cached).decode():
                             raise BulkError("corrupt_receipt", "Receipt differs from the finalized database evidence")
                         receipts[task.render_fingerprint] = cached
@@ -468,11 +513,16 @@ class PersistentWorkers:
                     if task.render_fingerprint in running_fingerprints:
                         continue
                     idle = next((index for index, slot in self.slots.items() if slot["request"] is None), None)
-                    if idle is None and len(self.slots) < self.limits.workers:
+                    if idle is None and len(self.slots) >= self.limits.workers:
+                        break
+                    # Do not repeatedly hash an undispatched job while every
+                    # worker is busy. Check before starting a process, again on
+                    # worker entry, and before promotion against pinned bytes.
+                    if self.renderer is compose:
+                        _check_inputs(task.payload, self.config)
+                    if idle is None:
                         idle = next(index for index in range(self.limits.workers) if index not in self.slots)
                         self._start(idle)
-                    if idle is None:
-                        break
                     claim_job(identity)
                     attempts[identity] = attempts.get(identity, 0) + 1
                     relative = self.work_root.relative_to(self.config.workspace_dir).as_posix() + "/jobs/" + fingerprint(identity) + f"/attempt-{attempts[identity]}-{uuid.uuid4().hex}/artifact" + (".jpg" if self.renderer is compose else ".bin")
@@ -483,43 +533,25 @@ class PersistentWorkers:
                     waiting.remove(identity)
                     metrics["executed"] += 1
                     metrics["max_inflight"] = max(metrics["max_inflight"], sum(slot["request"] is not None for slot in self.slots.values()))
-                response = None
-                for slot in self.slots.values():
-                    try:
-                        if slot["results"].poll():
-                            response = slot["results"].recv()
-                    except (EOFError, OSError):
-                        # Windows poll itself raises BrokenPipeError after a
-                        # hard worker exit; the owned-process check recovers it.
-                        pass
-                    if response is not None:
-                        break
-                if response is None:
+                # Consume every ready pipe, not just one. A retiring worker
+                # exits after sending success; unread success is not a crash.
+                handled = False
+                for slot in list(self.slots.values()):
+                    handled = accept_response(receive_ready(slot)) or handled
+                if not handled:
                     time.sleep(.01)
-                if response is not None:
-                    index = next((index for index, slot in self.slots.items() if slot["request"] and slot["request"]["id"] == response["id"] and slot["request"]["attempt"] == response["attempt"] and slot["process"].pid == response["pid"]), None)
-                    if index is not None:
-                        metrics["peak_worker_rss"] = max(metrics["peak_worker_rss"], response["rss"])
-                        io_samples[response["pid"]] = (response["read_bytes"], response["write_bytes"])
-                        if response["status"] == "error":
-                            failure(index, response["error"])
-                        else:
-                            request = self.slots[index]["request"]
-                            task = catalog[request["id"]]
-                            source = confined(self.config.workspace_dir, request["staged_relative"], must_exist=True)
-                            receipt = self._publish(task, states[task.id], source, response["sha256"])
-                            completed[task.id] = {"status": "rendered", "sha256": receipt["sha256"], "pid": response["pid"]}
-                            receipts[task.render_fingerprint] = receipt
-                            running_fingerprints.discard(task.render_fingerprint)
-                            self.slots[index]["request"] = None
-                            if response["retire"]:
-                                self.recycles += 1
-                                self._stop(index)
                 total_rss = 0
                 for index in list(self.slots):
                     slot = self.slots[index]
                     request = slot["request"]
                     if not slot["process"].is_alive():
+                        # The child may exit between the initial poll and this
+                        # check. Its complete final response is already in the
+                        # pipe; drain it before classifying a genuine exit.
+                        if request and accept_response(receive_ready(slot)):
+                            if index in self.slots:
+                                self._stop(index)
+                            continue
                         if request:
                             failure(index, "worker_exit")
                         else:
@@ -531,8 +563,11 @@ class PersistentWorkers:
                         continue
                     total_rss += rss
                     metrics["peak_worker_rss"] = max(metrics["peak_worker_rss"], rss)
-                    if request and (rss > self.limits.worker_memory_bytes or time.monotonic() - slot["started"] > self.limits.timeout_seconds):
-                        failure(index, "memory_limit" if rss > self.limits.worker_memory_bytes else "timeout")
+                    if request and rss > self.limits.worker_memory_bytes:
+                        failure(index, "memory_limit")
+                    elif request and time.monotonic() - slot["started"] > self.limits.timeout_seconds:
+                        if not accept_response(receive_ready(slot)):
+                            failure(index, "timeout")
                     elif not request and rss > self.limits.worker_memory_bytes:
                         self.recycles += 1
                         self._stop(index)

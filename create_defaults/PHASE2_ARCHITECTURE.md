@@ -598,3 +598,25 @@ authentication, authorization service or publication workflow is introduced.
 Source snapshots cannot refresh a running render implicitly. A fresh explicit
 preflight/delta is required after external translation/definition edits.
 See [Package D Usage](PACKAGE_D_USAGE.md) for the API and exit contracts.
+
+
+## Package E authorized validation
+
+The maintainer subsequently approved Gates A-D and authorized Package E from
+`166a007c00f14b166a97be8887a4532ea42078b8`. Earlier boundary statements record
+historical gate decisions. Deployment and production cutover remain unauthorized.
+
+Package E adds opt-in local acceptance tools (`bulk/e_*.py`) around the existing
+planner, mandatory preflight, persistent workers, read-only inventory, review and
+color services. Full renders and benchmarks require explicit selection and use
+separate output/cache/work roots, conservative sampled resource limits and worker
+limits. Ordinary PR CI runs a bounded offline smoke and retains only selected
+review artifacts. Full output collections and databases remain ignored.
+
+Cache reuse keeps exact input/output hashing and finalized database receipt checks.
+It avoids redundant full decoding of already verified immutable bytes; new atomic
+promotions still require full image decoding. Loaded pinned-library metadata is
+cached per process, while renderer source identities are recomputed. The worker
+scheduler checks sources before starting/dispatching and drains buffered success
+responses before classifying retiring workers as failed. All changes require
+focused regression evidence; see [Package E report](PACKAGE_E_REPORT.md).
