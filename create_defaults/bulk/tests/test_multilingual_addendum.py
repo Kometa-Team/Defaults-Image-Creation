@@ -73,12 +73,21 @@ def test_poster_keys_exclude_unrelated_and_deduplicate(definition, config, tmp_p
 
 @pytest.mark.parametrize("text", ["", " ", 3])
 def test_empty_and_invalid_poster_keys_are_separate_from_typography(definition, config, tmp_path, text):
+    value = definition.data
+    value["caption"]["suffix"] = " 1947"
+    definition = Definition.create(value)
     source = translations(tmp_path, en=captions(definition, "Book"), fr=captions(definition, text))
     report = run_preflight(definition, source, config, languages=["fr"])
     audit = poster_key_audit([report], source, local_snapshot({code: tmp_path / (code + ".yml") for code in source.sources}))
     assert audit["matrix"]["fr"]["invalid_or_empty"] == 1
     assert audit["matrix"]["fr"]["missing"] == 0
     assert report["variants"][0]["status"] == "blocked"
+    if isinstance(text, str):
+        # A year suffix can fit even when its required translated label is empty.
+        variant = report["variants"][0]
+        assert variant["caption"].endswith("1947")
+        assert variant["typography"]["state"] == "fits_current"
+
 
 def test_measurements_are_exact_cached_and_match_native_probe(definition, config):
     font = config.asset_dir / definition.data["composer"]["font"]
