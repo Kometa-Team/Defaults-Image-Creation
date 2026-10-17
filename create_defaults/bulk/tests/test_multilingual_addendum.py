@@ -143,9 +143,10 @@ def test_only_changed_french_font_or_layout_invalidates_approval(definition, con
 def test_required_template_key_is_counted_even_when_caption_resolution_fails(definition, config, tmp_path):
     value = definition.data
     value["caption"]["template_key"] = "key_names.based"
-    source = translations(tmp_path,
-        en={"key_names": {"book": "Book", "based": "Based on <<item>>"}, "unrelated": {"unused": ""}},
-        fr={"key_names": {"book": "Livre"}, "unrelated": {"unused": 3}})
+    english, french = captions(definition, "Book"), captions(definition, "Livre")
+    english.setdefault("key_names", {})["based"] = "Based on <<item>>"
+    english["unrelated"], french["unrelated"] = {"unused": ""}, {"unused": 3}
+    source = translations(tmp_path, en=english, fr=french)
     report = run_preflight(Definition.create(value), source, config, languages=["fr"])
     snapshot = local_snapshot({code: tmp_path / (code + ".yml") for code in source.sources})
     audit = poster_key_audit([report], source, snapshot)
