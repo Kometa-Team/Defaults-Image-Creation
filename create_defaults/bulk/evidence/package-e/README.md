@@ -55,3 +55,17 @@ controlled before/after assessment without rewriting those records.
 - `overlay-retained-before-after.json.gz` and `overlay-correction-impact.json`:
   3,571 retained outputs compared, 387 expected grayscale ICC changes and 3,184
   unchanged other modes; no approval is transferred.
+
+- `multilingual-correction.json`: the controlled corrected 139,398-variant audit
+  against the same pinned snapshot; three independent readiness dimensions, exact
+  historical-acceptance context comparisons and separate captionless-artwork counts.
+- `multilingual-poster-keys.json.gz`: only 960 poster-required keys per language,
+  with exact valid/missing/invalid values, affected IDs, sources and English references.
+- `multilingual-measurement-groups.json.gz`: exact native metrics and unactivated
+  fitting proposals for 14,508 current-input groups and their 74,209 variant members.
+- `multilingual-variant-index.json.gz`: every current variant validation/status and
+  measurement binding. The complete raw 26.7 MB ledger remains local by exact hash;
+  repeated catalog/source metadata is not duplicated in this compact index.
+- `multilingual-validation.json`: current Windows/Linux regressions and exact
+  sample comparisons, retained pre-correction failures and source/version identities.
+  These records grant no artwork approval or typography activation.

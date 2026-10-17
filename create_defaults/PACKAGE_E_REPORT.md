@@ -9,7 +9,7 @@ Earlier reports, fixtures, original Package D/E audits and the four exact Packag
 No artwork or translation was published; no production PowerShell was replaced,
 production permissions granted, PR merged or ready transition performed.
 
-**Acceptance is still in progress.** Pending: full English generation, full renderer comparison, selective published comparison, corrected isolated overlay scaling. No final production-readiness pass is claimed. Non-English publication and broader overlay visual decisions remain pending exact maintainer review.
+**Acceptance is still in progress.** Pending: full English generation, full renderer comparison, selective published comparison, corrected isolated overlay scaling. No final production-readiness pass is claimed. Non-English publication and broader overlay visual decisions remain pending exact maintainer review. The corrected multilingual audit makes 41,417 variants newly technically eligible; 14,899 retain final needs_layout_review status. All 9,957 English validation identities are unchanged. Technical eligibility grants no artwork approval.
 
 ## Tested source and environment
 
@@ -90,7 +90,7 @@ not authorization to change colors or layouts.
 
 ## Full English generation and renderer comparison
 
-In progress: last recorded 6,386 verified of 9,957 required. This is incomplete evidence, not a full pass.
+In progress: last recorded 9,957 verified of 9,957 required. This is incomplete evidence, not a full pass.
 
 The full comparison requires a complete, validated manifest and matching source,
 asset, font and semantic identities for every reference. Its original Phase 1
@@ -335,7 +335,86 @@ installed in production. See [upstream font provenance](https://github.com/googl
 
 ## Corrected multilingual audit and independent readiness
 
-The corrected all-language audit is in progress in an isolated checkout against the same pinned snapshot. Actual fitting text is technically eligible; proposed typography remains needs_layout_review. Full corrected counts are pending. No artwork approvals or layout activations are granted.
+This controlled comparison uses the original pinned translation snapshot. Original D/E audit files remain unchanged. Only keys required by active, applicable caption definitions, templates and resolved dependencies count toward completeness. The exact key ledger retains source hashes, English references, logical IDs, categories and variant IDs.
+
+| Language | Unique required | Valid | Missing | Invalid / empty | Key completion % | Identical English (info) | Missing posters / variants | Invalid posters / variants | Impacted union variants |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| ar | 960 | 41 | 472 | 447 | 4.2708 | 1 | 2070 / 2070 | 3854 / 3854 | 5872 |
+| bg | 960 | 943 | 17 | 0 | 98.2292 | 9 | 34 / 34 | 0 / 0 | 34 |
+| da | 960 | 905 | 55 | 0 | 94.2708 | 314 | 275 / 275 | 0 / 0 | 275 |
+| de | 960 | 960 | 0 | 0 | 100.0 | 291 | 0 / 0 | 0 / 0 | 0 |
+| en | 960 | 960 | 0 | 0 | 100.0 | 0 | 0 / 0 | 0 / 0 | 0 |
+| es | 960 | 960 | 0 | 0 | 100.0 | 220 | 0 / 0 | 0 / 0 | 0 |
+| fr | 960 | 960 | 0 | 0 | 100.0 | 236 | 0 / 0 | 0 / 0 | 0 |
+| hu | 960 | 941 | 19 | 0 | 98.0208 | 216 | 36 / 36 | 0 / 0 | 36 |
+| it | 960 | 901 | 59 | 0 | 93.8542 | 277 | 86 / 86 | 0 / 0 | 86 |
+| nb_NO | 960 | 285 | 472 | 203 | 29.6875 | 62 | 2070 / 2070 | 1184 / 1184 | 3206 |
+| nl | 960 | 157 | 472 | 331 | 16.3542 | 27 | 2070 / 2070 | 3738 / 3738 | 5756 |
+| pt-br | 960 | 242 | 472 | 246 | 25.2083 | 45 | 2070 / 2070 | 3290 / 3290 | 5360 |
+| ru | 960 | 162 | 798 | 0 | 16.875 | 1 | 5773 / 5773 | 0 / 0 | 5773 |
+| sv | 960 | 892 | 68 | 0 | 92.9167 | 266 | 313 / 313 | 0 / 0 | 313 |
+
+Identical values remain valid and informational. The ledger separately tags numeric labels, acronym candidates, identifiable proper-name keys and explicitly approved unchanged values where available. Capitalization and equal character counts do not prove a translation problem. Unrelated resource keys never enter this denominator.
+
+| Language | Old blocked | Current blocked | No caption required | Measured text fits current | Newly eligible | Fits proposal | Final needs_layout_review | Current geometric failures | Missing glyphs | RTL / shaping | Blocked parents |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| ar | 7306 | 7306 | 1340 | 3539 | 0 | 0 | 0 | 0 | 0 | 1434 | 0 |
+| bg | 7105 | 43 | 1340 | 5881 | 4369 | 2693 | 2693 | 2693 | 9 | 0 | 0 |
+| da | 5982 | 275 | 1340 | 6775 | 4140 | 1567 | 1567 | 1567 | 0 | 0 | 0 |
+| de | 5819 | 0 | 1340 | 6930 | 4132 | 1687 | 1687 | 1687 | 0 | 0 | 0 |
+| en | 0 | 0 | 1340 | 8616 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| es | 5878 | 0 | 1340 | 6771 | 4032 | 1846 | 1846 | 1846 | 0 | 0 | 0 |
+| fr | 4752 | 0 | 1340 | 8210 | 4345 | 407 | 407 | 407 | 0 | 0 | 0 |
+| hu | 5869 | 36 | 1340 | 7197 | 4449 | 1384 | 1384 | 1384 | 0 | 0 | 0 |
+| it | 5827 | 86 | 1340 | 8328 | 5538 | 203 | 203 | 203 | 0 | 0 | 0 |
+| nb_NO | 7251 | 3206 | 1340 | 4228 | 2859 | 1317 | 1186 | 1317 | 0 | 0 | 0 |
+| nl | 7281 | 5756 | 1340 | 4949 | 1403 | 122 | 122 | 122 | 0 | 0 | 0 |
+| pt-br | 7265 | 5360 | 1340 | 4830 | 678 | 1227 | 1227 | 1227 | 0 | 0 | 0 |
+| ru | 7306 | 5773 | 1340 | 1593 | 282 | 1251 | 1251 | 1251 | 0 | 0 | 0 |
+| sv | 6829 | 313 | 1340 | 6978 | 5190 | 1326 | 1326 | 1326 | 0 | 0 | 0 |
+
+Technical counts overlap and must not be summed. The fit column counts measured text; captionless artwork needs no text measurement and remains included in overall eligibility. A caption can fit while a required value is empty, leaving the variant blocked. Current clipping and a fitting proposal can also describe the same variant. Final needs_layout_review excludes candidates with another blocking error; all proposals remain unapproved. Glyph/RTL failures prevent a reliable geometric assessment rather than counting as a successful fit. Normal wrapping is informational; four or more rows and margins under 20 pixels remain warnings.
+
+The correction makes 41,417 variants newly technically eligible. 14,899 have final needs_layout_review status. Existing typography is unchanged; smaller-size proposals never enter effective generation definitions automatically. Strict batches stop before rendering, while partial batches exclude these candidates.
+
+| Language | Historical exact D poster samples / different current renderer contexts | Pending individual artwork review | Potential group candidates under current policy | Exact current audit approvals | Stale / rejected / invalidated current approvals |
+| --- | --- | --- | --- | --- | --- |
+| ar | 0 / 0 | 1309 | 1340 | 0 | 0 / 0 / 0 |
+| bg | 0 / 0 | 7219 | 0 | 0 | 0 / 0 / 0 |
+| da | 0 / 0 | 6773 | 1340 | 0 | 0 / 0 / 0 |
+| de | 0 / 0 | 6928 | 1340 | 0 | 0 / 0 / 0 |
+| en | 1 / 1 | 4285 | 5670 | 0 | 0 / 0 / 0 |
+| es | 0 / 0 | 6769 | 1340 | 0 | 0 / 0 / 0 |
+| fr | 1 / 1 | 8208 | 1340 | 0 | 0 / 0 / 0 |
+| hu | 0 / 0 | 8535 | 0 | 0 | 0 / 0 / 0 |
+| it | 0 / 0 | 8326 | 1340 | 0 | 0 / 0 / 0 |
+| nb_NO | 0 / 0 | 4223 | 1340 | 0 | 0 / 0 / 0 |
+| nl | 0 / 0 | 2737 | 1340 | 0 | 0 / 0 / 0 |
+| pt-br | 0 / 0 | 2028 | 1340 | 0 | 0 / 0 / 0 |
+| ru | 0 / 0 | 2931 | 0 | 0 | 0 / 0 / 0 |
+| sv | 0 / 0 | 6976 | 1340 | 0 | 0 / 0 / 0 |
+
+This fresh technical audit rendered no previews and imported no approvals. Pending counts describe technically eligible public variants awaiting exact artwork inspection. No prior D acceptance is transferred. The four historical sample decisions remain bound to their own exact bytes and renderer/font/layout/validation context. Zero stale or invalidated audit approvals reflects the empty isolated review store, not a claim that all historical approvals remain current under new policies.
+
+2 historical overlay sample acceptances are separate from the poster-language table. 4 historical accepted sample contexts differ from the current renderer context. These differences already existed at the Package E dependency/platform/overlay checkpoint; the multilingual correction itself preserves current English and overlay policy/renderer identities. Their original exact decisions remain preserved; no current-runtime acceptance is inferred and no synthetic stale/rejected review event is created.
+
+All 9,957 English validation identities match the original audit exactly. Composer sources, parameters and bundled fonts remain unchanged. The original full English and overlay runs retain their separate source hashes and receipts.
+
+Validated examples using current parameters:
+
+- longer: es / poster.f97fdc940e8feee8d8fe115b; English "OTHER ASPECT RATIOS"; translated "OTRAS RELACIONES DE ASPECTO". Exact validation 6eec28e8d8343de165ac8e3394d90a85143ce1202634c2d94e315667787dfa4f.
+
+- same_length: bg / poster.bf5f77efc9d73b1c101f4118; English "INTERLINGUE AUDIO"; translated "АУДИО НА ОКДЕНТАЛ". Exact validation 64ba91065f9352199d8effa9ac6aa190c146c9e5a6f8b2d227cc77524766390a.
+
+- shorter: hu / poster.6ddbb493f0f53fa58e2724ef; English "OTHER ASPECT RATIOS"; translated "EGYÉB KÉPARÁNYOK". Exact validation e809fc29a47f073b6fb49929c9208fa533f718778e4cccb488cd3e2940fcb47e.
+
+Measurement reuse: 14,508 distinct groups, 74,209 members and 6,399 repeated groups. The controlled 512-measurement microbenchmark took 0.867 seconds cold and 0.156 seconds warm. Cold includes font loading. These are native in-process measurement timings, rather than a whole-render speedup. Audit cache counters and exact measurement inputs are retained in the evidence.
+
+Cache keys bind exact caption text, font bytes, effective size/offset, compositor renderer and validation-policy version. The compositor derives shaping from Unicode text; identical native inputs can share measurements across languages while variant validations remain language-bound. Caption/font/layout/renderer/policy changes still invalidate the affected review context precisely; ingestion preserves the policy a historical report actually recorded.
+
+Arabic retains its approved-script-font and joining/bidi/anchor review boundary. Missing translations, unsupported glyphs and geometric failures remain constraints. No wording, upstream translation, installed font or catalog typography was changed. A future risk-based process may group exact language/font/layout/template combinations and inspect representatives, but any group acceptance needs an explicit exact-membership decision. Current translated-caption policy requires individual artwork review; representatives never automatically approve uninspected variants.
+
+See [corrected multilingual evidence](bulk/evidence/package-e/multilingual-correction.json) and its compressed key, measurement and variant ledgers. All new technical evidence grants zero artwork approvals or publication permissions.
 
 ## Incremental generation, review integrity and recovery
 
@@ -434,16 +513,16 @@ See [profile evidence](bulk/evidence/package-e/warm-profiling.json).
 
 ## Platform tests and CI
 
-| Suite | Windows | Linux executable checkpoint |
+| Suite | Windows | Linux current addendum checkpoint |
 | --- | --- | --- |
 | Phase 1 | 120 passed | 120 passed |
 | Package A | 35 passed | 35 passed |
-| B-E | 221 passed / 2 skips / 0 failures | 222 passed / 1 skip |
+| B-E | 241 passed / 2 skips / 0 failures | 242 passed / 1 skip |
 | People | 129 passed / 1 account skip | 129 passed / 1 platform skip |
 | Manifest validators / compile | Passed | Passed |
 | E smoke | 35 posters + 38 corrected overlays passed | 35 posters + 38 corrected overlays passed |
 
-Linux totals 506 passed and two platform skips. Windows final bulk counts supersede the earlier run and repeated focused cases are not added to that total.
+Current Linux validation totals 526 passed and two platform skips. Original 506-test evidence remains historical. Windows final bulk counts supersede the earlier run and repeated focused cases are not added to that total.
 
 [Final executable Linux CI](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39060962332)
 is successful at workflow head `690d1977b207cbbb61371a0fcb8bd02e37db85d2`.
@@ -477,6 +556,17 @@ CI retains contents:read, pinned actions and nonpersistent credentials. It runs
 35 posters/38 overlays plus focused D samples, never full production generation.
 Selected review artifacts expire after 14 days. Full output collections, caches,
 SQLite databases and font binaries are not CI/repository payloads.
+
+Current multilingual correction validation is retained separately in
+[multilingual validation](bulk/evidence/package-e/multilingual-validation.json):
+525 Windows passes with three account skips and 526 Linux passes with two platform
+skips. Both manifest checks, compilation and the 35-poster/38-overlay acceptance
+smoke pass. The current Windows/Linux sample ledger matches all 35 JPEG hashes
+and all 38 decoded overlay pixels; PNG byte streams differ. Original regression
+and platform records remain historical evidence. A targeted Git attribute preserves
+exact hash-bound Package D observation bytes on Windows checkouts, without changing
+its metrics or acceptance. The initial fixture and CRLF failures are retained beside
+the passing correction results. No approval is transferred between these contexts.
 
 ## Security, dependencies and repository hygiene
 
@@ -513,20 +603,22 @@ Final complete-PR static inventory:
 ```json
 {
   "pr_base": "57ef136833a3f54da2bf1e4ddef98addfa36d583",
-  "files": 209,
+  "files": 225,
   "groups": {
-    "implementation tests docs or workflow": 92,
+    "implementation tests docs or workflow": 97,
     "compressed immutable manifest fixtures": 1,
     "generated catalog and source-normalized migration audits": 88,
-    "compact package audit evidence": 24,
+    "compact package audit evidence": 30,
+    "compressed Package E exact output and comparison audit ledgers": 5,
     "Package A source and inventory evidence": 4
   },
   "bytes_by_group": {
-    "implementation tests docs or workflow": 953535,
+    "implementation tests docs or workflow": 1020477,
     "compressed immutable manifest fixtures": 1458149,
-    "generated catalog and source-normalized migration audits": 13803206,
-    "compact package audit evidence": 543981,
-    "Package A source and inventory evidence": 2133232
+    "generated catalog and source-normalized migration audits": 14117015,
+    "compact package audit evidence": 997447,
+    "compressed Package E exact output and comparison audit ledgers": 21361501,
+    "Package A source and inventory evidence": 2194331
   },
   "possible_credentials": [],
   "unexpected_generated_or_binary_payloads": [],
@@ -564,7 +656,7 @@ rewritten to remove failures or reduce the PR size.
 | Fresh all-language discovery/coverage/strict-partial checks | Passed | 139398 contracts, all 14 resources; no English scope differences. |
 | Complete non-English production collections | Blocked | Translation, typography and artwork approval are assessed separately in the corrected matrix. |
 | Arabic font / RTL / mixed-script acceptance | Blocked | OFL candidate and probes preserved; no visual/font approval. |
-| Fitting proposals / scalable group analysis | Passed with documented limitation | Six actual previews; no policy change or new approvals. |
+| Fitting proposals / scalable group analysis | Passed with documented limitation | Native translated fitting and review-only proposals; zero new artwork approvals. |
 | Review/invalidation integrity | Passed | Exact artifacts/version-bound subsets; synthetic decisions isolated. |
 | Historical color preservation / new assignment policy | Passed | 9957 historical colors; uniqueness/concurrency/provenance regression tests. |
 | Dependency/license and complete-PR static audit | Passed with documented limitation | Direct-pin advisory screen and source audit; no full transitive/native SBOM. |
@@ -577,8 +669,9 @@ Priority maintainer decisions before any future production operation:
 2. Resolve the Action & adventure/Action & Adventure destination case mapping.
 3. Review broader overlay behavior and the corrected ICC sample identities; existing
    D acceptance covers its exact reviewed samples only.
-4. Review/activate each translated fitting proposal in its current version context;
-   decide Arabic font/RTL/anchor behavior and preserve high-risk individual review.
+4. Review translated artwork that fits current settings and decide which exact layout
+   proposals to approve before any activation. Decide Arabic font/RTL/anchor behavior
+   and preserve high-risk individual review.
 5. Approve any future low-risk group policy explicitly; no current group inference
    authorizes translated collections or missing content.
 6. Separately authorize a cutover plan, publishing authority and rollback ownership.
