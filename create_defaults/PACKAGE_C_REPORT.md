@@ -3,8 +3,8 @@
 ## Gate Status
 
 Package C is implemented on `feat/default-posters-python-generator` for draft
-PR #12. Gate C remains **awaiting maintainer approval**. Local final regression
-and Linux CI results are recorded below as they complete; no production-readiness
+PR #12. Gate C remains **awaiting maintainer approval**. Windows and Linux
+regression checks passed as recorded below; no production-readiness
 or multilingual-acceptance claim is made.
 
 The production PowerShell generator, validated Pillow composer/text engine,
@@ -52,6 +52,14 @@ Historical fixtures and their original 9,958-job counts remain unchanged.
 Splatter row 4883. The authoritative row 4884 retains `genre/Splatter.jpg`,
 `#990000`, the original logo/layout/translation, and disabled white-wash.
 
+The catalog contains **4,372 authoring definitions**, including named range
+families and explicit color/white style definitions. This is not a one-to-one
+count of the original 3,352 CSV rows: 3,351 original literal source lines remain
+active and one is explicitly retired. All 9,958 original effective job identities
+are accounted for as 9,957 active plus the one D02 retirement. Source-line/row
+coverage and effective-job counts are distinct; neither historical count is
+rewritten to conceal the migration's representation changes.
+
 There are **9,955 published-path contracts and two private intermediates**. The
 legacy Awards calls at producer lines 1912 and 2226 were subsequently overwritten
 by equivalent year jobs. They remain explicit `_intermediates/award/...` local
@@ -81,29 +89,29 @@ Generated-input canonical plans use real verified benchmark parents, not invente
 hashes. Exact plan/sample identities are in
 `bulk/catalog/audit/package-c-evidence.json` and the per-category JSON reports.
 
-| Category | Legacy Jobs | Active Jobs | Automated Gate | Maintainer Gate |
-| --- | ---: | ---: | --- | --- |
-| Aspect | 9 | 9 | Passed | Awaiting review |
-| AudioLanguage | 188 | 188 | Passed | Awaiting review |
-| Awards | 4,847 | 4,847 | Passed | Awaiting review |
-| Based | 4 | 4 | Passed | Awaiting review |
-| Chart | 1,182 | 1,182 | Passed | Awaiting review |
-| ContentRating | 72 | 72 | Passed | Awaiting review |
-| Country | 608 | 608 | Passed | Awaiting review |
-| Decade | 31 | 31 | Passed | Awaiting review |
-| Franchise | 118 | 118 | Passed | Awaiting review |
-| Genre | 276 | 275 | Passed, D02 documented | Awaiting review |
-| Network | 568 | 568 | Passed | Awaiting review |
-| Playlist | 9 | 9 | Passed | Awaiting review |
-| Resolution | 15 | 15 | Passed | Awaiting review |
-| Seasonal | 23 | 23 | Passed | Awaiting review |
-| Separators | 749 | 749 | Passed | Awaiting review |
-| Streaming | 256 | 256 | Passed | Awaiting review |
-| Studio | 488 | 488 | Passed | Awaiting review |
-| SubtitleLanguage | 188 | 188 | Passed | Awaiting review |
-| Universe | 20 | 20 | Passed | Awaiting review |
-| VideoFormat | 6 | 6 | Passed | Awaiting review |
-| Year | 301 | 301 | Passed | Awaiting review |
+| Category | Authoring Definitions | Legacy Jobs | Active Jobs | Automated Gate | Maintainer Gate |
+| --- | ---: | ---: | ---: | --- | --- |
+| Aspect | 9 | 9 | 9 | Passed | Awaiting review |
+| AudioLanguage | 188 | 188 | 188 | Passed | Awaiting review |
+| Awards | 161 | 4,847 | 4,847 | Passed | Awaiting review |
+| Based | 4 | 4 | 4 | Passed | Awaiting review |
+| Chart | 1,182 | 1,182 | 1,182 | Passed | Awaiting review |
+| ContentRating | 50 | 72 | 72 | Passed | Awaiting review |
+| Country | 608 | 608 | 608 | Passed | Awaiting review |
+| Decade | 17 | 31 | 31 | Passed | Awaiting review |
+| Franchise | 118 | 118 | 118 | Passed | Awaiting review |
+| Genre | 275 | 276 | 275 | Passed, D02 documented | Awaiting review |
+| Network | 568 | 568 | 568 | Passed | Awaiting review |
+| Playlist | 9 | 9 | 9 | Passed | Awaiting review |
+| Resolution | 15 | 15 | 15 | Passed | Awaiting review |
+| Seasonal | 23 | 23 | 23 | Passed | Awaiting review |
+| Separators | 35 | 749 | 749 | Passed | Awaiting review |
+| Streaming | 256 | 256 | 256 | Passed | Awaiting review |
+| Studio | 488 | 488 | 488 | Passed | Awaiting review |
+| SubtitleLanguage | 188 | 188 | 188 | Passed | Awaiting review |
+| Universe | 20 | 20 | 20 | Passed | Awaiting review |
+| VideoFormat | 6 | 6 | 6 | Passed | Awaiting review |
+| Year | 152 | 301 | 301 | Passed | Awaiting review |
 
 ## Visual Evidence
 
@@ -111,8 +119,10 @@ Local comparison index: `config/package-c/validation-02/index.html`.
 Year/Decade's expanded font/dependency comparisons are under `validation-03/` and
 linked from that index. Each comparison shows the actual persistent-worker JPEG
 beside a fresh direct approved-Pillow-API reference using the corrected captured
-parameters. Source/generated input bytes are pinned. Compared outputs are
-byte-identical, including approved Jakarta 409-point and Monoton examples.
+parameters. Source/generated input bytes are pinned. All **50** compared outputs
+are byte-identical, including approved Jakarta 409-point and Monoton examples.
+All 50 final worker/reference file pairs were rechecked against recorded hashes
+after the incremental restore tests.
 
 This proves the new orchestration preserves the approved Python rendering path;
 it is **not** a new full ImageMagick comparison or published-artwork reconciliation.
@@ -168,12 +178,22 @@ Windows validation completed:
 - Compile and staged whitespace checks: **passed**. Staged scope contains 107
   source/data/documentation files, with no generated images, font binaries,
   databases, caches, workspaces, secrets or production-script changes.
-- Linux PR CI: pending authorized push; the existing read-only workflow discovers
-  the new offline category and real-composer tests automatically.
+- Linux PR CI: **passed** for code commit `6c6cabb949366df8898795c8c167f9724b84b2d7`.
+  [Run 38981456384](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/38981456384)
+  used Ubuntu 24.04 / Python 3.13.16; job duration 3m13s. The subsequent report
+  update is documentation only. The existing read-only workflow discovers the
+  new offline category and real-composer tests automatically.
 
 Local total: **401 passed, 2 platform-permission skips** across the four suites.
 Third-party pytest plugin autoload was disabled for the local pytest commands;
 the repository's actual test selection was unchanged.
+
+Linux results: Phase 1 **120 passed** (38.612s), Package A **35 passed** (4.338s),
+Package B/C **117 passed, 1 skipped** (111.36s), People regressions **129 passed,
+1 skipped** (5.14s). Both baseline validators, compile and whitespace checks passed.
+The Linux skips are explicitly Windows-only junction tests, not failed symlink
+coverage. Linux total: **401 passed, 2 expected platform skips**. No executable
+change was necessary to resolve Linux CI failures.
 
 Tests cover all categories, dynamic determinism and limits, exact approved
 corrections/fonts, actual parent/child rendering, no invented dependency hashes,
