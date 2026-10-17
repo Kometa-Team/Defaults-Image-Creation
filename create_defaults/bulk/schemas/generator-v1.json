@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kometa:bulk:generator:1",
+  "type": "object",
+  "$defs": {
+    "measurement": {"type": "object", "additionalProperties": false, "required": ["point_size", "evidence_sha256"], "properties": {"point_size": {"type": "integer"}, "evidence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}},
+    "measurements": {"type": "object", "minProperties": 1, "maxProperties": 2000, "additionalProperties": {"$ref": "#/$defs/measurement"}},
+    "range": {"type": "object", "required": ["start", "stop", "step", "directory", "measurements"], "properties": {"start": {"type": "integer", "minimum": 1000, "maximum": 2999}, "stop": {"type": "integer", "minimum": 1001, "maximum": 3000}, "step": {"enum": [1, 10]}, "directory": {"type": "string", "format": "artwork-path"}, "measurements": {"$ref": "#/$defs/measurements"}, "parent_directory": {"type": "string", "format": "artwork-path"}}}
+  },
+  "allOf": [
+    {"if": {"properties": {"name": {"enum": ["award-years", "best-of-years"]}}}, "then": {"properties": {"parameters": {"$ref": "#/$defs/range"}}}},
+    {"if": {"properties": {"name": {"const": "separator-variants"}}}, "then": {"properties": {"parameters": {"type": "object", "additionalProperties": false, "required": ["variants", "filename"], "properties": {"filename": {"type": "string", "format": "artwork-path"}, "variants": {"type": "array", "minItems": 1, "maxItems": 64, "items": {"type": "object", "additionalProperties": false, "required": ["name", "base_color", "evidence_sha256"], "properties": {"name": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"}, "base_color": {"type": "string", "pattern": "^#[0-9a-fA-F]{6}$"}, "evidence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}}}}}}},
+    {"if": {"properties": {"name": {"const": "content-rating-series"}}}, "then": {"properties": {"parameters": {"type": "object", "additionalProperties": false, "required": ["values", "directory", "caption_suffix", "measurements"], "properties": {"values": {"type": "array", "minItems": 1, "maxItems": 64, "uniqueItems": true, "items": {"type": "string", "pattern": "^[A-Za-z0-9+-]{1,12}$"}}, "directory": {"type": "string", "format": "artwork-path"}, "caption_suffix": {"enum": ["", "+"]}, "measurements": {"$ref": "#/$defs/measurements"}}}}}}
+  ]
+}

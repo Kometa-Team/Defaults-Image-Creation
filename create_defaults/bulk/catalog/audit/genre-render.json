@@ -1,0 +1,344 @@
+{
+  "active_jobs": 275,
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "category": "Genre",
+  "cold_metrics": [
+    {
+      "cache_hit_rate": 0.0,
+      "cache_hits": 0,
+      "dedup_reuses": 0,
+      "executed": 3,
+      "jobs_per_second": 0.8593866419951444,
+      "max_inflight": 2,
+      "peak_parent_rss": 66621440,
+      "peak_worker_rss": 153174016,
+      "peak_workers_rss_sum": 284729344,
+      "process_start": "spawn",
+      "read_bytes": 26086361,
+      "wall_seconds": 3.490861800033599,
+      "worker_pids": [
+        54464,
+        87020
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 2,
+      "write_bytes": 4633796
+    }
+  ],
+  "contract_parity": true,
+  "definitions": 275,
+  "discrepancies": [],
+  "human_visual_approval": false,
+  "incremental_metrics": [
+    {
+      "cache_hit_rate": 0.6666666666666666,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 1.2426525063102072,
+      "max_inflight": 1,
+      "peak_parent_rss": 133840896,
+      "peak_worker_rss": 156553216,
+      "peak_workers_rss_sum": 156553216,
+      "process_start": "spawn",
+      "read_bytes": 11187676,
+      "wall_seconds": 2.4141906001605093,
+      "worker_pids": [
+        89948
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 1613208
+    }
+  ],
+  "legacy_effective_jobs": 276,
+  "limitations": [
+    "Fresh direct Pillow parity, not a new legacy ImageMagick comparison",
+    "English only; full multilingual layout belongs to D",
+    "Representative sample, not every category output rendered"
+  ],
+  "restore_metrics": [
+    {
+      "cache_hit_rate": 0.6666666666666666,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 1.1059575537400133,
+      "max_inflight": 1,
+      "peak_parent_rss": 134160384,
+      "peak_worker_rss": 150749184,
+      "peak_workers_rss_sum": 150749184,
+      "process_start": "spawn",
+      "read_bytes": 11189554,
+      "wall_seconds": 2.7125814999453723,
+      "worker_pids": [
+        25304
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 1614460
+    }
+  ],
+  "resume_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 3,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 8.956830754214728,
+      "max_inflight": 0,
+      "peak_parent_rss": 133214208,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.3349399003200233,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ],
+  "sample_comparisons": [
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#606723",
+        "border_color": "#FFFFFF",
+        "caption": {
+          "advances": [
+            1395.0929999999998,
+            1755.964,
+            1498.6019999999999,
+            380.61799999999994
+          ],
+          "glyph_bounds_source": "original font outline bounds",
+          "ink_bounds": [
+            73,
+            34,
+            1818,
+            935
+          ],
+          "line_height": 243,
+          "line_widths": [
+            1396,
+            1756,
+            1499,
+            381
+          ],
+          "lines": [
+            "1001 MOVIES",
+            "YOU MUST SEE",
+            "BEFORE YOU",
+            "DIE"
+          ],
+          "point_size": 217
+        },
+        "engine": "python",
+        "font": {
+          "path": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+        },
+        "gradient": 1,
+        "logo_size": [
+          1800,
+          1216
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#606723",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 217,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\logos_genre\\1001 Movies You Must See Before You Die.png",
+          "logo_offset": -500,
+          "logo_resize": 1800,
+          "out_name": "1001 Movies You Must See Before You Die",
+          "text": "1001 MOVIES YOU MUST SEE BEFORE YOU DIE",
+          "text_offset": 850,
+          "white_wash": true
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\genre\\reference\\poster.6f194ebb38066c692e1b6523.jpg",
+        "sha256": "63c59cad6b4d8f58558b9213b6e47205fb95f02e8e597e58cf63201cc7515d9f",
+        "size_bytes": 701061
+      },
+      "output": "genre/1001 Movies You Must See Before You Die.jpg",
+      "poster_id": "genre.genre-1001-movies-you-must-see-before-you-die.ca982ba3",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "63c59cad6b4d8f58558b9213b6e47205fb95f02e8e597e58cf63201cc7515d9f",
+      "sha256": "63c59cad6b4d8f58558b9213b6e47205fb95f02e8e597e58cf63201cc7515d9f"
+    },
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#D16496",
+        "border_color": "#FFFFFF",
+        "caption": {
+          "advances": [
+            1075.0,
+            1189.0
+          ],
+          "glyph_bounds_source": "original font outline bounds",
+          "ink_bounds": [
+            372,
+            243,
+            1545,
+            723
+          ],
+          "line_height": 280,
+          "line_widths": [
+            1075,
+            1189
+          ],
+          "lines": [
+            "ABSURD",
+            "COMEDY"
+          ],
+          "point_size": 250
+        },
+        "engine": "python",
+        "font": {
+          "path": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+        },
+        "gradient": 1,
+        "logo_size": [
+          1800,
+          1215
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#D16496",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 250,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\logos_genre\\Absurd Comedy.png",
+          "logo_offset": -500,
+          "logo_resize": 1800,
+          "out_name": "Absurd Comedy",
+          "text": "ABSURD COMEDY",
+          "text_offset": 850,
+          "white_wash": false
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\genre\\reference\\poster.1909aac40cbb9f907448d68c.jpg",
+        "sha256": "0df6bf0c9521a567c5a658c2deadc896df78d5bd1c0642ca792956d8efeb2687",
+        "size_bytes": 808356
+      },
+      "output": "genre/Absurd Comedy.jpg",
+      "poster_id": "genre.genre-absurd-comedy.a6975754",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "0df6bf0c9521a567c5a658c2deadc896df78d5bd1c0642ca792956d8efeb2687",
+      "sha256": "0df6bf0c9521a567c5a658c2deadc896df78d5bd1c0642ca792956d8efeb2687"
+    },
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#990000",
+        "border_color": "#FFFFFF",
+        "caption": {
+          "advances": [
+            1293.5
+          ],
+          "glyph_bounds_source": "original font outline bounds",
+          "ink_bounds": [
+            318,
+            383,
+            1593,
+            583
+          ],
+          "line_height": 280,
+          "line_widths": [
+            1294
+          ],
+          "lines": [
+            "SPLATTER"
+          ],
+          "point_size": 250
+        },
+        "engine": "python",
+        "font": {
+          "path": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+        },
+        "gradient": 1,
+        "logo_size": [
+          1800,
+          1215
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#990000",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 250,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\logos_genre\\Splatter.png",
+          "logo_offset": -500,
+          "logo_resize": 1800,
+          "out_name": "Splatter",
+          "text": "SPLATTER",
+          "text_offset": 850,
+          "white_wash": false
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\genre\\reference\\poster.a0c41407c3edeb21d2615083.jpg",
+        "sha256": "7ed904a5e3bc1e264b487f9f612ccc30117dda15340c209d8a2fbc53233dcf27",
+        "size_bytes": 807100
+      },
+      "output": "genre/Splatter.jpg",
+      "poster_id": "genre.genre-splatter.d3e4161c",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "7ed904a5e3bc1e264b487f9f612ccc30117dda15340c209d8a2fbc53233dcf27",
+      "sha256": "7ed904a5e3bc1e264b487f9f612ccc30117dda15340c209d8a2fbc53233dcf27"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Resolved English contract parity; generated inputs require separately verified real parent artifacts before render planning",
+  "status": "automated_sample_passed",
+  "wall_seconds": 18.65835230005905,
+  "warm_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 3,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 3.6090651054908744,
+      "max_inflight": 0,
+      "peak_parent_rss": 65523712,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.8312401999719441,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ]
+}

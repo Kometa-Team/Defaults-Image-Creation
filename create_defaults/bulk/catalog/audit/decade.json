@@ -1,0 +1,408 @@
+{
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "active": [
+    {
+      "poster_id": "decade.decade-other.b9d2114d",
+      "legacy_id": "decade-06910-3151e1c03ee5",
+      "job_sha256": "89caa9cda245ec6eca2011fba8ad4f63050b7a8feb12e3e9d14e3a78836fa655",
+      "source": {
+        "definition_line": 4396,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4408
+      },
+      "row_sha256": "c41110045a1304c2753ee8eced243150023d24d9714c8b0cdf11e5d9c9348fa5",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "decade.decade-1880.a3636532",
+      "legacy_id": "decade-06911-e33f693862de",
+      "job_sha256": "6a97b9b168037d0775cc7ea87f1a6b435d4da83b3b80608381cc690ec7cda50e",
+      "source": {
+        "definition_line": 4419,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4445
+      },
+      "row_sha256": "339275c7fb5263a5b409fa01c3ae3699bc10974dc4c4c80ebf9aa253d33685ba",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "decade.decade-1890.f61e8ab8",
+      "legacy_id": "decade-06912-35cf0f550fb0",
+      "job_sha256": "7652c532619a6cf6a2cb86d19e156e82ea5b0d7af82220b91a88c50fbd26f51d",
+      "source": {
+        "definition_line": 4420,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4445
+      },
+      "row_sha256": "a458dd4b302bf0ca4c8056e7bfefe0e6f6caaedcf721c956a9c4993241bf32b8",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "decade.decade-1900.7066c0d1",
+      "legacy_id": "decade-06913-421a7faaf053",
+      "job_sha256": "d03d8062be88d03d1f42415aab3a72149497770ae814ba9fca519c0f0dccf642",
+      "source": {
+        "definition_line": 4421,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4445
+      },
+      "row_sha256": "d594a02593bef22bd228a75972db7309326062c3e1e93ce9ceb10c4355387bc1",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "decade.decade-1910.218f522c",
+      "legacy_id": "decade-06914-4f55ddf35643",
+      "job_sha256": "09d5d863a240c01e8d69fdca3b882b1690a6132642f80e918e56ee7d9f0b65fd",
+      "source": {
+        "definition_line": 4422,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4445
+      },
+      "row_sha256": "da4f9fa515ac502507f670f8dd5f29431710094939fdca738fc5cce6b22da487",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "decade.decade-1920.9b6eae4a",
+      "legacy_id": "decade-06915-60f86e2ea814",
+      "job_sha256": "eabb4c7edb113ad2da8772d4860dabbf1757bf003d226c1858cd56fbda8fb638",
+      "source": {
+        "definition_line": 4423,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4445
+      },
+      "row_sha256": "1a841e410ee4af02141df2450208fc262912ffd113f29af6c77d3366d3bc2141",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "decade.decade-1930.a405123a",
+      "legacy_id": "decade-06916-b8808a513216",
+      "job_sha256": "ee991dd3605117034683a49074b9a078a465ad4e81d65db95f5c88626a77de5b",
+      "source": {
+        "definition_line": 4424,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4445
+      },
+      "row_sha256": "ec9bf8481ddf731d734a8532193f1fd6bbff044754798014d8c1130b8dc9f972",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "decade.decade-1940.46b7ef22",
+      "legacy_id": "decade-06917-9f7a5b74bb61",
+      "job_sha256": "9ea111b8f3d7f344ea2a542f9bc9d6cf307050e30b416a6adc0749580ebd0375",
+      "source": {
+        "definition_line": 4425,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4445
+      },
+      "row_sha256": "0e1d6aa8517c9018bfa06e5f8699aba0f307fb24e83e4cdd7bcdcb8fce87164e",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "decade.decade-1950.6267b17f",
+      "legacy_id": "decade-06918-a3041ee461d6",
+      "job_sha256": "bf4197e9e63264ffc4c559bbf15b1ee8988e52809960ebaae7f54b84b9e818e0",
+      "source": {
+        "definition_line": 4426,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4445
+      },
+      "row_sha256": "7c97e3cf0358b71803a6867491968e0b39e6463bc531c1ca8b3f9a755dbfbad8",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "decade.decade-1960.842f289e",
+      "legacy_id": "decade-06919-1b3f76444cc2",
+      "job_sha256": "6a1949539e447b8b413398919b54916fc622d3652240ef18f9e0f321d5aa6868",
+      "source": {
+        "definition_line": 4427,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4445
+      },
+      "row_sha256": "e5f1dfdb855784f9f8b10d6dc3efc4c9613bfb4325cbe59f21dba460ebe8df94",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "decade.decade-1970.fe52ec50",
+      "legacy_id": "decade-06920-dd3f6197cc60",
+      "job_sha256": "4718fd6600f8c578d9b825a64948af9f7c40a0b2ad26ca3840754f759e0b6fc5",
+      "source": {
+        "definition_line": 4428,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4445
+      },
+      "row_sha256": "4d189ba7925163c884a565433b666791638449d5a026cd3059b000f0a26090d2",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "decade.decade-1980.be33b98b",
+      "legacy_id": "decade-06921-4d238951ce79",
+      "job_sha256": "c1f0a923674ebf9a2752493a985cf8b1d0991af11920fa836b9c4f977e46fcef",
+      "source": {
+        "definition_line": 4429,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4445
+      },
+      "row_sha256": "0b5f08fd885ecc65f3cc2d64feb394e621c97d5e7dbee107a9565ea5568751e2",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "decade.decade-1990.0237b3fc",
+      "legacy_id": "decade-06922-0ff73fdcb5cb",
+      "job_sha256": "2954e39b748cc9454c0bfce0594ab8158a6e22a71e0d5a0794a7826c4309a0e1",
+      "source": {
+        "definition_line": 4430,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4445
+      },
+      "row_sha256": "cf9ac7ee0ea64a42e72134f6ec44d0514bdc56984813921b6552f76316d72c71",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "decade.decade-2000.3d2a25be",
+      "legacy_id": "decade-06923-03819946a9e2",
+      "job_sha256": "3c1c6d391d7f8d8b657265251887004bb594e67285ffee13660b2cd780a87462",
+      "source": {
+        "definition_line": 4431,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4445
+      },
+      "row_sha256": "c3e56687a160d2c78f36e22afdcbe504e834598bf5e130ae2c8331e6e14b48f6",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "decade.decade-2010.e896b17a",
+      "legacy_id": "decade-06924-19d140698a7d",
+      "job_sha256": "15eaca689a22b92b61bb0a899678bb512818c4ade4b4f46fa123dacbdab287ff",
+      "source": {
+        "definition_line": 4432,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4445
+      },
+      "row_sha256": "5e9909079f058c5d58ded67f6428e6fc7e366bd05da67a18f8ff543c18c318af",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "decade.decade-2020.6b12c5db",
+      "legacy_id": "decade-06925-4562da353829",
+      "job_sha256": "a362cc16a8f55db63e5042213e7bf6a63469e58315c1f1edceda2eb378a7a0a9",
+      "source": {
+        "definition_line": 4433,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4445
+      },
+      "row_sha256": "2ce35c8f12fb3a1e118613228b48b83bc2d4fbffdf1a7a79c4052502e76291d4",
+      "frozen_choices": [
+        "legacy numeric logo_resize=0 defaults to 2000"
+      ]
+    },
+    {
+      "poster_id": "decade.decade-best-1880.a3e83384",
+      "legacy_id": "decade-06926-f114c1491b0d",
+      "job_sha256": "656da775d01ff61ae677c5fbfd6e6c32beadc71684162ecda616b03b374868ac",
+      "source": {
+        "definition_line": 4433,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4467
+      },
+      "row_sha256": "2ce35c8f12fb3a1e118613228b48b83bc2d4fbffdf1a7a79c4052502e76291d4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "decade.decade-best-1890.94a764bf",
+      "legacy_id": "decade-06927-90877f9804e0",
+      "job_sha256": "b58a899517e6eee955a6a897f3748453b88b8eb4c54db1a1402379a3b2d09dcd",
+      "source": {
+        "definition_line": 4433,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4467
+      },
+      "row_sha256": "2ce35c8f12fb3a1e118613228b48b83bc2d4fbffdf1a7a79c4052502e76291d4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "decade.decade-best-1900.52184e3a",
+      "legacy_id": "decade-06928-9748f03f36fe",
+      "job_sha256": "fd211d13f66c88820decb65422e58458e72191b26d568dfc1b52284fbc6cd164",
+      "source": {
+        "definition_line": 4433,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4467
+      },
+      "row_sha256": "2ce35c8f12fb3a1e118613228b48b83bc2d4fbffdf1a7a79c4052502e76291d4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "decade.decade-best-1910.045badee",
+      "legacy_id": "decade-06929-27e60a3d09a1",
+      "job_sha256": "6bcd523e6f6ea9d9644915e34a79ee71f9565b966797605c1a13c765c1af5a16",
+      "source": {
+        "definition_line": 4433,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4467
+      },
+      "row_sha256": "2ce35c8f12fb3a1e118613228b48b83bc2d4fbffdf1a7a79c4052502e76291d4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "decade.decade-best-1920.680e6fa3",
+      "legacy_id": "decade-06930-114556a3668f",
+      "job_sha256": "567ea835ba3ea820771334c19183bf78836fc79b8f1e03cb6ff3b1d500fb665c",
+      "source": {
+        "definition_line": 4433,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4467
+      },
+      "row_sha256": "2ce35c8f12fb3a1e118613228b48b83bc2d4fbffdf1a7a79c4052502e76291d4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "decade.decade-best-1930.20279b42",
+      "legacy_id": "decade-06931-745123794b0d",
+      "job_sha256": "3fc1d74a6fa58f2bf8a46be0972fa045fb3dede805b2a66d35077ced0cbddb88",
+      "source": {
+        "definition_line": 4433,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4467
+      },
+      "row_sha256": "2ce35c8f12fb3a1e118613228b48b83bc2d4fbffdf1a7a79c4052502e76291d4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "decade.decade-best-1940.5a625e51",
+      "legacy_id": "decade-06932-900a36da7c88",
+      "job_sha256": "2b3c38147dcb7205d9729894e6fbd129a46037cb26989becad5eeea9de66855f",
+      "source": {
+        "definition_line": 4433,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4467
+      },
+      "row_sha256": "2ce35c8f12fb3a1e118613228b48b83bc2d4fbffdf1a7a79c4052502e76291d4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "decade.decade-best-1950.b8c2d265",
+      "legacy_id": "decade-06933-3249da3bb5b7",
+      "job_sha256": "674641ab12797c43206b4c9a2294b1519ee260998b306690677b907d92c97c3a",
+      "source": {
+        "definition_line": 4433,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4467
+      },
+      "row_sha256": "2ce35c8f12fb3a1e118613228b48b83bc2d4fbffdf1a7a79c4052502e76291d4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "decade.decade-best-1960.76329a3b",
+      "legacy_id": "decade-06934-69b2487f3953",
+      "job_sha256": "d7daa8669605baf8b65a8209f25ad791937afde794bb1b06c89acae6cb33d4f1",
+      "source": {
+        "definition_line": 4433,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4467
+      },
+      "row_sha256": "2ce35c8f12fb3a1e118613228b48b83bc2d4fbffdf1a7a79c4052502e76291d4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "decade.decade-best-1970.d55e2062",
+      "legacy_id": "decade-06935-bec35fbb4194",
+      "job_sha256": "0231e164733b737be2960cc72ad6d2be23615a5928910ce48538693c72f6f21f",
+      "source": {
+        "definition_line": 4433,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4467
+      },
+      "row_sha256": "2ce35c8f12fb3a1e118613228b48b83bc2d4fbffdf1a7a79c4052502e76291d4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "decade.decade-best-1980.6a9375cd",
+      "legacy_id": "decade-06936-957458d0b0be",
+      "job_sha256": "29e01f9d1ff4be56759f122d93345f0a8949d6f30f15c3235440c25f867d521f",
+      "source": {
+        "definition_line": 4433,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4467
+      },
+      "row_sha256": "2ce35c8f12fb3a1e118613228b48b83bc2d4fbffdf1a7a79c4052502e76291d4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "decade.decade-best-1990.c6ef8654",
+      "legacy_id": "decade-06937-fdd796376b73",
+      "job_sha256": "913b00972572d6303aa765666bafd743c83280ba7a1fa5cf4cc91efbc171250a",
+      "source": {
+        "definition_line": 4433,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4467
+      },
+      "row_sha256": "2ce35c8f12fb3a1e118613228b48b83bc2d4fbffdf1a7a79c4052502e76291d4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "decade.decade-best-2000.b65ce3dc",
+      "legacy_id": "decade-06938-0d7ef03e8bf1",
+      "job_sha256": "3f0f8b74e1d198bc86c716a38c9410ab724ac9505237f2bae4bbd67ef200032e",
+      "source": {
+        "definition_line": 4433,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4467
+      },
+      "row_sha256": "2ce35c8f12fb3a1e118613228b48b83bc2d4fbffdf1a7a79c4052502e76291d4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "decade.decade-best-2010.a9281263",
+      "legacy_id": "decade-06939-dbd48cb9687b",
+      "job_sha256": "3cf4f2d38ee49578d5e298d3168633e87a7cebc06e3bce491993d73c50f157d5",
+      "source": {
+        "definition_line": 4433,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4467
+      },
+      "row_sha256": "2ce35c8f12fb3a1e118613228b48b83bc2d4fbffdf1a7a79c4052502e76291d4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "decade.decade-best-2020.6d6c1165",
+      "legacy_id": "decade-06940-a25564fc8062",
+      "job_sha256": "b121c38ae36fa4aa6a065af9b3ab4a422dfd2014dcaed59ae8295a666796d680",
+      "source": {
+        "definition_line": 4433,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4467
+      },
+      "row_sha256": "2ce35c8f12fb3a1e118613228b48b83bc2d4fbffdf1a7a79c4052502e76291d4",
+      "frozen_choices": []
+    }
+  ],
+  "retired": []
+}

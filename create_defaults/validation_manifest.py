@@ -296,11 +296,12 @@ def load_manifest(path):
     return value
 
 
-def validate_manifest(manifest, assets=ROOT):
+def validate_manifest(manifest, assets=ROOT, *, source_root=None):
+    source_root = Path(source_root) if source_root is not None else assets
     if manifest["schema"] != SCHEMA or len(manifest["jobs"]) != manifest["effective_composer_jobs"]:
         raise ValueError("Incomplete frozen manifest")
     for name, checksum in manifest["source_text_hashes"].items():
-        if text_digest(assets / name) != checksum:
+        if text_digest(source_root / name) != checksum:
             raise ValueError(f"Frozen renderer/source changed: {name}")
     for path, checksum in manifest["asset_hashes"].items():
         if checksum is not None and digest(assets / path) != checksum:

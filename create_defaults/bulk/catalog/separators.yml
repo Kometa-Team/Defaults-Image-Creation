@@ -1,0 +1,3910 @@
+schema_version: 1
+category: Separators
+definitions:
+- extends: legacy-poster
+  id: separators.collectionless.a76f3038
+  category: Separators
+  display_name: collectionless
+  source:
+    path: create_default_posters.ps1
+    line: 5566
+    row_sha256: 44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
+  composer:
+    base_color: '#DC9924'
+    font_size: 195
+    logo: logos_chart/Plex.png
+    logo_offset: -500
+    logo_resize: 1500
+    out_name: collectionless
+    text_offset: 850
+  caption:
+    mode: translation
+    key: collections.COLLECTIONLESS.name
+  output:
+    directory: ''
+    filename: collectionless.jpg
+    remote_paths:
+      en: collectionless.jpg
+  generator: null
+  color_assignment:
+    id: separators.collectionless.a76f3038.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.a04ab3f176604a3c4e47ce53
+  category: Separators
+  display_name: \amethyst\collectionless
+  source:
+    path: create_default_posters.ps1
+    line: 5576
+    row_sha256: 7c185388f7eb67d4f2b434f9077c19fcd2eecdd3219bcc72f5147fbd71205dda
+  composer:
+    base_color: '#545495'
+    font_size: 193
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: collectionless
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.COLLECTIONLESS
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: COLLECTIONLESS COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 193
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 88dc74e2bc8a5f84932c0cb524b783025763e5d9ded0b26357f04b106eb626fd
+  output:
+    directory: separators/amethyst
+    filename: collectionless.jpg
+    remote_paths:
+      en: separators/amethyst/collectionless.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: collectionless.jpg
+      variants:
+      - name: amethyst
+        base_color: '#545495'
+        evidence_sha256: 88dc74e2bc8a5f84932c0cb524b783025763e5d9ded0b26357f04b106eb626fd
+      - name: aqua
+        base_color: '#176D3B'
+        evidence_sha256: 2e72c06c2fd50f12f046456322619a733c35325ad19344c59f6343a4a12d887d
+      - name: blue
+        base_color: '#397588'
+        evidence_sha256: 467e12b6673ea24b80be205e14271f68b057c1b1f7141cb634c5584cea129b44
+      - name: forest
+        base_color: '#054F97'
+        evidence_sha256: 06fc71a773d2b82547f9d91f1c17a0282c421f860514a3005d4b0a82a297fb02
+      - name: fuchsia
+        base_color: '#B3BF7C'
+        evidence_sha256: 23b68bdc44c5412abb5374e524bdac4c7ff73834d2def1c1f7c56c2b29dbb728
+      - name: gold
+        base_color: '#142052'
+        evidence_sha256: 5f2e87ad1529e5ca58ce285821417a851a281288775b66472c66f308b0892b30
+      - name: gray
+        base_color: '#843EB2'
+        evidence_sha256: aef4eda0b4989115432b6f5482ae353b1117791ed7b5e552aaa233cdb697092b
+      - name: green
+        base_color: '#CC6B6E'
+        evidence_sha256: 116e05106c6dd786e5b96300c0d7c0f46fd732a326a52fede23ae3a2c9d04026
+      - name: navy
+        base_color: '#27FCC8'
+        evidence_sha256: 2c2683bd9629c3dd171530a3268e49e58e2a52a9548761029f849106298a4811
+      - name: ocean
+        base_color: '#0EC696'
+        evidence_sha256: 04502e403c91d3c86f862bdc87191be675229e83a77c4ab46531de406d8d3098
+      - name: olive
+        base_color: '#EE29B2'
+        evidence_sha256: 2fb896726bb4b7c6506ed433238a1943c27cdf748059646944cd1e9becf909bc
+      - name: orchid
+        base_color: '#BC2276'
+        evidence_sha256: 91eb35b7ce8ac83c6f73f9caa35b77de8169df14b441e38dd034ad8e0cf5f6a8
+      - name: orig
+        base_color: '#978CD7'
+        evidence_sha256: 1e633f58769cad7715d1b260397835b332d4f8b6ec9d7b4b3325eed4cb30cd86
+      - name: pink
+        base_color: '#22AB57'
+        evidence_sha256: a86c4dfda52bcb4995b4cfa7d83d8ba94207c05003dd8222988ae0d3e6b0f6ee
+      - name: plum
+        base_color: '#238837'
+        evidence_sha256: f95523a277fc413e22229f1e0c2cb3f85fc2faf93a1eb1c551b1d3e25e9932f7
+      - name: purple
+        base_color: '#1FB77E'
+        evidence_sha256: e9d2d6a03c477fb32d88e8df8a5cf1b4b6e9708e39bb6eb6ada2fb39c46cc50f
+      - name: red
+        base_color: '#FC53D4'
+        evidence_sha256: 56d1ea4f8b17c6d2afce82efb827b0f078ad8d1a11505e16e840c8006d8ade93
+      - name: rust
+        base_color: '#00F132'
+        evidence_sha256: f11a8550edf131d91442da856198409e36cc9939734f00cb55bc692d979909af
+      - name: salmon
+        base_color: '#3B89D4'
+        evidence_sha256: 4b613bd0f5131e0cfde7acb4b489868aa93b0fead8ab4c8791c2d60253e65afb
+      - name: sand
+        base_color: '#D57EA3'
+        evidence_sha256: 98051925aff9ec21ee0c0ab0239c2896fb0666b08bec896eb896163218848930
+      - name: stb
+        base_color: '#086639'
+        evidence_sha256: 973bfd7ef7777bec012b012a277ca50aed527f2245c10c60ebe8e7cb6388058c
+      - name: tan
+        base_color: '#8E7198'
+        evidence_sha256: a8b24d676e06534a81f603a145732ef02965e79b43b73c0cc7ccf7f5a9a6802d
+  color_assignment:
+    id: separators.series.a04ab3f176604a3c4e47ce53.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.172e960322fc5882f455aace
+  category: Separators
+  display_name: \amethyst\actor
+  source:
+    path: create_default_posters.ps1
+    line: 5577
+    row_sha256: 1026d2d0627f50a8cb2a9864d43b728aa1ab91ae411bb61ad320d6fa79d7c649
+  composer:
+    base_color: '#3A9635'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: actor
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.ACTOR
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: ACTOR COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 3356697ec431ada3bf7a54122ce65883fba6fa5a8efab439845b6763baf7094b
+  output:
+    directory: separators/amethyst
+    filename: actor.jpg
+    remote_paths:
+      en: separators/amethyst/actor.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: actor.jpg
+      variants:
+      - name: amethyst
+        base_color: '#3A9635'
+        evidence_sha256: 3356697ec431ada3bf7a54122ce65883fba6fa5a8efab439845b6763baf7094b
+      - name: aqua
+        base_color: '#8CCE09'
+        evidence_sha256: 1b07913a9faec185ed52771d07b4214827fc5075640e176e9d0e3a14a65ac29a
+      - name: blue
+        base_color: '#4D1B7A'
+        evidence_sha256: c4382486abdf0b65d4f54985d5c673eb4e32ccb5e641438f9b1af3d5090240dd
+      - name: forest
+        base_color: '#029D22'
+        evidence_sha256: 751e4bc054f4ee2a6ef041e96392b8469e6e67397fa0d796ffc8ed3758b90bfd
+      - name: fuchsia
+        base_color: '#1BC774'
+        evidence_sha256: 8cbba7b6ec7624c3561ce0402116c57d32ed901f469a2a7a7129271cb3c1e2e4
+      - name: gold
+        base_color: '#0E0C06'
+        evidence_sha256: e74b5a8a6b9b74cf601f6d7a9871da02ec2b5dac51103ff9a951fb33c629b404
+      - name: gray
+        base_color: '#B19A47'
+        evidence_sha256: eb94358f20ae902ccb9265536f647cf8ec8e37839899bd12a30cadf596dfd007
+      - name: green
+        base_color: '#BE7B8D'
+        evidence_sha256: 18a912abdb367430e70446ebef7cfecf526b4dff424f14b7b84b63274b3f80f1
+      - name: navy
+        base_color: '#5CFB3B'
+        evidence_sha256: c7a8c52484ab57d25dc36bcd49e6957cf1e1c90dfc0386744208d2b34319fe49
+      - name: ocean
+        base_color: '#768630'
+        evidence_sha256: 3c0f8b5e7c30d2873f1af59686005f1862d376a91fffa1fccd395d3e6ee8338d
+      - name: olive
+        base_color: '#2C709C'
+        evidence_sha256: 1ebc2cd5bdf24e58ceee6866aa6acd9916eaf5226905be09ba954c68844b252d
+      - name: orchid
+        base_color: '#DA0260'
+        evidence_sha256: c5c81c5786852eeeb1533c3e5d68f0d56c9d67d199e2b17fd36a9b4009f56e80
+      - name: orig
+        base_color: '#EF4056'
+        evidence_sha256: 73aae61928cc57746490894e909f4a7cbdc55620f0e5bab51c5e9fb58785b7b5
+      - name: pink
+        base_color: '#3886EE'
+        evidence_sha256: 97c19723df57867f2d5e3ada11f654bd4521c2a800bc2aa5f515167c6e92e2ab
+      - name: plum
+        base_color: '#94000D'
+        evidence_sha256: f33b0efb749bab4c0d4120c63b8ed4cfb474736ff1ec6014c6b57ad8bd4c3cf6
+      - name: purple
+        base_color: '#964604'
+        evidence_sha256: ba944e3ba981e086531409088af5159785bea744ed76783886b06cc185047593
+      - name: red
+        base_color: '#962D02'
+        evidence_sha256: d01ce9b06ed82a3739984df508b369b954024946cf6d40d7bb032cc84f677f60
+      - name: rust
+        base_color: '#71C98D'
+        evidence_sha256: 71b6dcc0fefa30df72fdb37cf294a58fa833f2adef1c8bedb01b3e78c3e42798
+      - name: salmon
+        base_color: '#389A55'
+        evidence_sha256: 866a66fe6361b16fc87f4ef6285f1385f113281d19b4ec8139977f9381212ae7
+      - name: sand
+        base_color: '#611CBE'
+        evidence_sha256: ff7eed001b8b5c4a84e3260a56b5a7ea8db267d0fcb577ffc5f4d5a599ec1720
+      - name: stb
+        base_color: '#01B90B'
+        evidence_sha256: cc9f704c714615783c828423e78d047c5d7d631f63f717ef10488caeac82e665
+      - name: tan
+        base_color: '#D32612'
+        evidence_sha256: efad502bef6398b24824820fff3eb31a18a95dc8510e0ad5b1dcddb8efc55dbc
+  color_assignment:
+    id: separators.series.172e960322fc5882f455aace.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.70618d97cc255424807895ce
+  category: Separators
+  display_name: \amethyst\aspect
+  source:
+    path: create_default_posters.ps1
+    line: 5578
+    row_sha256: d1ed9c377687a5bbe6fdb33093a95bc3fc6a70fcfba2872d53d4915a8de877df
+  composer:
+    base_color: '#C8457C'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: aspect
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.ASPECT_RATIO
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: ASPECT RATIO COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 9a5864e9cef2d3e214476ee13731eeb9a33c521cd8342a35833edcaf9e971486
+  output:
+    directory: separators/amethyst
+    filename: aspect.jpg
+    remote_paths:
+      en: separators/amethyst/aspect.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: aspect.jpg
+      variants:
+      - name: amethyst
+        base_color: '#C8457C'
+        evidence_sha256: 9a5864e9cef2d3e214476ee13731eeb9a33c521cd8342a35833edcaf9e971486
+      - name: aqua
+        base_color: '#C8E077'
+        evidence_sha256: 26ab69ef1f4100a7fb612b5070dd1b8fcd8a35772f9be742127157a2b3b7949b
+      - name: blue
+        base_color: '#26C92B'
+        evidence_sha256: 8118714714484176d19c8d849423c3deafc9b3c21ada0783e95c61a2b0e903a4
+      - name: forest
+        base_color: '#48484A'
+        evidence_sha256: 1c2b0ef2865d98049b3cb90ea1eb5b4c4e0dbc67b2e307507b848c5d2cb88bf7
+      - name: fuchsia
+        base_color: '#52A2ED'
+        evidence_sha256: efb2c6d86d1d2504f868d311df81daa8f4e5b419284514b7426fbb07ec262c76
+      - name: gold
+        base_color: '#46C58E'
+        evidence_sha256: c0c8b8ae104284b2c182039a3d81ca1539ba0ce66d5c2c7a2ee7c6cbaf9b081f
+      - name: gray
+        base_color: '#F78CEB'
+        evidence_sha256: 69388c17cf735979c14fdffb1325b3e5c798e382fda61b1e8458fcc72b8c4276
+      - name: green
+        base_color: '#92016A'
+        evidence_sha256: a1fdae24f88d82867448ba66475c839e9dffd5adcfdf50a9af592e95f65b83e8
+      - name: navy
+        base_color: '#2EC6AF'
+        evidence_sha256: 396577a44813d213f4c99b282154fca71e21523d7fcad0d447df6dc6a38ff1e3
+      - name: ocean
+        base_color: '#661693'
+        evidence_sha256: fcf7b575f422b9a0a0787e9186d940526847cc65b6f3483d5c7d1a95ff940764
+      - name: olive
+        base_color: '#5158C9'
+        evidence_sha256: 6fafd826ddf04da013782c8d67fb6fb3113d5a11ada7bbccb39ee6f2cde941b2
+      - name: orchid
+        base_color: '#BCA0F8'
+        evidence_sha256: 66cb24879457153279dfa3eabd107ff23f5e21e8276919c32ff097fc8fbefc41
+      - name: orig
+        base_color: '#D577CC'
+        evidence_sha256: ee5495eadea00b76eab0109c55622a7a492c6280b4cbb42c0c6196e2830449a5
+      - name: pink
+        base_color: '#99E075'
+        evidence_sha256: 86362cdfe1733668f9ea8bff29d5a598351ac5c7ba1e97efb5763c16ae902095
+      - name: plum
+        base_color: '#FD24EE'
+        evidence_sha256: f2c8d3e41d203a7a21e00e8ccd2ede799fc218a8ee5323ed982eb7965737748e
+      - name: purple
+        base_color: '#9100F4'
+        evidence_sha256: 0e249343b84d1e185ca7b84e0a6589387b98fcb9a2c9af6d291c4a04bb05e1ab
+      - name: red
+        base_color: '#BC8250'
+        evidence_sha256: 9b4d6dd11d3940d409fb4839b83476f748ead0ae628ea76648c361ca99aa73ae
+      - name: rust
+        base_color: '#9E363F'
+        evidence_sha256: 66c8f9a9a724c56d9d8cc772bf2e3d3e1c83e41d0b05c73bc4723851b0c40cc9
+      - name: salmon
+        base_color: '#BE90D2'
+        evidence_sha256: 28274693f7ad78c37dba361eba43e2b71952a730d2830a54bfd229952f435553
+      - name: sand
+        base_color: '#C90B73'
+        evidence_sha256: b54a8e1a8e23fe506e87be04fa82926a76788b16762ad848871f691d403ae9f8
+      - name: stb
+        base_color: '#7BA5A5'
+        evidence_sha256: 2339a7d5d0a20907c70b1cc68577fc8f14f4ba16642bef4dde7a1c8c7768506e
+      - name: tan
+        base_color: '#3CEF9A'
+        evidence_sha256: e303a75129f1db44d448c3cad89e2816011d88011f82e8b49d0569c5f806879e
+  color_assignment:
+    id: separators.series.70618d97cc255424807895ce.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.97017077298bdf97e1a2fcae
+  category: Separators
+  display_name: \amethyst\audio_language
+  source:
+    path: create_default_posters.ps1
+    line: 5579
+    row_sha256: 33d09869dd0377d7ed9d861935ef8976b36d55071eea67a5735cb7830b472fb0
+  composer:
+    base_color: '#E55A86'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: audio_language
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.AUDIO_LANGUAGE
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: AUDIO LANGUAGE COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 5a25f31013b876f53b9da1320db551f7337136cc1021f280e7554fb855cf066a
+  output:
+    directory: separators/amethyst
+    filename: audio_language.jpg
+    remote_paths:
+      en: separators/amethyst/audio_language.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: audio_language.jpg
+      variants:
+      - name: amethyst
+        base_color: '#E55A86'
+        evidence_sha256: 5a25f31013b876f53b9da1320db551f7337136cc1021f280e7554fb855cf066a
+      - name: aqua
+        base_color: '#3D1994'
+        evidence_sha256: 8e91c535e9e444b2acf83fd9c6920117f7a5bdf530a35c1e485439376aae7494
+      - name: blue
+        base_color: '#934D7D'
+        evidence_sha256: 8d8b9531e809e3d069cb9aba6a83c2e083b9da8c9a9537c64729ebf69f260dc3
+      - name: forest
+        base_color: '#5FCBD1'
+        evidence_sha256: ebf2f31279493814f8ce8caaace239c17bd4babe9891d2a04d0fd06999e13156
+      - name: fuchsia
+        base_color: '#9226B1'
+        evidence_sha256: 2b54abb92d914327d2c1c59be6b447227fa0d794cdbbf6277a9d52a6983c3012
+      - name: gold
+        base_color: '#FF8F0D'
+        evidence_sha256: 03f9d737be3d34fabc7683c7106a7bfa6760fc5820e85f02c857e477c1b542f4
+      - name: gray
+        base_color: '#D5342F'
+        evidence_sha256: 0ba4656a59ea43bc35f36cbed38d0658004900af6ce10aee47e3a93133c27832
+      - name: green
+        base_color: '#514C50'
+        evidence_sha256: b0f0171db50176f74bb154e210ec5b425a24295fffd7b9e3357ef224e84eb67c
+      - name: navy
+        base_color: '#E53696'
+        evidence_sha256: d3a0c1a11eaff9546e9d194471766c83e49bdfff9cbe97c312a6f98d188a2214
+      - name: ocean
+        base_color: '#ACEDC1'
+        evidence_sha256: 2d78b868239665533bad11ecb57030554341a3d001afb12abd2d3a26cd22b9d1
+      - name: olive
+        base_color: '#742C5D'
+        evidence_sha256: 77edc650b0662b8a2b18cafd75d964a5e3aaf64cea4ca9d15e6bc9abbc1d8d67
+      - name: orchid
+        base_color: '#C30599'
+        evidence_sha256: 6fbe57624f927e4219fdae1c8c851204ab27f632b3c38e53579ebe05ebc40ab6
+      - name: orig
+        base_color: '#85F96B'
+        evidence_sha256: 35878369d0426adb23989d46661234f559c1829703ea8a4bce842a9307db3d62
+      - name: pink
+        base_color: '#171287'
+        evidence_sha256: 347105f71897018d5b1b9236b193826c8dfb1962b9cf7b21ffd59b2fd772f209
+      - name: plum
+        base_color: '#7A18A6'
+        evidence_sha256: c903c1fddd0d14b6957c812a7edee6c7c89d961ba42c6a8b49808caab2bf5020
+      - name: purple
+        base_color: '#79AE49'
+        evidence_sha256: 1fe96bd223c724d8681f1cd5e1d3b5d4312788520e7afa2ecb3ec94c85c9cd52
+      - name: red
+        base_color: '#F32658'
+        evidence_sha256: 84ad25b28133dc4970730e905f7d120892b17a241cf2024a3cab75a50dc0e7fb
+      - name: rust
+        base_color: '#AF4081'
+        evidence_sha256: 45c7e22631c00ef29e20b92214486b7276cd9ff916b398383ceca1a9de7b62f5
+      - name: salmon
+        base_color: '#7824D3'
+        evidence_sha256: 205c3a44b48300c5b1f9165f6e77f49c964cede97d9a36cd065c2811d09a522e
+      - name: sand
+        base_color: '#D787E8'
+        evidence_sha256: c4503c922d3b9f0ee005bd9bebb2512d71d56994a99739e54e9b82b4261763c7
+      - name: stb
+        base_color: '#1BD090'
+        evidence_sha256: 6fa12d5ed034ae0df094b137c0a1bca4c3de05f2a74eb0bebacbe44c62934517
+      - name: tan
+        base_color: '#C92DB3'
+        evidence_sha256: 859ed05254bbd36085ca18238d6a6c38a66c12fd08948c1a6e9634367a5a84a0
+  color_assignment:
+    id: separators.series.97017077298bdf97e1a2fcae.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.50358d863c25f4b916630723
+  category: Separators
+  display_name: \amethyst\award
+  source:
+    path: create_default_posters.ps1
+    line: 5580
+    row_sha256: 949766bbd5142466471a2c6f319c08659170c4b0e48d1ec79b152d24522056a9
+  composer:
+    base_color: '#493698'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: award
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.AWARD
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: AWARD COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 6e0df9d7dd58ffdb406a5147656c721ead6aea2589ee0b583a477c92cffae388
+  output:
+    directory: separators/amethyst
+    filename: award.jpg
+    remote_paths:
+      en: separators/amethyst/award.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: award.jpg
+      variants:
+      - name: amethyst
+        base_color: '#493698'
+        evidence_sha256: 6e0df9d7dd58ffdb406a5147656c721ead6aea2589ee0b583a477c92cffae388
+      - name: aqua
+        base_color: '#787628'
+        evidence_sha256: eb201833dfe847068c578576825cb5b6fe85968089b9cef5db0287da9415498d
+      - name: blue
+        base_color: '#637784'
+        evidence_sha256: 08ea51baad0d0a46098fc55f1bcbece8f2476a286d92d1c27429c61496d97aa8
+      - name: forest
+        base_color: '#E2B23B'
+        evidence_sha256: a94a5b488d323604dc096940980127a9fa38983624cc70d5a2399a4b447384cc
+      - name: fuchsia
+        base_color: '#734CC1'
+        evidence_sha256: 14d4e6f31ca13952355431896a0dd1a64678448b04b9fb74bd7625f348d96b15
+      - name: gold
+        base_color: '#F830CE'
+        evidence_sha256: e0ead8250008220ebe773a9d365f68e522bb3730d9205b67fb5a1440e38e0c11
+      - name: gray
+        base_color: '#D1B993'
+        evidence_sha256: eb9607d60fdd8c94c2cff22ec6117e86782ecd4c9646ed8d62ad79a78ac37f9f
+      - name: green
+        base_color: '#EA21F0'
+        evidence_sha256: 96209716975d5b12761c9e29324926ffcbd4add9b862452ac20978d77b5d83a3
+      - name: navy
+        base_color: '#5A3F7D'
+        evidence_sha256: 13999c51b187d72e94b79aeabb8f2aee6df7ff886da03d2537fd2c515a9b7d37
+      - name: ocean
+        base_color: '#D4CC5C'
+        evidence_sha256: 3564aed2e65c112fa3e5cac57dfdbbe65b4349bd2d4e843eafa1a01a79d9b8f2
+      - name: olive
+        base_color: '#26B03D'
+        evidence_sha256: 420b5b0d9f34e1edf6e1637f6f68dafe39cee4bbc2e12d08b6426536af54c4d5
+      - name: orchid
+        base_color: '#3B9450'
+        evidence_sha256: 7d41d49e24ef1030954b0e544842e1be531247d937c4ea4bc2d5d34c417827ce
+      - name: orig
+        base_color: '#15F9E9'
+        evidence_sha256: d68e0629ab84a11e43735a97d5481f75b8f91cfebe53742bdc66939ecb5172a4
+      - name: pink
+        base_color: '#4334C8'
+        evidence_sha256: 98f33601dc4a18e395a9041b9abab4596e490aa08b2064b93557b0bd731cfffc
+      - name: plum
+        base_color: '#0324FF'
+        evidence_sha256: 5f1100478dec788d3986082c63c47522822d560b33f3cab2b6f6440bfa1e438a
+      - name: purple
+        base_color: '#0C9449'
+        evidence_sha256: 1a54753653bfb438bcf55333759d080a0e77e796870e9fd978b343c570a9acc3
+      - name: red
+        base_color: '#AC7260'
+        evidence_sha256: a1f9a7b7e5f4b1bc4c774fe3b30d8fae1e0d6703e5d82e45931390df5f7ff01e
+      - name: rust
+        base_color: '#7283FD'
+        evidence_sha256: a9bbceb266cb2453bc87670b8dc08ceebd37d0e5496319ca58c39fa8b2f835f0
+      - name: salmon
+        base_color: '#75F0E8'
+        evidence_sha256: 4ab31b6daafebee83677d4b4e2cb2c0d6af904a43494494326e62c30075ff897
+      - name: sand
+        base_color: '#69FF32'
+        evidence_sha256: c9d795feb4224f7e141a4b6849781de8684fd29294b05944e9d4508d8427fa83
+      - name: stb
+        base_color: '#BFEA4E'
+        evidence_sha256: 5158c46f960b5bad4a0fcb080da28dde8a353ec7ce8150a4891164e714a13422
+      - name: tan
+        base_color: '#DEE366'
+        evidence_sha256: 79469544f96587c35d59af93a0466d670f1aa848430060becad17efca8b63cff
+  color_assignment:
+    id: separators.series.50358d863c25f4b916630723.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.134d915a09a5395939df3473
+  category: Separators
+  display_name: \amethyst\chart
+  source:
+    path: create_default_posters.ps1
+    line: 5581
+    row_sha256: a027965bf0d2d12bd249b9787b03118151100ebee4c8b2af2514b0d53620e8ec
+  composer:
+    base_color: '#A3FEE0'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: chart
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.CHART
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: CHART COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 97e7649981fadcb8c82d1cb3f70b853b2f6e293c079f13f22884b233da43d52c
+  output:
+    directory: separators/amethyst
+    filename: chart.jpg
+    remote_paths:
+      en: separators/amethyst/chart.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: chart.jpg
+      variants:
+      - name: amethyst
+        base_color: '#A3FEE0'
+        evidence_sha256: 97e7649981fadcb8c82d1cb3f70b853b2f6e293c079f13f22884b233da43d52c
+      - name: aqua
+        base_color: '#84FB32'
+        evidence_sha256: 2400672842d764d430092d3a98878abf1570b11d5bfb97759cfc121ece41e40c
+      - name: blue
+        base_color: '#CBC286'
+        evidence_sha256: fb069b9b3d9a2e73dfcc928e62912704f9b85c511837677c0013cd636a377fd2
+      - name: forest
+        base_color: '#B23171'
+        evidence_sha256: d88675d62771762999e5b5f0932fa6a7c4fbb66fdda7f1a6487d081e0bbc3140
+      - name: fuchsia
+        base_color: '#0A9A82'
+        evidence_sha256: 22d6ab6a6aef771600c53ab6f3926c48743ce24c3cd025a93959bef6ff1f27c2
+      - name: gold
+        base_color: '#242EED'
+        evidence_sha256: df10ecf82f9cf849cdcd2ee72834b3d1a864be861bba8af575dad32d64244b79
+      - name: gray
+        base_color: '#568BB8'
+        evidence_sha256: 8af1f74c396d9107b7bbfd94eb37ceedc29f486e6b7096a67cc8a5f8e149b428
+      - name: green
+        base_color: '#34DCD9'
+        evidence_sha256: 21bef7b007d8344ed422396e9c9eab7c3c31635e6ec9a029ae8331301d926709
+      - name: navy
+        base_color: '#47D2D0'
+        evidence_sha256: 072b1e22cee4076ad9a8fe266707b0e404c3f213fc80e811303778f7c543d9d7
+      - name: ocean
+        base_color: '#CF7B4B'
+        evidence_sha256: 9514cc4a299087159c3cccae6a0debdf79dd5b290e10244b98528fba93163bf7
+      - name: olive
+        base_color: '#6B4853'
+        evidence_sha256: 507f49c4c312bf14ba53a8c08854998a7ac895a8e6cb425fbee0d53f66d7b707
+      - name: orchid
+        base_color: '#C9775F'
+        evidence_sha256: a461f7d6e85994ac153828c65bb83160af9220f7bd57d36a45689d4dfdb19be8
+      - name: orig
+        base_color: '#653C71'
+        evidence_sha256: 987c985fcf744414675a9c0e5f066fb7f99b0670e206719a100e7738adf8e27f
+      - name: pink
+        base_color: '#B5F87D'
+        evidence_sha256: 086a9d91ab8e6454e35c4bee7d4a718fda1f6419405bd6c0e9ba6109a06bad55
+      - name: plum
+        base_color: '#EE8338'
+        evidence_sha256: 105e13e313079e7978034fa7c97956955ceb79d5dc1354e7d2f0d921af23868a
+      - name: purple
+        base_color: '#476B01'
+        evidence_sha256: 0f6f3f0e26e3b8e6c73f113faad42e53e6c0b4fe28fad633501001866a303cc0
+      - name: red
+        base_color: '#AD7EE3'
+        evidence_sha256: 3bd46db687f9a2fec257ec2439146a07713798cfd64d8bdc55b7243beb9c0b24
+      - name: rust
+        base_color: '#14BE03'
+        evidence_sha256: 8e32570f2bac8c6356a2337802b7ab080f05cbd80e646b37d7051c7c7f95f35e
+      - name: salmon
+        base_color: '#5A0BB9'
+        evidence_sha256: 7dca50df421346c763889a56236c2cbcd4fff48421c6fd176fc33d77096d2f1b
+      - name: sand
+        base_color: '#A7B075'
+        evidence_sha256: 78b5c082355365e9d70580e388d5134491aa9e31e235ae2330273a1d92b47f6a
+      - name: stb
+        base_color: '#B9373F'
+        evidence_sha256: 826122d688fc72525b4893ea5a5c763ace2ce18681a90b62456501233a0371ec
+      - name: tan
+        base_color: '#F8B708'
+        evidence_sha256: 40caa9b0b71cfeb3f53a5a2fa66cf2b68b5477fc935a51254b362bdbea9dc677
+  color_assignment:
+    id: separators.series.134d915a09a5395939df3473.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.6a4e0d131e9f56bbc41c4904
+  category: Separators
+  display_name: \amethyst\content_rating
+  source:
+    path: create_default_posters.ps1
+    line: 5582
+    row_sha256: 47f08dc9252a7dddc055ec5b34235f336a2b99ce9dba5f42f2d43d52ad387f73
+  composer:
+    base_color: '#1D20B0'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: content_rating
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.CONTENT_RATINGS
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: CONTENT RATINGS COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: ce266e5023dac4f73741ce7d8a4fbd19a6f390c9a35e606b8d0750b306599e5f
+  output:
+    directory: separators/amethyst
+    filename: content_rating.jpg
+    remote_paths:
+      en: separators/amethyst/content_rating.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: content_rating.jpg
+      variants:
+      - name: amethyst
+        base_color: '#1D20B0'
+        evidence_sha256: ce266e5023dac4f73741ce7d8a4fbd19a6f390c9a35e606b8d0750b306599e5f
+      - name: aqua
+        base_color: '#0C10E9'
+        evidence_sha256: df992a888e38ed6e89903947725e0a8d9a993e5190ca8112452bb2ff0bc4de00
+      - name: blue
+        base_color: '#E07FA8'
+        evidence_sha256: bc03803a6baa4cdfc9ee292fc24989293e3b6e3281a70f7a98f87b3d636b2c90
+      - name: forest
+        base_color: '#652529'
+        evidence_sha256: 77f90f15a69b451e35860b97365b38cae36e1b65d08907a9093734424253f04c
+      - name: fuchsia
+        base_color: '#7394C6'
+        evidence_sha256: 2e675c1e7b7a5942b90b17ab16826a2f0b8a1b8172699b17544f730dd1acc4e6
+      - name: gold
+        base_color: '#06B8C2'
+        evidence_sha256: 4bed9354eaf63d41e5e5c32e272d981aa2eb049fc34c9e1230bcf3247cbd6f30
+      - name: gray
+        base_color: '#824A59'
+        evidence_sha256: 91a24392de89a539e829c4597c148f50d0f78c323d1c354d6aa69dea996373d0
+      - name: green
+        base_color: '#F9A846'
+        evidence_sha256: 28a7d232cc2cd83da178fbf3891430992ba9633571c910443dcf5c8a92666804
+      - name: navy
+        base_color: '#2E6991'
+        evidence_sha256: ed972f732d7553eb4d98d0e045b5e2f5c839fbe96acdc992e4a1ec11b3aa415e
+      - name: ocean
+        base_color: '#343AAD'
+        evidence_sha256: 820f46e910f681d900381f5ea4779f71604d8f19ebd94e2becd26165b406a44a
+      - name: olive
+        base_color: '#4D587F'
+        evidence_sha256: 59e6548fda13dd147d6e7b31da4c9b65af453140e573d5d9f4cb9538981f71eb
+      - name: orchid
+        base_color: '#8CB632'
+        evidence_sha256: cdeae251230090557ada4a71d24270def5ef14693a3dbdcf9dd81903c01a3533
+      - name: orig
+        base_color: '#18D1A2'
+        evidence_sha256: bc2d256d3e107ec58c35415c2754d9e760fc6413b8af2c785c75dfc61e75c34b
+      - name: pink
+        base_color: '#5D74C4'
+        evidence_sha256: 1f40b1e08c468c1b7bb8f932cce997ff3765c864ca8167e7426d50685afdda37
+      - name: plum
+        base_color: '#E26164'
+        evidence_sha256: 0df5ca3b261a8fda4a041805d2901c430a18b074f02d0d023760d4a928e785a7
+      - name: purple
+        base_color: '#6F2247'
+        evidence_sha256: 675a4b08c9c30fbfef42397010c0e7bf2774fcf4823a66b95742e7d261009535
+      - name: red
+        base_color: '#7C253B'
+        evidence_sha256: e72f1a9e78fd115bf4bf5dd21b8ee0f8d54a606cc467ad1892223370ca4c356e
+      - name: rust
+        base_color: '#EF93E5'
+        evidence_sha256: 0a39d5dbca91631f13552b60d78b1de3e062dfc1e3a0eb1788777e53718a85ca
+      - name: salmon
+        base_color: '#31B349'
+        evidence_sha256: 3f938d6c71dfa548955ce9daf815ad6ccaecd38d0bfaa499f022f8375bd320d1
+      - name: sand
+        base_color: '#14563E'
+        evidence_sha256: 1148c58cbd10be4505921af2b2a6dc32f2f6a7163fe2e736dcf6ebe1549d8b70
+      - name: stb
+        base_color: '#4AD641'
+        evidence_sha256: 341b01d912d444bb5f6e83f90f0f0aef24d89ea03fcc476ef8612ce7f516a6c8
+      - name: tan
+        base_color: '#901FF7'
+        evidence_sha256: 8c831e18c78f1ccd5a5049f3cbbcd807d39a7ca0a73a8c8c58b491a0c5f4f614
+  color_assignment:
+    id: separators.series.6a4e0d131e9f56bbc41c4904.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.1fe497c95588b90ccc0a24aa
+  category: Separators
+  display_name: \amethyst\country
+  source:
+    path: create_default_posters.ps1
+    line: 5583
+    row_sha256: 8a6e9dc8c743a9b472dac6f2c3defcf3ead551c141cccf9a8ae7233704d04735
+  composer:
+    base_color: '#B008F2'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: country
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.COUNTRY
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: COUNTRY COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 70b849058da1a8a5896768f54936da47cb7130c383408b73cbab33e227fb7797
+  output:
+    directory: separators/amethyst
+    filename: country.jpg
+    remote_paths:
+      en: separators/amethyst/country.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: country.jpg
+      variants:
+      - name: amethyst
+        base_color: '#B008F2'
+        evidence_sha256: 70b849058da1a8a5896768f54936da47cb7130c383408b73cbab33e227fb7797
+      - name: aqua
+        base_color: '#8188F5'
+        evidence_sha256: 0cc0154ad36db06561c1bbffe6749997b1b4967e40f35ab40d4c0e7ef2142349
+      - name: blue
+        base_color: '#2BACE4'
+        evidence_sha256: 22104eb349029b97748bd7cd1824616e41f9d3a9285224c6eeb83ca52ceaa7b4
+      - name: forest
+        base_color: '#F0D9DD'
+        evidence_sha256: de87efc93c82fa6f26e38b0f63570e359617e431570f38fa968b58b96005083f
+      - name: fuchsia
+        base_color: '#973C08'
+        evidence_sha256: 3a1c1456ddc7cf2eef579c85355c530f212b06e0938709ce6807ad346be1f250
+      - name: gold
+        base_color: '#AAE60E'
+        evidence_sha256: 218ba91f119936b47354a84263a886522c1bcb5d3acf53dbf4b5b6139c740af2
+      - name: gray
+        base_color: '#BE2A30'
+        evidence_sha256: aa7acad2677ee9e9d5ad7a12fa4391831df1504668de75177ec02630f7cdb752
+      - name: green
+        base_color: '#E5A09B'
+        evidence_sha256: ccfe9fbe347787a77293e6da79a3047010125e01359677b9009e34f539194187
+      - name: navy
+        base_color: '#F3F645'
+        evidence_sha256: 5df637f310deb4ba8e9e90039472a9332725f02eb6a3d5fa5aed72c42520d1b9
+      - name: ocean
+        base_color: '#A41D47'
+        evidence_sha256: 258f8d41fd972bedb176e2b6f22e58b0168e6d545538d55def66c2e1f0ff7bf9
+      - name: olive
+        base_color: '#323514'
+        evidence_sha256: 4fc2cc58708ed9c01a24af0383abc5410879347727a2364ed8a261916c5c222e
+      - name: orchid
+        base_color: '#F28D76'
+        evidence_sha256: a4981b96a1054d6fe31783376e215a384a1f2394a14b5d6bcc633e82047ecce0
+      - name: orig
+        base_color: '#289406'
+        evidence_sha256: 4620ced65276f4bbde53149a43de0d57e465557e0c6448d41f351ec66d48c686
+      - name: pink
+        base_color: '#7AE92D'
+        evidence_sha256: 097ef6490fbfeff4243d839ce58980a8a9985c3402159f6136f9144e2f41142b
+      - name: plum
+        base_color: '#AF93DE'
+        evidence_sha256: 1f0dae6d06f8b46a46962c86c98e650211e921d2223d552f4f1fdb34f8f153ae
+      - name: purple
+        base_color: '#B1351D'
+        evidence_sha256: b19b5cf29246c5cdb821c8057343d77cad64879c9f649d2ee9e08fc24ca8fe4d
+      - name: red
+        base_color: '#9209C7'
+        evidence_sha256: 23c3a9d13f1b8bdfea417b6e60c2d188dc681afdf74f5347264fee756b6f2d80
+      - name: rust
+        base_color: '#27A28C'
+        evidence_sha256: f1af073d63638d9598b3305bc36c8e69ec73e86eb71f04b711e470a9e4a3b7dd
+      - name: salmon
+        base_color: '#5EE17F'
+        evidence_sha256: 0e6400c0f85bcf08959a5dff5fff5117e18eb492863439b6716decc6b081aa20
+      - name: sand
+        base_color: '#3E23CE'
+        evidence_sha256: fbae5f303d2b1b01c7e7f7e8966b385d5349d9651f06bc0cbffbcb1af84d8745
+      - name: stb
+        base_color: '#568873'
+        evidence_sha256: 6e3f0c98bd14abcea419ea046b67be39f55b61b74e3197d90f3362045db0eb83
+      - name: tan
+        base_color: '#C28BAC'
+        evidence_sha256: 98f12a0f1a8865be99068ce70edccfa790036f6916e2cf9104ae83f217a48915
+  color_assignment:
+    id: separators.series.1fe497c95588b90ccc0a24aa.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.dca00ee649482160498613e6
+  category: Separators
+  display_name: \amethyst\continent
+  source:
+    path: create_default_posters.ps1
+    line: 5584
+    row_sha256: be3889868aaebf484ebadfaea4f665e3d2112ae0887cf19d9b49badfdf47cd55
+  composer:
+    base_color: '#49D97B'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: continent
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.CONTINENT
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: CONTINENT  COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 9f953138948d1a18ad4d0b2bcc7c3c6822bf67d92142b35b5b407f8c89b9294f
+  output:
+    directory: separators/amethyst
+    filename: continent.jpg
+    remote_paths:
+      en: separators/amethyst/continent.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: continent.jpg
+      variants:
+      - name: amethyst
+        base_color: '#49D97B'
+        evidence_sha256: 9f953138948d1a18ad4d0b2bcc7c3c6822bf67d92142b35b5b407f8c89b9294f
+      - name: aqua
+        base_color: '#70BD97'
+        evidence_sha256: 854030862bb2ba9f33eb35f903e8c4777cd50d30427d3d81aa37588b64db7404
+      - name: blue
+        base_color: '#14186F'
+        evidence_sha256: 8406db6b7e57674ba98578f54c4676de1fb91d66b65cd2745a4fee640482fc4b
+      - name: forest
+        base_color: '#183375'
+        evidence_sha256: ad5c385743eb12dfd22c995d2e2e935e9135ad2f37bc160838d4b64587ae372e
+      - name: fuchsia
+        base_color: '#A54102'
+        evidence_sha256: f3e2c9181f15caf8f1662396677014e565d7629b28eba783768497537f7506b3
+      - name: gold
+        base_color: '#5675C3'
+        evidence_sha256: 24dc8a3f0ff360c4158379ddd95e96fca73020db1d3c8da510473b121e7af1b4
+      - name: gray
+        base_color: '#33D5A9'
+        evidence_sha256: d872188226df4b6ec863f6ba34eb7bf4cba60d66506417b426b107e866085350
+      - name: green
+        base_color: '#A31E05'
+        evidence_sha256: ecf15872371ba4506d788d32bc7d5c52e6f94d08a0452cddaf3a2e1308f29a97
+      - name: navy
+        base_color: '#66FBCB'
+        evidence_sha256: 81fceb4b08e7c8fc53e1f44c9bd73c5bd4f55a16ac4df6b6ec86ddbd7d869975
+      - name: ocean
+        base_color: '#E21C60'
+        evidence_sha256: dffe0647fa7d1a58ba786b450fb6e3420735846730d4f30d987939541e87b20d
+      - name: olive
+        base_color: '#455549'
+        evidence_sha256: 3e1257ea11291dacbc4044163b7e6be361ff3c6b0b0f426aa04203f205b453b2
+      - name: orchid
+        base_color: '#8E4F99'
+        evidence_sha256: 3312d4155e879c30037eba431417cce3394fc827458dc51c2260a26ce677a6f6
+      - name: orig
+        base_color: '#F153DE'
+        evidence_sha256: 5e1ce394473e6a11bdfe3b649fb9a50e3676038d535155e64fb439621c18338e
+      - name: pink
+        base_color: '#AE14C8'
+        evidence_sha256: 6e90f289a63c3f8bf2ddec68a0178285a1ca69f1704bc32baa2329a4d6c81914
+      - name: plum
+        base_color: '#B89AAF'
+        evidence_sha256: d4d4f4facc6a4361b961725fd369503b030d5da84e32b5dd8c740dd900554a32
+      - name: purple
+        base_color: '#C31E17'
+        evidence_sha256: c69a26f71099cdf0fc63a15609b8c3e2a85cab4121d0b91a749058192fb92d6d
+      - name: red
+        base_color: '#99A827'
+        evidence_sha256: bdd6977ad89223b2458b0965fa9119053be04f5492afaab64a33a85e231ea202
+      - name: rust
+        base_color: '#A59972'
+        evidence_sha256: ab7aefcb91171c22079c586bdef7678ff67f48d8d6ebc66524bad843a9c7d0ba
+      - name: salmon
+        base_color: '#ABBB1D'
+        evidence_sha256: ce0b82342116a17e7de5bf8e08b88ca2874fe15c110ac845d9ce9be2ca4aad02
+      - name: sand
+        base_color: '#99C867'
+        evidence_sha256: 35d0b8926702ace50010eb6481e62882b3c6b47b6c33e542a6e9b6908564b7c4
+      - name: stb
+        base_color: '#0C980A'
+        evidence_sha256: d85d08e8a5ca4ca174e1288b414b7e6897631b050cd48c87439b70123d0539e6
+      - name: tan
+        base_color: '#3824E4'
+        evidence_sha256: c8da091343907c11be3c88bcb815d27b2fb607f2a1e530cf9c41039498fb2934
+  color_assignment:
+    id: separators.series.dca00ee649482160498613e6.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.e6f2f90fdb8b5d3f23abe364
+  category: Separators
+  display_name: \amethyst\decade
+  source:
+    path: create_default_posters.ps1
+    line: 5585
+    row_sha256: 74f07f5c34068956579780ed206c5ebffd2b582225dce6ab53fe8d345827e086
+  composer:
+    base_color: '#EFA632'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: decade
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.DECADE
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: DECADE COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: e3c1f8e4f441d3dcad06eefbb71e4c2e31141c2f9d38a2a5f27ce6799e7bde56
+  output:
+    directory: separators/amethyst
+    filename: decade.jpg
+    remote_paths:
+      en: separators/amethyst/decade.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: decade.jpg
+      variants:
+      - name: amethyst
+        base_color: '#EFA632'
+        evidence_sha256: e3c1f8e4f441d3dcad06eefbb71e4c2e31141c2f9d38a2a5f27ce6799e7bde56
+      - name: aqua
+        base_color: '#92D034'
+        evidence_sha256: a2b04ea3e78994b88cbd5a804608ec17d730327b2b7e7dd654d6a4b8ebbc668a
+      - name: blue
+        base_color: '#DC9370'
+        evidence_sha256: b9d77ae13c905a1ede351a8e5522a8feb3382203b5a5560001b90a6606b6b4f7
+      - name: forest
+        base_color: '#5EA3AC'
+        evidence_sha256: 3eff7e70b2a87c73d2d8febd81211ae68947b5771f3faa7e7dca4ec5dc0d684f
+      - name: fuchsia
+        base_color: '#2C8495'
+        evidence_sha256: 4f9abd59d66297a88c2b8de543a813a0a5dd8ff16263b7bf7a600ad108fd7073
+      - name: gold
+        base_color: '#E37967'
+        evidence_sha256: db6c013c6899c8533566a2c3e8180a67efcd5c4c81dcac56c611eb716fdce67f
+      - name: gray
+        base_color: '#75B4A6'
+        evidence_sha256: 7de3f0c780f28dd0e2015c3e8dda8011fa3a2256b99bd2bae32f87bbd7dd659b
+      - name: green
+        base_color: '#37CFB0'
+        evidence_sha256: 4f12eee48f40a533ce64b52ee73ab5263d8f60981d677af648455fc964429504
+      - name: navy
+        base_color: '#B9A0F1'
+        evidence_sha256: c33bd28ee71ac1d842c720320ffd664dc0f99a57b3e014504abcc5b39a8fd766
+      - name: ocean
+        base_color: '#D821B6'
+        evidence_sha256: bc025c924bb070276e232184cbfc6cd068c51457d0a0c7f41f03fbe2ec613190
+      - name: olive
+        base_color: '#5617EE'
+        evidence_sha256: 91637587d4c257d267eab9c66feaae3e4226f96047b81b61f94d754b7f333eca
+      - name: orchid
+        base_color: '#41CBFF'
+        evidence_sha256: 4d1a8b64b6ccacb67da1c66f861d3f8d3f1fae698077d80b8c27267a11370283
+      - name: orig
+        base_color: '#973082'
+        evidence_sha256: 1110f62f7d5fb484d99946930a61fb58e788232b1ab9248496d6ce3f5b2d2ef9
+      - name: pink
+        base_color: '#3E5726'
+        evidence_sha256: c38cd4d73f97fdc23251d43df3bf31cccbc1915e8d2ee28f998707ccdaba6dba
+      - name: plum
+        base_color: '#C93FA9'
+        evidence_sha256: 369d85357ffba13556f59725505904511684c7e1fc59aa85476eb43def362f17
+      - name: purple
+        base_color: '#3DA2A6'
+        evidence_sha256: d88cf39a8a2735d17cebf07fbd7bcc444af65b58065500c85a028a7ac99a17fa
+      - name: red
+        base_color: '#7B39AB'
+        evidence_sha256: 923947d351b1bdc0b926a5881b0e87f87095ddeca0cfb56c82a5a5cfb4823b54
+      - name: rust
+        base_color: '#0F5D5F'
+        evidence_sha256: a171c3cd7655eac520189bf255546e0954f151ac2d0e2d98e3aca07062f372c1
+      - name: salmon
+        base_color: '#0FC2D3'
+        evidence_sha256: 9c42d35390c8868e1a725e495de5f88dae587c0e6469256ce79b11837ff49f53
+      - name: sand
+        base_color: '#A9C324'
+        evidence_sha256: 3b4fc22e687a6340803cc10b24db756c51a85f89faf66c427dd16b0e80f6393b
+      - name: stb
+        base_color: '#FE0D26'
+        evidence_sha256: b6936cbb2039f0524deaa6d1b14971b116cac3a7d02f975e40d9ace58b17d5c0
+      - name: tan
+        base_color: '#81B8F2'
+        evidence_sha256: 00732e96411b954c0cdb9e69cfb5386339e9ada5880529a9b86e081f2b908671
+  color_assignment:
+    id: separators.series.e6f2f90fdb8b5d3f23abe364.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.4a46f10f163cb3d75b202141
+  category: Separators
+  display_name: \amethyst\director
+  source:
+    path: create_default_posters.ps1
+    line: 5586
+    row_sha256: 13957c1e31b8092720391f6442673e8540a4ae9f5cb0509dc86bd4df4cb3f7f4
+  composer:
+    base_color: '#E7BCF8'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: director
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.DIRECTOR
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: DIRECTOR COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 7ae34c0cc5a129ff2bbcb6ba03c62fccd9ecd73bb28e676b3d2b4730da5eeee9
+  output:
+    directory: separators/amethyst
+    filename: director.jpg
+    remote_paths:
+      en: separators/amethyst/director.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: director.jpg
+      variants:
+      - name: amethyst
+        base_color: '#E7BCF8'
+        evidence_sha256: 7ae34c0cc5a129ff2bbcb6ba03c62fccd9ecd73bb28e676b3d2b4730da5eeee9
+      - name: aqua
+        base_color: '#A8947E'
+        evidence_sha256: 55e4bf8cb714184fabaeee24d721482a255617fe5cc048338dce645c571606bb
+      - name: blue
+        base_color: '#31CAFF'
+        evidence_sha256: c335a8ecb2e57af77ee38054e2118d15819a7559e2b11154988081f5be0ee6b9
+      - name: forest
+        base_color: '#DDDE12'
+        evidence_sha256: bcb5ceddd5a708e71f4e4c62fa53ae644721d812cbbeb8d74910633e9f7c140c
+      - name: fuchsia
+        base_color: '#94B71C'
+        evidence_sha256: c2ec3249151ac2665b5ce605d1b1a23366f7f5458fe058459e7e263e0b025841
+      - name: gold
+        base_color: '#DFF820'
+        evidence_sha256: 7016efe2abb9906e0a4f0ce926b9640f74d0256f568fbc865b5a2bd24ab84ec4
+      - name: gray
+        base_color: '#562A79'
+        evidence_sha256: b0cf3a78c796939d9e9730919e99aa3c40501b13709f164feca2c32dd87b3869
+      - name: green
+        base_color: '#8E822C'
+        evidence_sha256: 46e954600c57ddfda5705396abd80fd1077f92f8dfc23f083f36665a86d50064
+      - name: navy
+        base_color: '#12B9D4'
+        evidence_sha256: 411341bb15da8be74ef12831460436d3d050ad46307c1af48d5de74b2b296013
+      - name: ocean
+        base_color: '#FE57B0'
+        evidence_sha256: d1e42ae26dd055a9a58e47a4631ab1d916fdd1af9b6f814ec1ad33453f70efe8
+      - name: olive
+        base_color: '#D6CDAF'
+        evidence_sha256: 382cd043c3d48457561f6e36ac180862e4ece7bf96827d617fcce843c4a38f28
+      - name: orchid
+        base_color: '#2698FF'
+        evidence_sha256: 2bdc8d016d1848fe66c4da1d6648a7794c1cc7e11720d94a6c547f88fd4478c8
+      - name: orig
+        base_color: '#BACA8C'
+        evidence_sha256: 27cd163893f54a295df23129d025a05c215a094bbc5db06a2fea78ec8de03f0c
+      - name: pink
+        base_color: '#F3C002'
+        evidence_sha256: 71347e500575d28f7818393f3b25d8b9e8e4d08b6af3114543a7dddf35d1a6ef
+      - name: plum
+        base_color: '#167F96'
+        evidence_sha256: 0167ad17b7b9a485e37dc1e8e6d72e3684ba208ee7c959fe60c82071391e07ee
+      - name: purple
+        base_color: '#99B3D5'
+        evidence_sha256: 54a59539eed46e0c180c3f19363757d9a549ee28a83e2ce3b18db61d56d43fc2
+      - name: red
+        base_color: '#62400B'
+        evidence_sha256: a6ff96cf8c26de42fa9a9ceacd630be6792911214fffa66dbaa26538613543b3
+      - name: rust
+        base_color: '#1B153A'
+        evidence_sha256: 1b8cd3cfae5954b92e3fa26d4830a983b2289e1c7476e6a078515993820da02a
+      - name: salmon
+        base_color: '#EAA822'
+        evidence_sha256: 2ec37c9134274559e3fb3db7786c1e87649114f1392461d5cedaed7b921d3320
+      - name: sand
+        base_color: '#9AE59F'
+        evidence_sha256: 9dd0c26d49a9f75e05848c30ec36370390ff613c6552c4b5e497fd506d8a5d72
+      - name: stb
+        base_color: '#A7BF65'
+        evidence_sha256: 20f9beb395844170e83f6691b51ae15ebadbdbc80e22369ef4498510a0627277
+      - name: tan
+        base_color: '#F133BB'
+        evidence_sha256: 8a0a3b0f05d5a1da5b6ccbd7e529d02ee3e60fada9db0c1fbcb456b9cfcd7e3a
+  color_assignment:
+    id: separators.series.4a46f10f163cb3d75b202141.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.7bf5f51b938efabe010e58d7
+  category: Separators
+  display_name: \amethyst\franchise
+  source:
+    path: create_default_posters.ps1
+    line: 5587
+    row_sha256: 5de8c2b06807a8819c211e9a1b55d418575355d0bf349cacbb4b1126468af791
+  composer:
+    base_color: '#D846D3'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: franchise
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.FRANCHISE
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: FRANCHISE COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: dcfc69a71290eed61be137b7920e749f596dda86b2f7c5713c46dacac40c7833
+  output:
+    directory: separators/amethyst
+    filename: franchise.jpg
+    remote_paths:
+      en: separators/amethyst/franchise.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: franchise.jpg
+      variants:
+      - name: amethyst
+        base_color: '#D846D3'
+        evidence_sha256: dcfc69a71290eed61be137b7920e749f596dda86b2f7c5713c46dacac40c7833
+      - name: aqua
+        base_color: '#F50BE1'
+        evidence_sha256: 9aa7c34e7d21493854571e666b739b12d2af9713e1fa3e0973161722795fd0c9
+      - name: blue
+        base_color: '#DF49C8'
+        evidence_sha256: d6bda4c188eb8dc19128767b627a2c24a81ab757c791cc08ff067ed6fae980e7
+      - name: forest
+        base_color: '#A14668'
+        evidence_sha256: 4dae381e2262b1ede672091e7c39bfcfa531b81142c7dbec2e8cc49778d89e5c
+      - name: fuchsia
+        base_color: '#53EEDF'
+        evidence_sha256: 6ef8877658d7d71b651d301ebaf6faaed4dc02aa073ed5ac786742e635b973bd
+      - name: gold
+        base_color: '#D74156'
+        evidence_sha256: 0401b50f11c22117dc117de7a7abe5f1958a669571be548a7219ede2f2a6cece
+      - name: gray
+        base_color: '#48581E'
+        evidence_sha256: e55a439baefb7acac9569d427c322994542d24e66f45c8764a7bcd10095775a0
+      - name: green
+        base_color: '#068787'
+        evidence_sha256: 16932ada05df7467281c06c7f40422e0f319ebf05d1e26e9ca784ea446c19430
+      - name: navy
+        base_color: '#6CE933'
+        evidence_sha256: 0d7e30025c828e4613f5a5ff3ac15777b8cee00a96cb326f29c919a7027bdaab
+      - name: ocean
+        base_color: '#CAB8FE'
+        evidence_sha256: 0d67a6f86e26455420d47d12a8bb65538708ec0f06f7870a1f64d49eef26d2ae
+      - name: olive
+        base_color: '#F3726B'
+        evidence_sha256: 0e1d85b660aaf3ab5303f34a16016bb05ce8a49f42303eb5656775abf2790510
+      - name: orchid
+        base_color: '#512B5B'
+        evidence_sha256: f85bc4cedbf7ff737fb34f0d27f771db5d883caa244252f102e5687c9315d565
+      - name: orig
+        base_color: '#D9709B'
+        evidence_sha256: c84f77f023327ca01f6afd02ec9f3ea5f7925c2577fa17f352667fc60da35b67
+      - name: pink
+        base_color: '#CA047E'
+        evidence_sha256: e5234a83eacaa18e8d89c0fc03dd6e5c56341a60c130478d33200ab23bc8f6d1
+      - name: plum
+        base_color: '#2749D8'
+        evidence_sha256: 065d9cecf45f3c27eb0fa5433c9dd0d1a461ca27c37861dc76600184290cbc83
+      - name: purple
+        base_color: '#36E356'
+        evidence_sha256: 34e43aae6b908c0f4bf448e13a7f986f589e263741472f1b9547416c544ac5b5
+      - name: red
+        base_color: '#0933FC'
+        evidence_sha256: ad0de9b964f1ec16b2ccbc091169bac8899321e460e896ce046643431d24f587
+      - name: rust
+        base_color: '#D3B587'
+        evidence_sha256: 4c3999f175609fe9dcc9f4868597e34f6bb075be54efe76738107d8b97a1bd0a
+      - name: salmon
+        base_color: '#30CD90'
+        evidence_sha256: 97f7b236e4022b808ea165833f74ab72b49f4387ee95fefb3559988c55e50570
+      - name: sand
+        base_color: '#6AEC49'
+        evidence_sha256: 6600648b4c6c85621de690e3ae993d6c374d94a061e3c6b9db824c728e2be18e
+      - name: stb
+        base_color: '#E9E0A0'
+        evidence_sha256: bbb7b0832ece59be6e2eb44f7ca5765cc3507e453ad8c064de7ec33f1efab67f
+      - name: tan
+        base_color: '#4FF8BB'
+        evidence_sha256: 12f327a28abefe7293f2e216ee03fbb2ef00b7830e54c20463b87cad5cca9beb
+  color_assignment:
+    id: separators.series.7bf5f51b938efabe010e58d7.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.7debde79200542174993054a
+  category: Separators
+  display_name: \amethyst\genre
+  source:
+    path: create_default_posters.ps1
+    line: 5588
+    row_sha256: 7c19d36ce55be4d1adfbcf568e52531a1ec37abfe0a8d00c92e76dc84a94d71b
+  composer:
+    base_color: '#EA078B'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: genre
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.GENRE
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: GENRE COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: f29e04805c798e2b2a611ed4581846554232a11f1c47e347a5622c07e40d9338
+  output:
+    directory: separators/amethyst
+    filename: genre.jpg
+    remote_paths:
+      en: separators/amethyst/genre.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: genre.jpg
+      variants:
+      - name: amethyst
+        base_color: '#EA078B'
+        evidence_sha256: f29e04805c798e2b2a611ed4581846554232a11f1c47e347a5622c07e40d9338
+      - name: aqua
+        base_color: '#DC801E'
+        evidence_sha256: 37e5f02fb326e9b2048337c89a4bf5ce455132d0a41835cc24d80b4fc02a3820
+      - name: blue
+        base_color: '#79CF6C'
+        evidence_sha256: 6e0a3ef879088b5995c9ae82893e3789830b084a1f25602f2024eb40c3c4f689
+      - name: forest
+        base_color: '#FB1CD5'
+        evidence_sha256: 6acdce1410982f979ad30ee579b8f2780e659ce96e6973f004839331bccf3f96
+      - name: fuchsia
+        base_color: '#168E66'
+        evidence_sha256: 66622337fee6a0ec9ba6ccf55cf1573f175eb0b2009d72cc231f664d97e436c0
+      - name: gold
+        base_color: '#6259BA'
+        evidence_sha256: d1a70a342cf7d227bac992238d70936cd7ceb66c91a0cfa998f7c33bc67f8a13
+      - name: gray
+        base_color: '#0CC8D8'
+        evidence_sha256: a009af9759296657074282d6fe96a17b34997c01cef926a613912c96a3506012
+      - name: green
+        base_color: '#C78D6F'
+        evidence_sha256: ffa292f02c7ed24a96c860e5362c3b46b81491ef5b6917bb03d72bcf9634322e
+      - name: navy
+        base_color: '#61B039'
+        evidence_sha256: f89db47731d79f108dbe423e8435a8bebe6dde1911436d71dbab5168652e744c
+      - name: ocean
+        base_color: '#0DC905'
+        evidence_sha256: 9a5a01ced34e9608ebc3daf65599a118442b2aab0394adaffc7f67b57f26d905
+      - name: olive
+        base_color: '#12C016'
+        evidence_sha256: d6782d2cd22531a0a274e2f594362eef5c9d80669028c7d7713d48e046b7b914
+      - name: orchid
+        base_color: '#F02243'
+        evidence_sha256: 90faa6af80d5677fbec021e8e12f3b65c657b569c13c19536a8c9ff7d2c2af3f
+      - name: orig
+        base_color: '#65D8A9'
+        evidence_sha256: 7d09c2842f31fbc0a65f9e158f19ca359d42eda65c0b33bede846ec32b2e1dde
+      - name: pink
+        base_color: '#1310F3'
+        evidence_sha256: 777c846ab3b9d764292ea3c5244df9d15dfa028f9c1a36fabf75296cb355235f
+      - name: plum
+        base_color: '#B44A25'
+        evidence_sha256: c9322f12a2bba3028fc6e4e3b59bab4f744949071e4702827c22049ad90e2dfb
+      - name: purple
+        base_color: '#903E6E'
+        evidence_sha256: eb17278499f1672fc4e238e4f0068bb176f163cd210fd8f6ab8aefe88397754d
+      - name: red
+        base_color: '#365848'
+        evidence_sha256: 72c6d468932ac574ceb5f054292266fe80024f02e605274b84190851289582f3
+      - name: rust
+        base_color: '#F5C67E'
+        evidence_sha256: 8a6289d6af4d158d1afd67bb20719d66f5ec5453070a16ae0b1611b64a80bf78
+      - name: salmon
+        base_color: '#A97A19'
+        evidence_sha256: 4c0b88e61826ee7db5c68a3b2fae12b2bceea78845c9f291f1eff5ecb0953c72
+      - name: sand
+        base_color: '#82F112'
+        evidence_sha256: 004f0c84d15cd079b00d289cbf5b08b8e83a52049a6a01231bf47cc87425b121
+      - name: stb
+        base_color: '#E096A1'
+        evidence_sha256: 7f3ac18fef82dbc53b9666e6d370f82c3201b7ba3d99ca8b2287a03a0ddda2df
+      - name: tan
+        base_color: '#DD9116'
+        evidence_sha256: cabe2faa5e1b34e865f22e86901a1949a2b68b826f6f358b80da89ec1626b4e2
+  color_assignment:
+    id: separators.series.7debde79200542174993054a.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.d991cb241bb96f5b71f02ba6
+  category: Separators
+  display_name: \amethyst\network_kids
+  source:
+    path: create_default_posters.ps1
+    line: 5589
+    row_sha256: 43d22e2cbb44ec05a5e082de189f4eb85bd5a288ae319120743928ae5fd314f6
+  composer:
+    base_color: '#0D2C4D'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: network_kids
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.KIDS_NETWORK
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: KIDS NETWORK COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 2731087dd45894faf64a45d7480e9fbf4c870d9b3ebb11b09e6e3070544221dc
+  output:
+    directory: separators/amethyst
+    filename: network_kids.jpg
+    remote_paths:
+      en: separators/amethyst/network_kids.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: network_kids.jpg
+      variants:
+      - name: amethyst
+        base_color: '#0D2C4D'
+        evidence_sha256: 2731087dd45894faf64a45d7480e9fbf4c870d9b3ebb11b09e6e3070544221dc
+      - name: aqua
+        base_color: '#B2363E'
+        evidence_sha256: 2bee8af084dfae384bf13b7a926d591fd996a7a854d410856f3187d76fc1398a
+      - name: blue
+        base_color: '#30080D'
+        evidence_sha256: d475a702ad8eba6141043bebab6efc989c265c1cf5e3f27bbf0432083942c3c8
+      - name: forest
+        base_color: '#E95732'
+        evidence_sha256: 1028b41867e48c125668a84e082bc34123c2abd20857151df715de0097127b4b
+      - name: fuchsia
+        base_color: '#81E579'
+        evidence_sha256: e1b6be2a0e6bc05714d5b759a7eb54e5c16f198b92b2ed7302294ac88ff529fa
+      - name: gold
+        base_color: '#4771FC'
+        evidence_sha256: 8a70b3f7059741c6f433fa9e81442635699188ca1b94247d0839523383fa577d
+      - name: gray
+        base_color: '#2B61A2'
+        evidence_sha256: 639b0c513964c6c32a9bd3be34903c2fe70d9f2ac4f7787bc3a2fe54aa07b064
+      - name: green
+        base_color: '#C0EAA6'
+        evidence_sha256: b9f704ace7dcd4582da747f8c3b317a41a3722e9f43f1a4e99c47656606f2ae4
+      - name: navy
+        base_color: '#18EBB6'
+        evidence_sha256: a2768534e8fda2919f2db38aa5fc79c57a2a4c5cb404f5c681da91409bff63b6
+      - name: ocean
+        base_color: '#BE644A'
+        evidence_sha256: 5d0c1ec08cf60248b8f549fc9fa0ce6a971d3c0fab2da591cf5543a91643be9e
+      - name: olive
+        base_color: '#808DD4'
+        evidence_sha256: 3f962fe6780eaa555a114c43351f85337efa86b8e8b9ecf804f0c3214263c33f
+      - name: orchid
+        base_color: '#12DB5F'
+        evidence_sha256: 714620ea5a82a4e084af134ddc9d1d9ac8219d90235431f52c16ffaa0e249071
+      - name: orig
+        base_color: '#DD58B9'
+        evidence_sha256: 72653d9001988781ad0fb8071d65e48e790986b4c2ce2295e84ae8998f595710
+      - name: pink
+        base_color: '#B9E003'
+        evidence_sha256: 83ab539bf2ff55c0c20ef7cceb1830b5705687a063243bcc0b586375dc104432
+      - name: plum
+        base_color: '#251BDE'
+        evidence_sha256: 5d7719cae315f0f98c416ce2c17aba0affb2366cd06fedb8de6a9ecc98da568c
+      - name: purple
+        base_color: '#A30729'
+        evidence_sha256: 881334dd07b0192523352800c3f05ad74483467a273dc48628bd6b6efc37e76a
+      - name: red
+        base_color: '#4A6B55'
+        evidence_sha256: bcebc898f328cbd4d9a23ba877ca9748af684aa2b6d9b9344da42e8d6de5eaf5
+      - name: rust
+        base_color: '#F8D537'
+        evidence_sha256: 82238d58ada5b51f3c47eb03d7c832dd8185bb8f7eec2c0ce3e464da4273a979
+      - name: salmon
+        base_color: '#056002'
+        evidence_sha256: 8f207b6c3451d3f3d0d9efe7e04ad6d345e69ed8d0d97b6c659334371bbbbd89
+      - name: sand
+        base_color: '#E56161'
+        evidence_sha256: 8f592b2ce3f379a5c3a28fa9300ac1e8075b990976d13364cb02c1b1b0c474cc
+      - name: stb
+        base_color: '#79FB6C'
+        evidence_sha256: d6cee269f33ae66103bf468d21fde602f13d6a669c374256e1427eadba42287b
+      - name: tan
+        base_color: '#2EA747'
+        evidence_sha256: 5f815fc61ebdac60abf49229d49f9e071310be134a511a24ca101392e133b356
+  color_assignment:
+    id: separators.series.d991cb241bb96f5b71f02ba6.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.72935488483290f8b0300cc5
+  category: Separators
+  display_name: \amethyst\movie_chart
+  source:
+    path: create_default_posters.ps1
+    line: 5590
+    row_sha256: 7fbfc292a867f05626d720dded6aa7cf58a3bd78cbc06e96a3a30a9a182af1bc
+  composer:
+    base_color: '#56ACCC'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: movie_chart
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.MOVIE_CHART
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: MOVIE CHART COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 222ee798d4737c678337620ae32f490e72277ab3d8e774bffd60789ad5112379
+  output:
+    directory: separators/amethyst
+    filename: movie_chart.jpg
+    remote_paths:
+      en: separators/amethyst/movie_chart.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: movie_chart.jpg
+      variants:
+      - name: amethyst
+        base_color: '#56ACCC'
+        evidence_sha256: 222ee798d4737c678337620ae32f490e72277ab3d8e774bffd60789ad5112379
+      - name: aqua
+        base_color: '#8F7205'
+        evidence_sha256: 8ff28814411125d2b32d2995d6452bbaf53b9fdcb4e04673343db227621f4382
+      - name: blue
+        base_color: '#24652A'
+        evidence_sha256: f933fdbd915d1b85bb870e207f5a578d032d4f9b0c55bd635041e52f15173e84
+      - name: forest
+        base_color: '#DB0911'
+        evidence_sha256: b7fa4ebc83663381b77e0662c690b855cd7913246a6fbdb14480b29d857853a4
+      - name: fuchsia
+        base_color: '#FA5314'
+        evidence_sha256: f66ddf0d58a80378b52850d8119328852d04d413a462c0ef2097dfd777f10821
+      - name: gold
+        base_color: '#74E16A'
+        evidence_sha256: 6e3b24371fe71889d3ca4282ab2ca2ac33290d2af2df842f4b64a92d1b86ad1b
+      - name: gray
+        base_color: '#B207C6'
+        evidence_sha256: dd5039913ea5f6c1a9317d6f304e64d617cdb2743a8df121f6d7b2626d4c35a4
+      - name: green
+        base_color: '#8AE6D1'
+        evidence_sha256: fa43107adff376187cb7e9c5e170abb9e3d791d080bff92a089adc44dd66c681
+      - name: navy
+        base_color: '#AC64F5'
+        evidence_sha256: 1844f081eeb3d722c69f3700bbb546de0c28b1030eed3b862b14c9a03c7363e5
+      - name: ocean
+        base_color: '#2B340C'
+        evidence_sha256: 62d0ed1ffd74a2efd4d8bdbf885bb24f492ae38de1e494c2aaf2b3bf80c6733c
+      - name: olive
+        base_color: '#096AD6'
+        evidence_sha256: f1ae6ae3d99f9bf29cf44f2040338a1bbdd2a1472892de241bfdcb9af0287e8c
+      - name: orchid
+        base_color: '#E66A65'
+        evidence_sha256: 6e6acdaa83760a77f8fd8b05ca76aa91967671416f07bd9da8dace1f640b09a2
+      - name: orig
+        base_color: '#53AC1B'
+        evidence_sha256: eecf6a2b27a454bd043a042a30d9c8816d02452cbdbebcbae28da1b2e80ee08d
+      - name: pink
+        base_color: '#8BC26E'
+        evidence_sha256: 36268d2b8f0d82ac09afeaac1d8db387c3a79c8c049bed4a56952b4061945bdb
+      - name: plum
+        base_color: '#64D4E0'
+        evidence_sha256: d4cf4efc94b9b615f127e5e97d9eda3c59eb28395bb08eed70c18bcabcc96bc0
+      - name: purple
+        base_color: '#5A5F1F'
+        evidence_sha256: 6430dcb7b9b6afe7075818b38915cbfbbc36f106be3a122fd9940fd417c70528
+      - name: red
+        base_color: '#7943A7'
+        evidence_sha256: 2f94356af160c605d8fc0364eafd317b47e63ae46ac33d839e705c48aa8f5090
+      - name: rust
+        base_color: '#665E28'
+        evidence_sha256: 7b374ad145bc3fa56907c4c2c647398c01fd87fef3dd0423ec14f8317c1e39fb
+      - name: salmon
+        base_color: '#326094'
+        evidence_sha256: 6ef8314e132a0a72ee625ebeb2ba5be5290646b9ccaea7393d48ee21f905ac2f
+      - name: sand
+        base_color: '#9C1680'
+        evidence_sha256: f18f687b4ec84d4d6b156a78bc506444297d9adb71cae74979f8f6086f4d7ed3
+      - name: stb
+        base_color: '#4DE286'
+        evidence_sha256: 9bfe2ac54f0a7bd76f5c5eaa8854dbbe4fb488f97232ebb507120efc865d5202
+      - name: tan
+        base_color: '#8DEFA8'
+        evidence_sha256: 28efd471f01a74f57037209d0a3ca5972f094bb4880a8047d375f106b57c1639
+  color_assignment:
+    id: separators.series.72935488483290f8b0300cc5.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.e0629eca1d7da6aa47be36de
+  category: Separators
+  display_name: \amethyst\network
+  source:
+    path: create_default_posters.ps1
+    line: 5591
+    row_sha256: 5efbbb92f70de7326a6b91b37167bc321b5c58ee1efb8fd5ec380b13e9fede56
+  composer:
+    base_color: '#46681B'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: network
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.NETWORK
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: NETWORK COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 4a1fcf2ff1c2a5949437e18f604744e5ff449964ee073a413642d6946abd8915
+  output:
+    directory: separators/amethyst
+    filename: network.jpg
+    remote_paths:
+      en: separators/amethyst/network.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: network.jpg
+      variants:
+      - name: amethyst
+        base_color: '#46681B'
+        evidence_sha256: 4a1fcf2ff1c2a5949437e18f604744e5ff449964ee073a413642d6946abd8915
+      - name: aqua
+        base_color: '#70D68A'
+        evidence_sha256: 51a87519b7ce95aad3fce04c8973041ce827dbe59102c1a1be43d2044ac1bac6
+      - name: blue
+        base_color: '#FF6757'
+        evidence_sha256: ff4a8c3abab3b4d0b2f6805621be60c7c40aa92bbe197ced907ded4fc71a0fd0
+      - name: forest
+        base_color: '#D1B3F8'
+        evidence_sha256: 6b939a2d7e704f7486142b7c4ad3b0ab53869e349cfc0e1e9355e582e1665803
+      - name: fuchsia
+        base_color: '#312439'
+        evidence_sha256: 7d889a5825a7754e38269199b8c430b7273372d05e857ba2a737a5c099ab4595
+      - name: gold
+        base_color: '#378D76'
+        evidence_sha256: 192264bc341db21534b46189e978c6c8c1932d07aa0fcb9242c9813dba3fd64f
+      - name: gray
+        base_color: '#E15825'
+        evidence_sha256: 13ea40abe467eeebd7ae104e0fda21eb9db29868bf344817186a623198b99dda
+      - name: green
+        base_color: '#83696C'
+        evidence_sha256: 7d644da3668af7a78e6caa6c4f775bed83acf389959a6cb0583a7fa19497c48a
+      - name: navy
+        base_color: '#7D137D'
+        evidence_sha256: a3770298338c51882a6171741150d44edb19ad998dc04bf49fa74b024393da5d
+      - name: ocean
+        base_color: '#E751E1'
+        evidence_sha256: 7317ac682bee35e9e6921270a7363a2f96fe2ecab74ba3888c94ce803a796968
+      - name: olive
+        base_color: '#2FBB79'
+        evidence_sha256: 96bc0f7a6389b3d5cf1e216b1b44836361a8444eb10c0f74a01451c7d073e7f2
+      - name: orchid
+        base_color: '#8F3A6C'
+        evidence_sha256: 04fbd1c53a4320ea974593cd396286850b3be7ff880f83ebb9b706d103697617
+      - name: orig
+        base_color: '#E4ED08'
+        evidence_sha256: c79cc68fbbc65e3a71a3bb4782fc61fab9d60cda158b682bdfc2d43319623bba
+      - name: pink
+        base_color: '#E25522'
+        evidence_sha256: d7d9826feae113aafc322caae673e21076a671b895cf9ca9e306507581fb469a
+      - name: plum
+        base_color: '#4DD203'
+        evidence_sha256: 538f3d0676ed06afc90f209ed9c64f6f78b721e9eb67507c027b724dd9e6aeb2
+      - name: purple
+        base_color: '#4F9699'
+        evidence_sha256: bd4a89769bf39166f5e0085283a635d13d37af3bbe8a8cb7ef1f9850bce4e347
+      - name: red
+        base_color: '#6F7B17'
+        evidence_sha256: f9ed5529124cc8f59686e3d1e1078bc900a2a6cc87ba15335a9930084044ee6a
+      - name: rust
+        base_color: '#B1E7B0'
+        evidence_sha256: 1ef69ebc17c71d65e61bb82e81fa889768cf6f2d3f49f31ef65910bafc0bb6cf
+      - name: salmon
+        base_color: '#B1B6BA'
+        evidence_sha256: 5e7b8b016dc106266b705e0ecb405160a1ca890b60de0616978ddcf8488bcadd
+      - name: sand
+        base_color: '#9D4044'
+        evidence_sha256: 5c19ade159da4c5d70480ec4796152a228648c96d9879a3a3591380e68c9c94d
+      - name: stb
+        base_color: '#644A8F'
+        evidence_sha256: ba01523ff6783128c51b38a3d0064c017fb56118c6907e5f10cc53477ffa67f4
+      - name: tan
+        base_color: '#AA41E6'
+        evidence_sha256: ac5fb41d6cd70f1a8a699e21e19290bcaaa429fec4f4de854ab6006095efb43a
+  color_assignment:
+    id: separators.series.e0629eca1d7da6aa47be36de.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.330255fd4f53c3162d195ee4
+  category: Separators
+  display_name: \amethyst\personal
+  source:
+    path: create_default_posters.ps1
+    line: 5592
+    row_sha256: 4b53d20dfea6470fac610cf98a6a5dce353eeaeb9697f1f0458ef005abe190a0
+  composer:
+    base_color: '#56C345'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: personal
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.PERSONAL
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: PERSONAL COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 4fad61d38ef698be5adb769ac5510a0c62194716cc3e90a768037fefd3713c8a
+  output:
+    directory: separators/amethyst
+    filename: personal.jpg
+    remote_paths:
+      en: separators/amethyst/personal.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: personal.jpg
+      variants:
+      - name: amethyst
+        base_color: '#56C345'
+        evidence_sha256: 4fad61d38ef698be5adb769ac5510a0c62194716cc3e90a768037fefd3713c8a
+      - name: aqua
+        base_color: '#BE1165'
+        evidence_sha256: f3a6cd90a83f4308fbd020ee2c2a192e9e5e0f7aeb102a87a8cfb7da4e5d6b26
+      - name: blue
+        base_color: '#5246F2'
+        evidence_sha256: 5c7187dd955570e8a29212104e08a651f0da04d09c5e7ed5954d0ff1589c89d9
+      - name: forest
+        base_color: '#A5903E'
+        evidence_sha256: 93f81ee68acf32d4146c381ee167c5d7557b8dc723fdb4a74cd88b0243c048e8
+      - name: fuchsia
+        base_color: '#8B0756'
+        evidence_sha256: f389035dde5f0da69b5ae7b9c151feb9ece2137601ae25c4bdaade61199cefd3
+      - name: gold
+        base_color: '#DA327C'
+        evidence_sha256: 432e33ee630a8f6dc84ec84535b4d12d56f8b196247d9f85d1affbbc6bf1fc0b
+      - name: gray
+        base_color: '#86D201'
+        evidence_sha256: 11e8f2dc43a056f270b20c69594f8f1eda36a8e047b62462714f02b4a9daf8a4
+      - name: green
+        base_color: '#B2ACD7'
+        evidence_sha256: d06195f278c9bc99c240f37020629689a428bb806ab7a9de5751daba4b6a1fc2
+      - name: navy
+        base_color: '#8B10E9'
+        evidence_sha256: a582d7d20918821d1ee680a9edab87589c100cf568387319f6aba20c01451ba4
+      - name: ocean
+        base_color: '#F9FFFE'
+        evidence_sha256: c0ff42bff127ec8da841e2128a66e51eeecb1cb9da283cab14871c9cefa45c2d
+      - name: olive
+        base_color: '#076045'
+        evidence_sha256: 4408dc515923c2aca00018428b4cea834d54902dbf353cf6d880bd834156cb8e
+      - name: orchid
+        base_color: '#3C0A96'
+        evidence_sha256: e744e1d64ab1832d6bd7e59140cbd4a71b684a9b6c3de698d3ad237ac145cc5b
+      - name: orig
+        base_color: '#ADF269'
+        evidence_sha256: 42fe9ce2a3f88f7859bc5e3bf75757878c48077eb1a3c8e62257da94f6888633
+      - name: pink
+        base_color: '#33C70D'
+        evidence_sha256: 658c91dfa46782bc9b7b91f45c91bffe1b3c6bcaaf93aa6415d3fce23c85c735
+      - name: plum
+        base_color: '#505D1E'
+        evidence_sha256: fd7b9ecbe61828af5550850edd54298efe666bbffd663d0b3460b788ca05bcfa
+      - name: purple
+        base_color: '#FFCAA5'
+        evidence_sha256: de4a1664c355bbaacbd6b8b3819a1a872d5b16ca99a3353e2e3ab64c7df9074e
+      - name: red
+        base_color: '#76E447'
+        evidence_sha256: cd76293ef8ab25b2944ecac7c160674ed3b161a115f9665bde2f0971aa1d49c2
+      - name: rust
+        base_color: '#71AB31'
+        evidence_sha256: 52e095ce8df1c82d4f64e84515aaeba5d09fbe35354a643dea18e6d35ec3d813
+      - name: salmon
+        base_color: '#82F2EC'
+        evidence_sha256: 851c18229ec6076e9e33c71d4858d9f1cbc45aab15885dfa789b17394eee9491
+      - name: sand
+        base_color: '#C189E4'
+        evidence_sha256: b6f973d2df6c38b45ac6612afd59c3c5be61cf48eed66ca8ffb9b8f62e2f63d9
+      - name: stb
+        base_color: '#04D069'
+        evidence_sha256: 372d4df35a8216fa881553563848eac079250c75b1238ddb18c6955eecf501d5
+      - name: tan
+        base_color: '#DDC764'
+        evidence_sha256: 6b722348123af1d9eb0e7479fdd60ccab5db247b5fcb823362e7121c24183c0f
+  color_assignment:
+    id: separators.series.330255fd4f53c3162d195ee4.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.0b39334ae8f222117177f346
+  category: Separators
+  display_name: \amethyst\producer
+  source:
+    path: create_default_posters.ps1
+    line: 5593
+    row_sha256: d7ffb8e57e6271e1ad21552aa88611b000542a773d6f5385e5da89f6e6a3b63f
+  composer:
+    base_color: '#9B7AFE'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: producer
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.PRODUCER
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: PRODUCER COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 7da86304fef21610ff671d15dd7450526c8771e46da9d1168d4adf440d89e495
+  output:
+    directory: separators/amethyst
+    filename: producer.jpg
+    remote_paths:
+      en: separators/amethyst/producer.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: producer.jpg
+      variants:
+      - name: amethyst
+        base_color: '#9B7AFE'
+        evidence_sha256: 7da86304fef21610ff671d15dd7450526c8771e46da9d1168d4adf440d89e495
+      - name: aqua
+        base_color: '#D192B2'
+        evidence_sha256: 3f3704e631a01bf84fa5c17cc630072c499fb2e5f77da9136cd5893876af6d91
+      - name: blue
+        base_color: '#EA3485'
+        evidence_sha256: 17592c9841fbe269d9d6d31481583f33ff224e23f344fe0d66d5d75721c1a1d8
+      - name: forest
+        base_color: '#C7A0E0'
+        evidence_sha256: a0a059514556dcef2647722d7acd190b5faed2633b5f5f189c1f54b8d82dacb0
+      - name: fuchsia
+        base_color: '#087192'
+        evidence_sha256: 3dfb6029951a499f95582f62db051c363aee04fa81341fb96131419649f731f1
+      - name: gold
+        base_color: '#90523D'
+        evidence_sha256: bf6e2668839e12db8e7c62814c35dfecce400d01120b756066107256cbcbc5f6
+      - name: gray
+        base_color: '#07CA5A'
+        evidence_sha256: 53a90e25200058c74a82d5828fce3e730afc7f9a40eb2a5f063aeb8cabcf48cf
+      - name: green
+        base_color: '#D763B6'
+        evidence_sha256: e5b6f843d3a7d49aef07d65c51dbf3ad857f21c81aac55a386557794eea29e5e
+      - name: navy
+        base_color: '#FF97FC'
+        evidence_sha256: 4ac79cc54121cb3efce78488d98fcb71d02eb94bc942660ddf4dae1671d418d9
+      - name: ocean
+        base_color: '#A79A63'
+        evidence_sha256: aa75af0981d8fa2682fe6cda5ce8013ca375566c684e1503f3a17ea5e256e70e
+      - name: olive
+        base_color: '#A98E19'
+        evidence_sha256: 713ebde52c7e56fec5d8f264e4b1acdf055bfe0f4b7ce0fab467217076c51cef
+      - name: orchid
+        base_color: '#9D8D94'
+        evidence_sha256: 3afc1c9a6948e62b7a8223078a97948edddcadcfb5affe0f321aac756638fb64
+      - name: orig
+        base_color: '#417BCE'
+        evidence_sha256: bc0bce23f920dff9de67c9d231018e36d772c39ffc4ac907d26aae950715c039
+      - name: pink
+        base_color: '#7C85EC'
+        evidence_sha256: 4c15b8e061f804160d1451e6d2fdc13a6e42192d9933f3c6a28cb6476f2973fc
+      - name: plum
+        base_color: '#5F3768'
+        evidence_sha256: 298a83bd7dda08888e13d989a7d75f995f69363226196f275fa4352126fc8204
+      - name: purple
+        base_color: '#624BE4'
+        evidence_sha256: 2e5c3605d17649df16a5312ee9f1e1d352a91e962b00a4c193256ab83db5c49b
+      - name: red
+        base_color: '#AA9B9A'
+        evidence_sha256: e0031a312677e78b38965dfd5339ebe21e9bc9925c2d1292629d994407f6c0d6
+      - name: rust
+        base_color: '#F242A6'
+        evidence_sha256: a358eef02a1f511a6e009b295035313408261ae6eb2074b3f75393ec97d24e4d
+      - name: salmon
+        base_color: '#B87C1C'
+        evidence_sha256: 3781cd157dc87880bcf38aa9825148b5b9388e4565ec6ec2abccf0cd9bf6e645
+      - name: sand
+        base_color: '#0D3BA3'
+        evidence_sha256: 8f05987efad3bcc75ebdb32ac381267eb770be6db6dc9b259c5d49f508274a0e
+      - name: stb
+        base_color: '#C78A86'
+        evidence_sha256: adb85e231c5dd507be5c67be9cc1dd9676cdd2da6d5a0bb2058c01637a42e2e0
+      - name: tan
+        base_color: '#F4E91F'
+        evidence_sha256: a5da8d4f261e6a1f6046ebea170586a4e9280b0132269c65d890f3c233836923
+  color_assignment:
+    id: separators.series.0b39334ae8f222117177f346.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.962a818df704c2ef16f7dc5d
+  category: Separators
+  display_name: \amethyst\region
+  source:
+    path: create_default_posters.ps1
+    line: 5594
+    row_sha256: ec2b0e61e7ee86928286cca8de694e9687c5a1c6c70dc991e96b212f477bd1da
+  composer:
+    base_color: '#E4B71F'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: region
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.REGION
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: REGION COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 88d7f53749d31fbf645794e7c4076920dde825e9b4b28bd4e3ec6510590f2cc2
+  output:
+    directory: separators/amethyst
+    filename: region.jpg
+    remote_paths:
+      en: separators/amethyst/region.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: region.jpg
+      variants:
+      - name: amethyst
+        base_color: '#E4B71F'
+        evidence_sha256: 88d7f53749d31fbf645794e7c4076920dde825e9b4b28bd4e3ec6510590f2cc2
+      - name: aqua
+        base_color: '#996E2F'
+        evidence_sha256: cb2f8ce046acb64446db360a82717db7a6e60e310900a99c6e8c84c78741ff71
+      - name: blue
+        base_color: '#BD5C89'
+        evidence_sha256: a05a5f90126ee61e70cc851c6adc681bb9330ed950385eb656ee9634946abdf0
+      - name: forest
+        base_color: '#CE853C'
+        evidence_sha256: c3904a8f7c65c76293045d0f3a8bbb4c28a4395f011ff89b10d8e8d81545a1f9
+      - name: fuchsia
+        base_color: '#C473CA'
+        evidence_sha256: 4adeec9be4e107e0da2542f652a66429d1c37177c5c5f9b1dab3f8f8761f3e51
+      - name: gold
+        base_color: '#6DC5FA'
+        evidence_sha256: 7aa11ba7750675b0c68459e7adc03e57b72b3dbbb2c46db507b0e7d9321d08e2
+      - name: gray
+        base_color: '#4F81AC'
+        evidence_sha256: c036ab5ddf2df28157027d915b888c250f8d6f828189ff40be5648828b9ce0e6
+      - name: green
+        base_color: '#FA6CF9'
+        evidence_sha256: 3f7caa6b2704a4eca6502cda97ba446535d348773f64de1655df121f02d88245
+      - name: navy
+        base_color: '#7D11F2'
+        evidence_sha256: ead15c7fa0314e67c44da41f9f9f42467a3310dddc9734dc87592d8d0c631aec
+      - name: ocean
+        base_color: '#A2EED0'
+        evidence_sha256: cbeca3851b27cbe18bf5f7bf2050bea496f9be9b4d08285738636388b26541f6
+      - name: olive
+        base_color: '#C05D2A'
+        evidence_sha256: c39e96b2313d1f7814839b3d28b571c61c6a5f6b9a0fbc7d40618b5ef5e1eca3
+      - name: orchid
+        base_color: '#C2CD0E'
+        evidence_sha256: 7d94d9a574cee6cd3615d2ca0c78e00d1335700c44013938a2348e5ef7e8c951
+      - name: orig
+        base_color: '#200882'
+        evidence_sha256: 0034d45656e968161b44a79208bfbccab1ef915de762d529c5ec54679583ba81
+      - name: pink
+        base_color: '#899CEC'
+        evidence_sha256: 2b9691d5ec6bfd61b61d7cce00e266558df3e63effaff6db8f57b19f2cb2e410
+      - name: plum
+        base_color: '#9E9DD1'
+        evidence_sha256: 350e7c906637af820a1d87f83934b543269b03eb86d06ce737afc8a611979c05
+      - name: purple
+        base_color: '#409419'
+        evidence_sha256: 2971ca88abb3130756b628ffd1994dc37460f31c1dab50a665c8668f1027272c
+      - name: red
+        base_color: '#B6B929'
+        evidence_sha256: 78863c7bd33831bcfede5fd230bbd83553bad64a70bc933934286b430472b358
+      - name: rust
+        base_color: '#F102E6'
+        evidence_sha256: 120e66ff38126a2bd16303d0b96668c5cf7ccdb3fc5ea2004880347cc94215a2
+      - name: salmon
+        base_color: '#88E2D2'
+        evidence_sha256: 9b64af61df8ec5fb7985b89e61dbc0663c2a91665092eb94b07911b6686012c3
+      - name: sand
+        base_color: '#F2966F'
+        evidence_sha256: 1f2675ef6fdaecff14709686eccf2a11e817b2a08d9ae47c80ffd3d525f34357
+      - name: stb
+        base_color: '#8D2D2B'
+        evidence_sha256: e38ba86a856abed58d534726eb0555b05f84a2af7fdeca55b68207d2745f0bf8
+      - name: tan
+        base_color: '#632070'
+        evidence_sha256: 2126b207a8b4e32e201ea1dd39b1f4fcbcb8fc4eb0014b17cd90551bd81dd093
+  color_assignment:
+    id: separators.series.962a818df704c2ef16f7dc5d.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.c4aafc56be1658caf1e189b7
+  category: Separators
+  display_name: \amethyst\resolution
+  source:
+    path: create_default_posters.ps1
+    line: 5595
+    row_sha256: 0825e4dbcc11e8954485dcfbb3d7587a39ad8675c37630c3f17d40ec6a7a07c7
+  composer:
+    base_color: '#DD647F'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: resolution
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.RESOLUTION
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: RESOLUTION COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 12622b3d2e00173e2fd8ab967a254a59a7532398d665732247ed3215cdd5bd98
+  output:
+    directory: separators/amethyst
+    filename: resolution.jpg
+    remote_paths:
+      en: separators/amethyst/resolution.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: resolution.jpg
+      variants:
+      - name: amethyst
+        base_color: '#DD647F'
+        evidence_sha256: 12622b3d2e00173e2fd8ab967a254a59a7532398d665732247ed3215cdd5bd98
+      - name: aqua
+        base_color: '#120CE4'
+        evidence_sha256: 33c6b068193b1de97f7ac71fb4ce5167709fbc404d0957ea3a8465b6ceda3af6
+      - name: blue
+        base_color: '#8F516D'
+        evidence_sha256: bd236122245ec47ff3af1a0c2473f7855cf79d2aa1f5259b037bc18f66e51823
+      - name: forest
+        base_color: '#541064'
+        evidence_sha256: dc57a688fca3fc3bca9facb83a892298ba813cc8c7daf45cd64fa317b4a9251e
+      - name: fuchsia
+        base_color: '#98CCEB'
+        evidence_sha256: 773c28dd2d7f729a28e28065cd2a18455e9ce4671ab1457e161ad1f4e40cdf9f
+      - name: gold
+        base_color: '#6B5E4F'
+        evidence_sha256: e1427e9b031af389988773ad36857613b9ae65dded204062f5d6a889439a9a70
+      - name: gray
+        base_color: '#EBD554'
+        evidence_sha256: ca8091d21026680b1c9e2c6428047f9914be3f663d5d9c2821f5bc065fbcb730
+      - name: green
+        base_color: '#8DBF66'
+        evidence_sha256: 08bba2b9addd86cf8623fabe6b13ab009e3da64e5e56eb0572521bcc1317bbe4
+      - name: navy
+        base_color: '#132E51'
+        evidence_sha256: b74785856a5a9ae79480270263a33f761d8a84b61a968061a114b3562c3cd37c
+      - name: ocean
+        base_color: '#DE34E1'
+        evidence_sha256: 926f9792afc7838c440b0e996f95ab6dd16c11a6975ece8b50d11272a83d0282
+      - name: olive
+        base_color: '#85CA4E'
+        evidence_sha256: 0e719e4ffe2feb86e6c10dd75af85a02a5a0f21d878cb0cb9963767ad777d259
+      - name: orchid
+        base_color: '#844E34'
+        evidence_sha256: 9d74f912d5b8d7e7a1c202e50c8b6e13bb60edb8b47dd6239e39477bc812750d
+      - name: orig
+        base_color: '#52F11D'
+        evidence_sha256: 393f0a12f5c5fc0170b2804560b7fc20529a84a8a7621e0c2ba0f33eb88ae9f4
+      - name: pink
+        base_color: '#C4F07B'
+        evidence_sha256: 07fca5b73439cb7b19ac64564f3f0c44bac949cada8fe64160ea5f4cdd50d33e
+      - name: plum
+        base_color: '#896FD7'
+        evidence_sha256: 197a83ce71d03fac00adf987452603aa92b49eccf1381c95c46ac570ad512d5b
+      - name: purple
+        base_color: '#C4CD65'
+        evidence_sha256: 7ce034355715cacaad7e4e1e5b3e295a158a0599dbb1b7b3e80f76dd674c3c6f
+      - name: red
+        base_color: '#CDC570'
+        evidence_sha256: 0a4378f695ae4c2c3260f9591ddf9e945519d4f9da14eb542669bc3e29f52b1c
+      - name: rust
+        base_color: '#82D1FD'
+        evidence_sha256: 2e298cb9ece34aa56324fc1e43819e97d5aabaa3f11f1e7f687b1e14ea9cf54d
+      - name: salmon
+        base_color: '#136630'
+        evidence_sha256: 94bfbc69d9e4dd4998903db4a53d31d893fdafa4288ded896101ae0e98f1bb35
+      - name: sand
+        base_color: '#8BD9F2'
+        evidence_sha256: 8978fd14ba49b0d801e36aadc90b2df16065a8e9cedd7710ad718d7b21129d0e
+      - name: stb
+        base_color: '#9EFB74'
+        evidence_sha256: 51082cd7a8640f795c5cad8b2186cdb5df1750fc2287d92579f00b8d2287d41b
+      - name: tan
+        base_color: '#0ABCB8'
+        evidence_sha256: 06708ee716ecf036027386b86c3ec4ce773ee0a4788b6cbe42b4ffecc05e46f2
+  color_assignment:
+    id: separators.series.c4aafc56be1658caf1e189b7.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.6f2a5939ab3c9602fa3a5d53
+  category: Separators
+  display_name: \amethyst\seasonal
+  source:
+    path: create_default_posters.ps1
+    line: 5596
+    row_sha256: c8105f3800c323f7f875d1f677a4ff5651bf19d5c3a8febdee66b507dac7037c
+  composer:
+    base_color: '#EE40BA'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: seasonal
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.SEASONAL
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: SEASONAL COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: c5953979f49a557148417794f4a131311bb8efddba0f45ca78f4c51011f4c7de
+  output:
+    directory: separators/amethyst
+    filename: seasonal.jpg
+    remote_paths:
+      en: separators/amethyst/seasonal.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: seasonal.jpg
+      variants:
+      - name: amethyst
+        base_color: '#EE40BA'
+        evidence_sha256: c5953979f49a557148417794f4a131311bb8efddba0f45ca78f4c51011f4c7de
+      - name: aqua
+        base_color: '#6CBFD7'
+        evidence_sha256: 226d7e251dc2dec966724148688513c1bad7696e263d5a8f51f6f66732c3f13c
+      - name: blue
+        base_color: '#B7D333'
+        evidence_sha256: 62c52003c68413f88a25aacf89dfec0bc5cfa0c297f88914ab9345ee0b64132f
+      - name: forest
+        base_color: '#B03C02'
+        evidence_sha256: d1d1364b568fed1290685a67abceae0661eca2b819cd0182f3273bdca24ae8a8
+      - name: fuchsia
+        base_color: '#305446'
+        evidence_sha256: e22d05bc10ac60a2705c8399dab7aa623f732e837442f0801b17eddb28a33658
+      - name: gold
+        base_color: '#6AF18C'
+        evidence_sha256: 7c470be0e9b1eb12edb6b427eaea542ff17562bcde384b2a48cd51861404acc3
+      - name: gray
+        base_color: '#3342A5'
+        evidence_sha256: 5b60ff43d36fa1eff7d4d4962e4edea3d93b502d6a702d9b2865ae224ac3b822
+      - name: green
+        base_color: '#779047'
+        evidence_sha256: 8049b1994fcabe124a5314030963f7bca9956d9026a44054aaa46a8238a4623e
+      - name: navy
+        base_color: '#E57712'
+        evidence_sha256: b232ca4b2a84e9cbd309dcbb9acf824310f03a206eb0a7d5a597f5b199fbacbf
+      - name: ocean
+        base_color: '#08D444'
+        evidence_sha256: 614cc478811a3f2cd980597df374e779350b03444248f0e8e43081a2877ddf1f
+      - name: olive
+        base_color: '#C8E19D'
+        evidence_sha256: 35bf090eb998f1865f298a1b96cc5b5554ebf4dafb65f41f8db513c6ec2d53e8
+      - name: orchid
+        base_color: '#88EF56'
+        evidence_sha256: ef6a18a74d77c454ee9766c105e6594ed1564992088b942a0ae564eb1e635f89
+      - name: orig
+        base_color: '#AD2255'
+        evidence_sha256: 083676eb0b1236c39a4fa9fdc689c0fcabf316f2ef77663e18c5ad03b250b323
+      - name: pink
+        base_color: '#196A73'
+        evidence_sha256: 9a96a36a61dbc3eda2cb6a317f6dbe095120f3a126e5538a5706ab0c3730696a
+      - name: plum
+        base_color: '#D97A49'
+        evidence_sha256: e5f5fd1f3aa92f20eef7926563f36296d31634431dd582a6c8637e515a23609a
+      - name: purple
+        base_color: '#677A9F'
+        evidence_sha256: 5c2e9e4187a87b5ec48ed8bc566dfb16e285ada9a63a4e56d701ce161413e43d
+      - name: red
+        base_color: '#E612C8'
+        evidence_sha256: 02b138a47eba630eb4bf90346e7d9a74009c7d38a065ce3a373113b20cd2b64b
+      - name: rust
+        base_color: '#D8E4E0'
+        evidence_sha256: 46d19ca92a529d96fc97d4f7b78d832432c8b55a29bcdfbf8bb6c7e53ae9efd8
+      - name: salmon
+        base_color: '#020F5A'
+        evidence_sha256: 579ecf91dd237634d9401f05e80b766c31189690af6dcec4594d06e4e57e7abe
+      - name: sand
+        base_color: '#8C97AF'
+        evidence_sha256: 32ff1a428b47e55208ebcc63f6a13b6c33f6ec65fdcdf175d1718d61f5d4aa5e
+      - name: stb
+        base_color: '#99247F'
+        evidence_sha256: 8db229ddc494a182acea9e8e5addf22eb25476f413b247dd7423516ff58294dc
+      - name: tan
+        base_color: '#26008A'
+        evidence_sha256: 657f4449f4971c99f8f0b51ba488467ef3cb2deacee43ce191e6ff6643698025
+  color_assignment:
+    id: separators.series.6f2a5939ab3c9602fa3a5d53.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.a878cf8829df5b0f2438da30
+  category: Separators
+  display_name: \amethyst\streaming
+  source:
+    path: create_default_posters.ps1
+    line: 5597
+    row_sha256: fe79a3d72c7573fb45e7dfe750d6e31ab78cb7907264be7817addb6973a788c6
+  composer:
+    base_color: '#033F39'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: streaming
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.STREAMING
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: STREAMING COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 5644180b3f604822d02183e51a0a6ef054f3a0e5788de1a66874ae1567678ada
+  output:
+    directory: separators/amethyst
+    filename: streaming.jpg
+    remote_paths:
+      en: separators/amethyst/streaming.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: streaming.jpg
+      variants:
+      - name: amethyst
+        base_color: '#033F39'
+        evidence_sha256: 5644180b3f604822d02183e51a0a6ef054f3a0e5788de1a66874ae1567678ada
+      - name: aqua
+        base_color: '#0D45C1'
+        evidence_sha256: 9fab10ee686514f6d0d74b59226e4f85658fef8da8885bcd2f734cee730ff428
+      - name: blue
+        base_color: '#E8BACB'
+        evidence_sha256: 4cbb0c92f7b57968736903c4286f27fb4aa1532da8c5a3f8cc44eab77c24c8f1
+      - name: forest
+        base_color: '#EB08A9'
+        evidence_sha256: 11895316db8887f7f6cc11a28c86c0b3903c66857e93beab7d027c371276bdf3
+      - name: fuchsia
+        base_color: '#A3B2ED'
+        evidence_sha256: b3986d069772b4806a9abd3e75a42132e2167f20203ecd6ba631653953a04904
+      - name: gold
+        base_color: '#1262BB'
+        evidence_sha256: b63cd94d21d76dcb5b045585cf40abb3c6999187159521bdc4f3e2cad33ae76a
+      - name: gray
+        base_color: '#FFA549'
+        evidence_sha256: b8d0a52ff5c1bc99185e36b960b67a23c4f17769835be4ac59b1ffad8bed6cad
+      - name: green
+        base_color: '#FB53D1'
+        evidence_sha256: edab4ae31fe1a91df78d6ba0e0df9d1e19ee5d3dec7cd621c3b83f3163187d17
+      - name: navy
+        base_color: '#952ACF'
+        evidence_sha256: b1241688d5a0fcc14018ef873e4ffd6d4f6924b14b5fc3cc0a76d36ade806972
+      - name: ocean
+        base_color: '#87BB5D'
+        evidence_sha256: d84de865c05bf1c72d3b6712d9171b926f2f0a75b47d06722c195bb46f86fad1
+      - name: olive
+        base_color: '#DE36E5'
+        evidence_sha256: 7e6e0d1d46331ced1fa82bc0558aea22b8fe0b6807a487d0f4eb0c6134b41b0d
+      - name: orchid
+        base_color: '#F4E98B'
+        evidence_sha256: becc5dc5cc2dff738485cf63a2f5125bbb1d54d12f0acf06af9d1a5381bd34b0
+      - name: orig
+        base_color: '#56CAAC'
+        evidence_sha256: fb87b749c06a95c12b988a05a882e4bc449b6a43bff42feb6f5329e0b33dc207
+      - name: pink
+        base_color: '#547CD9'
+        evidence_sha256: fa16d7c378186dd0a7ad1e5478a1ae58e28b5460ff01f9599e861e62c7c4fb51
+      - name: plum
+        base_color: '#A9761C'
+        evidence_sha256: 147e0cb551d7835456c4e53fc1aa6fecba7c2530edf9dbb8a651baae4fe1e3cb
+      - name: purple
+        base_color: '#379D6A'
+        evidence_sha256: 3b9f6a7e46bca8108bd842a4b251e686146008c01a703fa18d5acdd3ea4345bf
+      - name: red
+        base_color: '#420B92'
+        evidence_sha256: 268385f36698da81938612ba3e9a15e942783bf4f6793bf8ca1c3c5dff847ecf
+      - name: rust
+        base_color: '#AE568A'
+        evidence_sha256: 0a6d74406e13e5ab5c9a866cd5e542b19eef344dd72726bef5fa1a98b5785a37
+      - name: salmon
+        base_color: '#1BB7D1'
+        evidence_sha256: 3be41b049cb7735a1f2d70c200e99408fcb79496904bb8ba7fe6b1f7ccad89d5
+      - name: sand
+        base_color: '#5FE050'
+        evidence_sha256: 22fddf89cad1543fd495298402eb71696cfda2481801b51a8c0291cbb9f58e02
+      - name: stb
+        base_color: '#94BF8F'
+        evidence_sha256: 3aab63c4d382aca299372063f7035318e977dcacb523417ebba924e9f87916c5
+      - name: tan
+        base_color: '#B8A1E8'
+        evidence_sha256: ffbb0186fb2df7732acfe9cd196b9cf89f2acdd33e35c9df28d4ca8f9951c01e
+  color_assignment:
+    id: separators.series.a878cf8829df5b0f2438da30.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.6fc9a82eb0b1dffd497ca909
+  category: Separators
+  display_name: \amethyst\studio_animation
+  source:
+    path: create_default_posters.ps1
+    line: 5598
+    row_sha256: 04feacb3f5a4b3e4eb5f01e767628704b89b1d8c87a2ac313c7969d1ce0b12d6
+  composer:
+    base_color: '#934412'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: studio_animation
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.STUDIO_ANIMATION
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: STUDIO ANIMATION COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: ce815560973d14f960a42f5507243fdee0c02ac79aa384b9ea14e023c3effc03
+  output:
+    directory: separators/amethyst
+    filename: studio_animation.jpg
+    remote_paths:
+      en: separators/amethyst/studio_animation.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: studio_animation.jpg
+      variants:
+      - name: amethyst
+        base_color: '#934412'
+        evidence_sha256: ce815560973d14f960a42f5507243fdee0c02ac79aa384b9ea14e023c3effc03
+      - name: aqua
+        base_color: '#32EF11'
+        evidence_sha256: 2b05ac1fee87bc9aa89f3f753f05f132aa9a843de455b9b5eb3d60109edbaca1
+      - name: blue
+        base_color: '#428ABC'
+        evidence_sha256: 3caa8e61a4699ffc6766786480e64d92f25b57e05cc3ab26cb746d7367b49969
+      - name: forest
+        base_color: '#AA3D6D'
+        evidence_sha256: b822f68e5cbb92f743d60ceb877e541184d1293acb81f07a841468ac93cb2d5b
+      - name: fuchsia
+        base_color: '#C8278A'
+        evidence_sha256: 88c9f20d47f3382e28dc81f8149a4be5be9323f864246dff56f1e2d39dbb0370
+      - name: gold
+        base_color: '#933BAC'
+        evidence_sha256: f625f29e1e714c26e63fbcde73b2533e2bcce10671af63d19adaf95adaf1bb44
+      - name: gray
+        base_color: '#9456B2'
+        evidence_sha256: 78b35bec59902a62557de9f5a96fff6975837f31cb8c48631cbcc841a8db9d50
+      - name: green
+        base_color: '#1C54F9'
+        evidence_sha256: 043af4c5a515a1a717b6e49f6b7ff64aadf437b8589ca9cb1b607f3de7d8d426
+      - name: navy
+        base_color: '#4E5584'
+        evidence_sha256: 7b38cecf89f474bff137a7577e45cc53c393e096959eb1fa138ce365114c1ec2
+      - name: ocean
+        base_color: '#BFB9A0'
+        evidence_sha256: 960be2dcb67b9c11623833a655ce0183414792a670a6244f29a4fa675813248d
+      - name: olive
+        base_color: '#E5505E'
+        evidence_sha256: ba1ae2b718476838b5f2639baaacf79305d80cbc6c71e5d566a09ff9327eb5a8
+      - name: orchid
+        base_color: '#372A49'
+        evidence_sha256: 4fff2664fb5d1bd465b627a11d6d296fba4202c3f2e2c9d169af8ba0fdfdd566
+      - name: orig
+        base_color: '#2A7B49'
+        evidence_sha256: a5d58caecf6bc86a32eff58f0c199b586a1c1608632f3c246c1bc76b6e3940de
+      - name: pink
+        base_color: '#7C8750'
+        evidence_sha256: ed25a283b68b1a6a8040aa80ab485cfdbe7fb486a612bc4f1b9eff5c33b59c19
+      - name: plum
+        base_color: '#4814DE'
+        evidence_sha256: d58628aa0875b0cfb3a1b4ddc25b4bab7209f835788070ab9a1eec10e4d4e6a3
+      - name: purple
+        base_color: '#533214'
+        evidence_sha256: 57c5ccb1700cbd8d9bfefd7215b166017e046903eb3a41c86508c44c31c84618
+      - name: red
+        base_color: '#115B0D'
+        evidence_sha256: f2acf050809de2eb18222e3bd3ec196686b231c78618b4e954b6dcbda685dfbb
+      - name: rust
+        base_color: '#6941FE'
+        evidence_sha256: 4ed1ba0ae271c3648627f1bc94815f1f9b724fffd5f81b3e3b45a09040565810
+      - name: salmon
+        base_color: '#4AF43A'
+        evidence_sha256: a66d8c7ae6c2d2e16b79f526a8a6b6ae000952458088246d96bf238438be5e5f
+      - name: sand
+        base_color: '#90CB5B'
+        evidence_sha256: 2d75960c0550fd07598639f68e656fafd6a80fa11bff5bdad9c2eecaffcc153c
+      - name: stb
+        base_color: '#62E680'
+        evidence_sha256: e57c400c94e764f56f5fd107d6de057440026d7aa54d48820e3cb6452e0449ec
+      - name: tan
+        base_color: '#7445C2'
+        evidence_sha256: dcbf3af45aaacbea072ab3ec02d063193a920fd682223ab761435e563a0112fa
+  color_assignment:
+    id: separators.series.6fc9a82eb0b1dffd497ca909.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.2ff8155653964c5dc30ff8bf
+  category: Separators
+  display_name: \amethyst\studio
+  source:
+    path: create_default_posters.ps1
+    line: 5599
+    row_sha256: 50560ac08e660b852812bf6daa5806326e2b96cdc57d1340634e28c38d568fe9
+  composer:
+    base_color: '#506753'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: studio
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.STUDIO
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: STUDIO COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 34a1fcd81bcb223eb34842030801a3dd823f0ee302b307597be28c5e845c932c
+  output:
+    directory: separators/amethyst
+    filename: studio.jpg
+    remote_paths:
+      en: separators/amethyst/studio.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: studio.jpg
+      variants:
+      - name: amethyst
+        base_color: '#506753'
+        evidence_sha256: 34a1fcd81bcb223eb34842030801a3dd823f0ee302b307597be28c5e845c932c
+      - name: aqua
+        base_color: '#504316'
+        evidence_sha256: 31ef529e70bfbf9b9a9832fb0d4f443d11576048c96cdbc3dc55ff3e06b3f5b5
+      - name: blue
+        base_color: '#AF922B'
+        evidence_sha256: 80a5ddc5cd5b4dfef7b419fb13ae3d4e7f6bc82fc46421b9016df74d25eda693
+      - name: forest
+        base_color: '#91C27D'
+        evidence_sha256: b0bf2ad153ee601d4d89d40b65ce7af7ae8401a0a7d61eed8fc2ab561cc6e7f2
+      - name: fuchsia
+        base_color: '#4BA0EC'
+        evidence_sha256: 49925aaa8d5e39da65a27334fe55e486ef5d6f79733537a4286e348dfcbd8633
+      - name: gold
+        base_color: '#9B896C'
+        evidence_sha256: 5289ad94aa6c97919232bab09d036c6af6bfcf3c361221a448972f4b0fabd4c0
+      - name: gray
+        base_color: '#127171'
+        evidence_sha256: 199d0b96b47799eab3023eb827045ae937a2e390a417fa05a8f0c7059d4bb955
+      - name: green
+        base_color: '#F8F62B'
+        evidence_sha256: 4f8dd8f4c51fa851e213655eb56fe9647a854b7a1c3f4806121db40b867ad3b0
+      - name: navy
+        base_color: '#66284D'
+        evidence_sha256: 7458ba2d5761b8f14aeb9a6d77f6dbec16e092d7a6c37439e492bb44f824a426
+      - name: ocean
+        base_color: '#F7B76A'
+        evidence_sha256: c066388d2491dbcec76dbeb5e3816c1e6665644c62d41050e1cf22793eef6086
+      - name: olive
+        base_color: '#059291'
+        evidence_sha256: f49dbf0742cb2b4b513ad807f0215123b92096588b8382872f9449e336093d7b
+      - name: orchid
+        base_color: '#A8DDDC'
+        evidence_sha256: 3ea73802d9760f2f609ccf9d0087fb9b3e41e35555e9a8da5f8ae5b9d77f4137
+      - name: orig
+        base_color: '#849DDC'
+        evidence_sha256: 4b2be6d01141d1870d759a5fe8c3ea39de60616f0433f5d20cf5db6fdfe8dd4a
+      - name: pink
+        base_color: '#8E5823'
+        evidence_sha256: 6b994b06d4e58c2babb160c6a927765936064685e945a8df97085d62c3360618
+      - name: plum
+        base_color: '#C1993C'
+        evidence_sha256: bded8624983e42815a122c3779db3d4f46954b2e32adfdd90e3d3e3ef37f8aae
+      - name: purple
+        base_color: '#B17589'
+        evidence_sha256: 832e9f11cc7a7ff699d09bca83a418614812e497a426d182fe414546b7997a3d
+      - name: red
+        base_color: '#A35F5B'
+        evidence_sha256: f275225b0974b60c8d69c572fdbab97f4e5bb070e79cae94d627df7546d956a4
+      - name: rust
+        base_color: '#097173'
+        evidence_sha256: eddae4866a8d9725b52e97beb26f9abf6b650bfa964075c2f8861b5f4eb7b651
+      - name: salmon
+        base_color: '#06967A'
+        evidence_sha256: 767d61cd4b45f4ca424598924f7f6c6274f816a73d36d7f033b4bbd0782586bf
+      - name: sand
+        base_color: '#F89ABA'
+        evidence_sha256: e0f0de911349d6f5f71229f32258f915e233ce70668d1833013389767beb60e9
+      - name: stb
+        base_color: '#DF835E'
+        evidence_sha256: 745761999d19d54e46170dce33717e2788bc5db85bf8c3e2f869e0e5b7310432
+      - name: tan
+        base_color: '#2FCB68'
+        evidence_sha256: b32d6bd0c69dcc3b026f2f193ac3dcc91134a14cb6472ab3ba8d5ed72ef25d6f
+  color_assignment:
+    id: separators.series.2ff8155653964c5dc30ff8bf.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.369e3abce58e5414945e8d31
+  category: Separators
+  display_name: \amethyst\subtitle_language
+  source:
+    path: create_default_posters.ps1
+    line: 5600
+    row_sha256: efeac15b928cc55bdead73fbaa95e274945f9ddb841952f144fac94cfa99a560
+  composer:
+    base_color: '#42B3C6'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: subtitle_language
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.SUBTITLE
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: SUBTITLE COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 155072a7fbd8a91fce19b696e66c690e23583f5ef518be2eedeb4cb091c5082e
+  output:
+    directory: separators/amethyst
+    filename: subtitle_language.jpg
+    remote_paths:
+      en: separators/amethyst/subtitle_language.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: subtitle_language.jpg
+      variants:
+      - name: amethyst
+        base_color: '#42B3C6'
+        evidence_sha256: 155072a7fbd8a91fce19b696e66c690e23583f5ef518be2eedeb4cb091c5082e
+      - name: aqua
+        base_color: '#43264C'
+        evidence_sha256: cfe852ac141ac5cf5f6823f27842f259ad76293c7f4d6f8ae9993413a4adf385
+      - name: blue
+        base_color: '#BEC1D4'
+        evidence_sha256: ca633d9d6cf4220deca97a0cf20e06af823372edb706c0d0e109d3b3a95e88c5
+      - name: forest
+        base_color: '#425FA7'
+        evidence_sha256: b5006c079cdb5f3cea9346b34a06aca42efa0ed7cb993f8b2c8ea996bede7520
+      - name: fuchsia
+        base_color: '#029CC7'
+        evidence_sha256: 90d2ef2781f9e6047704034600fd585b58df1119a7cf4f28598e24344da5833d
+      - name: gold
+        base_color: '#E8636D'
+        evidence_sha256: 2c6cba99079220cda8268d49b088f227a0ba5571d8a7a5e160a9445fd4a09cb2
+      - name: gray
+        base_color: '#D37064'
+        evidence_sha256: 34df5c16bea232504d0b313d71d0bc1cf4c2bb480712b03c24df68d47e05e9ff
+      - name: green
+        base_color: '#EBB40D'
+        evidence_sha256: b9ed6ad88e491c682a2f448aa80ab3fff4c3e47b02430fa36aa99a2e92f305a3
+      - name: navy
+        base_color: '#6EFDA2'
+        evidence_sha256: e7fe5fec16855e75f588c1b34b3d76c07834d12b0810e39d54cb650090ba4e93
+      - name: ocean
+        base_color: '#543869'
+        evidence_sha256: 036732e6f34eee62887873e848cde21c8f4625936437bd7f05e743a9bcbacf91
+      - name: olive
+        base_color: '#A9422D'
+        evidence_sha256: 377b20c95b387510868237416c29d9bfea3cbb25c4817b3d5b815d0d97786045
+      - name: orchid
+        base_color: '#324957'
+        evidence_sha256: fc428831091a63c29f57b70106fbf4e36e36ef00c5d29898747ba05dee9c5cb1
+      - name: orig
+        base_color: '#302A6F'
+        evidence_sha256: 3396b3ab15208340a113757e9784cd1e261295285a7ab226ee2dfe0d3162d0bb
+      - name: pink
+        base_color: '#9A0977'
+        evidence_sha256: 66d9258f0740b2a82e55dc050f491cb7ba0400ec58a5ed2e2e8a0ee00f42f36e
+      - name: plum
+        base_color: '#08C3AE'
+        evidence_sha256: 47d4b62dd78185acbaa85312df7cd8f3115eefee4c456ef2d00485ba8140af25
+      - name: purple
+        base_color: '#F24102'
+        evidence_sha256: ee7215580037b22840bcd76118a3e3bfd851390d82885f659de5a5cef9c235c3
+      - name: red
+        base_color: '#F02B05'
+        evidence_sha256: e91345ecfd1930e156233147bd1ed2cd4ac996f51939149f750eb55dde85f8cb
+      - name: rust
+        base_color: '#5989E5'
+        evidence_sha256: 049426831ef4ce6f077c12de5ebb6cb6d6f0abcd7fa51dc5e0a8fa3bb59fdb84
+      - name: salmon
+        base_color: '#B6BF18'
+        evidence_sha256: 881b019fd5270fcef1dbf88af20f2d7d1c7af5ce43642a32b146a69fe858cad6
+      - name: sand
+        base_color: '#579077'
+        evidence_sha256: b966d619803602ca522d09aa4efd10f189a80d000c3d4944149cdfb40aec903f
+      - name: stb
+        base_color: '#EAE65E'
+        evidence_sha256: 494ee207e2c21e630489500c3408abc3b500b365728a33277c621e7f7407e0a2
+      - name: tan
+        base_color: '#2B0F46'
+        evidence_sha256: 9749cd09379b43b1915be50d1b2684538e4bb1ebab4e3473864da7d7b77c0d90
+  color_assignment:
+    id: separators.series.369e3abce58e5414945e8d31.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.2917dbd00f1cce75a2a692e9
+  category: Separators
+  display_name: \amethyst\tv_chart
+  source:
+    path: create_default_posters.ps1
+    line: 5601
+    row_sha256: 478474ea4f990189f8d358351d72e34996adbfa2610180cce66d8db1d42c11a1
+  composer:
+    base_color: '#1294EB'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: tv_chart
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.TV_CHART
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: TV CHART COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: c3ebb4c5226013b5278314ff75a9013f1a32c828fd29a445d97a37ea89eb6303
+  output:
+    directory: separators/amethyst
+    filename: tv_chart.jpg
+    remote_paths:
+      en: separators/amethyst/tv_chart.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: tv_chart.jpg
+      variants:
+      - name: amethyst
+        base_color: '#1294EB'
+        evidence_sha256: c3ebb4c5226013b5278314ff75a9013f1a32c828fd29a445d97a37ea89eb6303
+      - name: aqua
+        base_color: '#14EF97'
+        evidence_sha256: 61d4063299bf95105a17b1139e16ac75dc6650b0ea2945ea810951938490448f
+      - name: blue
+        base_color: '#E77E06'
+        evidence_sha256: aa2cb7cfa050504b9e95bf76df345db003f42e4139e37b159a73f497021cd74b
+      - name: forest
+        base_color: '#9392AA'
+        evidence_sha256: f591d9413f42eebe4fc89e98a0205071421bd89370009fac614da886fff39692
+      - name: fuchsia
+        base_color: '#C48B65'
+        evidence_sha256: d71424ed73d7ad1e222a0ccde1e0751f1c01616aee7348e2a9b0760986d588e3
+      - name: gold
+        base_color: '#E1D55D'
+        evidence_sha256: 84d3aff8aa24d22dc10102ede0c8670ee3ea5964ead3d2089380e0644b6db915
+      - name: gray
+        base_color: '#87FE45'
+        evidence_sha256: 087c6accef109594e74b43a0fd6c66c2063fe4214fd1e8871ae5e783189b98d2
+      - name: green
+        base_color: '#E3355E'
+        evidence_sha256: bddf34d0b8c3e913bd0104b9f1902053d8c106f399509394cad4e02987a7e497
+      - name: navy
+        base_color: '#8C3704'
+        evidence_sha256: 1534b564419e192ed108e18f395e8dec3f3cb845b36bf97526488955a573cca0
+      - name: ocean
+        base_color: '#A64885'
+        evidence_sha256: 3d532fe5422219aa1cedd5596d306b2b9565a2bd13e89fdb39b30d6d30ef04a2
+      - name: olive
+        base_color: '#699674'
+        evidence_sha256: 2960c69a5486141e7649d7781718f687ba2f949b34545ed12133ac2cbda9be70
+      - name: orchid
+        base_color: '#F79BDB'
+        evidence_sha256: 4115f99140137cc0138125ddfcbe443fb7479ed742168145e62f2f748d8680c5
+      - name: orig
+        base_color: '#20ADB1'
+        evidence_sha256: 9397b143f5e2c3aac570d5d00311e1edd45da0c9bbade177b75a775530d9890a
+      - name: pink
+        base_color: '#10226A'
+        evidence_sha256: 13fa9207b00dc322c0861318225905ae3eb5dea5a32f88064409fd92a9db2c13
+      - name: plum
+        base_color: '#A4AE3D'
+        evidence_sha256: 5a0e5d2d1036b9509c48e384b5c649e75f145fbad93b25dc8a9b05aeadf67286
+      - name: purple
+        base_color: '#A9C009'
+        evidence_sha256: 2ec6e74e6df3fd989c43d0a8c28e9ca6796d1b8a62dd88ce308819059beb76fd
+      - name: red
+        base_color: '#8B0301'
+        evidence_sha256: b37400dcbc92b69723dcf0fdbc5c5ce074c9c731c979ede5971eff196e2d451d
+      - name: rust
+        base_color: '#C1E50B'
+        evidence_sha256: 344b9fb95b29a34eb0ce1fccf9592b4dde9506d8ab0072605b92609617cff52a
+      - name: salmon
+        base_color: '#0B75D1'
+        evidence_sha256: c275466638e6b7ac760114ddb9f77ea66b0bfa7002596f9d5aaa1ba8d719f4b0
+      - name: sand
+        base_color: '#42CFF4'
+        evidence_sha256: f84dbadf39d370d9025a6c18f4798eeef322ac17badb3e1b7fdffaed75a4231a
+      - name: stb
+        base_color: '#04F161'
+        evidence_sha256: 13e3adfc1b5877108aa23228d3129f8add3442caa94aac1af379d9570afadb97
+      - name: tan
+        base_color: '#95EDB2'
+        evidence_sha256: 04e4c17fd5bfcd3d9250ae8313487f2bc8b02f3d8f16ad8a1e5f3fe9facca183
+  color_assignment:
+    id: separators.series.2917dbd00f1cce75a2a692e9.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.e71f63d6c7c75f2f7b964dcf
+  category: Separators
+  display_name: \amethyst\network_uk
+  source:
+    path: create_default_posters.ps1
+    line: 5602
+    row_sha256: 331939a031b97c3f557299e8227d9d7e78d7286d9f7743ea57f9dc6ad925bef0
+  composer:
+    base_color: '#297C0C'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: network_uk
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.UK_NETWORK
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: UK NETWORK COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: fc6a20591a2f7b1edf33d314621ac9401c21ba27e47bd2c7e44666b1a019e254
+  output:
+    directory: separators/amethyst
+    filename: network_uk.jpg
+    remote_paths:
+      en: separators/amethyst/network_uk.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: network_uk.jpg
+      variants:
+      - name: amethyst
+        base_color: '#297C0C'
+        evidence_sha256: fc6a20591a2f7b1edf33d314621ac9401c21ba27e47bd2c7e44666b1a019e254
+      - name: aqua
+        base_color: '#6E0F6A'
+        evidence_sha256: ce582353ed8844cd08028930c90414e7abfe8f60b0776dba8e1211e405169083
+      - name: blue
+        base_color: '#E3F031'
+        evidence_sha256: 5d8d9e1d7ea2149ff00f580606f05d1bb3fb88c30431e3d1741edc69168b6f29
+      - name: forest
+        base_color: '#173D8B'
+        evidence_sha256: c9f089c29aebc145f885bc6a16af917c9cf2117deeea8996dd9c4fc1c6ada274
+      - name: fuchsia
+        base_color: '#FC8A46'
+        evidence_sha256: fa2bd8e60f0a621d602babf3b09c19b02d5d695e03f0e7296cbb63c84e64346e
+      - name: gold
+        base_color: '#5FE75A'
+        evidence_sha256: dd1e959204ce44ddd9635dcbab6151d2ec57ecad2070a0de5fbc9b10f93f5941
+      - name: gray
+        base_color: '#832E98'
+        evidence_sha256: 9d4c8a51f002c6f30d696ff1e46d957034f5dbbe6639cf041c9d2908218b35e5
+      - name: green
+        base_color: '#FC1186'
+        evidence_sha256: c8b52b87700efce3847da3f8729a5e004451bd3670740c9930001fb26603aa32
+      - name: navy
+        base_color: '#BE0314'
+        evidence_sha256: d3b1327ad1b33b3ac368a1ca682c21c6415c31473da750d833760ce196d01f6c
+      - name: ocean
+        base_color: '#8D4395'
+        evidence_sha256: 2ce938fadd49b8d1a844ea6e2f56db7d9014ac47d1ba501572ea20a302f63c71
+      - name: olive
+        base_color: '#D83822'
+        evidence_sha256: f81b20e2ae11971c009d802455c97298c95f2bb2a72b0ec4951ea012593711bb
+      - name: orchid
+        base_color: '#D610EB'
+        evidence_sha256: 34755b6d06e436dfd64b41aaed1fece3265872d8c71e5c0ea83cee96ed525bf7
+      - name: orig
+        base_color: '#44AD26'
+        evidence_sha256: 0e0cc8f1f2bbeb842863367c195d432dbe8acd835a1adc0e8f1bce0b5194ea68
+      - name: pink
+        base_color: '#FA1FD0'
+        evidence_sha256: 6a570e0b07dc3770dd9eb675aa7a8d794a16cf465aa3c97be7776cb158cfca65
+      - name: plum
+        base_color: '#934239'
+        evidence_sha256: 53e6f9dba4b62849a1436d6d344cb4571f595e4bc3d1d12a00eedbfa8c284e3c
+      - name: purple
+        base_color: '#E7DC07'
+        evidence_sha256: a7fb0736d4c9f11ae13e6b2c6469b2070e3a1f80224313643b28bf630897cafd
+      - name: red
+        base_color: '#A06EF1'
+        evidence_sha256: 9f55d4afa2c7d2240ec40172ae238dfae8bd5c30ef9cadfb3d0af5497181bd7d
+      - name: rust
+        base_color: '#3C336F'
+        evidence_sha256: a85466a85c31dc1eb3e0e2ab6b0eb07421eb91684e58263dcb914121840002f1
+      - name: salmon
+        base_color: '#CB053B'
+        evidence_sha256: 3e7157be3b06992bef9e394d7c69615ab826173bebf55e7a5af4147de8f1b3a9
+      - name: sand
+        base_color: '#31D9AA'
+        evidence_sha256: 596a63918900ae10b582a3f5e38e95d90d9674b14eb156d113043d05e1d28d62
+      - name: stb
+        base_color: '#4CF724'
+        evidence_sha256: 39b4e216c64a3e37a9c3cd35df331a76e31ffc36a6ed6d63e37963adbd06dd8d
+      - name: tan
+        base_color: '#357F99'
+        evidence_sha256: d3749db1f40edea28baf526b54c3b90ed7df5aecc020ab0e38ba5c631e79464f
+  color_assignment:
+    id: separators.series.e71f63d6c7c75f2f7b964dcf.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.e251030552d7b1963a127aed
+  category: Separators
+  display_name: \amethyst\streaming_uk
+  source:
+    path: create_default_posters.ps1
+    line: 5603
+    row_sha256: aa518972be65be31e527926eadabc59fa7293482af27b5bdcc0446ed3db680aa
+  composer:
+    base_color: '#36C732'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: streaming_uk
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.UK_STREAMING
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: UK STREAMING COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 933106219bc1f97478e4d0a17c1eeaff28ff366f6aaf93cabc5ea16f1ab0f1d0
+  output:
+    directory: separators/amethyst
+    filename: streaming_uk.jpg
+    remote_paths:
+      en: separators/amethyst/streaming_uk.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: streaming_uk.jpg
+      variants:
+      - name: amethyst
+        base_color: '#36C732'
+        evidence_sha256: 933106219bc1f97478e4d0a17c1eeaff28ff366f6aaf93cabc5ea16f1ab0f1d0
+      - name: aqua
+        base_color: '#4F63D4'
+        evidence_sha256: a8dcf41ee810fc35d42093f1bd22f52e6b45dde6b97c82d6c90b83e1b889b08d
+      - name: blue
+        base_color: '#3D2CF7'
+        evidence_sha256: bfb4c180b40d2f7df99b9678c61819dd9f8d8f4bb2649c14b4762a483f2c39ea
+      - name: forest
+        base_color: '#3DC7FB'
+        evidence_sha256: c707da81598758dadd56621df2f05a1f7b50877a4166210f234739e1ac180d74
+      - name: fuchsia
+        base_color: '#C84F0D'
+        evidence_sha256: 2e6adb120926930d6c9a4a35059e6abd65d7e434c73dabb75bf60ab4ddcdccd3
+      - name: gold
+        base_color: '#B667EB'
+        evidence_sha256: 92aa049e4d5abd18525a6f0715e1fafc8e90e1a1b97052324af341de6eb8ec4e
+      - name: gray
+        base_color: '#D21890'
+        evidence_sha256: a0cf880b841acafe50bc2ed9ad8dc5d48890654ba8554bd32a6bcc151de3d915
+      - name: green
+        base_color: '#EC8BC9'
+        evidence_sha256: abbb96e8bc8ad8ab0628f13c324a7374ec9df90c5f9de44e1098fdab15050bd9
+      - name: navy
+        base_color: '#63298C'
+        evidence_sha256: dfa99986f214eac651bd7b6673a1503fbbad4f797ac4ffd0d584abdf3a98ecf5
+      - name: ocean
+        base_color: '#33B746'
+        evidence_sha256: 2fbf9ce83abed9eba3f08e8a7db6c2fc3d674455e39c0ed11ea15934ad1f58da
+      - name: olive
+        base_color: '#627D83'
+        evidence_sha256: 3e5a0846bd249d394b3966e8443e912f1ff2c2618e931fde749af2269c78afe0
+      - name: orchid
+        base_color: '#8A6470'
+        evidence_sha256: de73592bf7475fdd31c8c1f72af7eb53cfd6fc2cb9f9d324e5bc3a42448617f8
+      - name: orig
+        base_color: '#91119D'
+        evidence_sha256: 9ea8ad9d3261ba0a85c4937a772b543d50d26c13f52fb013d41e78b60790473c
+      - name: pink
+        base_color: '#215B72'
+        evidence_sha256: 9cd84b92e7d5345880bf2b304c4631171fc984bff471e3d1554e927ad31424b5
+      - name: plum
+        base_color: '#247D0A'
+        evidence_sha256: 7b096f2d6008b4622757baad6ebcf259cb598e1757fae3de04805d0ba44eef33
+      - name: purple
+        base_color: '#4FCFD3'
+        evidence_sha256: 72ce7551c83c3bcd9a529deb3c07eed067f9b2e007a47e0b4f46e6b18837cb8a
+      - name: red
+        base_color: '#021D88'
+        evidence_sha256: 61eaeebcc26f25c46362367f59900c676629123e505a38305c794107e4edaf89
+      - name: rust
+        base_color: '#B3C672'
+        evidence_sha256: f821f00e89a859277aaab1137953cfcc2c9b5fdf8dae9c38ffafd79b957555fb
+      - name: salmon
+        base_color: '#6EAF32'
+        evidence_sha256: 278e32592e56cd705f821280c46603fb39fbd7931eff73acf30059e2f92c7548
+      - name: sand
+        base_color: '#92EB35'
+        evidence_sha256: ae218151c393b31521c72bdcf907e4d0f530cbdcda8db9b35462ea9a3f8fabf8
+      - name: stb
+        base_color: '#A2ACD8'
+        evidence_sha256: dc49c7bdfa767b8c1c92700b847dc441c9f6a102f0912701e8d92e85b08245cb
+      - name: tan
+        base_color: '#B1F2A8'
+        evidence_sha256: 68282fa4102811f85635b7bfd7a77c85815115b15eba5becaac52177062eede5
+  color_assignment:
+    id: separators.series.e251030552d7b1963a127aed.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.a4a462766944400ecf281e83
+  category: Separators
+  display_name: \amethyst\universe
+  source:
+    path: create_default_posters.ps1
+    line: 5604
+    row_sha256: d8ed09e81546d93e47e2e99401dce58dec5d0bbe8906444767cc3d24b50efc44
+  composer:
+    base_color: '#B8E5BD'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: universe
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.UNIVERSE
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: UNIVERSE COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 4c9eaaedf3d619b127988fbc279840372295a0d8481fbf85b23e784c026d1263
+  output:
+    directory: separators/amethyst
+    filename: universe.jpg
+    remote_paths:
+      en: separators/amethyst/universe.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: universe.jpg
+      variants:
+      - name: amethyst
+        base_color: '#B8E5BD'
+        evidence_sha256: 4c9eaaedf3d619b127988fbc279840372295a0d8481fbf85b23e784c026d1263
+      - name: aqua
+        base_color: '#F54FB2'
+        evidence_sha256: 7f473ecf5e0d6b5549fb6ab9b33f6fe0a524119dd02bde38c2615c4eba38f4b0
+      - name: blue
+        base_color: '#212706'
+        evidence_sha256: fe41e3127738acf2b184b57f8dcf0d2c06dee16d8ecd487c82b38b1a0669a81f
+      - name: forest
+        base_color: '#F95FA8'
+        evidence_sha256: f2deefa910033a217934e8f78e2c440bc76e1e37bd52a09b747f4f23c41e7cf9
+      - name: fuchsia
+        base_color: '#B04590'
+        evidence_sha256: d90bc8f41dffc61f029e1ac5e168469eb9674720c1020c41943cf42b290a036d
+      - name: gold
+        base_color: '#C9E057'
+        evidence_sha256: 371207a559ad861cf7def851a542054a0fe3fe5a4adf4feed55ab536f92ff872
+      - name: gray
+        base_color: '#7A9067'
+        evidence_sha256: f62620c202a538e453284bc18674447a482b32ca97db423b9e911b7b1b6a7bed
+      - name: green
+        base_color: '#FFBB26'
+        evidence_sha256: c3a5ff27af8c54456929f439fd6579fa802e8e642d71acabd0afd85c22f2be28
+      - name: navy
+        base_color: '#66EE62'
+        evidence_sha256: 7bf6ef7c39fb20de740df1215acede6d2442a96375c951bd102aa4225c22fa83
+      - name: ocean
+        base_color: '#62F3F5'
+        evidence_sha256: 4ca081e19c8ed5ede00689a4a8ffeea2801a02d8b0b95bd94c8e01ff3334b74f
+      - name: olive
+        base_color: '#FCD42A'
+        evidence_sha256: 9b51c4fed1e3fab2c59ac07478985b7165fea8d00bcb73a4105efa82c6f345ae
+      - name: orchid
+        base_color: '#D3578F'
+        evidence_sha256: 01560b407eb7024004ea4d3df701859317b25b86d5000ec80f63afecd59e9aaa
+      - name: orig
+        base_color: '#CC8A40'
+        evidence_sha256: 56c3bd6e970a0dd92b3f4ab3257c6087b189c7df9c91590e5db57af911f1fac6
+      - name: pink
+        base_color: '#D7C861'
+        evidence_sha256: 13538412ae97c7b91779cb4c7afe04ce0a5097b78b4dcb47b6045c9809bbbfc0
+      - name: plum
+        base_color: '#217275'
+        evidence_sha256: 1a7f1708db0ae8e94dcc7a5773edad86b9e48b1bb2a3456f824ec6a0672b073b
+      - name: purple
+        base_color: '#A1C713'
+        evidence_sha256: 589de0647885421d9bcbc4ee42b06aaf616b2fc48b1cebdf0b925aab3ef34b8f
+      - name: red
+        base_color: '#AA638C'
+        evidence_sha256: be4dc94fd3b2b32fcb105e7dd0c23f9db4d6a087ab3245c4bb72806f43221ec8
+      - name: rust
+        base_color: '#1474F3'
+        evidence_sha256: 16d5b1b7ce64540600be589a521571211a4819decf9e24b796ed2c1e11750f96
+      - name: salmon
+        base_color: '#9C644B'
+        evidence_sha256: 0919dc451fc280a41c87d9c0e56059a0d75758b8a1387c8f98e3cf8abe856954
+      - name: sand
+        base_color: '#AC7940'
+        evidence_sha256: 9afd64dea8a55ad5b921228673a472a5a349488ba94a0d7aaeb3319571ff6322
+      - name: stb
+        base_color: '#72208B'
+        evidence_sha256: ae866580c2f040ec336e82a805760e3afc435076abc38ad13b0d70b5367c389a
+      - name: tan
+        base_color: '#C66E0D'
+        evidence_sha256: 2f024566ec0344faa204e9278343a8591c0544ffd2091f64738893aa32dcfa2b
+  color_assignment:
+    id: separators.series.a4a462766944400ecf281e83.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.a9cdb56f737d4fc0e70c5847
+  category: Separators
+  display_name: \amethyst\network_us
+  source:
+    path: create_default_posters.ps1
+    line: 5605
+    row_sha256: 7ae576dbb35b79890c4d39bcb38780780dc783ec977866bc4cf0a5ca6a04c5f4
+  composer:
+    base_color: '#3E4F7B'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: network_us
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.US_NETWORK
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: US NETWORK COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 6480f7d790288ce7a7c9dd74bc78dd66f8a60d9670c5021658292a51d08ee6d9
+  output:
+    directory: separators/amethyst
+    filename: network_us.jpg
+    remote_paths:
+      en: separators/amethyst/network_us.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: network_us.jpg
+      variants:
+      - name: amethyst
+        base_color: '#3E4F7B'
+        evidence_sha256: 6480f7d790288ce7a7c9dd74bc78dd66f8a60d9670c5021658292a51d08ee6d9
+      - name: aqua
+        base_color: '#3AAF83'
+        evidence_sha256: f3b8f1e90484c1c808829977bf7c9c6d358bf9890381d073fab8be8dafb3e1e1
+      - name: blue
+        base_color: '#7A6569'
+        evidence_sha256: 56c622dcad4d4bcb33ceecb42238395de993a4a3346cab6ccf54c2e0e88dbecb
+      - name: forest
+        base_color: '#812F32'
+        evidence_sha256: 8f2a1cc63580d8267c72eb636c75fa61dbc4f530739d723bb7691b370d3fad5b
+      - name: fuchsia
+        base_color: '#ED07DA'
+        evidence_sha256: e9b060bca18e8caed6013b4001ea1317964ef1621a82b62d1701cfd05d8056c7
+      - name: gold
+        base_color: '#86F773'
+        evidence_sha256: 1b8f2da0853541d83cdbadeb724e6e88d94c6b5f1cbcd05e4d2520ff46136f52
+      - name: gray
+        base_color: '#BB7857'
+        evidence_sha256: fc821422b575702cf1c0c24045baa86bc68e49ff350a3c8bf2a39f8631a7ddd1
+      - name: green
+        base_color: '#A3F22A'
+        evidence_sha256: 3906849fb9f4f5e5022199692c106870f98f4bb9b7f8e4e98ff141d43130d313
+      - name: navy
+        base_color: '#656233'
+        evidence_sha256: 7a06e4795a6c3698b26378066bbb664155a5c52883381451898caa7a717a186e
+      - name: ocean
+        base_color: '#E43F84'
+        evidence_sha256: 7d59abefabdf2582bbb791a03f4e09a7539a552c98670e4d83fefe1a465b9126
+      - name: olive
+        base_color: '#B13E88'
+        evidence_sha256: ba7a839a9066ddf7651a2c577ff498289ba5073a43d1893c8341006fd17d6990
+      - name: orchid
+        base_color: '#A8124D'
+        evidence_sha256: 4d4ff6f4c7d1ee9e04d19e653f9fd7bf86a7d861566f29c0b7b0434567103b8d
+      - name: orig
+        base_color: '#A2F353'
+        evidence_sha256: 01aed6627ce57d9d1438f60529ae55c5b504061e9581b74b82b89dc4204ba9f8
+      - name: pink
+        base_color: '#6D1CC3'
+        evidence_sha256: fab46e8b189bae00de82f6de2f2c96c4e9030e43aa80fcc6afea626197e9a2b1
+      - name: plum
+        base_color: '#F4F63D'
+        evidence_sha256: cae28341f3e4c7ef75eea19af83794df6d5f0a1bb1ab6d81a59c71bbaee2dfac
+      - name: purple
+        base_color: '#017301'
+        evidence_sha256: 909dd93f6150e525ac2c4a86554057ff3329b2ccfdad5091c4d0b0d953671b4f
+      - name: red
+        base_color: '#5D59B9'
+        evidence_sha256: cdeea68b6ee5d7ca7e907603b0b836e14e676f40a603c1ca43a449a0e408c967
+      - name: rust
+        base_color: '#DCAC38'
+        evidence_sha256: c42592d0d8ab978759df17c36f7fba48cdf7fae348db8cb8d4406802574b0d2f
+      - name: salmon
+        base_color: '#92AA3B'
+        evidence_sha256: 7a8817cd9023cb6af9a340e4fd9b067af1a9228470d7c761a4ce25fc359cf15e
+      - name: sand
+        base_color: '#24EAD9'
+        evidence_sha256: 5c9570aba097627badcff2a7f9c7196782fdfc89d3abb537bb6cecc38b1bc6c1
+      - name: stb
+        base_color: '#D59882'
+        evidence_sha256: bb204904fde619fd6c7f2dbb5747b6e3971be288c174c8228837631e250abc04
+      - name: tan
+        base_color: '#F1CC23'
+        evidence_sha256: 3e671b5a229ea8043674d4f9ac2b51fb639fe0d6ba6812c1e1ebd07f877deb56
+  color_assignment:
+    id: separators.series.a9cdb56f737d4fc0e70c5847.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.72716a22411ca00000431a1f
+  category: Separators
+  display_name: \amethyst\streaming_us
+  source:
+    path: create_default_posters.ps1
+    line: 5606
+    row_sha256: 59637bd6716430a363dfcaf286e6fb2a5891155b49f7eac1cfcf6602f9f90623
+  composer:
+    base_color: '#9F901E'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: streaming_us
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.US_STREAMING
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: US STREAMING COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: fe33789eda44683c35227ac42b0bf23c2db11c77c03181bcaec07bf943151eb5
+  output:
+    directory: separators/amethyst
+    filename: streaming_us.jpg
+    remote_paths:
+      en: separators/amethyst/streaming_us.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: streaming_us.jpg
+      variants:
+      - name: amethyst
+        base_color: '#9F901E'
+        evidence_sha256: fe33789eda44683c35227ac42b0bf23c2db11c77c03181bcaec07bf943151eb5
+      - name: aqua
+        base_color: '#345B77'
+        evidence_sha256: e5631bd502a59fd091ef2bc13a9305c641c6e138d73ca08d23edac8544be7cbd
+      - name: blue
+        base_color: '#19E558'
+        evidence_sha256: 28d70731612a1637c362de105a77f2ff7db46fed5e16df33b50fabe8c6219212
+      - name: forest
+        base_color: '#5B5ED4'
+        evidence_sha256: 9042198ea58ce67d650294a7fee96a25670b2222052acafdf9a700eaf561d758
+      - name: fuchsia
+        base_color: '#CD92A3'
+        evidence_sha256: fcabfb307a717b2143282217118f0b68aef1e9a8550a6f0c948554a3c4c51969
+      - name: gold
+        base_color: '#44384C'
+        evidence_sha256: ce4e119b66aef86a7b8380b98194ee174726466c0c3a69b01f68573c72b8ee65
+      - name: gray
+        base_color: '#EBFF8A'
+        evidence_sha256: b6197d55f27006eb8f19d0b5efad085a083e54b058948a6dd7c78e69ca8547cf
+      - name: green
+        base_color: '#B88C42'
+        evidence_sha256: 55f4fae3311a4386b50193a3c1df39b52846e622b48e0de9d5f2d6ee0716c8ba
+      - name: navy
+        base_color: '#2B3868'
+        evidence_sha256: e210eb91357875d7f51667512ed8247304a99427b9b584ff863bcd3d827ad96d
+      - name: ocean
+        base_color: '#85C2BA'
+        evidence_sha256: efc7e3277370c71130a53cd3d644ea4bffd7b133fdf939075eb90a0379e98e1e
+      - name: olive
+        base_color: '#544E6C'
+        evidence_sha256: edc5368923bb1a531508e66c4165c2c7d5dbc34ef986176cb9ccd8b725382058
+      - name: orchid
+        base_color: '#CAC9F8'
+        evidence_sha256: d8666b431b1a1790339cbded7ca9cf47c410f7152b6d0a6a7e3220cc25376298
+      - name: orig
+        base_color: '#76C7BD'
+        evidence_sha256: 16a61d1a5d2e754b752f8eb293824d6ece4e85af6356e79641e947baa99b2f46
+      - name: pink
+        base_color: '#FE30B6'
+        evidence_sha256: 1ba50d33c51d442b90bb8b99d15f4f9805fc83e267488dbd44669432ee3fe91f
+      - name: plum
+        base_color: '#9E107A'
+        evidence_sha256: 81b693cca845098bd5b7739901a02bebe102bbf53dfad89b293ef93206a5b63d
+      - name: purple
+        base_color: '#B72DAB'
+        evidence_sha256: bd3ae96b092a1a4b61ac25647cc016e091a5d1bbca00f92a409df1b3cbab4ed4
+      - name: red
+        base_color: '#626BB8'
+        evidence_sha256: 86a902529cfec8aa2d0bf18ccb8fa8ad6a163dc2e534489bf310c4788cf45735
+      - name: rust
+        base_color: '#584495'
+        evidence_sha256: e3fbebb04de1c4236d5ff475c3e03ed44facb9cc0ebfbe033647fefa0db055a5
+      - name: salmon
+        base_color: '#8D10FC'
+        evidence_sha256: 4e88596928d7d24ef1fd33e802207f307198698e63b86847c2809b4718a14d86
+      - name: sand
+        base_color: '#FA65BD'
+        evidence_sha256: b29d88277c81ecdf1c5790d39d3fba835813561e85f32bdc100892fb1311c50b
+      - name: stb
+        base_color: '#2C1EB1'
+        evidence_sha256: ca883d6f2e7891a1c704e2cfff3b63b9f6029e89bb3636ea8c0116fb4325f0fa
+      - name: tan
+        base_color: '#BF8192'
+        evidence_sha256: ae92ea74996c8772201a931c9d5a93e1365c173abab4eb00b33250b9c0d96b3b
+  color_assignment:
+    id: separators.series.72716a22411ca00000431a1f.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.2cbd46560b7021ff5823347e
+  category: Separators
+  display_name: \amethyst\writer
+  source:
+    path: create_default_posters.ps1
+    line: 5607
+    row_sha256: 43116d6068ed8d32f6ebf1386bcc2c1a53abeb28290104acd0f7ab5056a08ea1
+  composer:
+    base_color: '#89E6E6'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: writer
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.WRITER
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: WRITER COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 2bb254cb7e63c72c320324e16e399e520c45f418584fb407944b6c5b2ddbec63
+  output:
+    directory: separators/amethyst
+    filename: writer.jpg
+    remote_paths:
+      en: separators/amethyst/writer.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: writer.jpg
+      variants:
+      - name: amethyst
+        base_color: '#89E6E6'
+        evidence_sha256: 2bb254cb7e63c72c320324e16e399e520c45f418584fb407944b6c5b2ddbec63
+      - name: aqua
+        base_color: '#9454D0'
+        evidence_sha256: 6133b8cfb30ccd428982efaec8a09409b371456897237bb616a93b7eb27520f0
+      - name: blue
+        base_color: '#AC2F1A'
+        evidence_sha256: b8b33ef62c1c7bf569de3053487c2991ce7c04f2221b45ee75a0dc5bd7d781ce
+      - name: forest
+        base_color: '#5B1F04'
+        evidence_sha256: 456c4d9c4a2085f48b73c955e39548426ed88a9f13d64721eb4521f4551a6957
+      - name: fuchsia
+        base_color: '#EA44ED'
+        evidence_sha256: 796c62c70f1e0a645fc62d2b2adde8301853df07c03ef84c0919601d8abf6ce4
+      - name: gold
+        base_color: '#AD9F07'
+        evidence_sha256: 1554cc324997c5d8fb5ff80e839befe504fedca83faf34e0d167f6efe89618b9
+      - name: gray
+        base_color: '#016EBC'
+        evidence_sha256: 9ce9482d554efd7d7b9dfe2b5a6c40aaa92d6030bf892c45596eed00316c85f1
+      - name: green
+        base_color: '#94451D'
+        evidence_sha256: 4a266484b562a5d93f2d3f27e3c976a0eb7bac015cc3e7a37e9779091f152bfe
+      - name: navy
+        base_color: '#05404B'
+        evidence_sha256: 8a70e547ed573dc116289c7d2660c2039f88bb803ab5f728e3fe44d8e9c9e5cb
+      - name: ocean
+        base_color: '#2A36C0'
+        evidence_sha256: ad1feb7650f7455280ec53749a39f1555b79b29232dd13a99871aad06ee45c12
+      - name: olive
+        base_color: '#9E5075'
+        evidence_sha256: f7fb2b68258a57c908a974dfd447c0f07a2977da2f726e70aa88a1069c4388ea
+      - name: orchid
+        base_color: '#1677B3'
+        evidence_sha256: f926e750680b0929f9e548f1a0c36df33e46483e12f79ada8b3e0ed0314a2f18
+      - name: orig
+        base_color: '#0BDCCD'
+        evidence_sha256: e9eb9ee32d8d2fed3197ca663c5732d7aeff409ef8ef368b05375cc3a94f372b
+      - name: pink
+        base_color: '#094FD5'
+        evidence_sha256: 1290b46444a4661994ec210acea0347aca93d68efa4bfcdc6c9c9f65850be544
+      - name: plum
+        base_color: '#BA9264'
+        evidence_sha256: 7bc38fa624065538b9311eda7581500e63179968c93465db8adfdd7cdae940f5
+      - name: purple
+        base_color: '#02DF15'
+        evidence_sha256: 7efb7939c29efbd7da003006e54825335eead77e22c0a850d5165d29ec3ccdf0
+      - name: red
+        base_color: '#BF7703'
+        evidence_sha256: fcf0d94bd53b278e125102c4e5267701486b3d00ff0dd98a441402e3fbbf98fe
+      - name: rust
+        base_color: '#67B57C'
+        evidence_sha256: 98e00326a99927581bc49cf3e3a6813b783cf0afd8d0998c9e35095437409010
+      - name: salmon
+        base_color: '#FE4150'
+        evidence_sha256: 1a58b1222081dcf6a795659e4d46dda02ae9d43b2c0ef82c4c74b6653c977614
+      - name: sand
+        base_color: '#7DD57A'
+        evidence_sha256: 054d146682972d5e40f8b860b29f0a10ea85f21d1e84a4a47c556a145c207476
+      - name: stb
+        base_color: '#0C515C'
+        evidence_sha256: 9eb0dd4b9bd204961eeb7b8abb001205083b4291c22985e0669f1b27aae1807e
+      - name: tan
+        base_color: '#1D4733'
+        evidence_sha256: f855681215462bb900980668a9d50c340beca6b9cfe408e0a4d20d53dc057141
+  color_assignment:
+    id: separators.series.2cbd46560b7021ff5823347e.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.7046e4ac67dc0c28b466e3c0
+  category: Separators
+  display_name: \amethyst\year
+  source:
+    path: create_default_posters.ps1
+    line: 5608
+    row_sha256: e8983bb6509fb6b22a5f23b46ecc46fbb89f2ffad2f023c450f7fd6e6a5ea888
+  composer:
+    base_color: '#CDB8DB'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: year
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.YEAR
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: YEAR COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: f1030f7344d095f7e5498b8f70c110615a9c5a678bf03054e89664d11f1671e3
+  output:
+    directory: separators/amethyst
+    filename: year.jpg
+    remote_paths:
+      en: separators/amethyst/year.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: year.jpg
+      variants:
+      - name: amethyst
+        base_color: '#CDB8DB'
+        evidence_sha256: f1030f7344d095f7e5498b8f70c110615a9c5a678bf03054e89664d11f1671e3
+      - name: aqua
+        base_color: '#3CD45D'
+        evidence_sha256: 87a60a1bf9699bfe6b2c49d3af00245a6e3a64e873cd97e5354fd11f461c0d1c
+      - name: blue
+        base_color: '#1C0427'
+        evidence_sha256: 14ac59ed21e4a042898f0a4da33cdf992d1baac1affd6364b28a422e1375200e
+      - name: forest
+        base_color: '#DF18AA'
+        evidence_sha256: 14cc33d7ecebb078d405759bf0f5a84265959326407f23fd90a374dc2a8b1023
+      - name: fuchsia
+        base_color: '#29F186'
+        evidence_sha256: 78cddff2d3847e66d5db0c29e1899df2c1f7e5aeae5d8d2ab2733e485c6e7356
+      - name: gold
+        base_color: '#125591'
+        evidence_sha256: d0d9a8294f5c29baa6ac5813faa7cd827dd26c78eb16bc9a8f94a6bcfc9a252c
+      - name: gray
+        base_color: '#AB365C'
+        evidence_sha256: c95c0f6100a9a046f3f3f01b61e2b27a58fa8ef0f96a87f4d41863beb734cda5
+      - name: green
+        base_color: '#FB4D8A'
+        evidence_sha256: fe5727982d733f757d5b1023c657b56e11b57c103e3d638806027151268cc1c3
+      - name: navy
+        base_color: '#43351F'
+        evidence_sha256: 4d179ee829a70e869efc57660bb55ae133ccfefbf962963791464cac92aa03d1
+      - name: ocean
+        base_color: '#C116E0'
+        evidence_sha256: 1c20eeabefdc289eb042d79643d1cd5846b1f50891904df30f4e1fb0112ee292
+      - name: olive
+        base_color: '#81A455'
+        evidence_sha256: 920193211a31121ddefbfeda03e5f659634f0e0dea0d6e191f27be761ff0e078
+      - name: orchid
+        base_color: '#13E07F'
+        evidence_sha256: 6165248810770f57b175a7951a02bd8c876bd1e6e32d7dcc8c85cd3c5ecf4af0
+      - name: orig
+        base_color: '#31B285'
+        evidence_sha256: 0312144209169e1bec69a03dc1e4a09ade2f4c4376d951cdc382718f71f39f06
+      - name: pink
+        base_color: '#10D41E'
+        evidence_sha256: dfef2b6dc409b1449e0a45e13a5147ed0174b21f6c6efb52f451d81a8c1e1888
+      - name: plum
+        base_color: '#383D4F'
+        evidence_sha256: 18c908fcebafa1a10fa99de0f6555a7e90b12baf5ee5a0fc84e69d9e3cd5d595
+      - name: purple
+        base_color: '#729618'
+        evidence_sha256: eb19e5cd8d9179103592505da5d08f42e46597f818ed1f7b573eab16cac3e05e
+      - name: red
+        base_color: '#D3F715'
+        evidence_sha256: e18e9f7fae008d238271beb13f2cf241d7ca6e356679883793e3e196920c91b9
+      - name: rust
+        base_color: '#3E1CEC'
+        evidence_sha256: bc5250287399d4702e611a5a0dd833a05125bda731074cfcf56fd54b266245aa
+      - name: salmon
+        base_color: '#1E8ECF'
+        evidence_sha256: 006e96186c0e9c43efc74ae898b0d9affa7246b699f428f982f71cbc78b7f1ca
+      - name: sand
+        base_color: '#8BA905'
+        evidence_sha256: 2c3d6b0e7e966cd402816fc5d18803fb298c8f55da17879ae1c789c9d45283ce
+      - name: stb
+        base_color: '#C6067C'
+        evidence_sha256: 43a3f60fb872ee988ced1a986229d5d7b18d8df657194cc3af82b53e5fa94721
+      - name: tan
+        base_color: '#C4BF1C'
+        evidence_sha256: 159b30941939850f43e9623f2fb76bb2488c6a4912ce2c2b00290853fc5c0d8e
+  color_assignment:
+    id: separators.series.7046e4ac67dc0c28b466e3c0.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: separators.series.d81a0d5e7903b1c6661be9f5
+  category: Separators
+  display_name: \amethyst\based
+  source:
+    path: create_default_posters.ps1
+    line: 5609
+    row_sha256: a7e4bc932b7969123d5f250e92214389a95384a51f72a2037369da2f246136bd
+  composer:
+    base_color: '#A8D909'
+    font_size: 203
+    gradient: 0
+    logo: '@base/amethyst.png'
+    out_name: based
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.BASED_ON
+    template_key: collections.separator.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: BASED ON... COLLECTIONS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 203
+      box:
+      - 1900
+      - 1000
+      minimum: 100
+      maximum: 203
+      evidence_sha256: 534b8586a444f3836451b4451a940a97384b03d46adf69c5fb3d902fdc1c965a
+  output:
+    directory: separators/amethyst
+    filename: based.jpg
+    remote_paths:
+      en: separators/amethyst/based.jpg
+  generator:
+    name: separator-variants
+    version: 1
+    parameters:
+      filename: based.jpg
+      variants:
+      - name: amethyst
+        base_color: '#A8D909'
+        evidence_sha256: 534b8586a444f3836451b4451a940a97384b03d46adf69c5fb3d902fdc1c965a
+      - name: aqua
+        base_color: '#D99F1B'
+        evidence_sha256: d525a7ae486ec3c799e752afc267b92185b9f0e2c9550236d62b4d18141f799f
+      - name: blue
+        base_color: '#499B92'
+        evidence_sha256: beb2080e26c9d6995be49ca59f97b08332b2e968d299a2ee272dfd0e7cf1e0aa
+      - name: forest
+        base_color: '#1028FA'
+        evidence_sha256: 7492d579734db7c320b879251448b226d349e711cc857e32a6581d332cc9aeed
+      - name: fuchsia
+        base_color: '#C5CF07'
+        evidence_sha256: 15c2f3db1dbe4a44d8a98c81b78b5e05a4464390408b1d78b6799fb31680b80c
+      - name: gold
+        base_color: '#D59653'
+        evidence_sha256: 0f7cf886c821f1be6a414597a434b193197cdc26dff000fead7a81380bdb66ce
+      - name: gray
+        base_color: '#6BB081'
+        evidence_sha256: f581869d748e03f74f0ca60960ca26f692d9f07facd3853d82f85f29ed011722
+      - name: green
+        base_color: '#79325D'
+        evidence_sha256: f9dbecd37c5cb5f77c6cee13d39e96d6bf52d429078e45b86439e5690c2deeb3
+      - name: navy
+        base_color: '#939BCC'
+        evidence_sha256: 3181dc34178feaf1600bbddae5c41fd9dc78590f715fe98ae71e1a8be229a05b
+      - name: ocean
+        base_color: '#3B24DA'
+        evidence_sha256: d56d569ba26a471eda02b203ca593215bafe36c1e443f136a888b3187aa72cf7
+      - name: olive
+        base_color: '#8BB39E'
+        evidence_sha256: 97e27a31d538db52a98bd4c4ad3a6a1937df277e9609d3d4b02cf732334afccd
+      - name: orchid
+        base_color: '#276875'
+        evidence_sha256: 05e938b3342a2d74311910e0251b6494a0602b9a97177b9273dab874d968e637
+      - name: orig
+        base_color: '#7143CF'
+        evidence_sha256: 6771c4631ac711efe909d102efd2e816292d6e484f85fec9025d84b18ccce05c
+      - name: pink
+        base_color: '#D2F9D9'
+        evidence_sha256: 0dc0c17822c3f414bdadd32f4ada4dd175d6701a7fa2ca8e656e178f5a0aa5fd
+      - name: plum
+        base_color: '#8804C8'
+        evidence_sha256: cc78098eb7cbfa82069357fbe2d0d54963f7305f2e8b5f4b60553e680e8e2468
+      - name: purple
+        base_color: '#487E5A'
+        evidence_sha256: e5989acb02f7931fce882f4f5ca0cc1b9d3c5e8050fd78f61b5d3b6949dbf1fa
+      - name: red
+        base_color: '#D1D488'
+        evidence_sha256: 4b122a5b54c60a518d53ea346873c20d84b9e1f935523ccecd4a1155c0f31943
+      - name: rust
+        base_color: '#7BC523'
+        evidence_sha256: 6d4adf76913ec3bd16d787bbcfdb12f88c0d86b5bfbd4ab13ee0e0c1f895f303
+      - name: salmon
+        base_color: '#703815'
+        evidence_sha256: 67b8e7a5dd3832bf9e01c41618546da2386f86f91e99265150cfb29fd52c9912
+      - name: sand
+        base_color: '#E360D0'
+        evidence_sha256: bf52dd4640e1c1502aaeeb6f83eef3f1133c981971765aadfd9b618e30d39d6e
+      - name: stb
+        base_color: '#3AB891'
+        evidence_sha256: b6bf7d08d13171e6560502561ba8feebb349bc57a76a52f7d56b05927eaa0a87
+      - name: tan
+        base_color: '#4B09FD'
+        evidence_sha256: af808ef3b9cbd63149c8e81db52f7167cb73b209e299bab0ee4d08787575de4a
+  color_assignment:
+    id: separators.series.d81a0d5e7903b1c6661be9f5.background
+    origin: template
+    parent: null
+    relationship: null
+    exception: null

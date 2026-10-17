@@ -1,0 +1,225 @@
+{
+  "active_jobs": 488,
+  "approved_exceptions": [],
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "category": "Studio",
+  "cold_metrics": [
+    {
+      "cache_hit_rate": 0.0,
+      "cache_hits": 0,
+      "dedup_reuses": 0,
+      "executed": 2,
+      "jobs_per_second": 0.5723478438810524,
+      "max_inflight": 2,
+      "peak_parent_rss": 62300160,
+      "peak_worker_rss": 188436480,
+      "peak_workers_rss_sum": 339804160,
+      "process_start": "spawn",
+      "read_bytes": 40870770,
+      "wall_seconds": 3.494378499686718,
+      "worker_pids": [
+        67660,
+        89420
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 2,
+      "write_bytes": 4641762
+    }
+  ],
+  "contract_parity": true,
+  "definitions": 488,
+  "discrepancies": [],
+  "human_visual_approval": false,
+  "incremental_metrics": [
+    {
+      "cache_hit_rate": 0.5,
+      "cache_hits": 1,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 0.34868485836222807,
+      "max_inflight": 1,
+      "peak_parent_rss": 127332352,
+      "peak_worker_rss": 188604416,
+      "peak_workers_rss_sum": 188604416,
+      "process_start": "spawn",
+      "read_bytes": 13952109,
+      "wall_seconds": 5.735838399734348,
+      "worker_pids": [
+        62024
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 1164506
+    }
+  ],
+  "legacy_effective_jobs": 488,
+  "limitations": [
+    "Fresh direct Pillow parity, not a new legacy ImageMagick comparison",
+    "English only; full multilingual layout belongs to D",
+    "Representative sample, not every category output rendered"
+  ],
+  "normalizations": [
+    "HEX letter case only",
+    "Bind actual bundled asset/font paths instead of Windows case-insensitive aliases",
+    "Destination directories are separate from composer basenames"
+  ],
+  "private_intermediates": [],
+  "restore_metrics": [
+    {
+      "cache_hit_rate": 0.5,
+      "cache_hits": 1,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 0.5498733174345452,
+      "max_inflight": 1,
+      "peak_parent_rss": 127356928,
+      "peak_worker_rss": 188829696,
+      "peak_workers_rss_sum": 188829696,
+      "process_start": "spawn",
+      "read_bytes": 14366769,
+      "wall_seconds": 3.6372014000080526,
+      "worker_pids": [
+        37408
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 1449729
+    }
+  ],
+  "resume_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 5.086379437489356,
+      "max_inflight": 0,
+      "peak_parent_rss": 127418368,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.3932070001028478,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ],
+  "sample_comparisons": [
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#B69367",
+        "border_color": "#FFFFFF",
+        "engine": "python",
+        "font": null,
+        "gradient": 1,
+        "logo_size": [
+          1600,
+          1671
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#B69367",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 250,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\logos_studio\\101 Studios.png",
+          "logo_offset": 0,
+          "logo_resize": 1600,
+          "out_name": "101 Studios",
+          "text": "",
+          "text_offset": 0,
+          "white_wash": false
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\studio\\reference\\poster.8f1ffbb6ffcde20750700ac8.jpg",
+        "sha256": "bd32dd96f98b6e5f1a491886b29a39a5857dfa447b46eda1f0772c2eb1ba965b",
+        "size_bytes": 717523
+      },
+      "output": "studio/101 Studios.jpg",
+      "poster_id": "studio.studio-101-studios.e099bcfe",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "bd32dd96f98b6e5f1a491886b29a39a5857dfa447b46eda1f0772c2eb1ba965b",
+      "sha256": "bd32dd96f98b6e5f1a491886b29a39a5857dfa447b46eda1f0772c2eb1ba965b"
+    },
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#2BACFC",
+        "border_color": "#FFFFFF",
+        "engine": "python",
+        "font": null,
+        "gradient": 1,
+        "logo_size": [
+          1600,
+          1030
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#2BACFC",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 250,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\logos_studio\\1492 Pictures.png",
+          "logo_offset": 0,
+          "logo_resize": 1600,
+          "out_name": "1492 Pictures",
+          "text": "",
+          "text_offset": 0,
+          "white_wash": false
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\studio\\reference\\poster.4a0cf786b959eddc5f34434f.jpg",
+        "sha256": "8157b43613ed8acd59bbb00360c52f9e5c48101c1bdc1bb0f5c5766888081cdd",
+        "size_bytes": 1603098
+      },
+      "output": "studio/1492 Pictures.jpg",
+      "poster_id": "studio.studio-1492-pictures.8155e55d",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "8157b43613ed8acd59bbb00360c52f9e5c48101c1bdc1bb0f5c5766888081cdd",
+      "sha256": "8157b43613ed8acd59bbb00360c52f9e5c48101c1bdc1bb0f5c5766888081cdd"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Resolved English contract parity; generated inputs require separately verified real parent artifacts before render planning",
+  "status": "automated_sample_passed",
+  "wall_seconds": 31.010519800242037,
+  "warm_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 6.224138700244041,
+      "max_inflight": 0,
+      "peak_parent_rss": 62795776,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.3213296001777053,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ]
+}

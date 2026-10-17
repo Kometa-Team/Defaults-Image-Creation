@@ -1,0 +1,6725 @@
+schema_version: 1
+category: Year
+definitions:
+- extends: legacy-poster
+  id: year.year-other.122f9ae6
+  category: Year
+  display_name: other
+  source:
+    path: create_default_posters.ps1
+    line: 6700
+    row_sha256: 969db10da8f55ae977493995c1eaf6aafec5561705f8b23889be1a910f784ae7
+  composer:
+    base_color: '#FF2000'
+    logo_resize: 1600
+    out_name: other
+  caption:
+    mode: translation
+    key: collections.year_other.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: OTHER YEARS
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 93ff7e8987c1df071d378eb8f7c592e90eede8596469451a9e38965d5f0d9015
+  output:
+    directory: year
+    filename: other.jpg
+    remote_paths:
+      en: year/other.jpg
+  generator: null
+  color_assignment:
+    id: year.year-other.122f9ae6.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1880.3409b074
+  category: Year
+  display_name: '1880'
+  source:
+    path: create_default_posters.ps1
+    line: 6724
+    row_sha256: 00dd3e07140ea1294eafb1b4be4cc75d07d91bebcba0ff06a64c136351fd8e75
+  composer:
+    base_color: '#EF10D3'
+    font: fonts/Rye-Regular.ttf
+    font_size: 400
+    logo_resize: 1800
+    out_name: '1880'
+  caption:
+    mode: shared
+    text: '1880'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1880'
+      font_sha256: 722825f800cf7ceae4791b274d45da9df517db7cf7a07bfafd34452b787c5354
+      point_size: 400
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: a77210aa2999086472ce019627ecb46d8efd825a887b59407c1dd07fdfe77bd2
+  output:
+    directory: year
+    filename: 1880.jpg
+    remote_paths:
+      en: year/1880.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1880.3409b074.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1881.677b529a
+  category: Year
+  display_name: '1881'
+  source:
+    path: create_default_posters.ps1
+    line: 6725
+    row_sha256: 5ec48da99aab4b88275ca010ee2e291ea72a8a123a68691466db64cb19948ab8
+  composer:
+    base_color: '#EF102A'
+    font: fonts/Rye-Regular.ttf
+    font_size: 400
+    logo_resize: 1800
+    out_name: '1881'
+  caption:
+    mode: shared
+    text: '1881'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1881'
+      font_sha256: 722825f800cf7ceae4791b274d45da9df517db7cf7a07bfafd34452b787c5354
+      point_size: 400
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 093961e6413056178f9188e753634f0585b7397e206e7e0b6719e74ecd657ca3
+  output:
+    directory: year
+    filename: 1881.jpg
+    remote_paths:
+      en: year/1881.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1881.677b529a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1882.d0366d8f
+  category: Year
+  display_name: '1882'
+  source:
+    path: create_default_posters.ps1
+    line: 6726
+    row_sha256: 82150c55095f919a33761c4012dc3258e6f9a2cc019d876f181537791b065189
+  composer:
+    base_color: '#EF6210'
+    font: fonts/Rye-Regular.ttf
+    font_size: 400
+    logo_resize: 1800
+    out_name: '1882'
+  caption:
+    mode: shared
+    text: '1882'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1882'
+      font_sha256: 722825f800cf7ceae4791b274d45da9df517db7cf7a07bfafd34452b787c5354
+      point_size: 400
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: d2c810f9a2c9f95e5c83696ef37684817076a6592d64ce14a72dc39351caef20
+  output:
+    directory: year
+    filename: 1882.jpg
+    remote_paths:
+      en: year/1882.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1882.d0366d8f.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1883.a62dbdf7
+  category: Year
+  display_name: '1883'
+  source:
+    path: create_default_posters.ps1
+    line: 6727
+    row_sha256: f0ace7537b33567d58a4ea56f2d3d491ae7837756003dfe1b9272e50b238df0b
+  composer:
+    base_color: '#EFC910'
+    font: fonts/Rye-Regular.ttf
+    font_size: 400
+    logo_resize: 1800
+    out_name: '1883'
+  caption:
+    mode: shared
+    text: '1883'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1883'
+      font_sha256: 722825f800cf7ceae4791b274d45da9df517db7cf7a07bfafd34452b787c5354
+      point_size: 400
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: d24d0c177f0e65f9ff2642eaf92d400e01e404c8c3da55a338c0afc9c4c4ee4e
+  output:
+    directory: year
+    filename: 1883.jpg
+    remote_paths:
+      en: year/1883.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1883.a62dbdf7.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1884.0fb58f3a
+  category: Year
+  display_name: '1884'
+  source:
+    path: create_default_posters.ps1
+    line: 6728
+    row_sha256: e6dde9b7597968d99d1fd2fb192d22b089dae43ba161915447afc658e601fffd
+  composer:
+    base_color: '#10EFA3'
+    font: fonts/Rye-Regular.ttf
+    font_size: 400
+    logo_resize: 1800
+    out_name: '1884'
+  caption:
+    mode: shared
+    text: '1884'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1884'
+      font_sha256: 722825f800cf7ceae4791b274d45da9df517db7cf7a07bfafd34452b787c5354
+      point_size: 400
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 3d0e0b94ef6622f26d4ec201ec1f4943a2170e4f495cd0492ce622a2f69c0f3b
+  output:
+    directory: year
+    filename: 1884.jpg
+    remote_paths:
+      en: year/1884.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1884.0fb58f3a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1885.d7435c71
+  category: Year
+  display_name: '1885'
+  source:
+    path: create_default_posters.ps1
+    line: 6729
+    row_sha256: 84d348e5c34bc985decf263b7c575a164ef6a8d49814a4bab09bc2a22db56ab0
+  composer:
+    base_color: '#108FEF'
+    font: fonts/Rye-Regular.ttf
+    font_size: 400
+    logo_resize: 1800
+    out_name: '1885'
+  caption:
+    mode: shared
+    text: '1885'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1885'
+      font_sha256: 722825f800cf7ceae4791b274d45da9df517db7cf7a07bfafd34452b787c5354
+      point_size: 400
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 7cb4bdfc4a05ecb19613ed0851e6ea209bfc72fd5603ada204fb0296ef5d94bd
+  output:
+    directory: year
+    filename: 1885.jpg
+    remote_paths:
+      en: year/1885.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1885.d7435c71.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1886.b7a1fb3d
+  category: Year
+  display_name: '1886'
+  source:
+    path: create_default_posters.ps1
+    line: 6730
+    row_sha256: bed57c4aad67e75c6919cca6ebe43af24410ad96859686024b2a10fc706a83e2
+  composer:
+    base_color: '#A900EF'
+    font: fonts/Rye-Regular.ttf
+    font_size: 400
+    logo_resize: 1800
+    out_name: '1886'
+  caption:
+    mode: shared
+    text: '1886'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1886'
+      font_sha256: 722825f800cf7ceae4791b274d45da9df517db7cf7a07bfafd34452b787c5354
+      point_size: 400
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 128d70c7c7ae0fbbd1fd87f0041c49bf7cb92ab0240bd2070f8b0d2b3e01e2be
+  output:
+    directory: year
+    filename: 1886.jpg
+    remote_paths:
+      en: year/1886.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1886.b7a1fb3d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1887.0c2cd7f5
+  category: Year
+  display_name: '1887'
+  source:
+    path: create_default_posters.ps1
+    line: 6731
+    row_sha256: 30c0bfd325aca28a7e1fbb5cdfdb2396b951bd67d145bfc0be1816c04b633333
+  composer:
+    base_color: '#8D848E'
+    font: fonts/Rye-Regular.ttf
+    font_size: 400
+    logo_resize: 1800
+    out_name: '1887'
+  caption:
+    mode: shared
+    text: '1887'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1887'
+      font_sha256: 722825f800cf7ceae4791b274d45da9df517db7cf7a07bfafd34452b787c5354
+      point_size: 400
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: c3b3c6757ad90b3f07b9fe2a6bc9ba9a9b827d9ca10152983e2003a716f03e96
+  output:
+    directory: year
+    filename: 1887.jpg
+    remote_paths:
+      en: year/1887.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1887.0c2cd7f5.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1888.18589595
+  category: Year
+  display_name: '1888'
+  source:
+    path: create_default_posters.ps1
+    line: 6732
+    row_sha256: f0251bdead157c1fd46fa334f7abe97a8a02d999c702881a8a3f6baffe3be655
+  composer:
+    base_color: '#992C2E'
+    font: fonts/Rye-Regular.ttf
+    font_size: 400
+    logo_resize: 1800
+    out_name: '1888'
+  caption:
+    mode: shared
+    text: '1888'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1888'
+      font_sha256: 722825f800cf7ceae4791b274d45da9df517db7cf7a07bfafd34452b787c5354
+      point_size: 400
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 4485a059a4e0922bd5ce43916c5f40bcee158364cdf482a0057938c29d7af376
+  output:
+    directory: year
+    filename: 1888.jpg
+    remote_paths:
+      en: year/1888.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1888.18589595.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1889.b961eb2e
+  category: Year
+  display_name: '1889'
+  source:
+    path: create_default_posters.ps1
+    line: 6733
+    row_sha256: 3a6ea7bc8974924ac5a15b8155bf8e6eb6f7fdd663bee77a2514f63d4c96c8c6
+  composer:
+    base_color: '#131CA1'
+    font: fonts/Rye-Regular.ttf
+    font_size: 400
+    logo_resize: 1800
+    out_name: '1889'
+  caption:
+    mode: shared
+    text: '1889'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1889'
+      font_sha256: 722825f800cf7ceae4791b274d45da9df517db7cf7a07bfafd34452b787c5354
+      point_size: 400
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 8574068a72a9da4cdd6bbcac545d2c54edddb012c013dcf84619cd08254b1c1f
+  output:
+    directory: year
+    filename: 1889.jpg
+    remote_paths:
+      en: year/1889.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1889.b961eb2e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1890.b1e26d86
+  category: Year
+  display_name: '1890'
+  source:
+    path: create_default_posters.ps1
+    line: 6734
+    row_sha256: 20deceb5d79a74fd54787f7a7f20402f656da849ff58b9ee83138221b3cfce49
+  composer:
+    base_color: '#EF10D3'
+    font: fonts/Limelight-Regular.ttf
+    font_size: 426
+    logo_resize: 1800
+    out_name: '1890'
+  caption:
+    mode: shared
+    text: '1890'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1890'
+      font_sha256: 5d2c9f43d8cb4d49481a39a33cdc2a9157b1fcbfb381063a11617ede209a105c
+      point_size: 426
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 3255e46010c938ee18aff805171dd5b54412add28a159fc4e68f80f8d02dc804
+  output:
+    directory: year
+    filename: 1890.jpg
+    remote_paths:
+      en: year/1890.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1890.b1e26d86.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1891.3223ca29
+  category: Year
+  display_name: '1891'
+  source:
+    path: create_default_posters.ps1
+    line: 6735
+    row_sha256: 737d8f05d1c050a9dfb952ad5b8122a6d4631f66a732c1d9344e00a3ae99ed24
+  composer:
+    base_color: '#EF102A'
+    font: fonts/Limelight-Regular.ttf
+    font_size: 426
+    logo_resize: 1800
+    out_name: '1891'
+  caption:
+    mode: shared
+    text: '1891'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1891'
+      font_sha256: 5d2c9f43d8cb4d49481a39a33cdc2a9157b1fcbfb381063a11617ede209a105c
+      point_size: 426
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 7a7973264af415f2b629cc9ce6936103cf9f0b9c503f5f1e23f1895e6658b12a
+  output:
+    directory: year
+    filename: 1891.jpg
+    remote_paths:
+      en: year/1891.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1891.3223ca29.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1892.456434f3
+  category: Year
+  display_name: '1892'
+  source:
+    path: create_default_posters.ps1
+    line: 6736
+    row_sha256: 95b4a8831e2f5d4323b64f98f6f6246fbf7096b74fa87a5acce28098b7a883eb
+  composer:
+    base_color: '#EF6210'
+    font: fonts/Limelight-Regular.ttf
+    font_size: 426
+    logo_resize: 1800
+    out_name: '1892'
+  caption:
+    mode: shared
+    text: '1892'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1892'
+      font_sha256: 5d2c9f43d8cb4d49481a39a33cdc2a9157b1fcbfb381063a11617ede209a105c
+      point_size: 426
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: db92e5c087a84e2273d44968e2d3ee2fea608cc2bbd7fce92ff44f4830bfbe9b
+  output:
+    directory: year
+    filename: 1892.jpg
+    remote_paths:
+      en: year/1892.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1892.456434f3.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1893.dce6504b
+  category: Year
+  display_name: '1893'
+  source:
+    path: create_default_posters.ps1
+    line: 6737
+    row_sha256: cf1dd4aa92bb52a069a4e428c2fedba030b83a7a486c1bebc2e8310cce4570b9
+  composer:
+    base_color: '#EFC910'
+    font: fonts/Limelight-Regular.ttf
+    font_size: 426
+    logo_resize: 1800
+    out_name: '1893'
+  caption:
+    mode: shared
+    text: '1893'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1893'
+      font_sha256: 5d2c9f43d8cb4d49481a39a33cdc2a9157b1fcbfb381063a11617ede209a105c
+      point_size: 426
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 8b72927142a2748ceef72343b82337ff6b550009f7588863987c83fcf8c4c681
+  output:
+    directory: year
+    filename: 1893.jpg
+    remote_paths:
+      en: year/1893.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1893.dce6504b.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1894.ac942d61
+  category: Year
+  display_name: '1894'
+  source:
+    path: create_default_posters.ps1
+    line: 6738
+    row_sha256: 50850deba8b1682e675cdb21f7fae854e4e027f02945db615c8b078b8e2cf7e0
+  composer:
+    base_color: '#10EFA3'
+    font: fonts/Limelight-Regular.ttf
+    font_size: 425
+    logo_resize: 1800
+    out_name: '1894'
+  caption:
+    mode: shared
+    text: '1894'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1894'
+      font_sha256: 5d2c9f43d8cb4d49481a39a33cdc2a9157b1fcbfb381063a11617ede209a105c
+      point_size: 425
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 2c139e08f7d867baf1bbc5663cf755980ee8026200fa5778c4ec0c2a6de9477a
+  output:
+    directory: year
+    filename: 1894.jpg
+    remote_paths:
+      en: year/1894.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1894.ac942d61.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1895.88849bb0
+  category: Year
+  display_name: '1895'
+  source:
+    path: create_default_posters.ps1
+    line: 6739
+    row_sha256: 830085624dad0d7ee7e2054ec4f73afd8b78e1979ed6fa21a6451ebea81fa456
+  composer:
+    base_color: '#108FEF'
+    font: fonts/Limelight-Regular.ttf
+    font_size: 426
+    logo_resize: 1800
+    out_name: '1895'
+  caption:
+    mode: shared
+    text: '1895'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1895'
+      font_sha256: 5d2c9f43d8cb4d49481a39a33cdc2a9157b1fcbfb381063a11617ede209a105c
+      point_size: 426
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 6b91ecbeebd66b077184036561c7da5000331c6459b246641769c08e17a8d0e4
+  output:
+    directory: year
+    filename: 1895.jpg
+    remote_paths:
+      en: year/1895.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1895.88849bb0.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1896.be55bf77
+  category: Year
+  display_name: '1896'
+  source:
+    path: create_default_posters.ps1
+    line: 6740
+    row_sha256: fc6bd722ad7a4231b1f391ab74696d655d5432ed3074031021fab26077fb6c6e
+  composer:
+    base_color: '#A900EF'
+    font: fonts/Limelight-Regular.ttf
+    font_size: 425
+    logo_resize: 1800
+    out_name: '1896'
+  caption:
+    mode: shared
+    text: '1896'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1896'
+      font_sha256: 5d2c9f43d8cb4d49481a39a33cdc2a9157b1fcbfb381063a11617ede209a105c
+      point_size: 425
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 924c506ce2aea7615038f09c5bcff487292244e0fa5d9e4d567b8c36dddc613b
+  output:
+    directory: year
+    filename: 1896.jpg
+    remote_paths:
+      en: year/1896.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1896.be55bf77.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1897.51662434
+  category: Year
+  display_name: '1897'
+  source:
+    path: create_default_posters.ps1
+    line: 6741
+    row_sha256: 63db5cd45b93dd1ea131ca21df7a8dd045951fe6f68edd075a62ee193750fdac
+  composer:
+    base_color: '#8D848E'
+    font: fonts/Limelight-Regular.ttf
+    font_size: 426
+    logo_resize: 1800
+    out_name: '1897'
+  caption:
+    mode: shared
+    text: '1897'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1897'
+      font_sha256: 5d2c9f43d8cb4d49481a39a33cdc2a9157b1fcbfb381063a11617ede209a105c
+      point_size: 426
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: e3b1c4a83e50a260c0146b0bd268503a6b6d2567a84bbf13faadc67a058ea140
+  output:
+    directory: year
+    filename: 1897.jpg
+    remote_paths:
+      en: year/1897.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1897.51662434.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1898.fe50448d
+  category: Year
+  display_name: '1898'
+  source:
+    path: create_default_posters.ps1
+    line: 6742
+    row_sha256: 6e5342071e65750d475ea4ac29bf7b60d83f426d02c13aba603ff61830bfae6e
+  composer:
+    base_color: '#992C2E'
+    font: fonts/Limelight-Regular.ttf
+    font_size: 425
+    logo_resize: 1800
+    out_name: '1898'
+  caption:
+    mode: shared
+    text: '1898'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1898'
+      font_sha256: 5d2c9f43d8cb4d49481a39a33cdc2a9157b1fcbfb381063a11617ede209a105c
+      point_size: 425
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: aab4f690af16f7ed7053f3705dbd7d2f883f8605bb2b05287061e3706b881d29
+  output:
+    directory: year
+    filename: 1898.jpg
+    remote_paths:
+      en: year/1898.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1898.fe50448d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1899.8f63feda
+  category: Year
+  display_name: '1899'
+  source:
+    path: create_default_posters.ps1
+    line: 6743
+    row_sha256: 9f8d93708b1074eb0a7611063110d5cb6d32080828005f60d1cd72eaa4d1e19a
+  composer:
+    base_color: '#131CA1'
+    font: fonts/Limelight-Regular.ttf
+    font_size: 425
+    logo_resize: 1800
+    out_name: '1899'
+  caption:
+    mode: shared
+    text: '1899'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1899'
+      font_sha256: 5d2c9f43d8cb4d49481a39a33cdc2a9157b1fcbfb381063a11617ede209a105c
+      point_size: 425
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: c203e6d2046f08a6e098c42b22c79804d33b6ec7a4b60e0c7b593d77bec5f40d
+  output:
+    directory: year
+    filename: 1899.jpg
+    remote_paths:
+      en: year/1899.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1899.8f63feda.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1900.4be6ac53
+  category: Year
+  display_name: '1900'
+  source:
+    path: create_default_posters.ps1
+    line: 6744
+    row_sha256: db4f8ff55b0c0017d9766626c3272497d2cf807afe2503eab5b06dd203b1de4e
+  composer:
+    base_color: '#EF10D3'
+    font: fonts/BoecklinsUniverse.ttf
+    font_size: 453
+    logo_resize: 1800
+    out_name: '1900'
+  caption:
+    mode: shared
+    text: '1900'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1900'
+      font_sha256: 5f6f6396edee3fa1fe9443258d7463f82e6b2512a03c5102a90295a095339fb5
+      point_size: 453
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 278c6bf240a692d9e43704241bb03ba02bc4d0449f6ec1ed486f21c8b64aa6cd
+  output:
+    directory: year
+    filename: 1900.jpg
+    remote_paths:
+      en: year/1900.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1900.4be6ac53.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1901.c4c5dcfe
+  category: Year
+  display_name: '1901'
+  source:
+    path: create_default_posters.ps1
+    line: 6745
+    row_sha256: 572bba33fa2d5f41d2fb9b8dac2ab9fc342f6f191546afc7ccf8b6ff89e0e727
+  composer:
+    base_color: '#EF102A'
+    font: fonts/BoecklinsUniverse.ttf
+    font_size: 453
+    logo_resize: 1800
+    out_name: '1901'
+  caption:
+    mode: shared
+    text: '1901'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1901'
+      font_sha256: 5f6f6396edee3fa1fe9443258d7463f82e6b2512a03c5102a90295a095339fb5
+      point_size: 453
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 9b1f5a9d7ff1acd59d04f620caa37a137179fbe604b844275d488e236acfc7b6
+  output:
+    directory: year
+    filename: 1901.jpg
+    remote_paths:
+      en: year/1901.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1901.c4c5dcfe.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1902.ab5a0069
+  category: Year
+  display_name: '1902'
+  source:
+    path: create_default_posters.ps1
+    line: 6746
+    row_sha256: 1aeefebc4f6805cdb12256eac9366b7a20e11cb851da81dfd5f646cf17961828
+  composer:
+    base_color: '#EF6210'
+    font: fonts/BoecklinsUniverse.ttf
+    font_size: 453
+    logo_resize: 1800
+    out_name: '1902'
+  caption:
+    mode: shared
+    text: '1902'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1902'
+      font_sha256: 5f6f6396edee3fa1fe9443258d7463f82e6b2512a03c5102a90295a095339fb5
+      point_size: 453
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 9dce2e14f62a2ddce90700ea6de89d9068bb5fec03927782da687211112382fa
+  output:
+    directory: year
+    filename: 1902.jpg
+    remote_paths:
+      en: year/1902.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1902.ab5a0069.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1903.644df894
+  category: Year
+  display_name: '1903'
+  source:
+    path: create_default_posters.ps1
+    line: 6747
+    row_sha256: a978864a46e7336ef62ddeafddfce7aa4b36ea62217b886c9de04e4c22cbf149
+  composer:
+    base_color: '#EFC910'
+    font: fonts/BoecklinsUniverse.ttf
+    font_size: 453
+    logo_resize: 1800
+    out_name: '1903'
+  caption:
+    mode: shared
+    text: '1903'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1903'
+      font_sha256: 5f6f6396edee3fa1fe9443258d7463f82e6b2512a03c5102a90295a095339fb5
+      point_size: 453
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 5747e53808a9fd5703cd5486142b64cc7db8ba34e7e406d1fd5dea65bf3070b6
+  output:
+    directory: year
+    filename: 1903.jpg
+    remote_paths:
+      en: year/1903.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1903.644df894.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1904.ea81fffb
+  category: Year
+  display_name: '1904'
+  source:
+    path: create_default_posters.ps1
+    line: 6748
+    row_sha256: e7fd22c00f239c4e355051fda969f7a68f89a75cbc98fbfbc84a00f5ce08537d
+  composer:
+    base_color: '#10EFA3'
+    font: fonts/BoecklinsUniverse.ttf
+    font_size: 453
+    logo_resize: 1800
+    out_name: '1904'
+  caption:
+    mode: shared
+    text: '1904'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1904'
+      font_sha256: 5f6f6396edee3fa1fe9443258d7463f82e6b2512a03c5102a90295a095339fb5
+      point_size: 453
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 61f5bb7c033e06eca60898c86c0cc450258b14c630c60c78f148ab54d0c4247a
+  output:
+    directory: year
+    filename: 1904.jpg
+    remote_paths:
+      en: year/1904.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1904.ea81fffb.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1905.02150979
+  category: Year
+  display_name: '1905'
+  source:
+    path: create_default_posters.ps1
+    line: 6749
+    row_sha256: 6eb532383fe4ce9b1220b77f5d3bb7029fc9625cc4c93bf295b2e029815fe320
+  composer:
+    base_color: '#108FEF'
+    font: fonts/BoecklinsUniverse.ttf
+    font_size: 453
+    logo_resize: 1800
+    out_name: '1905'
+  caption:
+    mode: shared
+    text: '1905'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1905'
+      font_sha256: 5f6f6396edee3fa1fe9443258d7463f82e6b2512a03c5102a90295a095339fb5
+      point_size: 453
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: bf281cb158059d7fcc7ef07958c99e3db828e31c8dc1290e7890cf515c9e7371
+  output:
+    directory: year
+    filename: 1905.jpg
+    remote_paths:
+      en: year/1905.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1905.02150979.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1906.c6a402af
+  category: Year
+  display_name: '1906'
+  source:
+    path: create_default_posters.ps1
+    line: 6750
+    row_sha256: d43cfd41675d0c885afa3169f1fc9372f60d5da39206a6350701c540d236c0ea
+  composer:
+    base_color: '#A900EF'
+    font: fonts/BoecklinsUniverse.ttf
+    font_size: 453
+    logo_resize: 1800
+    out_name: '1906'
+  caption:
+    mode: shared
+    text: '1906'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1906'
+      font_sha256: 5f6f6396edee3fa1fe9443258d7463f82e6b2512a03c5102a90295a095339fb5
+      point_size: 453
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 94fcc25b7cc57050407903956b66f2cbdbd144a4f5c610df4798462ac8e32982
+  output:
+    directory: year
+    filename: 1906.jpg
+    remote_paths:
+      en: year/1906.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1906.c6a402af.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1907.422d0841
+  category: Year
+  display_name: '1907'
+  source:
+    path: create_default_posters.ps1
+    line: 6751
+    row_sha256: b9620ac577da64a8f1f1110efea75ed4da16a6c847ef35eb01da527031fbd0f4
+  composer:
+    base_color: '#8D848E'
+    font: fonts/BoecklinsUniverse.ttf
+    font_size: 453
+    logo_resize: 1800
+    out_name: '1907'
+  caption:
+    mode: shared
+    text: '1907'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1907'
+      font_sha256: 5f6f6396edee3fa1fe9443258d7463f82e6b2512a03c5102a90295a095339fb5
+      point_size: 453
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: fc4bcaebc8c1fda85822c7c0ebdaf0e4677484a747dbb47166a679c69484380a
+  output:
+    directory: year
+    filename: 1907.jpg
+    remote_paths:
+      en: year/1907.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1907.422d0841.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1908.a439c153
+  category: Year
+  display_name: '1908'
+  source:
+    path: create_default_posters.ps1
+    line: 6752
+    row_sha256: d3593215ac61005fc97936858b530f3203a9a6c8b762af239b96bac7685a8e0e
+  composer:
+    base_color: '#992C2E'
+    font: fonts/BoecklinsUniverse.ttf
+    font_size: 453
+    logo_resize: 1800
+    out_name: '1908'
+  caption:
+    mode: shared
+    text: '1908'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1908'
+      font_sha256: 5f6f6396edee3fa1fe9443258d7463f82e6b2512a03c5102a90295a095339fb5
+      point_size: 453
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: d0c114c7e7fd97cd786b5e3f85f479a79c37d36d1d23136c0dee0d6a5a5d13ea
+  output:
+    directory: year
+    filename: 1908.jpg
+    remote_paths:
+      en: year/1908.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1908.a439c153.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1909.d9fd6057
+  category: Year
+  display_name: '1909'
+  source:
+    path: create_default_posters.ps1
+    line: 6753
+    row_sha256: c36e3dbe2aae3080c785679b98d86aa8f219e6753183bcb2c18b809db87672ee
+  composer:
+    base_color: '#131CA1'
+    font: fonts/BoecklinsUniverse.ttf
+    font_size: 453
+    logo_resize: 1800
+    out_name: '1909'
+  caption:
+    mode: shared
+    text: '1909'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1909'
+      font_sha256: 5f6f6396edee3fa1fe9443258d7463f82e6b2512a03c5102a90295a095339fb5
+      point_size: 453
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 33c1db18c6321ec825797ee1befe3b8515a85a98eb0f0a8c528bc08a1c2e36a0
+  output:
+    directory: year
+    filename: 1909.jpg
+    remote_paths:
+      en: year/1909.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1909.d9fd6057.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1910.41ba9020
+  category: Year
+  display_name: '1910'
+  source:
+    path: create_default_posters.ps1
+    line: 6754
+    row_sha256: 64146eb945901fcff238909874c1b389ba7823fb10dd2b02076c07d0d762c139
+  composer:
+    base_color: '#EF10D3'
+    font: fonts/UnifrakturCook-Bold.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1910'
+  caption:
+    mode: shared
+    text: '1910'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1910'
+      font_sha256: b9ed8da80463792a29675199b0f6580871025c35b2c539cad7d5de050d216a0c
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: 459614e14fd8864abf22c2afbd337473d924bf2fd2e69c6807f277ea0d23c4e1
+  output:
+    directory: year
+    filename: 1910.jpg
+    remote_paths:
+      en: year/1910.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1910.41ba9020.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1911.5e09793d
+  category: Year
+  display_name: '1911'
+  source:
+    path: create_default_posters.ps1
+    line: 6755
+    row_sha256: 62c38a5b7a31bba7c00ad66bf96a30949345bb821442030a9678fdc1ee4f7b3f
+  composer:
+    base_color: '#EF102A'
+    font: fonts/UnifrakturCook-Bold.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1911'
+  caption:
+    mode: shared
+    text: '1911'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1911'
+      font_sha256: b9ed8da80463792a29675199b0f6580871025c35b2c539cad7d5de050d216a0c
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: d1960bdffa3049a0fed9c7dc34a3f75784e0a8ed37b0f0a4c0b79fc73cb8626c
+  output:
+    directory: year
+    filename: 1911.jpg
+    remote_paths:
+      en: year/1911.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1911.5e09793d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1912.5a519764
+  category: Year
+  display_name: '1912'
+  source:
+    path: create_default_posters.ps1
+    line: 6756
+    row_sha256: 567bd5bea59c9146abab9a4d941569dc3f24e883f06ad17ea6fe59fb2f60cb2b
+  composer:
+    base_color: '#EF6210'
+    font: fonts/UnifrakturCook-Bold.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1912'
+  caption:
+    mode: shared
+    text: '1912'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1912'
+      font_sha256: b9ed8da80463792a29675199b0f6580871025c35b2c539cad7d5de050d216a0c
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: 18dca98355598e475d602137f2041396d52d7050457ca85e782253f074d96820
+  output:
+    directory: year
+    filename: 1912.jpg
+    remote_paths:
+      en: year/1912.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1912.5a519764.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1913.482c6435
+  category: Year
+  display_name: '1913'
+  source:
+    path: create_default_posters.ps1
+    line: 6757
+    row_sha256: 79ca99e50f455212fea852aa7fefdad410bd1252b656a0a3d9bbed502270bee1
+  composer:
+    base_color: '#EFC910'
+    font: fonts/UnifrakturCook-Bold.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1913'
+  caption:
+    mode: shared
+    text: '1913'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1913'
+      font_sha256: b9ed8da80463792a29675199b0f6580871025c35b2c539cad7d5de050d216a0c
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: 4fff03653594a0f71bba68be88dff21a9f7845d56f85a2ac2d0f8815c68e2a57
+  output:
+    directory: year
+    filename: 1913.jpg
+    remote_paths:
+      en: year/1913.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1913.482c6435.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1914.0c111b5e
+  category: Year
+  display_name: '1914'
+  source:
+    path: create_default_posters.ps1
+    line: 6758
+    row_sha256: 1b779c19ef212599569f79458a16364e561c35da7e1c3e89b76aee743d5c5e8f
+  composer:
+    base_color: '#10EFA3'
+    font: fonts/UnifrakturCook-Bold.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1914'
+  caption:
+    mode: shared
+    text: '1914'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1914'
+      font_sha256: b9ed8da80463792a29675199b0f6580871025c35b2c539cad7d5de050d216a0c
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: b51183c9a784f0945c725be3b0100e9c452278722d4c313a456964a997da8f62
+  output:
+    directory: year
+    filename: 1914.jpg
+    remote_paths:
+      en: year/1914.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1914.0c111b5e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1915.9b1db394
+  category: Year
+  display_name: '1915'
+  source:
+    path: create_default_posters.ps1
+    line: 6759
+    row_sha256: 63a692f9d35e8f07db614c0bda5c89f2435da717077c361ef2a9d719a39b2830
+  composer:
+    base_color: '#108FEF'
+    font: fonts/UnifrakturCook-Bold.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1915'
+  caption:
+    mode: shared
+    text: '1915'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1915'
+      font_sha256: b9ed8da80463792a29675199b0f6580871025c35b2c539cad7d5de050d216a0c
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: 3b174157c7b0fd341d06a00469448fa66b58df21c8f3a5da27ebd518ab4c0245
+  output:
+    directory: year
+    filename: 1915.jpg
+    remote_paths:
+      en: year/1915.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1915.9b1db394.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1916.a858665c
+  category: Year
+  display_name: '1916'
+  source:
+    path: create_default_posters.ps1
+    line: 6760
+    row_sha256: 5f0e0816e1ec57d428990e305557d398e6de89cbe5c4bd1675ca4790c82f864f
+  composer:
+    base_color: '#A900EF'
+    font: fonts/UnifrakturCook-Bold.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1916'
+  caption:
+    mode: shared
+    text: '1916'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1916'
+      font_sha256: b9ed8da80463792a29675199b0f6580871025c35b2c539cad7d5de050d216a0c
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: 22d8f8fc5270746bfa58fbbe5f2119d0d558ef510c28981a4d96031e83b50b94
+  output:
+    directory: year
+    filename: 1916.jpg
+    remote_paths:
+      en: year/1916.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1916.a858665c.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1917.b7a1088f
+  category: Year
+  display_name: '1917'
+  source:
+    path: create_default_posters.ps1
+    line: 6761
+    row_sha256: 8ba713285518282cc4707019ac0950c00ec05dc1c66604c670a17f480192b844
+  composer:
+    base_color: '#8D848E'
+    font: fonts/UnifrakturCook-Bold.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1917'
+  caption:
+    mode: shared
+    text: '1917'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1917'
+      font_sha256: b9ed8da80463792a29675199b0f6580871025c35b2c539cad7d5de050d216a0c
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: 6751e644dded77a64b31d3d142554a1b6a278be96faca2f18777266cfcf44585
+  output:
+    directory: year
+    filename: 1917.jpg
+    remote_paths:
+      en: year/1917.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1917.b7a1088f.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1918.f444f0a7
+  category: Year
+  display_name: '1918'
+  source:
+    path: create_default_posters.ps1
+    line: 6762
+    row_sha256: 43520f7bf7b718a6d5b7ec27742d2050883248ca157f25b938c4b9b0268fd6e8
+  composer:
+    base_color: '#992C2E'
+    font: fonts/UnifrakturCook-Bold.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1918'
+  caption:
+    mode: shared
+    text: '1918'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1918'
+      font_sha256: b9ed8da80463792a29675199b0f6580871025c35b2c539cad7d5de050d216a0c
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: c8fa8105edc48d5754b80b22870d852fe3c4ac2c3d1d113b27e9af7a73923e86
+  output:
+    directory: year
+    filename: 1918.jpg
+    remote_paths:
+      en: year/1918.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1918.f444f0a7.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1919.3aee1c52
+  category: Year
+  display_name: '1919'
+  source:
+    path: create_default_posters.ps1
+    line: 6763
+    row_sha256: 3c86fb358ff051cff9bedc9306406bbc7aad1d52ff8ab9fbac0b30ade7750732
+  composer:
+    base_color: '#131CA1'
+    font: fonts/UnifrakturCook-Bold.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1919'
+  caption:
+    mode: shared
+    text: '1919'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1919'
+      font_sha256: b9ed8da80463792a29675199b0f6580871025c35b2c539cad7d5de050d216a0c
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: d5cce0eda611738f0108b215c2214f2d7b4f13d5d758fd5ef4459727bc2c94de
+  output:
+    directory: year
+    filename: 1919.jpg
+    remote_paths:
+      en: year/1919.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1919.3aee1c52.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1920.6d51f943
+  category: Year
+  display_name: '1920'
+  source:
+    path: create_default_posters.ps1
+    line: 6764
+    row_sha256: 419f7d177d0eb080fa5369348510fa72d6d1d7080b5d725d285684c90e3a03be
+  composer:
+    base_color: '#EF10D3'
+    font: fonts/Trochut-Regular.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1920'
+  caption:
+    mode: shared
+    text: '1920'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1920'
+      font_sha256: ec48b8641254bdcacc417b77992f7776a747a14f8a16c5d5af9d1b75f4bec17d
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 9661068eb15fd6d07a36a72b83db9cde76f163995ca6734891324e4657949d3b
+  output:
+    directory: year
+    filename: 1920.jpg
+    remote_paths:
+      en: year/1920.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1920.6d51f943.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1921.8e68c9ef
+  category: Year
+  display_name: '1921'
+  source:
+    path: create_default_posters.ps1
+    line: 6765
+    row_sha256: d9695e1c7eda8f073655d17a18c8ed880df110de7b3165e730840b4d92450fca
+  composer:
+    base_color: '#EF102A'
+    font: fonts/Trochut-Regular.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1921'
+  caption:
+    mode: shared
+    text: '1921'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1921'
+      font_sha256: ec48b8641254bdcacc417b77992f7776a747a14f8a16c5d5af9d1b75f4bec17d
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 94010923e0e41c02294fb3f5961b286c9325d33d3ece68e54ce643df97e01c7f
+  output:
+    directory: year
+    filename: 1921.jpg
+    remote_paths:
+      en: year/1921.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1921.8e68c9ef.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1922.61640345
+  category: Year
+  display_name: '1922'
+  source:
+    path: create_default_posters.ps1
+    line: 6766
+    row_sha256: b50cdfae6c1bfe53488c2f1e145cb1771e2782508278fc0207a86303de18c14a
+  composer:
+    base_color: '#EF6210'
+    font: fonts/Trochut-Regular.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1922'
+  caption:
+    mode: shared
+    text: '1922'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1922'
+      font_sha256: ec48b8641254bdcacc417b77992f7776a747a14f8a16c5d5af9d1b75f4bec17d
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 405b90ae9b49ae02519c43b4a4a0381022d8f970de3cc4b2bed8f3465fce399d
+  output:
+    directory: year
+    filename: 1922.jpg
+    remote_paths:
+      en: year/1922.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1922.61640345.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1923.a48ae01a
+  category: Year
+  display_name: '1923'
+  source:
+    path: create_default_posters.ps1
+    line: 6767
+    row_sha256: dc05aa898bd2d107bf7996f66fac20e97ec73ed25401a3818f23b86bfcbed01d
+  composer:
+    base_color: '#EFC910'
+    font: fonts/Trochut-Regular.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1923'
+  caption:
+    mode: shared
+    text: '1923'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1923'
+      font_sha256: ec48b8641254bdcacc417b77992f7776a747a14f8a16c5d5af9d1b75f4bec17d
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 55401050491af8c756ff9a51cf6eda04e2efee5bc4c00dcdb07cb9187a52d231
+  output:
+    directory: year
+    filename: 1923.jpg
+    remote_paths:
+      en: year/1923.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1923.a48ae01a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1924.12cdaa4e
+  category: Year
+  display_name: '1924'
+  source:
+    path: create_default_posters.ps1
+    line: 6768
+    row_sha256: af1a812858c29981dc947d75f1489cfe715e0309622fb4939b3155c9ba672ac7
+  composer:
+    base_color: '#10EFA3'
+    font: fonts/Trochut-Regular.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1924'
+  caption:
+    mode: shared
+    text: '1924'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1924'
+      font_sha256: ec48b8641254bdcacc417b77992f7776a747a14f8a16c5d5af9d1b75f4bec17d
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: d8a4f20bd6fd73b42e7f6a74a1ccd47c330d26c974ed39444f87439a8a5fdace
+  output:
+    directory: year
+    filename: 1924.jpg
+    remote_paths:
+      en: year/1924.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1924.12cdaa4e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1925.1b15a0ce
+  category: Year
+  display_name: '1925'
+  source:
+    path: create_default_posters.ps1
+    line: 6769
+    row_sha256: 4fbc87cab0972422240a576be5a387b734a99c1f9aea32d5078e1fd312f26093
+  composer:
+    base_color: '#108FEF'
+    font: fonts/Trochut-Regular.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1925'
+  caption:
+    mode: shared
+    text: '1925'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1925'
+      font_sha256: ec48b8641254bdcacc417b77992f7776a747a14f8a16c5d5af9d1b75f4bec17d
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: a1fd33606e3809a6ccb1297cf26c10105664e10345a30e1b0afe8d1aedc3af40
+  output:
+    directory: year
+    filename: 1925.jpg
+    remote_paths:
+      en: year/1925.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1925.1b15a0ce.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1926.9368270c
+  category: Year
+  display_name: '1926'
+  source:
+    path: create_default_posters.ps1
+    line: 6770
+    row_sha256: 2b5ecb30fd0555ac8048fc1ae6d92107d691d726a353a12516c41105bec60ead
+  composer:
+    base_color: '#A900EF'
+    font: fonts/Trochut-Regular.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1926'
+  caption:
+    mode: shared
+    text: '1926'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1926'
+      font_sha256: ec48b8641254bdcacc417b77992f7776a747a14f8a16c5d5af9d1b75f4bec17d
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: c8e28f7b1a269426407a801e3c141c3da4f00eefefcb3d8e37c238b2f9b773fb
+  output:
+    directory: year
+    filename: 1926.jpg
+    remote_paths:
+      en: year/1926.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1926.9368270c.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1927.d0dcd477
+  category: Year
+  display_name: '1927'
+  source:
+    path: create_default_posters.ps1
+    line: 6771
+    row_sha256: 68401cd703d65307dd503bca9bf5d320dabf828589fecdd143d119a90dacceac
+  composer:
+    base_color: '#8D848E'
+    font: fonts/Trochut-Regular.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1927'
+  caption:
+    mode: shared
+    text: '1927'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1927'
+      font_sha256: ec48b8641254bdcacc417b77992f7776a747a14f8a16c5d5af9d1b75f4bec17d
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 5067f629c04fa9c735827a4ad47137ac0c932a6eb5c917ea6f8d394fe04b7f98
+  output:
+    directory: year
+    filename: 1927.jpg
+    remote_paths:
+      en: year/1927.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1927.d0dcd477.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1928.2fb08250
+  category: Year
+  display_name: '1928'
+  source:
+    path: create_default_posters.ps1
+    line: 6772
+    row_sha256: 7b251793db2f391ca503f0b0497cde7b33a5bb1d843404851fa19c60361461ed
+  composer:
+    base_color: '#992C2E'
+    font: fonts/Trochut-Regular.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1928'
+  caption:
+    mode: shared
+    text: '1928'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1928'
+      font_sha256: ec48b8641254bdcacc417b77992f7776a747a14f8a16c5d5af9d1b75f4bec17d
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 216802403765b3f01dc3eb1e15f573d24b40854f76d312b7d808f639eb162635
+  output:
+    directory: year
+    filename: 1928.jpg
+    remote_paths:
+      en: year/1928.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1928.2fb08250.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1929.ceb95dbe
+  category: Year
+  display_name: '1929'
+  source:
+    path: create_default_posters.ps1
+    line: 6773
+    row_sha256: eefbc573d526bc74cc7e72eee2c62f268b8068f6d6725f327cc27e023018b1b4
+  composer:
+    base_color: '#131CA1'
+    font: fonts/Trochut-Regular.ttf
+    font_size: 418
+    logo_resize: 1800
+    out_name: '1929'
+  caption:
+    mode: shared
+    text: '1929'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1929'
+      font_sha256: ec48b8641254bdcacc417b77992f7776a747a14f8a16c5d5af9d1b75f4bec17d
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 4a7ac1377a66dceb8b7a307a180f79ccfb35ae288d27a346b67adb3c10cba5bc
+  output:
+    directory: year
+    filename: 1929.jpg
+    remote_paths:
+      en: year/1929.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1929.ceb95dbe.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1930.a5a17d57
+  category: Year
+  display_name: '1930'
+  source:
+    path: create_default_posters.ps1
+    line: 6774
+    row_sha256: 93d1d0b845a5b96fd306a9d4874f9afd38f74521cf2a6083152903d4ac2fc56d
+  composer:
+    base_color: '#EF10D3'
+    font: fonts/Righteous-Regular.ttf
+    font_size: 398
+    logo_resize: 1800
+    out_name: '1930'
+  caption:
+    mode: shared
+    text: '1930'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1930'
+      font_sha256: 4c3cdc5de2d70c4ee75fc9c1723a6b8f2d7316f49b383335fd8257a17dd88ade
+      point_size: 398
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 86f4dec5594246f96898165f83a6f6c37a449886f7514d33801ce4aff9f0fe06
+  output:
+    directory: year
+    filename: 1930.jpg
+    remote_paths:
+      en: year/1930.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1930.a5a17d57.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1931.d422a3cf
+  category: Year
+  display_name: '1931'
+  source:
+    path: create_default_posters.ps1
+    line: 6775
+    row_sha256: f25bb9d0ceceb5071bc2503d8ddd9b9b91fbb4e35c1a7d9cbe0e12404bd13288
+  composer:
+    base_color: '#EF102A'
+    font: fonts/Righteous-Regular.ttf
+    font_size: 398
+    logo_resize: 1800
+    out_name: '1931'
+  caption:
+    mode: shared
+    text: '1931'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1931'
+      font_sha256: 4c3cdc5de2d70c4ee75fc9c1723a6b8f2d7316f49b383335fd8257a17dd88ade
+      point_size: 398
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: db2cc3fd50ebfabeea0d75ea3e99797797151662324ce9e480bbd3555680a967
+  output:
+    directory: year
+    filename: 1931.jpg
+    remote_paths:
+      en: year/1931.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1931.d422a3cf.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1932.1a33ed14
+  category: Year
+  display_name: '1932'
+  source:
+    path: create_default_posters.ps1
+    line: 6776
+    row_sha256: a36e1b03a097f379cecf0f43b8e810d076bc6c7b8fdaccc1bc20e97a58fdeb68
+  composer:
+    base_color: '#EF6210'
+    font: fonts/Righteous-Regular.ttf
+    font_size: 398
+    logo_resize: 1800
+    out_name: '1932'
+  caption:
+    mode: shared
+    text: '1932'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1932'
+      font_sha256: 4c3cdc5de2d70c4ee75fc9c1723a6b8f2d7316f49b383335fd8257a17dd88ade
+      point_size: 398
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 5629fd26c7487f7cef95c2eb7a4ca87d817da1d725a55e76206d0988f52a7ef7
+  output:
+    directory: year
+    filename: 1932.jpg
+    remote_paths:
+      en: year/1932.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1932.1a33ed14.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1933.a2c006f3
+  category: Year
+  display_name: '1933'
+  source:
+    path: create_default_posters.ps1
+    line: 6777
+    row_sha256: a0146b8c1b54a97eb5557c43a684bcdd8cf986720d0572fd58e432d61a8fca56
+  composer:
+    base_color: '#EFC910'
+    font: fonts/Righteous-Regular.ttf
+    font_size: 398
+    logo_resize: 1800
+    out_name: '1933'
+  caption:
+    mode: shared
+    text: '1933'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1933'
+      font_sha256: 4c3cdc5de2d70c4ee75fc9c1723a6b8f2d7316f49b383335fd8257a17dd88ade
+      point_size: 398
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 0af905b38a7063b5f822047682dfa3e72dd1daa0b9025611ec00bd70a9b926fc
+  output:
+    directory: year
+    filename: 1933.jpg
+    remote_paths:
+      en: year/1933.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1933.a2c006f3.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1934.e3627b6a
+  category: Year
+  display_name: '1934'
+  source:
+    path: create_default_posters.ps1
+    line: 6778
+    row_sha256: 3b6d2e360048a01ffa79efeba5a65b60d5d03236e5bbd3129d0e01fee30ed31b
+  composer:
+    base_color: '#10EFA3'
+    font: fonts/Righteous-Regular.ttf
+    font_size: 398
+    logo_resize: 1800
+    out_name: '1934'
+  caption:
+    mode: shared
+    text: '1934'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1934'
+      font_sha256: 4c3cdc5de2d70c4ee75fc9c1723a6b8f2d7316f49b383335fd8257a17dd88ade
+      point_size: 398
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 20e1d8ac84267071820d4e0004e5e70e82b6c307c1521e297ab184ab3a649484
+  output:
+    directory: year
+    filename: 1934.jpg
+    remote_paths:
+      en: year/1934.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1934.e3627b6a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1935.d01e0ce0
+  category: Year
+  display_name: '1935'
+  source:
+    path: create_default_posters.ps1
+    line: 6779
+    row_sha256: 02950da741319640743a0c22bf8530e4be36e965b0d899a44e8dd25db7142ccb
+  composer:
+    base_color: '#108FEF'
+    font: fonts/Righteous-Regular.ttf
+    font_size: 398
+    logo_resize: 1800
+    out_name: '1935'
+  caption:
+    mode: shared
+    text: '1935'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1935'
+      font_sha256: 4c3cdc5de2d70c4ee75fc9c1723a6b8f2d7316f49b383335fd8257a17dd88ade
+      point_size: 398
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: eb2201e6b4f3433ddc16d44683e548f744aaac76fcccc8598d906a62721701b6
+  output:
+    directory: year
+    filename: 1935.jpg
+    remote_paths:
+      en: year/1935.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1935.d01e0ce0.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1936.0b89b509
+  category: Year
+  display_name: '1936'
+  source:
+    path: create_default_posters.ps1
+    line: 6780
+    row_sha256: 015579d75da1772dcf20b6ae4d649f219550b91f216a5c950da590c80ef07336
+  composer:
+    base_color: '#A900EF'
+    font: fonts/Righteous-Regular.ttf
+    font_size: 398
+    logo_resize: 1800
+    out_name: '1936'
+  caption:
+    mode: shared
+    text: '1936'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1936'
+      font_sha256: 4c3cdc5de2d70c4ee75fc9c1723a6b8f2d7316f49b383335fd8257a17dd88ade
+      point_size: 398
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: c221f118ba6ee6de3f4d0d87d56aa0a0c1773b5ac417f234369145a69c81ee55
+  output:
+    directory: year
+    filename: 1936.jpg
+    remote_paths:
+      en: year/1936.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1936.0b89b509.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1937.bae0933f
+  category: Year
+  display_name: '1937'
+  source:
+    path: create_default_posters.ps1
+    line: 6781
+    row_sha256: 47460267c9abab61c63ed6d8f03d6c09b87ac1f04a0f7490cca4596305c297ed
+  composer:
+    base_color: '#8D848E'
+    font: fonts/Righteous-Regular.ttf
+    font_size: 398
+    logo_resize: 1800
+    out_name: '1937'
+  caption:
+    mode: shared
+    text: '1937'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1937'
+      font_sha256: 4c3cdc5de2d70c4ee75fc9c1723a6b8f2d7316f49b383335fd8257a17dd88ade
+      point_size: 398
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 96550ab803b50a566aa846587916bd1e154a69ebee1b40ba29e96b76faee8daf
+  output:
+    directory: year
+    filename: 1937.jpg
+    remote_paths:
+      en: year/1937.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1937.bae0933f.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1938.809a3cc7
+  category: Year
+  display_name: '1938'
+  source:
+    path: create_default_posters.ps1
+    line: 6782
+    row_sha256: d9f1650aaa18de50cc2b9622af71ff19d99238c9f05433d48cf219d4de0811c9
+  composer:
+    base_color: '#992C2E'
+    font: fonts/Righteous-Regular.ttf
+    font_size: 398
+    logo_resize: 1800
+    out_name: '1938'
+  caption:
+    mode: shared
+    text: '1938'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1938'
+      font_sha256: 4c3cdc5de2d70c4ee75fc9c1723a6b8f2d7316f49b383335fd8257a17dd88ade
+      point_size: 398
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: fd90e47683de55d8a921cdd40e661c20e09ef7a84b6d92daab94ebf40540a2d0
+  output:
+    directory: year
+    filename: 1938.jpg
+    remote_paths:
+      en: year/1938.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1938.809a3cc7.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1939.8d40a365
+  category: Year
+  display_name: '1939'
+  source:
+    path: create_default_posters.ps1
+    line: 6783
+    row_sha256: f55895c5bf5bf27cb2ebe75a702e5647ae4e2ae215f6dfaf4372a6336075d781
+  composer:
+    base_color: '#131CA1'
+    font: fonts/Righteous-Regular.ttf
+    font_size: 398
+    logo_resize: 1800
+    out_name: '1939'
+  caption:
+    mode: shared
+    text: '1939'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1939'
+      font_sha256: 4c3cdc5de2d70c4ee75fc9c1723a6b8f2d7316f49b383335fd8257a17dd88ade
+      point_size: 398
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: d25a70425e36d6fc4010b72e7187e22c95122abffdf440eb3f35563465aed51c
+  output:
+    directory: year
+    filename: 1939.jpg
+    remote_paths:
+      en: year/1939.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1939.8d40a365.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1940.3a988ac1
+  category: Year
+  display_name: '1940'
+  source:
+    path: create_default_posters.ps1
+    line: 6784
+    row_sha256: 44fcd193d357c3649e2463475d8ad4da7e6f2d984161bef9228d969bfd5d3949
+  composer:
+    base_color: '#EF10D3'
+    font: fonts/Yesteryear-Regular.ttf
+    font_size: 342
+    logo_resize: 1800
+    out_name: '1940'
+  caption:
+    mode: shared
+    text: '1940'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1940'
+      font_sha256: b9d7736030dca2b5849f4fa565a75f91065cc5ded8b6023444bd74445a263c77
+      point_size: 342
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: 97df3dfab49635ffafe38deef4e7b276d75492f78be1aa0919afe3ca48cec190
+  output:
+    directory: year
+    filename: 1940.jpg
+    remote_paths:
+      en: year/1940.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1940.3a988ac1.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1941.4e80681e
+  category: Year
+  display_name: '1941'
+  source:
+    path: create_default_posters.ps1
+    line: 6785
+    row_sha256: adf46400986c1b9836e4274d12b83e7d6ea1e7259acccee57e6e5b5cbbaf5ee0
+  composer:
+    base_color: '#EF102A'
+    font: fonts/Yesteryear-Regular.ttf
+    font_size: 342
+    logo_resize: 1800
+    out_name: '1941'
+  caption:
+    mode: shared
+    text: '1941'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1941'
+      font_sha256: b9d7736030dca2b5849f4fa565a75f91065cc5ded8b6023444bd74445a263c77
+      point_size: 342
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: e37aaeb8b12bad329819f97fbb46fa843372a4798b79badedb4867aac40176c8
+  output:
+    directory: year
+    filename: 1941.jpg
+    remote_paths:
+      en: year/1941.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1941.4e80681e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1942.b8fce189
+  category: Year
+  display_name: '1942'
+  source:
+    path: create_default_posters.ps1
+    line: 6786
+    row_sha256: f4c8cbafa5835b83d6776b799f0a244a8626a2c2b1a0dc4f3858702cba21ae73
+  composer:
+    base_color: '#EF6210'
+    font: fonts/Yesteryear-Regular.ttf
+    font_size: 342
+    logo_resize: 1800
+    out_name: '1942'
+  caption:
+    mode: shared
+    text: '1942'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1942'
+      font_sha256: b9d7736030dca2b5849f4fa565a75f91065cc5ded8b6023444bd74445a263c77
+      point_size: 342
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: e51656e627282871711dff18d7a99e56aaed3be555445b0b2a7a1b5a8147356d
+  output:
+    directory: year
+    filename: 1942.jpg
+    remote_paths:
+      en: year/1942.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1942.b8fce189.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1943.f4698727
+  category: Year
+  display_name: '1943'
+  source:
+    path: create_default_posters.ps1
+    line: 6787
+    row_sha256: 7a2111a6d1695ee72b2e66a99834dd62816256c0c4664ab7c5a0b8c380729aae
+  composer:
+    base_color: '#EFC910'
+    font: fonts/Yesteryear-Regular.ttf
+    font_size: 342
+    logo_resize: 1800
+    out_name: '1943'
+  caption:
+    mode: shared
+    text: '1943'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1943'
+      font_sha256: b9d7736030dca2b5849f4fa565a75f91065cc5ded8b6023444bd74445a263c77
+      point_size: 342
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: 70db6e9af6e8c3ff23f275b8164e5a9e76a1e893786662b90d450e96e5fc8e7c
+  output:
+    directory: year
+    filename: 1943.jpg
+    remote_paths:
+      en: year/1943.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1943.f4698727.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1944.593a0bf4
+  category: Year
+  display_name: '1944'
+  source:
+    path: create_default_posters.ps1
+    line: 6788
+    row_sha256: 79f2f11b6fbbd0612a9b86b12e2d503239902cf372a7d8d6a52d340428a4b0fa
+  composer:
+    base_color: '#10EFA3'
+    font: fonts/Yesteryear-Regular.ttf
+    font_size: 342
+    logo_resize: 1800
+    out_name: '1944'
+  caption:
+    mode: shared
+    text: '1944'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1944'
+      font_sha256: b9d7736030dca2b5849f4fa565a75f91065cc5ded8b6023444bd74445a263c77
+      point_size: 342
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: cb704adf8ecdb881d50197276e56e3f1d32e8c260c87dd732cb416cf4758475f
+  output:
+    directory: year
+    filename: 1944.jpg
+    remote_paths:
+      en: year/1944.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1944.593a0bf4.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1945.002ca255
+  category: Year
+  display_name: '1945'
+  source:
+    path: create_default_posters.ps1
+    line: 6789
+    row_sha256: cb595bfcc444c2af55ffae5480a73378c721cdcd82dbad4300391cd9dfd4af5d
+  composer:
+    base_color: '#108FEF'
+    font: fonts/Yesteryear-Regular.ttf
+    font_size: 342
+    logo_resize: 1800
+    out_name: '1945'
+  caption:
+    mode: shared
+    text: '1945'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1945'
+      font_sha256: b9d7736030dca2b5849f4fa565a75f91065cc5ded8b6023444bd74445a263c77
+      point_size: 342
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: 7a46009c65a72b78190d3c9b2776b64fd6498fb58a5d1d7ece970a66f5f8c012
+  output:
+    directory: year
+    filename: 1945.jpg
+    remote_paths:
+      en: year/1945.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1945.002ca255.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1946.ad589f71
+  category: Year
+  display_name: '1946'
+  source:
+    path: create_default_posters.ps1
+    line: 6790
+    row_sha256: 2992279f45a17b4ab84b94a76cfccbedd534c149fd1d31a73c44663ae130f673
+  composer:
+    base_color: '#A900EF'
+    font: fonts/Yesteryear-Regular.ttf
+    font_size: 342
+    logo_resize: 1800
+    out_name: '1946'
+  caption:
+    mode: shared
+    text: '1946'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1946'
+      font_sha256: b9d7736030dca2b5849f4fa565a75f91065cc5ded8b6023444bd74445a263c77
+      point_size: 342
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: 1a75fd90627b910e64a04b5d8fbd5546d545f68e1e057274699e0dac265c2ae9
+  output:
+    directory: year
+    filename: 1946.jpg
+    remote_paths:
+      en: year/1946.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1946.ad589f71.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1947.46b8734a
+  category: Year
+  display_name: '1947'
+  source:
+    path: create_default_posters.ps1
+    line: 6791
+    row_sha256: 5182862e41a2c45ef17e4d2d83071095ce56a31e0e55bf42c9bb27af72b8b78a
+  composer:
+    base_color: '#8D848E'
+    font: fonts/Yesteryear-Regular.ttf
+    font_size: 342
+    logo_resize: 1800
+    out_name: '1947'
+  caption:
+    mode: shared
+    text: '1947'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1947'
+      font_sha256: b9d7736030dca2b5849f4fa565a75f91065cc5ded8b6023444bd74445a263c77
+      point_size: 342
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: 3f78a24c7c908c740638a062f4a769580316d963498d7de4d848c8c65d3c4f4b
+  output:
+    directory: year
+    filename: 1947.jpg
+    remote_paths:
+      en: year/1947.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1947.46b8734a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1948.32968e52
+  category: Year
+  display_name: '1948'
+  source:
+    path: create_default_posters.ps1
+    line: 6792
+    row_sha256: 0e05931f14b8be6a936a0616ccc06360be3fecd65580a9913fa34be923ce9dbd
+  composer:
+    base_color: '#992C2E'
+    font: fonts/Yesteryear-Regular.ttf
+    font_size: 342
+    logo_resize: 1800
+    out_name: '1948'
+  caption:
+    mode: shared
+    text: '1948'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1948'
+      font_sha256: b9d7736030dca2b5849f4fa565a75f91065cc5ded8b6023444bd74445a263c77
+      point_size: 342
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: e33c751eef38f868566578a970601ef708cb7fff90cbe58c201aee22c7241241
+  output:
+    directory: year
+    filename: 1948.jpg
+    remote_paths:
+      en: year/1948.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1948.32968e52.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1949.920d6d9a
+  category: Year
+  display_name: '1949'
+  source:
+    path: create_default_posters.ps1
+    line: 6793
+    row_sha256: 8706e8a2fc5e03277ea051add27834c905a5c01e9d132c13432cde0af552855a
+  composer:
+    base_color: '#131CA1'
+    font: fonts/Yesteryear-Regular.ttf
+    font_size: 342
+    logo_resize: 1800
+    out_name: '1949'
+  caption:
+    mode: shared
+    text: '1949'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1949'
+      font_sha256: b9d7736030dca2b5849f4fa565a75f91065cc5ded8b6023444bd74445a263c77
+      point_size: 342
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: 3236cdf4684c4862329c99dabbf7c998dd891b1b7ea58205a42a76b10afcdc80
+  output:
+    directory: year
+    filename: 1949.jpg
+    remote_paths:
+      en: year/1949.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1949.920d6d9a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1950.aed3562c
+  category: Year
+  display_name: '1950'
+  source:
+    path: create_default_posters.ps1
+    line: 6794
+    row_sha256: 709621f7cdefb2265877ffe7c73ed383afa06f89437dc58a0ff66090ed5365fd
+  composer:
+    base_color: '#EF10D3'
+    font: fonts/CherryCreamSoda-Regular.ttf
+    font_size: 414
+    logo_resize: 1800
+    out_name: '1950'
+  caption:
+    mode: shared
+    text: '1950'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1950'
+      font_sha256: d70eafe96abbaad50d94538b11077d88bb91ac3538dd0e70f0bdc0ce04e410e9
+      point_size: 414
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 6bc2be707ade589b7ad49280037fe250e6d60c0e541b023b1966dc9239be895c
+  output:
+    directory: year
+    filename: 1950.jpg
+    remote_paths:
+      en: year/1950.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1950.aed3562c.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1951.265ce916
+  category: Year
+  display_name: '1951'
+  source:
+    path: create_default_posters.ps1
+    line: 6795
+    row_sha256: 92b32fa78aecfad805439386892dca2b105412f236c3824f477c4bb80f6396bc
+  composer:
+    base_color: '#EF102A'
+    font: fonts/CherryCreamSoda-Regular.ttf
+    font_size: 414
+    logo_resize: 1800
+    out_name: '1951'
+  caption:
+    mode: shared
+    text: '1951'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1951'
+      font_sha256: d70eafe96abbaad50d94538b11077d88bb91ac3538dd0e70f0bdc0ce04e410e9
+      point_size: 414
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 5d18b6521de731d981e24a8fe05ff206e305ebfef4619779a36174cd99cf2c69
+  output:
+    directory: year
+    filename: 1951.jpg
+    remote_paths:
+      en: year/1951.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1951.265ce916.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1952.020b7f93
+  category: Year
+  display_name: '1952'
+  source:
+    path: create_default_posters.ps1
+    line: 6796
+    row_sha256: b0bddedf45965c4649c1257f221a7781d8faa7d3b8e0c18dd9a2475a96a97433
+  composer:
+    base_color: '#EF6210'
+    font: fonts/CherryCreamSoda-Regular.ttf
+    font_size: 414
+    logo_resize: 1800
+    out_name: '1952'
+  caption:
+    mode: shared
+    text: '1952'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1952'
+      font_sha256: d70eafe96abbaad50d94538b11077d88bb91ac3538dd0e70f0bdc0ce04e410e9
+      point_size: 414
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 340a0a5e6553e77fbf13b44694fe2e961abbc8f242f3b95aff1298adfcec3f0e
+  output:
+    directory: year
+    filename: 1952.jpg
+    remote_paths:
+      en: year/1952.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1952.020b7f93.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1953.80994b78
+  category: Year
+  display_name: '1953'
+  source:
+    path: create_default_posters.ps1
+    line: 6797
+    row_sha256: 40213a4a26b582b1eadd16a1cc386707829f1b8f6a64b9c49adeb1e6db789e78
+  composer:
+    base_color: '#EFC910'
+    font: fonts/CherryCreamSoda-Regular.ttf
+    font_size: 414
+    logo_resize: 1800
+    out_name: '1953'
+  caption:
+    mode: shared
+    text: '1953'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1953'
+      font_sha256: d70eafe96abbaad50d94538b11077d88bb91ac3538dd0e70f0bdc0ce04e410e9
+      point_size: 414
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 9cadf3071f944e6eec4370ea2a3b20dc99828ffee785670fddc68eaf6a8a1c5d
+  output:
+    directory: year
+    filename: 1953.jpg
+    remote_paths:
+      en: year/1953.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1953.80994b78.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1954.090f1521
+  category: Year
+  display_name: '1954'
+  source:
+    path: create_default_posters.ps1
+    line: 6798
+    row_sha256: a6351daed0db7b42a5ab2d1559abc57cb609ab92998b013883f814b6c4942696
+  composer:
+    base_color: '#10EFA3'
+    font: fonts/CherryCreamSoda-Regular.ttf
+    font_size: 414
+    logo_resize: 1800
+    out_name: '1954'
+  caption:
+    mode: shared
+    text: '1954'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1954'
+      font_sha256: d70eafe96abbaad50d94538b11077d88bb91ac3538dd0e70f0bdc0ce04e410e9
+      point_size: 414
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: bd179c03e67ce1e361b8b0168c530cdff98cfcc7bc9b3d1a18514de16ac5be45
+  output:
+    directory: year
+    filename: 1954.jpg
+    remote_paths:
+      en: year/1954.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1954.090f1521.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1955.dee5cdc9
+  category: Year
+  display_name: '1955'
+  source:
+    path: create_default_posters.ps1
+    line: 6799
+    row_sha256: d633963c444ed3690761a360b459fcef6e85d1069ccfbc82cd9458666dab2d0b
+  composer:
+    base_color: '#108FEF'
+    font: fonts/CherryCreamSoda-Regular.ttf
+    font_size: 414
+    logo_resize: 1800
+    out_name: '1955'
+  caption:
+    mode: shared
+    text: '1955'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1955'
+      font_sha256: d70eafe96abbaad50d94538b11077d88bb91ac3538dd0e70f0bdc0ce04e410e9
+      point_size: 414
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: c15466936ee15ecfc8a28a49f9a38df05f6e842a51062f42d4e6202577f61fa9
+  output:
+    directory: year
+    filename: 1955.jpg
+    remote_paths:
+      en: year/1955.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1955.dee5cdc9.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1956.527ca595
+  category: Year
+  display_name: '1956'
+  source:
+    path: create_default_posters.ps1
+    line: 6800
+    row_sha256: b32a95f7bf551c1808eace672606755a463f69871da0c66fd4803368777860f6
+  composer:
+    base_color: '#A900EF'
+    font: fonts/CherryCreamSoda-Regular.ttf
+    font_size: 414
+    logo_resize: 1800
+    out_name: '1956'
+  caption:
+    mode: shared
+    text: '1956'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1956'
+      font_sha256: d70eafe96abbaad50d94538b11077d88bb91ac3538dd0e70f0bdc0ce04e410e9
+      point_size: 414
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 7090753ead67f37e49d1e4039bf6da0d3aef97e44b6648fe75bc70ec20910e9a
+  output:
+    directory: year
+    filename: 1956.jpg
+    remote_paths:
+      en: year/1956.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1956.527ca595.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1957.1ff9bd5a
+  category: Year
+  display_name: '1957'
+  source:
+    path: create_default_posters.ps1
+    line: 6801
+    row_sha256: e687418cfb9f19dd153f50daa8a99d95f22c92e9128bb55b429f0c3457d5c71c
+  composer:
+    base_color: '#8D848E'
+    font: fonts/CherryCreamSoda-Regular.ttf
+    font_size: 414
+    logo_resize: 1800
+    out_name: '1957'
+  caption:
+    mode: shared
+    text: '1957'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1957'
+      font_sha256: d70eafe96abbaad50d94538b11077d88bb91ac3538dd0e70f0bdc0ce04e410e9
+      point_size: 414
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 6b62e01b665aa67d6517397a64243802d8c933c3f32afca197552f85bd52a243
+  output:
+    directory: year
+    filename: 1957.jpg
+    remote_paths:
+      en: year/1957.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1957.1ff9bd5a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1958.6d5171af
+  category: Year
+  display_name: '1958'
+  source:
+    path: create_default_posters.ps1
+    line: 6802
+    row_sha256: 556c19ef97c131710fadfb04692fca922e3996a4e2c43960928071e3f18f3ef0
+  composer:
+    base_color: '#992C2E'
+    font: fonts/CherryCreamSoda-Regular.ttf
+    font_size: 414
+    logo_resize: 1800
+    out_name: '1958'
+  caption:
+    mode: shared
+    text: '1958'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1958'
+      font_sha256: d70eafe96abbaad50d94538b11077d88bb91ac3538dd0e70f0bdc0ce04e410e9
+      point_size: 414
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 0ddfb6d644861325e9ceb138dc4faf2ef7f0eae08a39e9d076d2d8aa490be514
+  output:
+    directory: year
+    filename: 1958.jpg
+    remote_paths:
+      en: year/1958.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1958.6d5171af.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1959.fc12a19d
+  category: Year
+  display_name: '1959'
+  source:
+    path: create_default_posters.ps1
+    line: 6803
+    row_sha256: 75c5b14725ab7af435864ae41ce8b6df01f69eeffe1d067dfe3117e2275acc8c
+  composer:
+    base_color: '#131CA1'
+    font: fonts/CherryCreamSoda-Regular.ttf
+    font_size: 414
+    logo_resize: 1800
+    out_name: '1959'
+  caption:
+    mode: shared
+    text: '1959'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1959'
+      font_sha256: d70eafe96abbaad50d94538b11077d88bb91ac3538dd0e70f0bdc0ce04e410e9
+      point_size: 414
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: c20aed0139278aad18b3022e04f121d580d4cdd4bc6031308c47fdcb371ec79f
+  output:
+    directory: year
+    filename: 1959.jpg
+    remote_paths:
+      en: year/1959.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1959.fc12a19d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1960.c8d33c35
+  category: Year
+  display_name: '1960'
+  source:
+    path: create_default_posters.ps1
+    line: 6804
+    row_sha256: aef0a6500a08b01307bba169502a68131b1ff1a5869c92ecc88236e8b2fbe929
+  composer:
+    base_color: '#EF10D3'
+    font: fonts/Boogaloo-Regular.ttf
+    font_size: 393
+    logo_resize: 1800
+    out_name: '1960'
+  caption:
+    mode: shared
+    text: '1960'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1960'
+      font_sha256: 6aa7c9f7096b090a6783e31278abf907ec84a4bd98f280c925ab033d1fe91eb7
+      point_size: 393
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: f013cfd53fed1ac30b835703299cf561a3d590c277698d9ea873928f84ab3e22
+  output:
+    directory: year
+    filename: 1960.jpg
+    remote_paths:
+      en: year/1960.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1960.c8d33c35.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1961.072bf562
+  category: Year
+  display_name: '1961'
+  source:
+    path: create_default_posters.ps1
+    line: 6805
+    row_sha256: bb9e721718c22b34415c212d1b97380fee901c840736618aaf4153bf6468cb9c
+  composer:
+    base_color: '#EF102A'
+    font: fonts/Boogaloo-Regular.ttf
+    font_size: 393
+    logo_resize: 1800
+    out_name: '1961'
+  caption:
+    mode: shared
+    text: '1961'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1961'
+      font_sha256: 6aa7c9f7096b090a6783e31278abf907ec84a4bd98f280c925ab033d1fe91eb7
+      point_size: 393
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: eb96984bdc82b165904cdf8f93867df3c9288bff43806237f92edbfa1db55c13
+  output:
+    directory: year
+    filename: 1961.jpg
+    remote_paths:
+      en: year/1961.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1961.072bf562.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1962.327f9c2c
+  category: Year
+  display_name: '1962'
+  source:
+    path: create_default_posters.ps1
+    line: 6806
+    row_sha256: 9bfb6cc274397a3e2ad8d124d463e19807b0f93b72ceb2341b32dcd2c608b51b
+  composer:
+    base_color: '#EF6210'
+    font: fonts/Boogaloo-Regular.ttf
+    font_size: 393
+    logo_resize: 1800
+    out_name: '1962'
+  caption:
+    mode: shared
+    text: '1962'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1962'
+      font_sha256: 6aa7c9f7096b090a6783e31278abf907ec84a4bd98f280c925ab033d1fe91eb7
+      point_size: 393
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 793c84a10a9d3dc8f3e602d8c67bd1121ff646ad99ddf041a25955043ed1465a
+  output:
+    directory: year
+    filename: 1962.jpg
+    remote_paths:
+      en: year/1962.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1962.327f9c2c.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1963.c1412189
+  category: Year
+  display_name: '1963'
+  source:
+    path: create_default_posters.ps1
+    line: 6807
+    row_sha256: d4c75d42a879f45ece4020ddc669780ca448c626fd174a0ed47ef18c3243f6fb
+  composer:
+    base_color: '#EFC910'
+    font: fonts/Boogaloo-Regular.ttf
+    font_size: 393
+    logo_resize: 1800
+    out_name: '1963'
+  caption:
+    mode: shared
+    text: '1963'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1963'
+      font_sha256: 6aa7c9f7096b090a6783e31278abf907ec84a4bd98f280c925ab033d1fe91eb7
+      point_size: 393
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 250fe00aa7729e2bb477c21f2c89ffe5353271d19d85ccb40fb739ba096b23c3
+  output:
+    directory: year
+    filename: 1963.jpg
+    remote_paths:
+      en: year/1963.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1963.c1412189.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1964.b5023531
+  category: Year
+  display_name: '1964'
+  source:
+    path: create_default_posters.ps1
+    line: 6808
+    row_sha256: 3ea048fc811b927273a41b4f7e0463b95846d3858beb87dcf4940e9a1fb0535a
+  composer:
+    base_color: '#10EFA3'
+    font: fonts/Boogaloo-Regular.ttf
+    font_size: 393
+    logo_resize: 1800
+    out_name: '1964'
+  caption:
+    mode: shared
+    text: '1964'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1964'
+      font_sha256: 6aa7c9f7096b090a6783e31278abf907ec84a4bd98f280c925ab033d1fe91eb7
+      point_size: 393
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 7374d9367a642ef9870f4f19bf93f9588c8ea6c1af156a7b644ca39a1cbb70b8
+  output:
+    directory: year
+    filename: 1964.jpg
+    remote_paths:
+      en: year/1964.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1964.b5023531.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1965.bc7ef226
+  category: Year
+  display_name: '1965'
+  source:
+    path: create_default_posters.ps1
+    line: 6809
+    row_sha256: b130b7731b1fee428d3df1f663fd3eab12939e7d708522bc04262b1f69a47ede
+  composer:
+    base_color: '#108FEF'
+    font: fonts/Boogaloo-Regular.ttf
+    font_size: 393
+    logo_resize: 1800
+    out_name: '1965'
+  caption:
+    mode: shared
+    text: '1965'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1965'
+      font_sha256: 6aa7c9f7096b090a6783e31278abf907ec84a4bd98f280c925ab033d1fe91eb7
+      point_size: 393
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 20b24b501c5dbfd6950720cc060f021cc9dc00b4c4fd1116e5cc2356f2e52bfd
+  output:
+    directory: year
+    filename: 1965.jpg
+    remote_paths:
+      en: year/1965.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1965.bc7ef226.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1966.72ece364
+  category: Year
+  display_name: '1966'
+  source:
+    path: create_default_posters.ps1
+    line: 6810
+    row_sha256: 0a892f4325574a063eaa08861d6779327afbfa69a36a68d6bb87d425a63eefb0
+  composer:
+    base_color: '#A900EF'
+    font: fonts/Boogaloo-Regular.ttf
+    font_size: 393
+    logo_resize: 1800
+    out_name: '1966'
+  caption:
+    mode: shared
+    text: '1966'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1966'
+      font_sha256: 6aa7c9f7096b090a6783e31278abf907ec84a4bd98f280c925ab033d1fe91eb7
+      point_size: 393
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 5c72c9e2726bb86bda65f7e4e23fc2871a91aedb02aa68f9f710564243487e26
+  output:
+    directory: year
+    filename: 1966.jpg
+    remote_paths:
+      en: year/1966.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1966.72ece364.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1967.e9c1dab7
+  category: Year
+  display_name: '1967'
+  source:
+    path: create_default_posters.ps1
+    line: 6811
+    row_sha256: c17de628b0e36aacc56c267ce0c50458366e9829456be159bece70fbefb3947b
+  composer:
+    base_color: '#8D848E'
+    font: fonts/Boogaloo-Regular.ttf
+    font_size: 393
+    logo_resize: 1800
+    out_name: '1967'
+  caption:
+    mode: shared
+    text: '1967'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1967'
+      font_sha256: 6aa7c9f7096b090a6783e31278abf907ec84a4bd98f280c925ab033d1fe91eb7
+      point_size: 393
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 05dac410b4fdb4673b44d70a355a7022c63683ce7e51549e59657a6d0132dfbd
+  output:
+    directory: year
+    filename: 1967.jpg
+    remote_paths:
+      en: year/1967.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1967.e9c1dab7.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1968.b6e12082
+  category: Year
+  display_name: '1968'
+  source:
+    path: create_default_posters.ps1
+    line: 6812
+    row_sha256: ca44933a60335cf0643e6956ae5772e8355f53af7702a559c109c6b4f5255ac5
+  composer:
+    base_color: '#992C2E'
+    font: fonts/Boogaloo-Regular.ttf
+    font_size: 393
+    logo_resize: 1800
+    out_name: '1968'
+  caption:
+    mode: shared
+    text: '1968'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1968'
+      font_sha256: 6aa7c9f7096b090a6783e31278abf907ec84a4bd98f280c925ab033d1fe91eb7
+      point_size: 393
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 84dee7022d925b3613bff1c70b0e139a3ec2441e0fbaa25da75a9ba4ca89b55f
+  output:
+    directory: year
+    filename: 1968.jpg
+    remote_paths:
+      en: year/1968.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1968.b6e12082.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1969.73af0ff6
+  category: Year
+  display_name: '1969'
+  source:
+    path: create_default_posters.ps1
+    line: 6813
+    row_sha256: f2b2f14bce0fd5e933f01ec3da7dee6d8806a2ef40e4ecbf4318935802166e73
+  composer:
+    base_color: '#131CA1'
+    font: fonts/Boogaloo-Regular.ttf
+    font_size: 393
+    logo_resize: 1800
+    out_name: '1969'
+  caption:
+    mode: shared
+    text: '1969'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1969'
+      font_sha256: 6aa7c9f7096b090a6783e31278abf907ec84a4bd98f280c925ab033d1fe91eb7
+      point_size: 393
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: cf671192cd21334eda57aba3d4ddda4f05424bfe931f7e02e31dc01a1bf77d32
+  output:
+    directory: year
+    filename: 1969.jpg
+    remote_paths:
+      en: year/1969.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1969.73af0ff6.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1970.b3ecc3c5
+  category: Year
+  display_name: '1970'
+  source:
+    path: create_default_posters.ps1
+    line: 6814
+    row_sha256: 6cba87b72f7f01f398e341fdbe4efe225e727e2f41f311e13ca0c5ecad882e53
+  composer:
+    base_color: '#EF10D3'
+    font: fonts/Monoton-Regular.ttf
+    font_size: 340
+    logo_resize: 1800
+    out_name: '1970'
+  caption:
+    mode: shared
+    text: '1970'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1970'
+      font_sha256: 951c4cea65ffede784a7c9672feec5d329a7e1e12216c42d53ecf36c90d04dea
+      point_size: 340
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: d809a13e4da3ec0442ed4ddbe8ac78b3312e8825cd225b198cd394ae75d1e56c
+  output:
+    directory: year
+    filename: 1970.jpg
+    remote_paths:
+      en: year/1970.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1970.b3ecc3c5.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1971.2f614a24
+  category: Year
+  display_name: '1971'
+  source:
+    path: create_default_posters.ps1
+    line: 6815
+    row_sha256: c4fe4fda70742536d023aa7a92d11a5f4ad5e6e98982a8bb4112c2b4905c3323
+  composer:
+    base_color: '#EF102A'
+    font: fonts/Monoton-Regular.ttf
+    font_size: 341
+    logo_resize: 1800
+    out_name: '1971'
+  caption:
+    mode: shared
+    text: '1971'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1971'
+      font_sha256: 951c4cea65ffede784a7c9672feec5d329a7e1e12216c42d53ecf36c90d04dea
+      point_size: 341
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 23e58782ec56c0abf5aabbd2f999e01cb8ebcfb49c50c456d8d304f8fb3d82b5
+  output:
+    directory: year
+    filename: 1971.jpg
+    remote_paths:
+      en: year/1971.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1971.2f614a24.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1972.74546254
+  category: Year
+  display_name: '1972'
+  source:
+    path: create_default_posters.ps1
+    line: 6816
+    row_sha256: da7de39752ff1370c71c8f74f29bb333b37f9cfa5796325ae063b0a1a17eecc2
+  composer:
+    base_color: '#EF6210'
+    font: fonts/Monoton-Regular.ttf
+    font_size: 341
+    logo_resize: 1800
+    out_name: '1972'
+  caption:
+    mode: shared
+    text: '1972'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1972'
+      font_sha256: 951c4cea65ffede784a7c9672feec5d329a7e1e12216c42d53ecf36c90d04dea
+      point_size: 341
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: e0f8e9df34367864917cca19069f256859eca410c433512ec834bfc60f6b8fcc
+  output:
+    directory: year
+    filename: 1972.jpg
+    remote_paths:
+      en: year/1972.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1972.74546254.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1973.d59e0d84
+  category: Year
+  display_name: '1973'
+  source:
+    path: create_default_posters.ps1
+    line: 6817
+    row_sha256: 6822611c56fcdb43fc796d0fae6027581a987423f26bb7ce541625cebf588301
+  composer:
+    base_color: '#EFC910'
+    font: fonts/Monoton-Regular.ttf
+    font_size: 341
+    logo_resize: 1800
+    out_name: '1973'
+  caption:
+    mode: shared
+    text: '1973'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1973'
+      font_sha256: 951c4cea65ffede784a7c9672feec5d329a7e1e12216c42d53ecf36c90d04dea
+      point_size: 341
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 78cb996410259dd1d306ddfde6bf03f24bf701c9255a9cc769e2d3589fd6fea7
+  output:
+    directory: year
+    filename: 1973.jpg
+    remote_paths:
+      en: year/1973.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1973.d59e0d84.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1974.8b704cfb
+  category: Year
+  display_name: '1974'
+  source:
+    path: create_default_posters.ps1
+    line: 6818
+    row_sha256: a67e9d16147e1ad79bf06c4a2c7f8a27018dc9b0e703acc5f0b73eb12b2b1058
+  composer:
+    base_color: '#10EFA3'
+    font: fonts/Monoton-Regular.ttf
+    font_size: 341
+    logo_resize: 1800
+    out_name: '1974'
+  caption:
+    mode: shared
+    text: '1974'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1974'
+      font_sha256: 951c4cea65ffede784a7c9672feec5d329a7e1e12216c42d53ecf36c90d04dea
+      point_size: 341
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 9c0d1394edcfcab837375ea5ed27d1b2e22f779504f2cfcc69de0d3a6b4451ab
+  output:
+    directory: year
+    filename: 1974.jpg
+    remote_paths:
+      en: year/1974.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1974.8b704cfb.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1975.d08f01dc
+  category: Year
+  display_name: '1975'
+  source:
+    path: create_default_posters.ps1
+    line: 6819
+    row_sha256: 77243d1b34732415670b12524c3c65917179b161e57c5936d2d33068582b76f4
+  composer:
+    base_color: '#108FEF'
+    font: fonts/Monoton-Regular.ttf
+    font_size: 340
+    logo_resize: 1800
+    out_name: '1975'
+  caption:
+    mode: shared
+    text: '1975'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1975'
+      font_sha256: 951c4cea65ffede784a7c9672feec5d329a7e1e12216c42d53ecf36c90d04dea
+      point_size: 340
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: eff755ed5d0a1fc4d1a204ee1fe27b1c98af67e2e98927349d703e666cea7191
+  output:
+    directory: year
+    filename: 1975.jpg
+    remote_paths:
+      en: year/1975.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1975.d08f01dc.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1976.0aa2b55c
+  category: Year
+  display_name: '1976'
+  source:
+    path: create_default_posters.ps1
+    line: 6820
+    row_sha256: b27c6681e0c765e6e7dcaa52a91b3dffd0e9d37a8f8c087b42855073376f47b8
+  composer:
+    base_color: '#A900EF'
+    font: fonts/Monoton-Regular.ttf
+    font_size: 340
+    logo_resize: 1800
+    out_name: '1976'
+  caption:
+    mode: shared
+    text: '1976'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1976'
+      font_sha256: 951c4cea65ffede784a7c9672feec5d329a7e1e12216c42d53ecf36c90d04dea
+      point_size: 340
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 1417a2552f1a3dfd63f9b73f71ee91505ebc942c886cba405c6517a1c6531766
+  output:
+    directory: year
+    filename: 1976.jpg
+    remote_paths:
+      en: year/1976.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1976.0aa2b55c.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1977.0d88d5e9
+  category: Year
+  display_name: '1977'
+  source:
+    path: create_default_posters.ps1
+    line: 6821
+    row_sha256: 3224f5762507b133b89dbf09293338a933fcb0e8ad736d24f216899209ab70e4
+  composer:
+    base_color: '#8D848E'
+    font: fonts/Monoton-Regular.ttf
+    font_size: 341
+    logo_resize: 1800
+    out_name: '1977'
+  caption:
+    mode: shared
+    text: '1977'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1977'
+      font_sha256: 951c4cea65ffede784a7c9672feec5d329a7e1e12216c42d53ecf36c90d04dea
+      point_size: 341
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 96e81a68c3f8556f10d1d7b891421a54d10da67796ac24a7e9322806bbfe1ffc
+  output:
+    directory: year
+    filename: 1977.jpg
+    remote_paths:
+      en: year/1977.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1977.0d88d5e9.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1978.5ae02765
+  category: Year
+  display_name: '1978'
+  source:
+    path: create_default_posters.ps1
+    line: 6822
+    row_sha256: 862967146eb570836e1fb9c39f847694d944d9e1efc267399e78e5671e88bfea
+  composer:
+    base_color: '#992C2E'
+    font: fonts/Monoton-Regular.ttf
+    font_size: 340
+    logo_resize: 1800
+    out_name: '1978'
+  caption:
+    mode: shared
+    text: '1978'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1978'
+      font_sha256: 951c4cea65ffede784a7c9672feec5d329a7e1e12216c42d53ecf36c90d04dea
+      point_size: 340
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: d073003e75705c563fee0d8f03c3b2c4862936b207042524ec40c1ba9521050a
+  output:
+    directory: year
+    filename: 1978.jpg
+    remote_paths:
+      en: year/1978.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1978.5ae02765.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1979.12d5a697
+  category: Year
+  display_name: '1979'
+  source:
+    path: create_default_posters.ps1
+    line: 6823
+    row_sha256: 084096662d59609fa54b917fc28c9709025cf98bc4e2cb2509f4ae788e32ae58
+  composer:
+    base_color: '#131CA1'
+    font: fonts/Monoton-Regular.ttf
+    font_size: 340
+    logo_resize: 1800
+    out_name: '1979'
+  caption:
+    mode: shared
+    text: '1979'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1979'
+      font_sha256: 951c4cea65ffede784a7c9672feec5d329a7e1e12216c42d53ecf36c90d04dea
+      point_size: 340
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 792ea27a201d8892cea847c38c8485d0cc2a37723998e81b92107386942a36de
+  output:
+    directory: year
+    filename: 1979.jpg
+    remote_paths:
+      en: year/1979.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1979.12d5a697.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1980.dc3ee518
+  category: Year
+  display_name: '1980'
+  source:
+    path: create_default_posters.ps1
+    line: 6824
+    row_sha256: c1297a2e79266ff5c5f4145fd8fcf2cd6577f09b816d53f7a9abb506819e77e1
+  composer:
+    base_color: '#EF10D3'
+    font: fonts/Press-Start-2P.ttf
+    font_size: 300
+    logo_resize: 1800
+    out_name: '1980'
+  caption:
+    mode: shared
+    text: '1980'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1980'
+      font_sha256: 17ec7d250ff590971a6d966b4fdc5aa04d5e39a7694f4a0becb515b6a70a7228
+      point_size: 300
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 300
+      evidence_sha256: 209fd1bc6d1a365e058957b325ec7bc80d417617f9d7fe89b8277f128597bd84
+  output:
+    directory: year
+    filename: 1980.jpg
+    remote_paths:
+      en: year/1980.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1980.dc3ee518.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1981.ac7ebe08
+  category: Year
+  display_name: '1981'
+  source:
+    path: create_default_posters.ps1
+    line: 6825
+    row_sha256: 7460bb041d62804c8e4f2819b4b6db880a7fdbd1fc73a26e26adbb59c2a1ee91
+  composer:
+    base_color: '#EF102A'
+    font: fonts/Press-Start-2P.ttf
+    font_size: 300
+    logo_resize: 1800
+    out_name: '1981'
+  caption:
+    mode: shared
+    text: '1981'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1981'
+      font_sha256: 17ec7d250ff590971a6d966b4fdc5aa04d5e39a7694f4a0becb515b6a70a7228
+      point_size: 300
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 300
+      evidence_sha256: 0da21097123ca0bb3f44d74a0743ddaecee4a99570fed67c4d0c02d34e017c48
+  output:
+    directory: year
+    filename: 1981.jpg
+    remote_paths:
+      en: year/1981.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1981.ac7ebe08.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1982.3be17814
+  category: Year
+  display_name: '1982'
+  source:
+    path: create_default_posters.ps1
+    line: 6826
+    row_sha256: f64f138432093d6536d5b3bd4ea1b2cc940c78b775248d609c406c2801c480e3
+  composer:
+    base_color: '#EF6210'
+    font: fonts/Press-Start-2P.ttf
+    font_size: 300
+    logo_resize: 1800
+    out_name: '1982'
+  caption:
+    mode: shared
+    text: '1982'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1982'
+      font_sha256: 17ec7d250ff590971a6d966b4fdc5aa04d5e39a7694f4a0becb515b6a70a7228
+      point_size: 300
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 300
+      evidence_sha256: fae5e54b79c05dfb3dd11b33df03cac8aa4afea8f01f61dc5af3e088ef91bb9c
+  output:
+    directory: year
+    filename: 1982.jpg
+    remote_paths:
+      en: year/1982.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1982.3be17814.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1983.123687eb
+  category: Year
+  display_name: '1983'
+  source:
+    path: create_default_posters.ps1
+    line: 6827
+    row_sha256: de4bc6e657356c231ee8ad71c5d571c99dde587fcb41d1e87fce199ffcba74ad
+  composer:
+    base_color: '#EFC910'
+    font: fonts/Press-Start-2P.ttf
+    font_size: 300
+    logo_resize: 1800
+    out_name: '1983'
+  caption:
+    mode: shared
+    text: '1983'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1983'
+      font_sha256: 17ec7d250ff590971a6d966b4fdc5aa04d5e39a7694f4a0becb515b6a70a7228
+      point_size: 300
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 300
+      evidence_sha256: d72e98025ca46c3fcc664fa178451a386b68ed7f449d6dc610f9c298058eea34
+  output:
+    directory: year
+    filename: 1983.jpg
+    remote_paths:
+      en: year/1983.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1983.123687eb.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1984.85d35b0f
+  category: Year
+  display_name: '1984'
+  source:
+    path: create_default_posters.ps1
+    line: 6828
+    row_sha256: 6a3286a386d9bf6674faf503cb4251c0610e4f7588a50cffb6ac7500739a8949
+  composer:
+    base_color: '#10EFA3'
+    font: fonts/Press-Start-2P.ttf
+    font_size: 300
+    logo_resize: 1800
+    out_name: '1984'
+  caption:
+    mode: shared
+    text: '1984'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1984'
+      font_sha256: 17ec7d250ff590971a6d966b4fdc5aa04d5e39a7694f4a0becb515b6a70a7228
+      point_size: 300
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 300
+      evidence_sha256: 1835caaff95d4d3af9f6eeba4b5179a7c4bcd63381e91b3370644d8933e4387c
+  output:
+    directory: year
+    filename: 1984.jpg
+    remote_paths:
+      en: year/1984.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1984.85d35b0f.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1985.49958803
+  category: Year
+  display_name: '1985'
+  source:
+    path: create_default_posters.ps1
+    line: 6829
+    row_sha256: cc327598505b57c39169a14cb96c3094a48a40544554b8aa6e9ab4fbbe3b3683
+  composer:
+    base_color: '#108FEF'
+    font: fonts/Press-Start-2P.ttf
+    font_size: 300
+    logo_resize: 1800
+    out_name: '1985'
+  caption:
+    mode: shared
+    text: '1985'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1985'
+      font_sha256: 17ec7d250ff590971a6d966b4fdc5aa04d5e39a7694f4a0becb515b6a70a7228
+      point_size: 300
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 300
+      evidence_sha256: 9d2cd43c69e0ba52a55fd4ec812ffb4d663964877411d0a5cfe2b1bb6858f367
+  output:
+    directory: year
+    filename: 1985.jpg
+    remote_paths:
+      en: year/1985.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1985.49958803.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1986.aa9b2c48
+  category: Year
+  display_name: '1986'
+  source:
+    path: create_default_posters.ps1
+    line: 6830
+    row_sha256: ff82e246b05a2e6bb8492e62212eb4ddb9c8fa85add50182f245791e21ccf279
+  composer:
+    base_color: '#A900EF'
+    font: fonts/Press-Start-2P.ttf
+    font_size: 300
+    logo_resize: 1800
+    out_name: '1986'
+  caption:
+    mode: shared
+    text: '1986'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1986'
+      font_sha256: 17ec7d250ff590971a6d966b4fdc5aa04d5e39a7694f4a0becb515b6a70a7228
+      point_size: 300
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 300
+      evidence_sha256: 1e9eb62d2414d4f59aacedc0c909f3c1db5eaf6704a01ca00b9d4034719b0e2d
+  output:
+    directory: year
+    filename: 1986.jpg
+    remote_paths:
+      en: year/1986.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1986.aa9b2c48.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1987.d8392969
+  category: Year
+  display_name: '1987'
+  source:
+    path: create_default_posters.ps1
+    line: 6831
+    row_sha256: ba72395ded3199cb88c2dcaebb5932ea6ca6d035974973438df1bc3c44ae1a8f
+  composer:
+    base_color: '#8D848E'
+    font: fonts/Press-Start-2P.ttf
+    font_size: 300
+    logo_resize: 1800
+    out_name: '1987'
+  caption:
+    mode: shared
+    text: '1987'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1987'
+      font_sha256: 17ec7d250ff590971a6d966b4fdc5aa04d5e39a7694f4a0becb515b6a70a7228
+      point_size: 300
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 300
+      evidence_sha256: 5dc0e9a1323d027d51966a4ad4ad240d67c37928b2422a31f4eb96f2f102468a
+  output:
+    directory: year
+    filename: 1987.jpg
+    remote_paths:
+      en: year/1987.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1987.d8392969.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1988.ece39d28
+  category: Year
+  display_name: '1988'
+  source:
+    path: create_default_posters.ps1
+    line: 6832
+    row_sha256: 147026c48c0b54b62f904b8580252da0de166c8345ef5a4037e136d1bea3be06
+  composer:
+    base_color: '#992C2E'
+    font: fonts/Press-Start-2P.ttf
+    font_size: 300
+    logo_resize: 1800
+    out_name: '1988'
+  caption:
+    mode: shared
+    text: '1988'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1988'
+      font_sha256: 17ec7d250ff590971a6d966b4fdc5aa04d5e39a7694f4a0becb515b6a70a7228
+      point_size: 300
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 300
+      evidence_sha256: 7c9fcdd544df0b6cd8f681f55cdb4cc1bf5b4bb6b7753a825ce9702a01e53cbe
+  output:
+    directory: year
+    filename: 1988.jpg
+    remote_paths:
+      en: year/1988.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1988.ece39d28.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1989.609f4abb
+  category: Year
+  display_name: '1989'
+  source:
+    path: create_default_posters.ps1
+    line: 6833
+    row_sha256: 67a68266fefca5a821c7160a4b501ae56243d6be5244ddd37da18c62e74de32f
+  composer:
+    base_color: '#131CA1'
+    font: fonts/Press-Start-2P.ttf
+    font_size: 300
+    logo_resize: 1800
+    out_name: '1989'
+  caption:
+    mode: shared
+    text: '1989'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1989'
+      font_sha256: 17ec7d250ff590971a6d966b4fdc5aa04d5e39a7694f4a0becb515b6a70a7228
+      point_size: 300
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 300
+      evidence_sha256: 2b0d7b3b15131189c3d8cc15f2c98470003a03f857788a73ab0d746b25a14551
+  output:
+    directory: year
+    filename: 1989.jpg
+    remote_paths:
+      en: year/1989.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1989.609f4abb.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1990.f82ec797
+  category: Year
+  display_name: '1990'
+  source:
+    path: create_default_posters.ps1
+    line: 6834
+    row_sha256: 82766cad3f6f0da20435fc6a50ce54a192bc8a96d67e1b2d19b69c17150feb40
+  composer:
+    base_color: '#EF10D3'
+    font: fonts/Jura-Bold.ttf
+    font_size: 439
+    logo_resize: 1800
+    out_name: '1990'
+  caption:
+    mode: shared
+    text: '1990'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1990'
+      font_sha256: 1a3b4d7412f10cc17c34289c357e00c5e91bb2ec61b123c2a72cb975e0cbe94d
+      point_size: 439
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: ce6451c0a95af8828545ec8d80ca58f99e702a84464e71d8d5199cf520f5b3e4
+  output:
+    directory: year
+    filename: 1990.jpg
+    remote_paths:
+      en: year/1990.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1990.f82ec797.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1991.4e598ffd
+  category: Year
+  display_name: '1991'
+  source:
+    path: create_default_posters.ps1
+    line: 6835
+    row_sha256: 1d98aa7cbb3b1cb5c3ff0ee2dd676dff754a84caaa3c34d6a3e01ee3b3e4d507
+  composer:
+    base_color: '#EF102A'
+    font: fonts/Jura-Bold.ttf
+    font_size: 439
+    logo_resize: 1800
+    out_name: '1991'
+  caption:
+    mode: shared
+    text: '1991'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1991'
+      font_sha256: 1a3b4d7412f10cc17c34289c357e00c5e91bb2ec61b123c2a72cb975e0cbe94d
+      point_size: 439
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 4f1e7519935c7f41a218fa65cdb4cdf9f8662f8ec51d4077a9608a5eb81b072e
+  output:
+    directory: year
+    filename: 1991.jpg
+    remote_paths:
+      en: year/1991.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1991.4e598ffd.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1992.849f9ace
+  category: Year
+  display_name: '1992'
+  source:
+    path: create_default_posters.ps1
+    line: 6836
+    row_sha256: 4196e6cd072cffd0ec539f7cf441fdf65b5c284d6a97240c806cfb45b27c50ef
+  composer:
+    base_color: '#EF6210'
+    font: fonts/Jura-Bold.ttf
+    font_size: 439
+    logo_resize: 1800
+    out_name: '1992'
+  caption:
+    mode: shared
+    text: '1992'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1992'
+      font_sha256: 1a3b4d7412f10cc17c34289c357e00c5e91bb2ec61b123c2a72cb975e0cbe94d
+      point_size: 439
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 2fe18dcf936c9ab2df286060552a8211047da5865996afb65e46b9c66c101586
+  output:
+    directory: year
+    filename: 1992.jpg
+    remote_paths:
+      en: year/1992.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1992.849f9ace.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1993.ced8a706
+  category: Year
+  display_name: '1993'
+  source:
+    path: create_default_posters.ps1
+    line: 6837
+    row_sha256: 1db65426049667c4c95d6455262c1ae356dbcb1d27b931767c9ea5ab7edefefc
+  composer:
+    base_color: '#EFC910'
+    font: fonts/Jura-Bold.ttf
+    font_size: 439
+    logo_resize: 1800
+    out_name: '1993'
+  caption:
+    mode: shared
+    text: '1993'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1993'
+      font_sha256: 1a3b4d7412f10cc17c34289c357e00c5e91bb2ec61b123c2a72cb975e0cbe94d
+      point_size: 439
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: a86bcc2e1c8bfb279f48d2c305c8f5ff7ce0a5881b535a98c9affe0fdc383d7c
+  output:
+    directory: year
+    filename: 1993.jpg
+    remote_paths:
+      en: year/1993.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1993.ced8a706.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1994.9c5ae18d
+  category: Year
+  display_name: '1994'
+  source:
+    path: create_default_posters.ps1
+    line: 6838
+    row_sha256: 858d660a074e75350ba12ac1e6a3c0232d9ce50afeb884a66e2999a0b6aaed5f
+  composer:
+    base_color: '#10EFA3'
+    font: fonts/Jura-Bold.ttf
+    font_size: 439
+    logo_resize: 1800
+    out_name: '1994'
+  caption:
+    mode: shared
+    text: '1994'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1994'
+      font_sha256: 1a3b4d7412f10cc17c34289c357e00c5e91bb2ec61b123c2a72cb975e0cbe94d
+      point_size: 439
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 0677fadf814d7cad49f7fb4b5097de822a46151e02fa27f3654fc90556355fc4
+  output:
+    directory: year
+    filename: 1994.jpg
+    remote_paths:
+      en: year/1994.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1994.9c5ae18d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1995.747896ef
+  category: Year
+  display_name: '1995'
+  source:
+    path: create_default_posters.ps1
+    line: 6839
+    row_sha256: 83960567a4e2d562d848ba91b8ed8742c00451ad0923c1619aaa94c283c5dc75
+  composer:
+    base_color: '#108FEF'
+    font: fonts/Jura-Bold.ttf
+    font_size: 439
+    logo_resize: 1800
+    out_name: '1995'
+  caption:
+    mode: shared
+    text: '1995'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1995'
+      font_sha256: 1a3b4d7412f10cc17c34289c357e00c5e91bb2ec61b123c2a72cb975e0cbe94d
+      point_size: 439
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: fa85efd7151422ca73217b403a0c7e8cc63785df733eb780c1edb51fb5811aa3
+  output:
+    directory: year
+    filename: 1995.jpg
+    remote_paths:
+      en: year/1995.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1995.747896ef.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1996.5684189f
+  category: Year
+  display_name: '1996'
+  source:
+    path: create_default_posters.ps1
+    line: 6840
+    row_sha256: 81ae53a756d6a5d36f68793eeda62b27c16aa135ce82a67ac4d6420a329ff657
+  composer:
+    base_color: '#A900EF'
+    font: fonts/Jura-Bold.ttf
+    font_size: 439
+    logo_resize: 1800
+    out_name: '1996'
+  caption:
+    mode: shared
+    text: '1996'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1996'
+      font_sha256: 1a3b4d7412f10cc17c34289c357e00c5e91bb2ec61b123c2a72cb975e0cbe94d
+      point_size: 439
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: de42c99b5e376a1c3d1dfdc6228d98c3d7a7d81be953cb07941f51bb1be75f85
+  output:
+    directory: year
+    filename: 1996.jpg
+    remote_paths:
+      en: year/1996.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1996.5684189f.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1997.3a273ada
+  category: Year
+  display_name: '1997'
+  source:
+    path: create_default_posters.ps1
+    line: 6841
+    row_sha256: 779663ee3ea7d62935cd1649da5c87b1879f9f78ee14c0e05f22c480e66c3d43
+  composer:
+    base_color: '#8D848E'
+    font: fonts/Jura-Bold.ttf
+    font_size: 439
+    logo_resize: 1800
+    out_name: '1997'
+  caption:
+    mode: shared
+    text: '1997'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1997'
+      font_sha256: 1a3b4d7412f10cc17c34289c357e00c5e91bb2ec61b123c2a72cb975e0cbe94d
+      point_size: 439
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 2bca7d8df073f2b96944eb599ba639c291a681568e31305106275f0881d3f5af
+  output:
+    directory: year
+    filename: 1997.jpg
+    remote_paths:
+      en: year/1997.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1997.3a273ada.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1998.3a78f4f1
+  category: Year
+  display_name: '1998'
+  source:
+    path: create_default_posters.ps1
+    line: 6842
+    row_sha256: e179c965d2948343789d64ec73581338f3edb7b87ef919ca91fd7e41aaeaf5af
+  composer:
+    base_color: '#992C2E'
+    font: fonts/Jura-Bold.ttf
+    font_size: 439
+    logo_resize: 1800
+    out_name: '1998'
+  caption:
+    mode: shared
+    text: '1998'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1998'
+      font_sha256: 1a3b4d7412f10cc17c34289c357e00c5e91bb2ec61b123c2a72cb975e0cbe94d
+      point_size: 439
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: f180deaff5af1cafc1af99771293b7c9352dda695368dec3e638f635dd6b2a14
+  output:
+    directory: year
+    filename: 1998.jpg
+    remote_paths:
+      en: year/1998.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1998.3a78f4f1.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-1999.84ad7403
+  category: Year
+  display_name: '1999'
+  source:
+    path: create_default_posters.ps1
+    line: 6843
+    row_sha256: 3d3d0c52edbef058ee5a92ccf572e8a661710f1bd47bbb3ba9efbe1336f6b29c
+  composer:
+    base_color: '#131CA1'
+    font: fonts/Jura-Bold.ttf
+    font_size: 439
+    logo_resize: 1800
+    out_name: '1999'
+  caption:
+    mode: shared
+    text: '1999'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '1999'
+      font_sha256: 1a3b4d7412f10cc17c34289c357e00c5e91bb2ec61b123c2a72cb975e0cbe94d
+      point_size: 439
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: d3cb9dae5f24e8ba0b346e88d48710a9d29532fd7f3694b23e0a376c23526f7a
+  output:
+    directory: year
+    filename: 1999.jpg
+    remote_paths:
+      en: year/1999.jpg
+  generator: null
+  color_assignment:
+    id: year.year-1999.84ad7403.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2000.45107e64
+  category: Year
+  display_name: '2000'
+  source:
+    path: create_default_posters.ps1
+    line: 6844
+    row_sha256: 2783d167af9577a78f31b257c0ab8ed2fbdf755f101c10b281733e4e38780394
+  composer:
+    base_color: '#EF10D3'
+    font: fonts/SpecialElite-Regular.ttf
+    font_size: 500
+    logo_resize: 1800
+    out_name: '2000'
+  caption:
+    mode: shared
+    text: '2000'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2000'
+      font_sha256: 14780ea85064dcb150c23c9a87e2b870439c38668b6d8f1dad5c6db701ab9520
+      point_size: 500
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: f9271834fe52dec5f07d69beabed845df79b036dcc76e6b55023df98f5caa5dd
+  output:
+    directory: year
+    filename: 2000.jpg
+    remote_paths:
+      en: year/2000.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2000.45107e64.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2001.89355809
+  category: Year
+  display_name: '2001'
+  source:
+    path: create_default_posters.ps1
+    line: 6845
+    row_sha256: 982f3c2c4081ddd071231e1e44559ab486fda10c379066ba2fa32afeec0a61b5
+  composer:
+    base_color: '#EF102A'
+    font: fonts/SpecialElite-Regular.ttf
+    font_size: 500
+    logo_resize: 1800
+    out_name: '2001'
+  caption:
+    mode: shared
+    text: '2001'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2001'
+      font_sha256: 14780ea85064dcb150c23c9a87e2b870439c38668b6d8f1dad5c6db701ab9520
+      point_size: 500
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 9a185d3c938a3bb17a1e91ae99f6e97d548362633929d090535be84e80126fae
+  output:
+    directory: year
+    filename: 2001.jpg
+    remote_paths:
+      en: year/2001.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2001.89355809.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2002.280dec57
+  category: Year
+  display_name: '2002'
+  source:
+    path: create_default_posters.ps1
+    line: 6846
+    row_sha256: 284ca4df7760096bb999f5f4419128bd0e33b211cccdcc8b3de8d26ff30d4b4e
+  composer:
+    base_color: '#EF6210'
+    font: fonts/SpecialElite-Regular.ttf
+    font_size: 500
+    logo_resize: 1800
+    out_name: '2002'
+  caption:
+    mode: shared
+    text: '2002'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2002'
+      font_sha256: 14780ea85064dcb150c23c9a87e2b870439c38668b6d8f1dad5c6db701ab9520
+      point_size: 500
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 6d2a3684fdaa5ec15656dfb36c5e4b3374ca844602c90af1decaeb338f6f2f8f
+  output:
+    directory: year
+    filename: 2002.jpg
+    remote_paths:
+      en: year/2002.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2002.280dec57.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2003.d2b4633f
+  category: Year
+  display_name: '2003'
+  source:
+    path: create_default_posters.ps1
+    line: 6847
+    row_sha256: bfab90a1471c475dc0b5631e19f724e2f6f6edd91547b7af731e95611b112386
+  composer:
+    base_color: '#EFC910'
+    font: fonts/SpecialElite-Regular.ttf
+    font_size: 500
+    logo_resize: 1800
+    out_name: '2003'
+  caption:
+    mode: shared
+    text: '2003'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2003'
+      font_sha256: 14780ea85064dcb150c23c9a87e2b870439c38668b6d8f1dad5c6db701ab9520
+      point_size: 500
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: c1065916eaed43e5a9a4dccf344ad8e3995e46529ddba3072cc7a4b6454422d6
+  output:
+    directory: year
+    filename: 2003.jpg
+    remote_paths:
+      en: year/2003.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2003.d2b4633f.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2004.100e2fda
+  category: Year
+  display_name: '2004'
+  source:
+    path: create_default_posters.ps1
+    line: 6848
+    row_sha256: eeef4330f41fa758ae73f97748775fd3f6274f1208115df72dc5375b6cd89923
+  composer:
+    base_color: '#10EFA3'
+    font: fonts/SpecialElite-Regular.ttf
+    font_size: 500
+    logo_resize: 1800
+    out_name: '2004'
+  caption:
+    mode: shared
+    text: '2004'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2004'
+      font_sha256: 14780ea85064dcb150c23c9a87e2b870439c38668b6d8f1dad5c6db701ab9520
+      point_size: 500
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 3a26fa2b9548579696720bd0a0e7d04fc913f77664ffb468a3405fe04a814ad1
+  output:
+    directory: year
+    filename: 2004.jpg
+    remote_paths:
+      en: year/2004.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2004.100e2fda.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2005.8e98884e
+  category: Year
+  display_name: '2005'
+  source:
+    path: create_default_posters.ps1
+    line: 6849
+    row_sha256: 673a35a28a02090e61434f602f7e3c7044ed15492767ed62ba48be83f4944d39
+  composer:
+    base_color: '#108FEF'
+    font: fonts/SpecialElite-Regular.ttf
+    font_size: 500
+    logo_resize: 1800
+    out_name: '2005'
+  caption:
+    mode: shared
+    text: '2005'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2005'
+      font_sha256: 14780ea85064dcb150c23c9a87e2b870439c38668b6d8f1dad5c6db701ab9520
+      point_size: 500
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 4cd12510210b89db290084c19254578a9ca49e3edcb45de4c8f91c666cd43acf
+  output:
+    directory: year
+    filename: 2005.jpg
+    remote_paths:
+      en: year/2005.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2005.8e98884e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2006.c65d7001
+  category: Year
+  display_name: '2006'
+  source:
+    path: create_default_posters.ps1
+    line: 6850
+    row_sha256: 6a92937bcdd4744228e402ccb60187a6e3707fc372e3c0a69c01301791ca1ee7
+  composer:
+    base_color: '#A900EF'
+    font: fonts/SpecialElite-Regular.ttf
+    font_size: 500
+    logo_resize: 1800
+    out_name: '2006'
+  caption:
+    mode: shared
+    text: '2006'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2006'
+      font_sha256: 14780ea85064dcb150c23c9a87e2b870439c38668b6d8f1dad5c6db701ab9520
+      point_size: 500
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: f42380323145cc6a9023ea150cc160ba297df32c14e057442afafb365e4b1b89
+  output:
+    directory: year
+    filename: 2006.jpg
+    remote_paths:
+      en: year/2006.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2006.c65d7001.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2007.e5128b2a
+  category: Year
+  display_name: '2007'
+  source:
+    path: create_default_posters.ps1
+    line: 6851
+    row_sha256: 644c3dcaefb64f4c7cd33e213bd749baf1f6585433ef257cdc9165fd6fb4f3fc
+  composer:
+    base_color: '#8D848E'
+    font: fonts/SpecialElite-Regular.ttf
+    font_size: 500
+    logo_resize: 1800
+    out_name: '2007'
+  caption:
+    mode: shared
+    text: '2007'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2007'
+      font_sha256: 14780ea85064dcb150c23c9a87e2b870439c38668b6d8f1dad5c6db701ab9520
+      point_size: 500
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 0360c7e83a150724c8a8b464e7eb34c3df18bc5ecaed29816ef2f9e3c60999c6
+  output:
+    directory: year
+    filename: 2007.jpg
+    remote_paths:
+      en: year/2007.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2007.e5128b2a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2008.3fa7162b
+  category: Year
+  display_name: '2008'
+  source:
+    path: create_default_posters.ps1
+    line: 6852
+    row_sha256: c60c7e5c7eb3cd11f31781716f5c0fd84672014e0e7cbaebe700f511a4dd04d5
+  composer:
+    base_color: '#992C2E'
+    font: fonts/SpecialElite-Regular.ttf
+    font_size: 500
+    logo_resize: 1800
+    out_name: '2008'
+  caption:
+    mode: shared
+    text: '2008'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2008'
+      font_sha256: 14780ea85064dcb150c23c9a87e2b870439c38668b6d8f1dad5c6db701ab9520
+      point_size: 500
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: e1844aeee7cbc8f5546ccd79a6660dd0137fab6f36fe1d530734ebd270bca800
+  output:
+    directory: year
+    filename: 2008.jpg
+    remote_paths:
+      en: year/2008.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2008.3fa7162b.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2009.e5fdbc58
+  category: Year
+  display_name: '2009'
+  source:
+    path: create_default_posters.ps1
+    line: 6853
+    row_sha256: c9a4e987a87efaeb98fbb6d04d40f199f5567b0fb76c1fa5b62cb0fb6a3085a8
+  composer:
+    base_color: '#131CA1'
+    font: fonts/SpecialElite-Regular.ttf
+    font_size: 500
+    logo_resize: 1800
+    out_name: '2009'
+  caption:
+    mode: shared
+    text: '2009'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2009'
+      font_sha256: 14780ea85064dcb150c23c9a87e2b870439c38668b6d8f1dad5c6db701ab9520
+      point_size: 500
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: a6cd761e4c6d890b3618d59870f1a61badd4f2fa6802e26536696b8b64746109
+  output:
+    directory: year
+    filename: 2009.jpg
+    remote_paths:
+      en: year/2009.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2009.e5fdbc58.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2010.90994e53
+  category: Year
+  display_name: '2010'
+  source:
+    path: create_default_posters.ps1
+    line: 6854
+    row_sha256: c570437005f1d86bf79ec418ada5c49b6ded29bcdd9c6aec1f9ac97f31e91a5b
+  composer:
+    base_color: '#EF10D3'
+    font: fonts/Barlow-Regular.ttf
+    font_size: 421
+    logo_resize: 1800
+    out_name: '2010'
+  caption:
+    mode: shared
+    text: '2010'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2010'
+      font_sha256: 77fb1ac54d2ceb980e3ebdfa7a9d0f64e85a66e4fdfb7f914a7b0aa08fb33a5d
+      point_size: 421
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: baff8cbe7c6fd10ea803998940e67ec6a10f59e655bfa37814e27d2b53884ab2
+  output:
+    directory: year
+    filename: 2010.jpg
+    remote_paths:
+      en: year/2010.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2010.90994e53.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2011.75033883
+  category: Year
+  display_name: '2011'
+  source:
+    path: create_default_posters.ps1
+    line: 6855
+    row_sha256: 45bdda964d784a3772c8a1c0acf7c857695bb785c5f183de0dc9a417c8610820
+  composer:
+    base_color: '#EF102A'
+    font: fonts/Barlow-Regular.ttf
+    font_size: 421
+    logo_resize: 1800
+    out_name: '2011'
+  caption:
+    mode: shared
+    text: '2011'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2011'
+      font_sha256: 77fb1ac54d2ceb980e3ebdfa7a9d0f64e85a66e4fdfb7f914a7b0aa08fb33a5d
+      point_size: 421
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 985a8f1eaa52075de64372985c77dd91456b1578d880419383d3f599c6577a9e
+  output:
+    directory: year
+    filename: 2011.jpg
+    remote_paths:
+      en: year/2011.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2011.75033883.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2012.93c85fd8
+  category: Year
+  display_name: '2012'
+  source:
+    path: create_default_posters.ps1
+    line: 6856
+    row_sha256: 0dbeb2386bed80f94f9c899d717d1aed959b1126545aa793bd37e024219f17ef
+  composer:
+    base_color: '#EF6210'
+    font: fonts/Barlow-Regular.ttf
+    font_size: 421
+    logo_resize: 1800
+    out_name: '2012'
+  caption:
+    mode: shared
+    text: '2012'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2012'
+      font_sha256: 77fb1ac54d2ceb980e3ebdfa7a9d0f64e85a66e4fdfb7f914a7b0aa08fb33a5d
+      point_size: 421
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 53d333a7ff70d6be38102a8918229d5ac1e64d01d3db00a11944d8a4b0d0a9fa
+  output:
+    directory: year
+    filename: 2012.jpg
+    remote_paths:
+      en: year/2012.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2012.93c85fd8.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2013.9c460d3d
+  category: Year
+  display_name: '2013'
+  source:
+    path: create_default_posters.ps1
+    line: 6857
+    row_sha256: a87d3be174a717e5e58da9c540fdff17878f6c14f232dc6101c00f4745352a47
+  composer:
+    base_color: '#EFC910'
+    font: fonts/Barlow-Regular.ttf
+    font_size: 421
+    logo_resize: 1800
+    out_name: '2013'
+  caption:
+    mode: shared
+    text: '2013'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2013'
+      font_sha256: 77fb1ac54d2ceb980e3ebdfa7a9d0f64e85a66e4fdfb7f914a7b0aa08fb33a5d
+      point_size: 421
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 54253e7eda42b18573c0bb733dcd2b5a615f29a460e87f6b91c9a6f2a4c55285
+  output:
+    directory: year
+    filename: 2013.jpg
+    remote_paths:
+      en: year/2013.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2013.9c460d3d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2014.36d5de47
+  category: Year
+  display_name: '2014'
+  source:
+    path: create_default_posters.ps1
+    line: 6858
+    row_sha256: 9d929e959f1e6bec6df7fa96fc9e751c9fd9edb8143b863d876fa4df8d76ffc9
+  composer:
+    base_color: '#10EFA3'
+    font: fonts/Barlow-Regular.ttf
+    font_size: 421
+    logo_resize: 1800
+    out_name: '2014'
+  caption:
+    mode: shared
+    text: '2014'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2014'
+      font_sha256: 77fb1ac54d2ceb980e3ebdfa7a9d0f64e85a66e4fdfb7f914a7b0aa08fb33a5d
+      point_size: 421
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 8d75d2923894bd21a78dc8f80681ee845c9f742b04ffb874bea53c7aad9a269b
+  output:
+    directory: year
+    filename: 2014.jpg
+    remote_paths:
+      en: year/2014.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2014.36d5de47.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2015.c26f986f
+  category: Year
+  display_name: '2015'
+  source:
+    path: create_default_posters.ps1
+    line: 6859
+    row_sha256: 0472462106856941ff514c64271c9a78f3731b0f4cb60fb06e94958dd69708f4
+  composer:
+    base_color: '#108FEF'
+    font: fonts/Barlow-Regular.ttf
+    font_size: 421
+    logo_resize: 1800
+    out_name: '2015'
+  caption:
+    mode: shared
+    text: '2015'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2015'
+      font_sha256: 77fb1ac54d2ceb980e3ebdfa7a9d0f64e85a66e4fdfb7f914a7b0aa08fb33a5d
+      point_size: 421
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: c6549313c84c6246a38ccc74b03419128575ee946869c676b41e27c20f6ce787
+  output:
+    directory: year
+    filename: 2015.jpg
+    remote_paths:
+      en: year/2015.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2015.c26f986f.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2016.9392c723
+  category: Year
+  display_name: '2016'
+  source:
+    path: create_default_posters.ps1
+    line: 6860
+    row_sha256: 4c5960e0cfc5fed817ff27e238397ec04d72dc3b348becb404bac56f9e29af4a
+  composer:
+    base_color: '#A900EF'
+    font: fonts/Barlow-Regular.ttf
+    font_size: 421
+    logo_resize: 1800
+    out_name: '2016'
+  caption:
+    mode: shared
+    text: '2016'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2016'
+      font_sha256: 77fb1ac54d2ceb980e3ebdfa7a9d0f64e85a66e4fdfb7f914a7b0aa08fb33a5d
+      point_size: 421
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 0041805b0d0e8b727a63e7576dbfd9f158a03265750251d2590746b040d43c8d
+  output:
+    directory: year
+    filename: 2016.jpg
+    remote_paths:
+      en: year/2016.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2016.9392c723.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2017.6da63c9b
+  category: Year
+  display_name: '2017'
+  source:
+    path: create_default_posters.ps1
+    line: 6861
+    row_sha256: 1cef1ce7802abe08d8a99f6c668678d97bfa79308b009d1668e3f8ed12d46787
+  composer:
+    base_color: '#8D848E'
+    font: fonts/Barlow-Regular.ttf
+    font_size: 421
+    logo_resize: 1800
+    out_name: '2017'
+  caption:
+    mode: shared
+    text: '2017'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2017'
+      font_sha256: 77fb1ac54d2ceb980e3ebdfa7a9d0f64e85a66e4fdfb7f914a7b0aa08fb33a5d
+      point_size: 421
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 3de505111ad8aa0c733fd672e8befece5dc5efc500f85ca566be7b1567109eae
+  output:
+    directory: year
+    filename: 2017.jpg
+    remote_paths:
+      en: year/2017.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2017.6da63c9b.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2018.2b65b5b3
+  category: Year
+  display_name: '2018'
+  source:
+    path: create_default_posters.ps1
+    line: 6862
+    row_sha256: e13f73c3a8982ae4cf4296f92b2a787858ba7a4c09a2924464b3b137f6cb065f
+  composer:
+    base_color: '#992C2E'
+    font: fonts/Barlow-Regular.ttf
+    font_size: 421
+    logo_resize: 1800
+    out_name: '2018'
+  caption:
+    mode: shared
+    text: '2018'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2018'
+      font_sha256: 77fb1ac54d2ceb980e3ebdfa7a9d0f64e85a66e4fdfb7f914a7b0aa08fb33a5d
+      point_size: 421
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 2e36ec35efc52d1f46361520cbb707c785384d1464fffc99b887ef2d4280b7f2
+  output:
+    directory: year
+    filename: 2018.jpg
+    remote_paths:
+      en: year/2018.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2018.2b65b5b3.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2019.88ab466d
+  category: Year
+  display_name: '2019'
+  source:
+    path: create_default_posters.ps1
+    line: 6863
+    row_sha256: 8edcfaf86d6bae5197cc5448902ee05acd9e4ab79a110903e3f414e113a98a9e
+  composer:
+    base_color: '#131CA1'
+    font: fonts/Barlow-Regular.ttf
+    font_size: 421
+    logo_resize: 1800
+    out_name: '2019'
+  caption:
+    mode: shared
+    text: '2019'
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: '2019'
+      font_sha256: 77fb1ac54d2ceb980e3ebdfa7a9d0f64e85a66e4fdfb7f914a7b0aa08fb33a5d
+      point_size: 421
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 898627fc516392d16eae9dd9a83a768feb378a716886914af5a2dfa33c0d026f
+  output:
+    directory: year
+    filename: 2019.jpg
+    remote_paths:
+      en: year/2019.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2019.88ab466d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2020.83bfe96a
+  category: Year
+  display_name: '2020'
+  source:
+    path: create_default_posters.ps1
+    line: 6864
+    row_sha256: 814a5961cb051c14d341aed4677234fba00e34f1912dc409561e348dbac018b3
+  composer:
+    base_color: '#EF10D3'
+    font: fonts/PlusJakartaSans-Bold.ttf
+    font_size: 409
+    logo_resize: 1800
+    out_name: '2020'
+  caption:
+    mode: shared
+    text: '2020'
+    case: exact
+  output:
+    directory: year
+    filename: 2020.jpg
+    remote_paths:
+      en: year/2020.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2020.83bfe96a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2021.42e06fe9
+  category: Year
+  display_name: '2021'
+  source:
+    path: create_default_posters.ps1
+    line: 6865
+    row_sha256: 778fa764497eeba22c5a3424521a4cf38578997f6c2720c3ee5524595a12814d
+  composer:
+    base_color: '#EF102A'
+    font: fonts/PlusJakartaSans-Bold.ttf
+    font_size: 409
+    logo_resize: 1800
+    out_name: '2021'
+  caption:
+    mode: shared
+    text: '2021'
+    case: exact
+  output:
+    directory: year
+    filename: 2021.jpg
+    remote_paths:
+      en: year/2021.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2021.42e06fe9.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2022.5c0e146e
+  category: Year
+  display_name: '2022'
+  source:
+    path: create_default_posters.ps1
+    line: 6866
+    row_sha256: a007a261d990f57d0a6bb20963f0dd0309f3913e7cb9f6cdba90e5d5dd70a17a
+  composer:
+    base_color: '#EF6210'
+    font: fonts/PlusJakartaSans-Bold.ttf
+    font_size: 409
+    logo_resize: 1800
+    out_name: '2022'
+  caption:
+    mode: shared
+    text: '2022'
+    case: exact
+  output:
+    directory: year
+    filename: 2022.jpg
+    remote_paths:
+      en: year/2022.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2022.5c0e146e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2023.db858a6c
+  category: Year
+  display_name: '2023'
+  source:
+    path: create_default_posters.ps1
+    line: 6867
+    row_sha256: 656d723370ef561e992e84e4042cf2445e0d81a5bdf9658b44d85efe3e7301fe
+  composer:
+    base_color: '#EFC910'
+    font: fonts/PlusJakartaSans-Bold.ttf
+    font_size: 409
+    logo_resize: 1800
+    out_name: '2023'
+  caption:
+    mode: shared
+    text: '2023'
+    case: exact
+  output:
+    directory: year
+    filename: 2023.jpg
+    remote_paths:
+      en: year/2023.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2023.db858a6c.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2024.11aeb912
+  category: Year
+  display_name: '2024'
+  source:
+    path: create_default_posters.ps1
+    line: 6868
+    row_sha256: fee937f395f73390254265c272227dc23861937d8f3a983d6652b289007ff8f1
+  composer:
+    base_color: '#10EFA3'
+    font: fonts/PlusJakartaSans-Bold.ttf
+    font_size: 409
+    logo_resize: 1800
+    out_name: '2024'
+  caption:
+    mode: shared
+    text: '2024'
+    case: exact
+  output:
+    directory: year
+    filename: 2024.jpg
+    remote_paths:
+      en: year/2024.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2024.11aeb912.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2025.151ecd4f
+  category: Year
+  display_name: '2025'
+  source:
+    path: create_default_posters.ps1
+    line: 6869
+    row_sha256: e05c892b6794a0ff5f893df8d5e8872cf86334bd884adb03758e47f0ab6221ea
+  composer:
+    base_color: '#108FEF'
+    font: fonts/PlusJakartaSans-Bold.ttf
+    font_size: 409
+    logo_resize: 1800
+    out_name: '2025'
+  caption:
+    mode: shared
+    text: '2025'
+    case: exact
+  output:
+    directory: year
+    filename: 2025.jpg
+    remote_paths:
+      en: year/2025.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2025.151ecd4f.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2026.dea93149
+  category: Year
+  display_name: '2026'
+  source:
+    path: create_default_posters.ps1
+    line: 6870
+    row_sha256: 4c2b30a5835edbd1ca8f08d14d9dec9f16604960257e1987332e0bd4f8d9a1f9
+  composer:
+    base_color: '#A900EF'
+    font: fonts/PlusJakartaSans-Bold.ttf
+    font_size: 409
+    logo_resize: 1800
+    out_name: '2026'
+  caption:
+    mode: shared
+    text: '2026'
+    case: exact
+  output:
+    directory: year
+    filename: 2026.jpg
+    remote_paths:
+      en: year/2026.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2026.dea93149.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2027.54246ed0
+  category: Year
+  display_name: '2027'
+  source:
+    path: create_default_posters.ps1
+    line: 6871
+    row_sha256: 3ee24ffc1334b8e855559fad6d99f79d6a0bdf88543c3a70bd26e850f6645a33
+  composer:
+    base_color: '#8D848E'
+    font: fonts/PlusJakartaSans-Bold.ttf
+    font_size: 409
+    logo_resize: 1800
+    out_name: '2027'
+  caption:
+    mode: shared
+    text: '2027'
+    case: exact
+  output:
+    directory: year
+    filename: 2027.jpg
+    remote_paths:
+      en: year/2027.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2027.54246ed0.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2028.6f9ca027
+  category: Year
+  display_name: '2028'
+  source:
+    path: create_default_posters.ps1
+    line: 6872
+    row_sha256: b5685fcb022b8557ed26f45fce538faaa1d63043f7d9ad9239839ff6e54b425b
+  composer:
+    base_color: '#992C2E'
+    font: fonts/PlusJakartaSans-Bold.ttf
+    font_size: 409
+    logo_resize: 1800
+    out_name: '2028'
+  caption:
+    mode: shared
+    text: '2028'
+    case: exact
+  output:
+    directory: year
+    filename: 2028.jpg
+    remote_paths:
+      en: year/2028.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2028.6f9ca027.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.year-2029.f74841d3
+  category: Year
+  display_name: '2029'
+  source:
+    path: create_default_posters.ps1
+    line: 6873
+    row_sha256: 6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816
+  composer:
+    base_color: '#131CA1'
+    font: fonts/PlusJakartaSans-Bold.ttf
+    font_size: 409
+    logo_resize: 1800
+    out_name: '2029'
+  caption:
+    mode: shared
+    text: '2029'
+    case: exact
+  output:
+    directory: year
+    filename: 2029.jpg
+    remote_paths:
+      en: year/2029.jpg
+  generator: null
+  color_assignment:
+    id: year.year-2029.f74841d3.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: year.series.d40a903c5b6e003596a91a6e
+  category: Year
+  display_name: '1880'
+  source:
+    path: create_default_posters.ps1
+    line: 6873
+    row_sha256: 6502df21bc6f05d1c7d5b53a886c8528ad665f626acfca6a05bb9ce232b3a816
+  composer:
+    font_size: 200
+    logo: defaults-en/year/1880.jpg
+    out_name: '1880'
+    text_offset: -400
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.BEST_OF
+  layout:
+    kind: captured_fit
+    measurement:
+      text: BEST OF
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 200
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 200
+      evidence_sha256: 9f31c105c245c2bd5930722dab7a4d88606a7ce95f8a9fbccc57072d977bc064
+  output:
+    directory: year/best
+    filename: 1880.jpg
+    remote_paths:
+      en: year/best/1880.jpg
+  dependencies:
+  - poster_id: year.year-1880.3409b074
+    input: logo
+  generator:
+    name: best-of-years
+    version: 1
+    parameters:
+      start: 1880
+      stop: 2030
+      step: 1
+      directory: year/best
+      measurements:
+        '1880':
+          point_size: 200
+          evidence_sha256: 9f31c105c245c2bd5930722dab7a4d88606a7ce95f8a9fbccc57072d977bc064
+        '1881':
+          point_size: 200
+          evidence_sha256: 2264633250267245eed42e3491a454801756eab8e37b40a8a8de08725f3ac846
+        '1882':
+          point_size: 200
+          evidence_sha256: b3d9195ab0ec5db3b84fcc9eb16c737d0e2028fcf4a9be358d788824866a451a
+        '1883':
+          point_size: 200
+          evidence_sha256: 300a32d7a7af2cef9644431ba4fdf17506561479d28509dca81e4fe11c5352b2
+        '1884':
+          point_size: 200
+          evidence_sha256: 0b18a4dba421e0bdcb3545f90b92671ea0a8fa8f017e99b609e3e93c82f3a4f1
+        '1885':
+          point_size: 200
+          evidence_sha256: 5c677d5ab0f17825c0bd1ac8ab64b406c91aa7b24881ce6607af016763e2b46d
+        '1886':
+          point_size: 200
+          evidence_sha256: 468baf0f1252d1372054305bde6794a737f04889a02cee6f39a91ee84ad2f173
+        '1887':
+          point_size: 200
+          evidence_sha256: 31970dff5d7b80d451ebb88b74238555d5e96c7da4b04f000cf59236a319b55a
+        '1888':
+          point_size: 200
+          evidence_sha256: 1b579c1652d5986af0475b9e4be9d1f86f5dc6d6f63d8e309e75b87549454825
+        '1889':
+          point_size: 200
+          evidence_sha256: 9524a7eb705f034680107bc43299f6e2ca4f5be41157277c687a004be2bd86a2
+        '1890':
+          point_size: 200
+          evidence_sha256: 06e7fd4d1b853b6036b8c6e6d5f5c80b2284eeca917b7fda40c29fac2fb7d502
+        '1891':
+          point_size: 200
+          evidence_sha256: 8e96e625e75ca75c82a6c9f1799b96173c8feb2a5031ff60e1f71eb6dabf3369
+        '1892':
+          point_size: 200
+          evidence_sha256: 069be98be0f9f7375ced9e882fc9b79fcb1cf502f6cd3f7049f844243d0a2dcc
+        '1893':
+          point_size: 200
+          evidence_sha256: 44b4a23a3dbdeae45e48d48bb1a8e69a6d1214e9dd82ed54ccf5c91693ba6eaa
+        '1894':
+          point_size: 200
+          evidence_sha256: 83974e71a01d83f599abe765b5f1b6a79b5db07da0f420c0815f419dfab797cd
+        '1895':
+          point_size: 200
+          evidence_sha256: 620729fbb465255fad83db9b9f7288ce8b8f4c018b2af6f123a9defc2821e064
+        '1896':
+          point_size: 200
+          evidence_sha256: b4364f112f01a36404ecb72da6c50b5657dbe971ee492e19b68e49c964871bf4
+        '1897':
+          point_size: 200
+          evidence_sha256: 76a1c52f1d49fd38fd4d3f0ff1d542432450c156212212112008bdaa7d874a70
+        '1898':
+          point_size: 200
+          evidence_sha256: 120136af11a88c394202543c1532a937c609bb3c89da942184155b3ba0bee20a
+        '1899':
+          point_size: 200
+          evidence_sha256: 37d5875e6066c1cc3d25bec9edd0f32e47fe6bca787bba03abd1717d13be82c4
+        '1900':
+          point_size: 200
+          evidence_sha256: da1732f3b739287f01c819cb40c41a8c61fe6a7b59d9b145901ee67897be9776
+        '1901':
+          point_size: 200
+          evidence_sha256: 5f872e8b7da3c20ee44f22b091f8ee9f736b01227e32d84be725c529a0121b28
+        '1902':
+          point_size: 200
+          evidence_sha256: 52f22624d20e6db995d54edb606196962c17bb1a7c1184015bf45bdafaa3e981
+        '1903':
+          point_size: 200
+          evidence_sha256: 156e727ed4ba574c5566ec75012da3d0570fe89af8e9046af34c52b4958df7ce
+        '1904':
+          point_size: 200
+          evidence_sha256: e0c1b316f097f1b5242e145851b1890b7a985427a84fdd23282cc49f23423430
+        '1905':
+          point_size: 200
+          evidence_sha256: 126608994d0dba8d406a697069513fb28b84feea1a832702e8d911a7479f6adb
+        '1906':
+          point_size: 200
+          evidence_sha256: 455aefc63a397549c8d21cab9cff0cfe127523b6d67fd808c924b0abcfef1108
+        '1907':
+          point_size: 200
+          evidence_sha256: 274224b7ad1d70e4464f215209579a1f7219cc3eec0de1fc455c90c9fbdb549e
+        '1908':
+          point_size: 200
+          evidence_sha256: c9c844915605065a96f73460ab2a33f458ea24264f8ef052e63f9f39755e0065
+        '1909':
+          point_size: 200
+          evidence_sha256: 56c2980a23eb4ecc2e9d04edcc9ee1673789a79fadb21a90f66f5e3f9f59554b
+        '1910':
+          point_size: 200
+          evidence_sha256: a112eb01c0fd15899d2cb7cdd66df5870fe39f8a9e4cc64728bedd8848030812
+        '1911':
+          point_size: 200
+          evidence_sha256: 26e42c58a46e218882960a1968ea7a6286997366cdaf497e4d369b1313406cbd
+        '1912':
+          point_size: 200
+          evidence_sha256: 8e9741536d199c0f540cf8dd31aab5279be31fad5909a4160a7229412ca7866c
+        '1913':
+          point_size: 200
+          evidence_sha256: 6d78adc9ee1549c029b9aeba4b37de0f77045931194abb0e7665cbd7f1cf8d82
+        '1914':
+          point_size: 200
+          evidence_sha256: 61029d81e340937413ad008d3b752bb70c055a450322d0f1e164bcfbee11cd70
+        '1915':
+          point_size: 200
+          evidence_sha256: 7ca8893685a2a62ee429eb558ed522f4b363ee8c3322ec28cd2f8592c5f1bea4
+        '1916':
+          point_size: 200
+          evidence_sha256: 4e88ea0e7b382aa0a2eab8ec1ff4afac1e3ec393cfa32703bffa3d0efcc35b2c
+        '1917':
+          point_size: 200
+          evidence_sha256: 925c5ab32bde8ebae34590979c6980488b9094cc7eb4b8a16cb2ae24ad506251
+        '1918':
+          point_size: 200
+          evidence_sha256: 4c416750ba7a7792fa1eababdf53436970173da484c59710e94ae04c65a8569b
+        '1919':
+          point_size: 200
+          evidence_sha256: 88bf1036ee79aefc2cc18d5b972ef0b86f5812739eb9f118ca17e87ef176d844
+        '1920':
+          point_size: 200
+          evidence_sha256: 972cf7572c15bfefe305f1c68bd1b4d93374a849aa635f97734696359e9b6b36
+        '1921':
+          point_size: 200
+          evidence_sha256: 9edcb2b424371d44b5a1db1425c7c9f87e6752ce302d86c9994c0977ce0694e5
+        '1922':
+          point_size: 200
+          evidence_sha256: eb8429cc1fc790826a982d43adc826d6d114d813ac312f9f3d95ed525ea8f5e9
+        '1923':
+          point_size: 200
+          evidence_sha256: 9c0d417fd391c1d043563a37db3d98a25254a884b7721ac41f917d9e2b43ca46
+        '1924':
+          point_size: 200
+          evidence_sha256: f61d665e0e33444f730b58d47208427b2b7e52801f6789b8f4c1d16994b205dd
+        '1925':
+          point_size: 200
+          evidence_sha256: d251bc2bf938d52df7957436ac9d4a13c67667502ac6c3e10a5c51b2a328232f
+        '1926':
+          point_size: 200
+          evidence_sha256: 012b6e22d6cdea335d5597ff75c125a312b823e32ce8a161624950db9f58d392
+        '1927':
+          point_size: 200
+          evidence_sha256: 10cd9e2a84179e7990d7a6603cc29adbacda2c94b96cc548de5c5ff0ca7dd150
+        '1928':
+          point_size: 200
+          evidence_sha256: 48b3ee35577726bb7fc05dea4738ac465a960ca24000cb545dd62d7fadaea532
+        '1929':
+          point_size: 200
+          evidence_sha256: 70d082ebd90255c1d9bff6de8543874c3fac07f0349b6d3edc116d9b984a6acb
+        '1930':
+          point_size: 200
+          evidence_sha256: 66bf684c1d5524552c04112f906a9c037b8281954f383a99bef236c851f9e63a
+        '1931':
+          point_size: 200
+          evidence_sha256: 365530e9184c58ce483f87de2022a543dd2f23130b712363e41cb883bbc09a0b
+        '1932':
+          point_size: 200
+          evidence_sha256: 72c5fba6ea084e79a38f68e27c9b0b0679f342185d703fe2e5654248b1faf1f7
+        '1933':
+          point_size: 200
+          evidence_sha256: f7fdd12b6cd2446e7a4a365b9af25018ce8401d39cf7d8487095592cb278e5b7
+        '1934':
+          point_size: 200
+          evidence_sha256: 681c9c4e3d352c1b57350280e513600a63feb670049b3dc70350fe6fc78eb70d
+        '1935':
+          point_size: 200
+          evidence_sha256: 09aa6cec4121b944a8e9a9cfcfb27316e7cad7b7454c28c0dfb545c03b7e28f7
+        '1936':
+          point_size: 200
+          evidence_sha256: 9d359d0c2283226e5c149b47ed414bae53ae93ebebd52ca0a8d6bbfd36c73b59
+        '1937':
+          point_size: 200
+          evidence_sha256: 33ee4d7079c47bc6773691ff57d4e7cbd81a4d09b7c8cf76cf870d00a4c565cc
+        '1938':
+          point_size: 200
+          evidence_sha256: 7d41eb742e3cbd2b46fb8167fb0a01381d08cfadfed31849a830bcd29f5843b5
+        '1939':
+          point_size: 200
+          evidence_sha256: 2512b3eaa4bac8ceebc5d5c434c27fe06e8a87d212e6afb43c6947bd95ef26f2
+        '1940':
+          point_size: 200
+          evidence_sha256: 39e2f1c08ef40583a6e09253575c18b77fabdde973bf2446469647ad1e04e783
+        '1941':
+          point_size: 200
+          evidence_sha256: 0abaad3122ed3a6344dc7116f71a5fbc946ebafc72cadbd650c65ce4577c13e5
+        '1942':
+          point_size: 200
+          evidence_sha256: 84d7850fa517d516eda8bf0b11193c8a5ac67621c0782e017053988a17165782
+        '1943':
+          point_size: 200
+          evidence_sha256: b3fc726116c4da50a11eccf1813b671de0725e57866e53d174e648a3d7912181
+        '1944':
+          point_size: 200
+          evidence_sha256: b86b102ca15b59246598c7764ea092154dcab0d22ce5c0a9cf65d5a24668ca33
+        '1945':
+          point_size: 200
+          evidence_sha256: 5a4df7855134a11faf675b9cb9c36a0d6bfe480704825159912a0b6db734c05b
+        '1946':
+          point_size: 200
+          evidence_sha256: 1b18293b676b7527d83092e75052455ee33ef8e16f397e9ba5e0388b26486d7b
+        '1947':
+          point_size: 200
+          evidence_sha256: 6c23c9ff82055e8e9cbb247365a4a51a302d50169a3b7bba4fde9932c6b58690
+        '1948':
+          point_size: 200
+          evidence_sha256: fe4db465ad142aeffe175c54d002ab18f2a6199fdb897eca2fbee1a6aabd68bf
+        '1949':
+          point_size: 200
+          evidence_sha256: 94a95bdec4250ca1b5a26fb38356141d3c55f142f10ae11ec1158715b70cbd48
+        '1950':
+          point_size: 200
+          evidence_sha256: a1fcfcba72b709d77393a2a90edfb3552540167ff020dd4f7d9cd2778bd4881c
+        '1951':
+          point_size: 200
+          evidence_sha256: a1baf87874ce467a5ccd5623ff7b2bf063b397031c9a16083a1c014826b70819
+        '1952':
+          point_size: 200
+          evidence_sha256: b5e44086640ff57be3cd6a19bd9ff886c2c3bb1b50236cc7d4e7142a32291892
+        '1953':
+          point_size: 200
+          evidence_sha256: d06462c4008c2a90013cfa53e933a65098ba3cc6bba276412ae4be5da3ee084d
+        '1954':
+          point_size: 200
+          evidence_sha256: fee76a812fcc96dc0456da5d7618536b97a852b8b47a801947fac777b63aa3fb
+        '1955':
+          point_size: 200
+          evidence_sha256: 48dd16e8504fc0781a3ee82c02d3eb769a15c7f79450849680d2df79e4b44830
+        '1956':
+          point_size: 200
+          evidence_sha256: 0bfbb00771d19931026e72f211e8235406f7be0d22fe73cfe2c351f669e48c30
+        '1957':
+          point_size: 200
+          evidence_sha256: d6d78a16f70d77dd284e75a0c5821dcf4c71a38a84fc07ada75a1ce5e7ce294b
+        '1958':
+          point_size: 200
+          evidence_sha256: bd1501bf4b507b6b4279d664bd6c25ebb04ce4276a79ccd4b26ec646c0ffcb40
+        '1959':
+          point_size: 200
+          evidence_sha256: a8d0bc772c67a863aa609d011793fa7a3d3b1336165e8d949bad364097dfda3c
+        '1960':
+          point_size: 200
+          evidence_sha256: d0c414028da8b86b5152c93fb07732348d9a9a205451f108756d552ccc2b7cf1
+        '1961':
+          point_size: 200
+          evidence_sha256: c330c0b470b38b7cdcc0da24d8d9e1cb6cecd10118232b966aad1d782107a8e8
+        '1962':
+          point_size: 200
+          evidence_sha256: 7a01566b59b42236b4f2089bffd0c87b9db8d7a70e39b15e707101b507da574a
+        '1963':
+          point_size: 200
+          evidence_sha256: a1d71f42add8a0d356bbdb9256f12816c07a10e09d88d39afffd64cb4d212584
+        '1964':
+          point_size: 200
+          evidence_sha256: cd15379491bd2d140a5eadee13cfc0229afdd45f3024fc7a05a1ceaae2e60b7f
+        '1965':
+          point_size: 200
+          evidence_sha256: 0a85c97745588e4b64441f2b46a35e7381143f74ec28359707d2165c92d60e6e
+        '1966':
+          point_size: 200
+          evidence_sha256: 259b391d56ac5c03df566e69f3afe5928115d1c38b8740a42298e9ce6fb928d7
+        '1967':
+          point_size: 200
+          evidence_sha256: 430ca855e94cb4ab2d17ab7f636302e170a8cea7896074242d3e39485de540c8
+        '1968':
+          point_size: 200
+          evidence_sha256: f06f9f92ce19e4d2c5db963cb3849adff0ed390c142af815cd061d3132f43ab2
+        '1969':
+          point_size: 200
+          evidence_sha256: 97578ea4296b8b1f4bc976b2090530a9ff2c1e3b6e13ff09e8b1744383a8274d
+        '1970':
+          point_size: 200
+          evidence_sha256: 489b40cf0654afd096a461414e208cdb25248490dcd8bd1a9a54bab09d331427
+        '1971':
+          point_size: 200
+          evidence_sha256: e607d813ced80a91673df10da16aa5c11983cbfb76674cae3ecb37252fd59479
+        '1972':
+          point_size: 200
+          evidence_sha256: c9b184009bf6e691cedf9ec3a4dba987b929174b5d155d557660d5492eeea936
+        '1973':
+          point_size: 200
+          evidence_sha256: 65d8776a5aba53eae0d5f904c8cf02f296a9d88bae227cf9c5f04bf6f5dd60a0
+        '1974':
+          point_size: 200
+          evidence_sha256: 2ae73f2b774fa3ba9c872f18f02248a07dd069ce0e4d147ecf64c51778f0ca72
+        '1975':
+          point_size: 200
+          evidence_sha256: 0cd46a1d2ca28c23b447dfef68be7aedf4cb1330c366d54a730068fb4155f8af
+        '1976':
+          point_size: 200
+          evidence_sha256: 1dedf9b3bfa8e89da015577aaae7d43c61664a6129c9c3f76ebf787fdd95363e
+        '1977':
+          point_size: 200
+          evidence_sha256: 27fd557083f212126083a7b6f0813874b21312decc10defcedfe1aa7fa00ce96
+        '1978':
+          point_size: 200
+          evidence_sha256: cf63bc3bbc208042fba2a360184fad7d8af7be21c0186031c99612c98251aa23
+        '1979':
+          point_size: 200
+          evidence_sha256: c70ed59cbf3d975424d6b06d42e88e8ff807c8fc5d77e25860421f7a61fd35d2
+        '1980':
+          point_size: 200
+          evidence_sha256: 7c2f9df2507770c8cf7dfbc962210728300a63e0d18077fc2584860871cabaf2
+        '1981':
+          point_size: 200
+          evidence_sha256: 60f31bdbc724952487fc19dd4e07ce281d499d106892455fb594d124a6b4c536
+        '1982':
+          point_size: 200
+          evidence_sha256: a89360e1b6b81baa9698827a8ed1b96c73aff793aad74497b44683b4b72046f2
+        '1983':
+          point_size: 200
+          evidence_sha256: 131c34a6717f43593bf31bd251075d10d1f67ad84552e7f8564eaa78c32ecb10
+        '1984':
+          point_size: 200
+          evidence_sha256: 6b83d96361614ed505e91680004d52527b5525dfdf7755d37f22e95b0a028b84
+        '1985':
+          point_size: 200
+          evidence_sha256: c2a40e6614be7eb7619669a93aeb9ccd539292ab1545a7710d5614a39e38603a
+        '1986':
+          point_size: 200
+          evidence_sha256: ba23c58cc3da5c66f4ad0347b43855d1e32ccad5009866b2777e5efee283aa20
+        '1987':
+          point_size: 200
+          evidence_sha256: af1384c42fcd5bf7d4f981b82b11d8783097813a39c52f6baa3ac87ea6738c79
+        '1988':
+          point_size: 200
+          evidence_sha256: ee709336cf6919f5b72ab27d7f4e3e3f6ed95c37ad264fc63af743bd9b0f5d50
+        '1989':
+          point_size: 200
+          evidence_sha256: 4f51c44dcb1d30cc6bec40c78d63dc1187a78d5e5c42f466e292f8597790f021
+        '1990':
+          point_size: 200
+          evidence_sha256: bb9aff90c7bba63105a30cbc4ffa749dd3a6d64139f9c6e3d769a1a7162ba4c6
+        '1991':
+          point_size: 200
+          evidence_sha256: 6be4e16ca66005ee1f6d51cd3d451d44e34d8bf3631eeb1be7160768cadcd597
+        '1992':
+          point_size: 200
+          evidence_sha256: ebd998c80e3f85f08688e996197c5f80ab559fd6fc54a528940dcbaec9f5f4f6
+        '1993':
+          point_size: 200
+          evidence_sha256: fee0b13bfd4f6900adfce934007f713a301b20e46950bdd2469932a6dd5e480c
+        '1994':
+          point_size: 200
+          evidence_sha256: 866635ffe193a7515b4d4533d85d89844a6b1b1dd46bfb31fa6c2f0c63f7f172
+        '1995':
+          point_size: 200
+          evidence_sha256: 4a7cc28b45a2348236c7f1fdba48e8075dec5342994768185ca38d7825ca36ea
+        '1996':
+          point_size: 200
+          evidence_sha256: bb5124d6753e22f63f29038386477ac8d3343248c2ef4bbd822a8ef513dd3705
+        '1997':
+          point_size: 200
+          evidence_sha256: 50b5a46b20e804f210bca458dd0352265f289c94a884ce474f0bd55c11246e3a
+        '1998':
+          point_size: 200
+          evidence_sha256: dcd7f05ad66a5cdb09b8a83fd61dd4a97cf892a36f17600d4b3357b3b39695dc
+        '1999':
+          point_size: 200
+          evidence_sha256: 468585e7e626ad617d0f285ed77f7860fd1ad8dd8f9331ec1556722fc3a187a5
+        '2000':
+          point_size: 200
+          evidence_sha256: 85f4e08c471db3c2c571310f048d2db21dccdd3a507eb3bf48df5c722bfda656
+        '2001':
+          point_size: 200
+          evidence_sha256: 7698944f59f64c264628ebb7a5a8c06ea080bd656521e9c0510cb6993cb7b416
+        '2002':
+          point_size: 200
+          evidence_sha256: 3270b98ccc4f7fa9c777f109a42dbc4bf647f9a6f75ab3a2272df819b40b5bc0
+        '2003':
+          point_size: 200
+          evidence_sha256: 5b04a6af30d9dafc2de5429c912ff448bdc3a61d36e981433635049254e20263
+        '2004':
+          point_size: 200
+          evidence_sha256: 8ae731ded5ab91a15ccdeef4b43403d9cb1d014df3d10876a8befd815185500c
+        '2005':
+          point_size: 200
+          evidence_sha256: 61df8525c3c39a5a2f4446c1057a936fc0de7927446d27236975eb8118075bbd
+        '2006':
+          point_size: 200
+          evidence_sha256: a8b0596427821eece99bf50ddcde83dc293877bf8f5cab9cc73369aa25e16306
+        '2007':
+          point_size: 200
+          evidence_sha256: 86f06c5bcac4d203ce310b337613d4ff83e5d98e793c8d7866f71704f4f6bcc7
+        '2008':
+          point_size: 200
+          evidence_sha256: 6a0de051a6298804b54bf1feabb95e00a07db9300ed771aecb16ae36e31aff46
+        '2009':
+          point_size: 200
+          evidence_sha256: 878d2829a12c5a9409f421dbb2a187a4f081707fc122c3a9ce97f023223d9988
+        '2010':
+          point_size: 200
+          evidence_sha256: ed96db8a2187e3ec03ba12c16687b8cecdf9e26e1771e3e33c6ca782d6649821
+        '2011':
+          point_size: 200
+          evidence_sha256: bca2341bab89888f2718c5cbc4e7cf5316796ecd4e7d97e5c4e4e6251c1e8f15
+        '2012':
+          point_size: 200
+          evidence_sha256: 6846c4371ddc5bf6c9afe4122449f5ff3bf6d2765f9e5dc13d55391b6c5df24b
+        '2013':
+          point_size: 200
+          evidence_sha256: 88bd6d11386fcc8c5a285452016626c5559b13a1b78021d51ba7116c79829920
+        '2014':
+          point_size: 200
+          evidence_sha256: d73627a632a3d4986be23f46c856810f0590ef3749919a179274ee47229505ea
+        '2015':
+          point_size: 200
+          evidence_sha256: acb98d69f422bae2d41488a0ecc9db0cec71d69152c9266a1d5597529312c8e4
+        '2016':
+          point_size: 200
+          evidence_sha256: 64f1d08a4f687a2ae5dd5915261e463b30a1dda26aed1fac486f0b3ed28ca09b
+        '2017':
+          point_size: 200
+          evidence_sha256: 714cdc22c888340cbd4961142de9e80e18c1ce04674ca22c9985ee15b1bc82b8
+        '2018':
+          point_size: 200
+          evidence_sha256: 32066fb95c1ea7bf166ede32e1c6407336fa1bccad52f198dae9c8e0f977b5c8
+        '2019':
+          point_size: 200
+          evidence_sha256: dc167ffce7a72016a732eec3326b031a0d7e7ae20674bf83b8d3e859258f5a1e
+        '2020':
+          point_size: 200
+          evidence_sha256: 829fe3ac0307ba83ff45a92033d561b81a6d8e5e439a3ba73a8c9c79352a0776
+        '2021':
+          point_size: 200
+          evidence_sha256: d0746f4dbbbbccf32d61f40361e63bac6948e38c9d070be0232a9ad50f89efe9
+        '2022':
+          point_size: 200
+          evidence_sha256: 4b3a8afde4c2834a7ff39d0cc2a14c9bc12d49dedc825b16cffa9ec9cdab1e4d
+        '2023':
+          point_size: 200
+          evidence_sha256: b09a14ce99c15452f5124028dd07d03e32df86e61351ad30faeb675e807cb236
+        '2024':
+          point_size: 200
+          evidence_sha256: 51ccc89fb50b40fe795d4b195cfeefbe5b37068be4ae93e0c253c033c4d97c48
+        '2025':
+          point_size: 200
+          evidence_sha256: 2caf6f2f50f29f679463f89aee1f52c78c0b7f55f586e136ee410e1e1ac8136b
+        '2026':
+          point_size: 200
+          evidence_sha256: 2cd18019ba6d8709cca8b3df5f18a027d714dba08a4a5f7f49428a7a318979e3
+        '2027':
+          point_size: 200
+          evidence_sha256: 6a9fe90ef0e795b8d4236d4a4bd0d9f4e56064974d40dbcfc0228a625fc8e092
+        '2028':
+          point_size: 200
+          evidence_sha256: 2c3700be63137f702790964926485860f71f38bc74597762dea0c12bc5616f17
+        '2029':
+          point_size: 200
+          evidence_sha256: 3f96e4d68937edaf5eaa5f92ef6b32f27d1b4b30ce17b3e672e5c94eb9aada6d
+      parent_directory: year
+  color_assignment:
+    id: year.series.d40a903c5b6e003596a91a6e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null

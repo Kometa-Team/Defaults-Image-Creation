@@ -1,0 +1,62 @@
+schema_version: 1
+category: Year
+definitions:
+- id: year.2020
+  category: Year
+  display_name: '2020'
+  source:
+    path: create_default_posters.ps1
+    line: 6864
+    row_sha256: 814a5961cb051c14d341aed4677234fba00e34f1912dc409561e348dbac018b3
+  composer:
+    avg_color: false
+    avg_color_image: null
+    base_color: '#EF10D3'
+    border: false
+    border_color: '#FFFFFF'
+    border_width: 15
+    clean: true
+    dom_color: false
+    dom_color_image: null
+    font: fonts/PlusJakartaSans-Bold.ttf
+    font_color: '#FFFFFF'
+    font_size: 409
+    gradient: 1
+    logo: transparent.png
+    logo_offset: 0
+    logo_resize: 1800
+    out_name: '2020'
+    text: ''
+    text_offset: 0
+    white_wash: true
+  caption:
+    mode: shared
+    key: null
+    template_key: null
+    text: '2020'
+    case: upper
+    direction: auto
+    fallback: null
+  layout:
+    kind: fixed
+    measurement: null
+  languages:
+  - en
+  applicability:
+    en:
+      status: applicable
+      reason: Representative English infrastructure example only
+  output:
+    directory: year
+    filename: 2020.jpg
+    remote_paths:
+      en: year/2020.jpg
+  color_assignment:
+    id: year.2020.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+  dependencies: []
+  overrides: []
+  generator: null

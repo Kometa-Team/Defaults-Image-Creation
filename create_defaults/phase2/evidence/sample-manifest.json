@@ -1,0 +1,313 @@
+{
+  "jobs": [
+    {
+      "canvas": [
+        2000,
+        3000
+      ],
+      "definition": {
+        "line": 4493,
+        "producer_line": 4618,
+        "row_sha256": "540a6b163e5ee4755e63efc9949ce61339cdd9c3fa43b813dc3abda589d75e40"
+      },
+      "effective": {
+        "avg_color": false,
+        "avg_color_image": null,
+        "base_color": "#9034AF",
+        "border": false,
+        "border_color": "#FFFFFF",
+        "border_width": 15,
+        "clean": true,
+        "dom_color": false,
+        "dom_color_image": null,
+        "font": "fonts/Comfortaa-Medium.ttf",
+        "font_color": "#FFFFFF",
+        "font_size": 250,
+        "gradient": 1,
+        "logo": "logos_franchise/Death in Paradise (2011).png",
+        "logo_offset": 0,
+        "logo_resize": 1600,
+        "out_name": "Death in Paradise (2011)",
+        "text": "",
+        "text_offset": 0,
+        "white_wash": false
+      },
+      "inputs": [
+        {
+          "path": "fades/@bottom-top-fade.png",
+          "sha256": "79d93b7455a694820a4df4b27b4418ea0063af59400ed778fc66f83648daa110"
+        },
+        {
+          "path": "fades/@bottom-up-fade.png",
+          "sha256": "7ed182e395a08b4035b687e6f0661029ef938f8027923ec9434ebcbc5d144cfd"
+        },
+        {
+          "path": "fades/@center-out-fade.png",
+          "sha256": "6d36359197363ddc092fdaa8aa4590838b01b8a22c3bf4b6ded76d65bc85a87c"
+        },
+        {
+          "path": "fades/@none.png",
+          "sha256": "5e89879184510e91e477d41c61bd86a0e9209e9ecc17909a7b0ee20427950cbc"
+        },
+        {
+          "path": "fades/@top-down-fade.png",
+          "sha256": "cbbf0b235a893410e02977419c89ee6ad97df253cbaee382e01d088d2cce6b39"
+        },
+        {
+          "path": "fonts/Comfortaa-Medium.ttf",
+          "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+        },
+        {
+          "path": "logos_franchise/Death in Paradise (2011).png",
+          "sha256": "ef5e3860da604fc4e2f8a0af81bfd4c7614fea894097ac04b4e148bba06a8105"
+        },
+        {
+          "path": "transparent.png",
+          "sha256": "64a0a1d637ff0687ccbcaeca31b8e6b7235002b1ee8528e7a60be6a7d636f1fc"
+        }
+      ],
+      "language": "en",
+      "legacy_job_id": "franchise-06945-8e8134ef709a",
+      "local_relative": "defaults-en/franchise/Death in Paradise (2011).jpg",
+      "poster_id": "franchise.death-in-paradise-2011",
+      "remote_relative": "franchise/Death in Paradise (2011).jpg",
+      "spec_sha256": "f0aec657d20ca87358b16adbb0b5c67d4d28d951abfaa4cb7ac424ff522f78a4",
+      "variant": "base"
+    },
+    {
+      "canvas": [
+        2000,
+        3000
+      ],
+      "definition": {
+        "line": 4681,
+        "producer_line": 4949,
+        "row_sha256": "967e8b9998eec67d4e36bd75b177c6fb8347850fe9973a856a5a3306efdfb1f8"
+      },
+      "effective": {
+        "avg_color": false,
+        "avg_color_image": null,
+        "base_color": "#387DBF",
+        "border": false,
+        "border_color": "#FFFFFF",
+        "border_width": 15,
+        "clean": true,
+        "dom_color": false,
+        "dom_color_image": null,
+        "font": "fonts/Comfortaa-Medium.ttf",
+        "font_color": "#FFFFFF",
+        "font_size": 250,
+        "gradient": 1,
+        "logo": "logos_genre/Action.png",
+        "logo_offset": -500,
+        "logo_resize": 1800,
+        "out_name": "Action",
+        "text": "ACTION",
+        "text_offset": 850,
+        "white_wash": true
+      },
+      "inputs": [
+        {
+          "path": "fades/@bottom-top-fade.png",
+          "sha256": "79d93b7455a694820a4df4b27b4418ea0063af59400ed778fc66f83648daa110"
+        },
+        {
+          "path": "fades/@bottom-up-fade.png",
+          "sha256": "7ed182e395a08b4035b687e6f0661029ef938f8027923ec9434ebcbc5d144cfd"
+        },
+        {
+          "path": "fades/@center-out-fade.png",
+          "sha256": "6d36359197363ddc092fdaa8aa4590838b01b8a22c3bf4b6ded76d65bc85a87c"
+        },
+        {
+          "path": "fades/@none.png",
+          "sha256": "5e89879184510e91e477d41c61bd86a0e9209e9ecc17909a7b0ee20427950cbc"
+        },
+        {
+          "path": "fades/@top-down-fade.png",
+          "sha256": "cbbf0b235a893410e02977419c89ee6ad97df253cbaee382e01d088d2cce6b39"
+        },
+        {
+          "path": "fonts/Comfortaa-Medium.ttf",
+          "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+        },
+        {
+          "path": "logos_genre/Action.png",
+          "sha256": "075872a76493628cb1b2b384c9bcacec0c0a4b95c758d95fd5836bb60105a23e"
+        },
+        {
+          "path": "transparent.png",
+          "sha256": "64a0a1d637ff0687ccbcaeca31b8e6b7235002b1ee8528e7a60be6a7d636f1fc"
+        }
+      ],
+      "language": "en",
+      "legacy_job_id": "genre-07078-51b961b826a1",
+      "local_relative": "defaults-en/genre/Action.jpg",
+      "poster_id": "genre.action",
+      "remote_relative": "genre/Action.jpg",
+      "spec_sha256": "9ccf8267e3c4bf1e1b2683c4c9d49972c48626555af63ef437cb25fb0ec27151",
+      "variant": "base"
+    },
+    {
+      "canvas": [
+        2000,
+        3000
+      ],
+      "definition": {
+        "line": 5350,
+        "producer_line": 5370,
+        "row_sha256": "d223d67dc619a5955bb6fc9675a1706c78637d33c0c911348119602a05e9a495"
+      },
+      "effective": {
+        "avg_color": false,
+        "avg_color_image": null,
+        "base_color": "#2B8F40",
+        "border": false,
+        "border_color": "#FFFFFF",
+        "border_width": 15,
+        "clean": true,
+        "dom_color": false,
+        "dom_color_image": null,
+        "font": "fonts/BebasNeue-Regular.ttf",
+        "font_color": "#FFFFFF",
+        "font_size": 154,
+        "gradient": 1,
+        "logo": "logos_playlist/Arrowverse.png",
+        "logo_offset": -200,
+        "logo_resize": 1600,
+        "out_name": "Arrowverse (Timeline Order)",
+        "text": "TIMELINE ORDER",
+        "text_offset": 450,
+        "white_wash": true
+      },
+      "inputs": [
+        {
+          "path": "fades/@bottom-top-fade.png",
+          "sha256": "79d93b7455a694820a4df4b27b4418ea0063af59400ed778fc66f83648daa110"
+        },
+        {
+          "path": "fades/@bottom-up-fade.png",
+          "sha256": "7ed182e395a08b4035b687e6f0661029ef938f8027923ec9434ebcbc5d144cfd"
+        },
+        {
+          "path": "fades/@center-out-fade.png",
+          "sha256": "6d36359197363ddc092fdaa8aa4590838b01b8a22c3bf4b6ded76d65bc85a87c"
+        },
+        {
+          "path": "fades/@none.png",
+          "sha256": "5e89879184510e91e477d41c61bd86a0e9209e9ecc17909a7b0ee20427950cbc"
+        },
+        {
+          "path": "fades/@top-down-fade.png",
+          "sha256": "cbbf0b235a893410e02977419c89ee6ad97df253cbaee382e01d088d2cce6b39"
+        },
+        {
+          "path": "fonts/BebasNeue-Regular.ttf",
+          "sha256": "08e4623805102d819f58601e46e345648846075e363b2ceb23313c2d1c83ec73"
+        },
+        {
+          "path": "logos_playlist/Arrowverse.png",
+          "sha256": "256787f4761e845b3a626ab2c23b943eb626ce0d006a98a92a16ded4fac01f8b"
+        },
+        {
+          "path": "transparent.png",
+          "sha256": "64a0a1d637ff0687ccbcaeca31b8e6b7235002b1ee8528e7a60be6a7d636f1fc"
+        }
+      ],
+      "language": "en",
+      "legacy_job_id": "playlist-07903-d46c66411ad8",
+      "local_relative": "defaults-en/playlist/Arrowverse (Timeline Order).jpg",
+      "poster_id": "playlist.arrowverse-timeline",
+      "remote_relative": "playlist/Arrowverse (Timeline Order).jpg",
+      "spec_sha256": "796e7442984a406a066884fd24a556fc31baee030fd8a0147f07f4db3c9d6c24",
+      "variant": "base"
+    },
+    {
+      "canvas": [
+        2000,
+        3000
+      ],
+      "definition": {
+        "line": 6864,
+        "producer_line": 6885,
+        "row_sha256": "814a5961cb051c14d341aed4677234fba00e34f1912dc409561e348dbac018b3"
+      },
+      "effective": {
+        "avg_color": false,
+        "avg_color_image": null,
+        "base_color": "#EF10D3",
+        "border": false,
+        "border_color": "#FFFFFF",
+        "border_width": 15,
+        "clean": true,
+        "dom_color": false,
+        "dom_color_image": null,
+        "font": "fonts/PlusJakartaSans-Bold.ttf",
+        "font_color": "#FFFFFF",
+        "font_size": 409,
+        "gradient": 1,
+        "logo": "transparent.png",
+        "logo_offset": 0,
+        "logo_resize": 1800,
+        "out_name": "2020",
+        "text": "2020",
+        "text_offset": 0,
+        "white_wash": true
+      },
+      "inputs": [
+        {
+          "path": "fades/@bottom-top-fade.png",
+          "sha256": "79d93b7455a694820a4df4b27b4418ea0063af59400ed778fc66f83648daa110"
+        },
+        {
+          "path": "fades/@bottom-up-fade.png",
+          "sha256": "7ed182e395a08b4035b687e6f0661029ef938f8027923ec9434ebcbc5d144cfd"
+        },
+        {
+          "path": "fades/@center-out-fade.png",
+          "sha256": "6d36359197363ddc092fdaa8aa4590838b01b8a22c3bf4b6ded76d65bc85a87c"
+        },
+        {
+          "path": "fades/@none.png",
+          "sha256": "5e89879184510e91e477d41c61bd86a0e9209e9ecc17909a7b0ee20427950cbc"
+        },
+        {
+          "path": "fades/@top-down-fade.png",
+          "sha256": "cbbf0b235a893410e02977419c89ee6ad97df253cbaee382e01d088d2cce6b39"
+        },
+        {
+          "path": "fonts/PlusJakartaSans-Bold.ttf",
+          "sha256": "5f5342ef76862b5b5365d1dff1a667629dfa484e388dd602552f647219c3870f"
+        },
+        {
+          "path": "transparent.png",
+          "sha256": "64a0a1d637ff0687ccbcaeca31b8e6b7235002b1ee8528e7a60be6a7d636f1fc"
+        }
+      ],
+      "language": "en",
+      "legacy_job_id": "year-09798-84e0b72a512b",
+      "local_relative": "defaults-en/year/2020.jpg",
+      "poster_id": "year.2020",
+      "remote_relative": "year/2020.jpg",
+      "spec_sha256": "3d0e053a53159f4cde633cdcb641b11e0f45301016f5cc5b53263d85f82e0976",
+      "variant": "base"
+    }
+  ],
+  "renderer": {
+    "composer_text_sha256": "51cfae66a3f0feb265a46e5d4c3024fc6daa66abefe453e21ba977fd21953305",
+    "encoding": {
+      "format": "JPEG",
+      "quality": 100,
+      "subsampling": 0
+    },
+    "text_engine_text_sha256": "1c557ef8cbe788f26678cbe59623c90833a99008aa14de36633b57c5a68b3db7"
+  },
+  "schema_version": 1,
+  "scope": "package-a-capture-sample-not-rendered",
+  "source": {
+    "bulk_text_sha256": "56302000b4fddbba5468694b9cdb19eddcb28b1e2ac86433c11e4ca74a638bf7",
+    "capture_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+    "commit": "57ef136833a3f54da2bf1e4ddef98addfa36d583",
+    "translation_sha256": "5fe987030981e83c35fab37192240afd596febf7f6f4d205a9c024a272ff390f"
+  }
+}

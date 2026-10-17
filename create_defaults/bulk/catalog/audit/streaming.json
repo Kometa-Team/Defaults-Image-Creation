@@ -1,0 +1,3590 @@
+{
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "active": [
+    {
+      "poster_id": "streaming.streaming-color-all-4.9a458f7a",
+      "legacy_id": "streaming-08699-727bfd0b8e34",
+      "job_sha256": "63be9eefb4dfdc9f9cb98d382ab4235efb18502cf4ba4749d68037188a91a39b",
+      "source": {
+        "definition_line": 5640,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "105f2d7134f191d68736e9a0175d86b62a0b404e13741568de6829859af7023e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-amc.dbd81ca2",
+      "legacy_id": "streaming-08700-3856e689002b",
+      "job_sha256": "2a5b0b0862c07cd76625e1ab26b4d4dc6279519c7a3bdc8407a90a164fb3c9e1",
+      "source": {
+        "definition_line": 5641,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "418ce13d11ce0f38f02ddaddf1baa7a505fce24d3e74e3594269296e55ca04ce",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-apple-tv.bc53ad4e",
+      "legacy_id": "streaming-08701-9e43eddd6531",
+      "job_sha256": "bc334541dd6ff77738f53d6de282da9acecc6072545d219d1824e5df07327c59",
+      "source": {
+        "definition_line": 5642,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "484abe2bd22b2982986728917365821e17b483248953b38809aa76a9c1e3d1df",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-apple-tv.6f7ab74b",
+      "legacy_id": "streaming-08702-521ea0502adf",
+      "job_sha256": "baa5ecf67e888eda261e16acc6fc84382c67d34a9bc30b064ef65a61b79d0fc5",
+      "source": {
+        "definition_line": 5643,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "468d8f7eb465ebb239708aa38cede8c6b55a1d28650c77f07c19ced1abc4c6f1",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-atres-player.0e7a3c5c",
+      "legacy_id": "streaming-08703-904544972797",
+      "job_sha256": "413a3b6cf991bbad0e6b340af00dbfdbdb6417d2ee6c60061e7418185c8f9606",
+      "source": {
+        "definition_line": 5644,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "bdbf48ba15f0f0af67d661620478b31dbba40012f2e90eb156f5cf7bcb3450ea",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-bet.59307ece",
+      "legacy_id": "streaming-08704-5ba928525991",
+      "job_sha256": "aa28a91ce2fd253630a34807d9bbcab1bac1cc67ef6e97f6e4428508520dda1c",
+      "source": {
+        "definition_line": 5645,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "b79dcd6f9312a8e57e3700125c6bbbd3d466d7022a3ac60f067902a7ca397aeb",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-britbox.513c1bbe",
+      "legacy_id": "streaming-08705-08b05a463e36",
+      "job_sha256": "69751473ca8e29c4ead591ad02122bd728077098aac76c41c4816d9144a0bea0",
+      "source": {
+        "definition_line": 5646,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "4dec1b7adcad89b49906f0c55a0e2e700668e8234a7f564a87ebb1963b9b6257",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-channel-4.f8bef02b",
+      "legacy_id": "streaming-08706-0ea1a5a4da3d",
+      "job_sha256": "914602c38ee599b204ff13d95f280976a2564ee46d75a3b94a80adfd90c01580",
+      "source": {
+        "definition_line": 5647,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "cc8b169368edd0f75c871f1c063a4be9d675450083ceb6b8541eef2800efa653",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-crave.eb189cc0",
+      "legacy_id": "streaming-08707-1bb23e5d7e8e",
+      "job_sha256": "bc7db4e61431d19533e2f2229d98ac69ee50fa769e0d143a39820cabe7526b8e",
+      "source": {
+        "definition_line": 5648,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "9c41705f60a991144fead8dc62414ad22ea943a81bfc7477f7f3e4aa3478dfb1",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-crunchyroll.aece5436",
+      "legacy_id": "streaming-08708-033e4d1aee1e",
+      "job_sha256": "1d359c0709260e36aaae615417c45175a03492cb342d98e6e001e983fc3adb7c",
+      "source": {
+        "definition_line": 5649,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "f6f8ecb934ab23f4a127b12b228b480c403db62622bf072c61be0c00cbc1c470",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-discovery.795a0413",
+      "legacy_id": "streaming-08709-d2cfc156d8f7",
+      "job_sha256": "5ed91baf08193ea693ec055346dcaa9a68840e996b6c24412d7a8c94111c44df",
+      "source": {
+        "definition_line": 5650,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "2872a4c441ed3202743b00139c3e68380f2d4a34b51d09f40e3f3d0cc8d7131c",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-disney.54c1ce5f",
+      "legacy_id": "streaming-08710-46a6001c7af5",
+      "job_sha256": "76b68fc7300af7b6c97431e21543670a9c674a47a3ab85542696a0df73e60aba",
+      "source": {
+        "definition_line": 5651,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "0b14a1733c6acb4098e1910011acf7727f9144d3a26f99bdffcf1d5fdc0e2c97",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-filmin.999a8773",
+      "legacy_id": "streaming-08711-1a4ef3a23736",
+      "job_sha256": "29922184b2ed135397d2dd401fa2a6f4b9bf501bfbd6522f6571679136502271",
+      "source": {
+        "definition_line": 5652,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "ded30e944a170a4ba353bf3f836bd5afed736e726b73564bbed3f0f1035d158b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-funimation.b8be79dc",
+      "legacy_id": "streaming-08712-0afe503b144d",
+      "job_sha256": "008d9cc5339c5d665db354e7d21333703239c8c9846ac88aa347568170bbeb47",
+      "source": {
+        "definition_line": 5653,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "1664fa082b6ad0d34c49a30819de0098827f7d8e730acad8a02347176bfa6cd3",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-hayu.44249004",
+      "legacy_id": "streaming-08713-ce1bf2b3e9de",
+      "job_sha256": "309a706c0b161b75f332cd2325047aa91a0f84d620044e4463c77cfed3ad80a2",
+      "source": {
+        "definition_line": 5654,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "06aa5eae0eb93bc941c085bce8ff4a069cc4234cf4b8892e6a78e672bb6ed8bf",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-hbo-max.ed9ad956",
+      "legacy_id": "streaming-08714-4e380dd72337",
+      "job_sha256": "15deecafd4df2dcef5e4ca7d7bc570019b5f6194a7a0836ba3f139fc2a75bf15",
+      "source": {
+        "definition_line": 5655,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "00a0da23bbccc6266e6a62e7826c4dc71f077d0fad4df96d21588db3318fcf5d",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-hulu.ba433e12",
+      "legacy_id": "streaming-08715-002765b5ad18",
+      "job_sha256": "e49ed4875a360f05f0171ef08af71fceab30f1064d3c91081cb37fe75e02102b",
+      "source": {
+        "definition_line": 5656,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "797745bb0cfb84582e7ea94598bd70819e554107ab22fba1577ef6255d65db5f",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-itvx.4efdf3d9",
+      "legacy_id": "streaming-08716-77c48e31c8df",
+      "job_sha256": "23faa960364ae23af852e0b478cffddd9a9fe871d15e6fa357e2173b2e4875ef",
+      "source": {
+        "definition_line": 5657,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "fda988c1472fe4a495cc96a2599bab4641997e08a5bca3b16192cc31b3914e4b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-max.96c8702a",
+      "legacy_id": "streaming-08717-bdb10267504c",
+      "job_sha256": "eeaf5ab44bf94993b16779c36d2a2f651ed3321a563dd608aa7b5c1f04880bb9",
+      "source": {
+        "definition_line": 5658,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "301837b93b8aed9db73024e345fe7d3f99ef581afbf7d536843bcb66507a651b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-movistar-plus.601a418d",
+      "legacy_id": "streaming-08718-78ba64cab761",
+      "job_sha256": "2c0cfb671113bcb833dcc50a07faaf50b0d21385381f564a652336c94b9b222f",
+      "source": {
+        "definition_line": 5659,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "d1f321598cbbed3c06279a96759443ac3057fa03b9841fb3dda8ea8715c07494",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-mubi.8bab7c2e",
+      "legacy_id": "streaming-08719-76d708806f58",
+      "job_sha256": "99e1531d534320177e020e26d0950d0a9369f9151e723873ef38d6fc38a9256f",
+      "source": {
+        "definition_line": 5660,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "8232c09720638f7ab4bac2c70277b06ebe2118c9ce4853174ca8e508922c468e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-my-5.5bf732f3",
+      "legacy_id": "streaming-08720-1fc9b96d9c62",
+      "job_sha256": "2f679d1daf04550485a8772f8f30961ed33b3b22c09c16d5a353202e3f65c950",
+      "source": {
+        "definition_line": 5661,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "1cb44388d3f90c2d6a37c5e508589e5d5b649e7655611c3119d8c367a5126011",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-netflix.014e42b4",
+      "legacy_id": "streaming-08721-f288cf50c5f9",
+      "job_sha256": "b3bfb3402a5969ce63a64608dbe20d38377661a1edc7e46b2f99b0807bba8bd6",
+      "source": {
+        "definition_line": 5662,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "c5d4f5bd3249ea755cd695270e6c3c0b19dd5feb1bdcb7026ba8348cc74a2557",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-now.232ad094",
+      "legacy_id": "streaming-08722-5f19740a53cc",
+      "job_sha256": "eafd9ec95486356861a40fed3c18cc20659561c9575a4aeab5ab80abd944f7f9",
+      "source": {
+        "definition_line": 5663,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "0f79451a75a9b7120a89d7575d65128aa811a4ff64b3f37720824ebcf8906e9d",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-paramount.053d0099",
+      "legacy_id": "streaming-08723-2654100e9207",
+      "job_sha256": "82ce582fdb77e092fac6beac2c2f7bbec8b0bfa135fcd1dbcae91168fcbf8e03",
+      "source": {
+        "definition_line": 5664,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "cae8ce951b24c4fe94f1b42462e9cdb6a3ae482a6fc9ae89234057826518fbfa",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-peacock.5bf8372c",
+      "legacy_id": "streaming-08724-d28f610d509d",
+      "job_sha256": "954ae7cc4dc97455035dc0164fa22e93072372c03db2cd48a7d334c7a5e005a1",
+      "source": {
+        "definition_line": 5665,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "e5c3651c3eef3d5528b54b8f5f5fb9527f264055954f67e28d89a4e9009bc082",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-prime-video.4426c8b9",
+      "legacy_id": "streaming-08725-84358e6cf9cd",
+      "job_sha256": "344486353ca6f20df3de2344c38e876cce68211fd9e20984cafbd10bf187cf67",
+      "source": {
+        "definition_line": 5666,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "4f847008aab79fc70bb5df49d0e35ef38041e6d6ccac1ce9018baa6cc7226e70",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-quibi.93daec09",
+      "legacy_id": "streaming-08726-697098091db8",
+      "job_sha256": "1ebc79086698f6415a87f532839335f778a63eeb5ccb1b6f3cada4a3d19fe3d0",
+      "source": {
+        "definition_line": 5667,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "1ca03ab191af4e3e73eb244e759f0f7ff450e770f556433253826ffcd2842d91",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-showtime.c7acfcdd",
+      "legacy_id": "streaming-08727-c083732213d9",
+      "job_sha256": "5e223041378aa65074223c531355395cdae98bbf275124cf248eaf83eb63cd69",
+      "source": {
+        "definition_line": 5668,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "c817a5025dc50d330f583679d46ae49d9111ef6f1ccbf76bb767b8702a10a197",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-stan.c16c7d95",
+      "legacy_id": "streaming-08728-9bef95147b93",
+      "job_sha256": "0855a81636da07da3628f317e493e226b3fa6c4398d97dc0ae9e6974854d6119",
+      "source": {
+        "definition_line": 5669,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "d2f599bff5c2d1eb2a13e27261a493ec5f07884caedff60fb28723af1cf784b6",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-tubi.84d9eb10",
+      "legacy_id": "streaming-08729-338dbf6d0b95",
+      "job_sha256": "353e6a12fa9fae9010a96246c22a732911583f033cc70a09ef93321a2c080c07",
+      "source": {
+        "definition_line": 5670,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "5a54fff571ca7403f4eee93870a716c866df74c56454fe335054afba8985a00b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-youtube.5116d3f1",
+      "legacy_id": "streaming-08730-d8bc61b364a8",
+      "job_sha256": "ef3f376b74a992dc45e25cccfd9b07c183f62cf89f5b56d4ff733acd76c08e9c",
+      "source": {
+        "definition_line": 5671,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "9ea39ff8d4f4f20127b4539feb4c4cdf6419c07ad28c0a429a7487b41f19eff7",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-all-4-movies.f367e06d",
+      "legacy_id": "streaming-08731-5988ec268e1a",
+      "job_sha256": "2c252e4106a07f2c39a7558a63b15e3f8b1b63210e2af9543d3138c449c439b1",
+      "source": {
+        "definition_line": 5672,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "51d91bd7195ba51080e02a570937afa419afa6645190175e5f80e832ff2fdfcc",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-amc-movies.09488147",
+      "legacy_id": "streaming-08732-e3354e5e4bac",
+      "job_sha256": "9a8a1f0162eb3557a787273ad06a365fe2b2cb5e9e5337d487e9ea9b59686253",
+      "source": {
+        "definition_line": 5673,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "9dc11b65a14ce290522dfa0c14ffd75b28bc54bccc513b690c0be74bc476a784",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-apple-tv-movies.488e9f5b",
+      "legacy_id": "streaming-08733-744070ed7fc6",
+      "job_sha256": "c0841cc6df5e0cd0080570004b86e8f349b23337cfd9565fee57b71ba7849e5a",
+      "source": {
+        "definition_line": 5674,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "2c5ef00c6e45cad403e3a03e74ac7cd19c2b71b6b8692cce82f1648be706b1cc",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-apple-tv-movies.0ee9d0a3",
+      "legacy_id": "streaming-08734-52c3bb9e3a3b",
+      "job_sha256": "594ebc3cc0cc72acd46f64d53bdb4829795bbbd9195e315b25cae88ccafe4308",
+      "source": {
+        "definition_line": 5675,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "20b3a6217d32682326e620db8a5eb65e2ede52cb00ea0b7c750686d48c45c80a",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-atres-player-movies.e21707da",
+      "legacy_id": "streaming-08735-1b9e940f50a2",
+      "job_sha256": "4673f5cb171c6bde6e8dcfeb47c2f0c0810218e39b404cfaa2651fe8b8de21f3",
+      "source": {
+        "definition_line": 5676,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "2d9f3fcefe4cbdd8a186dbaf2df50f2227b1611622d861bbc2a80145a1ac1f15",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-bet-movies.7d136219",
+      "legacy_id": "streaming-08736-6a01198d3cc3",
+      "job_sha256": "ff3712d1c62f51074f8ca2d00e74c7dd762094c5fe1044c77b149c470f070f5c",
+      "source": {
+        "definition_line": 5677,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "c5e56af778c5840b3aab81dc0f69177c31d2530cd35bdde02f07c894aeeeb7b6",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-britbox-movies.9cd4873d",
+      "legacy_id": "streaming-08737-a8297c3e1c63",
+      "job_sha256": "b540d12762d327590a513ff379b72b02035b59e12a8d9df582266b2ebadc7e7f",
+      "source": {
+        "definition_line": 5678,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "eb26d8d2e42270268ca6fcbb12f64385963b45f7ac004fb07fc02d4fd65e9629",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-channel-4-movies.148ccd47",
+      "legacy_id": "streaming-08738-53f6619d9e0c",
+      "job_sha256": "4d74c6ba345106cadf5fcfa992f21b953cfc8c5e50ab9d14da28ff81ff1a9296",
+      "source": {
+        "definition_line": 5679,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "337de4b89cfa8ca1086830503b6ec481e5408ae1f433bd7b355d5a9585615c8a",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-crave-movies.ddeb2ba4",
+      "legacy_id": "streaming-08739-66b6b554612c",
+      "job_sha256": "a1f8febd536e0159af53bab3aa4c49ce5ed136c2396da89d48d274b2058e38e7",
+      "source": {
+        "definition_line": 5680,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "04346fe5524518b9dee1ec7e34e099433c04eee4851023d6de8643581b2dd363",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-crunchyroll-movies.d7e845e0",
+      "legacy_id": "streaming-08740-540cf7508368",
+      "job_sha256": "c7d30060735463e146c98eddec7f93545ddc7fed536b3a30f61681765a4569d9",
+      "source": {
+        "definition_line": 5681,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "38039f9e1c6d218409e93e0c991a0441e30a08b17c0f3e7dfd2d18796ba76c54",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-discovery-movies.0b2d6724",
+      "legacy_id": "streaming-08741-f81620c3c895",
+      "job_sha256": "52c74ab464572119b1dba76999dc81e8e6ec3257c336725af2c76252a0ec335d",
+      "source": {
+        "definition_line": 5682,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "bba0d9cb82846463508015e1d1429f241ad5e9aadbd908ce359cacf0a8ec9dda",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-disney-movies.8f2ff870",
+      "legacy_id": "streaming-08742-3fdf47c3d9c0",
+      "job_sha256": "948ab89f0cd7a04ec8fbbc200e44c39503ecd672184c43789e56cbab736f56f0",
+      "source": {
+        "definition_line": 5683,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "0cabc906606c7b749f8a7324729ae08cebb27ad83f09acaccfaeaee81a7e0e66",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-filmin-movies.081e4147",
+      "legacy_id": "streaming-08743-686d69e5239c",
+      "job_sha256": "51018c5f6c4fd2e123f1be11601f033090e63c7d670aabd27093c7afd3aebb9e",
+      "source": {
+        "definition_line": 5684,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "c63856a18a04934b02012f172459075781ee54fc17073a08ac91001f50756f19",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-funimation-movies.74eb279a",
+      "legacy_id": "streaming-08744-9e6b9578546e",
+      "job_sha256": "db54eb320ca563fa9eb53b5d61b108c0ea844b58ef9e2b754e80cd18dcf88200",
+      "source": {
+        "definition_line": 5685,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "b7e87e0b179d25d2d105727143c7c2652b079dbb6c4aeeb9ed72720d6ccb646b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-hayu-movies.eaded571",
+      "legacy_id": "streaming-08745-dbb9176538e5",
+      "job_sha256": "7ce0d8f00f767b27fa505ac15e499420a5f3bffa25de71a2678de8578b572258",
+      "source": {
+        "definition_line": 5686,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "e66496b50096d4b37f3e942131ed8ad2425455c94eea2644ac6dcc59b7514879",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-hbo-max-movies.bc4bb9cb",
+      "legacy_id": "streaming-08746-509352abae64",
+      "job_sha256": "574698be95f261d4772eeffdf4f18aa587d849886c128d06f7d25ae347792987",
+      "source": {
+        "definition_line": 5687,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "5aaedc5df3705210ab06c47bd2fd684e7c513589c680dbd6dba17ef04c2576a4",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-hulu-movies.b1c6a3f9",
+      "legacy_id": "streaming-08747-8a6b457181a2",
+      "job_sha256": "2dfac352953638dd0ce51179383f4963c3530cb6826d3745b539083be04c2871",
+      "source": {
+        "definition_line": 5688,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "47b8efe4753b23851ea835de7f6d44effc8ac116baf1568fdea7af81b1e03548",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-itvx-movies.83918ede",
+      "legacy_id": "streaming-08748-9453a8196c40",
+      "job_sha256": "2d6095b1efe2cb3d8bd4af174b43d13d938a523ce77b78907d6fc35e7f03e4fe",
+      "source": {
+        "definition_line": 5689,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "c2654c669e6c597779cfd04ff11ae7c1a9cdfc88c50f7e5d8100432a8646b915",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-max-movies.2258f19c",
+      "legacy_id": "streaming-08749-d575d258338d",
+      "job_sha256": "c5ca8b4a47df9180f7852142bd8e49eff8e5d24cb2beb28102f2925fd6d2d28f",
+      "source": {
+        "definition_line": 5690,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "1850fc8fa56c86c90f02104cf870aa5556ce75cabd227ce3649b431dd2a1cc4e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-movistar-plus-movies.45e290d5",
+      "legacy_id": "streaming-08750-c18dbb6360e2",
+      "job_sha256": "4a64e26108fdda753ca6d462db6950f05b5f2ebeb25f38aab5f4b70becb9e2c2",
+      "source": {
+        "definition_line": 5691,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "0ec9038c1a1b1981a119a22fdb82209d6714a9bbcef9b840cbaa7d9fdffe3ac8",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-mubi-movies.2de79837",
+      "legacy_id": "streaming-08751-bb4707abbd97",
+      "job_sha256": "7354c2fad7b743a84794709600d2847bbea574c8d222b546a292d4595a370e8d",
+      "source": {
+        "definition_line": 5692,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "632a643936c91529f1b6fdfe0b7c90868f703f66a78407afec813239b2a5e910",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-my-5-movies.105278c1",
+      "legacy_id": "streaming-08752-66f115fd9232",
+      "job_sha256": "225a3d8fdf17799155f666dcae701de17b92400e2149e0b76a190992c3db8d8c",
+      "source": {
+        "definition_line": 5693,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "b2d0baf118ae367f3ca05282fe9c9df143ff789f3553974ac2950cbceebdea56",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-netflix-movies.67f6468b",
+      "legacy_id": "streaming-08753-9783bea2b08c",
+      "job_sha256": "bafbb3fa04505b2774bde00b8313e904605dbff55cd299af5bd1639a195a643d",
+      "source": {
+        "definition_line": 5694,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "264ddef771c6c20b708d829c67b0b078f10b4ee857c4af545fa093839511250b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-now-movies.ea562c12",
+      "legacy_id": "streaming-08754-f3747af41caf",
+      "job_sha256": "d35935ea515ae3fe4c499258965cd6dbec48b0471f0257b9331aa0825ff8a6d1",
+      "source": {
+        "definition_line": 5695,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "65a455d1f45270dcb7444d80231e3b684081ecbe82f9cb7272a1a3cd9850463b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-paramount-movies.35d211fc",
+      "legacy_id": "streaming-08755-7954e2e5df5f",
+      "job_sha256": "1deefb5e7c5a5a8efcc0a497c725c6049f8c6080d2c2d4594b78dc968cea48ea",
+      "source": {
+        "definition_line": 5696,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "0c0e10b7bd5d348fbf47a0554f00a3150f8a17af28234b9041a3eae6b1a3f58b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-peacock-movies.fcaed90a",
+      "legacy_id": "streaming-08756-aab7b34e5098",
+      "job_sha256": "e5bdc62b3df8acbda54a7182c007970239cd4cf351d04dba0d80c1f20b0c0710",
+      "source": {
+        "definition_line": 5697,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "6e88c7d87ae8518d8ef92c25dd385ff98d919064afe6802d17a840586c2d73ed",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-prime-video-movies.c0e6b9c2",
+      "legacy_id": "streaming-08757-5e4db96ea1a4",
+      "job_sha256": "62db73c6702de2cff4a8549f390d25224a1180af740f4387f583be0c7b85f34d",
+      "source": {
+        "definition_line": 5698,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "82024c630ea42b0ac21ef0251ed53d299ff56015afb75aa60857b62a8f29ab96",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-quibi-movies.03c3f037",
+      "legacy_id": "streaming-08758-f8b94c953f82",
+      "job_sha256": "7ebb8b329bf9f93a231c466291f643e2b8f08b4cd589e990ef624eb86abd2f1b",
+      "source": {
+        "definition_line": 5699,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "714b2daf178a827c871d0e25db70e399a16ddca8a5bdc902bea9308d4d2336bb",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-showtime-movies.957ea7c5",
+      "legacy_id": "streaming-08759-bcebc4a4db8b",
+      "job_sha256": "0b1a4131940359dc4e0568788c108bded628a0e813d11bace904fd25f1be60a8",
+      "source": {
+        "definition_line": 5700,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "7f944fc21072b5703ec44167a8620388250dcdbcdd3dc6e3f98e5d8ef5087097",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-stan-movies.603c24c9",
+      "legacy_id": "streaming-08760-5f488970c84b",
+      "job_sha256": "93835106539e793516fe7c51954e2afe77581cd5e8d0911ca8462d1e8463649d",
+      "source": {
+        "definition_line": 5701,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "a8f1fa7c7bd7b7462de604c0cfc5dc0837efd904c71ca48e495ac6cfc8b0dfa0",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-tubi-movies.00d43a89",
+      "legacy_id": "streaming-08761-946e55c507b9",
+      "job_sha256": "76e32b2f1b76b94e83da77a0aeb354bb9e1eb305feeb8adc4d5e9d2e58be422c",
+      "source": {
+        "definition_line": 5702,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "045f3d3bdb18f86878d1a69af5957729f32f86bf4cdbfdb5f196b85f689f1927",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-youtube-movies.deba61c8",
+      "legacy_id": "streaming-08762-5c03ee6b1ae4",
+      "job_sha256": "8d62905dd3c1f8a6a0367bdcecc79bacb0756ede88b485d1cd9358d1dc92543e",
+      "source": {
+        "definition_line": 5703,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "f076a83314ba90ff723bfcbcbc0b28ce080a5812ccd013ca3201fe63f8793c93",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-all-4-shows.e76d94e5",
+      "legacy_id": "streaming-08763-c5279561e9fa",
+      "job_sha256": "a6b6832f8b97b25032a93ede46595ea35b22ea6675f1c92b67db0ed0fb8709ed",
+      "source": {
+        "definition_line": 5704,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "d842473dfc871a565a56c62193640c0a4c7c0bf10ec3414734deac40a35d27d0",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-amc-shows.8d96e692",
+      "legacy_id": "streaming-08764-da306550e227",
+      "job_sha256": "0d5701372303953bc5cae0a3ccbd3aff46b21988ffc00c67b9b28ef9ddb3b6c2",
+      "source": {
+        "definition_line": 5705,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "9dcd63a5bc3ef31abb189a6c18861962433eb32e91b6357d470e0c2e6ab250ba",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-apple-tv-shows.f5ede434",
+      "legacy_id": "streaming-08765-966c0c27bf19",
+      "job_sha256": "734c4c99291141d3b531777ff9058e666be7429753d63103ade5b88b9ffc9581",
+      "source": {
+        "definition_line": 5706,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "e5b2e26cad56a1fa73276329ecdfecb702bf4f2b5a05f1b362a4e29b6af107bc",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-apple-tv-shows.f25fcbec",
+      "legacy_id": "streaming-08766-9bdcb0d0b673",
+      "job_sha256": "60b827be372fecba477c309a2ddcec9d763ab415362c09565d6016d27d44c7e7",
+      "source": {
+        "definition_line": 5707,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "4afdf860438ff652de12f4d4cdc9c6824933cbd40addc759d2c1d6fb62159578",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-atres-player-shows.2ed5c8e8",
+      "legacy_id": "streaming-08767-3712800125d1",
+      "job_sha256": "e820cbc985744d1febd6df98c537b7da5c25cc51cb1defa7b8d287bcbd4b6810",
+      "source": {
+        "definition_line": 5708,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "80c3b4e8402816383080d3bc1ec673c6bce0b8bc93503eb2ab337fccf514a2d9",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-bet-shows.1d56f1e5",
+      "legacy_id": "streaming-08768-286d9095ca82",
+      "job_sha256": "b74273f598ce52a9db7cd7bdd695e30d2a66b887a829ea9480b96a9b2ca2bf75",
+      "source": {
+        "definition_line": 5709,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "f89939906418d9c31fb5dc5a378400094e37742cf53b46722788d8a242d5a38c",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-britbox-shows.dc77b327",
+      "legacy_id": "streaming-08769-2bf3f01fdfdd",
+      "job_sha256": "aec1e63048723f61d28937d1df2529c86998a9ae862b6e1fc2dbed7fc5790842",
+      "source": {
+        "definition_line": 5710,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "aac88117e5981d2073b62d06664d7febf998ad0bdc710740f1a8556f13406a56",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-channel-4-shows.df222f15",
+      "legacy_id": "streaming-08770-69367d2b9d88",
+      "job_sha256": "727d50bf55368a3b513e75b4ea2e7e0b4017cff130f3fd089c05188c44e7a895",
+      "source": {
+        "definition_line": 5711,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "2ae1b8aad9142c6ba19163144fbeb85f5b29d1d428d04cb6939f58b58f550d18",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-crave-shows.95f83a25",
+      "legacy_id": "streaming-08771-8db3d3563b22",
+      "job_sha256": "08d88d6beaa45822a00abfe3a2cd0339c72074947a637e34a32edbce2ccd305d",
+      "source": {
+        "definition_line": 5712,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "80a31e5fbecb2cd0d57bc4a68fe8384f95d0de896e9637214204f160cbf1a5da",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-crunchyroll-shows.ec257466",
+      "legacy_id": "streaming-08772-cf36cb1acc67",
+      "job_sha256": "41d78e6aff0fef0b9e46e47240ae8500612cf1ae35f7e79eaed809a2bc500731",
+      "source": {
+        "definition_line": 5713,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "936c922816c924c39d2642524d2c24e8493595aca29bd349857a83953ee6f909",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-discovery-shows.b9113f06",
+      "legacy_id": "streaming-08773-898a4de17ae4",
+      "job_sha256": "b59c78cebb57c73a7d876eacae17e5a0218c878e3eb21980a35344651b7f2c28",
+      "source": {
+        "definition_line": 5714,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "b3e80c946f9ccc3af8a89408c939cc6eb68d127c4ebadbc7ce59b0f0d92cb88e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-disney-shows.1c7cd487",
+      "legacy_id": "streaming-08774-a784f279f130",
+      "job_sha256": "ab3d2e3fb06b0eaae2f3b028d1db65f8c5b823b1397a920d54e45784fd16c8a2",
+      "source": {
+        "definition_line": 5715,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "7a3a82f9f4e149311f4a27fbaa6e42b8c0a0d2f1872e1823e8642e52d36c6549",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-filmin-shows.6b1f1896",
+      "legacy_id": "streaming-08775-702bf752c8d0",
+      "job_sha256": "cc8196707b470a028307781b136a38de36a385bff869e327d8b078cfb4f569de",
+      "source": {
+        "definition_line": 5716,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "7a7a1a5bdf51d2df93f183a0bd4f215b68b31f82f1f283478732b63f7ac75318",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-funimation-shows.9dd19e3d",
+      "legacy_id": "streaming-08776-bdca2dfffb9c",
+      "job_sha256": "fb661264f9d14d487f37e164ade09b7548f6eb5fea177c89ee26402b6708480f",
+      "source": {
+        "definition_line": 5717,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "9f7ae73e6f9c3c251ef3e994de6d8cd395c871a8ceec516303de1c99fce002f1",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-hayu-shows.408ed6bb",
+      "legacy_id": "streaming-08777-a3552c5e7030",
+      "job_sha256": "169a4905bd370bb5b85e8d8b7209cac511ea29d97057f8caeeb921bf54fcf90e",
+      "source": {
+        "definition_line": 5718,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "4f6b327e9b042b6a0fbc7de82a626ad5bea1add7dc94f1b07032b753cce11ab3",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-hbo-max-shows.fedc7e61",
+      "legacy_id": "streaming-08778-2abf73403ac2",
+      "job_sha256": "20a87c78e6c17c572dc53ba168273826e6962a17298db2f9dd05b0f2755921cb",
+      "source": {
+        "definition_line": 5719,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "c9b1426a3cc0cc245cd07a262251ac67465a9ea5961ec7d75044e2ef11e84057",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-hulu-shows.4dcf5f3a",
+      "legacy_id": "streaming-08779-0908ef7dcf15",
+      "job_sha256": "b5492c3e42607f96066e65d066c0138f410c04cdde742eeb228a7221cd9d307f",
+      "source": {
+        "definition_line": 5720,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "093beec312ff474d5c5a7134583310cab7b21eee846302a335501f03666a2d5d",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-itvx-shows.e89d1a81",
+      "legacy_id": "streaming-08780-4e1af479d771",
+      "job_sha256": "beb8a998d5baa242138cb42d18d3a7a3b4925243278e99dab3ac82d8673ac1f9",
+      "source": {
+        "definition_line": 5721,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "5cb0dbab4619d07fa3821451e8707685253265692e2fc1ef92cb695ea4debed2",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-max-shows.b2e06158",
+      "legacy_id": "streaming-08781-497318119e04",
+      "job_sha256": "530703205fd19bae00da28a8ccc7d189e54b988f5355eb60df7babc2092b50b3",
+      "source": {
+        "definition_line": 5722,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "4e6f2f18faf59d0959abf49e9613d670a106412179513c7408e9819a4212558b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-movistar-plus-shows.f0ef1937",
+      "legacy_id": "streaming-08782-5288326f0728",
+      "job_sha256": "7486d62e99c59dcfcf77849f5a846a51dda343b054f4c0597483915ae6bd18d1",
+      "source": {
+        "definition_line": 5723,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "bf1a5378de46212d0164019d35fdaf53cc85c971ab4396ece23a5a693d3797c9",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-mubi-shows.56e56779",
+      "legacy_id": "streaming-08783-55c1c82b19ec",
+      "job_sha256": "e4499b104d24e63aa31833742dab528d5b55de60ec46efc439326493a44bb0b7",
+      "source": {
+        "definition_line": 5724,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "9c16bef824320ed579178478a1ce47aa080f113ff84df2942dc6d01fe3e8aff7",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-my-5-shows.e5f67504",
+      "legacy_id": "streaming-08784-1968e2ec0ccb",
+      "job_sha256": "9422e471975566a185311aa4449b2d8c84d2cdde590f858620aa1b3284d2567d",
+      "source": {
+        "definition_line": 5725,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "77bb22bba32d6702099eee1526f6cf377ca7019d6199e5ccbb27a906386d2689",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-netflix-shows.117c409e",
+      "legacy_id": "streaming-08785-5f8534cb9b5c",
+      "job_sha256": "af8f274278b6c50804b1becda0fea1f9e5783c55f500d38cdd725b1fb4a8df18",
+      "source": {
+        "definition_line": 5726,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "f7d72133177376704e4d81a305269a17c770a01d1d82900fbc3c6ae800b1b80b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-now-shows.31315420",
+      "legacy_id": "streaming-08786-d3520f3c23bd",
+      "job_sha256": "c477d5f155b04f936c8490e4838ea482c75fa8280e40d143307cafbcfa804ff5",
+      "source": {
+        "definition_line": 5727,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "dfc3129dd56a643ec488ee72b05afdfb97c6c3a7ca4ef24cee4672d9484e74a9",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-paramount-shows.b0691faf",
+      "legacy_id": "streaming-08787-e673b9e14ed1",
+      "job_sha256": "51a633377a292e5ba0fe928f2ec85ad9e9afade519abf1d18176ff71111d0e90",
+      "source": {
+        "definition_line": 5728,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "5a67eaf357c9025c7c452e7ab566ed8365f67a3f7a6384f0b323135796eb40d4",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-peacock-shows.ae3ab920",
+      "legacy_id": "streaming-08788-b6ce6e1e195a",
+      "job_sha256": "3719d0e2be1cbaa993da0e91ca99fe87fbf11d525c7fe69d5fe2fdfadd83a6b6",
+      "source": {
+        "definition_line": 5729,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "5efdd5a966541ca024af981fffc81d2046607a68ffe65601ea0e1164acd1c39e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-prime-video-shows.b9134634",
+      "legacy_id": "streaming-08789-cf8129476b51",
+      "job_sha256": "1cede2cf62284c253e2e687312d78d3bdb8feb9631d1f8d54088da90896acbba",
+      "source": {
+        "definition_line": 5730,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "3d09beb182d6b8299b346bcda76cc725f905f1ab1876da607165af6d8462446e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-quibi-shows.4b7e8968",
+      "legacy_id": "streaming-08790-b0ea19c32fd2",
+      "job_sha256": "a48949043690cb382132bf13030a1792b52f8fce254190f3439ff8192b0ad020",
+      "source": {
+        "definition_line": 5731,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "c687d026e46bb9ac5e21c35c657cc6ba463a0aced582f0b3fefdda514fcb1db4",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-showtime-shows.cee6fae7",
+      "legacy_id": "streaming-08791-7e05eeade6f2",
+      "job_sha256": "0c822d174a17d51a186df7a45768f46a698c1393c3b9452c382a522fa2c3d2fd",
+      "source": {
+        "definition_line": 5732,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "8663a0852cb7dfae75a782dcc25721efb761a7540a4a4371a97bb1e674aba159",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-stan-shows.eef25f56",
+      "legacy_id": "streaming-08792-44f119974646",
+      "job_sha256": "90adf12d937535f531003cc2264f9248dd17ec328f2833a92c147e963cebf964",
+      "source": {
+        "definition_line": 5733,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "b8cded0cb3234df8051eeb2e9a3f1cd25c6570c7b9aa0aee26a920ff043dd5ae",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-tubi-shows.3685782a",
+      "legacy_id": "streaming-08793-9ed8d57e2135",
+      "job_sha256": "2483a28b345b2f2f685631277a1cc956dc63174cd5b324e6c09a3a0f55484afb",
+      "source": {
+        "definition_line": 5734,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "86b5b3a8dfc0b4e091262396547a9c6bab7b8f29125cdff4d8117595947d19ca",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-youtube-shows.c803cb58",
+      "legacy_id": "streaming-08794-7438a40e28d7",
+      "job_sha256": "4a46d91bd1d6d759e4022455c454bfcd12a4edab2f4e5b59a0492b2cd7923472",
+      "source": {
+        "definition_line": 5735,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "93cf343516be0bdfddad62df64be9dc32cc6ec8409b020f8f25c4db8909b7b74",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-all-4-originals.af159fc5",
+      "legacy_id": "streaming-08795-e82c702fb043",
+      "job_sha256": "049f919cfb8f5281f4f892f1b846224871c9f9969f76a4fefcc9790cb8dffdef",
+      "source": {
+        "definition_line": 5736,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "c2282609dfd0138fc332b2dc1ff7a13af5d5a71178b1b514b31c45c2948986df",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-amc-originals.fda77656",
+      "legacy_id": "streaming-08796-5d1d19614a0b",
+      "job_sha256": "9ec73d1aa890c447bda5b01c7f0c7f2632a4777119fb55069509b718de475dbc",
+      "source": {
+        "definition_line": 5737,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "d4299a22beb46c541bccb9c41f5ebb19c8e8d192e93f306a30811110de3babb4",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-apple-tv-originals.60e01262",
+      "legacy_id": "streaming-08797-ba6315037043",
+      "job_sha256": "2559a47e8cfb05918dacf2bf1356bd201c984a8bd7afcb03a52e7b4f8a60bee3",
+      "source": {
+        "definition_line": 5738,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "19e00c65526e6a1f41936cfbcf5859d1819acbdf59064f51c9459546c1d40eac",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-apple-tv-originals.e2a2dd25",
+      "legacy_id": "streaming-08798-57799174e771",
+      "job_sha256": "aa5ca04f6f7d061bec3b17af09316359ce3af9980df38959a5a86872551b36ff",
+      "source": {
+        "definition_line": 5739,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "61cf98bc80e5e2694f15131efee043bd883b42946211314c6ff9ff32c44eec8e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-atres-player-originals.12eb0987",
+      "legacy_id": "streaming-08799-c3ace0007007",
+      "job_sha256": "554327bd122ee0b4bf7ab8c1ae1bd3d74e7cd07cf78b5da72f7b7aac524032df",
+      "source": {
+        "definition_line": 5740,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "6bb473e9d5d0fe2de338600a8bb196d3105635a507c0571a6f4ede6db9fddd0b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-bet-originals.7b3ce83e",
+      "legacy_id": "streaming-08800-4cd7928c0fa4",
+      "job_sha256": "a241fad9ca78dbf97901dd4d2a7bab3b2ced880afdfa20b4de777960e91883ca",
+      "source": {
+        "definition_line": 5741,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "05368c543ab84f851d45037aa5417df3621654a73450abce27f7d87cf448ff19",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-britbox-originals.152c3d65",
+      "legacy_id": "streaming-08801-09c59fb41633",
+      "job_sha256": "18675d58fe62687b5074073b77474feb0fa4c0019d5bb8013cca44d9b3b9bf14",
+      "source": {
+        "definition_line": 5742,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "9b3e193accea8981152b03b8c96b5a62b02be499cab7a74df6e902f4630e2c93",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-channel-4-originals.aab5c933",
+      "legacy_id": "streaming-08802-a5dca5aadfdf",
+      "job_sha256": "8e5759d7cc33347fef82722fd1af36b693668dd7b2f0190282f5d693ed759906",
+      "source": {
+        "definition_line": 5743,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "3071998504b005af0b34d1053ec1c07a2d6134fd2a84de0324a1d1e885d3020c",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-crave-originals.9944a542",
+      "legacy_id": "streaming-08803-185ad0f534ea",
+      "job_sha256": "75494a9601749f5f452212b31c69388d0e72ca62c27b65a85edf60951174abcb",
+      "source": {
+        "definition_line": 5744,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "fd6680eede992ff333f4fc1815d5bb0b941326ae611dcd020a4f700364950a12",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-crunchyroll-originals.e709d95f",
+      "legacy_id": "streaming-08804-6424f9a4521d",
+      "job_sha256": "e6fdf35550034a5a4ca9c9ddd46abbabe928b9d700a777c96792151e6ba4f54a",
+      "source": {
+        "definition_line": 5745,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "76700a2de83bdf683f4130309832e330d68bbddb560d43388b5f520d3d2d5916",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-discovery-originals.13b50fd6",
+      "legacy_id": "streaming-08805-629fd19ad9f9",
+      "job_sha256": "ad502ea11ac1c63314f15d8d16ac396829176b03dd3a6f9214f7bacb86f9662a",
+      "source": {
+        "definition_line": 5746,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "501ae004d816bcbcc3a9809786564f7701bea89fed6ff538eb540f1869af7ce7",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-disney-originals.d26f348f",
+      "legacy_id": "streaming-08806-166d2d8b34ab",
+      "job_sha256": "00b4aaccf4ab206252be97eb31f0e8b0c65bcb4d1fe6939d62d42d088c970228",
+      "source": {
+        "definition_line": 5747,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "e2c28606b2557c3ac009b5c74d0706555791651d53577472125b7a1b618d7a30",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-filmin-originals.0a25d5fb",
+      "legacy_id": "streaming-08807-f884e4fd2835",
+      "job_sha256": "2ccf8a0c6bfda183763d16c95a4e70fb9eac191487a60c1f29b799f8989f228f",
+      "source": {
+        "definition_line": 5748,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "4e518b3d7120684d008a6d879f6da318ef8c7291ee6de19aa94fd98605755534",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-funimation-originals.edf6e289",
+      "legacy_id": "streaming-08808-2dae18fd21ad",
+      "job_sha256": "c6a37e44103a99568aa86cedee0dde831a3e49cda0786ae0760c49e6ff14652e",
+      "source": {
+        "definition_line": 5749,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "a1cd988db40a1cca011222170c49f2f72fe3fc764c936136ab4bd150412b2519",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-hayu-originals.f120200e",
+      "legacy_id": "streaming-08809-f92215c88385",
+      "job_sha256": "1315c776a8f2a5d1c390c6a03c90dc6e51e6d0fa6e8a8952306726e0625a6a08",
+      "source": {
+        "definition_line": 5750,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "8c435f870660ab77df34af0ac3faa24ef6c2346401e77244cf4bc952c65964f4",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-hbo-max-originals.b2e8bee1",
+      "legacy_id": "streaming-08810-a731c7a27796",
+      "job_sha256": "87ed5b822e5e933e2bf8d491e9fb86a4db95f75e34254d28a45037c050605009",
+      "source": {
+        "definition_line": 5751,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "cacc0da1cea01945b5c19786fca860faafcfa2708576a95d2373841c43bc3d28",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-hulu-originals.584a523d",
+      "legacy_id": "streaming-08811-fc59ae16b2fa",
+      "job_sha256": "6f481fc101ac67d7433c7a63d1539343baf5600df006e588dbd4227e4d50b560",
+      "source": {
+        "definition_line": 5752,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "e7473bf58ccf96f2c2ecaa3a1dc07507236ae5395091178611fa1cc063bbe765",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-itvx-originals.05ceec18",
+      "legacy_id": "streaming-08812-0bb0a0df2c9c",
+      "job_sha256": "00e7c6efb49e549f3bc1106ebb03534f10b8e0fd54bebe5a0bc8d344dc40b66f",
+      "source": {
+        "definition_line": 5753,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "933bc2e85a93347c62a6dba597ec739e6e459290e3e461d9684f644fef1a1d95",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-max-originals.b0da3d9b",
+      "legacy_id": "streaming-08813-77412357f4cc",
+      "job_sha256": "03b4e60b983b2b1f7f30f99b5fd751550c1be3d3f0f705703889c942d9418059",
+      "source": {
+        "definition_line": 5754,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "99c9f7855c92fea574c5b3381a1003523f6d9ffe2abe548e0b450d436b50babe",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-movistar-plus-originals.c91c485d",
+      "legacy_id": "streaming-08814-efbdb0fb70c9",
+      "job_sha256": "0016bdbd2a4afa1b6646c810fdd62848aae2d02c6b92ee228298d5ebda7c1fe3",
+      "source": {
+        "definition_line": 5755,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "637fdab90a22012931294cec4370291d0732bfd15e06f1d3a1e216f11d21cb89",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-mubi-originals.007eeb03",
+      "legacy_id": "streaming-08815-f4a722cf56a8",
+      "job_sha256": "0b8bdcc617e5d170b3c35e0da47422ae19439d2458b7ffd297b04cb76d0be932",
+      "source": {
+        "definition_line": 5756,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "ac9b8c4c5fcf0daf8c76289b2cfdc9f3713a2b9c01e208e86fd947d56996d4b8",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-my-5-originals.aa94befd",
+      "legacy_id": "streaming-08816-b8153a39f370",
+      "job_sha256": "11f82017d80686dd00174a0213249b15d36518e0f1d474d59d30faa34b9b3a09",
+      "source": {
+        "definition_line": 5757,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "b6152d26000d979cd649f0339d60e863102943bb1de8f29f0546a66082da9eab",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-netflix-originals.e6e2a398",
+      "legacy_id": "streaming-08817-e696452ecea1",
+      "job_sha256": "dc0c5aff2683ce078aa663a7d01a8c32ef05dd7e559738eae9bafc0f8dffd5fd",
+      "source": {
+        "definition_line": 5758,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "2c351daf183fa619833f71a16b203d3b39581a97c1d89b0a5b7ea68b65d0e91c",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-now-originals.eff8ebc1",
+      "legacy_id": "streaming-08818-7775488ea633",
+      "job_sha256": "3b27ea4e1846c56f985a69dfc0c0d48b1c16839e776aac2347adc4fd88895bbc",
+      "source": {
+        "definition_line": 5759,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "8dc0b4d47574968f1d74dcf5c8ea1aa70652e54700477f06497c1872d3fee8ce",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-paramount-originals.a6bf1241",
+      "legacy_id": "streaming-08819-2dd27e2050ed",
+      "job_sha256": "89b88bbd4bd8f22bea46ac3f712798cdf98df51c9f0d2520f5f6623a9afc50c5",
+      "source": {
+        "definition_line": 5760,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "f18b668eddfd526e4bde93702e0fb93505670aa63aeb2c35cfc62a13532ec6a0",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-peacock-originals.b1e193de",
+      "legacy_id": "streaming-08820-995ffeb7b00a",
+      "job_sha256": "4dd42a85bf5553df8f21f406c3df3b2bb4b783984d1ce092a010035d35ce18c9",
+      "source": {
+        "definition_line": 5761,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "386a05b923496f08e1cfe297f46899146916030551d0bf64a4d033d2a3ad3003",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-prime-video-originals.1ae16c50",
+      "legacy_id": "streaming-08821-078fe62a43c4",
+      "job_sha256": "0086277a9d938ed998ed74d91a6176651e64814d0efab1518c27b3069689e39b",
+      "source": {
+        "definition_line": 5762,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "ecdd508a5482eef9c686ec4e8097ae87f8963717e9bda06baeb9f92233f510ce",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-quibi-originals.61b0eefe",
+      "legacy_id": "streaming-08822-b17553423252",
+      "job_sha256": "dfda2fc5108222cb8959a0156a93fd11a53ded30eeb10eec93cbed5e91e46826",
+      "source": {
+        "definition_line": 5763,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "0dc09694317597761a7001d912b644a6cd8a542a8d39fa33e5e940f380c8904e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-showtime-originals.3ff76ea8",
+      "legacy_id": "streaming-08823-6c7be02ba09c",
+      "job_sha256": "8055559f7b73215a563aab8b666843ecef3f31571887308d0a7424240db70cec",
+      "source": {
+        "definition_line": 5764,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "6b57e90fad61d6ced830e5d2d28e562260ee95b490f17348da09a14b661b71af",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-stan-originals.c59424af",
+      "legacy_id": "streaming-08824-2468acbbdb39",
+      "job_sha256": "415cb631a55a21e6201f58bed6679799e9593ec4029b580fdb673294d002b560",
+      "source": {
+        "definition_line": 5765,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "e28bca5a3e45cc6d320c9c07043d26f0ef968f3c197fc4a12c95d80abb1b7e0a",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-tubi-originals.c3d60dc7",
+      "legacy_id": "streaming-08825-16d9018884e0",
+      "job_sha256": "5ea55478d473f4f66d0c6b353a92b279140a738b5e5225d4ae38907022511988",
+      "source": {
+        "definition_line": 5766,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "cabf69b9c3bfb7f845d611d3d76dccd2fd1f31977a6e321e9d3e8ffa73970e56",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-color-youtube-originals.490a9618",
+      "legacy_id": "streaming-08826-b0d3224added",
+      "job_sha256": "7df40bd88037daf7134a5aa5f775b48b23e9f7c5b5373b3ba7d8c4991e1209e9",
+      "source": {
+        "definition_line": 5767,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5779
+      },
+      "row_sha256": "60a1f6d8845c2c641874617dc503cb6d7b24d6070923376439699b9f9ca87d44",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-all-4.45260c4e",
+      "legacy_id": "streaming-08827-754a76e500f7",
+      "job_sha256": "7f00adbbccac697315a086ff1808434ff033f3aecd68196c5eca7cbbbe4e96b1",
+      "source": {
+        "definition_line": 5640,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "105f2d7134f191d68736e9a0175d86b62a0b404e13741568de6829859af7023e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-amc.b8115100",
+      "legacy_id": "streaming-08828-cf9695b397b3",
+      "job_sha256": "43bf8628d7a3a35c9b993e8ea4fcc41e7119514cc4e9f0520d0fbdd0a38df284",
+      "source": {
+        "definition_line": 5641,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "418ce13d11ce0f38f02ddaddf1baa7a505fce24d3e74e3594269296e55ca04ce",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-apple-tv.a8a43762",
+      "legacy_id": "streaming-08829-0bca99bf103c",
+      "job_sha256": "eace8fc7063daf35e83afc4d5aa642d11dcb6a8a4ac351434a1b25f25fbf3b2c",
+      "source": {
+        "definition_line": 5642,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "484abe2bd22b2982986728917365821e17b483248953b38809aa76a9c1e3d1df",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-apple-tv.48f1131b",
+      "legacy_id": "streaming-08830-f93c453cea4e",
+      "job_sha256": "c7ac7a5a9e60b54f71f287cc267fe4d6e55d31182d3ac5e8752df58da9f8219e",
+      "source": {
+        "definition_line": 5643,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "468d8f7eb465ebb239708aa38cede8c6b55a1d28650c77f07c19ced1abc4c6f1",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-atres-player.20d270a4",
+      "legacy_id": "streaming-08831-f4c5728fbf16",
+      "job_sha256": "bad5be4a8c45eb074a182cb93f68d27c7a206d5c625457147c2a27370ceb1292",
+      "source": {
+        "definition_line": 5644,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "bdbf48ba15f0f0af67d661620478b31dbba40012f2e90eb156f5cf7bcb3450ea",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-bet.8bec75b6",
+      "legacy_id": "streaming-08832-f49b6e5dba97",
+      "job_sha256": "b034498457e51d12c366686fcc689072bd586136a1de1dfdfad4893c62bb9826",
+      "source": {
+        "definition_line": 5645,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "b79dcd6f9312a8e57e3700125c6bbbd3d466d7022a3ac60f067902a7ca397aeb",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-britbox.7017bbbe",
+      "legacy_id": "streaming-08833-f04a861c54fd",
+      "job_sha256": "468707f286fb6fb7daefb36deaec720ecc08327bbb1c50a4545d26a50401d742",
+      "source": {
+        "definition_line": 5646,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "4dec1b7adcad89b49906f0c55a0e2e700668e8234a7f564a87ebb1963b9b6257",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-channel-4.32858ce5",
+      "legacy_id": "streaming-08834-4c22ca458bfc",
+      "job_sha256": "202388ce1b409278bba0879247a2d5bf52a5d6551734491217551c883ca24645",
+      "source": {
+        "definition_line": 5647,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "cc8b169368edd0f75c871f1c063a4be9d675450083ceb6b8541eef2800efa653",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-crave.c0c50f87",
+      "legacy_id": "streaming-08835-8310078a2a51",
+      "job_sha256": "2074edd8b783abec60c3527450d15247b8120bdd49f79f5a46bce5a4fd2a6dbc",
+      "source": {
+        "definition_line": 5648,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "9c41705f60a991144fead8dc62414ad22ea943a81bfc7477f7f3e4aa3478dfb1",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-crunchyroll.a11a350b",
+      "legacy_id": "streaming-08836-3ef35da13fd7",
+      "job_sha256": "c22932b523b1d76e5c5a5db0d0d627f0c66057d2a882601cd5e38968120cd040",
+      "source": {
+        "definition_line": 5649,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "f6f8ecb934ab23f4a127b12b228b480c403db62622bf072c61be0c00cbc1c470",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-discovery.9c00512f",
+      "legacy_id": "streaming-08837-3278849878f0",
+      "job_sha256": "ac166c061be83919d9fb0e0ab373ea3dfeb0b4d0396d82ef3d49b37cbe7c8f88",
+      "source": {
+        "definition_line": 5650,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "2872a4c441ed3202743b00139c3e68380f2d4a34b51d09f40e3f3d0cc8d7131c",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-disney.5f7092a5",
+      "legacy_id": "streaming-08838-7939b085da2e",
+      "job_sha256": "8a422bdcc320761ea57f6faafcdfbca29ed0faa151429f345463cf11f2a4b258",
+      "source": {
+        "definition_line": 5651,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "0b14a1733c6acb4098e1910011acf7727f9144d3a26f99bdffcf1d5fdc0e2c97",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-filmin.4f7e3c55",
+      "legacy_id": "streaming-08839-68c867a30cdb",
+      "job_sha256": "917842936fd11aa751ce716b391b985bd062308e78eeb892e3fd3f700133e040",
+      "source": {
+        "definition_line": 5652,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "ded30e944a170a4ba353bf3f836bd5afed736e726b73564bbed3f0f1035d158b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-funimation.a6fa9ec3",
+      "legacy_id": "streaming-08840-f6cafc1c6002",
+      "job_sha256": "a92a6e5e208291d90ec2e47e7ed7dfe09369ba246b6eba4e1f9c850c40856ea6",
+      "source": {
+        "definition_line": 5653,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "1664fa082b6ad0d34c49a30819de0098827f7d8e730acad8a02347176bfa6cd3",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-hayu.03707943",
+      "legacy_id": "streaming-08841-a831a430cc40",
+      "job_sha256": "8aeb21eef8ff0f5b9fe5d5c6bd21e8801aa992c1b39d311dea8e960f6fadc216",
+      "source": {
+        "definition_line": 5654,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "06aa5eae0eb93bc941c085bce8ff4a069cc4234cf4b8892e6a78e672bb6ed8bf",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-hbo-max.4e74aa7a",
+      "legacy_id": "streaming-08842-2d95b2126453",
+      "job_sha256": "72e122eebc3169d8bae76f37e9f8408ba7c10232c36757ba391d8f847ae93e5c",
+      "source": {
+        "definition_line": 5655,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "00a0da23bbccc6266e6a62e7826c4dc71f077d0fad4df96d21588db3318fcf5d",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-hulu.71b44dcc",
+      "legacy_id": "streaming-08843-79cb3f49268f",
+      "job_sha256": "1184dc081297bbbe659432e8e0844a85ba87f54801b1030632d3a4bd175b5277",
+      "source": {
+        "definition_line": 5656,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "797745bb0cfb84582e7ea94598bd70819e554107ab22fba1577ef6255d65db5f",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-itvx.62cb8dec",
+      "legacy_id": "streaming-08844-ed63a661558f",
+      "job_sha256": "729fb7f925ad54db5ad7890a57a9f16ba772c5b9ae0eea1f4055a7cf9e5a8f8d",
+      "source": {
+        "definition_line": 5657,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "fda988c1472fe4a495cc96a2599bab4641997e08a5bca3b16192cc31b3914e4b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-max.ba2486d1",
+      "legacy_id": "streaming-08845-02f55f410947",
+      "job_sha256": "ce2025e01af6399118739ec99a716b5c28171d206b5e93dd2a877838e5896407",
+      "source": {
+        "definition_line": 5658,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "301837b93b8aed9db73024e345fe7d3f99ef581afbf7d536843bcb66507a651b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-movistar-plus.27a79555",
+      "legacy_id": "streaming-08846-8b089d8ab1c3",
+      "job_sha256": "69555b7f2b45135d1cbaeaa7ff1b1e7bd9a6653d069fa8ad52ae8cb988871fcb",
+      "source": {
+        "definition_line": 5659,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "d1f321598cbbed3c06279a96759443ac3057fa03b9841fb3dda8ea8715c07494",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-mubi.1c292dbe",
+      "legacy_id": "streaming-08847-8ab588fc3492",
+      "job_sha256": "8ff0a1867d4c914a147e914213ef797595d9c71f1721f688593c2565d1cd15b6",
+      "source": {
+        "definition_line": 5660,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "8232c09720638f7ab4bac2c70277b06ebe2118c9ce4853174ca8e508922c468e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-my-5.19c1f1f9",
+      "legacy_id": "streaming-08848-076d4329e2b0",
+      "job_sha256": "3907bdd5763c16720395d42c60065be2114764df49f90f9b6532168175326390",
+      "source": {
+        "definition_line": 5661,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "1cb44388d3f90c2d6a37c5e508589e5d5b649e7655611c3119d8c367a5126011",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-netflix.0f96c3f0",
+      "legacy_id": "streaming-08849-16f5200430fd",
+      "job_sha256": "c4d0e950bc5eadb6324225071788e19045346c377cff026f5085a441bbbc7d07",
+      "source": {
+        "definition_line": 5662,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "c5d4f5bd3249ea755cd695270e6c3c0b19dd5feb1bdcb7026ba8348cc74a2557",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-now.339cba1f",
+      "legacy_id": "streaming-08850-731bb6d6a77f",
+      "job_sha256": "c6617894f269d6d66e4262c143f37a7c1e521019ff6ca64f95de2631aa8fcc84",
+      "source": {
+        "definition_line": 5663,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "0f79451a75a9b7120a89d7575d65128aa811a4ff64b3f37720824ebcf8906e9d",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-paramount.34db2423",
+      "legacy_id": "streaming-08851-82869838f606",
+      "job_sha256": "d7e0bf0c7a30def5181a1b2fc0899eb7eb36b8854289d4830bbe95ecd0c7d17a",
+      "source": {
+        "definition_line": 5664,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "cae8ce951b24c4fe94f1b42462e9cdb6a3ae482a6fc9ae89234057826518fbfa",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-peacock.b2b88a3a",
+      "legacy_id": "streaming-08852-55b27dd486b2",
+      "job_sha256": "dde5c9d4e51206c2926b90b1a602ee3b4edf23ccf95f694241c8260c6a0191be",
+      "source": {
+        "definition_line": 5665,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "e5c3651c3eef3d5528b54b8f5f5fb9527f264055954f67e28d89a4e9009bc082",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-prime-video.84bedae1",
+      "legacy_id": "streaming-08853-b41b4187a3a9",
+      "job_sha256": "ef826e32d9958d5124df0a3da547e03ec57b64baa4de34eec02e526c70576368",
+      "source": {
+        "definition_line": 5666,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "4f847008aab79fc70bb5df49d0e35ef38041e6d6ccac1ce9018baa6cc7226e70",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-quibi.55f7fa20",
+      "legacy_id": "streaming-08854-a62aa4df3c80",
+      "job_sha256": "0b4941672258a2088616d12333e397cb6328a321b6737066072d998f11dd4e6b",
+      "source": {
+        "definition_line": 5667,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "1ca03ab191af4e3e73eb244e759f0f7ff450e770f556433253826ffcd2842d91",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-showtime.15899a48",
+      "legacy_id": "streaming-08855-634e842bfba5",
+      "job_sha256": "84a1ab40431743630724698e6f96cc32315c0f0745f583cd8cfad86f7155e620",
+      "source": {
+        "definition_line": 5668,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "c817a5025dc50d330f583679d46ae49d9111ef6f1ccbf76bb767b8702a10a197",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-stan.35994ec5",
+      "legacy_id": "streaming-08856-37e56c11087b",
+      "job_sha256": "efb2a6a80b64fbb4ea22339d181384794d754f9ea3340f024750c5214721798e",
+      "source": {
+        "definition_line": 5669,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "d2f599bff5c2d1eb2a13e27261a493ec5f07884caedff60fb28723af1cf784b6",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-tubi.34a40618",
+      "legacy_id": "streaming-08857-85a00c395df9",
+      "job_sha256": "a2cd38a875616b8fa9a1f10e0d43cdeaf35973981ab3de14ead816cb9ea06b11",
+      "source": {
+        "definition_line": 5670,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "5a54fff571ca7403f4eee93870a716c866df74c56454fe335054afba8985a00b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-youtube.8f9f30d1",
+      "legacy_id": "streaming-08858-a6f10d2af4e3",
+      "job_sha256": "af446040bcc32518a0d2a5a08a00dc58b57df3e3217673e62c57e613a616c84d",
+      "source": {
+        "definition_line": 5671,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "9ea39ff8d4f4f20127b4539feb4c4cdf6419c07ad28c0a429a7487b41f19eff7",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-all-4-movies.8841d785",
+      "legacy_id": "streaming-08859-4710b426f07f",
+      "job_sha256": "fcb7138475721680f146957237b412e189d30b9e0c45982b6b56eda530ca1aff",
+      "source": {
+        "definition_line": 5672,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "51d91bd7195ba51080e02a570937afa419afa6645190175e5f80e832ff2fdfcc",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-amc-movies.7a05b008",
+      "legacy_id": "streaming-08860-1c7d0bfe8ac8",
+      "job_sha256": "9ca5cead6897ad6853b25084a4a82d6f88b36fc905e93a77f3cbe231de04de18",
+      "source": {
+        "definition_line": 5673,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "9dc11b65a14ce290522dfa0c14ffd75b28bc54bccc513b690c0be74bc476a784",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-apple-tv-movies.bfaad043",
+      "legacy_id": "streaming-08861-428724234604",
+      "job_sha256": "3ac3c744b2759c57118e3a36ce45a9ff4345c9ade6cd974085b59a175df14c9e",
+      "source": {
+        "definition_line": 5674,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "2c5ef00c6e45cad403e3a03e74ac7cd19c2b71b6b8692cce82f1648be706b1cc",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-apple-tv-movies.52900605",
+      "legacy_id": "streaming-08862-e73017b222d0",
+      "job_sha256": "482299771970405e396e88b685e88cc708d77e92ee486c21d7095839fdd09d1a",
+      "source": {
+        "definition_line": 5675,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "20b3a6217d32682326e620db8a5eb65e2ede52cb00ea0b7c750686d48c45c80a",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-atres-player-movies.627e802a",
+      "legacy_id": "streaming-08863-722dd3e4d977",
+      "job_sha256": "a1003370215e39e52f5136a4a71ecbbbcf866ed7af1b2764955c11638f2ea0a9",
+      "source": {
+        "definition_line": 5676,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "2d9f3fcefe4cbdd8a186dbaf2df50f2227b1611622d861bbc2a80145a1ac1f15",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-bet-movies.82023659",
+      "legacy_id": "streaming-08864-7ceb14cd1950",
+      "job_sha256": "0efbee714029a61e4b06d7f7455c50bd3e62e7afd638d79d154fdd51eafaa205",
+      "source": {
+        "definition_line": 5677,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "c5e56af778c5840b3aab81dc0f69177c31d2530cd35bdde02f07c894aeeeb7b6",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-britbox-movies.f04c65b7",
+      "legacy_id": "streaming-08865-9a3f782fef53",
+      "job_sha256": "11cf2fd3331f3eba5b546a315bca7341a50fdb654c079a530b6c7370eb818164",
+      "source": {
+        "definition_line": 5678,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "eb26d8d2e42270268ca6fcbb12f64385963b45f7ac004fb07fc02d4fd65e9629",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-channel-4-movies.c1afbb9b",
+      "legacy_id": "streaming-08866-24d46afd7bca",
+      "job_sha256": "6ab6789d5f13e2a4fe769b412d4d6578bbb05fc6e4deaabe53214fc06e89fb21",
+      "source": {
+        "definition_line": 5679,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "337de4b89cfa8ca1086830503b6ec481e5408ae1f433bd7b355d5a9585615c8a",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-crave-movies.b2fd0009",
+      "legacy_id": "streaming-08867-11d61c4a2d69",
+      "job_sha256": "fc378ac053e516cb0f43fe8cb9fb375b6ab4aa274ad0053ca4ee3fbd59a73bc6",
+      "source": {
+        "definition_line": 5680,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "04346fe5524518b9dee1ec7e34e099433c04eee4851023d6de8643581b2dd363",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-crunchyroll-movies.f6a255f9",
+      "legacy_id": "streaming-08868-34df6fb5b168",
+      "job_sha256": "f94b02996c3c9b4489fdb3f43065c383b1d16195f70bb3a1f7866eea3a01d1ac",
+      "source": {
+        "definition_line": 5681,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "38039f9e1c6d218409e93e0c991a0441e30a08b17c0f3e7dfd2d18796ba76c54",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-discovery-movies.90139765",
+      "legacy_id": "streaming-08869-17a00334dff2",
+      "job_sha256": "8320a6c899bd1ca0f8ad856e7709bbbfee087a26041859db21d9cf99a9b5a163",
+      "source": {
+        "definition_line": 5682,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "bba0d9cb82846463508015e1d1429f241ad5e9aadbd908ce359cacf0a8ec9dda",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-disney-movies.de2c453b",
+      "legacy_id": "streaming-08870-4b80aaff464f",
+      "job_sha256": "a5c6853b680b599f9a033d85655216eedfb9d2151e202dc1847e28cfff24d21d",
+      "source": {
+        "definition_line": 5683,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "0cabc906606c7b749f8a7324729ae08cebb27ad83f09acaccfaeaee81a7e0e66",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-filmin-movies.f5cb375c",
+      "legacy_id": "streaming-08871-2bf5b2c048dd",
+      "job_sha256": "f42a1e6cc361219eb647ba032636ccb4429e63d5ddbf99b1efe5e0e5897f3fec",
+      "source": {
+        "definition_line": 5684,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "c63856a18a04934b02012f172459075781ee54fc17073a08ac91001f50756f19",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-funimation-movies.9f5ba198",
+      "legacy_id": "streaming-08872-5fe036b84b93",
+      "job_sha256": "7505c7f5bec56d9aecb90a688314c8915d2aa6311ad57f8d984a9282fc8abee2",
+      "source": {
+        "definition_line": 5685,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "b7e87e0b179d25d2d105727143c7c2652b079dbb6c4aeeb9ed72720d6ccb646b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-hayu-movies.bd6609dd",
+      "legacy_id": "streaming-08873-a471f3430fd9",
+      "job_sha256": "e4272bfcb745a322340c379f1f013bad05f8d631d8540c078b53045aeb4975f3",
+      "source": {
+        "definition_line": 5686,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "e66496b50096d4b37f3e942131ed8ad2425455c94eea2644ac6dcc59b7514879",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-hbo-max-movies.147561da",
+      "legacy_id": "streaming-08874-2b0369717f50",
+      "job_sha256": "6a3f3e874054d961736121bc34f1cae461e5f10375fd617981a9a50b378297b7",
+      "source": {
+        "definition_line": 5687,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "5aaedc5df3705210ab06c47bd2fd684e7c513589c680dbd6dba17ef04c2576a4",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-hulu-movies.030dc016",
+      "legacy_id": "streaming-08875-4dbd37c1dff8",
+      "job_sha256": "677b8b113286c93d58fa2535e0abcb4a52acdf2283a4db116bae84608db71e4c",
+      "source": {
+        "definition_line": 5688,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "47b8efe4753b23851ea835de7f6d44effc8ac116baf1568fdea7af81b1e03548",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-itvx-movies.799640c0",
+      "legacy_id": "streaming-08876-8ba821a8d748",
+      "job_sha256": "520c05f0aa554a4079c6d63e070b546dd44d41ac5be8041933bbddca48096a3d",
+      "source": {
+        "definition_line": 5689,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "c2654c669e6c597779cfd04ff11ae7c1a9cdfc88c50f7e5d8100432a8646b915",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-max-movies.115a8665",
+      "legacy_id": "streaming-08877-9b9eb0cff9d9",
+      "job_sha256": "80f9b0e393a459f275c6b31805e76f3e50d7191e06f5b846a7c94c7a17690e37",
+      "source": {
+        "definition_line": 5690,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "1850fc8fa56c86c90f02104cf870aa5556ce75cabd227ce3649b431dd2a1cc4e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-movistar-plus-movies.ee941a05",
+      "legacy_id": "streaming-08878-46dedeec02c7",
+      "job_sha256": "0c068707647329e36e442f749f7b79d6abb446052cdac4ab0a0a5fd385377e2f",
+      "source": {
+        "definition_line": 5691,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "0ec9038c1a1b1981a119a22fdb82209d6714a9bbcef9b840cbaa7d9fdffe3ac8",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-mubi-movies.f3d717a9",
+      "legacy_id": "streaming-08879-d31b4b0f379f",
+      "job_sha256": "3c00c4cb0028912f3f99f0ab588ac87184d047aa272773d7ef5e4c3a362838ae",
+      "source": {
+        "definition_line": 5692,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "632a643936c91529f1b6fdfe0b7c90868f703f66a78407afec813239b2a5e910",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-my-5-movies.49e1351d",
+      "legacy_id": "streaming-08880-fc5f404952ad",
+      "job_sha256": "f0e5389d9d0184235b744b503366491f6676a77ecacdf6c4806a854a0053b31c",
+      "source": {
+        "definition_line": 5693,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "b2d0baf118ae367f3ca05282fe9c9df143ff789f3553974ac2950cbceebdea56",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-netflix-movies.4edce05b",
+      "legacy_id": "streaming-08881-ea2c332f997b",
+      "job_sha256": "10a60d377a9010bd53ca5334042c8c0c90de07b62af40f3c42551f10245e08bd",
+      "source": {
+        "definition_line": 5694,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "264ddef771c6c20b708d829c67b0b078f10b4ee857c4af545fa093839511250b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-now-movies.387b548e",
+      "legacy_id": "streaming-08882-f74460b2f92c",
+      "job_sha256": "dcba6be68e6939462e6b503910bc79fba4f722768195a0ce5c1d1223cc7a2980",
+      "source": {
+        "definition_line": 5695,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "65a455d1f45270dcb7444d80231e3b684081ecbe82f9cb7272a1a3cd9850463b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-paramount-movies.1b667fe2",
+      "legacy_id": "streaming-08883-1f64c18e61f3",
+      "job_sha256": "34ce1f61e26538c448409ae49e08e9f1327866550d61b1cc66fd63629388c803",
+      "source": {
+        "definition_line": 5696,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "0c0e10b7bd5d348fbf47a0554f00a3150f8a17af28234b9041a3eae6b1a3f58b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-peacock-movies.c0d1cc15",
+      "legacy_id": "streaming-08884-8e9034777b13",
+      "job_sha256": "c00ac27a5860b16cd4950372d554a0d1331d95543636602a18c6e2372b90bdf3",
+      "source": {
+        "definition_line": 5697,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "6e88c7d87ae8518d8ef92c25dd385ff98d919064afe6802d17a840586c2d73ed",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-prime-video-movies.51fc1cd7",
+      "legacy_id": "streaming-08885-176538f423f0",
+      "job_sha256": "d463dc442e4374f1cb861fe080197b7b050c2efb3983f5c55eb4a08f4f02753f",
+      "source": {
+        "definition_line": 5698,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "82024c630ea42b0ac21ef0251ed53d299ff56015afb75aa60857b62a8f29ab96",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-quibi-movies.764b5144",
+      "legacy_id": "streaming-08886-ea667e0087ce",
+      "job_sha256": "d2a509c4f8f09b874530a3ac8a12b9ce847489b5f377bf8b67b5d6796e1c1186",
+      "source": {
+        "definition_line": 5699,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "714b2daf178a827c871d0e25db70e399a16ddca8a5bdc902bea9308d4d2336bb",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-showtime-movies.af88bbc4",
+      "legacy_id": "streaming-08887-5cbebf8768f6",
+      "job_sha256": "132bc694fa1cfbc7b29403c11948d26adba92d9396f7008774f6672a3c67733e",
+      "source": {
+        "definition_line": 5700,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "7f944fc21072b5703ec44167a8620388250dcdbcdd3dc6e3f98e5d8ef5087097",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-stan-movies.8ac36e57",
+      "legacy_id": "streaming-08888-fe87de773b34",
+      "job_sha256": "07b654fe742637eeaba4e30c9365ab6b36139fa1cac8d9180b470f388c09f921",
+      "source": {
+        "definition_line": 5701,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "a8f1fa7c7bd7b7462de604c0cfc5dc0837efd904c71ca48e495ac6cfc8b0dfa0",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-tubi-movies.9078cf75",
+      "legacy_id": "streaming-08889-71d371425c32",
+      "job_sha256": "4522abd4e89865ccdc00d8f5ca897b59d54b5d5d0982a6852a06fd695221f704",
+      "source": {
+        "definition_line": 5702,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "045f3d3bdb18f86878d1a69af5957729f32f86bf4cdbfdb5f196b85f689f1927",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-youtube-movies.dcddee6b",
+      "legacy_id": "streaming-08890-a61fb8799b8a",
+      "job_sha256": "405167f9e896e2254817be111777f15e2adb29f8c779f9a5816452f2c4fb91fa",
+      "source": {
+        "definition_line": 5703,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "f076a83314ba90ff723bfcbcbc0b28ce080a5812ccd013ca3201fe63f8793c93",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-all-4-shows.34c89982",
+      "legacy_id": "streaming-08891-0be93e17dbfa",
+      "job_sha256": "715f23b11d0633f7d732db1f82c09df090b6bd1f568aeafcf076121bfcac2e2d",
+      "source": {
+        "definition_line": 5704,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "d842473dfc871a565a56c62193640c0a4c7c0bf10ec3414734deac40a35d27d0",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-amc-shows.86c60955",
+      "legacy_id": "streaming-08892-2af227b49169",
+      "job_sha256": "285452f04f06b0abeef4a6e5b4709b90324682fb24898e216e7cbc3c87302993",
+      "source": {
+        "definition_line": 5705,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "9dcd63a5bc3ef31abb189a6c18861962433eb32e91b6357d470e0c2e6ab250ba",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-apple-tv-shows.16facce9",
+      "legacy_id": "streaming-08893-641d843bf43d",
+      "job_sha256": "9a0d487e30af64133668d1e3a394ee9ca051b01e5b9a0029a3fd01a040f2c487",
+      "source": {
+        "definition_line": 5706,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "e5b2e26cad56a1fa73276329ecdfecb702bf4f2b5a05f1b362a4e29b6af107bc",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-apple-tv-shows.183b1dd4",
+      "legacy_id": "streaming-08894-03cfc1091419",
+      "job_sha256": "98eca6c7cc6606bbbfc2d116361521d97d3da97b56343a8334b46bf9bc49fd61",
+      "source": {
+        "definition_line": 5707,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "4afdf860438ff652de12f4d4cdc9c6824933cbd40addc759d2c1d6fb62159578",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-atres-player-shows.58f0efeb",
+      "legacy_id": "streaming-08895-3659347c19a6",
+      "job_sha256": "28eefc766b772b8d8029b0f94965ed3bc1578bc1b83cfac72cc963a719732ad5",
+      "source": {
+        "definition_line": 5708,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "80c3b4e8402816383080d3bc1ec673c6bce0b8bc93503eb2ab337fccf514a2d9",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-bet-shows.e2a9973e",
+      "legacy_id": "streaming-08896-b02db1687922",
+      "job_sha256": "ce4eaf6d150a72b058d3490fa32da3a28d4d82f96665f7027c3640f679f8aea0",
+      "source": {
+        "definition_line": 5709,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "f89939906418d9c31fb5dc5a378400094e37742cf53b46722788d8a242d5a38c",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-britbox-shows.6d827474",
+      "legacy_id": "streaming-08897-320106f8dbd8",
+      "job_sha256": "57c3159f1eac37f23ad81ebcb508dad3fa53809586a50881e5c76f6ee0529403",
+      "source": {
+        "definition_line": 5710,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "aac88117e5981d2073b62d06664d7febf998ad0bdc710740f1a8556f13406a56",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-channel-4-shows.a8d08332",
+      "legacy_id": "streaming-08898-8ec7bdf60b4d",
+      "job_sha256": "96dcc946e92943204d9678b784d4884ba750ee94451cb815a72125eef57f897b",
+      "source": {
+        "definition_line": 5711,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "2ae1b8aad9142c6ba19163144fbeb85f5b29d1d428d04cb6939f58b58f550d18",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-crave-shows.82504ee3",
+      "legacy_id": "streaming-08899-e92cfe3ef55d",
+      "job_sha256": "2450e978fd983e060765a36e888aa7176239dfaf34abbf8124bdfe39233ad943",
+      "source": {
+        "definition_line": 5712,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "80a31e5fbecb2cd0d57bc4a68fe8384f95d0de896e9637214204f160cbf1a5da",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-crunchyroll-shows.2f61d7e3",
+      "legacy_id": "streaming-08900-1c3bd532266f",
+      "job_sha256": "e956645c85b1d322c5358d69e1c8db2268aef33badea962530d537fb1b912b5c",
+      "source": {
+        "definition_line": 5713,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "936c922816c924c39d2642524d2c24e8493595aca29bd349857a83953ee6f909",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-discovery-shows.4f157d64",
+      "legacy_id": "streaming-08901-229acf0d1894",
+      "job_sha256": "e6b36408eab7d1a4aa0ee4db42a425ca57e76fe2c513f2a125123c303d96f391",
+      "source": {
+        "definition_line": 5714,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "b3e80c946f9ccc3af8a89408c939cc6eb68d127c4ebadbc7ce59b0f0d92cb88e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-disney-shows.068f328d",
+      "legacy_id": "streaming-08902-3691e50d34e0",
+      "job_sha256": "031c41949c429d890af39e3ff213825344dde89ee93f3edb47c6e3278e7880fd",
+      "source": {
+        "definition_line": 5715,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "7a3a82f9f4e149311f4a27fbaa6e42b8c0a0d2f1872e1823e8642e52d36c6549",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-filmin-shows.b205c9e7",
+      "legacy_id": "streaming-08903-8eeb72b54172",
+      "job_sha256": "534520a5421b0d9fec1d7e22a51df1a0ad434b1e8015d880b070fe337c641cd0",
+      "source": {
+        "definition_line": 5716,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "7a7a1a5bdf51d2df93f183a0bd4f215b68b31f82f1f283478732b63f7ac75318",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-funimation-shows.f05ace5f",
+      "legacy_id": "streaming-08904-36ceff04bfa4",
+      "job_sha256": "92934da2d4edbec84e2064b5dd39015804c36beea350673d0fa20b6e85c3cffa",
+      "source": {
+        "definition_line": 5717,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "9f7ae73e6f9c3c251ef3e994de6d8cd395c871a8ceec516303de1c99fce002f1",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-hayu-shows.69f6e8cd",
+      "legacy_id": "streaming-08905-b16bb5598b27",
+      "job_sha256": "39d765ea2792c39b59921ca4437a3a6803ecc0cfec2ee5b9dd59540c4f7c965a",
+      "source": {
+        "definition_line": 5718,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "4f6b327e9b042b6a0fbc7de82a626ad5bea1add7dc94f1b07032b753cce11ab3",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-hbo-max-shows.e485fde6",
+      "legacy_id": "streaming-08906-8fc9ab5819ec",
+      "job_sha256": "ce9c52724ebe02ad1f73f9d7cd1de7590e6ac534b1be802fc0dd1370445e1906",
+      "source": {
+        "definition_line": 5719,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "c9b1426a3cc0cc245cd07a262251ac67465a9ea5961ec7d75044e2ef11e84057",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-hulu-shows.535a2b47",
+      "legacy_id": "streaming-08907-d22471b210a6",
+      "job_sha256": "0e96a65b22217d74720c5c5efe70ddf56f1b9dea29ff98843c51d7428e2d7108",
+      "source": {
+        "definition_line": 5720,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "093beec312ff474d5c5a7134583310cab7b21eee846302a335501f03666a2d5d",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-itvx-shows.9339f848",
+      "legacy_id": "streaming-08908-8502132fab91",
+      "job_sha256": "6e9715ff0b8f7a56b5adfaca29be5babf6fc72adbcba4a6260f10e73ef95b4b4",
+      "source": {
+        "definition_line": 5721,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "5cb0dbab4619d07fa3821451e8707685253265692e2fc1ef92cb695ea4debed2",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-max-shows.c118aa5c",
+      "legacy_id": "streaming-08909-b4b9f6508d9c",
+      "job_sha256": "4bcecce01fb6fec297d0d8d80edf19570ba56347b6e956351a1d5bd30ff7c251",
+      "source": {
+        "definition_line": 5722,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "4e6f2f18faf59d0959abf49e9613d670a106412179513c7408e9819a4212558b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-movistar-plus-shows.89adb324",
+      "legacy_id": "streaming-08910-d009846dbe3d",
+      "job_sha256": "d323c42a0b333fca070c70182b88525b305c4901fd75edd227150ac119f672df",
+      "source": {
+        "definition_line": 5723,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "bf1a5378de46212d0164019d35fdaf53cc85c971ab4396ece23a5a693d3797c9",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-mubi-shows.6f4ed626",
+      "legacy_id": "streaming-08911-325d4f13f56f",
+      "job_sha256": "5edae1bc351e391ff49f4f269a89bc2f37f86cae6459b5ad95cc9542457367ad",
+      "source": {
+        "definition_line": 5724,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "9c16bef824320ed579178478a1ce47aa080f113ff84df2942dc6d01fe3e8aff7",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-my-5-shows.2652cbf7",
+      "legacy_id": "streaming-08912-b4d2d4ee3499",
+      "job_sha256": "240632aac347fd258ee6d6281a618cca7cd2be596792cb84a51d6379b7d54286",
+      "source": {
+        "definition_line": 5725,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "77bb22bba32d6702099eee1526f6cf377ca7019d6199e5ccbb27a906386d2689",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-netflix-shows.b3e14aa9",
+      "legacy_id": "streaming-08913-2f4f4a3f1629",
+      "job_sha256": "45c6b3b189bae069aa2647fa29a98c6402be752bb8765640c5aa1478e3216060",
+      "source": {
+        "definition_line": 5726,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "f7d72133177376704e4d81a305269a17c770a01d1d82900fbc3c6ae800b1b80b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-now-shows.b2710141",
+      "legacy_id": "streaming-08914-82f74916d7e3",
+      "job_sha256": "430e8983222d4ea71e39a192cd7d85e30c35bb21b448b429b94b0c10391ceb12",
+      "source": {
+        "definition_line": 5727,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "dfc3129dd56a643ec488ee72b05afdfb97c6c3a7ca4ef24cee4672d9484e74a9",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-paramount-shows.caa4b30d",
+      "legacy_id": "streaming-08915-3d10c8770491",
+      "job_sha256": "dfa873493a49c7f1a56872224ac44985d5203f2e8511f01fc4f35c4e904812c4",
+      "source": {
+        "definition_line": 5728,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "5a67eaf357c9025c7c452e7ab566ed8365f67a3f7a6384f0b323135796eb40d4",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-peacock-shows.8961db85",
+      "legacy_id": "streaming-08916-abb336380971",
+      "job_sha256": "152b3629e4fd8ed11d86eaa58eff188f1c9b6729d8cc8aafa9eaca0b72318177",
+      "source": {
+        "definition_line": 5729,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "5efdd5a966541ca024af981fffc81d2046607a68ffe65601ea0e1164acd1c39e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-prime-video-shows.83e0d54e",
+      "legacy_id": "streaming-08917-2b16cb232481",
+      "job_sha256": "af26272abc82a834d74300bf989779bfac9b8bc73904b0ad830397d5b0779d15",
+      "source": {
+        "definition_line": 5730,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "3d09beb182d6b8299b346bcda76cc725f905f1ab1876da607165af6d8462446e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-quibi-shows.bc9e6d5d",
+      "legacy_id": "streaming-08918-997cb5cce98d",
+      "job_sha256": "f8494103dcfaac6c7d9a968243d147b52a2055ff6f3b1226a43fbdc6a5b0efa0",
+      "source": {
+        "definition_line": 5731,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "c687d026e46bb9ac5e21c35c657cc6ba463a0aced582f0b3fefdda514fcb1db4",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-showtime-shows.a4f4b048",
+      "legacy_id": "streaming-08919-a87cff8b39be",
+      "job_sha256": "504c80001d4c42ad26fd8002d95da3a5d34a1f7fd875cf22c1875e1655ead982",
+      "source": {
+        "definition_line": 5732,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "8663a0852cb7dfae75a782dcc25721efb761a7540a4a4371a97bb1e674aba159",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-stan-shows.5a82f321",
+      "legacy_id": "streaming-08920-9fa041ca0a48",
+      "job_sha256": "16c0d75c1650303c4dfa453a0e52115e3b90b9f2f88df41a3b3d3adc1fd54389",
+      "source": {
+        "definition_line": 5733,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "b8cded0cb3234df8051eeb2e9a3f1cd25c6570c7b9aa0aee26a920ff043dd5ae",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-tubi-shows.00ac44e4",
+      "legacy_id": "streaming-08921-34e8fef206bf",
+      "job_sha256": "513334518fa4bd662ca0b5f65808249d6b8cfa3044605efe77fc44e28c486b63",
+      "source": {
+        "definition_line": 5734,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "86b5b3a8dfc0b4e091262396547a9c6bab7b8f29125cdff4d8117595947d19ca",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-youtube-shows.4d33b856",
+      "legacy_id": "streaming-08922-21dcf5c391b2",
+      "job_sha256": "2842d8c20efd501ccdbdde34471a107e6b8dce7f267294738d6001531ef6b6cf",
+      "source": {
+        "definition_line": 5735,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "93cf343516be0bdfddad62df64be9dc32cc6ec8409b020f8f25c4db8909b7b74",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-all-4-originals.efb31935",
+      "legacy_id": "streaming-08923-bcafb43d1623",
+      "job_sha256": "a193ae7616e43d0fb3508982028f7ad16237bff9397200ea8528d14e7e6b814e",
+      "source": {
+        "definition_line": 5736,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "c2282609dfd0138fc332b2dc1ff7a13af5d5a71178b1b514b31c45c2948986df",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-amc-originals.25720bf8",
+      "legacy_id": "streaming-08924-f58de8650352",
+      "job_sha256": "d6d30871079f709a574ea2860aaf61ffff35131b7ed854e8f725eb33adb4761c",
+      "source": {
+        "definition_line": 5737,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "d4299a22beb46c541bccb9c41f5ebb19c8e8d192e93f306a30811110de3babb4",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-apple-tv-originals.26154a3d",
+      "legacy_id": "streaming-08925-1be85b4ca5f5",
+      "job_sha256": "10c02b1af87f07c273797606621867512ef1413a5a0215349e428e0fa054d114",
+      "source": {
+        "definition_line": 5738,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "19e00c65526e6a1f41936cfbcf5859d1819acbdf59064f51c9459546c1d40eac",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-apple-tv-originals.0ebb2d2e",
+      "legacy_id": "streaming-08926-e28adfdb7c73",
+      "job_sha256": "6de736c803b979302d4e5d12e0c1c370b684250f60a8ab3565c54ddbe84a57b0",
+      "source": {
+        "definition_line": 5739,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "61cf98bc80e5e2694f15131efee043bd883b42946211314c6ff9ff32c44eec8e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-atres-player-originals.c783fd46",
+      "legacy_id": "streaming-08927-c79f7636737f",
+      "job_sha256": "56aa79f5145aa6290b954cf6166d44119ad0421a2f264ccd5adf934a40efe7e7",
+      "source": {
+        "definition_line": 5740,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "6bb473e9d5d0fe2de338600a8bb196d3105635a507c0571a6f4ede6db9fddd0b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-bet-originals.52bf4cf3",
+      "legacy_id": "streaming-08928-2ec2cda420e3",
+      "job_sha256": "dcbafbef761634490cfb26fe9fab3ce361cb65b653b2798e6808ce9d315cf6b4",
+      "source": {
+        "definition_line": 5741,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "05368c543ab84f851d45037aa5417df3621654a73450abce27f7d87cf448ff19",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-britbox-originals.f02a00f5",
+      "legacy_id": "streaming-08929-0de6d0186a81",
+      "job_sha256": "53daff275b637519c280eb5aff81af49a70800d30927c50d2cb14f778ee99cd4",
+      "source": {
+        "definition_line": 5742,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "9b3e193accea8981152b03b8c96b5a62b02be499cab7a74df6e902f4630e2c93",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-channel-4-originals.e484361a",
+      "legacy_id": "streaming-08930-cbd19444ecb0",
+      "job_sha256": "99b94b50b0b06da85322970d8ff00c669a6101c256e03114e54932593f6f773b",
+      "source": {
+        "definition_line": 5743,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "3071998504b005af0b34d1053ec1c07a2d6134fd2a84de0324a1d1e885d3020c",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-crave-originals.36a628ab",
+      "legacy_id": "streaming-08931-5a3e5e3d3176",
+      "job_sha256": "ff2db6eb6c4a452f8d82a824855f1e21954b86c509bf19c89ab0182f5aa4b183",
+      "source": {
+        "definition_line": 5744,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "fd6680eede992ff333f4fc1815d5bb0b941326ae611dcd020a4f700364950a12",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-crunchyroll-originals.bd9774cf",
+      "legacy_id": "streaming-08932-7e055169975b",
+      "job_sha256": "c72b22623f4436d11a76b4ec8f49fd6facf24b7efc2ff1715a7168d7e724c960",
+      "source": {
+        "definition_line": 5745,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "76700a2de83bdf683f4130309832e330d68bbddb560d43388b5f520d3d2d5916",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-discovery-originals.b6010d05",
+      "legacy_id": "streaming-08933-4cca58a60344",
+      "job_sha256": "34e5aacb7689860e7df5088e6de2dda34d8575766775bbed4796593658dccd58",
+      "source": {
+        "definition_line": 5746,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "501ae004d816bcbcc3a9809786564f7701bea89fed6ff538eb540f1869af7ce7",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-disney-originals.40b10c4d",
+      "legacy_id": "streaming-08934-50eb703e1d40",
+      "job_sha256": "26e07d1ccd472f0251291999a68462c9ec8239a88bca4aa06a1186cccf1c4964",
+      "source": {
+        "definition_line": 5747,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "e2c28606b2557c3ac009b5c74d0706555791651d53577472125b7a1b618d7a30",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-filmin-originals.d57ef299",
+      "legacy_id": "streaming-08935-0b1c601e7e14",
+      "job_sha256": "41b2328dda420f61ef13d45f981ca094cf981067351bb43258b6162ea0cac6e6",
+      "source": {
+        "definition_line": 5748,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "4e518b3d7120684d008a6d879f6da318ef8c7291ee6de19aa94fd98605755534",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-funimation-originals.a0b36dbd",
+      "legacy_id": "streaming-08936-c750c92d3b04",
+      "job_sha256": "d495af376177a7527a642d8ab806b0d0f142d36a03ddd1879394dacdf3ec2742",
+      "source": {
+        "definition_line": 5749,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "a1cd988db40a1cca011222170c49f2f72fe3fc764c936136ab4bd150412b2519",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-hayu-originals.884c11e3",
+      "legacy_id": "streaming-08937-6f2b070f9c11",
+      "job_sha256": "830ca524c8bbd3ef7599c33f56014923ca3a5b9b812e6fe53355711df252e6a3",
+      "source": {
+        "definition_line": 5750,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "8c435f870660ab77df34af0ac3faa24ef6c2346401e77244cf4bc952c65964f4",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-hbo-max-originals.1949713b",
+      "legacy_id": "streaming-08938-0f61ad3f4430",
+      "job_sha256": "6e3575a382bf40d6ced49438d1cfcc6196cf5429229d0a46c014778d9226ef28",
+      "source": {
+        "definition_line": 5751,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "cacc0da1cea01945b5c19786fca860faafcfa2708576a95d2373841c43bc3d28",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-hulu-originals.961b6b54",
+      "legacy_id": "streaming-08939-5c037e2f12c3",
+      "job_sha256": "0ad81cc566c62ec6ba376c5fe5efafbac4ea331545ef71ea1118740e96fdffe8",
+      "source": {
+        "definition_line": 5752,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "e7473bf58ccf96f2c2ecaa3a1dc07507236ae5395091178611fa1cc063bbe765",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-itvx-originals.1e6de710",
+      "legacy_id": "streaming-08940-36c655b4b866",
+      "job_sha256": "465ebc270e4e4e2ca51f41062fb2f48ee6c4bda609e6a3376304af54372a12ea",
+      "source": {
+        "definition_line": 5753,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "933bc2e85a93347c62a6dba597ec739e6e459290e3e461d9684f644fef1a1d95",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-max-originals.44e38f57",
+      "legacy_id": "streaming-08941-8efb1441f026",
+      "job_sha256": "48e4744fb36debeebdf6702f0e0da9d79f8e439a4d0ccf252827dec24b5b1049",
+      "source": {
+        "definition_line": 5754,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "99c9f7855c92fea574c5b3381a1003523f6d9ffe2abe548e0b450d436b50babe",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-movistar-plus-originals.5216c0f2",
+      "legacy_id": "streaming-08942-39553d90617a",
+      "job_sha256": "888cf39d2a00655b325849a86cba9e2eb8bc373724af3bde66c6ad9e0adbbe46",
+      "source": {
+        "definition_line": 5755,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "637fdab90a22012931294cec4370291d0732bfd15e06f1d3a1e216f11d21cb89",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-mubi-originals.74e7693e",
+      "legacy_id": "streaming-08943-3a779534143f",
+      "job_sha256": "40532c6779e27617e5a6addb230ba893da0f1f7fefc80cb067fa4f5b020390ad",
+      "source": {
+        "definition_line": 5756,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "ac9b8c4c5fcf0daf8c76289b2cfdc9f3713a2b9c01e208e86fd947d56996d4b8",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-my-5-originals.c8593b17",
+      "legacy_id": "streaming-08944-24e3d56cd204",
+      "job_sha256": "583778d698b1fa9501a29fc0bc3ece127f761521f109aa841b96a73e69533959",
+      "source": {
+        "definition_line": 5757,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "b6152d26000d979cd649f0339d60e863102943bb1de8f29f0546a66082da9eab",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-netflix-originals.4e12551b",
+      "legacy_id": "streaming-08945-9c3642818c87",
+      "job_sha256": "a401f7c443b423871b52d9f153dd36892f4c321844bd848eab0a574eb4b8b576",
+      "source": {
+        "definition_line": 5758,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "2c351daf183fa619833f71a16b203d3b39581a97c1d89b0a5b7ea68b65d0e91c",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-now-originals.761c6a70",
+      "legacy_id": "streaming-08946-cdb427516dfb",
+      "job_sha256": "60b5c0d587fca3d497b731bcd46996230f8b6edf624a0c91453cf22ab6f38d4a",
+      "source": {
+        "definition_line": 5759,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "8dc0b4d47574968f1d74dcf5c8ea1aa70652e54700477f06497c1872d3fee8ce",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-paramount-originals.8e53b653",
+      "legacy_id": "streaming-08947-9a7063d187e7",
+      "job_sha256": "52d069b62ebf75b4c0d8a7aaf4c5ae2ad0c7ad8d15cb85abe04050446dba3c93",
+      "source": {
+        "definition_line": 5760,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "f18b668eddfd526e4bde93702e0fb93505670aa63aeb2c35cfc62a13532ec6a0",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-peacock-originals.bd0c3935",
+      "legacy_id": "streaming-08948-168659480767",
+      "job_sha256": "de1345cd4b10ac0e247570724d3ed9dbbfbb4e69ecea80d06eb5d7921a122ab0",
+      "source": {
+        "definition_line": 5761,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "386a05b923496f08e1cfe297f46899146916030551d0bf64a4d033d2a3ad3003",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-prime-video-originals.14f8eb14",
+      "legacy_id": "streaming-08949-110dedd8c033",
+      "job_sha256": "7c94158af00a11007a08aa41b814c222e79237338c207afde770c89ba145feff",
+      "source": {
+        "definition_line": 5762,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "ecdd508a5482eef9c686ec4e8097ae87f8963717e9bda06baeb9f92233f510ce",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-quibi-originals.290253a4",
+      "legacy_id": "streaming-08950-b558fe549079",
+      "job_sha256": "7fdf9b65dfc126fe099440d16b3288fed43d44852552c5c5404a3086b1bf0d0e",
+      "source": {
+        "definition_line": 5763,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "0dc09694317597761a7001d912b644a6cd8a542a8d39fa33e5e940f380c8904e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-showtime-originals.34f0f1f5",
+      "legacy_id": "streaming-08951-88a5e3da58b1",
+      "job_sha256": "e323537c49ca4ceadf0088fc6d048c62d2bfee17d3ce7023655177f63f451c2b",
+      "source": {
+        "definition_line": 5764,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "6b57e90fad61d6ced830e5d2d28e562260ee95b490f17348da09a14b661b71af",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-stan-originals.fb2b4a46",
+      "legacy_id": "streaming-08952-808257acd03a",
+      "job_sha256": "c7570696c82cc53e6107e0c340e93f7d0ceee234ccdc496cbf8782342d16cf02",
+      "source": {
+        "definition_line": 5765,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "e28bca5a3e45cc6d320c9c07043d26f0ef968f3c197fc4a12c95d80abb1b7e0a",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-tubi-originals.d8ca90ed",
+      "legacy_id": "streaming-08953-59fa4adb462b",
+      "job_sha256": "0e533fcd3dfc319e05e4950a9571566ef79124de5d143dc66ce3ccdadce8ccc7",
+      "source": {
+        "definition_line": 5766,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "cabf69b9c3bfb7f845d611d3d76dccd2fd1f31977a6e321e9d3e8ffa73970e56",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "streaming.streaming-white-youtube-originals.65c78e6e",
+      "legacy_id": "streaming-08954-02f219105fd1",
+      "job_sha256": "d845ca95eb5ec1bdeed8a33e2cc3975d80f4161425b167c660e611dd464c10c4",
+      "source": {
+        "definition_line": 5767,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5795
+      },
+      "row_sha256": "60a1f6d8845c2c641874617dc503cb6d7b24d6070923376439699b9f9ca87d44",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    }
+  ],
+  "retired": []
+}

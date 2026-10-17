@@ -1,0 +1,504 @@
+schema_version: 1
+category: Universe
+definitions:
+- extends: legacy-poster
+  id: universe.universe-askew.5471da5b
+  category: Universe
+  display_name: askew
+  source:
+    path: create_default_posters.ps1
+    line: 6639
+    row_sha256: 9114b2dfb9f2277d5b7d76930684415696cad1b2ab36ecb186d349c1805a630d
+  composer:
+    base_color: '#0F66AD'
+    logo: logos_universe/askew.png
+    logo_resize: 1800
+    out_name: askew
+  output:
+    directory: universe
+    filename: askew.jpg
+    remote_paths:
+      en: universe/askew.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-askew.5471da5b.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-avp.c7e5e4ca
+  category: Universe
+  display_name: avp
+  source:
+    path: create_default_posters.ps1
+    line: 6640
+    row_sha256: c5dc30f69c670c5f2c0b551743697f0778a18f1c9543c76dedb39c49a6dbe166
+  composer:
+    base_color: '#2FC926'
+    logo: logos_universe/avp.png
+    logo_resize: 1800
+    out_name: avp
+  output:
+    directory: universe
+    filename: avp.jpg
+    remote_paths:
+      en: universe/avp.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-avp.c7e5e4ca.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-arrow.b2770f83
+  category: Universe
+  display_name: arrow
+  source:
+    path: create_default_posters.ps1
+    line: 6641
+    row_sha256: c362d82668d2c7d761bafcc3f821524b9e23febf245f9882abc4121cb733f962
+  composer:
+    base_color: '#03451A'
+    logo: logos_universe/arrow.png
+    logo_resize: 1800
+    out_name: arrow
+  output:
+    directory: universe
+    filename: arrow.jpg
+    remote_paths:
+      en: universe/arrow.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-arrow.b2770f83.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-conjuring.a80ae997
+  category: Universe
+  display_name: conjuring
+  source:
+    path: create_default_posters.ps1
+    line: 6642
+    row_sha256: e11f3a69342977f7b03ee3e42038d451029089d71ad98169be172bd6d7d2b731
+  composer:
+    base_color: '#8A2939'
+    logo: logos_universe/conjuring.png
+    logo_resize: 1800
+    out_name: conjuring
+  output:
+    directory: universe
+    filename: conjuring.jpg
+    remote_paths:
+      en: universe/conjuring.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-conjuring.a80ae997.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-dca.50894de6
+  category: Universe
+  display_name: dca
+  source:
+    path: create_default_posters.ps1
+    line: 6643
+    row_sha256: 96a9c8bba68bef81ef0c8df5b7089ba60b1ca56de85305ab554a4fc7acfb3b29
+  composer:
+    base_color: '#2832C5'
+    logo: logos_universe/dca.png
+    logo_resize: 1800
+    out_name: dca
+  output:
+    directory: universe
+    filename: dca.jpg
+    remote_paths:
+      en: universe/dca.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-dca.50894de6.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-dceu.c62b064c
+  category: Universe
+  display_name: dceu
+  source:
+    path: create_default_posters.ps1
+    line: 6644
+    row_sha256: fc0cbd9bf4f32adf4fa038685f5d27fd8976940751edd53c3af990d5941faa21
+  composer:
+    base_color: '#2832C6'
+    logo: logos_universe/dceu.png
+    logo_resize: 1800
+    out_name: dceu
+  output:
+    directory: universe
+    filename: dceu.jpg
+    remote_paths:
+      en: universe/dceu.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-dceu.c62b064c.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-dcu.10a78b46
+  category: Universe
+  display_name: dcu
+  source:
+    path: create_default_posters.ps1
+    line: 6645
+    row_sha256: f67f6d6020e13d9a4e7c1fdcffc39b9be742319e0969c040ca16d26d9efae2be
+  composer:
+    base_color: '#2832C4'
+    logo: logos_universe/dcu.png
+    logo_resize: 1500
+    out_name: dcu
+  output:
+    directory: universe
+    filename: dcu.jpg
+    remote_paths:
+      en: universe/dcu.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-dcu.10a78b46.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-fast.afcce74c
+  category: Universe
+  display_name: fast
+  source:
+    path: create_default_posters.ps1
+    line: 6646
+    row_sha256: 663b90474c1516a47d04fa9e7beef289def44273e68187990fe5a0336467f818
+  composer:
+    base_color: '#7F1FC8'
+    logo: logos_universe/fast.png
+    logo_resize: 1800
+    out_name: fast
+  output:
+    directory: universe
+    filename: fast.jpg
+    remote_paths:
+      en: universe/fast.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-fast.afcce74c.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-marvel.e2145583
+  category: Universe
+  display_name: marvel
+  source:
+    path: create_default_posters.ps1
+    line: 6647
+    row_sha256: 29ebf0b2fa37a950dc28502dc1f69e490baaa7f72f0d7a50cdc8ab91ef2fb57f
+  composer:
+    base_color: '#ED171F'
+    logo: logos_universe/marvel.png
+    logo_resize: 1800
+    out_name: marvel
+  output:
+    directory: universe
+    filename: marvel.jpg
+    remote_paths:
+      en: universe/marvel.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-marvel.e2145583.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-mcu.a4a73d83
+  category: Universe
+  display_name: mcu
+  source:
+    path: create_default_posters.ps1
+    line: 6648
+    row_sha256: 5377bedfed55680d9c170a341db489bb6673fd2f78b4ed98005edc11d9c5cfbc
+  composer:
+    base_color: '#C62D21'
+    logo: logos_universe/mcu.png
+    logo_resize: 1800
+    out_name: mcu
+  output:
+    directory: universe
+    filename: mcu.jpg
+    remote_paths:
+      en: universe/mcu.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-mcu.a4a73d83.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-middle.6cf1ce7e
+  category: Universe
+  display_name: middle
+  source:
+    path: create_default_posters.ps1
+    line: 6649
+    row_sha256: b17d2e632804a6735c30ef686f9379d344010dccf80d7655e3ae42b7d158586a
+  composer:
+    base_color: '#D79C2B'
+    logo: logos_universe/middle.png
+    logo_resize: 1800
+    out_name: middle
+  output:
+    directory: universe
+    filename: middle.jpg
+    remote_paths:
+      en: universe/middle.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-middle.6cf1ce7e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-monsterverse.299f1ce5
+  category: Universe
+  display_name: monsterverse
+  source:
+    path: create_default_posters.ps1
+    line: 6650
+    row_sha256: 2644cae1bd6091a6e8a345af30d6abdc9d199d780629be13f9982ac92f0ebd67
+  composer:
+    base_color: '#016A15'
+    logo: logos_universe/monsterverse.png
+    logo_resize: 1800
+    out_name: monsterverse
+    white_wash: false
+  output:
+    directory: universe
+    filename: monsterverse.jpg
+    remote_paths:
+      en: universe/monsterverse.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-monsterverse.299f1ce5.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-mummy.e893b1bd
+  category: Universe
+  display_name: mummy
+  source:
+    path: create_default_posters.ps1
+    line: 6651
+    row_sha256: cc1e687823d157692db38f3b2b0b1e25d94eb1cae8cdb2f143047e7f8631af9f
+  composer:
+    base_color: '#DBA02F'
+    logo: logos_universe/mummy.png
+    logo_resize: 1800
+    out_name: mummy
+  output:
+    directory: universe
+    filename: mummy.jpg
+    remote_paths:
+      en: universe/mummy.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-mummy.e893b1bd.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-rocky.739526c5
+  category: Universe
+  display_name: rocky
+  source:
+    path: create_default_posters.ps1
+    line: 6652
+    row_sha256: 3e9646fb5f35b6263878ecde1a35bfc449925050bae6435b9cadcdabd7f8b440
+  composer:
+    base_color: '#CC1F10'
+    logo: logos_universe/rocky.png
+    logo_resize: 1800
+    out_name: rocky
+  output:
+    directory: universe
+    filename: rocky.jpg
+    remote_paths:
+      en: universe/rocky.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-rocky.739526c5.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-star.a2517fdc
+  category: Universe
+  display_name: star
+  source:
+    path: create_default_posters.ps1
+    line: 6653
+    row_sha256: e2a1f0af0ff2fbfb2e517f489d12c9f695158c570403d22df4477ae9112ae86d
+  composer:
+    base_color: '#FFD64F'
+    logo: logos_universe/star.png
+    logo_resize: 1800
+    out_name: star
+  output:
+    directory: universe
+    filename: star.jpg
+    remote_paths:
+      en: universe/star.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-star.a2517fdc.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-star-1.c61d4636
+  category: Universe
+  display_name: star (1)
+  source:
+    path: create_default_posters.ps1
+    line: 6654
+    row_sha256: 3ad6e1fd57287fad0418c54b8afaf92368ad090ec96a3ebbb8f0fa973df129cd
+  composer:
+    base_color: '#F2DC1D'
+    logo: logos_universe/star (1).png
+    logo_resize: 1800
+    out_name: star (1)
+  output:
+    directory: universe
+    filename: star (1).jpg
+    remote_paths:
+      en: universe/star (1).jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-star-1.c61d4636.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-starsky.2565efbb
+  category: Universe
+  display_name: starsky
+  source:
+    path: create_default_posters.ps1
+    line: 6655
+    row_sha256: c1819926b8920707945f32b9e149f71da9afada167c9e9fc57a9967a853f7ea5
+  composer:
+    base_color: '#0595FB'
+    logo: logos_universe/starsky.png
+    logo_resize: 1800
+    out_name: starsky
+  output:
+    directory: universe
+    filename: starsky.jpg
+    remote_paths:
+      en: universe/starsky.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-starsky.2565efbb.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-trek.a1e1446d
+  category: Universe
+  display_name: trek
+  source:
+    path: create_default_posters.ps1
+    line: 6656
+    row_sha256: 54152a5388d963500c70fac76827863cf0e6aa5808e7413ff4044da941c6cc81
+  composer:
+    base_color: '#ffe15f'
+    logo: logos_universe/trek.png
+    logo_resize: 1800
+    out_name: trek
+  output:
+    directory: universe
+    filename: trek.jpg
+    remote_paths:
+      en: universe/trek.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-trek.a1e1446d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-wizard.c3cef0a9
+  category: Universe
+  display_name: wizard
+  source:
+    path: create_default_posters.ps1
+    line: 6657
+    row_sha256: 4d37da6ed7bcad95662ecf256da5ec8832001d9452c343e8622022e07440e6b3
+  composer:
+    base_color: '#878536'
+    logo: logos_universe/wizard.png
+    logo_resize: 1800
+    out_name: wizard
+  output:
+    directory: universe
+    filename: wizard.jpg
+    remote_paths:
+      en: universe/wizard.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-wizard.c3cef0a9.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: universe.universe-xmen.46751fc2
+  category: Universe
+  display_name: xmen
+  source:
+    path: create_default_posters.ps1
+    line: 6658
+    row_sha256: 70cf8e7973710c8d29882307a78a377b2616caad0fca5a4a9fe8ccefcaed006d
+  composer:
+    base_color: '#636363'
+    logo: logos_universe/xmen.png
+    logo_resize: 1800
+    out_name: xmen
+  output:
+    directory: universe
+    filename: xmen.jpg
+    remote_paths:
+      en: universe/xmen.jpg
+  generator: null
+  color_assignment:
+    id: universe.universe-xmen.46751fc2.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null

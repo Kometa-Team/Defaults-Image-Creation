@@ -1,0 +1,2968 @@
+schema_version: 1
+category: Franchise
+definitions:
+- extends: legacy-poster
+  id: franchise.franchise-spartacus.01bcc280
+  category: Franchise
+  display_name: Spartacus
+  source:
+    path: create_default_posters.ps1
+    line: 4489
+    row_sha256: 1ed7630a7382de449a427b5a6756067b1812bb71c023f0ff143d42737499adf0
+  composer:
+    base_color: '#6558B8'
+    logo: logos_franchise/Spartacus.png
+    logo_resize: 1600
+    out_name: Spartacus
+    white_wash: false
+  output:
+    directory: franchise
+    filename: Spartacus.jpg
+    remote_paths:
+      en: franchise/Spartacus.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-spartacus.01bcc280.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-reacher.95f21e9f
+  category: Franchise
+  display_name: Reacher
+  source:
+    path: create_default_posters.ps1
+    line: 4490
+    row_sha256: 358cf25442595e6dc896b3ca085fcf77303e3c8537ed5d296f4bbe3433f72b3c
+  composer:
+    base_color: '#4E0345'
+    logo: logos_franchise/Reacher.png
+    logo_resize: 1600
+    out_name: Reacher
+    white_wash: false
+  output:
+    directory: franchise
+    filename: Reacher.jpg
+    remote_paths:
+      en: franchise/Reacher.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-reacher.95f21e9f.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-inspector-morse.004a087c
+  category: Franchise
+  display_name: Inspector Morse
+  source:
+    path: create_default_posters.ps1
+    line: 4491
+    row_sha256: 85d08226e3528fd0b472bb5555bf006a1559467fc2aeeb1a47941db5e9b1b63c
+  composer:
+    base_color: '#30FA20'
+    logo: logos_franchise/Inspector Morse.png
+    logo_resize: 1600
+    out_name: Inspector Morse
+    white_wash: false
+  output:
+    directory: franchise
+    filename: Inspector Morse.jpg
+    remote_paths:
+      en: franchise/Inspector Morse.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-inspector-morse.004a087c.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-father-brown.4a26f656
+  category: Franchise
+  display_name: Father Brown
+  source:
+    path: create_default_posters.ps1
+    line: 4492
+    row_sha256: 2aa363b3cfff1fd4e311e64ee162d1b544840b3b753126fbbfd6725f89080b29
+  composer:
+    base_color: '#825445'
+    logo: logos_franchise/Father Brown.png
+    logo_resize: 1600
+    out_name: Father Brown
+    white_wash: false
+  output:
+    directory: franchise
+    filename: Father Brown.jpg
+    remote_paths:
+      en: franchise/Father Brown.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-father-brown.4a26f656.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-death-in-paradise-2011.e5339def
+  category: Franchise
+  display_name: Death in Paradise (2011)
+  source:
+    path: create_default_posters.ps1
+    line: 4493
+    row_sha256: 540a6b163e5ee4755e63efc9949ce61339cdd9c3fa43b813dc3abda589d75e40
+  composer:
+    base_color: '#9034AF'
+    logo: logos_franchise/Death in Paradise (2011).png
+    logo_resize: 1600
+    out_name: Death in Paradise (2011)
+    white_wash: false
+  output:
+    directory: franchise
+    filename: Death in Paradise (2011).jpg
+    remote_paths:
+      en: franchise/Death in Paradise (2011).jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-death-in-paradise-2011.e5339def.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-john-wick.608715da
+  category: Franchise
+  display_name: John Wick
+  source:
+    path: create_default_posters.ps1
+    line: 4494
+    row_sha256: bbd861584d10f46148dec4f365d62e6d6d152666c79aa359fcc4f2faea2a9a5b
+  composer:
+    base_color: '#1A1F2B'
+    logo: logos_franchise/John Wick.png
+    logo_resize: 1600
+    out_name: John Wick
+    white_wash: false
+  output:
+    directory: franchise
+    filename: John Wick.jpg
+    remote_paths:
+      en: franchise/John Wick.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-john-wick.608715da.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-john-wick2.6da235fa
+  category: Franchise
+  display_name: John Wick2
+  source:
+    path: create_default_posters.ps1
+    line: 4495
+    row_sha256: 5fb690dfbf702c207bdaa7637c6af799a66d87d8c1d4185421783a112c06e233
+  composer:
+    base_color: '#1A1F2B'
+    logo: logos_franchise/John Wick2.png
+    logo_resize: 1600
+    out_name: John Wick2
+    white_wash: false
+  output:
+    directory: franchise
+    filename: John Wick2.jpg
+    remote_paths:
+      en: franchise/John Wick2.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-john-wick2.6da235fa.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-bosch.05307794
+  category: Franchise
+  display_name: Bosch
+  source:
+    path: create_default_posters.ps1
+    line: 4496
+    row_sha256: 417053dbf7aef895f58f00c0d718111dba63e680ba16d4877a895df1afda7e82
+  composer:
+    base_color: '#2C2C2C'
+    logo: logos_franchise/Bosch.png
+    logo_resize: 1600
+    out_name: Bosch
+    white_wash: false
+  output:
+    directory: franchise
+    filename: Bosch.jpg
+    remote_paths:
+      en: franchise/Bosch.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-bosch.05307794.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-hellboy.9b3b389c
+  category: Franchise
+  display_name: Hellboy
+  source:
+    path: create_default_posters.ps1
+    line: 4497
+    row_sha256: be8ebecef85c2920d0707c1b42652da0c8e9a3542060f9c252853547310fc67f
+  composer:
+    base_color: '#601C1C'
+    logo: logos_franchise/Hellboy.png
+    logo_resize: 1600
+    out_name: Hellboy
+    white_wash: false
+  output:
+    directory: franchise
+    filename: Hellboy.jpg
+    remote_paths:
+      en: franchise/Hellboy.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-hellboy.9b3b389c.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-robocop.079b602d
+  category: Franchise
+  display_name: RoboCop
+  source:
+    path: create_default_posters.ps1
+    line: 4498
+    row_sha256: 6391a096abeee4af679398a9f44e564d18d10976b2fa04256b48431557d35601
+  composer:
+    base_color: '#1A2639'
+    logo: logos_franchise/RoboCop.png
+    logo_resize: 1600
+    out_name: RoboCop
+    white_wash: false
+  output:
+    directory: franchise
+    filename: RoboCop.jpg
+    remote_paths:
+      en: franchise/RoboCop.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-robocop.079b602d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-28-days-weeks-later.ef9f23c8
+  category: Franchise
+  display_name: 28 Days Weeks Later
+  source:
+    path: create_default_posters.ps1
+    line: 4499
+    row_sha256: 010aac06d65a5ec18e830607cae115e1701d8663af86a1d2e3ae27149c673293
+  composer:
+    base_color: '#B93033'
+    logo: logos_franchise/28 Days Weeks Later.png
+    logo_resize: 1600
+    out_name: 28 Days Weeks Later
+    white_wash: false
+  output:
+    directory: franchise
+    filename: 28 Days Weeks Later.jpg
+    remote_paths:
+      en: franchise/28 Days Weeks Later.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-28-days-weeks-later.ef9f23c8.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-power.cd51a6b5
+  category: Franchise
+  display_name: Power
+  source:
+    path: create_default_posters.ps1
+    line: 4500
+    row_sha256: bb84c957f77ff64c64dabb332972410475a74306fb325116f373943e39468854
+  composer:
+    base_color: '#63E2C5'
+    logo: logos_franchise/Power.png
+    logo_resize: 1600
+    out_name: Power
+    white_wash: false
+  output:
+    directory: franchise
+    filename: Power.jpg
+    remote_paths:
+      en: franchise/Power.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-power.cd51a6b5.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-game-of-thrones.2a6e1294
+  category: Franchise
+  display_name: Game of Thrones
+  source:
+    path: create_default_posters.ps1
+    line: 4501
+    row_sha256: 7d2b073862048cb521ab4d4285754002c25554215af9117f58a878e9f4b8306c
+  composer:
+    base_color: '#25972E'
+    logo: logos_franchise/Game of Thrones.png
+    logo_resize: 1600
+    out_name: Game of Thrones
+    white_wash: false
+  output:
+    directory: franchise
+    filename: Game of Thrones.jpg
+    remote_paths:
+      en: franchise/Game of Thrones.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-game-of-thrones.2a6e1294.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-9-1-1.baa7affb
+  category: Franchise
+  display_name: 9-1-1
+  source:
+    path: create_default_posters.ps1
+    line: 4502
+    row_sha256: 297feabd2c167ce5775aca32c4af3ac96f9dfea3fe8f2ab00802ed7f1fdd344d
+  composer:
+    base_color: '#C62B2B'
+    logo: logos_franchise/9-1-1.png
+    logo_resize: 1600
+    out_name: 9-1-1
+  output:
+    directory: franchise
+    filename: 9-1-1.jpg
+    remote_paths:
+      en: franchise/9-1-1.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-9-1-1.baa7affb.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-a-nightmare-on-elm-street.9b8e42ba
+  category: Franchise
+  display_name: A Nightmare on Elm Street
+  source:
+    path: create_default_posters.ps1
+    line: 4503
+    row_sha256: 035367e48ff089d545f5faac80874ffcfa2896ae63566b063f8243cb8915f87d
+  composer:
+    base_color: '#BE3C3E'
+    logo: logos_franchise/A Nightmare on Elm Street.png
+    logo_resize: 1600
+    out_name: A Nightmare on Elm Street
+  output:
+    directory: franchise
+    filename: A Nightmare on Elm Street.jpg
+    remote_paths:
+      en: franchise/A Nightmare on Elm Street.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-a-nightmare-on-elm-street.9b8e42ba.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-alien-predator.54f5113e
+  category: Franchise
+  display_name: Alien Predator
+  source:
+    path: create_default_posters.ps1
+    line: 4504
+    row_sha256: 07ed7d3da939a810d557266fe0ee07be9f16aa47f12567d52d47207d9cf17e2b
+  composer:
+    base_color: '#1EAC1B'
+    logo: logos_franchise/Alien Predator.png
+    logo_resize: 1600
+    out_name: Alien Predator
+  output:
+    directory: franchise
+    filename: Alien Predator.jpg
+    remote_paths:
+      en: franchise/Alien Predator.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-alien-predator.54f5113e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-alien.f5932699
+  category: Franchise
+  display_name: Alien
+  source:
+    path: create_default_posters.ps1
+    line: 4505
+    row_sha256: 582aa0cc6af16853589bdda2045269a0ee6561330a0165303d5f0095c222e500
+  composer:
+    base_color: '#18BC56'
+    logo: logos_franchise/Alien.png
+    logo_resize: 1600
+    out_name: Alien
+  output:
+    directory: franchise
+    filename: Alien.jpg
+    remote_paths:
+      en: franchise/Alien.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-alien.f5932699.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-american-pie.80d27367
+  category: Franchise
+  display_name: American Pie
+  source:
+    path: create_default_posters.ps1
+    line: 4506
+    row_sha256: 3eddef34805163e2e292ead39185d3b9cb45efb1c5ba26008fea3a05e46b9c37
+  composer:
+    base_color: '#C24940'
+    logo: logos_franchise/American Pie.png
+    logo_resize: 1600
+    out_name: American Pie
+  output:
+    directory: franchise
+    filename: American Pie.jpg
+    remote_paths:
+      en: franchise/American Pie.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-american-pie.80d27367.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-anaconda.a27b54c4
+  category: Franchise
+  display_name: Anaconda
+  source:
+    path: create_default_posters.ps1
+    line: 4507
+    row_sha256: 72c18a60fa32c03181ac73a1ab9a1cd2996c6b33f3822d9f0eee8bffe2cdbde5
+  composer:
+    base_color: '#A42E2D'
+    logo: logos_franchise/Anaconda.png
+    logo_resize: 1600
+    out_name: Anaconda
+  output:
+    directory: franchise
+    filename: Anaconda.jpg
+    remote_paths:
+      en: franchise/Anaconda.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-anaconda.a27b54c4.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-angels-in-the.75d46005
+  category: Franchise
+  display_name: Angels In The
+  source:
+    path: create_default_posters.ps1
+    line: 4508
+    row_sha256: 0a6612f677e306a0b1b07550bc214cd1458ac639606d3d5b49e185e88596e781
+  composer:
+    base_color: '#4869BD'
+    logo: logos_franchise/Angels In The.png
+    logo_resize: 1600
+    out_name: Angels In The
+  output:
+    directory: franchise
+    filename: Angels In The.jpg
+    remote_paths:
+      en: franchise/Angels In The.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-angels-in-the.75d46005.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-appleseed.153cbc70
+  category: Franchise
+  display_name: Appleseed
+  source:
+    path: create_default_posters.ps1
+    line: 4509
+    row_sha256: 2f3284c305b899fbeb779e2bdd4655a523b81235605f0eebe95b2bb259656b9c
+  composer:
+    base_color: '#986E22'
+    logo: logos_franchise/Appleseed.png
+    logo_resize: 1600
+    out_name: Appleseed
+  output:
+    directory: franchise
+    filename: Appleseed.jpg
+    remote_paths:
+      en: franchise/Appleseed.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-appleseed.153cbc70.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-archie-comics.973dd4de
+  category: Franchise
+  display_name: Archie Comics
+  source:
+    path: create_default_posters.ps1
+    line: 4510
+    row_sha256: 184b7eeca7a835030ba2a8a8168d5a7b0b385c60b441f96dd4d39acde8013c5d
+  composer:
+    base_color: '#DFB920'
+    logo: logos_franchise/Archie Comics.png
+    logo_resize: 1600
+    out_name: Archie Comics
+  output:
+    directory: franchise
+    filename: Archie Comics.jpg
+    remote_paths:
+      en: franchise/Archie Comics.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-archie-comics.973dd4de.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-arrowverse.25e978aa
+  category: Franchise
+  display_name: Arrowverse
+  source:
+    path: create_default_posters.ps1
+    line: 4511
+    row_sha256: 221e6d484bfd2027e552517c3dd0b81ff24797ac36dca1059a6a1f02734bceb3
+  composer:
+    base_color: '#2B8F40'
+    logo: logos_franchise/Arrowverse.png
+    logo_resize: 1600
+    out_name: Arrowverse
+  output:
+    directory: franchise
+    filename: Arrowverse.jpg
+    remote_paths:
+      en: franchise/Arrowverse.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-arrowverse.25e978aa.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-barbershop.94a90fe3
+  category: Franchise
+  display_name: Barbershop
+  source:
+    path: create_default_posters.ps1
+    line: 4512
+    row_sha256: a3acab858eaf70d07c20d13e902855e24e6b25b1635d226e41abac2c1aeb4f9e
+  composer:
+    base_color: '#2399AF'
+    logo: logos_franchise/Barbershop.png
+    logo_resize: 1600
+    out_name: Barbershop
+  output:
+    directory: franchise
+    filename: Barbershop.jpg
+    remote_paths:
+      en: franchise/Barbershop.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-barbershop.94a90fe3.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-batman.63e2f2d5
+  category: Franchise
+  display_name: Batman
+  source:
+    path: create_default_posters.ps1
+    line: 4513
+    row_sha256: 2c09f58251601a8ca40b4e34ad8b49e82178182a7d485b2ea16c28a62f897efe
+  composer:
+    base_color: '#525252'
+    logo: logos_franchise/Batman.png
+    logo_resize: 1600
+    out_name: Batman
+  output:
+    directory: franchise
+    filename: Batman.jpg
+    remote_paths:
+      en: franchise/Batman.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-batman.63e2f2d5.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-bourne.32197673
+  category: Franchise
+  display_name: Bourne
+  source:
+    path: create_default_posters.ps1
+    line: 4514
+    row_sha256: 3228cc96f148d15d57a85fbb5162eb7a282a838d42d92df15290d2d25248b14e
+  composer:
+    base_color: '#383838'
+    logo: logos_franchise/Bourne.png
+    logo_resize: 1600
+    out_name: Bourne
+    white_wash: false
+  output:
+    directory: franchise
+    filename: Bourne.jpg
+    remote_paths:
+      en: franchise/Bourne.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-bourne.32197673.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-charlie-brown.cbe021bf
+  category: Franchise
+  display_name: Charlie Brown
+  source:
+    path: create_default_posters.ps1
+    line: 4515
+    row_sha256: bced4a3f85a054845fd34bb9026fa6c067e0e8b74fbf0a17758c49747171a01c
+  composer:
+    base_color: '#C8BF2B'
+    logo: logos_franchise/Charlie Brown.png
+    logo_resize: 1600
+    out_name: Charlie Brown
+  output:
+    directory: franchise
+    filename: Charlie Brown.jpg
+    remote_paths:
+      en: franchise/Charlie Brown.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-charlie-brown.cbe021bf.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-cloverfield.379b4284
+  category: Franchise
+  display_name: Cloverfield
+  source:
+    path: create_default_posters.ps1
+    line: 4516
+    row_sha256: 9468e33b66e75d006d9823f5998cf01167351b04277527603af790e31719e6ea
+  composer:
+    base_color: '#0E1672'
+    logo: logos_franchise/Cloverfield.png
+    logo_resize: 1600
+    out_name: Cloverfield
+  output:
+    directory: franchise
+    filename: Cloverfield.jpg
+    remote_paths:
+      en: franchise/Cloverfield.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-cloverfield.379b4284.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-cornetto-trilogy.64c0807f
+  category: Franchise
+  display_name: Cornetto Trilogy
+  source:
+    path: create_default_posters.ps1
+    line: 4517
+    row_sha256: 92127b8033446146a98ad1ae61884196e9fa8c02a6d4003b4b17f2cc584afaa7
+  composer:
+    base_color: '#6C9134'
+    logo: logos_franchise/Cornetto Trilogy.png
+    logo_resize: 1600
+    out_name: Cornetto Trilogy
+  output:
+    directory: franchise
+    filename: Cornetto Trilogy.jpg
+    remote_paths:
+      en: franchise/Cornetto Trilogy.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-cornetto-trilogy.64c0807f.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-csi.b4b6612e
+  category: Franchise
+  display_name: CSI
+  source:
+    path: create_default_posters.ps1
+    line: 4518
+    row_sha256: 7b2fa75450dae588d6d7075b89fa3fb3523d65a816d90746b21f6eba00fa1a7d
+  composer:
+    base_color: '#969322'
+    logo: logos_franchise/CSI.png
+    logo_resize: 1600
+    out_name: CSI
+  output:
+    directory: franchise
+    filename: CSI.jpg
+    remote_paths:
+      en: franchise/CSI.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-csi.b4b6612e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-dc-super-hero-girls.ee422b1d
+  category: Franchise
+  display_name: DC Super Hero Girls
+  source:
+    path: create_default_posters.ps1
+    line: 4519
+    row_sha256: be303f75e790be53c1a48725d41b31ccfce3e681c10311f8b0432d62bb4b6061
+  composer:
+    base_color: '#299CB1'
+    logo: logos_franchise/DC Super Hero Girls.png
+    logo_resize: 1600
+    out_name: DC Super Hero Girls
+  output:
+    directory: franchise
+    filename: DC Super Hero Girls.jpg
+    remote_paths:
+      en: franchise/DC Super Hero Girls.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-dc-super-hero-girls.ee422b1d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-dc-universe.9077f353
+  category: Franchise
+  display_name: DC Universe
+  source:
+    path: create_default_posters.ps1
+    line: 4520
+    row_sha256: 2ddd5de5d8a402e05ec88f598085a201a455e959b08ed88a2e214d69b43e4a89
+  composer:
+    base_color: '#213DB6'
+    logo: logos_franchise/DC Universe.png
+    logo_resize: 1600
+    out_name: DC Universe
+  output:
+    directory: franchise
+    filename: DC Universe.jpg
+    remote_paths:
+      en: franchise/DC Universe.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-dc-universe.9077f353.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-deadpool.efd33582
+  category: Franchise
+  display_name: Deadpool
+  source:
+    path: create_default_posters.ps1
+    line: 4521
+    row_sha256: a742a47920a00b650f75663f43294443e0cc365680a2a9260c990b8dd4c40df0
+  composer:
+    base_color: '#BD393C'
+    logo: logos_franchise/Deadpool.png
+    logo_resize: 1600
+    out_name: Deadpool
+  output:
+    directory: franchise
+    filename: Deadpool.jpg
+    remote_paths:
+      en: franchise/Deadpool.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-deadpool.efd33582.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-despicable-me.d810da61
+  category: Franchise
+  display_name: Despicable Me
+  source:
+    path: create_default_posters.ps1
+    line: 4522
+    row_sha256: 6f6573e284a5a30ed32e8f2e9144c2dd137a0b47410a57812be2bfb32bb1469e
+  composer:
+    base_color: '#C77344'
+    logo: logos_franchise/Despicable Me.png
+    logo_resize: 1600
+    out_name: Despicable Me
+  output:
+    directory: franchise
+    filename: Despicable Me.jpg
+    remote_paths:
+      en: franchise/Despicable Me.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-despicable-me.d810da61.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-doctor-who.7fc76271
+  category: Franchise
+  display_name: Doctor Who
+  source:
+    path: create_default_posters.ps1
+    line: 4523
+    row_sha256: 69a8c1cfb371063b688c30a3171e77b334358c8466881b3a6dee5efdccf1c4f6
+  composer:
+    base_color: '#1C38B4'
+    logo: logos_franchise/Doctor Who.png
+    logo_resize: 1600
+    out_name: Doctor Who
+  output:
+    directory: franchise
+    filename: Doctor Who.jpg
+    remote_paths:
+      en: franchise/Doctor Who.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-doctor-who.7fc76271.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-escape-from.9c76f3ed
+  category: Franchise
+  display_name: Escape From
+  source:
+    path: create_default_posters.ps1
+    line: 4524
+    row_sha256: 8963bbf1267acb027c781ed84125e4b4e6fc795aacf38d758e07768c2370d760
+  composer:
+    base_color: '#B82026'
+    logo: logos_franchise/Escape From.png
+    logo_resize: 1600
+    out_name: Escape From
+  output:
+    directory: franchise
+    filename: Escape From.jpg
+    remote_paths:
+      en: franchise/Escape From.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-escape-from.9c76f3ed.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-fantastic-beasts.4dee9ee6
+  category: Franchise
+  display_name: Fantastic Beasts
+  source:
+    path: create_default_posters.ps1
+    line: 4525
+    row_sha256: 70353f1fd736932ab74819caa8fb4d4d660a80096fb7160a8277bda6fbc5e511
+  composer:
+    base_color: '#9E972B'
+    logo: logos_franchise/Fantastic Beasts.png
+    logo_resize: 1600
+    out_name: Fantastic Beasts
+  output:
+    directory: franchise
+    filename: Fantastic Beasts.jpg
+    remote_paths:
+      en: franchise/Fantastic Beasts.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-fantastic-beasts.4dee9ee6.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-fast-furious.4aada360
+  category: Franchise
+  display_name: Fast & Furious
+  source:
+    path: create_default_posters.ps1
+    line: 4526
+    row_sha256: 9d9e30935dd9b3932b2a39b4f61cda734f97e30306aa0f8f37acf2ac89dddd45
+  composer:
+    base_color: '#8432C4'
+    logo: logos_franchise/Fast & Furious.png
+    logo_resize: 1600
+    out_name: Fast & Furious
+  output:
+    directory: franchise
+    filename: Fast & Furious.jpg
+    remote_paths:
+      en: franchise/Fast & Furious.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-fast-furious.4aada360.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-fbi.f21c3866
+  category: Franchise
+  display_name: FBI
+  source:
+    path: create_default_posters.ps1
+    line: 4527
+    row_sha256: e964d52b57f85952171991838d8282c156545629ba32b71017c2b1e5939e2db4
+  composer:
+    base_color: '#FFD32C'
+    logo: logos_franchise/FBI.png
+    logo_resize: 1600
+    out_name: FBI
+  output:
+    directory: franchise
+    filename: FBI.jpg
+    remote_paths:
+      en: franchise/FBI.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-fbi.f21c3866.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-final-fantasy.d4eb6eda
+  category: Franchise
+  display_name: Final Fantasy
+  source:
+    path: create_default_posters.ps1
+    line: 4528
+    row_sha256: 98848404119a43c06a07256701d42da234d28768dd4a66d2d52a40c01812e818
+  composer:
+    base_color: '#86969F'
+    logo: logos_franchise/Final Fantasy.png
+    logo_resize: 1600
+    out_name: Final Fantasy
+  output:
+    directory: franchise
+    filename: Final Fantasy.jpg
+    remote_paths:
+      en: franchise/Final Fantasy.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-final-fantasy.d4eb6eda.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-friday-the-13th.0fdaa3d5
+  category: Franchise
+  display_name: Friday the 13th
+  source:
+    path: create_default_posters.ps1
+    line: 4529
+    row_sha256: b4c64f7c404e7f9f37ffd44291d99adfb1e0c67e10b2e743965bd6f9ab94afe8
+  composer:
+    base_color: '#B9242A'
+    logo: logos_franchise/Friday the 13th.png
+    logo_resize: 1600
+    out_name: Friday the 13th
+  output:
+    directory: franchise
+    filename: Friday the 13th.jpg
+    remote_paths:
+      en: franchise/Friday the 13th.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-friday-the-13th.0fdaa3d5.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-frozen.8b6a73c8
+  category: Franchise
+  display_name: Frozen
+  source:
+    path: create_default_posters.ps1
+    line: 4530
+    row_sha256: dbec90efcf542d3c2485934ac4b464a6c719ca06d53355e91fa4ffc8e69cbf74
+  composer:
+    base_color: '#2A5994'
+    logo: logos_franchise/Frozen.png
+    logo_resize: 1600
+    out_name: Frozen
+  output:
+    directory: franchise
+    filename: Frozen.jpg
+    remote_paths:
+      en: franchise/Frozen.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-frozen.8b6a73c8.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-garfield.3c1e2555
+  category: Franchise
+  display_name: Garfield
+  source:
+    path: create_default_posters.ps1
+    line: 4531
+    row_sha256: 3bcd4fd66a7f3cf3ea84c261ea35cf194f5dcd966713a80ae42851ec631c7af6
+  composer:
+    base_color: '#C28117'
+    logo: logos_franchise/Garfield.png
+    logo_resize: 1600
+    out_name: Garfield
+  output:
+    directory: franchise
+    filename: Garfield.jpg
+    remote_paths:
+      en: franchise/Garfield.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-garfield.3c1e2555.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-ghostbusters.39dba724
+  category: Franchise
+  display_name: Ghostbusters
+  source:
+    path: create_default_posters.ps1
+    line: 4532
+    row_sha256: 4dd2a3c1e32d0bb155757e19850093cd1e66ddbb9021a4af3f63a1fd324f1a64
+  composer:
+    base_color: '#414141'
+    logo: logos_franchise/Ghostbusters.png
+    logo_resize: 1600
+    out_name: Ghostbusters
+  output:
+    directory: franchise
+    filename: Ghostbusters.jpg
+    remote_paths:
+      en: franchise/Ghostbusters.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-ghostbusters.39dba724.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-godzilla-heisei.ded5486e
+  category: Franchise
+  display_name: Godzilla (Heisei)
+  source:
+    path: create_default_posters.ps1
+    line: 4533
+    row_sha256: fd1474a1dc2383b030b7f78b25704b4565dbefe1a737f169f1f89ab609cec2fd
+  composer:
+    base_color: '#BFB330'
+    logo: logos_franchise/Godzilla (Heisei).png
+    logo_resize: 1600
+    out_name: Godzilla (Heisei)
+  output:
+    directory: franchise
+    filename: Godzilla (Heisei).jpg
+    remote_paths:
+      en: franchise/Godzilla (Heisei).jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-godzilla-heisei.ded5486e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-godzilla-showa.29a42054
+  category: Franchise
+  display_name: Godzilla (Showa)
+  source:
+    path: create_default_posters.ps1
+    line: 4534
+    row_sha256: 35c0e00a020a1a1d47bf746cfc3232ee9f417a13070f671a56dd198d009cb7de
+  composer:
+    base_color: '#BDB12A'
+    logo: logos_franchise/Godzilla (Showa).png
+    logo_resize: 1600
+    out_name: Godzilla (Showa)
+  output:
+    directory: franchise
+    filename: Godzilla (Showa).jpg
+    remote_paths:
+      en: franchise/Godzilla (Showa).jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-godzilla-showa.29a42054.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-godzilla.772fd74c
+  category: Franchise
+  display_name: Godzilla
+  source:
+    path: create_default_posters.ps1
+    line: 4535
+    row_sha256: f97a3aa80248f882ca874835d4a03ddd5116ad54659793a845d52a6bd09241aa
+  composer:
+    base_color: '#B82737'
+    logo: logos_franchise/Godzilla.png
+    logo_resize: 1600
+    out_name: Godzilla
+  output:
+    directory: franchise
+    filename: Godzilla.jpg
+    remote_paths:
+      en: franchise/Godzilla.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-godzilla.772fd74c.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-halloween.06521065
+  category: Franchise
+  display_name: Halloween
+  source:
+    path: create_default_posters.ps1
+    line: 4536
+    row_sha256: 1b7a8d79988923810ceb483908836620178093526e5e4349a7b730d600bd4929
+  composer:
+    base_color: '#BB2D22'
+    logo: logos_franchise/Halloween.png
+    logo_resize: 1600
+    out_name: Halloween
+  output:
+    directory: franchise
+    filename: Halloween.jpg
+    remote_paths:
+      en: franchise/Halloween.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-halloween.06521065.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-halo.17f46414
+  category: Franchise
+  display_name: Halo
+  source:
+    path: create_default_posters.ps1
+    line: 4537
+    row_sha256: 39672b47cdd3dfa745375bfb5eb9978e859f2e9cd2cd8c77c7bc4da20ab40218
+  composer:
+    base_color: '#556A92'
+    logo: logos_franchise/Halo.png
+    logo_resize: 1600
+    out_name: Halo
+  output:
+    directory: franchise
+    filename: Halo.jpg
+    remote_paths:
+      en: franchise/Halo.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-halo.17f46414.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-hannibal-lecter.112c884e
+  category: Franchise
+  display_name: Hannibal Lecter
+  source:
+    path: create_default_posters.ps1
+    line: 4538
+    row_sha256: 06dc3768ce5f291c91410fe9e13fa0705ea7d89ef24f5efb0fa932420dfc59eb
+  composer:
+    base_color: '#383838'
+    logo: logos_franchise/Hannibal Lecter.png
+    logo_resize: 1600
+    out_name: Hannibal Lecter
+  output:
+    directory: franchise
+    filename: Hannibal Lecter.jpg
+    remote_paths:
+      en: franchise/Hannibal Lecter.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-hannibal-lecter.112c884e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-harry-potter.12344fb9
+  category: Franchise
+  display_name: Harry Potter
+  source:
+    path: create_default_posters.ps1
+    line: 4539
+    row_sha256: 4082e84c3c08fe75fe8c1d1f90ec1f730ee1902511286955a1acb387e77a866a
+  composer:
+    base_color: '#9D9628'
+    logo: logos_franchise/Harry Potter.png
+    logo_resize: 1600
+    out_name: Harry Potter
+  output:
+    directory: franchise
+    filename: Harry Potter.jpg
+    remote_paths:
+      en: franchise/Harry Potter.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-harry-potter.12344fb9.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-has-fallen.971af7c8
+  category: Franchise
+  display_name: Has Fallen
+  source:
+    path: create_default_posters.ps1
+    line: 4540
+    row_sha256: 1c7af3c21f5dc2074422f756cfd7704c58d10d4932b151070e12c6c514ec6fdd
+  composer:
+    base_color: '#3B3B3B'
+    logo: logos_franchise/Has Fallen.png
+    logo_resize: 1600
+    out_name: Has Fallen
+  output:
+    directory: franchise
+    filename: Has Fallen.jpg
+    remote_paths:
+      en: franchise/Has Fallen.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-has-fallen.971af7c8.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-ice-age.870ec843
+  category: Franchise
+  display_name: Ice Age
+  source:
+    path: create_default_posters.ps1
+    line: 4541
+    row_sha256: 530d8685550b2b8186dae12112fd0d72a911f295c3f6fde94803ba3fbebf87ca
+  composer:
+    base_color: '#5EA0BB'
+    logo: logos_franchise/Ice Age.png
+    logo_resize: 1600
+    out_name: Ice Age
+  output:
+    directory: franchise
+    filename: Ice Age.jpg
+    remote_paths:
+      en: franchise/Ice Age.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-ice-age.870ec843.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-in-association-with-marvel.2a800bac
+  category: Franchise
+  display_name: In Association with Marvel
+  source:
+    path: create_default_posters.ps1
+    line: 4542
+    row_sha256: 50c9062bf6af93549487106a427efac53cab110c328ab2c172776de98cff87c2
+  composer:
+    base_color: '#C42424'
+    logo: logos_franchise/In Association with Marvel.png
+    logo_resize: 1600
+    out_name: In Association with Marvel
+  output:
+    directory: franchise
+    filename: In Association with Marvel.jpg
+    remote_paths:
+      en: franchise/In Association with Marvel.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-in-association-with-marvel.2a800bac.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-indiana-jones.2d434499
+  category: Franchise
+  display_name: Indiana Jones
+  source:
+    path: create_default_posters.ps1
+    line: 4543
+    row_sha256: d27a967988907ff40fa9ccf09e8ca08c0182bcd3e70c94f04e357663d0926bd0
+  composer:
+    base_color: '#D97724'
+    logo: logos_franchise/Indiana Jones.png
+    logo_resize: 1600
+    out_name: Indiana Jones
+  output:
+    directory: franchise
+    filename: Indiana Jones.jpg
+    remote_paths:
+      en: franchise/Indiana Jones.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-indiana-jones.2d434499.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-ip-man.f4eef708
+  category: Franchise
+  display_name: IP Man
+  source:
+    path: create_default_posters.ps1
+    line: 4544
+    row_sha256: 9b57d61dbb609b1b129ffca6d573635dadb96b4e3d25428f103c155c92f661ce
+  composer:
+    base_color: '#8D7E63'
+    logo: logos_franchise/IP Man.png
+    logo_resize: 1600
+    out_name: IP Man
+    white_wash: false
+  output:
+    directory: franchise
+    filename: IP Man.jpg
+    remote_paths:
+      en: franchise/IP Man.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-ip-man.f4eef708.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-james-bond-007.6b7d0ab8
+  category: Franchise
+  display_name: James Bond 007
+  source:
+    path: create_default_posters.ps1
+    line: 4545
+    row_sha256: c970709150d087323b9a8d93444841453745eed27a504578f4ed6d448f84fbce
+  composer:
+    base_color: '#414141'
+    logo: logos_franchise/James Bond 007.png
+    logo_resize: 1600
+    out_name: James Bond 007
+  output:
+    directory: franchise
+    filename: James Bond 007.jpg
+    remote_paths:
+      en: franchise/James Bond 007.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-james-bond-007.6b7d0ab8.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-jurassic-park.6ce728ac
+  category: Franchise
+  display_name: Jurassic Park
+  source:
+    path: create_default_posters.ps1
+    line: 4546
+    row_sha256: af3c4b201f6cde12ed7eb39466f1e1a3c940168d8a5f8e12ac164e1925c820c9
+  composer:
+    base_color: '#902E32'
+    logo: logos_franchise/Jurassic Park.png
+    logo_resize: 1600
+    out_name: Jurassic Park
+  output:
+    directory: franchise
+    filename: Jurassic Park.jpg
+    remote_paths:
+      en: franchise/Jurassic Park.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-jurassic-park.6ce728ac.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-karate-kid.5d44caee
+  category: Franchise
+  display_name: Karate Kid
+  source:
+    path: create_default_posters.ps1
+    line: 4547
+    row_sha256: 7feed5eff42282fc569028a1f7b33628a0788997f83fbf92b96acab1a0f4deb6
+  composer:
+    base_color: '#AC6822'
+    logo: logos_franchise/Karate Kid.png
+    logo_resize: 1600
+    out_name: Karate Kid
+  output:
+    directory: franchise
+    filename: Karate Kid.jpg
+    remote_paths:
+      en: franchise/Karate Kid.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-karate-kid.5d44caee.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-law-order.698b49f1
+  category: Franchise
+  display_name: Law & Order
+  source:
+    path: create_default_posters.ps1
+    line: 4548
+    row_sha256: 05e15e2d277117c6e45c69f01b42c19fc09cbdcfea4821a0c4ebaa49a07d8a5b
+  composer:
+    base_color: '#5B87AB'
+    logo: logos_franchise/Law & Order.png
+    logo_resize: 1600
+    out_name: Law & Order
+  output:
+    directory: franchise
+    filename: Law & Order.jpg
+    remote_paths:
+      en: franchise/Law & Order.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-law-order.698b49f1.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-lord-of-the-rings.662eb14f
+  category: Franchise
+  display_name: Lord of the Rings
+  source:
+    path: create_default_posters.ps1
+    line: 4549
+    row_sha256: d1a90953b147f00b09685de116cc2350bc2e891db6ea757a9c3929c0ddf8f069
+  composer:
+    base_color: '#C38B27'
+    logo: logos_franchise/Lord of the Rings.png
+    logo_resize: 1600
+    out_name: Lord of the Rings
+  output:
+    directory: franchise
+    filename: Lord of the Rings.jpg
+    remote_paths:
+      en: franchise/Lord of the Rings.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-lord-of-the-rings.662eb14f.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-madagascar.7e755d69
+  category: Franchise
+  display_name: Madagascar
+  source:
+    path: create_default_posters.ps1
+    line: 4550
+    row_sha256: 35cf65d378ca0b4182cffa8fca9d13de9faeaff5e5282b28d48dfec65378e6fc
+  composer:
+    base_color: '#AD8F27'
+    logo: logos_franchise/Madagascar.png
+    logo_resize: 1600
+    out_name: Madagascar
+  output:
+    directory: franchise
+    filename: Madagascar.jpg
+    remote_paths:
+      en: franchise/Madagascar.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-madagascar.7e755d69.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-marvel-cinematic-universe.cab4d3b3
+  category: Franchise
+  display_name: Marvel Cinematic Universe
+  source:
+    path: create_default_posters.ps1
+    line: 4551
+    row_sha256: 90d115d427d00e40450ed29fbad1047d2542344f0291971f667ac76083813407
+  composer:
+    base_color: '#AD2B2B'
+    logo: logos_franchise/Marvel Cinematic Universe.png
+    logo_resize: 1600
+    out_name: Marvel Cinematic Universe
+  output:
+    directory: franchise
+    filename: Marvel Cinematic Universe.jpg
+    remote_paths:
+      en: franchise/Marvel Cinematic Universe.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-marvel-cinematic-universe.cab4d3b3.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-marx-brothers.22dde88d
+  category: Franchise
+  display_name: Marx Brothers
+  source:
+    path: create_default_posters.ps1
+    line: 4552
+    row_sha256: 60970f7ba9199b6ded1b7977ad8660e73255e9f5219fa4852b0d6231d59a7ff3
+  composer:
+    base_color: '#347294'
+    logo: logos_franchise/Marx Brothers.png
+    logo_resize: 1600
+    out_name: Marx Brothers
+  output:
+    directory: franchise
+    filename: Marx Brothers.jpg
+    remote_paths:
+      en: franchise/Marx Brothers.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-marx-brothers.22dde88d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-middle-earth.d1762912
+  category: Franchise
+  display_name: Middle Earth
+  source:
+    path: create_default_posters.ps1
+    line: 4553
+    row_sha256: c70d471bb5871cf4641afbc65119041bf54b73be379cf3677e21a7572791d8d3
+  composer:
+    base_color: '#C28A25'
+    logo: logos_franchise/Middle Earth.png
+    logo_resize: 1600
+    out_name: Middle Earth
+  output:
+    directory: franchise
+    filename: Middle Earth.jpg
+    remote_paths:
+      en: franchise/Middle Earth.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-middle-earth.d1762912.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-mission-impossible.0ca29070
+  category: Franchise
+  display_name: Mission Impossible
+  source:
+    path: create_default_posters.ps1
+    line: 4554
+    row_sha256: e008429d81f3894394f31d0d0035b6f9e606b6212642079ff0c4951fb666aa6d
+  composer:
+    base_color: '#BF1616'
+    logo: logos_franchise/Mission Impossible.png
+    logo_resize: 1600
+    out_name: Mission Impossible
+  output:
+    directory: franchise
+    filename: Mission Impossible.jpg
+    remote_paths:
+      en: franchise/Mission Impossible.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-mission-impossible.0ca29070.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-monty-python.87abd03d
+  category: Franchise
+  display_name: Monty Python
+  source:
+    path: create_default_posters.ps1
+    line: 4555
+    row_sha256: 35e45058673e56670b0e57745106abdc5c2ecb57de816a47e715fb7eca8a47ce
+  composer:
+    base_color: '#B61C22'
+    logo: logos_franchise/Monty Python.png
+    logo_resize: 1600
+    out_name: Monty Python
+  output:
+    directory: franchise
+    filename: Monty Python.jpg
+    remote_paths:
+      en: franchise/Monty Python.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-monty-python.87abd03d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-mortal-kombat.89a8fc01
+  category: Franchise
+  display_name: Mortal Kombat
+  source:
+    path: create_default_posters.ps1
+    line: 4556
+    row_sha256: 7b43ceddb2ca45beda7fab47f2dfac32daee5e581ea4382ff0d883cc79e118bd
+  composer:
+    base_color: '#BA4D29'
+    logo: logos_franchise/Mortal Kombat.png
+    logo_resize: 1600
+    out_name: Mortal Kombat
+  output:
+    directory: franchise
+    filename: Mortal Kombat.jpg
+    remote_paths:
+      en: franchise/Mortal Kombat.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-mortal-kombat.89a8fc01.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-mothra.00a6ad94
+  category: Franchise
+  display_name: Mothra
+  source:
+    path: create_default_posters.ps1
+    line: 4557
+    row_sha256: 69f1abaea13c8a952d9ae2759e4bda3b64ae4042381910d9c8f743493645e4c2
+  composer:
+    base_color: '#9C742A'
+    logo: logos_franchise/Mothra.png
+    logo_resize: 1600
+    out_name: Mothra
+  output:
+    directory: franchise
+    filename: Mothra.jpg
+    remote_paths:
+      en: franchise/Mothra.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-mothra.00a6ad94.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-ncis.17c4ec7d
+  category: Franchise
+  display_name: NCIS
+  source:
+    path: create_default_posters.ps1
+    line: 4558
+    row_sha256: d934e837c54a83f19db6583003817d46429e03e96befc54129887c799c0ab86c
+  composer:
+    base_color: '#AC605F'
+    logo: logos_franchise/NCIS.png
+    logo_resize: 1600
+    out_name: NCIS
+  output:
+    directory: franchise
+    filename: NCIS.jpg
+    remote_paths:
+      en: franchise/NCIS.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-ncis.17c4ec7d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-one-chicago.d0a63b92
+  category: Franchise
+  display_name: One Chicago
+  source:
+    path: create_default_posters.ps1
+    line: 4559
+    row_sha256: e55319d4106945685fcba7e607875890ad70ffe115602c2242003c8a1545ee72
+  composer:
+    base_color: '#BE7C30'
+    logo: logos_franchise/One Chicago.png
+    logo_resize: 1600
+    out_name: One Chicago
+  output:
+    directory: franchise
+    filename: One Chicago.jpg
+    remote_paths:
+      en: franchise/One Chicago.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-one-chicago.d0a63b92.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-oz.e92b28ef
+  category: Franchise
+  display_name: Oz
+  source:
+    path: create_default_posters.ps1
+    line: 4560
+    row_sha256: 174f0ab83d851dacd626a7f1942fe27069656e81ce18faad077b5c16ab33ad82
+  composer:
+    base_color: '#AD8F27'
+    logo: logos_franchise/Oz.png
+    logo_resize: 1600
+    out_name: Oz
+  output:
+    directory: franchise
+    filename: Oz.jpg
+    remote_paths:
+      en: franchise/Oz.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-oz.e92b28ef.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-pet-sematary.5d09b901
+  category: Franchise
+  display_name: Pet Sematary
+  source:
+    path: create_default_posters.ps1
+    line: 4561
+    row_sha256: 6f92d13b8f8d6a47f970ded2b462533278515f9a8241316c0b6c7ed45e78a74e
+  composer:
+    base_color: '#B71F25'
+    logo: logos_franchise/Pet Sematary.png
+    logo_resize: 1600
+    out_name: Pet Sematary
+  output:
+    directory: franchise
+    filename: Pet Sematary.jpg
+    remote_paths:
+      en: franchise/Pet Sematary.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-pet-sematary.5d09b901.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-pirates-of-the-caribbean.d2510f11
+  category: Franchise
+  display_name: Pirates of the Caribbean
+  source:
+    path: create_default_posters.ps1
+    line: 4562
+    row_sha256: 42a0417b3c34a5d51c7921353f323b1dbbadbab48cc8d47a1c2b97052de7b53d
+  composer:
+    base_color: '#7F6936'
+    logo: logos_franchise/Pirates of the Caribbean.png
+    logo_resize: 1600
+    out_name: Pirates of the Caribbean
+  output:
+    directory: franchise
+    filename: Pirates of the Caribbean.jpg
+    remote_paths:
+      en: franchise/Pirates of the Caribbean.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-pirates-of-the-caribbean.d2510f11.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-planet-of-the-apes.638a944e
+  category: Franchise
+  display_name: Planet of the Apes
+  source:
+    path: create_default_posters.ps1
+    line: 4563
+    row_sha256: 3cfef37443a1c8ad7571fd40f839b34ae6b0008eb8d9d41c1614f43b0f8c745f
+  composer:
+    base_color: '#4E4E4E'
+    logo: logos_franchise/Planet of the Apes.png
+    logo_resize: 1600
+    out_name: Planet of the Apes
+  output:
+    directory: franchise
+    filename: Planet of the Apes.jpg
+    remote_paths:
+      en: franchise/Planet of the Apes.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-planet-of-the-apes.638a944e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-pok-mon.37a4a27c
+  category: Franchise
+  display_name: "Pok\xE9mon"
+  source:
+    path: create_default_posters.ps1
+    line: 4564
+    row_sha256: aa1113b56e03d1fd8d4bc95238f8180e10e1fca446b990500dc5f03925cf7a6c
+  composer:
+    base_color: '#FECA06'
+    logo: "logos_franchise/Pok\xE9mon.png"
+    logo_resize: 1600
+    out_name: "Pok\xE9mon"
+  output:
+    directory: franchise
+    filename: "Pok\xE9mon.jpg"
+    remote_paths:
+      en: "franchise/Pok\xE9mon.jpg"
+  generator: null
+  color_assignment:
+    id: franchise.franchise-pok-mon.37a4a27c.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-power-rangers.5b9a9911
+  category: Franchise
+  display_name: Power Rangers
+  source:
+    path: create_default_posters.ps1
+    line: 4565
+    row_sha256: 6e2d77c1a4502f49eee8651e1e4e4ea52cdcbcfb4bb7571db202220346ba0656
+  composer:
+    base_color: '#24AA60'
+    logo: logos_franchise/Power Rangers.png
+    logo_resize: 1600
+    out_name: Power Rangers
+  output:
+    directory: franchise
+    filename: Power Rangers.jpg
+    remote_paths:
+      en: franchise/Power Rangers.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-power-rangers.5b9a9911.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-pretty-little-liars.f5391109
+  category: Franchise
+  display_name: Pretty Little Liars
+  source:
+    path: create_default_posters.ps1
+    line: 4566
+    row_sha256: 7a646837b7654a8626107105917f081e75ee104a2408f0cf30e0fc769107ad0a
+  composer:
+    base_color: '#BD0F0F'
+    logo: logos_franchise/Pretty Little Liars.png
+    logo_resize: 1600
+    out_name: Pretty Little Liars
+  output:
+    directory: franchise
+    filename: Pretty Little Liars.jpg
+    remote_paths:
+      en: franchise/Pretty Little Liars.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-pretty-little-liars.f5391109.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-resident-evil-biohazard.e5a33a26
+  category: Franchise
+  display_name: Resident Evil Biohazard
+  source:
+    path: create_default_posters.ps1
+    line: 4567
+    row_sha256: 86fdf5cd188a745d11a816b30cab8d2e8a326bf8b615fdc7da8f7088df0620ec
+  composer:
+    base_color: '#930B0B'
+    logo: logos_franchise/Resident Evil Biohazard.png
+    logo_resize: 1600
+    out_name: Resident Evil Biohazard
+  output:
+    directory: franchise
+    filename: Resident Evil Biohazard.jpg
+    remote_paths:
+      en: franchise/Resident Evil Biohazard.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-resident-evil-biohazard.e5a33a26.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-resident-evil.87a471a5
+  category: Franchise
+  display_name: Resident Evil
+  source:
+    path: create_default_posters.ps1
+    line: 4568
+    row_sha256: 4aa649d3b9014f9c68c5775a6cfab20a39ad7ec1048c578cc761afd8bdd80ac2
+  composer:
+    base_color: '#940E0F'
+    logo: logos_franchise/Resident Evil.png
+    logo_resize: 1600
+    out_name: Resident Evil
+  output:
+    directory: franchise
+    filename: Resident Evil.jpg
+    remote_paths:
+      en: franchise/Resident Evil.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-resident-evil.87a471a5.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-rocky-creed.878aba9d
+  category: Franchise
+  display_name: Rocky Creed
+  source:
+    path: create_default_posters.ps1
+    line: 4569
+    row_sha256: 1c03fae5e803b90795faa5ab1a38f27e09d8c8d465de0978343c01f45e211e47
+  composer:
+    base_color: '#C52A2A'
+    logo: logos_franchise/Rocky Creed.png
+    logo_resize: 1600
+    out_name: Rocky Creed
+  output:
+    directory: franchise
+    filename: Rocky Creed.jpg
+    remote_paths:
+      en: franchise/Rocky Creed.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-rocky-creed.878aba9d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-rocky.374d9dab
+  category: Franchise
+  display_name: Rocky
+  source:
+    path: create_default_posters.ps1
+    line: 4570
+    row_sha256: b3981db79637e8a94f1d25928e586ca33ad2827c1825d763fde1e835bbbcbff3
+  composer:
+    base_color: '#C22121'
+    logo: logos_franchise/Rocky.png
+    logo_resize: 1600
+    out_name: Rocky
+  output:
+    directory: franchise
+    filename: Rocky.jpg
+    remote_paths:
+      en: franchise/Rocky.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-rocky.374d9dab.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-rupaul-s-drag-race.e1641df2
+  category: Franchise
+  display_name: RuPaul's Drag Race
+  source:
+    path: create_default_posters.ps1
+    line: 4571
+    row_sha256: 5ef5dded6a7cf83ab30830b888cf150a947c6f4d28645de715a367abc035503f
+  composer:
+    base_color: '#FF5757'
+    logo: logos_franchise/RuPaul's Drag Race.png
+    logo_resize: 1600
+    out_name: RuPaul's Drag Race
+  output:
+    directory: franchise
+    filename: RuPaul's Drag Race.jpg
+    remote_paths:
+      en: franchise/RuPaul's Drag Race.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-rupaul-s-drag-race.e1641df2.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-scooby-doo.617075cb
+  category: Franchise
+  display_name: Scooby-Doo!
+  source:
+    path: create_default_posters.ps1
+    line: 4572
+    row_sha256: 190e3e7ca246786cb5eab6960d38b8f91656045c9d7c7ffde1ed67a49d95ed7b
+  composer:
+    base_color: '#5F3879'
+    logo: logos_franchise/Scooby-Doo!.png
+    logo_resize: 1600
+    out_name: Scooby-Doo!
+  output:
+    directory: franchise
+    filename: Scooby-Doo!.jpg
+    remote_paths:
+      en: franchise/Scooby-Doo!.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-scooby-doo.617075cb.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-shaft.949672ac
+  category: Franchise
+  display_name: Shaft
+  source:
+    path: create_default_posters.ps1
+    line: 4573
+    row_sha256: a9e4f91a6e8a44ff5f0bdd53a0e7cfd9979ae7a595484482a16ad00969bcaf43
+  composer:
+    base_color: '#382637'
+    logo: logos_franchise/Shaft.png
+    logo_resize: 1600
+    out_name: Shaft
+  output:
+    directory: franchise
+    filename: Shaft.jpg
+    remote_paths:
+      en: franchise/Shaft.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-shaft.949672ac.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-shrek.760b44cb
+  category: Franchise
+  display_name: Shrek
+  source:
+    path: create_default_posters.ps1
+    line: 4574
+    row_sha256: 62f4728de40a56c62c2d2c7455f6fa45277396a453a4e26e41af271ff28d8dbd
+  composer:
+    base_color: '#3DB233'
+    logo: logos_franchise/Shrek.png
+    logo_resize: 1600
+    out_name: Shrek
+  output:
+    directory: franchise
+    filename: Shrek.jpg
+    remote_paths:
+      en: franchise/Shrek.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-shrek.760b44cb.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-spider-man.9d960b52
+  category: Franchise
+  display_name: Spider-Man
+  source:
+    path: create_default_posters.ps1
+    line: 4575
+    row_sha256: 364df6d6d11358d2081a1df0d42ae4ce7809c43d1952bac83bf014073673a82d
+  composer:
+    base_color: '#C11B1B'
+    logo: logos_franchise/Spider-Man.png
+    logo_resize: 1600
+    out_name: Spider-Man
+  output:
+    directory: franchise
+    filename: Spider-Man.jpg
+    remote_paths:
+      en: franchise/Spider-Man.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-spider-man.9d960b52.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-star-trek-alternate-reality.00f6638a
+  category: Franchise
+  display_name: Star Trek Alternate Reality
+  source:
+    path: create_default_posters.ps1
+    line: 4576
+    row_sha256: 2f5afa1bb7b6ef8a7b2201d4dcbe068626e61d74aabe5e713d87b79ca241920f
+  composer:
+    base_color: '#C78639'
+    logo: logos_franchise/Star Trek Alternate Reality.png
+    logo_resize: 1600
+    out_name: Star Trek Alternate Reality
+  output:
+    directory: franchise
+    filename: Star Trek Alternate Reality.jpg
+    remote_paths:
+      en: franchise/Star Trek Alternate Reality.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-star-trek-alternate-reality.00f6638a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-star-trek-the-next-generation.84126b95
+  category: Franchise
+  display_name: Star Trek The Next Generation
+  source:
+    path: create_default_posters.ps1
+    line: 4577
+    row_sha256: 0042c7bbbbc08f8a3807e4d3a69761ba67d2171f999d85a204f6fc0920f881d8
+  composer:
+    base_color: '#B7AE4C'
+    logo: logos_franchise/Star Trek The Next Generation.png
+    logo_resize: 1600
+    out_name: Star Trek The Next Generation
+  output:
+    directory: franchise
+    filename: Star Trek The Next Generation.jpg
+    remote_paths:
+      en: franchise/Star Trek The Next Generation.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-star-trek-the-next-generation.84126b95.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-star-trek-the-original-series.4582c2eb
+  category: Franchise
+  display_name: Star Trek The Original Series
+  source:
+    path: create_default_posters.ps1
+    line: 4578
+    row_sha256: e74033069c10e93c3446bc90b48092546d1b39dda2a9190691a205e9475ab43a
+  composer:
+    base_color: '#BB5353'
+    logo: logos_franchise/Star Trek The Original Series.png
+    logo_resize: 1600
+    out_name: Star Trek The Original Series
+  output:
+    directory: franchise
+    filename: Star Trek The Original Series.jpg
+    remote_paths:
+      en: franchise/Star Trek The Original Series.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-star-trek-the-original-series.4582c2eb.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-star-trek.90597f0e
+  category: Franchise
+  display_name: Star Trek
+  source:
+    path: create_default_posters.ps1
+    line: 4579
+    row_sha256: 438192ec94c2cfb7e5e4b8e5db6cbf753f93bfa65b70ffa7a05241010988384f
+  composer:
+    base_color: '#C2A533'
+    logo: logos_franchise/Star Trek.png
+    logo_resize: 1600
+    out_name: Star Trek
+  output:
+    directory: franchise
+    filename: Star Trek.jpg
+    remote_paths:
+      en: franchise/Star Trek.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-star-trek.90597f0e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-star-wars-legends.54b58c9c
+  category: Franchise
+  display_name: Star Wars Legends
+  source:
+    path: create_default_posters.ps1
+    line: 4580
+    row_sha256: ad18047053446f2927ff94873356be621ae35ba651938e66b847e853a7baa831
+  composer:
+    base_color: '#BAA416'
+    logo: logos_franchise/Star Wars Legends.png
+    logo_resize: 1600
+    out_name: Star Wars Legends
+  output:
+    directory: franchise
+    filename: Star Wars Legends.jpg
+    remote_paths:
+      en: franchise/Star Wars Legends.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-star-wars-legends.54b58c9c.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-star-wars-skywalker-saga.dada5b9f
+  category: Franchise
+  display_name: Star Wars Skywalker Saga
+  source:
+    path: create_default_posters.ps1
+    line: 4581
+    row_sha256: 69ab6fcc773d45e45c4b59f055b42ddb9b7f31d7c9e1719953253f5ee144ce56
+  composer:
+    base_color: '#5C5C5C'
+    logo: logos_franchise/Star Wars Skywalker Saga.png
+    logo_resize: 1600
+    out_name: Star Wars Skywalker Saga
+  output:
+    directory: franchise
+    filename: Star Wars Skywalker Saga.jpg
+    remote_paths:
+      en: franchise/Star Wars Skywalker Saga.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-star-wars-skywalker-saga.dada5b9f.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-star-wars.eda4fef2
+  category: Franchise
+  display_name: Star Wars
+  source:
+    path: create_default_posters.ps1
+    line: 4582
+    row_sha256: da91257290f35b1fce1dd1155d87e893e079c569cdbd6b22b32d2cf8aba22f2d
+  composer:
+    base_color: '#C2A21B'
+    logo: logos_franchise/Star Wars.png
+    logo_resize: 1600
+    out_name: Star Wars
+  output:
+    directory: franchise
+    filename: Star Wars.jpg
+    remote_paths:
+      en: franchise/Star Wars.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-star-wars.eda4fef2.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-stargate.e9da6be4
+  category: Franchise
+  display_name: Stargate
+  source:
+    path: create_default_posters.ps1
+    line: 4583
+    row_sha256: cd0a5ae000e825f626f2ee6e75c8c4c8cffa60b1fbb00e75d259f2b5410d7eb4
+  composer:
+    base_color: '#6C73A1'
+    logo: logos_franchise/Stargate.png
+    logo_resize: 1600
+    out_name: Stargate
+  output:
+    directory: franchise
+    filename: Stargate.jpg
+    remote_paths:
+      en: franchise/Stargate.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-stargate.e9da6be4.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-street-fighter.0c2bd192
+  category: Franchise
+  display_name: Street Fighter
+  source:
+    path: create_default_posters.ps1
+    line: 4584
+    row_sha256: f1787ca3a885d8ad19baf1ccaaabbdea7b9b8300f4b4cad8cf0bc7046f3432c5
+  composer:
+    base_color: '#C5873F'
+    logo: logos_franchise/Street Fighter.png
+    logo_resize: 1600
+    out_name: Street Fighter
+  output:
+    directory: franchise
+    filename: Street Fighter.jpg
+    remote_paths:
+      en: franchise/Street Fighter.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-street-fighter.0c2bd192.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-superman.195b62c8
+  category: Franchise
+  display_name: Superman
+  source:
+    path: create_default_posters.ps1
+    line: 4585
+    row_sha256: e9d46ca3c41b72da7e8827b1a1f9344d8bb7ccc7eda7f7c70263ca1fdea3bff7
+  composer:
+    base_color: '#C34544'
+    logo: logos_franchise/Superman.png
+    logo_resize: 1600
+    out_name: Superman
+  output:
+    directory: franchise
+    filename: Superman.jpg
+    remote_paths:
+      en: franchise/Superman.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-superman.195b62c8.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-teenage-mutant-ninja-turtles.a5180667
+  category: Franchise
+  display_name: Teenage Mutant Ninja Turtles
+  source:
+    path: create_default_posters.ps1
+    line: 4586
+    row_sha256: 6238c60f090d769e0661577c375c6356b1f0b00478bb7b2542590b8e602ba8a3
+  composer:
+    base_color: '#78A82E'
+    logo: logos_franchise/Teenage Mutant Ninja Turtles.png
+    logo_resize: 1600
+    out_name: Teenage Mutant Ninja Turtles
+  output:
+    directory: franchise
+    filename: Teenage Mutant Ninja Turtles.jpg
+    remote_paths:
+      en: franchise/Teenage Mutant Ninja Turtles.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-teenage-mutant-ninja-turtles.a5180667.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-the-hunger-games.f6c008be
+  category: Franchise
+  display_name: The Hunger Games
+  source:
+    path: create_default_posters.ps1
+    line: 4587
+    row_sha256: a3dd48fe569c69cd5c469068ae419b9356d06f2ccaa9f5b3af8932afebff5c1e
+  composer:
+    base_color: '#619AB5'
+    logo: logos_franchise/The Hunger Games.png
+    logo_resize: 1600
+    out_name: The Hunger Games
+  output:
+    directory: franchise
+    filename: The Hunger Games.jpg
+    remote_paths:
+      en: franchise/The Hunger Games.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-the-hunger-games.f6c008be.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-the-man-with-no-name.82604835
+  category: Franchise
+  display_name: The Man With No Name
+  source:
+    path: create_default_posters.ps1
+    line: 4588
+    row_sha256: fcc3dc87b2103b358f1da45e4eeb56a23a845fa84aa3362d0d59abde3a9ac3e9
+  composer:
+    base_color: '#9A7B40'
+    logo: logos_franchise/The Man With No Name.png
+    logo_resize: 1600
+    out_name: The Man With No Name
+  output:
+    directory: franchise
+    filename: The Man With No Name.jpg
+    remote_paths:
+      en: franchise/The Man With No Name.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-the-man-with-no-name.82604835.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-the-mummy.7d5130ab
+  category: Franchise
+  display_name: The Mummy
+  source:
+    path: create_default_posters.ps1
+    line: 4589
+    row_sha256: 8874ca71732087d4a766243c59f48781657a3b1e8ef769db084857a43a2d6170
+  composer:
+    base_color: '#C28A25'
+    logo: logos_franchise/The Mummy.png
+    logo_resize: 1600
+    out_name: The Mummy
+  output:
+    directory: franchise
+    filename: The Mummy.jpg
+    remote_paths:
+      en: franchise/The Mummy.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-the-mummy.7d5130ab.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-the-real-housewives.77225e06
+  category: Franchise
+  display_name: The Real Housewives
+  source:
+    path: create_default_posters.ps1
+    line: 4590
+    row_sha256: 84715e643697386f6afb713482fbae9c58a40f22f0c7edc5be9a8a2dab817997
+  composer:
+    base_color: '#400EA4'
+    logo: logos_franchise/The Real Housewives.png
+    logo_resize: 1600
+    out_name: The Real Housewives
+  output:
+    directory: franchise
+    filename: The Real Housewives.jpg
+    remote_paths:
+      en: franchise/The Real Housewives.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-the-real-housewives.77225e06.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-the-rookie.dfa35be6
+  category: Franchise
+  display_name: The Rookie
+  source:
+    path: create_default_posters.ps1
+    line: 4591
+    row_sha256: c53e301cb20558fbcce3027e90a4872461e4277871e1f348239d8c3565c420a8
+  composer:
+    base_color: '#DC5A2B'
+    logo: logos_franchise/The Rookie.png
+    logo_resize: 1600
+    out_name: The Rookie
+  output:
+    directory: franchise
+    filename: The Rookie.jpg
+    remote_paths:
+      en: franchise/The Rookie.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-the-rookie.dfa35be6.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-the-texas-chainsaw-massacre.b09e968a
+  category: Franchise
+  display_name: The Texas Chainsaw Massacre
+  source:
+    path: create_default_posters.ps1
+    line: 4592
+    row_sha256: 72067d9855473861861d6196dbbfee147776f00dc9565dd4e075b1421b129710
+  composer:
+    base_color: '#B15253'
+    logo: logos_franchise/The Texas Chainsaw Massacre.png
+    logo_resize: 1600
+    out_name: The Texas Chainsaw Massacre
+  output:
+    directory: franchise
+    filename: The Texas Chainsaw Massacre.jpg
+    remote_paths:
+      en: franchise/The Texas Chainsaw Massacre.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-the-texas-chainsaw-massacre.b09e968a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-the-three-stooges.c3fb545e
+  category: Franchise
+  display_name: The Three Stooges
+  source:
+    path: create_default_posters.ps1
+    line: 4593
+    row_sha256: d4510b13c57d5a2c9aa8ab1765aa192a240e8f8ed981baa3bf1dbd4163cd0e47
+  composer:
+    base_color: '#B9532A'
+    logo: logos_franchise/The Three Stooges.png
+    logo_resize: 1600
+    out_name: The Three Stooges
+  output:
+    directory: franchise
+    filename: The Three Stooges.jpg
+    remote_paths:
+      en: franchise/The Three Stooges.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-the-three-stooges.c3fb545e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-the-twilight-zone.4b33b80d
+  category: Franchise
+  display_name: The Twilight Zone
+  source:
+    path: create_default_posters.ps1
+    line: 4594
+    row_sha256: 67ac20d1c85dc218a50445bc573da0cc88018d46221b57d23e762c863091a41d
+  composer:
+    base_color: '#16245F'
+    logo: logos_franchise/The Twilight Zone.png
+    logo_resize: 1600
+    out_name: The Twilight Zone
+  output:
+    directory: franchise
+    filename: The Twilight Zone.jpg
+    remote_paths:
+      en: franchise/The Twilight Zone.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-the-twilight-zone.4b33b80d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-the-walking-dead.ac865175
+  category: Franchise
+  display_name: The Walking Dead
+  source:
+    path: create_default_posters.ps1
+    line: 4595
+    row_sha256: f582db56d401282840c57a214ad8c556010a0ae54716a88715d2258563a137e7
+  composer:
+    base_color: '#797F48'
+    logo: logos_franchise/The Walking Dead.png
+    logo_resize: 1600
+    out_name: The Walking Dead
+  output:
+    directory: franchise
+    filename: The Walking Dead.jpg
+    remote_paths:
+      en: franchise/The Walking Dead.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-the-walking-dead.ac865175.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-tom-and-jerry.46d2bf20
+  category: Franchise
+  display_name: Tom and Jerry
+  source:
+    path: create_default_posters.ps1
+    line: 4596
+    row_sha256: 688c425cedfc62b506b98a162d2c1ef57b452e795cc2fe0a0ac337baf1ae7508
+  composer:
+    base_color: '#B9252B'
+    logo: logos_franchise/Tom and Jerry.png
+    logo_resize: 1600
+    out_name: Tom and Jerry
+  output:
+    directory: franchise
+    filename: Tom and Jerry.jpg
+    remote_paths:
+      en: franchise/Tom and Jerry.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-tom-and-jerry.46d2bf20.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-tomb-raider.b57f664c
+  category: Franchise
+  display_name: Tomb Raider
+  source:
+    path: create_default_posters.ps1
+    line: 4597
+    row_sha256: bb90188e7747d0070134577a71bbc5df66a2ad3832c4ab687354661101e5556b
+  composer:
+    base_color: '#620D0E'
+    logo: logos_franchise/Tomb Raider.png
+    logo_resize: 1600
+    out_name: Tomb Raider
+  output:
+    directory: franchise
+    filename: Tomb Raider.jpg
+    remote_paths:
+      en: franchise/Tomb Raider.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-tomb-raider.b57f664c.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-toy-story.ef675667
+  category: Franchise
+  display_name: Toy Story
+  source:
+    path: create_default_posters.ps1
+    line: 4598
+    row_sha256: b811361e2772af9968bf108f749f72b5bd76d29da6eac18530bd13f74607bd0b
+  composer:
+    base_color: '#CEB423'
+    logo: logos_franchise/Toy Story.png
+    logo_resize: 1600
+    out_name: Toy Story
+  output:
+    directory: franchise
+    filename: Toy Story.jpg
+    remote_paths:
+      en: franchise/Toy Story.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-toy-story.ef675667.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-transformers.d39577be
+  category: Franchise
+  display_name: Transformers
+  source:
+    path: create_default_posters.ps1
+    line: 4599
+    row_sha256: 1cdeaec6e1fe7aee979f2c59926a6b4acbe460472120eb05205bc40fe4316ea6
+  composer:
+    base_color: '#B02B2B'
+    logo: logos_franchise/Transformers.png
+    logo_resize: 1600
+    out_name: Transformers
+  output:
+    directory: franchise
+    filename: Transformers.jpg
+    remote_paths:
+      en: franchise/Transformers.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-transformers.d39577be.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-tron.1bfa2515
+  category: Franchise
+  display_name: Tron
+  source:
+    path: create_default_posters.ps1
+    line: 4600
+    row_sha256: 5a556bc1efca15b60a4fbba8270460bd32d793271872c3d83ad97b3320e9a827
+  composer:
+    base_color: '#5798B2'
+    logo: logos_franchise/Tron.png
+    logo_resize: 1600
+    out_name: Tron
+  output:
+    directory: franchise
+    filename: Tron.jpg
+    remote_paths:
+      en: franchise/Tron.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-tron.1bfa2515.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-twilight.76e2004d
+  category: Franchise
+  display_name: Twilight
+  source:
+    path: create_default_posters.ps1
+    line: 4601
+    row_sha256: db4e1492e8a1096da946008299832dcca307786dcadb5d3a4c9bd390779401c2
+  composer:
+    base_color: '#3B3B3B'
+    logo: logos_franchise/Twilight.png
+    logo_resize: 1600
+    out_name: Twilight
+  output:
+    directory: franchise
+    filename: Twilight.jpg
+    remote_paths:
+      en: franchise/Twilight.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-twilight.76e2004d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-unbreakable.8c4f5c55
+  category: Franchise
+  display_name: Unbreakable
+  source:
+    path: create_default_posters.ps1
+    line: 4602
+    row_sha256: 195ad8d6dcd709d785cec8939335ee7919dea6029f6892093368fd4fd1908aee
+  composer:
+    base_color: '#445DBB'
+    logo: logos_franchise/Unbreakable.png
+    logo_resize: 1600
+    out_name: Unbreakable
+  output:
+    directory: franchise
+    filename: Unbreakable.jpg
+    remote_paths:
+      en: franchise/Unbreakable.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-unbreakable.8c4f5c55.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-wallace-gromit.ae67758e
+  category: Franchise
+  display_name: Wallace & Gromit
+  source:
+    path: create_default_posters.ps1
+    line: 4603
+    row_sha256: 76a76ccc8873b2846a80a84a1822eee2995cbf0a7d16686b2d6099c7886cdad8
+  composer:
+    base_color: '#BA2A20'
+    logo: logos_franchise/Wallace & Gromit.png
+    logo_resize: 1600
+    out_name: Wallace & Gromit
+  output:
+    directory: franchise
+    filename: Wallace & Gromit.jpg
+    remote_paths:
+      en: franchise/Wallace & Gromit.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-wallace-gromit.ae67758e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-wizarding-world.02799aca
+  category: Franchise
+  display_name: Wizarding World
+  source:
+    path: create_default_posters.ps1
+    line: 4604
+    row_sha256: dd10bcff3d60531039004272a3dd648f6d0fa3142db307e1ced5ba8c16268354
+  composer:
+    base_color: '#7B7A33'
+    logo: logos_franchise/Wizarding World.png
+    logo_resize: 1600
+    out_name: Wizarding World
+  output:
+    directory: franchise
+    filename: Wizarding World.jpg
+    remote_paths:
+      en: franchise/Wizarding World.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-wizarding-world.02799aca.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-x-men.218982b6
+  category: Franchise
+  display_name: X-Men
+  source:
+    path: create_default_posters.ps1
+    line: 4605
+    row_sha256: 816905bda87a0a1931f88f7958081a04fce19fd11deacebf4e783b39c5709aa8
+  composer:
+    base_color: '#636363'
+    logo: logos_franchise/X-Men.png
+    logo_resize: 1600
+    out_name: X-Men
+  output:
+    directory: franchise
+    filename: X-Men.jpg
+    remote_paths:
+      en: franchise/X-Men.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-x-men.218982b6.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: franchise.franchise-yellowstone.da3708ef
+  category: Franchise
+  display_name: Yellowstone
+  source:
+    path: create_default_posters.ps1
+    line: 4606
+    row_sha256: 6f8a00cec7d6fea1a601e327e193b1069c76e23c6e2952339563c9fac3ae5d4d
+  composer:
+    base_color: '#441515'
+    logo: logos_franchise/Yellowstone.png
+    logo_resize: 1600
+    out_name: Yellowstone
+  output:
+    directory: franchise
+    filename: Yellowstone.jpg
+    remote_paths:
+      en: franchise/Yellowstone.jpg
+  generator: null
+  color_assignment:
+    id: franchise.franchise-yellowstone.da3708ef.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null

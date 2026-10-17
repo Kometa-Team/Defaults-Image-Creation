@@ -1,0 +1,637 @@
+{
+  "active_jobs": 301,
+  "approved_exceptions": [],
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "category": "Year",
+  "cold_metrics": [
+    {
+      "cache_hit_rate": 0.0,
+      "cache_hits": 0,
+      "dedup_reuses": 0,
+      "executed": 4,
+      "jobs_per_second": 0.3530737172381392,
+      "max_inflight": 2,
+      "peak_parent_rss": 61005824,
+      "peak_worker_rss": 155971584,
+      "peak_workers_rss_sum": 281956352,
+      "process_start": "spawn",
+      "read_bytes": 27449141,
+      "wall_seconds": 11.32907889969647,
+      "worker_pids": [
+        56708,
+        23272
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 2,
+      "write_bytes": 4754014
+    },
+    {
+      "cache_hit_rate": 0.5,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 2,
+      "jobs_per_second": 0.7482499555496943,
+      "max_inflight": 2,
+      "peak_parent_rss": 61550592,
+      "peak_worker_rss": 191107072,
+      "peak_workers_rss_sum": 337035264,
+      "process_start": "spawn",
+      "read_bytes": 10798218,
+      "wall_seconds": 5.345807200297713,
+      "worker_pids": [
+        56708,
+        23272
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 2555698
+    }
+  ],
+  "contract_parity": true,
+  "definitions": 301,
+  "discrepancies": [],
+  "evidence_directory": "config/package-c/validation-03/year",
+  "human_visual_approval": false,
+  "incremental_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 4,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 3.844637801897184,
+      "max_inflight": 0,
+      "peak_parent_rss": 138059776,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 1.040410100016743,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    },
+    {
+      "cache_hit_rate": 0.75,
+      "cache_hits": 3,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 1.4260227186728158,
+      "max_inflight": 1,
+      "peak_parent_rss": 139042816,
+      "peak_worker_rss": 181850112,
+      "peak_workers_rss_sum": 181850112,
+      "process_start": "spawn",
+      "read_bytes": 12110103,
+      "wall_seconds": 2.8050043997354805,
+      "worker_pids": [
+        101312
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 1342972
+    }
+  ],
+  "legacy_effective_jobs": 301,
+  "limitations": [
+    "Fresh direct Pillow parity, not a new legacy ImageMagick comparison",
+    "English only; full multilingual layout belongs to D",
+    "Representative sample, not every category output rendered"
+  ],
+  "normalizations": [
+    "HEX letter case only",
+    "Bind actual bundled asset/font paths instead of Windows case-insensitive aliases",
+    "Destination directories are separate from composer basenames"
+  ],
+  "private_intermediates": [],
+  "restore_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 4,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 0.7836023835271527,
+      "max_inflight": 0,
+      "peak_parent_rss": 139640832,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 5.10462970007211,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    },
+    {
+      "cache_hit_rate": 0.75,
+      "cache_hits": 3,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 0.35300686481596666,
+      "max_inflight": 1,
+      "peak_parent_rss": 140177408,
+      "peak_worker_rss": 170258432,
+      "peak_workers_rss_sum": 170258432,
+      "process_start": "spawn",
+      "read_bytes": 12071051,
+      "wall_seconds": 11.331224400084466,
+      "worker_pids": [
+        92696
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 1358218
+    }
+  ],
+  "resume_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 4,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 5.166082447956235,
+      "max_inflight": 0,
+      "peak_parent_rss": 141357056,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.7742810999043286,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    },
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 4,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 10.031108973605775,
+      "max_inflight": 0,
+      "peak_parent_rss": 140554240,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.39875950012356043,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ],
+  "sample_comparisons": [
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#EF10D3",
+        "border_color": "#FFFFFF",
+        "caption": {
+          "advances": [
+            1015.625
+          ],
+          "glyph_bounds_source": "original font outline bounds",
+          "ink_bounds": [
+            466,
+            340,
+            1450,
+            649
+          ],
+          "line_height": 501,
+          "line_widths": [
+            1016
+          ],
+          "lines": [
+            "1880"
+          ],
+          "point_size": 400
+        },
+        "engine": "python",
+        "font": {
+          "path": "{REPOSITORY}\\create_defaults\\fonts\\Rye-Regular.ttf",
+          "sha256": "722825f800cf7ceae4791b274d45da9df517db7cf7a07bfafd34452b787c5354"
+        },
+        "gradient": 1,
+        "logo_size": [
+          1800,
+          1800
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#EF10D3",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Rye-Regular.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 400,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\transparent.png",
+          "logo_offset": 0,
+          "logo_resize": 1800,
+          "out_name": "1880",
+          "text": "1880",
+          "text_offset": 0,
+          "white_wash": true
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-03\\year\\reference\\poster.6beb87d62baa512463ddd7f2.jpg",
+        "sha256": "e676398efd075e18191fdf023a547c6e2af1ac619b91b795c8df521387a1b61c",
+        "size_bytes": 594422
+      },
+      "output": "year/1880.jpg",
+      "poster_id": "year.year-1880.3409b074",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "e676398efd075e18191fdf023a547c6e2af1ac619b91b795c8df521387a1b61c",
+      "sha256": "e676398efd075e18191fdf023a547c6e2af1ac619b91b795c8df521387a1b61c"
+    },
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#EF102A",
+        "border_color": "#FFFFFF",
+        "caption": {
+          "advances": [
+            910.15625
+          ],
+          "glyph_bounds_source": "original font outline bounds",
+          "ink_bounds": [
+            519,
+            340,
+            1395,
+            649
+          ],
+          "line_height": 501,
+          "line_widths": [
+            911
+          ],
+          "lines": [
+            "1881"
+          ],
+          "point_size": 400
+        },
+        "engine": "python",
+        "font": {
+          "path": "{REPOSITORY}\\create_defaults\\fonts\\Rye-Regular.ttf",
+          "sha256": "722825f800cf7ceae4791b274d45da9df517db7cf7a07bfafd34452b787c5354"
+        },
+        "gradient": 1,
+        "logo_size": [
+          1800,
+          1800
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#EF102A",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Rye-Regular.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 400,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\transparent.png",
+          "logo_offset": 0,
+          "logo_resize": 1800,
+          "out_name": "1881",
+          "text": "1881",
+          "text_offset": 0,
+          "white_wash": true
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-03\\year\\reference\\poster.3d204cdc58dedbc1a338ce01.jpg",
+        "sha256": "7ab05783db0a5c381447b0af8897e16071ae0a85c077641de9ee5448f5e53a55",
+        "size_bytes": 533659
+      },
+      "output": "year/1881.jpg",
+      "poster_id": "year.year-1881.677b529a",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "7ab05783db0a5c381447b0af8897e16071ae0a85c077641de9ee5448f5e53a55",
+      "sha256": "7ab05783db0a5c381447b0af8897e16071ae0a85c077641de9ee5448f5e53a55"
+    },
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#EF10D3",
+        "border_color": "#FFFFFF",
+        "caption": {
+          "advances": [
+            912.421875
+          ],
+          "glyph_bounds_source": "original font outline bounds",
+          "ink_bounds": [
+            503,
+            341,
+            1396,
+            640
+          ],
+          "line_height": 530,
+          "line_widths": [
+            913
+          ],
+          "lines": [
+            "1970"
+          ],
+          "point_size": 340
+        },
+        "engine": "python",
+        "font": {
+          "path": "{REPOSITORY}\\create_defaults\\fonts\\Monoton-Regular.ttf",
+          "sha256": "951c4cea65ffede784a7c9672feec5d329a7e1e12216c42d53ecf36c90d04dea"
+        },
+        "gradient": 1,
+        "logo_size": [
+          1800,
+          1800
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#EF10D3",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Monoton-Regular.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 340,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\transparent.png",
+          "logo_offset": 0,
+          "logo_resize": 1800,
+          "out_name": "1970",
+          "text": "1970",
+          "text_offset": 0,
+          "white_wash": true
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-03\\year\\reference\\poster.1c2d60fc133ea707143c43d2.jpg",
+        "sha256": "258ca7bda247a1c6226f20b880c92783fcbd0e12307c7218026498f52fdd0eba",
+        "size_bytes": 709383
+      },
+      "output": "year/1970.jpg",
+      "poster_id": "year.year-1970.b3ecc3c5",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "258ca7bda247a1c6226f20b880c92783fcbd0e12307c7218026498f52fdd0eba",
+      "sha256": "258ca7bda247a1c6226f20b880c92783fcbd0e12307c7218026498f52fdd0eba"
+    },
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#EF10D3",
+        "border_color": "#FFFFFF",
+        "caption": {
+          "advances": [
+            1067.49
+          ],
+          "glyph_bounds_source": "original font outline bounds",
+          "ink_bounds": [
+            432,
+            357,
+            1462,
+            672
+          ],
+          "line_height": 516,
+          "line_widths": [
+            1068
+          ],
+          "lines": [
+            "2020"
+          ],
+          "point_size": 409
+        },
+        "engine": "python",
+        "font": {
+          "path": "{REPOSITORY}\\create_defaults\\fonts\\PlusJakartaSans-Bold.ttf",
+          "sha256": "5f5342ef76862b5b5365d1dff1a667629dfa484e388dd602552f647219c3870f"
+        },
+        "gradient": 1,
+        "logo_size": [
+          1800,
+          1800
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#EF10D3",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\PlusJakartaSans-Bold.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 409,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\transparent.png",
+          "logo_offset": 0,
+          "logo_resize": 1800,
+          "out_name": "2020",
+          "text": "2020",
+          "text_offset": 0,
+          "white_wash": true
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-03\\year\\reference\\poster.584bc608d36a8126f5a64221.jpg",
+        "sha256": "c7be058188e042d4b7b7d001ee9848e7c2995592a7d76c0e55b76d8863d0f9f4",
+        "size_bytes": 539041
+      },
+      "output": "year/2020.jpg",
+      "poster_id": "year.year-2020.83bfe96a",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "c7be058188e042d4b7b7d001ee9848e7c2995592a7d76c0e55b76d8863d0f9f4",
+      "sha256": "c7be058188e042d4b7b7d001ee9848e7c2995592a7d76c0e55b76d8863d0f9f4"
+    },
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#FFFFFF",
+        "border_color": "#FFFFFF",
+        "caption": {
+          "advances": [
+            904.8000000000001
+          ],
+          "glyph_bounds_source": "original font outline bounds",
+          "ink_bounds": [
+            518,
+            406,
+            1395,
+            567
+          ],
+          "line_height": 224,
+          "line_widths": [
+            905
+          ],
+          "lines": [
+            "BEST OF"
+          ],
+          "point_size": 200
+        },
+        "engine": "python",
+        "font": {
+          "path": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+        },
+        "gradient": 1,
+        "logo_size": [
+          2000,
+          3000
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#FFFFFF",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 200,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\config\\package-c\\validation-03\\year\\output\\defaults-en\\year\\1880.jpg",
+          "logo_offset": 0,
+          "logo_resize": 2000,
+          "out_name": "1880",
+          "text": "BEST OF",
+          "text_offset": -400,
+          "white_wash": false
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-03\\year\\reference\\poster.b7c61ad4422f3d20172b9899.jpg",
+        "sha256": "28866915dbb0e7986025e52c1a58c705f5005a27786182f3e7d402215e20b22a",
+        "size_bytes": 671356
+      },
+      "output": "year/best/1880.jpg",
+      "poster_id": "year.year-best-1880.857a43e2",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "28866915dbb0e7986025e52c1a58c705f5005a27786182f3e7d402215e20b22a",
+      "sha256": "28866915dbb0e7986025e52c1a58c705f5005a27786182f3e7d402215e20b22a"
+    },
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#FFFFFF",
+        "border_color": "#FFFFFF",
+        "caption": {
+          "advances": [
+            904.8000000000001
+          ],
+          "glyph_bounds_source": "original font outline bounds",
+          "ink_bounds": [
+            518,
+            406,
+            1395,
+            567
+          ],
+          "line_height": 224,
+          "line_widths": [
+            905
+          ],
+          "lines": [
+            "BEST OF"
+          ],
+          "point_size": 200
+        },
+        "engine": "python",
+        "font": {
+          "path": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+        },
+        "gradient": 1,
+        "logo_size": [
+          2000,
+          3000
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#FFFFFF",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 200,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\config\\package-c\\validation-03\\year\\output\\defaults-en\\year\\1881.jpg",
+          "logo_offset": 0,
+          "logo_resize": 2000,
+          "out_name": "1881",
+          "text": "BEST OF",
+          "text_offset": -400,
+          "white_wash": false
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-03\\year\\reference\\poster.50468dd4f790c936ab2377ea.jpg",
+        "sha256": "bff664d9bcf9d3314dcb1ca4a61fd69948725b6d60e26eb7191564c7bc87b061",
+        "size_bytes": 606493
+      },
+      "output": "year/best/1881.jpg",
+      "poster_id": "year.year-best-1881.74bc08df",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "bff664d9bcf9d3314dcb1ca4a61fd69948725b6d60e26eb7191564c7bc87b061",
+      "sha256": "bff664d9bcf9d3314dcb1ca4a61fd69948725b6d60e26eb7191564c7bc87b061"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Resolved English contract parity; generated inputs require separately verified real parent artifacts before render planning",
+  "status": "automated_sample_passed",
+  "wall_seconds": 99.16650479985401,
+  "warm_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 4,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 2.4354801720169097,
+      "max_inflight": 0,
+      "peak_parent_rss": 62550016,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 1.6423866003751755,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    },
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 4,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 9.946433487945239,
+      "max_inflight": 0,
+      "peak_parent_rss": 62017536,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.40215419977903366,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ]
+}

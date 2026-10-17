@@ -1,0 +1,270 @@
+{
+  "active_jobs": 23,
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "category": "Seasonal",
+  "cold_metrics": [
+    {
+      "cache_hit_rate": 0.0,
+      "cache_hits": 0,
+      "dedup_reuses": 0,
+      "executed": 2,
+      "jobs_per_second": 0.6760396636942098,
+      "max_inflight": 2,
+      "peak_parent_rss": 59695104,
+      "peak_worker_rss": 158060544,
+      "peak_workers_rss_sum": 284078080,
+      "process_start": "spawn",
+      "read_bytes": 21839442,
+      "wall_seconds": 2.958406299818307,
+      "worker_pids": [
+        54460,
+        80088
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 2,
+      "write_bytes": 3313116
+    }
+  ],
+  "contract_parity": true,
+  "definitions": 23,
+  "discrepancies": [],
+  "human_visual_approval": false,
+  "incremental_metrics": [
+    {
+      "cache_hit_rate": 0.5,
+      "cache_hits": 1,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 0.8451398668359505,
+      "max_inflight": 1,
+      "peak_parent_rss": 133320704,
+      "peak_worker_rss": 161812480,
+      "peak_workers_rss_sum": 161812480,
+      "process_start": "spawn",
+      "read_bytes": 9830055,
+      "wall_seconds": 2.366472200024873,
+      "worker_pids": [
+        51608
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 996278
+    }
+  ],
+  "legacy_effective_jobs": 23,
+  "limitations": [
+    "Fresh direct Pillow parity, not a new legacy ImageMagick comparison",
+    "English only; full multilingual layout belongs to D",
+    "Representative sample, not every category output rendered"
+  ],
+  "restore_metrics": [
+    {
+      "cache_hit_rate": 0.5,
+      "cache_hits": 1,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 0.9226065073299935,
+      "max_inflight": 1,
+      "peak_parent_rss": 133378048,
+      "peak_worker_rss": 150712320,
+      "peak_workers_rss_sum": 150712320,
+      "process_start": "spawn",
+      "read_bytes": 10325755,
+      "wall_seconds": 2.1677713999524713,
+      "worker_pids": [
+        45804
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 1294688
+    }
+  ],
+  "resume_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 7.07938540062763,
+      "max_inflight": 0,
+      "peak_parent_rss": 134086656,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.2825103998184204,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ],
+  "sample_comparisons": [
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#43C32F",
+        "border_color": "#FFFFFF",
+        "caption": {
+          "advances": [
+            568.5
+          ],
+          "glyph_bounds_source": "original font outline bounds",
+          "ink_bounds": [
+            669,
+            385,
+            1221,
+            601
+          ],
+          "line_height": 280,
+          "line_widths": [
+            569
+          ],
+          "lines": [
+            "4/20"
+          ],
+          "point_size": 250
+        },
+        "engine": "python",
+        "font": {
+          "path": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+        },
+        "gradient": 1,
+        "logo_size": [
+          1800,
+          1216
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#43C32F",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 250,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\logos_seasonal\\420.png",
+          "logo_offset": -500,
+          "logo_resize": 1800,
+          "out_name": "420",
+          "text": "4/20",
+          "text_offset": 850,
+          "white_wash": true
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\seasonal\\reference\\poster.8e8dd1e32c5504c5e1fe3324.jpg",
+        "sha256": "003572e1b5939f0519acbdd030e63c7da5a56e537c072c2879ff236f0779543f",
+        "size_bytes": 647214
+      },
+      "output": "seasonal/420.jpg",
+      "poster_id": "seasonal.seasonal-420.6eef3c61",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "003572e1b5939f0519acbdd030e63c7da5a56e537c072c2879ff236f0779543f",
+      "sha256": "003572e1b5939f0519acbdd030e63c7da5a56e537c072c2879ff236f0779543f"
+    },
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#0EC26B",
+        "border_color": "#FFFFFF",
+        "caption": {
+          "advances": [
+            1855.6400000000003,
+            1750.208,
+            1786.6399999999999
+          ],
+          "glyph_bounds_source": "original font outline bounds",
+          "ink_bounds": [
+            25,
+            206,
+            1872,
+            768
+          ],
+          "line_height": 207,
+          "line_widths": [
+            1856,
+            1751,
+            1787
+          ],
+          "lines": [
+            "ASIAN AMERICAN &",
+            "PACIFIC ISLANDER",
+            "HERITAGE MONTH"
+          ],
+          "point_size": 184
+        },
+        "engine": "python",
+        "font": {
+          "path": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+        },
+        "gradient": 1,
+        "logo_size": [
+          1800,
+          1216
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#0EC26B",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 184,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\logos_seasonal\\APAC month.png",
+          "logo_offset": -500,
+          "logo_resize": 1800,
+          "out_name": "aapi",
+          "text": "ASIAN AMERICAN & PACIFIC ISLANDER HERITAGE MONTH",
+          "text_offset": 850,
+          "white_wash": true
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\seasonal\\reference\\poster.07c767437846d5b6565621b7.jpg",
+        "sha256": "32f6b1d4d9c65ba595032dc8ec01dece6c1223e3dc1f1e276c1abcb87e33d038",
+        "size_bytes": 1009084
+      },
+      "output": "seasonal/aapi.jpg",
+      "poster_id": "seasonal.seasonal-aapi.24f40f3a",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "32f6b1d4d9c65ba595032dc8ec01dece6c1223e3dc1f1e276c1abcb87e33d038",
+      "sha256": "32f6b1d4d9c65ba595032dc8ec01dece6c1223e3dc1f1e276c1abcb87e33d038"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Resolved English contract parity; generated inputs require separately verified real parent artifacts before render planning",
+  "status": "automated_sample_passed",
+  "wall_seconds": 13.94980249973014,
+  "warm_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 4.500399413227274,
+      "max_inflight": 0,
+      "peak_parent_rss": 60022784,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.4444049997255206,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ]
+}

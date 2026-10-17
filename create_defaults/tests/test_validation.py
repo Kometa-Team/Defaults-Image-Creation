@@ -24,6 +24,7 @@ from create_defaults import revalidate_grayscale as grayscale
 from create_defaults.validation_review import review_summary
 from create_defaults.review_validation_groups import warning_groups, warning_rank, write_groups, write_ranked_warnings
 from create_defaults.poster_fixtures import extract_rows
+from create_defaults.bulk.baselines import verify_historical
 
 
 class WorkflowBoundaryTests(unittest.TestCase):
@@ -35,11 +36,18 @@ class WorkflowBoundaryTests(unittest.TestCase):
         self.assertEqual(job["runs-on"], "ubuntu-latest")
         self.assertNotIn("permissions", job)
         actions = [step for step in job["steps"] if "uses" in step]
-        self.assertEqual(len(actions), 2)
+        self.assertEqual(len(actions), 3)
         for step in actions:
-            self.assertRegex(step["uses"], r"^actions/(checkout|setup-python)@[0-9a-f]{40}$")
+            self.assertRegex(step["uses"], r"^actions/(checkout|setup-python|upload-artifact)@[0-9a-f]{40}$")
         self.assertEqual(actions[0]["with"]["persist-credentials"], "false")
         self.assertEqual(actions[1]["with"]["python-version"], "3.13")
+        self.assertEqual(actions[2]["uses"], "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02")
+        self.assertEqual(actions[2]["with"]["retention-days"], "14")
+        self.assertEqual(actions[2]["with"]["if-no-files-found"], "error")
+        paths = actions[2]["with"]["path"].splitlines()
+        self.assertTrue(paths)
+        self.assertTrue(all(path.startswith("config/package-d-smoke/") for path in paths))
+        self.assertFalse(any("sqlite" in path or path.endswith("cache/**") for path in paths))
         commands = "\n".join(step.get("run", "") for step in job["steps"])
         for required in ("pip install", "compileall", "unittest discover", "validation_manifest.py --check", "git diff --check"):
             self.assertIn(required, commands)
@@ -191,7 +199,7 @@ class FrozenInventoryTests(unittest.TestCase):
         path = ROOT / "fixtures/effective-jobs-en-cmap-compat.json.gz"
         self.assertTrue(path.is_file(), "Generate the frozen manifest before accepting validation")
         value = manifest.load_manifest(path)
-        self.assertTrue(manifest.validate_manifest(value))
+        self.assertTrue(verify_historical(value))
         self.assertEqual(value["literal_definitions"], len(extract_rows()))
         self.assertEqual(value["covered_literal_definitions"], 3352)
         self.assertEqual(value["uncovered_literal_lines"], [])

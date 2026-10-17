@@ -1,0 +1,282 @@
+{
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "active": [
+    {
+      "poster_id": "seasonal.seasonal-420.6eef3c61",
+      "legacy_id": "seasonal-07927-9bcece49f91b",
+      "job_sha256": "cbcb32d3b606a018a9773bb42c530a2f17174bbadef99d3fce161ecb88703ac7",
+      "source": {
+        "definition_line": 5505,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "2ef7675b20c115476eea12f9d56d6ebea7c2224b1ba20ddfa8765597c4e29101",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-aapi.24f40f3a",
+      "legacy_id": "seasonal-07928-9e437e6175ca",
+      "job_sha256": "0712bb702603915f427b8783adf417358804aa94398ef571b737d9fa53f55db6",
+      "source": {
+        "definition_line": 5506,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "04ff75bb7f758dd74bea4fd9bbb56a2e72ae2a7a250c2a9b5836ba736a523e35",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-black-history.d8a83a03",
+      "legacy_id": "seasonal-07929-86035ea9c235",
+      "job_sha256": "364e92fef442994d49f4c0c641a4944830a63d9ff807a877ad005c801bfdc854",
+      "source": {
+        "definition_line": 5507,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "faa1bb519a285b0d8f581e5ff02fce4d1ab3f04873966ee48b111e1f285d670c",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-black-history2.4849a4c5",
+      "legacy_id": "seasonal-07930-f49ed6a4580c",
+      "job_sha256": "71d4462398c2cfbe150109d79d08c474611af7a1f4f9c6ce03f553b3b3cffd57",
+      "source": {
+        "definition_line": 5508,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "26ad3dcb690a8bb2cb909c854ee0257c074da7d43a93a41260d7a9111cf99807",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-christmas.835f0965",
+      "legacy_id": "seasonal-07931-faa827885f59",
+      "job_sha256": "c0fe3a9e0230f2dc3b4e84d6bf98fa8ee4d364a2b94f25a327a51e006f74102c",
+      "source": {
+        "definition_line": 5509,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "2f9fb1b86effd2033292c712c29369b133f23adeb3020b875eb71c6524ef5096",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-christmas-cartoons.58f84762",
+      "legacy_id": "seasonal-07932-4fede7b1a8e7",
+      "job_sha256": "802b290d0d0fb51d2047079494361bff97a03ead70cc240930dc7bbdbc192c28",
+      "source": {
+        "definition_line": 5510,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "97d6913d6dc9e1d7a77730c9c4579599a60974e5bb9caac7e1841068dcfaedc2",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-christmas-episodes.7c3e474e",
+      "legacy_id": "seasonal-07933-58196dbcc975",
+      "job_sha256": "ec8fce4d14d6dfd52e25828a022b7b36c2b16083f6d5fc1e875ac6b73c706fcf",
+      "source": {
+        "definition_line": 5511,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "87bbc91a3f5049345ffe9ee551fbad519c92600536f6d1633ba8da00241ba061",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-disabilities.d81423ef",
+      "legacy_id": "seasonal-07934-caa1922821c8",
+      "job_sha256": "f1416897e799ede8149d3af387da541e98f330ef22476a43fef46a89b87eed99",
+      "source": {
+        "definition_line": 5512,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "dfaea2afb70b8b93653fc93a4d8ed6fd13c762609e07058b5e2b041dbd24b7d8",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-easter.4808b636",
+      "legacy_id": "seasonal-07935-9aecd4c603b7",
+      "job_sha256": "da295fb243b95737c9e2fe1ca8e2c441378ee4faf3f82282064787c55bf5943b",
+      "source": {
+        "definition_line": 5513,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "9bb2c0eae4d9e2d649a170b560ccd90235924673a592b5e6d3da249e25ec6b7d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-father.ba0d124a",
+      "legacy_id": "seasonal-07936-eff2ac8ae64c",
+      "job_sha256": "3ce86c844eec0536a53f6eff1549642a445969f70892b1976222bf5793fddd8e",
+      "source": {
+        "definition_line": 5514,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "727d26d31d7dfe74acfa14bdce5dbcf8c55df51dce6a2b69c050bccbaa72f568",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-halloween.4aed3419",
+      "legacy_id": "seasonal-07937-d90f50b755c2",
+      "job_sha256": "730b0616866503008227d6a8d1478140aa440d048a081278960dcfe57d23d384",
+      "source": {
+        "definition_line": 5515,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "70948389a515e5f114dde558f9c2cf0617ef53b3cdb92458eca48d0f2145de6e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-independence.8cad01d7",
+      "legacy_id": "seasonal-07938-6a3f8083864f",
+      "job_sha256": "a699d47eb590ce3e28d4302f7788d5f046c84ebddad94d7f068db31e8295ab19",
+      "source": {
+        "definition_line": 5516,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "2e78e36aed6ae0c3657b988ac866c718266d843563a3f3a2c5a4bb5019491ba3",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-labor.4a84b87a",
+      "legacy_id": "seasonal-07939-07c0c72ead7b",
+      "job_sha256": "e9363c603f03d217bd4c302547076f9914d66fc395a8bfa4279851d1876c3db3",
+      "source": {
+        "definition_line": 5517,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "491c128a3f073ffb09f7ab984a123334cad98dc29d84fef729ea2069c8b13e9a",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-latinx.70d732e8",
+      "legacy_id": "seasonal-07940-4c5863a814fc",
+      "job_sha256": "6ba56e8554dfce499dcd4b8ce1b567fcc6898449193c50f769df74ad401aae11",
+      "source": {
+        "definition_line": 5518,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "2217a774ab7f6bdb4c0f676e2a5781918431365761d1339c7c3fe5bc14d632e7",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-lgbtq.2e35274d",
+      "legacy_id": "seasonal-07941-7b3be1822ef4",
+      "job_sha256": "f67550a30614e1568f94535be0c3b291382dd21ab3d694252d824f2242974995",
+      "source": {
+        "definition_line": 5519,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "7445f8c5072871b702862b5786710d770eb98c49c8d9772df7519a4598f3570d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-memorial.e8199a5a",
+      "legacy_id": "seasonal-07942-dda70c1e3eb0",
+      "job_sha256": "60dc34664c794fb8faa9b20e3fc712ff10946a3446d4796106fc06f280a06ce1",
+      "source": {
+        "definition_line": 5520,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "5040300d314baa72143e013e561543fc63c94abd2a571c5b93e1beea1d03b64c",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-mother.71fdcbad",
+      "legacy_id": "seasonal-07943-610b3e667145",
+      "job_sha256": "2fce8f9403aee956ae526790de0ea305a48648fff438461612fe6c2c100cc30e",
+      "source": {
+        "definition_line": 5521,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "07af5d16f27a3881bbd6d30c3edf291134133ee9c6851e784d8cb702ee4ee548",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-patrick.cb1e6a10",
+      "legacy_id": "seasonal-07944-3669a18cdad1",
+      "job_sha256": "67755dba7617f3335383d834385e80fdab64a520454dc46233d63f4f03d0dbfd",
+      "source": {
+        "definition_line": 5522,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "ae3a07ca97c2ed6f0eb542e228dcd151b7d43cfefad066bb434a492e38dd4a5c",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-thanksgiving.5f193251",
+      "legacy_id": "seasonal-07945-1f65a07226a0",
+      "job_sha256": "ed419fc885249789573687bc829cb971fef3f112eb4c9c965ee53ccd31460054",
+      "source": {
+        "definition_line": 5523,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "011be85c4ea7e27bb7f147156e7ab11cd9ea629951b49a82ba7a693e6cc24f87",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-valentine.7b635a36",
+      "legacy_id": "seasonal-07946-8e61344f4937",
+      "job_sha256": "33bc344c831f81d01fa4b92d38346390781c1bf2940a4578f2ed82b7c60546b0",
+      "source": {
+        "definition_line": 5524,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "e3fc93e6c068b9e79595a8601e73b70966bcb218d2373b0f9733083b5b0f0eca",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-veteran.4c1ae612",
+      "legacy_id": "seasonal-07947-498966582011",
+      "job_sha256": "3b38bae8e627fd5e1656d53a1708158fe946322d32b0a01fdaa686d98661a31f",
+      "source": {
+        "definition_line": 5525,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "ac9b31b75443a19efaa8ff7f31e10ff1fb92353e3439c38f3e8fd8398a2c5cb3",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-women.3dca44d4",
+      "legacy_id": "seasonal-07948-dc1b9bd19cdc",
+      "job_sha256": "f119ff026956f4379237e5410315641b304910987be59469d91c5adf139bcfbd",
+      "source": {
+        "definition_line": 5526,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "b3f1e7b8639ec9659ec8e2a42a1bb5a23d16471b1e2a14368d8c5a75de6da022",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "seasonal.seasonal-years.f913667d",
+      "legacy_id": "seasonal-07949-e7b9fc94b04c",
+      "job_sha256": "2dae060ed923fc99e3fe93b049af52864eaab313b9d1f7133ddbfc556555faed",
+      "source": {
+        "definition_line": 5527,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5539
+      },
+      "row_sha256": "4a1a8d4d6fe9b77803ec8705977d3ddd992ff766cefd49a0e72acee2f60cd4cf",
+      "frozen_choices": []
+    }
+  ],
+  "retired": []
+}

@@ -8,6 +8,8 @@ import time
 import unicodedata
 from pathlib import Path, PurePosixPath
 
+from github_inventory_core import blob_sha, complete_tree
+
 from people_github import GitHubClient, GitHubError, REPOSITORIES, branch_name, repository_mapping, sandbox_storage
 
 
@@ -23,10 +25,6 @@ def path_key(path):
 
 def name_key(name):
     return " ".join(unicodedata.normalize("NFC", name).casefold().split())
-
-
-def blob_sha(data):
-    return hashlib.sha1(b"blob " + str(len(data)).encode("ascii") + b"\0" + data).hexdigest()
 
 
 def default_state_dir():
@@ -61,28 +59,10 @@ class RemoteInventory:
         self.db.close()
 
     def tree_entries(self, repo, sha, prefix=""):
-        try:
-            data = self.client.request("GET", f"/repos/{repo}/git/trees/{sha}?recursive=1")
-        except GitHubError as error:
-            if error.status not in {0, 500, 502, 503, 504}:
-                raise
-            data = {"truncated": True}
-        if not data.get("truncated"):
-            return [dict(item, path=prefix + item["path"]) for item in data["tree"]]
-        # Discard incomplete recursive results; never interpret truncation as missing files.
-        pending = [(sha, prefix)]
-        result = []
-        while pending:
-            subtree, base = pending.pop()
-            data = self.client.request("GET", f"/repos/{repo}/git/trees/{subtree}")
-            if data.get("truncated"):
-                raise GitHubError("Nonrecursive tree truncated; inventory is incomplete, refusing publication.")
-            for item in data["tree"]:
-                entry = dict(item, path=base + item["path"])
-                result.append(entry)
-                if item["type"] == "tree":
-                    pending.append((item["sha"], entry["path"] + "/"))
-        return result
+        def get_tree(tree, recursive):
+            suffix = "?recursive=1" if recursive else ""
+            return self.client.request("GET", f"/repos/{repo}/git/trees/{tree}{suffix}")
+        return [dict(item, path=prefix + item["path"]) for item in complete_tree(get_tree, sha)]
 
     def refresh(self, style, force=False):
         repo = self.repositories[style]

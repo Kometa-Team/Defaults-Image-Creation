@@ -1,0 +1,1572 @@
+{
+  "scope": "Parser AST only; no source execution",
+  "aliases": {
+    "Charts": "Chart",
+    "Award": "Awards",
+    "Studio": "Studio",
+    "Universe": "Universe",
+    "Decades": "Decade",
+    "Resolutions": "Resolution",
+    "Separator": "Separators",
+    "Playlist": "Playlist",
+    "Chart": "Chart",
+    "Franchise": "Franchise",
+    "SubtitleLanguages": "SubtitleLanguage",
+    "Playlists": "Playlist",
+    "Aspect": "Aspect",
+    "Genre": "Genre",
+    "Seasonals": "Seasonal",
+    "Franchises": "Franchise",
+    "Years": "Year",
+    "Overlay": "Overlays",
+    "Genres": "Genre",
+    "Resolution": "Resolution",
+    "VideoFormat": "VideoFormat",
+    "Based": "Based",
+    "VideoFormats": "VideoFormat",
+    "Streaming": "Streaming",
+    "Studios": "Studio",
+    "Countries": "Country",
+    "Separators": "Separators",
+    "ContentRating": "ContentRating",
+    "Awards": "Awards",
+    "AudioLanguage": "AudioLanguage",
+    "Seasonal": "Seasonal",
+    "Year": "Year",
+    "Universes": "Universe",
+    "Networks": "Network",
+    "Decade": "Decade",
+    "SubtitleLanguage": "SubtitleLanguage",
+    "AudioLanguages": "AudioLanguage",
+    "ContentRatings": "ContentRating",
+    "Country": "Country",
+    "Network": "Network",
+    "Overlays": "Overlays"
+  },
+  "schema_version": 1,
+  "all_dispatch": [
+    "Aspect",
+    "AudioLanguage",
+    "Awards",
+    "Based",
+    "Chart",
+    "ContentRating",
+    "Country",
+    "Decade",
+    "Franchise",
+    "Genre",
+    "Network",
+    "Playlist",
+    "Resolution",
+    "Seasonal",
+    "Separators",
+    "Streaming",
+    "Studio",
+    "SubtitleLanguage",
+    "Universe",
+    "VideoFormat",
+    "Year",
+    "Overlays"
+  ],
+  "functions": [
+    {
+      "end_line": 876,
+      "category": "Aspect",
+      "translation_calls": [
+        {
+          "line": 840,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"collections.$($item.key_name).name\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 865,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 835,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 860,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 818
+    },
+    {
+      "end_line": 1121,
+      "category": "AudioLanguage",
+      "translation_calls": [
+        {
+          "line": 905,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"collections.$($item.key_name).name\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 912,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"collections.audio_language.name\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1111,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 900,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1106,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 883
+    },
+    {
+      "end_line": 2762,
+      "category": "Awards",
+      "translation_calls": [
+        {
+          "line": 1158,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1189,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1206,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1223,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1252,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1345,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1376,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1393,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1410,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1438,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1469,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1486,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1503,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1531,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1562,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1579,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1596,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1624,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1655,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1672,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1689,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1717,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1748,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1765,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1782,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1810,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1841,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1858,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1875,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1903,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1929,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1944,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1951,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1966,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1973,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1988,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 1995,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2021,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2054,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2071,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2088,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2117,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2148,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2165,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2182,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2217,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2257,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2265,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2280,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2288,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2303,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2310,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2325,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2332,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2347,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2354,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2369,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2376,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2402,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2433,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2450,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2467,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2495,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2526,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2543,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2560,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2589,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2620,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2638,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2655,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2683,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2714,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2731,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 2749,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 1153,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1171,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1172,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1187,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1188,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1204,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1205,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1221,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1222,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1247,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1265,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1266,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1340,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1358,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1359,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1374,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1375,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1391,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1392,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1408,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1409,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1433,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1451,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1452,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1467,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1468,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1484,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1485,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1501,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1502,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1526,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1544,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1545,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1560,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1561,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1577,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1578,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1594,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1595,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1619,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1637,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1638,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1653,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1654,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1670,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1671,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1687,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1688,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1712,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1730,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1731,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1746,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1747,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1763,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1764,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1780,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1781,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1805,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1823,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1824,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1839,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1840,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1856,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1857,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1873,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1874,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1898,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1921,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1922,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1942,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1943,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1964,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1965,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 1986,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 1987,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2016,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2036,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2037,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2052,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2053,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2069,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2070,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2086,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2087,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2112,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2130,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2131,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2146,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2147,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2163,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2164,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2180,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2181,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2212,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2235,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2236,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2255,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2256,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2278,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2279,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2301,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2302,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2323,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2324,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2345,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2346,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2367,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2368,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2397,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2415,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2416,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2431,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2432,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2448,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2449,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2465,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2466,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2490,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2508,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2509,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2524,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2525,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2541,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2542,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2558,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2559,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2584,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2602,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2603,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2618,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2619,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2636,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2637,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2653,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2654,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2678,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2696,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2697,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2712,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2713,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2729,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2730,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 2747,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 2748,
+          "kind": "ForStatementAst"
+        }
+      ],
+      "line": 1127
+    },
+    {
+      "end_line": 2809,
+      "category": "Based",
+      "translation_calls": [
+        {
+          "line": 2800,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 2795,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 2768
+    },
+    {
+      "end_line": 3452,
+      "category": "Chart",
+      "translation_calls": [
+        {
+          "line": 3427,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 3441,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 3422,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 3436,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 2815
+    },
+    {
+      "end_line": 3676,
+      "category": "ContentRating",
+      "translation_calls": [
+        {
+          "line": 3495,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"collections.$($item.key_name).name\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 3507,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.age\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 3512,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.NOT_RATED\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 3523,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.RATED\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 3528,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.NOT_RATED\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 3553,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 3579,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 3605,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 3636,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 3666,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 3490,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 3506,
+          "kind": "ForStatementAst"
+        },
+        {
+          "line": 3522,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 3548,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 3574,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 3600,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 3631,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 3661,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 3458
+    },
+    {
+      "end_line": 4375,
+      "category": "Country",
+      "translation_calls": [
+        {
+          "line": 3706,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"collections.$($item.key_name).name\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 4024,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 4344,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 4364,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"collections.$($item.key_name).name\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 3701,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 4019,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 4339,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 4359,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 3682
+    },
+    {
+      "end_line": 4475,
+      "category": "Decade",
+      "translation_calls": [
+        {
+          "line": 4405,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"collections.$($item.key_name).name\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 4455,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.BEST_OF\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 4400,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 4437,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 4464,
+          "kind": "ForStatementAst"
+        }
+      ],
+      "line": 4381
+    },
+    {
+      "end_line": 4626,
+      "category": "Franchise",
+      "translation_calls": [
+        {
+          "line": 4615,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 4610,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 4481
+    },
+    {
+      "end_line": 4957,
+      "category": "Genre",
+      "translation_calls": [
+        {
+          "line": 4654,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"collections.$($item.key_name).name\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 4946,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 4649,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 4941,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 4632
+    },
+    {
+      "end_line": 5331,
+      "category": "Network",
+      "translation_calls": [
+        {
+          "line": 4986,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"collections.$($item.key_name).name\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 5285,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 5300,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 5320,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"collections.$($item.key_name).name\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 4981,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 5280,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 5295,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 5315,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 4963
+    },
+    {
+      "end_line": 5378,
+      "category": "Playlist",
+      "translation_calls": [
+        {
+          "line": 5367,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 5362,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 5337
+    },
+    {
+      "end_line": 5487,
+      "category": "Resolution",
+      "translation_calls": [
+        {
+          "line": 5406,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"collections.$($item.key_name).name\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 5433,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 5454,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"collections.$($item.key_name).name\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 5475,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 5401,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 5428,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 5449,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 5470,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 5384
+    },
+    {
+      "end_line": 5547,
+      "category": "Seasonal",
+      "translation_calls": [
+        {
+          "line": 5536,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 5531,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 5493
+    },
+    {
+      "end_line": 5626,
+      "category": "Separators",
+      "translation_calls": [
+        {
+          "line": 5564,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"collections.COLLECTIONLESS.name\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 5612,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"collections.separator.name\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 5616,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 5560,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 5615,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 5618,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 5553
+    },
+    {
+      "end_line": 5802,
+      "category": "Streaming",
+      "translation_calls": [
+        {
+          "line": 5776,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 5792,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 5771,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 5787,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 5632
+    },
+    {
+      "end_line": 6344,
+      "category": "Studio",
+      "translation_calls": [
+        {
+          "line": 5831,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"collections.$($item.key_name).name\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 6334,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 5826,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 6329,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 5808
+    },
+    {
+      "end_line": 6587,
+      "category": "SubtitleLanguage",
+      "translation_calls": [
+        {
+          "line": 6372,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"collections.$($item.key_name).name\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 6379,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"collections.subtitle_language.name\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 6578,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 6367,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 6573,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 6350
+    },
+    {
+      "end_line": 6625,
+      "category": "VideoFormat",
+      "translation_calls": [
+        {
+          "line": 6615,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 6610,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 6593
+    },
+    {
+      "end_line": 6677,
+      "category": "Universe",
+      "translation_calls": [
+        {
+          "line": 6667,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.$($item.key_name)\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 6662,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 6631
+    },
+    {
+      "end_line": 6915,
+      "category": "Year",
+      "translation_calls": [
+        {
+          "line": 6709,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"collections.$($item.key_name).name\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        },
+        {
+          "line": 6895,
+          "expression": "Get-YamlPropertyValue -PropertyPath \"key_names.BEST_OF\" -ConfigObject $global:ConfigObj -CaseSensitivity Upper"
+        }
+      ],
+      "loops": [
+        {
+          "line": 6704,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 6877,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 6904,
+          "kind": "ForStatementAst"
+        }
+      ],
+      "line": 6683
+    },
+    {
+      "end_line": 6977,
+      "category": "Overlays",
+      "translation_calls": [],
+      "loops": [
+        {
+          "line": 6930,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 6942,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 6954,
+          "kind": "ForEachStatementAst"
+        },
+        {
+          "line": 6966,
+          "kind": "ForEachStatementAst"
+        }
+      ],
+      "line": 6921
+    }
+  ],
+  "supported_languages": [
+    "ar",
+    "en",
+    "da",
+    "de",
+    "es",
+    "fr",
+    "it",
+    "nb_NO",
+    "nl",
+    "pt-br",
+    "sv"
+  ],
+  "source_sha256": "d01b6327f9e0535f7f74b78c85729713957ae5ae2f4aab6cd5d86e66ad28bd83"
+}
