@@ -19,6 +19,9 @@ def load_catalog(categories=(), *, posters=()):
         if index["sha256"] != fingerprint({k: v for k, v in index.items() if k != "sha256"}):
             raise BulkError("corrupt_catalog", "Scoped catalog index hash mismatch")
         identities, needed_categories, visited = set(), set(), set()
+        members = {}
+        for poster_id, entry in index["posters"].items():
+            members.setdefault(entry["definition"], []).append(poster_id)
         def include(identity):
             if identity in visited:
                 return
@@ -28,6 +31,11 @@ def load_catalog(categories=(), *, posters=()):
             visited.add(identity)
             identities.add(item["definition"])
             needed_categories.add(item["category"])
+            # A family selector expands every generated child. Include the
+            # dependencies of every member, not only the family metadata row.
+            if item["definition"] == identity:
+                for member in members.get(identity, ()):
+                    include(member)
             for dep in item["dependencies"]:
                 include(dep)
         for identity in posters:

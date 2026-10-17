@@ -142,11 +142,11 @@ def main(argv=None):
     if args.operation == "index":
         reference_index(args.root)
     elif args.generated:
-        compare(args.root, args.generated)
+        if not compare(args.root, args.generated)["passed"]:
+            raise BulkError("renderer_parity", "Unexplained rendering differences fail acceptance; evidence retained")
     else:
         parser.error("compare requires --generated")
 
 
 if __name__ == "__main__":
     main()
-

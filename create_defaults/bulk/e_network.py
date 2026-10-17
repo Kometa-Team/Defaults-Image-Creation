@@ -113,6 +113,12 @@ def published(root, baseline, generated=None, samples=0):
             candidates = sorted((r for r in rows if r["category"] == category and r["status"] == "found"), key=lambda r: r["expected"])
             if candidates:
                 selected.append(candidates[0])
+        # Include the approved source corrections and preserved clipping case
+        # when the caller explicitly raises the sample budget above 21.
+        for expected in ("genre/Splatter.jpg", "franchise/Death in Paradise (2011).jpg", "collectionless.jpg"):
+            candidate = next((r for r in rows if r["expected"] == expected and r["status"] == "found"), None)
+            if candidate is not None and candidate not in selected:
+                selected.append(candidate)
         for r in selected[:samples]:
             local = Path(generated) / "output" / r["local"]
             if not local.is_file():
@@ -164,4 +170,3 @@ def main(argv=None):
 
 if __name__ == "__main__":
     main()
-

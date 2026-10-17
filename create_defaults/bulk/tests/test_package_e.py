@@ -476,3 +476,81 @@ def test_all_recycling_workers_keep_buffered_success_responses(tmp_path, monkeyp
     assert result["metrics"]["worker_recycles"] == 4
     assert result["metrics"]["failures"] == result["metrics"]["retry_attempts"] == 0
 
+
+
+def test_generated_family_selector_loads_every_child_parent_but_stays_scoped():
+    from create_defaults.bulk.generators import GENERATORS
+    family = "year.series.d40a903c5b6e003596a91a6e"
+    definitions = load_catalog(posters=[family])
+    catalog, families, _ = Planner(generators=GENERATORS).expand(definitions)
+    assert len(families[family]) == 150
+    assert len(catalog) == 300
+    assert {item.category for item in catalog.values()} == {"Year"}
+    assert all(dep["poster_id"] in catalog for item in catalog.values()
+               for dep in item.data["dependencies"])
+
+
+@pytest.mark.parametrize("name", ["small", "medium", "larger", "dependencies", "mixed"])
+def test_benchmark_selection_has_bounded_complete_dependency_closure(name):
+    from create_defaults.bulk.e_performance import selected_workload
+    from create_defaults.bulk.generators import GENERATORS
+    definitions, selected = selected_workload(name)
+    catalog, families, _ = Planner(generators=GENERATORS).expand(definitions)
+    assert not set(selected).intersection(families)
+    needed = set()
+    def include(identity):
+        if identity in needed:
+            return
+        needed.add(identity)
+        for dependency in catalog[identity].data["dependencies"]:
+            include(dependency["poster_id"])
+    for identity in selected:
+        include(identity)
+    assert 1 <= len(needed) <= 64
+    if name == "mixed":
+        assert len(needed) == 16
+        assert {catalog[k].category for k in needed} == {"Based", "Genre", "Year", "Playlist"}
+
+
+def test_concurrent_group_decision_is_atomic_and_records_inspected_subset(tmp_path):
+    from concurrent.futures import ThreadPoolExecutor
+    definitions, captions = [], {"key_names": {}}
+    for index, original in enumerate(load_catalog(["Based"])):
+        value = original.data
+        value["layout"] = {"kind": "fixed", "measurement": None}
+        value["composer"]["font_size"] = 100
+        captions["key_names"][value["caption"]["key"].split(".")[-1]] = "Synthetic " + str(index)
+        definitions.append(Definition.create(value))
+    file = tmp_path / "en.yml"
+    file.write_text(yaml.safe_dump(captions), encoding="utf-8")
+    config = Config(cache_dir=tmp_path / "cache", output_dir=tmp_path / "output", workspace_dir=tmp_path / "work")
+    result = generate(definitions, Translations({"en": file}), config=config,
+        categories=["Based"], limits=WorkerLimits(workers=2))
+    assert result["status"] == "verified"
+    assert all(v["risk"]["level"] == "low" for v in result["preflight"]["variants"])
+    reviews = Reviews(Store(config.cache_dir / "state.sqlite"), config)
+    reviews.attach(result)
+    identities = sorted(v["id"] for v in result["preflight"]["variants"])
+    inspected = identities[:2]
+    batch = reviews.batch(identities, scope="Ephemeral synthetic regression only", inspected=inspected)
+    def decide(index):
+        try:
+            return reviews.approve_group(batch["id"], membership=batch["membership"],
+                reviewer="synthetic-concurrent-test-" + str(index),
+                comment="Synthetic group mechanics; no actual maintainer artwork acceptance.")["approved"]
+        except Conflict:
+            return 0
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        assert sorted(pool.map(decide, [0, 1])) == [0, 4]
+    assert all(reviews.item(identity)["state"] == "approved" for identity in identities)
+    events = [e for e in reviews.export()["events"] if e["kind"] == "review_group_approve"]
+    assert len(events) == 4
+    assert all(e["payload"]["decision_type"] == "representative-group"
+               and e["payload"]["inspected"] == inspected for e in events)
+
+
+def test_comparison_cli_cannot_report_success_for_unexplained_differences(tmp_path, monkeypatch):
+    from create_defaults.bulk import e_comparison
+    monkeypatch.setattr(e_comparison, "compare", lambda *args: {"passed": False})
+    with pytest.raises(BulkError, match="fail acceptance"):
+        e_comparison.main(["compare", "--root", str(tmp_path / "refs"), "--generated", str(tmp_path / "generated")])
