@@ -9,6 +9,8 @@ are in [PACKAGE_E_USAGE.md](../../../PACKAGE_E_USAGE.md).
   paths and source/runtime identities.
 - `language-audit.json`: fresh pinned 14-language / 139,398-contract coverage,
   source consistency, contributor and fitting-group digests.
+- `snapshot-scope-consistency.json`: all 14 single/Based scope comparisons, full
+  French/Arabic identity comparisons and actual strict/partial behavior.
 - `fitting-proposals.json`: six exact unapproved preview contexts plus Arabic
   candidate/license/probe identities; no production font installation.
 - `poster-benchmarks-and-historical-overlay.json`: all 18 poster scaling observations,

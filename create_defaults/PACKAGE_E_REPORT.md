@@ -90,7 +90,7 @@ not authorization to change colors or layouts.
 
 ## Full English generation and renderer comparison
 
-In progress: last recorded 3,181 verified of 9,957 required. This is incomplete evidence, not a full pass.
+In progress: last recorded 3,883 verified of 9,957 required. This is incomplete evidence, not a full pass.
 
 The full comparison requires a complete, validated manifest and matching source,
 asset, font and semantic identities for every reference. Its original Phase 1
@@ -169,7 +169,7 @@ The existing receipt/review service registers these 64 exact previews as
 [Pending batch identities](bulk/evidence/package-e/pending-overlay-review.json)
 link its local review page and exact image/validation versions.
 
-In progress: last recorded 2,272 verified of 4,122 required. This is incomplete evidence, not a full pass.
+In progress: last recorded 3,232 verified of 4,122 required. This is incomplete evidence, not a full pass.
 
 The four exact D sample approvals and their image/source/font/layout/validation
 identities remain in `bulk/evidence/package-d/maintainer-visual-acceptance-20261017*.json`.
@@ -212,7 +212,13 @@ ready item is an ASCII caption (`4/20`), not evidence of Arabic production readi
 Bulgarian/Hungarian/Russian also remain explicitly new-language warnings.
 
 English validation fingerprints match all 9,957 full/category variants and a separate
-single Book check, with zero differences. The fresh audit reports 4,131 deduplicated
+single Book check, with zero differences. Additional current-snapshot checks cover
+single Book and Based-category fingerprints for all 14 languages, plus complete
+9,957-contract French and Arabic selections against their 21 category scopes:
+all 30 observations have zero differences. A real English/French Book batch in
+strict mode renders nothing when French is blocked; partial mode renders exactly
+the eligible English output, with no French fallback or new approval. See
+[snapshot scope evidence](bulk/evidence/package-e/snapshot-scope-consistency.json). The fresh audit reports 4,131 deduplicated
 missing/invalid resource keys linked to 29,429 dependent variants (links can overlap).
 Raw audit identity: `529b6d27178b210fb0b7fa58d1994a8996a56d95b8c03d3807213d04c34eaa04`;
 deduplicated contributor mapping:
@@ -424,19 +430,19 @@ Final complete-PR static inventory:
 ```json
 {
   "pr_base": "57ef136833a3f54da2bf1e4ddef98addfa36d583",
-  "files": 208,
+  "files": 209,
   "groups": {
     "implementation tests docs or workflow": 92,
     "compressed immutable manifest fixtures": 1,
     "generated catalog and source-normalized migration audits": 88,
-    "compact package audit evidence": 23,
+    "compact package audit evidence": 24,
     "Package A source and inventory evidence": 4
   },
   "bytes_by_group": {
-    "implementation tests docs or workflow": 951573,
+    "implementation tests docs or workflow": 953535,
     "compressed immutable manifest fixtures": 1458149,
     "generated catalog and source-normalized migration audits": 13803206,
-    "compact package audit evidence": 532220,
+    "compact package audit evidence": 543981,
     "Package A source and inventory evidence": 2133232
   },
   "possible_credentials": [],
