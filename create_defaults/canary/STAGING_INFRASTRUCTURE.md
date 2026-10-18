@@ -1,8 +1,8 @@
 # English canary staging infrastructure — review only
 
-**Prepared, not installed or activated.** All staging gates are disabled. No
-Default-Images request, ref/PR creation, credential enabling, App installation,
-workflow installation, image publication or merge was performed in this task.
+**Prepared, not installed or activated.** All staging gates are disabled. Read-only
+GitHub identity/permission inspection was performed; no ref/PR creation, credential
+enabling, App installation, workflow installation, image publication or merge occurred.
 PR #12 remains draft. This is implementation preparation, not staging authority.
 
 ## Reviewable files and fixed identities
@@ -56,9 +56,10 @@ repacking, translated layout activation, overlays or private intermediates.
    reviewed infrastructure commit and its separately approved activation commit.
    No helper, requirement, workflow or shared runtime change is silently adopted.
 5. Source token remains `contents: read`, `actions: read`. Actual live environment
-   checks require only `bullmoose20` as reviewer, prevent-self-review enabled and
-   only `main` deployment branch. Admin-bypass disabling is separately attested:
-   the environment response does not reliably expose that setting.
+   checks require the five exact verified maintainer identities, self-review allowed,
+   only `main` deployment branch and an exact authorized live-settings fingerprint.
+   Missing/true native admin-bypass readback stops. See the open blocker below.
+   An explicit native approval record is required; actor identity grants no approval.
 6. Target App token is requested only after the protected environment and complete
    preflight, restricted to Default-Images and Contents/Pull requests write. The
    helper confirms its installation token can access only that one repository.
@@ -92,13 +93,88 @@ Nothing below has been applied.
 
 ### 1. Confirm people and operating window
 
-Confirm `bullmoose20` as primary staging reviewer and rollback owner. Verify that
-account has source-repository read access for environment review and the operational
-access needed to coordinate rollback. Name a **different authorized source-repository
-writer** to dispatch runs: prevent-self-review means `bullmoose20` cannot approve a
-run they started. If no second operator is available, remain blocked; do not silently
-relax self-review protection. Confirm the 30-minute observation/writer-reservation
-window and the existing PowerShell launcher/configuration/owner. Do not alter it.
+The intended approval roster is `bullmoose20`, `YozoraXCII`, `chazlarson`,
+`meisnate12`, `badja-dev`. Each may initiate and explicitly approve their own run or approve
+another permitted initiator's run. One approval suffices; every fresh staging run
+must pause. There is no independent-dispatcher requirement. Actual workflow dispatch
+permission is governed by GitHub (write access for manual runs), not granted by this
+proposal. An outside writer may initiate but cannot approve merely because of their
+write role, PR authorship, workflow inputs or configuration submitted in a PR.
+
+| Initiator (if GitHub permits dispatch) | Permitted explicit approver | Self-approval |
+| --- | --- | --- |
+| bullmoose20 | Any one of the five authorized maintainers | Allowed |
+| YozoraXCII | Any one of the five authorized maintainers | Allowed |
+| chazlarson | Any one of the five authorized maintainers | Allowed |
+| meisnate12 | Any one of the five authorized maintainers | Allowed |
+| badja-dev | Any one of the five authorized maintainers | Allowed |
+| Other eligible workflow writer | Any one of the five authorized maintainers | Outside initiator cannot approve |
+
+`bullmoose20` remains proposed primary coordinator and rollback owner, subject to
+separate confirmation. This coordination role does not restrict deployment approval
+to that account. Confirm the 30-minute observation/writer-reservation window and
+existing PowerShell launcher/configuration/owner; do not alter the generator.
+
+### Verified identities, roles and reviewer representation
+
+Read-only GitHub observations are retained in the [permission audit](../bulk/evidence/english-canary/trusted-maintainer-permissions-20261018-v2.json) and its unchanged earlier snapshot.
+The authenticated account was `bullmoose20`.
+
+| Account | Account ID | Organization membership | Defaults-Image-Creation effective role | Default-Images effective role |
+| --- | --- | --- | --- | --- |
+| bullmoose20 | 12549033 | active member | write | maintain |
+| YozoraXCII | 96386153 | active owner (`admin`) | admin | admin |
+| chazlarson | 3865541 | active owner (`admin`) | admin | admin |
+| meisnate12 | 1631064 | active owner (`admin`) | admin | admin |
+| badja-dev | 180163201 | active owner (`admin`) | admin | admin |
+
+GitHub's collaborator endpoint reports permission `write` for `maintain`, so the
+record includes both `permission` and `role_name`; the table uses the effective role.
+The visible `developers` team (ID 13883129, organization Kometa-Team, no parent)
+contains **exactly all five authorized accounts** after the user's addendum.
+It is a matching team candidate; no new dedicated team is necessary. The source
+team repository listing exposed write access, and its permission-check request
+succeeded with an empty response. The target team permission check returned 404
+and a missing `admin:org` scope diagnostic; it establishes no target team role.
+Each user's effective target role was independently verified as shown above.
+Repository-level team-list GETs returned 404 on both repositories; hidden team
+access remains an organization-admin verification item, not an invented absence.
+
+**Preferred team option: existing `Kometa-Team/developers`**, provided its exact
+five-user effective membership and source eligibility are reverified at setup and
+before minting a write token. Team mode pins organization, slug, numeric ID and
+member account IDs, rejects parent hierarchy changes and stops on missing/changed
+team/membership. The member-list API includes child-team members; more than five
+entries on its first 100-result page already fails closed. See
+[team member API permissions and inheritance](https://docs.github.com/en/rest/teams/members).
+A future GitHub Actions token with only source Contents/Actions read cannot be
+assumed to read a closed organization team: the endpoint requires organization
+Members read. Do not expand the target App's scope or add credentials in this task.
+An authorized read-only team-lookup mechanism must be separately reviewed if this
+mode is selected; unavailable team reads stop without fallback.
+
+**Prepared least-privilege alternative: five explicit verified users.** This is the
+current disabled policy's `reviewer_representation: explicit_users`; the helper also
+supports a separately selected `team` mode. GitHub permits up to six user/team entries;
+one listed reviewer approves, and reviewers need source repository read access.
+Both repositories are public and the observed organization plan is Free, where
+native required reviewers are supported. See
+[reviewer limits](https://docs.github.com/en/rest/deployments/environments) and
+[plan availability](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments).
+
+If an administrator prefers a dedicated team `image-publishing-approvers`, its
+intended effective membership must be exactly the **same five accounts**. Creation,
+access grants and a newly pinned team identity require separate approval; the helper
+will reject an unpinned replacement team. No team was created or changed here.
+
+Organization-admin verification, if access is incomplete: Organization Settings >
+People: check each account's active status and owner/member role; Teams: inspect
+all visible and secret teams, effective/nested members and repository access; each
+repository Settings > Collaborators and teams: inspect direct, team, base and owner
+access and effective role. With appropriately authorized read access, paginate
+`GET /orgs/Kometa-Team/teams`, each `/teams/{slug}/members` and `/teams/{slug}/repos`,
+plus `GET /repos/Kometa-Team/{repo}/collaborators/{login}/permission` and `/teams`.
+Capture exact responses/errors. A 403/404 must remain unknown, never inferred absent.
 
 ### 2. Register the target-only GitHub App
 
@@ -129,10 +205,14 @@ reviewed implementation and authorization, not magically excluded by token scope
 In **Defaults-Image-Creation**, not Default-Images:
 
 1. Settings → Environments → New environment → `english-canary-stage`.
-2. Required reviewers: **only `bullmoose20`**, after confirmation. GitHub accepts
-   any one listed reviewer, so do not add a fallback that weakens this requirement.
-3. Enable **Prevent self-review**. Deselect **Allow administrators to bypass
-   configured protection rules**. Save and retain settings evidence.
+2. Enable **Required reviewers** and add exactly `bullmoose20`, `YozoraXCII`,
+   `chazlarson`, `meisnate12`, `badja-dev`, checking the account IDs above. One of five approves.
+   Alternatively, after separately approving team-mode lookup access, select only
+   the verified Developers team and pin `reviewer_representation: team` in both
+   policy and authorization. Never select general collaborators or an unverified
+   team, and never switch representations automatically after a failed check.
+3. Leave **Prevent self-review unchecked**. Deselect **Allow administrators to bypass
+   configured protection rules**. Save protection rules and retain settings evidence.
 4. Deployment branches/tags: Selected branches and tags → Branch → exactly `main`.
    Add no tag or wildcard rule. The helper verifies the live reviewer/branch rules.
 5. Environment variable `ENGLISH_CANARY_APP_ID`: the confirmed App ID.
@@ -163,40 +243,20 @@ explicit installation/merge authorization may deploy it. Record the resulting fu
 source infrastructure commit **A**. Policy remains disabled and authorization false.
 The template uses only manual dispatch and no publication/rollback mode.
 
-### 5. Approve the artifact intake explicitly
+### 5. Decide artifact intake and retention separately
 
-The prepared implementation uses the **read-only source prerelease asset** backend,
-not an arbitrary URL. GitHub draft releases require push access to view, so silently
-using a draft would not work with the source read-only workflow token. This template
-therefore requires a **published prerelease** in the source repository, not a draft.
-See [release visibility](https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28).
+See [private artifact-delivery assessment](ARTIFACT_DELIVERY_ASSESSMENT.md).
+**Recommend a separately authorized private holding repository with pinned Actions
+artifact delivery**, subject to access/retention verification and adapter review.
+No holding repository, upload, credential or adapter is created by this task.
 
-**This would make the review ZIP publicly downloadable in the public source repo.**
-It is an additional publication action requiring explicit artifact-sharing approval,
-separate from visual acceptance or staging permission. It has NOT occurred. If a
-public source artifact is unacceptable, do not enable this template: approve and
-review a private Actions-artifact intake adapter first. Do not widen source token
-permissions or use a personal token just to bypass draft-release restrictions.
-
-Only after artifact-sharing authorization, a source repository writer could run:
-
-```powershell
-$bundlePath = 'C:\Users\bullmoose20\Defaults-Image-Creation\config\english-canary\preparation-20261017-v1\english-canary-review-bundle.zip'
-(Get-FileHash -LiteralPath $bundlePath -Algorithm SHA256).Hash
-# Must equal 97d82b19eb237908cbd4657c67ca16eefe089b5a6d6a5f9e1690fda6cdb597c5
-# FUTURE AUTHORIZED ACTION ONLY; do not run under preparation/visual approval:
-$sourceImplementationCommit = '<approved full source infrastructure commit A>'
-# Require the source release/tag name to be absent; stop if either already exists.
-# This creates a new source tag at exactly A as well as the prerelease and asset.
-gh release create english-canary-approved-v1 $bundlePath --repo Kometa-Team/Defaults-Image-Creation --target $sourceImplementationCommit --prerelease --title 'English canary reviewed bundle — not production' --notes 'Immutable accepted review archive; no Default-Images publication authorization.'
-gh api repos/Kometa-Team/Defaults-Image-Creation/releases/tags/english-canary-approved-v1 --jq '.assets[] | {id,name,size,digest}'
-```
-
-Record integer asset ID, exactly 7,256,318 bytes and digest `sha256:<ZIP SHA above>`.
-Never use `--clobber`, replace or repack it. Preserve a second verified offline copy
-and the separate acceptance/audit records. Future `verify` dispatch uses the asset
-ID, `mode=verify`, `confirm_staging=false`; it makes no Default-Images request or write.
-Creating a source release may notify watchers; this too is included in the checklist.
+The existing inactive template still implements a source **public prerelease** GET
+backend. This is not the recommended privacy-preserving choice and is not activated.
+No prerelease, source tag or ZIP upload has occurred. Do not dispatch this backend
+unless public sharing is separately explicitly approved. Otherwise replace it only
+through a separately authorized private adapter change; do not repack the ZIP or
+reuse a target write token to read a source draft release. The earlier public-backend
+implementation and immutable preparation record remain historical evidence.
 
 ### 6. Prepare a distinct staging-authorization change
 
@@ -209,8 +269,9 @@ activation/configuration change, not part of this task.
 - Authorization: `authorized=true`, action `stage_seven_english_images_only`;
   record implementation commit A, full helper and installed-workflow SHA-256 values
   (hash normalized LF text), integer source asset ID, all seven exact destinations,
-  exact ZIP/preparation/acceptance identities, pinned target HEAD, reviewer/rollback
-  owner `bullmoose20`, owner/window/durable-backup/bypass confirmations, and UTC
+  exact ZIP/preparation/acceptance identities, pinned target HEAD, five-person reviewer
+  roster with verified IDs, rollback owner `bullmoose20`, exact live environment
+  snapshot SHA-256, owner/window/durable-backup/bypass confirmations, and UTC
   expiry no more than 24 hours ahead. `publish_authorized` and `merge_authorized`
   remain false. Recompute canonical envelope SHA after finalizing fields.
 - Re-read target HEAD/tree and seven old blob identities using read-only access.
@@ -218,8 +279,8 @@ activation/configuration change, not part of this task.
   a new base into the old acceptance or weaken checks. Prepare an additive,
   separately reviewed baseline update if needed while keeping images/archive intact.
 - Obtain explicit staging approval naming A, B, installed workflow/helper hashes,
-  asset ID, bundle/preparation/acceptance hashes, target base, seven paths, dispatcher,
-  reviewer/owner and expiry. Only then may a maintainer deploy B and set the source
+  asset ID, bundle/preparation/acceptance hashes, target base, seven paths, permitted
+  initiator, reviewer roster/rollback owner, environment snapshot and expiry. Only then may a maintainer deploy B and set the source
   repository variable to `true`. No target operation is authorized before this.
 
 This two-commit scheme avoids inventing a self-referential commit SHA inside its
@@ -227,12 +288,31 @@ own authorization: A pins code, B only contains approved activation/authorizatio
 
 ### 7. Future staging execution — separately authorized only
 
-The named independent operator selects source Actions → English Poster Canary
-Staging → Run workflow → `main`, mode `stage`, exact asset ID and confirm true.
-`bullmoose20` reviews the exact run/ref/artifacts and approves `english-canary-stage`.
-The preflight completes before a target write token is minted, then is repeated.
-Only a new seven-file candidate branch and a **draft** PR in Default-Images may be
-created. Master stays unchanged; the resulting PR must remain unmerged.
+Only after separate setup and exact staging authorization, `bullmoose20` can:
+
+1. Open **Defaults-Image-Creation > Actions > English Poster Canary Staging**.
+2. Select **Run workflow**, trusted branch **main**, mode **stage**, exact separately
+   approved asset ID, and confirm staging. Click **Run workflow** once.
+3. Open that run. Its read-only verify job checks the sealed archive and policy.
+4. Wait for the protected `english-canary-stage` job to show **Review deployments**.
+   It must pause even when the initiator is a designated reviewer.
+5. Inspect the run SHA, exact seven image/hash bindings, authorization expiry, target
+   base, settings and write scope. Select **Review deployments**, check only
+   **english-canary-stage**, optionally record the authorization reference, and
+   explicitly click **Approve and deploy** (or Reject).
+6. After native approval, read-only preflight checks live protection, exact source,
+   run/attempt and GitHub's approval history **before** minting the target App token.
+   An unobservable/changed native control stops here; do not override the helper.
+7. If all checks pass, only a new seven-file branch and **draft** target PR are
+   created. Verify the seven paths/hashes and retain audit evidence; master stays
+   unchanged. The target PR remains unmerged.
+
+The same sequence applies to any of the five maintainers approving their own run.
+To approve another maintainer's (or an outside permitted writer's) run, open that
+pending run and perform steps 4-5 as one of the five designated reviewers. The
+outside initiator has no approval right. GitHub determines who can dispatch;
+this workflow grants no new access. A new dispatch is required for each attempt:
+reruns are refused because review history is per run and could reuse old approval.
 
 The complete future action list is in the separate checklist. End the run after
 retaining audit evidence. Disable the repository variable afterward under the
@@ -259,7 +339,46 @@ App/env/installation/intake/authorization/role confirmations remain outstanding.
 Real App access, token revocation and GitHub staging have deliberately not been tested.
 No production-changing action may proceed on the basis of this report.
 
-Focused validation: **57 checks passed** locally, including the isolated minimal
-runtime deployment fixture and all earlier image acceptance/scope checks. The
-recorded pre-collection suite had 55 checks; two later deployment/transport
-integrity checks also pass. Full PR CI is run separately before handoff.
+### Native-control verification blocker and test boundary
+
+The documented REST environment response does **not** expose `can_admins_bypass`,
+and GraphQL Environment introspection exposed no bypass field. No source staging
+environment exists yet. The helper requires authoritative readback equal to false;
+missing/true state fails closed before App token minting. The API's lack of a field
+must not be treated as proof that native no-bypass protection is unavailable, or
+that it is disabled. A manually checked box/authorization boolean is not substituted
+for machine readback. A supported authoritative readback/evidence verification
+method must be separately reviewed before staging can run; no extra Administration
+permission or undocumented endpoint is silently requested. Until resolved, this is
+**an explicit staging blocker**, even after a trusted maintainer clicks approval.
+
+An admin must verify in GitHub UI: reviewer names/IDs, self-review unchecked, bypass
+unchecked and only main branch; retain evidence. If native required-reviewer controls
+are unavailable for the actual repository/plan, stop; do not replace them with an
+actor YAML condition. Once setup is separately authorized, prove the pause, trusted
+self-review, cross-review, outsider rejection, secret isolation and no-bypass behavior
+with a GitHub-hosted **no-target-token/no-target-write** approval exercise before
+activating staging. No such hosted approval exercise occurred in this task.
+
+Local fixtures cover all five self-review identities, cross-review and outside-writer
+initiation followed by trusted approval, denial without explicit review, outsider
+reviews, roster/ID/team drift, wrong source/attempt, missing/changed native controls,
+artifact and seven-path safeguards. They validate parsing/policy logic, **not GitHub's
+server-side authorization or UI behavior**. Existing immutable evidence is preserved;
+new implementation and dry-run evidence are additive.
+
+Roster changes require disabling staging, verifying account IDs/membership/access,
+reviewing a new pinned implementation/environment configuration and exact staging
+authorization, and repeating the no-write hosted checks. PR content/inputs cannot
+amend the roster. Repository/organization administrators can edit settings or trusted
+source code; native reviewers do not remove that administrative authority. The helper
+rejects observable drift, and fresh settings evidence is required before activation.
+
+### Production remains separate
+
+No production environment/publisher is created, configured or activated. Future
+production uses a **different** protected environment and another explicit approval
+by one of the same authorized maintainers; staging review/history never satisfies
+it. A reviewed target canary PR, exact candidate commit, verified backups, observation
+window and separately authorized production execution remain required. No automatic
+merge, cutover, PowerShell replacement or next migration phase follows staging.

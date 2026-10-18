@@ -371,3 +371,11 @@ All gates remain disabled; bullmoose20 roles are proposed/unconfirmed. The final
 local dry-run creates no staging ref or remote write. App/env/credential installation,
 artifact intake/sharing, infrastructure deployment and exact staging permission
 remain separately required. Nothing merges PR #12, replaces PowerShell or publishes.
+
+Trusted-maintainer staging policy was updated for the five verified users including
+badja-dev. The Developers team matches all five; explicit users remain the disabled
+default, with guarded optional team mode. One explicit native approval (including
+self-review) is required per fresh run; no independent dispatcher or actor-based
+auto-approval. Current read-only API admin-bypass verification is a fail-closed
+blocker. Setup, private artifact intake and staging permission remain separate.
+See the [current setup guide](canary/STAGING_INFRASTRUCTURE.md).

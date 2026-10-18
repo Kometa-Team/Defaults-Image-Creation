@@ -1,88 +1,96 @@
 # Separate English canary staging-authorization checklist
 
-**All unchecked; preparation and visual acceptance grant none of these permissions.**
-Proposed primary reviewer/rollback owner: `bullmoose20`, pending explicit confirmation.
-Use the [configuration instructions](STAGING_INFRASTRUCTURE.md). No action was executed.
+**All unchecked.** The five-person approval policy is specified; setup, staging,
+publication and merge are not authorized. `bullmoose20` remains proposed primary
+coordinator/rollback owner pending separate confirmation. Follow the exact conditional
+[setup guide and operator UI walkthrough](STAGING_INFRASTRUCTURE.md).
 
 ## Setup changes requiring explicit setup approval
 
-- [ ] Confirm `bullmoose20` roles/access and name a different writer to dispatch.
-- [ ] Register the organization-owned App; generate its private key; install it on
-      Kometa-Team with Default-Images as its **only** selected repository.
-- [ ] Grant only Metadata read, Contents write, Pull requests write. No organization,
-      Administration, Workflows or source-repository installation permission.
-- [ ] Create source environment `english-canary-stage`, only reviewer `bullmoose20`,
-      prevent self-review, disable admin bypass, allow only branch `main`.
-- [ ] Add source environment App-ID variable/private-key secret. No broad PAT fallback.
-- [ ] Authorize a separate infrastructure deployment PR in the source repo, exactly
-      the deployment manifest; explicitly review/authorize its installation/merge.
-      This does not merge or mark PR #12 ready, or modify PowerShell.
-- [ ] Record installed implementation commit A and full file/action hashes.
-- [ ] Keep source repository staging variable false/absent and policy/auth disabled.
+- [ ] Confirm the verified roster: bullmoose20, YozoraXCII, chazlarson, meisnate12,
+      badja-dev; confirm rollback owner and actual legacy launcher/window.
+- [ ] Choose reviewer representation explicitly: five usernames (prepared default),
+      or existing Developers team ID 13883129 with separately approved read-only
+      membership lookup. Team membership must remain exactly these five users.
+      No new team or access grant is authorized. Resolve retained API limitations.
+- [ ] Source administrator creates `english-canary-stage`: Required reviewers,
+      exactly the selected users/team; **Prevent self-review off**, **Allow
+      administrators to bypass configured protection rules off**, only branch main.
+- [ ] Establish authoritative no-bypass readback. Current documented REST data omits
+      the setting; the helper intentionally blocks on missing state. A settings
+      checkbox/manual boolean alone does not satisfy the runtime check. Resolve
+      this blocker by a separately reviewed supported verification mechanism.
+- [ ] Register the organization-owned target App, generate its private key and install
+      on **Default-Images only**. Metadata read, Contents write, Pull requests write;
+      no Administration, Workflows, source or organization access.
+- [ ] Configure source protected environment App-ID variable/private-key secret.
+      Keep repository `ENGLISH_CANARY_STAGING_ENABLED` absent/false.
+- [ ] Separately authorize infrastructure-only source deployment using the exact
+      deployment manifest and reviewed installed implementation commit A. Do not
+      merge PR #12 or replace PowerShell. Installing YAML alone is insufficient.
+- [ ] Run a separately approved GitHub-hosted approval exercise with **no target App
+      token or write operation**: verify every run pauses; self/cross review works;
+      outside initiators cannot approve; no bypass; branch/secret isolation holds.
+      Local fixtures and normal validation CI do not prove these server behaviors.
+- [ ] Preserve settings/hosted-test evidence and pin the live environment snapshot.
+      Leave all policy/authorization gates off pending exact staging permission.
 
-## Artifact transfer requiring explicit artifact-sharing approval
+## Artifact transfer decision requiring separate approval
 
-- [ ] Choose/approve the source prerelease intake backend. It makes the existing
-      ZIP publicly downloadable in the source repo; no such publication is currently
-      authorized. If privacy is required, remain disabled until a private adapter
-      has been separately reviewed. Do not silently use write credentials for drafts.
-- [ ] Authorize a new source tag `english-canary-approved-v1` at exact approved
-      implementation commit A, source prerelease creation and uploading **only the existing ZIP**,
-      not a new render/repack. Record tag, source asset ID, size and exact SHA/digest.
-      Source release notifications can occur. No release in Default-Images.
-- [ ] Retain a second verified backup and the separate seven-image approval records.
-- [ ] Run source workflow `verify` only; no target writes or target token required.
+- [ ] Review [delivery options](ARTIFACT_DELIVERY_ASSESSMENT.md). Recommended private
+      holding-repository Actions intake needs separate repository/access/adapter
+      approval; none is implemented or created here.
+- [ ] Do not assume a public repository's Actions artifacts are private. The existing
+      inactive public prerelease intake remains unapproved; no tag/release/upload.
+- [ ] If public intake is separately selected, explicitly authorize the new source
+      tag/release and exact ZIP upload, recognizing public disclosure/notifications.
+      Otherwise review a private adapter before installation; no credential fallback.
+- [ ] Preserve the exact 7,256,318-byte ZIP and SHA-256
+      `97d82b19eb237908cbd4657c67ca16eefe089b5a6d6a5f9e1690fda6cdb597c5`,
+      separate artwork acceptance, producer identity, retention and verified backups.
 
-## Distinct permission to activate staging
+## Exact one-run staging permission required after setup
 
-- [ ] Confirm target HEAD/tree and all seven existing exact-case blob identities.
-      Any drift from the recorded base stops for a fresh reviewed baseline.
-- [ ] Confirm writer reservation, 30-minute observation period and backup availability.
-- [ ] Prepare activation/authorization-only commit B relative to reviewed code A.
-      Bind all seven paths, existing ZIP and approval hashes, source asset ID,
-      implementation/workflow/helper hashes, base HEAD, dispatcher, confirmed
-      reviewer/owner and UTC expiry (at most 24 hours). No publish/merge authority.
-- [ ] Explicitly authorize deployment of B and setting the source staging variable true.
-- [ ] Explicitly authorize the specific staging run, not merely workflow installation.
-- [ ] Have the independent operator dispatch `stage`; `bullmoose20` must review and
-      approve the protected environment. No self-review or administrator bypass.
+- [ ] Fresh read-only target master/tree/seven old-blob verification. Pinned base:
+      `59e49ede8d41ac5991f971e66e93af596402329a`. Drift requires additive review.
+- [ ] Reserve competing writers/legacy job for the observation window.
+- [ ] Approve commit B changing only disabled policy/authorization JSON relative to A:
+      exact A/helper/workflow, five-account roster and chosen representation, live
+      environment snapshot, seven paths and archive/preparation/acceptance hashes,
+      immutable asset identity, target base, owner/window/retention/bypass confirmations
+      and <=24-hour UTC expiry. Publishing/merging remain false.
+- [ ] Separately authorize deploying B and setting the source repository variable true.
+- [ ] A GitHub-permitted writer dispatches main/stage once with the exact asset ID and
+      confirm true. Any one of the five reviewers, including that initiator, explicitly
+      selects Review deployments > english-canary-stage > Approve and deploy.
+      An eligible outside writer may dispatch; only a designated maintainer approves.
+      No actor automatically approves, and reruns cannot reuse earlier approval.
 
-## Every possible target GitHub mutation in that future authorized run
+## Complete future staging action inventory (not executed)
 
-1. POST App installation access-token creation (official action); repository scope
-   narrowed to Default-Images. GET installation repository scope is verified.
-2. GET target master, commit/tree and exact old blob identities (read-only).
-3. Up to **7 × POST `/repos/Kometa-Team/Default-Images/git/blobs`** for accepted bytes.
-4. **1 × POST `.../git/trees`** with base tree and exactly seven replacement entries.
-5. GET complete candidate tree; verify no unrelated change.
-6. **1 × POST `.../git/commits`** with exactly the approved master HEAD as sole parent.
-7. Recheck master; GET new branch name to require absence.
-8. **1 × POST `.../git/refs`** to create only the new `canary/english-<auth-prefix>` ref.
-9. Recheck master. **1 × POST `.../pulls`** to open a **draft** seven-file PR against
-   master; PR creation can notify target watchers/reviewers. No explicit reviewer
-   request/comment/label operation is included.
-10. Recheck master; append local immutable audit events and upload an audit artifact
-    in **Defaults-Image-Creation**. Failure evidence is uploaded too.
-11. Official action post step revokes its installation token (DELETE token, not
-    a repository/ref deletion). Reconcile manually if revocation fails.
+After native approval and preflight, the exact authorized staging run may:
 
-There is **no** PATCH/update of master or any existing ref, force push, merge API,
-file deletion, tag change, settings change in Default-Images, per-file Contents API
-replacement, workflow installation in Default-Images, rollback or publication route.
-An App installation is a separately approved GitHub access/configuration change,
-not an image update; it has not occurred under this preparation.
+1. Read source artifact/authorization/environment/run/approval evidence; team mode
+   additionally reads pinned team membership. Write source run logs/local audit.
+2. Mint one short-lived target-only installation token after all checks pass.
+3. Read target installation scope, master HEAD, complete tree and old blobs.
+4. POST seven already accepted image blobs, one candidate tree and one sole-parent
+   commit; verify exact seven replacements and unchanged unrelated content.
+5. POST-create one new `canary/english-<authorization-hash-prefix>` ref, never update
+   an existing ref; stop on concurrent HEAD changes and preserve forensic evidence.
+6. POST one **draft** PR into Default-Images/master. This is a separate future target
+   PR, not a change to PR #12. Never merge or update master.
+7. Upload unique immutable-at-upload source audit artifacts, preserve a second verified
+   copy and revoke the installation token in the pinned action's post step.
+8. Disable the repository staging variable afterward under the approved procedure.
 
-Partial errors may leave Git objects, a staging branch or draft PR. Stop and preserve
-rather than retry/delete/rebase. Only the separately authorized run may create those
-objects. The local dry-run creates none of those remote objects or local staging refs.
+No automatic cleanup, ref overwrite, force, deletion, production publisher or rollback
+API is implemented. Failures stop without write retries; partial objects/refs/PRs may
+remain for owner reconciliation. Audit any failure or manual follow-up separately.
 
-## Required approval wording must identify
+## Production remains a separate decision
 
-Implementation A and activation B; installed workflow/helper hashes; source artifact
-ID and ZIP SHA `97d82b19eb237908cbd4657c67ca16eefe089b5a6d6a5f9e1690fda6cdb597c5`;
-preparation `bc7657363fb253bb41965b56bd73ef650be5dc9606bfff486ac8aa76eb2d77be`;
-acceptance `139ed5b73c5ee555488163e024c85e33850207a401aa65b546d87c6b1a7f3919`;
-target base and seven paths; independent dispatcher; confirmed `bullmoose20` roles;
-window and expiry. Explicitly limit authority to the new draft staging PR and
-forbid publishing, merging, production ref changes, PowerShell replacement and
-anything outside the seven images. No future IDs/commit hashes are invented here.
+A future distinct production environment requires another explicit trusted-maintainer
+approval, reviewed target PR/exact candidate commit, verified backups and separately
+authorized execution. Staging approval/history cannot authorize publication. No
+production environment, credential or publisher is configured by this task.

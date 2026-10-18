@@ -35,3 +35,24 @@ The acceptance is an additional record, not a rewritten preparation report.
 - `staging-infrastructure-dry-run-20261018.json`: seven exact accepted images in
   a real local Git commit, unchanged local refs/worktree and zero network/remote
   writes/ref/PR creation. See the [implementation guide](../../../canary/STAGING_INFRASTRUCTURE.md).
+
+- `trusted-maintainer-permissions-20261018.json`: initial read-only four-person
+  discovery snapshot, preserved as observed before the fifth-maintainer addendum.
+- `trusted-maintainer-permissions-20261018-v2.json`: additive fifth-maintainer
+  verification, exact five-member Developers roster and retained API limitations.
+- `trusted-maintainer-approval-20261018.json`: current five-account approval model,
+  code/config identities, native-control limitations and supersession of the old
+  independent-dispatcher proposal; no setup or staging authorization.
+- `trusted-maintainer-dry-run-20261018.json`: current-helper offline Git rehearsal
+  with all seven unchanged accepted images and zero network/target writes.
+
+Earlier staging-infrastructure proof/metrics remain historical snapshots; current
+code/deployment checks bind the additive trusted-maintainer records instead.
+
+- `trusted-maintainer-approval-20261018-v2.json` and
+  `trusted-maintainer-dry-run-20261018-v2.json`: final source-integrity revision and
+  current implementation/local rehearsal; explicitly supersede the earlier new
+  preparation snapshots, which remain preserved. Artwork acceptance is unchanged.
+- `staging-deployment-manifest-20261018-v1.json` and
+  `trusted-maintainer-deployment-manifest-20261018-v1.json`: exact historical manifest
+  snapshots corresponding to earlier preparation proofs.

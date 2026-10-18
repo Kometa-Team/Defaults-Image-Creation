@@ -64,7 +64,9 @@ jobs:
       needs.verify.outputs.stage_allowed == 'true' &&
       inputs.mode == 'stage' && inputs.confirm_staging == true &&
       vars.ENGLISH_CANARY_STAGING_ENABLED == 'true' &&
-      github.ref == 'refs/heads/main' && github.actor != 'bullmoose20'
+      github.ref == 'refs/heads/main'
+    # Native required reviewers are the authorization authority. Every fresh
+    # dispatch pauses here; the initiator can be one of the five reviewers.
     environment: english-canary-stage
     runs-on: ubuntu-24.04
     timeout-minutes: 15

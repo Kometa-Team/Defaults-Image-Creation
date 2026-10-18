@@ -75,9 +75,18 @@ no remote or local staging ref/PR is created and local baseline refs/worktree st
 unchanged. Failure-path tests cover disabled credentials/network, stale HEAD,
 extra/case-drift paths, unsafe archives, unauthorized API methods and immutable audits.
 
-`bullmoose20` is proposed as primary reviewer/rollback owner, pending confirmation;
-an independent dispatcher is required by self-review protection. No GitHub setting,
-App, credential, workflow, staging branch or Default-Images file changed. The proposed
+The [trusted-maintainer update](bulk/evidence/english-canary/trusted-maintainer-approval-20261018-v2.json)
+supersedes the prior independent-dispatcher proposal. All five identities and effective
+roles are verified, including badja-dev (admin on both repositories); the existing
+Developers team matches that exact roster. Any one of the five may explicitly approve
+their own run or another GitHub-permitted initiator's run; no actor auto-approval.
+The disabled default uses five explicit users; optional pinned-team mode requires
+fresh exact membership checks and separately approved read access. Native environment
+controls remain authoritative, with explicit approval-history checks before token
+minting. Unknown/enabled admin-bypass readback stops; current documented REST lacks
+that field, leaving an explicit staging blocker. Local fixtures are not hosted
+approval proof. `bullmoose20` coordinator/rollback roles remain unconfirmed. No GitHub
+setting, App, credential, workflow, staging branch or Default-Images file changed. The proposed
 public source-prerelease intake needs separate artifact-sharing approval or a
 reviewed private adapter. All staging gates stay false pending separate setup,
 implementation/deployment and exact staging authorization. No publisher/merge/rollback
@@ -953,3 +962,10 @@ Priority maintainer decisions before any future production operation:
 This checklist grants no execution authority. Gate E is approved for the recorded
 scope; the PR remains draft for the separately authorized English canary preparation
 and subsequent explicit review/authorization. No future phase begins automatically.
+
+Trusted-maintainer update validation: **135 focused local checks passed** (38 unrelated
+checks deselected), including all five self/cross-review identities, outsider rejection,
+team/control drift, preflight before target-token access and unchanged seven-image
+acceptance. The offline Git rehearsal verified seven exact hashes with no network
+or ref/PR creation. Normal PR CI is separate from the still-pending GitHub-hosted
+protected-environment approval exercise.

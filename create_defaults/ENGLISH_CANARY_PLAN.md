@@ -60,7 +60,10 @@ unauthorized templates, seven-file guarded helper, minimal deployment manifest,
 failure-path tests and a local-only Git dry-run. The
 [separate action/authorization checklist](canary/STAGING_AUTHORIZATION_CHECKLIST.md)
 lists every future configuration and staging operation. `bullmoose20` is proposed
-as primary reviewer and rollback owner; no confirmation or GitHub assignment is inferred.
+as primary coordinator and rollback owner; those roles remain unconfirmed. The five
+verified authorized reviewers are bullmoose20, YozoraXCII, chazlarson, meisnate12 and
+badja-dev. Any one explicitly approves, including the initiator; no independent
+dispatcher is required. No GitHub assignment or staging permission is inferred.
 
 The prepared workflow implements **verify/stage only**. No publish, merge or rollback
 mode exists. The broader publication ideas later in this plan remain future proposals,
@@ -69,11 +72,22 @@ is installed, and PR #12 is still draft. A separate infrastructure-only source
 deployment is needed because source main lacks the shared runtime; copying YAML
 alone is insufficient and merging PR #12 is not authorized.
 
-The proposed read-only intake uses a source prerelease asset. Public exposure of
+The inactive read-only intake still implements a source prerelease asset. The
+[private delivery assessment](canary/ARTIFACT_DELIVERY_ASSESSMENT.md) recommends a
+separately approved private holding-repository adapter; none is implemented. Public exposure of
 the unchanged ZIP requires a separate artifact-sharing decision; no source release
 or upload was performed. If private intake is required, leave this template disabled
 until an alternative adapter is reviewed. Preparation/visual approval does not grant
 artifact publication, App installation, staging or any Default-Images write.
+
+The [trusted-maintainer update](bulk/evidence/english-canary/trusted-maintainer-approval-20261018-v2.json)
+adds exact account/team checks and read-only native approval history before target
+token minting. The existing Developers team now matches all five authorized accounts;
+the default explicit-user configuration avoids unapproved organization credentials.
+Team mode requires fresh pinned team/membership readback and fails closed on missing
+access. Native bypass readback remains an explicit blocker: documented REST omits
+that setting, and the helper rejects unknown/true state. Normal CI/local policy
+fixtures do not prove GitHub-hosted protected-environment behavior.
 
 ## Concrete candidate and observed results
 
@@ -223,7 +237,8 @@ IDs require separate setup authorization. Do not reuse a broad personal `gh` log
 or add target write scopes to the read-only preparation helper. The proposed
 `english-canary-stage` and `english-canary-production` environments require named
 maintainer reviewers, restricted trusted refs and a tested no-bypass policy. The
-maintainer must choose reviewer membership and whether independent review is required.
+maintainer has specified the five-person roster above, self-review allowed and one
+explicit approval per deployment; staging and production remain separate events.
 Environment secrets are released only after configured protection passes; see
 [GitHub deployment controls](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/control-deployments).
 
@@ -353,3 +368,10 @@ fail parity rather than transfer approval. The command generates local evidence,
 uses bounded GET-only comparison and has no publishing or dispatch command. A fresh
 root never replaces this v1 evidence. It does not package a new bundle automatically;
 a changed proposal must receive its own verified checksum inventory and archive.
+
+Trusted-maintainer update validation: **135 focused local checks passed** (38 unrelated
+checks deselected), including all five self/cross-review identities, outsider rejection,
+team/control drift, preflight before target-token access and unchanged seven-image
+acceptance. The offline Git rehearsal verified seven exact hashes with no network
+or ref/PR creation. Normal PR CI is separate from the still-pending GitHub-hosted
+protected-environment approval exercise.

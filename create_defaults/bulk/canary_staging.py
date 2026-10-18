@@ -29,6 +29,9 @@ PREPARATION_SHA = "bc7657363fb253bb41965b56bd73ef650be5dc9606bfff486ac8aa76eb2d7
 ACCEPTANCE_SHA = "139ed5b73c5ee555488163e024c85e33850207a401aa65b546d87c6b1a7f3919"
 BUNDLE_NAME = "english-canary-review-bundle.zip"
 RELEASE_TAG = "english-canary-approved-v1"
+# Verified account IDs are part of the reviewed implementation, never workflow inputs.
+MAINTAINERS = {"bullmoose20":12549033, "YozoraXCII":96386153, "chazlarson":3865541, "meisnate12":1631064, "badja-dev":180163201}
+APPROVER_TEAM = {"organization":"Kometa-Team", "slug":"developers", "id":13883129}
 MAX_ARCHIVE = 16 * 1024**2
 DESTINATIONS = {"based/Book.jpg", "decade/2020.jpg", "franchise/Death in Paradise (2011).jpg", "genre/Action & Adventure.jpg", "genre/Splatter.jpg", "year/2020.jpg", "year/best/2020.jpg"}
 
@@ -148,12 +151,15 @@ def validate_authorization(policy, auth, *, source_sha, helper_sha, workflow_sha
     require(policy.get("staging_enabled") is True, "Staging is disabled in reviewed policy")
     require(policy.get("target_repository")==TARGET and policy.get("source_environment")=="english-canary-stage" and policy.get("source_ref")=="refs/heads/main" and policy.get("publication_enabled") is False,"Policy target/environment/publishing scope mismatch")
     require(policy.get("reviewer_confirmed") is True and policy.get("rollback_owner_confirmed") is True, "Proposed ownership not confirmed")
-    require(policy.get("primary_reviewer") == policy.get("rollback_owner") == "bullmoose20", "Unexpected owner/reviewer")
+    require(policy.get("authorized_maintainers") == MAINTAINERS and policy.get("reviewer_representation") in {"explicit_users", "team"} and policy.get("reviewer_team") == APPROVER_TEAM, "Unapproved maintainer roster/representation")
+    require(policy.get("primary_reviewer") == policy.get("rollback_owner") == "bullmoose20", "Unexpected proposed coordinator/rollback owner")
     require(auth.get("authorized") is True and auth.get("action") == "stage_seven_english_images_only", "Separate staging authorization absent")
     require(auth.get("target_repository") == TARGET and auth.get("target_branch") == "master", "Wrong target")
     require(auth.get("bundle_sha256") == BUNDLE_SHA and auth.get("preparation_sha256") == PREPARATION_SHA and auth.get("acceptance_sha256") == ACCEPTANCE_SHA, "Authorization artifact identity mismatch")
     require(auth.get("source_commit") == source_sha and auth.get("helper_sha256") == helper_sha and auth.get("workflow_sha256") == workflow_sha, "Unapproved implementation/source")
-    require(auth.get("reviewer") == auth.get("rollback_owner") == "bullmoose20" and auth.get("owner_confirmation") is True, "Owner confirmation missing")
+    require(auth.get("authorized_maintainers") == MAINTAINERS and auth.get("reviewer_representation") == policy.get("reviewer_representation"), "Authorization maintainer roster/representation changed")
+    require(auth.get("rollback_owner") == "bullmoose20" and auth.get("owner_confirmation") is True, "Owner confirmation missing")
+    require(re.fullmatch(r"[0-9a-f]{64}", auth.get("environment_snapshot_sha256") or "") is not None, "Reviewed live environment snapshot required")
     require(auth.get("writer_reservation_confirmed") is True and auth.get("artifact_retention_confirmed") is True, "Writer reservation/durable backup missing")
     require(re.fullmatch(r"[0-9a-f]{40}", auth.get("expected_target_head", "")) is not None, "Pinned target HEAD required")
     require(auth.get("expected_target_head") == policy.get("expected_target_head"), "Policy/authorization target HEAD differs")
@@ -169,15 +175,65 @@ def validate_authorization(policy, auth, *, source_sha, helper_sha, workflow_sha
     return "canary/english-" + auth["sha256"][:12]
 
 
-def check_environment(value, branches):
+def check_environment(value, branches, *, representation="explicit_users", team=None, members=None):
+    """Validate exact native reviewers; neither actor nor write role grants approval.
+
+    Team mode additionally requires fresh API membership readback. Missing access
+    stops rather than falling back to another representation or approving a role.
+    """
+    require(value.get("name") == "english-canary-stage" and type(value.get("id")) is int and value["id"] > 0, "Wrong/missing staging environment identity")
     rules = [r for r in value.get("protection_rules", []) if r.get("type") == "required_reviewers"]
-    require(len(rules) == 1 and rules[0].get("prevent_self_review") is True, "Required reviewer/self-review protection missing")
+    require(len(rules) == 1 and rules[0].get("prevent_self_review") is False, "Explicit review with self-review permitted is required")
     reviewers = rules[0].get("reviewers", [])
-    require(len(reviewers) == 1 and reviewers[0].get("type") == "User" and reviewers[0].get("reviewer",{}).get("login") == "bullmoose20", "Required reviewer must be bullmoose20")
+    membership = None
+    if representation == "explicit_users":
+        require(len(reviewers) == len(MAINTAINERS) and all(r.get("type") == "User" for r in reviewers), "Exactly five explicit maintainers required")
+        identities = [(r.get("reviewer", {}).get("login"), r.get("reviewer", {}).get("id")) for r in reviewers]
+        require(len(set(identities)) == len(MAINTAINERS) and dict(identities) == MAINTAINERS, "Required maintainer identities changed")
+    elif representation == "team":
+        require(isinstance(team, dict) and isinstance(members, list), "Verified team identity/membership unavailable")
+        require(team.get("id")==APPROVER_TEAM["id"] and team.get("slug")==APPROVER_TEAM["slug"] and team.get("organization",{}).get("login")==APPROVER_TEAM["organization"] and team.get("parent") is None, "Approved team identity/hierarchy changed")
+        identities=[(m.get("login"), m.get("id")) for m in members]
+        require(len(identities)==len(set(identities))==len(MAINTAINERS) and dict(identities)==MAINTAINERS, "Approved team membership changed")
+        require(len(reviewers)==1 and reviewers[0].get("type")=="Team" and reviewers[0].get("reviewer",{}).get("id")==APPROVER_TEAM["id"] and reviewers[0].get("reviewer",{}).get("slug")==APPROVER_TEAM["slug"], "Expected reviewer team missing/changed")
+        membership={"team":APPROVER_TEAM,"members":MAINTAINERS}
+    else:
+        require(False, "Unsupported reviewer representation")
+    # The documented REST response currently omits this setting. Do not infer
+    # false from absence or substitute a workflow input/manual boolean for it.
+    require(value.get("can_admins_bypass") is False, "Native administrator-bypass disabled state unavailable or enabled; staging blocked")
     require(value.get("deployment_branch_policy") == {"protected_branches":False,"custom_branch_policies":True}, "Selected deployment branches required")
     require([(b.get("name"),b.get("type")) for b in branches] == [("main","branch")], "Environment must allow only main branch")
-    # GitHub does not reliably return admin-bypass state in this response. Its
-    # independently reviewed settings evidence is a separate authorization condition.
+    return fingerprint({"environment":value,"branch_policies":branches,"representation":representation,"verified_team":membership})
+
+
+def check_native_approval(history, environment):
+    """Supplement native environment enforcement with its read-only review history.
+
+    Local fixtures prove policy validation only, never GitHub server enforcement.
+    No approval is synthesized from actor, PR author, inputs or a write role.
+    """
+    require(isinstance(history, list), "Native deployment review history unavailable")
+    approvals = []
+    for review in history:
+        relevant = any(e.get("id") == environment["id"] and e.get("name") == "english-canary-stage" for e in review.get("environments", []))
+        if not relevant:
+            continue
+        user = review.get("user", {})
+        require(review.get("state") == "approved" and MAINTAINERS.get(user.get("login")) == user.get("id") and user.get("id") is not None, "Unauthorized/rejected native environment review")
+        approvals.append({"login":user["login"],"id":user["id"]})
+    require(bool(approvals), "Explicit authorized-maintainer staging approval absent")
+    return {"environment_id":environment["id"],"environment":"english-canary-stage","approvers":approvals,"review_history_sha256":fingerprint(history),"production_authorized":False}
+
+
+def validate_run_context(context, run, current):
+    require(context.get("GITHUB_ACTIONS")=="true" and context.get("GITHUB_REPOSITORY")==SOURCE and context.get("GITHUB_EVENT_NAME")=="workflow_dispatch" and context.get("GITHUB_REF")=="refs/heads/main", "Only approved manual workflow on source main may stage")
+    require(context.get("CANARY_STAGING_CONFIRMED")=="true" and context.get("CANARY_POLICY_VARIABLE")=="true", "Explicit confirmation/repository staging variable absent")
+    # Review history is per run, not per attempt. Refuse reruns to prevent reuse
+    # of an earlier attempt's approval: dispatch a fresh run for a fresh pause.
+    require(context.get("GITHUB_RUN_ATTEMPT")=="1" and run.get("run_attempt")==1, "Fresh dispatch required; reruns cannot reuse approvals")
+    require(str(run.get("id"))==context.get("GITHUB_RUN_ID") and run.get("repository",{}).get("full_name")==SOURCE and run.get("head_sha")==current and run.get("head_branch")=="main" and run.get("event")=="workflow_dispatch" and run.get("path")==".github/workflows/english-poster-canary.yml", "Native workflow run identity/source differs")
+
 
 
 def runtime_write_gate(authorization_sha):
@@ -419,24 +475,32 @@ def preflight_staging(bundle_path, asset_id):
     branch=validate_authorization(policy,auth,source_sha=implementation,helper_sha=helper_sha,workflow_sha=workflow_sha)
     require(str(auth.get("source_release_asset_id"))==str(asset_id),"Authorization asset ID mismatch")
     require(auth.get("admin_bypass_disabled_confirmed") is True,"Environment bypass settings not confirmed")
-    require(os.environ.get("GITHUB_ACTIONS")=="true" and os.environ.get("GITHUB_REPOSITORY")==SOURCE and os.environ.get("GITHUB_EVENT_NAME")=="workflow_dispatch" and os.environ.get("GITHUB_REF")=="refs/heads/main","Only approved manual workflow on source main may stage")
-    require(os.environ.get("CANARY_STAGING_CONFIRMED")=="true" and os.environ.get("GITHUB_ACTOR")!="bullmoose20","Explicit confirmation and independent dispatcher required")
-    require(os.environ.get("CANARY_POLICY_VARIABLE")=="true","Repository staging variable is disabled")
+    run_id=os.environ.get("GITHUB_RUN_ID", "")
+    require(re.fullmatch(r"[1-9][0-9]*",run_id) is not None,"Native workflow run ID required")
+    run=gh_json("repos/"+SOURCE+"/actions/runs/"+run_id)
+    validate_run_context(os.environ,run,current)
     environment=gh_json("repos/"+SOURCE+"/environments/english-canary-stage")
     policies=gh_json("repos/"+SOURCE+"/environments/english-canary-stage/deployment-branch-policies")
     require(policies.get("total_count")==1,"Exactly one allowed environment branch policy required")
-    check_environment(environment,policies.get("branch_policies",[]))
+    team=members=None
+    if policy.get("reviewer_representation")=="team":
+        team=gh_json("orgs/Kometa-Team/teams/developers")
+        members=gh_json("orgs/Kometa-Team/teams/developers/members?per_page=100")
+    environment_sha=check_environment(environment,policies.get("branch_policies",[]),representation=policy["reviewer_representation"],team=team,members=members)
+    require(environment_sha==auth.get("environment_snapshot_sha256"),"Environment configuration changed after authorization")
+    approval=check_native_approval(gh_json("repos/"+SOURCE+"/actions/runs/"+run_id+"/approvals"),environment)
+    approval.update(run_id=int(run_id),run_attempt=1,initiator=os.environ.get("GITHUB_ACTOR"),environment_snapshot_sha256=environment_sha)
     bundle=verify_bundle(bundle_path)
     require(auth.get("destinations")==sorted(r["destination"] for r in bundle.rows),"Authorization exact path list differs")
     require(auth.get("expected_target_head")==bundle.preparation["published_snapshot"]["head"],"Changed baseline needs a fresh comparison, not authorization substitution")
-    return bundle,auth,branch,current
+    return bundle,auth,branch,current,approval
 
 
 def execute_staging(bundle_path, asset_id, audit_root, *, preflight_only=False):
     audit=Audit(audit_root)
     try:
-        bundle,auth,branch,current=preflight_staging(bundle_path,asset_id)
-        audit.add("authorized_staging_preflight",{"authorization_sha256":auth["sha256"],"checkout_commit":current,"reviewer":"bullmoose20","archive_sha256":BUNDLE_SHA,"publish_authorized":False})
+        bundle,auth,branch,current,approval=preflight_staging(bundle_path,asset_id)
+        audit.add("authorized_staging_preflight",{"authorization_sha256":auth["sha256"],"checkout_commit":current,"native_approval":approval,"archive_sha256":BUNDLE_SHA,"publish_authorized":False})
         if preflight_only:return
         client=GitHub(os.environ.get("CANARY_APP_TOKEN"),audit,auth["expected_target_head"],auth["sha256"]);client.check_token_scope()
         return stage_objects(client,bundle,auth["expected_target_head"],branch,auth["sha256"],audit)

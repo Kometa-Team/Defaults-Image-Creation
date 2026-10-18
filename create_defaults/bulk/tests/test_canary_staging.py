@@ -85,7 +85,7 @@ def test_disabled_policy_blocks_cli_and_transport_before_credentials_or_network(
 @pytest.fixture
 def authorized():
     policy=s.envelope(s.SETUP/'staging-policy.json');policy.update(staging_enabled=True,reviewer_confirmed=True,rollback_owner_confirmed=True)
-    auth=s.envelope(s.SETUP/'staging-authorization.json');auth.update(authorized=True,source_release_asset_id=123,owner_confirmation=True,writer_reservation_confirmed=True,artifact_retention_confirmed=True,source_commit='1'*40,helper_sha256='2'*64,workflow_sha256='3'*64,expires_at_utc=(datetime.now(timezone.utc)+timedelta(hours=1)).isoformat())
+    auth=s.envelope(s.SETUP/'staging-authorization.json');auth.update(authorized=True,source_release_asset_id=123,owner_confirmation=True,writer_reservation_confirmed=True,artifact_retention_confirmed=True,source_commit='1'*40,helper_sha256='2'*64,workflow_sha256='3'*64,environment_snapshot_sha256='4'*64,expires_at_utc=(datetime.now(timezone.utc)+timedelta(hours=1)).isoformat())
     return policy,auth
 
 
@@ -116,11 +116,118 @@ def test_mutation_transport_cannot_publish_force_merge_or_widen_scope(monkeypatc
     with pytest.raises(BulkError):client.call(method,endpoint,payload)
 
 
-def test_environment_requires_confirmed_named_independent_review():
-    env={'protection_rules':[{'type':'required_reviewers','prevent_self_review':True,'reviewers':[{'type':'User','reviewer':{'login':'bullmoose20'}}]}],'deployment_branch_policy':{'protected_branches':False,'custom_branch_policies':True}}
-    s.check_environment(env,[{'name':'main','type':'branch'}])
-    env['protection_rules'][0]['prevent_self_review']=False
-    with pytest.raises(BulkError):s.check_environment(env,[{'name':'main','type':'branch'}])
+@pytest.fixture
+def native_environment():
+    return {'id':101,'name':'english-canary-stage','can_admins_bypass':False,
+        'protection_rules':[{'type':'required_reviewers','prevent_self_review':False,
+            'reviewers':[{'type':'User','reviewer':{'login':login,'id':uid}} for login,uid in s.MAINTAINERS.items()]}],
+        'deployment_branch_policy':{'protected_branches':False,'custom_branch_policies':True}}
+
+
+def review(login, environment_id=101, state='approved'):
+    return {'state':state,'environments':[{'id':environment_id,'name':'english-canary-stage'}],
+        'user':{'login':login,'id':s.MAINTAINERS.get(login,999)}}
+
+
+def run_context(actor):
+    context={'GITHUB_ACTIONS':'true','GITHUB_REPOSITORY':s.SOURCE,'GITHUB_EVENT_NAME':'workflow_dispatch',
+        'GITHUB_REF':'refs/heads/main','CANARY_STAGING_CONFIRMED':'true','CANARY_POLICY_VARIABLE':'true',
+        'GITHUB_RUN_ATTEMPT':'1','GITHUB_RUN_ID':'202','GITHUB_ACTOR':actor}
+    run={'id':202,'run_attempt':1,'repository':{'full_name':s.SOURCE},'head_sha':'a'*40,
+        'head_branch':'main','event':'workflow_dispatch','path':'.github/workflows/english-poster-canary.yml'}
+    return context,run
+
+
+@pytest.mark.parametrize('initiator,approver',[(initiator,approver) for initiator in [*s.MAINTAINERS,'outside-writer'] for approver in s.MAINTAINERS])
+def test_local_policy_allows_trusted_self_or_other_review_but_never_infers_approval(native_environment,initiator,approver):
+    context,run=run_context(initiator)
+    s.validate_run_context(context,run,'a'*40)
+    assert s.check_environment(native_environment,[{'name':'main','type':'branch'}])
+    with pytest.raises(BulkError,match='approval absent'):s.check_native_approval([],native_environment)
+    proof=s.check_native_approval([review(approver)],native_environment)
+    assert proof['approvers']==[{'login':approver,'id':s.MAINTAINERS[approver]}]
+    assert proof['production_authorized'] is False  # Staging approval grants no production permission.
+
+
+@pytest.mark.parametrize('mutation',['missing_reviewers','extra_writer','missing_maintainer','wrong_id',
+    'duplicate_user','self_review_prevented','self_review_unspecified','bypass_enabled','bypass_unobservable',
+    'team_missing','team_changed','wrong_branch','tag_branch','wrong_environment'])
+def test_local_environment_policy_fails_closed(native_environment,mutation):
+    env=native_environment;rule=env['protection_rules'][0];branches=[{'name':'main','type':'branch'}]
+    if mutation=='missing_reviewers':env['protection_rules']=[]
+    elif mutation=='extra_writer':rule['reviewers'].append({'type':'User','reviewer':{'login':'outside-writer','id':999}})
+    elif mutation=='missing_maintainer':rule['reviewers'].pop()
+    elif mutation=='wrong_id':rule['reviewers'][0]['reviewer']['id']=999
+    elif mutation=='duplicate_user':rule['reviewers'][-1]=deepcopy(rule['reviewers'][0])
+    elif mutation=='self_review_prevented':rule['prevent_self_review']=True
+    elif mutation=='self_review_unspecified':rule.pop('prevent_self_review')
+    elif mutation=='bypass_enabled':env['can_admins_bypass']=True
+    elif mutation=='bypass_unobservable':env.pop('can_admins_bypass')
+    elif mutation in {'team_missing','team_changed'}:rule['reviewers']=[{'type':'Team','reviewer':{'slug':'image-publishing-approvers' if mutation=='team_missing' else 'developers','id':13883129}}]
+    elif mutation=='wrong_branch':branches[0]['name']='*'
+    elif mutation=='tag_branch':branches[0]['type']='tag'
+    elif mutation=='wrong_environment':env['name']='english-canary-production'
+    with pytest.raises(BulkError):s.check_environment(env,branches)
+
+
+def team_environment(env):
+    env=deepcopy(env)
+    env['protection_rules'][0]['reviewers']=[{'type':'Team','reviewer':{'slug':'developers','id':13883129}}]
+    team={'id':13883129,'slug':'developers','organization':{'login':'Kometa-Team'},'parent':None}
+    members=[{'login':login,'id':uid} for login,uid in s.MAINTAINERS.items()]
+    return env,team,members
+
+
+def test_existing_team_requires_exact_pinned_five_member_roster(native_environment):
+    env,team,members=team_environment(native_environment)
+    assert s.check_environment(env,[{'name':'main','type':'branch'}],representation='team',team=team,members=members)
+    for login in s.MAINTAINERS:
+        assert s.check_native_approval([review(login)],env)['approvers'][0]['login']==login
+
+
+@pytest.mark.parametrize('mutation',['missing_team','missing_members','wrong_id','wrong_slug','wrong_org','parent',
+    'removed_member','new_outside_member','duplicate_member','wrong_member_id','wrong_reviewer_team'])
+def test_team_membership_and_identity_drift_fails_closed(native_environment,mutation):
+    env,team,members=team_environment(native_environment)
+    if mutation=='missing_team':team=None
+    elif mutation=='missing_members':members=None
+    elif mutation=='wrong_id':team['id']=999
+    elif mutation=='wrong_slug':team['slug']='image-publishing-approvers'
+    elif mutation=='wrong_org':team['organization']['login']='outside'
+    elif mutation=='parent':team['parent']={'id':999}
+    elif mutation=='removed_member':members.pop()
+    elif mutation=='new_outside_member':members.append({'login':'outside-writer','id':999})
+    elif mutation=='duplicate_member':members[-1]=members[0]
+    elif mutation=='wrong_member_id':members[-1]['id']=999
+    elif mutation=='wrong_reviewer_team':env['protection_rules'][0]['reviewers'][0]['reviewer']['id']=999
+    with pytest.raises(BulkError):s.check_environment(env,[{'name':'main','type':'branch'}],representation='team',team=team,members=members)
+
+
+@pytest.mark.parametrize('history',[[review('outside-writer')],[review('unlisted-admin')],
+    [review('bullmoose20',state='rejected')],[review('bullmoose20',environment_id=102)],
+    [{'state':'approved','environments':[{'id':101,'name':'english-canary-production'}],'user':{'login':'bullmoose20','id':12549033}}],
+    [{'state':'approved','environments':[{'id':101,'name':'english-canary-stage'}],'user':{'login':'bullmoose20','id':999}}],None])
+def test_outsiders_wrong_environment_and_spoofed_id_cannot_satisfy_approval(native_environment,history):
+    with pytest.raises(BulkError):s.check_native_approval(history,native_environment)
+
+
+@pytest.mark.parametrize('mutation',['rerun','wrong_sha','pull_request','other_repo','wrong_workflow','unconfirmed'])
+def test_run_identity_prevents_approval_reuse_and_input_bypass(mutation):
+    context,run=run_context('outside-writer')
+    if mutation=='rerun':context['GITHUB_RUN_ATTEMPT']='2';run['run_attempt']=2
+    elif mutation=='wrong_sha':run['head_sha']='f'*40
+    elif mutation=='pull_request':run['event']='pull_request'
+    elif mutation=='other_repo':run['repository']['full_name']='outside/fork'
+    elif mutation=='wrong_workflow':run['path']='.github/workflows/untrusted.yml'
+    elif mutation=='unconfirmed':context['CANARY_STAGING_CONFIRMED']='false'
+    with pytest.raises(BulkError):s.validate_run_context(context,run,'a'*40)
+
+
+@pytest.mark.parametrize('side',['policy','authorization'])
+def test_mutated_roster_or_pr_configuration_cannot_add_an_approver(authorized,side):
+    policy,auth=deepcopy(authorized)
+    (policy if side=='policy' else auth)['authorized_maintainers']['outside-writer']=999
+    with pytest.raises(BulkError):s.validate_authorization(policy,auth,source_sha='1'*40,helper_sha='2'*64,workflow_sha='3'*64)
 
 
 @pytest.mark.parametrize('bad',['../escape','/absolute','link','duplicate','checksum'])
@@ -158,6 +265,8 @@ def test_workflow_template_is_uninstalled_and_defaults_disabled():
     assert inputs['confirm_staging']['default']=='false'
     assert value['permissions']=={'contents':'read','actions':'read'}
     stage=value['jobs']['stage'];assert stage['environment']=='english-canary-stage'
+    assert 'github.actor' not in stage['if'] and 'github.triggering_actor' not in stage['if']
+    assert 'environment' not in value['jobs']['verify']
     assert "vars.ENGLISH_CANARY_STAGING_ENABLED == 'true'" in stage['if']
     steps=stage['steps'];token=next(i for i,v in enumerate(steps) if 'actions/create-github-app-token@' in v.get('uses',''))
     assert any(' authorize ' in (' '+v.get('run','').replace('\n',' ')+' ') for v in steps[:token])
@@ -171,8 +280,8 @@ def test_workflow_template_is_uninstalled_and_defaults_disabled():
 def test_deployment_subset_and_final_dry_run_bind_current_implementation(tmp_path):
     import os, subprocess, sys
     manifest=s.envelope(s.SETUP/'deployment-files.json')
-    proof=s.envelope(s.EVIDENCE/'staging-infrastructure-20261018.json')
-    dry=s.envelope(s.EVIDENCE/'staging-infrastructure-dry-run-20261018.json')
+    proof=s.envelope(s.EVIDENCE/'trusted-maintainer-approval-20261018-v2.json')
+    dry=s.envelope(s.EVIDENCE/'trusted-maintainer-dry-run-20261018-v2.json')
     assert proof['deployment_manifest_sha256']==manifest['sha256']
     assert proof['local_dry_run']==dry
     assert dry['archive_sha256']==s.BUNDLE_SHA and dry['acceptance_sha256']==s.ACCEPTANCE_SHA
@@ -190,3 +299,60 @@ def test_deployment_subset_and_final_dry_run_bind_current_implementation(tmp_pat
     result=subprocess.run([sys.executable,'-m','create_defaults.bulk.canary_staging','stage','--bundle','unused.zip','--asset-id','123','--audit-root',str(tmp_path/'disabled-fixture-audit')],cwd=runtime,env=env,capture_output=True,text=True)
     assert result.returncode!=0 and 'Staging remains disabled' in result.stderr
     assert not (s.ROOT.parent/'.github/workflows/english-poster-canary.yml').exists()
+
+
+def test_permission_addendum_verifies_fifth_account_without_rewriting_initial_observations():
+    old=s.envelope(s.EVIDENCE/'trusted-maintainer-permissions-20261018.json')
+    current=s.envelope(s.EVIDENCE/'trusted-maintainer-permissions-20261018-v2.json')
+    assert current['supersedes_intended_roster_from_sha256']==old['sha256']
+    assert current['intended_maintainers']==s.MAINTAINERS
+    rows=current['additional_observations']
+    roles=[r['response'] for r in rows if '/collaborators/badja-dev/permission' in r['endpoint']]
+    assert len(roles)==2 and all(r['login']=='badja-dev' and r['role_name']=='admin' for r in roles)
+    members=next(r['response'] for r in rows if '/members?' in r['endpoint'])
+    assert {r['login']:r['id'] for r in members}==s.MAINTAINERS
+
+
+@pytest.mark.parametrize('scenario',['authorized','no_review','outside_review','changed_environment','unobservable_bypass','missing_team_access','production_requested'])
+def test_preflight_requires_native_proof_before_target_token(authorized,native_environment,tmp_path,monkeypatch,scenario):
+    policy,auth=deepcopy(authorized)
+    root=tmp_path/'create_defaults';root.mkdir()
+    workflow=root.parent/'.github/workflows/english-poster-canary.yml';workflow.parent.mkdir(parents=True);workflow.write_bytes(b'fixture workflow')
+    auth.update(helper_sha256=hashlib.sha256(Path(s.__file__).read_bytes().replace(b'\r\n',b'\n')).hexdigest(),
+        workflow_sha256=hashlib.sha256(workflow.read_bytes()).hexdigest(),admin_bypass_disabled_confirmed=True)
+    branches=[{'name':'main','type':'branch'}]
+    auth['environment_snapshot_sha256']=s.check_environment(native_environment,branches)
+    auth['destinations']=sorted(s.DESTINATIONS)
+    context,run=run_context('badja-dev');run['head_sha']='1'*40
+    for key,value in context.items():monkeypatch.setenv(key,value)
+    monkeypatch.setattr(s,'ROOT',root)
+    def envelopes(path):return deepcopy(policy if Path(path).name=='staging-policy.json' else auth)
+    monkeypatch.setattr(s,'envelope',envelopes)
+    monkeypatch.setattr(s.subprocess,'check_output',lambda args,**kw:'1'*40 if args[1]=='rev-parse' else '')
+    monkeypatch.setattr(s.subprocess,'run',lambda *a,**kw:SimpleNamespace(returncode=0))
+    monkeypatch.setattr(s,'verify_bundle',lambda path:SimpleNamespace(rows=[{'destination':d} for d in sorted(s.DESTINATIONS)],preparation={'published_snapshot':{'head':auth['expected_target_head']}}))
+    monkeypatch.setattr(s,'GitHub',lambda *a,**kw:pytest.fail('No target token/client during authorize or failed preflight'))
+    history=[review('badja-dev')]
+    if scenario=='no_review':history=[]
+    elif scenario=='outside_review':history=[review('outside-writer')]
+    elif scenario=='changed_environment':auth['environment_snapshot_sha256']='f'*64
+    elif scenario=='unobservable_bypass':native_environment.pop('can_admins_bypass')
+    elif scenario=='missing_team_access':policy['reviewer_representation']=auth['reviewer_representation']='team'
+    elif scenario=='production_requested':auth['publish_authorized']=True
+    def api(endpoint):
+        if endpoint.endswith('/environments/english-canary-stage'):return native_environment
+        if endpoint.endswith('/deployment-branch-policies'):return {'total_count':1,'branch_policies':branches}
+        if endpoint.endswith('/approvals'):return history
+        if endpoint.endswith('/actions/runs/202'):return run
+        if endpoint.startswith('orgs/'):
+            raise BulkError('canary_staging_stop','Team membership API access unavailable')
+        pytest.fail('Unexpected API endpoint: '+endpoint)
+    monkeypatch.setattr(s,'gh_json',api)
+    if scenario=='authorized':
+        # Stubbed APIs validate integration/policy only, not GitHub's server-side gate.
+        s.execute_staging('fixture.zip','123',tmp_path/'audit',preflight_only=True)
+        event=__import__('json').loads((tmp_path/'audit/0001.json').read_text(encoding='utf-8'))
+        assert event['payload']['native_approval']['approvers'][0]['login']=='badja-dev'
+        assert event['payload']['native_approval']['production_authorized'] is False
+    else:
+        with pytest.raises(BulkError):s.execute_staging('fixture.zip','123',tmp_path/'audit',preflight_only=True)
