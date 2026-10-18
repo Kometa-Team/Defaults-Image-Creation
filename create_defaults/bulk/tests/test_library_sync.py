@@ -258,6 +258,16 @@ def test_reconciliation_preserves_original_evidence_and_outstanding_mismatch(tmp
     assert result["layout_review_required"] == 1
 
 
+def test_report_rejects_changed_production_snapshot(tmp_path):
+    from create_defaults.bulk.library_report import build
+    from create_defaults.bulk.library_sources import save
+    save(tmp_path / "production-snapshot.json", sealed({"repository": "Kometa-Team/Default-Images", "branch": "master", "head": "b" * 40, "tree": "c" * 40}))
+    save(tmp_path / "proposed-tolerance-policy.json", PROPOSED_POLICY)
+    save(tmp_path / "english-inventory.json", inventory(tmp_path))
+    with pytest.raises(BulkError, match="Production snapshot moved"):
+        build(tmp_path)
+
+
 def test_retained_overlay_acceptance_requires_unchanged_comparison(monkeypatch):
     from create_defaults.bulk.config import ROOT
     from create_defaults.bulk.library_sources import load_json

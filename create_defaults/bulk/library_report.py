@@ -12,6 +12,39 @@ from .library_sync import _group_manifests, classify_difference, font_impacts, g
 from .library_visual import evaluate
 
 
+def historical_diagnostics(rows, jobs):
+    """Read prior classified comparisons only when their ledger hash is pinned.
+
+    This is diagnostic history, never a transfer of artwork approval.
+    """
+    path = ROOT.parent / "config/package-e/reference-comparison/phase1-reference-ledger.json"
+    if not path.is_file():
+        return {"available": False, "missing_resource": str(path)}
+    trusted = check_seal(load_json(ROOT / "bulk/evidence/package-e/full-english.json"))
+    expected = trusted["evidence"]["reference_comparison"]["source_reference_summary"]["ledger_sha256"]
+    ledger = load_json(path)
+    if fingerprint(ledger) != expected:
+        return {"available": False, "reason": "Historical reference ledger hash differs; no history reused"}
+    previous = {r["path"]: r for r in ledger}
+    matched = Counter()
+    for row in rows:
+        if row["difference_class"] != "unexpected_difference":
+            continue
+        old = previous.get(jobs[row["id"]]["local_relative"])
+        if not old:
+            continue
+        same_candidate = row["candidate_sha256"] == old["python_sha256"]
+        same_published = any(p["relative"] == row["destination"] and p["sha256"] == row["published_sha256"]
+                             for p in old["published_counterparts"])
+        row["historical_diagnostic"] = {"ledger_sha256": expected,
+            "classification": old["previous_classification"], "candidate_bytes_unchanged": same_candidate,
+            "published_bytes_unchanged": same_published, "same_comparison": same_candidate and same_published,
+            "approval_inherited": False}
+        if same_candidate and same_published:
+            matched[old["previous_classification"]] += 1
+    return {"available": True, "ledger_sha256": expected, "unchanged_out_of_policy_comparisons": dict(matched)}
+
+
 def reconcile(original, policy=None, font_impacts_by_id=None):
     check_seal(original)
     result = deepcopy(original)
@@ -63,6 +96,8 @@ def build(root):
     for kind in ("english", "overlays"):
         policy = load_json(root / "proposed-overlay-tolerance-policy.json") if kind == "overlays" else english_policy
         original = load_json(root / (kind + "-inventory.json"))
+        if original["baseline"] != {k: production[k] for k in ("repository", "branch", "head", "tree")}:
+            raise BulkError("baseline_drift", "Production snapshot moved; refresh the affected inventory before planning")
         data = reference(kind)
         if original["reference_manifest"] != data["manifest_header"]["sha256"]:
             raise BulkError("stale_reference", "Analysis belongs to a different source manifest")
@@ -73,6 +108,8 @@ def build(root):
         report["runtime"] = runtime_identity()
         for row in report["rows"]:
             row["background_color"] = jobs[row["id"]]["parameters"].get("base_color")
+        if kind == "english":
+            report["historical_diagnostics"] = historical_diagnostics(report["rows"], jobs)
         report = sealed(report)
         inventories[kind] = report
         save(root / (kind + "-reconciled-inventory.json"), report)
@@ -86,6 +123,16 @@ def build(root):
         review_root = root / (kind + "-review")
         review_root.mkdir(exist_ok=True)
         gallery(review_root, report["rows"], approval_groups)
+        exceptions = [r for r in report["rows"] if not r["publication_eligible"] and r["difference_class"] in
+                      {"unexpected_difference", "layout_changed", "missing_published", "blocked"}]
+        save(root / (kind + "-exception-queue.json"), sealed({"inventory_sha256": report["sha256"], "members": exceptions}))
+        exception_root = root / (kind + "-exceptions")
+        exception_root.mkdir(exist_ok=True)
+        exception_groups = _group_manifests(exceptions, policy, report["baseline"])
+        if kind == "english":
+            for group in exception_groups:
+                group["samples"] = [{"destination": m["destination"], "reasons": ["individual exception review"]} for m in group["members"]]
+        gallery(exception_root, exceptions, exception_groups)
         pending = defaultdict(list)
         for row in report["rows"]:
             if row["hash_state"] == "exact_match":
@@ -130,6 +177,8 @@ def build(root):
     for kind, report in inventories.items():
         summary["inventories"][kind] = {k: report[k] for k in ("sha256", "expected", "private_excluded", "counts", "hash_states", "by_category", "by_font", "binary_different_approved", "withheld_or_blocked", "remaining_verified_sha256_mismatches", "verification_gaps", "layout_review_required")}
         summary["inventories"][kind]["eligible_manifest_entries"] = len(plans[kind]["members"])
+        if kind == "english":
+            summary["inventories"][kind]["historical_diagnostics"] = report["historical_diagnostics"]
         summary["inventories"][kind]["exceptions"] = [{"destination": r["destination"], "hash_state": r["hash_state"], "blockers": r["blockers"]} for r in report["rows"] if r["hash_state"] not in {"exact_match", "unequal"}]
         expected = {r["destination"] for r in report["rows"]}
         prefixes = {p.split('/')[0] for p in expected}
