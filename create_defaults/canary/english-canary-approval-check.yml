@@ -1,0 +1,63 @@
+# REVIEW TEMPLATE ONLY. Separate installation authorization required.
+# No artifact-reader or target-writer key/token is referenced by this workflow.
+name: English Canary Approval Check
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  before_gate:
+    if: github.repository == 'Kometa-Team/Defaults-Image-Creation'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PROBE: ${{ secrets.ENGLISH_CANARY_APPROVAL_PROBE }}
+    steps:
+      - name: Environment-only sentinel must be unavailable before native approval
+        run: test -z "$PROBE"
+      - name: Approval instructions
+        run: echo 'Use native Review deployments; comment exactly english-canary-approval-check. This run never obtains publishing or artifact credentials.' >> "$GITHUB_STEP_SUMMARY"
+  protected_probe:
+    needs: before_gate
+    environment: english-canary-stage
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PROBE: ${{ secrets.ENGLISH_CANARY_APPROVAL_PROBE }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r create_defaults/canary/requirements-staging.txt
+      - name: Verify native reviewers, source, actual approval history and sentinel after the pause
+        run: |
+          python - <<'PY'
+          import os, json
+          from pathlib import Path
+          from create_defaults.bulk.canary_staging import gh_json, check_environment, check_native_approval, SOURCE, require
+          from create_defaults.bulk.common import fingerprint
+          require(os.environ.get('GITHUB_REF') == 'refs/heads/main', 'Native branch rejection expected for non-main probe')
+          require(os.environ.get('GITHUB_RUN_ATTEMPT') == '1', 'Use fresh dispatch, not rerun')
+          require(bool(os.environ.get('PROBE')), 'Environment sentinel missing after approval')
+          env = gh_json('repos/' + SOURCE + '/environments/english-canary-stage')
+          rules = gh_json('repos/' + SOURCE + '/environments/english-canary-stage/deployment-branch-policies')
+          require(rules.get('total_count') == 1, 'Exactly one branch policy required')
+          snapshot = check_environment(env, rules.get('branch_policies', []))
+          proof = check_native_approval(gh_json('repos/' + SOURCE + '/actions/runs/' + os.environ['GITHUB_RUN_ID'] + '/approvals'), env, expected_comment='english-canary-approval-check')
+          report = {'kind':'actual_hosted_native_approval_probe', 'run_id':int(os.environ['GITHUB_RUN_ID']), 'source_commit':os.environ['GITHUB_SHA'], 'environment_snapshot_sha256':snapshot, 'approval':proof, 'environment_sentinel_available':True, 'hidden_setting_machine_verified':False, 'target_credentials_obtained':False, 'target_writes':0}
+          report['sha256'] = fingerprint(report)
+          Path('approval-probe-report.json').write_text(json.dumps(report, sort_keys=True), encoding='utf-8')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: english-canary-approval-probe-${{ github.run_id }}
+          path: approval-probe-report.json
+          retention-days: 90
+          if-no-files-found: warn

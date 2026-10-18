@@ -72,22 +72,19 @@ is installed, and PR #12 is still draft. A separate infrastructure-only source
 deployment is needed because source main lacks the shared runtime; copying YAML
 alone is insufficient and merging PR #12 is not authorized.
 
-The inactive read-only intake still implements a source prerelease asset. The
-[private delivery assessment](canary/ARTIFACT_DELIVERY_ASSESSMENT.md) recommends a
-separately approved private holding-repository adapter; none is implemented. Public exposure of
-the unchanged ZIP requires a separate artifact-sharing decision; no source release
-or upload was performed. If private intake is required, leave this template disabled
-until an alternative adapter is reviewed. Preparation/visual approval does not grant
-artifact publication, App installation, staging or any Default-Images write.
+The current [private delivery implementation](canary/ARTIFACT_DELIVERY_ASSESSMENT.md)
+uses an unchanged ZIP blob pinned in a dedicated private repository, read by a separate
+Contents-read App. The public prerelease path is removed. No holding repo, upload or
+credential exists under this preparation authorization.
 
-The [trusted-maintainer update](bulk/evidence/english-canary/explicit-user-infrastructure-20261018.json)
-adds exact account/team checks and read-only native approval history before target
-token minting. The existing Developers team now matches all five authorized accounts;
-the selected explicit-user configuration requires no organization membership credentials.
-Option A is now approved: only five explicit User reviewers are supported; no
-team field, membership API, organization Members credential or team-mode fallback remains. Native bypass readback remains an explicit blocker: documented REST omits
-that setting, and the helper rejects unknown/true state. Normal CI/local policy
-fixtures do not prove GitHub-hosted protected-environment behavior.
+Option A is approved and remains explicit_users only. Current preflight checks exact
+native reviewer/source/run identities and actual approval history, plus a fresh reviewed
+setup receipt for hidden UI settings and real hosted probe evidence. It does not invent
+an administrator-bypass API field or call a manual inspection machine proof. Both App
+tokens remain behind explicit native approval; full ZIP checks precede writer minting.
+Source main currently reports unprotected and must be configured by an authorized admin.
+The [exact staging proposal](canary/FIRST_STAGING_AUTHORIZATION_PROPOSAL.md) preserves
+all seven accepted paths/hashes and leaves unknown installed IDs/commits unfilled.
 
 ## Concrete candidate and observed results
 
@@ -315,8 +312,8 @@ instructions after the stated approvals, not commands to run now.
    stale-base paths fail closed. Installing it on the source default branch needs
    its own reviewed change; **PR #12 remains draft and unmerged**.
 4. Approve the artifact-intake backend before any upload. The current proposal uses
-   a published source prerelease asset, which would make the ZIP public; that sharing
-   needs explicit approval. A private backend would require its own reviewed adapter.
+   a pinned private Git blob via a separate Contents-read App; owner-approved repository,
+   upload, immutable pins and retention remain required. Public prerelease intake is removed.
    Verify downloaded bytes equal the archive SHA above;
    record the artifact ID, digest and retention. Do not rerender in a Linux publisher:
    these reviewed artifacts are bound to the recorded Windows renderer context.
@@ -394,3 +391,33 @@ Option A focused validation: **129 local checks passed**, with 38 unrelated chec
 deselected. Final helper rehearsal verified all seven accepted hashes, exact paths,
 unchanged local refs/worktree and zero network/target writes. Full PR CI runs
 separately; hosted native approval testing remains unperformed and unauthorized.
+
+## Infrastructure engineering readiness - external setup pending
+
+The [current implementation evidence](bulk/evidence/english-canary/infrastructure-readiness-20261018-v2.json)
+binds private adapter/protection/helper/workflow/configuration and deployment identities.
+The original ZIP and seven individually accepted images are reused unchanged. Private
+intake is GET-only, pins repository privacy/ID/commit/tree/path/blob and exact ZIP bytes,
+then verifies accepted JPEG/context bindings before writer-token creation. A separate
+inactive approval probe references no publishing or artifact keys.
+
+Supported hidden-setting verification is explicitly manual: a source admin retains
+redacted UI evidence, reviews actual hosted probe outcomes and signs off a fresh hashed
+setup receipt; native history plus exact per-run receipt/authorization comment is also
+required. Local fixtures are not native-hosted proof. No receipt or hosted success is
+fabricated. Protected, unchanged live source main is now mandatory; current main reports
+unprotected. Current read-only target evidence still matches the accepted master and
+all seven old blobs; complete target-tree checks are required again during staging.
+
+The [final external-action checklist](canary/STAGING_AUTHORIZATION_CHECKLIST.md) and
+[exact first staging proposal](canary/FIRST_STAGING_AUTHORIZATION_PROPOSAL.md) identify
+owner/admin setup, private storage/Apps/keys, actual hosted verification, source A/B,
+rollback/writer reservation and final exact expiring authority. No external setup,
+workflow activation, archive upload, target branch/PR, merge or production action was
+performed. Engineering is prepared for installation review; staging is **not ready**.
+
+Infrastructure readiness focused validation: **182 checks passed** (38 unrelated
+checks deselected), covering the private adapter, setup/hosted evidence parsers,
+native comment/source freshness/token ordering, failure audits and unchanged seven
+artwork bindings. Final native-branch probe revision is also checked locally. No
+actual hosted environment test or infrastructure setup is claimed.

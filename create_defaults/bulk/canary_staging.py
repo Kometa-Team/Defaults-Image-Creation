@@ -28,7 +28,6 @@ BUNDLE_SHA = "97d82b19eb237908cbd4657c67ca16eefe089b5a6d6a5f9e1690fda6cdb597c5"
 PREPARATION_SHA = "bc7657363fb253bb41965b56bd73ef650be5dc9606bfff486ac8aa76eb2d77be"
 ACCEPTANCE_SHA = "139ed5b73c5ee555488163e024c85e33850207a401aa65b546d87c6b1a7f3919"
 BUNDLE_NAME = "english-canary-review-bundle.zip"
-RELEASE_TAG = "english-canary-approved-v1"
 # Verified account IDs are part of the reviewed implementation, never workflow inputs.
 MAINTAINERS = {"bullmoose20":12549033, "YozoraXCII":96386153, "chazlarson":3865541, "meisnate12":1631064, "badja-dev":180163201}
 REVIEWER_MODEL_SHA = "15328b4c2e20aa238ffce99cf6652de46cd642b8a4610f6dd6c6d28ec7912dd3"
@@ -164,7 +163,7 @@ def validate_authorization(policy, auth, *, source_sha, helper_sha, workflow_sha
     require(auth.get("writer_reservation_confirmed") is True and auth.get("artifact_retention_confirmed") is True, "Writer reservation/durable backup missing")
     require(re.fullmatch(r"[0-9a-f]{40}", auth.get("expected_target_head", "")) is not None, "Pinned target HEAD required")
     require(auth.get("expected_target_head") == policy.get("expected_target_head"), "Policy/authorization target HEAD differs")
-    require(type(auth.get("source_release_asset_id")) is int and auth["source_release_asset_id"]>0,"Pinned source release asset ID required")
+    require(all(re.fullmatch(r"[0-9a-f]{64}", auth.get(k) or "") for k in ("private_artifact_sha256","setup_receipt_sha256")),"Pinned private artifact/setup receipt required")
     require(auth.get("publish_authorized") is False and auth.get("merge_authorized") is False, "Staging authorization must exclude publishing/merging")
     require(isinstance(auth.get("expires_at_utc"),str),"Authorization expiry required")
     try:
@@ -185,15 +184,15 @@ def check_environment(value, branches):
     require(len(reviewers) == len(MAINTAINERS) and all(r.get("type") == "User" for r in reviewers), "Exactly five explicit maintainers required")
     identities = [(r.get("reviewer", {}).get("login"), r.get("reviewer", {}).get("id")) for r in reviewers]
     require(len(set(identities)) == len(MAINTAINERS) and dict(identities) == MAINTAINERS, "Required maintainer identities changed")
-    # The documented REST response currently omits this setting. Do not infer
-    # false from absence or substitute a workflow input/manual boolean for it.
-    require(value.get("can_admins_bypass") is False, "Native administrator-bypass disabled state unavailable or enabled; staging blocked")
+    # Only documented exposed controls are machine-checked here. GitHub's UI
+    # no-bypass setting requires a separately pinned, fresh setup-verification
+    # receipt and native hosted evidence; absence of an API field proves nothing.
     require(value.get("deployment_branch_policy") == {"protected_branches":False,"custom_branch_policies":True}, "Selected deployment branches required")
     require([(b.get("name"),b.get("type")) for b in branches] == [("main","branch")], "Environment must allow only main branch")
     return fingerprint({"environment":value,"branch_policies":branches,"representation":"explicit_users"})
 
 
-def check_native_approval(history, environment):
+def check_native_approval(history, environment, *, expected_comment=None):
     """Supplement native environment enforcement with its read-only review history.
 
     Local fixtures prove policy validation only, never GitHub server enforcement.
@@ -207,6 +206,8 @@ def check_native_approval(history, environment):
             continue
         user = review.get("user", {})
         require(review.get("state") == "approved" and MAINTAINERS.get(user.get("login")) == user.get("id") and user.get("id") is not None, "Unauthorized/rejected native environment review")
+        if expected_comment is not None:
+            require(review.get("comment")==expected_comment,"Explicit native approval comment does not bind this run/setup/authorization")
         approvals.append({"login":user["login"],"id":user["id"]})
     require(bool(approvals), "Explicit authorized-maintainer staging approval absent")
     return {"environment_id":environment["id"],"environment":"english-canary-stage","approvers":approvals,"review_history_sha256":fingerprint(history),"production_authorized":False}
@@ -229,6 +230,10 @@ def runtime_write_gate(authorization_sha):
     require(auth.get("publish_authorized") is False and auth.get("merge_authorized") is False,"Unexpected production authority")
     expiry=datetime.fromisoformat(auth["expires_at_utc"].replace("Z","+00:00"))
     require(expiry.tzinfo is not None and datetime.now(timezone.utc)<expiry,"Staging authorization expired")
+    receipt=envelope(SETUP/"environment-setup-verification.json")
+    require(receipt["sha256"]==auth.get("setup_receipt_sha256") and receipt.get("verified") is True,"Setup receipt changed before write")
+    receipt_end=datetime.fromisoformat(receipt["expires_at_utc"].replace("Z","+00:00"))
+    require(receipt_end.tzinfo is not None and datetime.now(timezone.utc)<receipt_end,"Setup inspection expired before write")
 
 
 class GitHub:
@@ -430,21 +435,12 @@ def gh_json(endpoint):
     return json.loads(result.stdout)
 
 
-def fetch_bundle(asset_id, output):
-    require(re.fullmatch(r"[1-9][0-9]*",str(asset_id)) is not None,"Positive source asset ID required")
-    release=gh_json("repos/"+SOURCE+"/releases/tags/"+RELEASE_TAG)
-    require(release.get("draft") is False and release.get("prerelease") is True,"Bundle intake requires the separately authorized source prerelease; no source write token fallback")
-    assets=[a for a in release.get("assets",[]) if str(a["id"])==str(asset_id)]
-    require(len(assets)==1,"Asset not in approved source release")
-    asset=assets[0]
-    require(asset["name"]==BUNDLE_NAME and asset["size"]==7256318 and asset.get("digest")=="sha256:"+BUNDLE_SHA,"Source asset metadata/hash mismatch")
-    output=Path(output);output.mkdir(parents=True,exist_ok=False)
-    subprocess.run(["gh","release","download",RELEASE_TAG,"--repo",SOURCE,"--pattern",BUNDLE_NAME,"--dir",str(output)],stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=True,timeout=180)
-    require({p.name for p in output.iterdir()}=={BUNDLE_NAME},"Unexpected downloaded files")
-    verify_bundle(output/BUNDLE_NAME)
+def fetch_bundle(output, audit):
+    from .canary_private import fetch
+    return fetch(output,audit)
 
 
-def preflight_staging(bundle_path, asset_id):
+def preflight_staging(bundle_path=None):
     policy=envelope(SETUP/"staging-policy.json");auth=envelope(SETUP/"staging-authorization.json")
     require(policy.get("staging_enabled") is True,"Staging remains disabled; no credentials/network accessed")
     implementation=auth.get("source_commit","")
@@ -452,36 +448,53 @@ def preflight_staging(bundle_path, asset_id):
     current=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT.parent,text=True).strip()
     subprocess.run(["git","merge-base","--is-ancestor",implementation,current],cwd=ROOT.parent,check=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     changed=subprocess.check_output(["git","diff","--name-only",implementation,current],cwd=ROOT.parent,text=True).splitlines()
-    require(set(changed)<= {"create_defaults/canary/staging-authorization.json","create_defaults/canary/staging-policy.json"},"Implementation changed after approval; only explicit activation/authorization JSON follow-up allowed")
+    require(set(changed)<= {"create_defaults/canary/staging-authorization.json","create_defaults/canary/staging-policy.json","create_defaults/canary/private-artifact.json","create_defaults/canary/environment-setup-verification.json"},"Implementation changed after approval; only explicit activation/authorization JSON follow-up allowed")
     require(subprocess.check_output(["git","status","--porcelain","--untracked-files=no"],cwd=ROOT.parent,text=True).strip()=="","Trusted workflow checkout must be clean")
     helper_sha=hashlib.sha256(Path(__file__).read_bytes().replace(b"\r\n",b"\n")).hexdigest()
     workflow=ROOT.parent/".github/workflows/english-poster-canary.yml"
     require(workflow.is_file(),"Reviewed workflow is not installed")
     workflow_sha=hashlib.sha256(workflow.read_bytes().replace(b"\r\n",b"\n")).hexdigest()
     branch=validate_authorization(policy,auth,source_sha=implementation,helper_sha=helper_sha,workflow_sha=workflow_sha)
-    require(str(auth.get("source_release_asset_id"))==str(asset_id),"Authorization asset ID mismatch")
+    from .canary_private import validate_config
+    from .canary_protection import validate_receipt,verify_hosted_runs,approval_comment
+    artifact=envelope(SETUP/"private-artifact.json")
+    require(artifact["sha256"]==auth["private_artifact_sha256"],"Private artifact pin changed after authorization")
+    validate_config(artifact)
     require(auth.get("admin_bypass_disabled_confirmed") is True,"Environment bypass settings not confirmed")
     run_id=os.environ.get("GITHUB_RUN_ID", "")
     require(re.fullmatch(r"[1-9][0-9]*",run_id) is not None,"Native workflow run ID required")
     run=gh_json("repos/"+SOURCE+"/actions/runs/"+run_id)
     validate_run_context(os.environ,run,current)
+    live_source=gh_json("repos/"+SOURCE+"/branches/main")
+    require(live_source.get("protected") is True and live_source.get("commit",{}).get("sha")==current,"Source main must be protected and unchanged after approval")
     environment=gh_json("repos/"+SOURCE+"/environments/english-canary-stage")
     policies=gh_json("repos/"+SOURCE+"/environments/english-canary-stage/deployment-branch-policies")
     require(policies.get("total_count")==1,"Exactly one allowed environment branch policy required")
     environment_sha=check_environment(environment,policies.get("branch_policies",[]))
     require(environment_sha==auth.get("environment_snapshot_sha256"),"Environment configuration changed after authorization")
-    approval=check_native_approval(gh_json("repos/"+SOURCE+"/actions/runs/"+run_id+"/approvals"),environment)
+    receipt=envelope(SETUP/"environment-setup-verification.json")
+    setup_proof=validate_receipt(receipt,environment_sha=environment_sha,implementation=implementation,auth=auth)
+    require(receipt.get("environment_id")==environment["id"],"Setup receipt environment identity changed")
+    admin=gh_json("repos/"+SOURCE+"/collaborators/"+receipt["checked_by"]+"/permission")
+    require(admin.get("role_name")=="admin" and admin.get("user",{}).get("id")==receipt["checked_by_id"],"Setup inspector no longer has source administrator access")
+    verify_hosted_runs(receipt,implementation,gh_json)
+    approval=check_native_approval(gh_json("repos/"+SOURCE+"/actions/runs/"+run_id+"/approvals"),environment,expected_comment=approval_comment(auth,run_id))
+    approval["setup_verification"]=setup_proof
     approval.update(run_id=int(run_id),run_attempt=1,initiator=os.environ.get("GITHUB_ACTOR"),environment_snapshot_sha256=environment_sha)
-    bundle=verify_bundle(bundle_path)
-    require(auth.get("destinations")==sorted(r["destination"] for r in bundle.rows),"Authorization exact path list differs")
-    require(auth.get("expected_target_head")==bundle.preparation["published_snapshot"]["head"],"Changed baseline needs a fresh comparison, not authorization substitution")
+    bundle=verify_bundle(bundle_path) if bundle_path is not None else None
+    if bundle is not None:
+        require(auth.get("destinations")==sorted(r["destination"] for r in bundle.rows),"Authorization exact path list differs")
+        require(auth.get("expected_target_head")==bundle.preparation["published_snapshot"]["head"],"Changed baseline needs a fresh comparison, not authorization substitution")
+    else:
+        require(auth.get("destinations")==sorted(DESTINATIONS),"Authorization exact path list differs")
+        require(auth.get("expected_target_head")==envelope(EVIDENCE/"preparation-20261017.json")["published_snapshot"]["head"],"Changed target baseline needs fresh comparison")
     return bundle,auth,branch,current,approval
 
 
-def execute_staging(bundle_path, asset_id, audit_root, *, preflight_only=False):
+def execute_staging(bundle_path, audit_root, *, preflight_only=False):
     audit=Audit(audit_root)
     try:
-        bundle,auth,branch,current,approval=preflight_staging(bundle_path,asset_id)
+        bundle,auth,branch,current,approval=preflight_staging(bundle_path)
         audit.add("authorized_staging_preflight",{"authorization_sha256":auth["sha256"],"checkout_commit":current,"native_approval":approval,"archive_sha256":BUNDLE_SHA,"publish_authorized":False})
         if preflight_only:return
         client=GitHub(os.environ.get("CANARY_APP_TOKEN"),audit,auth["expected_target_head"],auth["sha256"]);client.check_token_scope()
@@ -496,15 +509,25 @@ def main(argv=None):
     for name in ("verify","dry-run","authorize","stage"):
         p=commands.add_parser(name);p.add_argument("--bundle",required=True,type=Path)
         if name=="dry-run":p.add_argument("--root",required=True,type=Path)
-        if name in {"authorize","stage"}:p.add_argument("--asset-id",required=True);p.add_argument("--audit-root",required=True,type=Path)
+        if name in {"authorize","stage"}:p.add_argument("--audit-root",required=True,type=Path)
+    p=commands.add_parser("authorize-metadata");p.add_argument("--audit-root",required=True,type=Path)
     p=commands.add_parser("audit-verify");p.add_argument("--root",required=True,type=Path)
-    p=commands.add_parser("fetch");p.add_argument("--asset-id",required=True);p.add_argument("--out",required=True,type=Path)
+    p=commands.add_parser("fetch");p.add_argument("--out",required=True,type=Path);p.add_argument("--audit-root",required=True,type=Path)
     args=parser.parse_args(argv)
     if args.command=="audit-verify":print(verify_audit(args.root))
-    elif args.command=="fetch":fetch_bundle(args.asset_id,args.out)
+    elif args.command=="authorize-metadata":execute_staging(None,args.audit_root,preflight_only=True)
+    elif args.command=="fetch":
+        audit=Audit(args.audit_root)
+        try:
+            _,auth,_,_,_=preflight_staging()
+            audit.add("private_intake_authorized",{"authorization_sha256":auth["sha256"]})
+            fetch_bundle(args.out,audit)
+        except Exception as error:
+            audit.add("stopped",{"error_type":type(error).__name__,"automatic_retry":False})
+            raise
     elif args.command=="verify":verify_bundle(args.bundle);print("Seven exact accepted images and sealed archive verified; no staging authority")
     elif args.command=="dry-run":dry_run(args.bundle,args.root)
-    else:execute_staging(args.bundle,args.asset_id,args.audit_root,preflight_only=args.command=="authorize")
+    else:execute_staging(args.bundle,args.audit_root,preflight_only=args.command=="authorize")
 
 
 if __name__=="__main__":main()

@@ -68,3 +68,20 @@ code/deployment checks bind the additive trusted-maintainer records instead.
   snapshots remain immutable historical evidence, not the selected configuration.
 - `trusted-maintainer-deployment-manifest-20261018-v2.json`: previous exact
   deployment manifest, retained because the prior preparation proof binds its hash.
+
+- `readiness-target-baseline-20261018.json`: current GET-only target HEAD/root and
+  seven-path old-blob comparisons; source main observed unprotected. Scoped tree
+  traversal followed a failed large recursive response; no fresh full-tree/image
+  download or target write is claimed.
+- `readiness-private-adapter-local-20261018.json`: actual original ZIP through a
+  simulated private Git API reader; zero network/upload, not real private access.
+- `infrastructure-readiness-dry-run-20261018.json`: current-helper local seven-file
+  Git staging rehearsal, no remote/ref/PR creation.
+- `infrastructure-readiness-20261018.json`: current private/protection/hosted-probe
+  engineering and exact deployment bindings; real infrastructure/hosted evidence
+  and staging authority remain absent. Prior evidence snapshots are preserved.
+
+- `infrastructure-readiness-20261018-v2.json`: final native non-main probe behavior
+  and installation hashes; earlier preparation/manifest snapshot retained unchanged.
+- `explicit-user-deployment-manifest-20261018.json` and
+  `readiness-deployment-manifest-20261018-v1.json`: immutable prior manifest snapshots.

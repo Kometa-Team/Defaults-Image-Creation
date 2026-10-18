@@ -84,12 +84,11 @@ The maintainer subsequently approved Option A: exactly five explicit users. Team
 mode/configuration/runtime membership reads are removed; no organization Members
 credential is required by the selected configuration. Native environment
 controls remain authoritative, with explicit approval-history checks before token
-minting. Unknown/enabled admin-bypass readback stops; current documented REST lacks
-that field, leaving an explicit staging blocker. Local fixtures are not hosted
+minting. Hidden administrator-bypass verification uses a supported auditable UI
+setup receipt plus actual hosted/native evidence; no nonexistent API field is required. Local fixtures are not hosted
 approval proof. `bullmoose20` coordinator/rollback roles remain unconfirmed. No GitHub
-setting, App, credential, workflow, staging branch or Default-Images file changed. The proposed
-public source-prerelease intake needs separate artifact-sharing approval or a
-reviewed private adapter. All staging gates stay false pending separate setup,
+setting, App, credential, workflow, staging branch or Default-Images file changed. The selected private Git-blob intake is implemented locally with a separate
+Contents-read App; repository creation/upload/credentials remain unauthorized. All staging gates stay false pending separate setup,
 implementation/deployment and exact staging authorization. No publisher/merge/rollback
 implementation or automatic subsequent phase is included. PR #12 remains draft.
 
@@ -977,11 +976,41 @@ setup, credential, artifact-upload, staging or production authority. The reviewe
 model is confirmed; proposed coordinator/rollback ownership remains separately
 unconfirmed. Exact source repository-admin versus organization-owner/App-manager
 setup instructions are in the [final checklist](canary/STAGING_AUTHORIZATION_CHECKLIST.md).
-Private holding-repository intake remains recommended and separately undecided;
-native no-bypass readback remains a fail-closed blocker. All historical artwork,
+Private holding-repository Git-blob intake is selected and implemented locally;
+external setup and actual hosted/manual protection evidence remain pending. All historical artwork,
 Gate E, renderer/font/layout/validation and comparison evidence is unchanged.
 
 Option A focused validation: **129 local checks passed**, with 38 unrelated checks
 deselected. Final helper rehearsal verified all seven accepted hashes, exact paths,
 unchanged local refs/worktree and zero network/target writes. Full PR CI runs
 separately; hosted native approval testing remains unperformed and unauthorized.
+
+## Infrastructure engineering readiness - external setup pending
+
+The [current implementation evidence](bulk/evidence/english-canary/infrastructure-readiness-20261018-v2.json)
+binds private adapter/protection/helper/workflow/configuration and deployment identities.
+The original ZIP and seven individually accepted images are reused unchanged. Private
+intake is GET-only, pins repository privacy/ID/commit/tree/path/blob and exact ZIP bytes,
+then verifies accepted JPEG/context bindings before writer-token creation. A separate
+inactive approval probe references no publishing or artifact keys.
+
+Supported hidden-setting verification is explicitly manual: a source admin retains
+redacted UI evidence, reviews actual hosted probe outcomes and signs off a fresh hashed
+setup receipt; native history plus exact per-run receipt/authorization comment is also
+required. Local fixtures are not native-hosted proof. No receipt or hosted success is
+fabricated. Protected, unchanged live source main is now mandatory; current main reports
+unprotected. Current read-only target evidence still matches the accepted master and
+all seven old blobs; complete target-tree checks are required again during staging.
+
+The [final external-action checklist](canary/STAGING_AUTHORIZATION_CHECKLIST.md) and
+[exact first staging proposal](canary/FIRST_STAGING_AUTHORIZATION_PROPOSAL.md) identify
+owner/admin setup, private storage/Apps/keys, actual hosted verification, source A/B,
+rollback/writer reservation and final exact expiring authority. No external setup,
+workflow activation, archive upload, target branch/PR, merge or production action was
+performed. Engineering is prepared for installation review; staging is **not ready**.
+
+Infrastructure readiness focused validation: **182 checks passed** (38 unrelated
+checks deselected), covering the private adapter, setup/hosted evidence parsers,
+native comment/source freshness/token ordering, failure audits and unchanged seven
+artwork bindings. Final native-branch probe revision is also checked locally. No
+actual hosted environment test or infrastructure setup is claimed.

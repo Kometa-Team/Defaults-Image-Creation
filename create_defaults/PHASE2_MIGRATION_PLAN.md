@@ -384,3 +384,8 @@ The maintainer has now approved Option A (five explicit users) for the reviewer 
 only. Selected configuration and helper no longer support teams or require membership
 lookups/organization credentials. Setup, artifact transfer, ownership and execution
 still require separate approval. See the [final authorization checklist](canary/STAGING_AUTHORIZATION_CHECKLIST.md).
+
+Infrastructure readiness engineering now selects private Git-blob archive intake with
+a separate read-only App and supported UI/setup-receipt plus native hosted approval
+evidence. No invented bypass API field is used. Source main protection, external setup,
+actual hosted proof and exact staging authority remain unmet; no target write occurred.
