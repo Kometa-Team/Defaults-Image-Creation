@@ -43,6 +43,8 @@ edge error, and explicitly named global luminance SSIM. Transparent artwork is
 compared over black and white, with alpha and coverage diagnostics retained.
 It does not certify clipping, infer fonts from raster pixels, or perform OCR.
 Font/layout provenance and existing preflight diagnostics remain review gates.
+Tagged ICC comparisons require specific colorspace review; identical raw RGB
+values alone cannot establish renderer equivalence for tagged artwork.
 
 SQLite caches measured comparisons by both SHA-256 hashes, parameters and visual
 algorithm source identity. A rerun rehashes candidates and inputs before reuse.
@@ -58,9 +60,12 @@ Results include `*-inventory.json`, complete replacement inventories, proposed
 approval-group memberships and representative `*-review/review.html` galleries.
 Full-resolution links may point into the read-only local checkout; preview images
 are local to the gallery. Font matrices contain every member and deterministic
-samples. Calibration records separately identify seven accepted historical
+samples. Replacement impact follows the existing generated-input dependency
+graph, including changed fonts inside derived artwork whose own caption font
+is unchanged. Calibration records separately identify seven accepted historical
 positive pairs, current category samples, and eight deliberately defective
-controls. Passing a proposed screen grants no approval.
+controls. Unchanged-font positives and intentional direct/inherited font changes
+are reported separately. Passing a proposed screen grants no approval.
 
 ## Planning from explicit maintainer decisions
 

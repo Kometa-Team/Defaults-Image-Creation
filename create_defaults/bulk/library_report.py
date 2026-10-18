@@ -4,15 +4,15 @@ from collections import Counter, defaultdict
 from copy import deepcopy
 from pathlib import Path
 
-from .common import fingerprint, path_key, sha256
+from .common import BulkError, fingerprint, path_key, sha256
 from .config import ROOT
 from .library_publication import batch_plan, publication_manifest, retained_overlay_decisions
 from .library_sources import check_seal, load_json, reference, runtime_identity, save, sealed
-from .library_sync import _group_manifests, classify_difference, gallery
+from .library_sync import _group_manifests, classify_difference, font_impacts, gallery
 from .library_visual import evaluate
 
 
-def reconcile(original, policy=None):
+def reconcile(original, policy=None, font_impacts_by_id=None):
     check_seal(original)
     result = deepcopy(original)
     result.pop("sha256")
@@ -23,6 +23,9 @@ def reconcile(original, policy=None):
         result["policy_sha256"] = fingerprint(policy)
     for row in result["rows"]:
         old = row["difference_class"]
+        if font_impacts_by_id is not None and row.get("id") in font_impacts_by_id:
+            row["font_migration"] = font_impacts_by_id[row["id"]]
+            row["font_change_expected"] = bool(row["font_migration"]["all_fonts"])
         if policy is not None and row.get("metrics"):
             row["tolerance"] = evaluate(row["metrics"], policy)
             row["analysis_context_sha256"] = row["context_sha256"]
@@ -60,8 +63,12 @@ def build(root):
     for kind in ("english", "overlays"):
         policy = load_json(root / "proposed-overlay-tolerance-policy.json") if kind == "overlays" else english_policy
         original = load_json(root / (kind + "-inventory.json"))
-        report = reconcile(original, policy=policy)
-        jobs = {r["job"]["id"]: r["job"] for r in reference(kind)["rows"]}
+        data = reference(kind)
+        if original["reference_manifest"] != data["manifest_header"]["sha256"]:
+            raise BulkError("stale_reference", "Analysis belongs to a different source manifest")
+        impact = font_impacts(data["rows"]) if kind == "english" else None
+        report = reconcile(original, policy=policy, font_impacts_by_id=impact)
+        jobs = {r["job"]["id"]: r["job"] for r in data["rows"]}
         report.pop("sha256")
         report["runtime"] = runtime_identity()
         for row in report["rows"]:
@@ -83,7 +90,8 @@ def build(root):
         for row in report["rows"]:
             if row["hash_state"] == "exact_match":
                 continue
-            key = "overlays" if kind == "overlays" else ("font:" + row["font"] if row["difference_class"] == "font_changed" else "renderer-and-layout-review")
+            font_scope = ",".join(row.get("font_migration", {}).get("all_fonts", [])) or row["font"]
+            key = "overlays" if kind == "overlays" else ("font:" + font_scope if row["difference_class"] == "font_changed" else "renderer-and-layout-review")
             pending[key].append(row)
         for name, rows in sorted(pending.items()):
             groups.append({"name": name, "kind": kind, "destinations": len(rows),
@@ -99,8 +107,9 @@ def build(root):
     benchmark = check_seal(load_json(benchmark_path)) if benchmark_path.exists() else None
     summary = {"schema_version": 1, "baseline": inventories["english"]["baseline"],
         "canary_remotely_hash_verified": inventories["english"]["canary_remotely_verified"],
-        "inventories": {}, "calibration": {k: calibration[k] for k in ("accepted_positive_distribution", "accepted_positive_rejected", "defective_controls_missed", "policy_approved")},
+        "inventories": {}, "calibration": {k: calibration[k] for k in ("accepted_positive_distribution", "accepted_positive_rejected", "in_scope_accepted_positive_count", "in_scope_accepted_positive_rejections", "font_migration_positive_count", "defective_controls_missed", "policy_approved")},
         "fonts": [{k: f[k] for k in ("original_font", "replacement_font", "public_destinations", "rendered_caption_destinations", "categories")} for f in fonts["fonts"]],
+        "font_replacement_impacts": fonts["replacement_impacts"],
         "logical_publication_groups": groups, "offline_transport": benchmark,
         "proposed_transport_defaults": {"maximum_files": 300, "maximum_bytes": 200 * 1024 ** 2,
             "pack_reserve": "Measure actual incremental packs before authorized remote staging; binary artifacts may not compress further",

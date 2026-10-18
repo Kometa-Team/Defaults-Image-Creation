@@ -24,6 +24,38 @@ from .library_sources import (CANARY_COMMIT, check_seal, blob_id, load_json,
                               published_file, reference, save, sealed, snapshot)
 from .library_visual import PROPOSED_POLICY, compare_images, evaluate
 
+FONT_REPLACEMENTS = {
+    "fonts/PlusJakartaSans-Bold.ttf": ("Helvetica Bold", "HELVETICA_REPLACEMENT.md"),
+    "fonts/BebasNeue-Regular.ttf": ("Bebas Regular 1.100", "BEBAS_REPLACEMENT.md"),
+    "fonts/Monoton-Regular.ttf": ("Monoton historical private binary", "FONT_PROVENANCE.md"),
+}
+
+
+def font_impacts(rows):
+    """Follow the established generated-input DAG, including private parents."""
+    jobs = {r["job"]["id"]: r["job"] for r in rows}
+    result, visiting = {}, set()
+    def visit(identity):
+        if identity in result:
+            return result[identity]
+        if identity in visiting or identity not in jobs:
+            raise BulkError("font_dependency_graph", "Missing or cyclic generated font dependency")
+        visiting.add(identity)
+        job = jobs[identity]
+        font = job["parameters"].get("font")
+        direct = {font} if font in FONT_REPLACEMENTS and job["parameters"].get("text") else set()
+        inherited = set()
+        for dependency in job["dependencies"]:
+            inherited.update(visit(dependency["job_id"])["all_fonts"])
+        value = {"direct_fonts": sorted(direct), "inherited_fonts": sorted(inherited),
+                 "all_fonts": sorted(direct | inherited)}
+        result[identity] = value
+        visiting.remove(identity)
+        return value
+    for identity in jobs:
+        visit(identity)
+    return result
+
 
 def classify_difference(row):
     """Keep historical layout risk separate from observed rendering changes."""
@@ -37,6 +69,8 @@ def classify_difference(row):
         return "missing_published"
     if not row.get("metrics", {}).get("same_dimensions"):
         return "layout_changed"
+    if any(row["metrics"].get(side, {}).get("icc_profile") for side in ("candidate", "published")):
+        return "unexpected_difference"  # Raw decoded RGB alone cannot accept tagged colorspace changes.
     if row.get("font_change_expected"):
         return "font_changed"
     return "renderer_equivalence_pending_policy" if row.get("tolerance", {}).get("screen_pass") else "unexpected_difference"
@@ -147,12 +181,16 @@ def _group_manifests(rows, policy, baseline):
         if row["difference_class"] == "exact_match":
             continue
         lane = "overlays" if row["kind"] == "overlay" else row["difference_class"]
-        key = (lane, row["font"], row["category"])
+        key = (lane, row["font"], row["category"], tuple(row.get("font_migration", {}).get("all_fonts", [])))
         groups[key].append(row)
     output = []
-    for (lane, font, category), members in sorted(groups.items()):
+    for (lane, font, category, affected_fonts), members in sorted(groups.items()):
+        displayed_font = font
+        if affected_fonts and font not in affected_fonts:
+            displayed_font += " (generated input: " + ", ".join(affected_fonts) + ")"
         bindings = [{k: r.get(k) for k in ("destination", "candidate_sha256", "published_sha256", "context_sha256")} for r in members]
-        output.append(sealed({"schema_version": 1, "lane": lane, "category": category, "font": font,
+        output.append(sealed({"schema_version": 1, "lane": lane, "category": category, "font": displayed_font,
+                              "affected_replacement_fonts": list(affected_fonts),
                               "baseline": baseline, "policy_sha256": fingerprint(policy),
                               "members": bindings, "membership_sha256": fingerprint(bindings),
                               "samples": deterministic_samples(members), "approval": "pending",
@@ -166,10 +204,10 @@ def gallery(root, rows, groups):
     by_path = {r["destination"]: r for r in rows}
     for group in groups:
         content = '<h2>' + html.escape(" / ".join((group["lane"], group["category"], group["font"]))) + '</h2>'
-        content += '<p>Pending review. Group membership SHA-256: ' + group["membership_sha256"] + '</p>'
+        content += '<p>Group review pending; retained individual decisions remain valid where recorded. Membership SHA-256: ' + group["membership_sha256"] + '</p>'
         for sample in group["samples"]:
             row = by_path[sample["destination"]]
-            content += '<article><h3>' + html.escape(row["destination"]) + '</h3><p>' + html.escape(", ".join(sample["reasons"])) + '</p><div class="pair">'
+            content += '<article><h3>' + html.escape(row["destination"]) + '</h3><p>' + html.escape(", ".join(sample["reasons"])) + '</p><p>Approval: ' + html.escape(row.get("approval", "comparison evidence")) + '</p><div class="pair">'
             for label, field in (("Published", "published_path"), ("Python candidate", "candidate_path")):
                 path = row.get(field)
                 if path and Path(path).is_file():
@@ -187,7 +225,7 @@ def gallery(root, rows, groups):
             '<title>English library synchronization review</title><style>body{font:16px system-ui;margin:24px;background:#eee;color:#222;overflow-wrap:anywhere}'
             '.pair{display:flex;gap:20px;flex-wrap:wrap}figure{margin:0;max-width:100%;min-width:0}img{max-width:100%;background:#888}pre{white-space:pre-wrap;overflow-wrap:anywhere}'
             'article{background:white;padding:16px;margin:16px 0}h2{margin-top:48px}</style><h1>Library review: no publication authorized</h1>'
-            '<p>Representative deterministic samples, not complete visual coverage. Click an image for full resolution. All decisions remain pending.</p>'
+            '<p>Representative deterministic samples, not complete visual coverage. Click an image for full resolution. Per-artifact approval status is recorded in the inventory.</p>'
             + ''.join(cards) + '</html>')
     (root / "review.html").write_text(page, encoding="utf-8")
 
@@ -209,6 +247,7 @@ def inventory(root, *, kind, output, catalog=None, local_published=None, workers
         if fresh_plan["sha256"] != data["manifest_header"]["sha256"]:
             raise BulkError("overlay_plan_drift", "Fresh overlay catalog/inputs differ from accepted full run")
     records = [r for r in data["rows"] if r["job"]["remote_relative"] is not None]
+    impact = font_impacts(data["rows"]) if kind == "english" else {}
     if kind == "english" and {v["remote_relative"] for v in variants.values() if not v["private"]} != {r["job"]["remote_relative"] for r in records}:
         raise BulkError("catalog_drift", "Current public catalog differs from verified full-run ledger")
     keys = [path_key(r["job"]["remote_relative"]) for r in records]
@@ -254,6 +293,7 @@ def inventory(root, *, kind, output, catalog=None, local_published=None, workers
                "receipt_sha256": reference_row["receipt"]["receipt_sha256"],
                "identity_correction": reference_row.get("identity_correction"),
                "historical": historical, "canary_member": destination in canary_hashes,
+               "font_migration": impact.get(job["id"], {}),
                "approval": "pending", "publication_eligible": False, "technical_valid": False,
                "difference_class": "blocked", "hash_state": "unverifiable", "blockers": []}
         try:
@@ -289,10 +329,7 @@ def inventory(root, *, kind, output, catalog=None, local_published=None, workers
                 with sqlite3.connect(cache, timeout=60) as db:
                     db.execute("INSERT OR REPLACE INTO comparisons VALUES (?,?)", (identity, canonical(metrics).decode()))
             row["metrics"], row["tolerance"] = metrics, evaluate(metrics, policy)
-            old_font = historical.get("historical_font", "")
-            intentional_font = (("PlusJakarta" in font)
-                                or ("BebasNeue" in font)
-                                or ("Monoton" in font)) and bool(row["caption"])
+            intentional_font = bool(row["font_migration"].get("all_fonts"))
             row["font_change_expected"] = intentional_font
             row["difference_class"] = classify_difference(row)
             row["layout_review_required"] = bool(variant.get("risk", {}).get("requires_individual"))

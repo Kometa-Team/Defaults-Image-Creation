@@ -12,7 +12,7 @@ from .common import BulkError, confined, fingerprint, sha256
 from .config import ROOT
 from .library_publication import batch_plan, publication_manifest
 from .library_sources import (check_seal, load_json, published_file, reference, save, sealed)
-from .library_sync import deterministic_samples, font_history, gallery
+from .library_sync import FONT_REPLACEMENTS, deterministic_samples, font_history, font_impacts, gallery
 from .library_visual import compare_images, evaluate, geometry_diagnostics
 
 
@@ -20,6 +20,7 @@ def font_matrix(root):
     from create_defaults.poster_fixtures import font_inventory
     data = reference("english")
     history = font_history()
+    impacts = font_impacts(data["rows"])
     metadata = {Path(item["file"]).name: item for item in font_inventory([]) if item.get("file")}
     grouped = defaultdict(list)
     for row in data["rows"]:
@@ -32,13 +33,7 @@ def font_matrix(root):
         font_metadata = metadata[name]
         record = {k: font_metadata[k] for k in ("sha256", "family", "copyright", "license_status", "license_metadata", "license_evidence", "provenance_warning") if k in font_metadata}
         rendered = [r for r in rows if r["job"]["parameters"]["text"]]
-        original, evidence = font, None
-        if "PlusJakarta" in font:
-            original, evidence = "Helvetica Bold", "HELVETICA_REPLACEMENT.md"
-        elif "BebasNeue" in font:
-            original, evidence = "Bebas Regular 1.100", "BEBAS_REPLACEMENT.md"
-        elif "Monoton" in font:
-            original, evidence = "Monoton historical private binary", "FONT_PROVENANCE.md"
+        original, evidence = FONT_REPLACEMENTS.get(font, (font, None))
         members = [{"destination": r["job"]["remote_relative"], "caption": r["job"]["parameters"]["text"],
                     "font_size": r["job"]["parameters"]["font_size"], "layout_risks": r["validation"]["diagnostic_codes"],
                     "background_color": r["job"]["parameters"]["base_color"],
@@ -54,8 +49,19 @@ def font_matrix(root):
                        "non_ascii_characters": sorted({c for r in members for c in r["caption"] if ord(c) > 127}),
                        "missing_caption_characters": sorted({c for r in members for c in r["caption"] if not c.isspace() and ord(c) not in font_metadata["supported_codepoints"]}),
                        "members": members, "samples": deterministic_samples(members)})
+    replacement_impacts = []
+    public = [r for r in data["rows"] if r["job"]["remote_relative"]]
+    for font, (original, evidence) in FONT_REPLACEMENTS.items():
+        affected = [r for r in public if font in impacts[r["job"]["id"]]["all_fonts"]]
+        replacement_impacts.append({"original_font": original, "replacement_font": font,
+            "evidence": evidence, "evidence_sha256": sha256(ROOT / evidence),
+            "direct_public_destinations": sum(font in impacts[r["job"]["id"]]["direct_fonts"] for r in affected),
+            "inherited_public_destinations": sum(font in impacts[r["job"]["id"]]["inherited_fonts"] for r in affected),
+            "total_affected_public_destinations": len(affected),
+            "members": [{"destination": r["job"]["remote_relative"], "sha256": r["receipt"]["sha256"],
+                         "font_migration": impacts[r["job"]["id"]]} for r in affected]})
     report = sealed({"schema_version": 1, "public_destinations": sum(r["public_destinations"] for r in result),
-                     "fonts": result, "approval_granted": False})
+                     "fonts": result, "replacement_impacts": replacement_impacts, "approval_granted": False})
     save(Path(root) / "font-impact-matrix.json", report)
     return report
 
@@ -67,6 +73,7 @@ def calibration(root, output, local_published):
     state = check_seal(load_json(root / "production-snapshot.json"))
     policy = load_json(root / "proposed-tolerance-policy.json")
     data = reference("english")
+    impacts = font_impacts(data["rows"])
     by_path = {r["job"]["remote_relative"]: r for r in data["rows"]}
     canary = check_seal(load_json(ROOT / "bulk/evidence/english-canary/preparation-20261017.json"))
     positive, current = [], []
@@ -82,6 +89,8 @@ def calibration(root, output, local_published):
         metrics["geometry"] = geometry_diagnostics(candidate, backup, job["parameters"])
         positive.append({"destination": accepted["destination"], "candidate_sha256": sha256(candidate),
             "published_sha256": sha256(backup), "metrics": metrics, "screen": evaluate(metrics, policy),
+            "font_migration": impacts[job["id"]],
+            "in_renderer_equivalence_scope": not bool(impacts[job["id"]]["all_fonts"]),
             "evidence": "Exact individually accepted canary vs retained original published bytes"})
     entries = {r["path"]: r for r in state["entries"]}
     history = font_history()
@@ -168,6 +177,9 @@ def calibration(root, output, local_published):
         "known_accepted_positives": positive, "current_category_samples": current, "negative_controls": negative,
         "accepted_positive_distribution": distribution(positive), "current_sample_distribution": distribution(current),
         "accepted_positive_rejected": sum(not r["screen"]["screen_pass"] for r in positive),
+        "in_scope_accepted_positive_count": sum(r["in_renderer_equivalence_scope"] for r in positive),
+        "in_scope_accepted_positive_rejections": sum(r["in_renderer_equivalence_scope"] and not r["screen"]["screen_pass"] for r in positive),
+        "font_migration_positive_count": sum(not r["in_renderer_equivalence_scope"] for r in positive),
         "defective_controls_missed": sum(r["defect_missed"] for r in negative),
         "policy_approved": False, "limitations": "Sample calibration only; no universal visual guarantee, no automatic approval"})
     save(root / "tolerance-calibration.json", result)

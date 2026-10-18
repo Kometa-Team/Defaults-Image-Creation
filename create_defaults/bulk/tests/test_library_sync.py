@@ -10,7 +10,7 @@ from PIL import Image, ImageDraw
 from create_defaults.bulk.common import BulkError, fingerprint, sha256
 from create_defaults.bulk.library_publication import batch_plan, publication_manifest, verify_published
 from create_defaults.bulk.library_sources import sealed
-from create_defaults.bulk.library_sync import classify_difference, deterministic_samples
+from create_defaults.bulk.library_sync import classify_difference, deterministic_samples, font_impacts
 from create_defaults.bulk.library_transport import git, run
 from create_defaults.bulk.library_visual import PROPOSED_POLICY, compare_images, evaluate
 
@@ -167,6 +167,18 @@ def test_geometry_diagnostics_preserve_original_measurements(tmp_path):
     assert compare_images(a, b)["rgb_mae"] > 0
 
 
+def test_tagged_colorspace_requires_review_even_when_raw_rgb_matches(tmp_path):
+    from PIL import ImageCms
+    a, b = tmp_path / "plain.png", tmp_path / "tagged.png"
+    image = Image.new("RGB", (30, 40), "navy")
+    image.save(a)
+    image.save(b, icc_profile=ImageCms.ImageCmsProfile(ImageCms.createProfile("sRGB")).tobytes())
+    row = inventory(tmp_path)["rows"][0]
+    row["metrics"] = compare_images(a, b)
+    assert row["metrics"]["rgb_mae"] == 0
+    assert classify_difference(row) == "unexpected_difference"
+
+
 @pytest.mark.parametrize("defect", ["missing_logo", "changed_text", "color", "geometry", "clipping", "aspect", "alpha"])
 def test_negative_controls_reject(tmp_path, defect):
     a, b = tmp_path / "a.png", tmp_path / "b.png"
@@ -203,6 +215,30 @@ def test_historical_wrap_warning_does_not_claim_a_changed_layout(tmp_path):
     assert classify_difference(row) == "renderer_equivalence_pending_policy"
     row["metrics"]["same_dimensions"] = False
     assert classify_difference(row) == "layout_changed"
+
+
+def test_font_substitution_follows_generated_parent_and_grandchild(tmp_path):
+    rows = [
+        {"job": {"id": "year-2020", "parameters": {"font": "fonts/PlusJakartaSans-Bold.ttf", "text": "2020"}, "dependencies": []}},
+        {"job": {"id": "year-best-2020", "parameters": {"font": "fonts/Comfortaa-Medium.ttf", "text": "BEST OF 2020"},
+                 "dependencies": [{"job_id": "year-2020"}]}},
+        {"job": {"id": "grandchild", "parameters": {"font": "fonts/Comfortaa-Medium.ttf", "text": "BEST"},
+                 "dependencies": [{"job_id": "year-best-2020"}]}},
+    ]
+    impacts = font_impacts(rows)
+    assert impacts["year-best-2020"]["direct_fonts"] == []
+    assert impacts["year-best-2020"]["inherited_fonts"] == ["fonts/PlusJakartaSans-Bold.ttf"]
+    assert impacts["grandchild"]["all_fonts"] == ["fonts/PlusJakartaSans-Bold.ttf"]
+    report = inventory(tmp_path)
+    report["rows"][0]["font_change_expected"] = bool(impacts["year-best-2020"]["all_fonts"])
+    report = reseal(report)
+    assert not publication_manifest(report, PROPOSED_POLICY, [approve(report)])["members"]
+
+
+def test_font_dependency_cycle_is_blocked():
+    rows = [{"job": {"id": "cycle", "parameters": {}, "dependencies": [{"job_id": "cycle"}]}}]
+    with pytest.raises(BulkError, match="cyclic"):
+        font_impacts(rows)
 
 
 def test_reconciliation_preserves_original_evidence_and_outstanding_mismatch(tmp_path):
