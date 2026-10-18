@@ -31,7 +31,7 @@ BUNDLE_NAME = "english-canary-review-bundle.zip"
 RELEASE_TAG = "english-canary-approved-v1"
 # Verified account IDs are part of the reviewed implementation, never workflow inputs.
 MAINTAINERS = {"bullmoose20":12549033, "YozoraXCII":96386153, "chazlarson":3865541, "meisnate12":1631064, "badja-dev":180163201}
-APPROVER_TEAM = {"organization":"Kometa-Team", "slug":"developers", "id":13883129}
+REVIEWER_MODEL_SHA = "15328b4c2e20aa238ffce99cf6652de46cd642b8a4610f6dd6c6d28ec7912dd3"
 MAX_ARCHIVE = 16 * 1024**2
 DESTINATIONS = {"based/Book.jpg", "decade/2020.jpg", "franchise/Death in Paradise (2011).jpg", "genre/Action & Adventure.jpg", "genre/Splatter.jpg", "year/2020.jpg", "year/best/2020.jpg"}
 
@@ -151,7 +151,8 @@ def validate_authorization(policy, auth, *, source_sha, helper_sha, workflow_sha
     require(policy.get("staging_enabled") is True, "Staging is disabled in reviewed policy")
     require(policy.get("target_repository")==TARGET and policy.get("source_environment")=="english-canary-stage" and policy.get("source_ref")=="refs/heads/main" and policy.get("publication_enabled") is False,"Policy target/environment/publishing scope mismatch")
     require(policy.get("reviewer_confirmed") is True and policy.get("rollback_owner_confirmed") is True, "Proposed ownership not confirmed")
-    require(policy.get("authorized_maintainers") == MAINTAINERS and policy.get("reviewer_representation") in {"explicit_users", "team"} and policy.get("reviewer_team") == APPROVER_TEAM, "Unapproved maintainer roster/representation")
+    require(policy.get("authorized_maintainers") == MAINTAINERS and policy.get("reviewer_representation") == "explicit_users" and "reviewer_team" not in policy, "Unapproved maintainer roster/representation")
+    require(policy.get("reviewer_model_approval_sha256") == auth.get("reviewer_model_approval_sha256") == REVIEWER_MODEL_SHA, "Approved explicit-user model decision changed")
     require(policy.get("primary_reviewer") == policy.get("rollback_owner") == "bullmoose20", "Unexpected proposed coordinator/rollback owner")
     require(auth.get("authorized") is True and auth.get("action") == "stage_seven_english_images_only", "Separate staging authorization absent")
     require(auth.get("target_repository") == TARGET and auth.get("target_branch") == "master", "Wrong target")
@@ -175,36 +176,21 @@ def validate_authorization(policy, auth, *, source_sha, helper_sha, workflow_sha
     return "canary/english-" + auth["sha256"][:12]
 
 
-def check_environment(value, branches, *, representation="explicit_users", team=None, members=None):
-    """Validate exact native reviewers; neither actor nor write role grants approval.
-
-    Team mode additionally requires fresh API membership readback. Missing access
-    stops rather than falling back to another representation or approving a role.
-    """
+def check_environment(value, branches):
+    """Enforce approved Option A: exact users, no team/organization membership reads."""
     require(value.get("name") == "english-canary-stage" and type(value.get("id")) is int and value["id"] > 0, "Wrong/missing staging environment identity")
     rules = [r for r in value.get("protection_rules", []) if r.get("type") == "required_reviewers"]
     require(len(rules) == 1 and rules[0].get("prevent_self_review") is False, "Explicit review with self-review permitted is required")
     reviewers = rules[0].get("reviewers", [])
-    membership = None
-    if representation == "explicit_users":
-        require(len(reviewers) == len(MAINTAINERS) and all(r.get("type") == "User" for r in reviewers), "Exactly five explicit maintainers required")
-        identities = [(r.get("reviewer", {}).get("login"), r.get("reviewer", {}).get("id")) for r in reviewers]
-        require(len(set(identities)) == len(MAINTAINERS) and dict(identities) == MAINTAINERS, "Required maintainer identities changed")
-    elif representation == "team":
-        require(isinstance(team, dict) and isinstance(members, list), "Verified team identity/membership unavailable")
-        require(team.get("id")==APPROVER_TEAM["id"] and team.get("slug")==APPROVER_TEAM["slug"] and team.get("organization",{}).get("login")==APPROVER_TEAM["organization"] and team.get("parent") is None, "Approved team identity/hierarchy changed")
-        identities=[(m.get("login"), m.get("id")) for m in members]
-        require(len(identities)==len(set(identities))==len(MAINTAINERS) and dict(identities)==MAINTAINERS, "Approved team membership changed")
-        require(len(reviewers)==1 and reviewers[0].get("type")=="Team" and reviewers[0].get("reviewer",{}).get("id")==APPROVER_TEAM["id"] and reviewers[0].get("reviewer",{}).get("slug")==APPROVER_TEAM["slug"], "Expected reviewer team missing/changed")
-        membership={"team":APPROVER_TEAM,"members":MAINTAINERS}
-    else:
-        require(False, "Unsupported reviewer representation")
+    require(len(reviewers) == len(MAINTAINERS) and all(r.get("type") == "User" for r in reviewers), "Exactly five explicit maintainers required")
+    identities = [(r.get("reviewer", {}).get("login"), r.get("reviewer", {}).get("id")) for r in reviewers]
+    require(len(set(identities)) == len(MAINTAINERS) and dict(identities) == MAINTAINERS, "Required maintainer identities changed")
     # The documented REST response currently omits this setting. Do not infer
     # false from absence or substitute a workflow input/manual boolean for it.
     require(value.get("can_admins_bypass") is False, "Native administrator-bypass disabled state unavailable or enabled; staging blocked")
     require(value.get("deployment_branch_policy") == {"protected_branches":False,"custom_branch_policies":True}, "Selected deployment branches required")
     require([(b.get("name"),b.get("type")) for b in branches] == [("main","branch")], "Environment must allow only main branch")
-    return fingerprint({"environment":value,"branch_policies":branches,"representation":representation,"verified_team":membership})
+    return fingerprint({"environment":value,"branch_policies":branches,"representation":"explicit_users"})
 
 
 def check_native_approval(history, environment):
@@ -482,11 +468,7 @@ def preflight_staging(bundle_path, asset_id):
     environment=gh_json("repos/"+SOURCE+"/environments/english-canary-stage")
     policies=gh_json("repos/"+SOURCE+"/environments/english-canary-stage/deployment-branch-policies")
     require(policies.get("total_count")==1,"Exactly one allowed environment branch policy required")
-    team=members=None
-    if policy.get("reviewer_representation")=="team":
-        team=gh_json("orgs/Kometa-Team/teams/developers")
-        members=gh_json("orgs/Kometa-Team/teams/developers/members?per_page=100")
-    environment_sha=check_environment(environment,policies.get("branch_policies",[]),representation=policy["reviewer_representation"],team=team,members=members)
+    environment_sha=check_environment(environment,policies.get("branch_policies",[]))
     require(environment_sha==auth.get("environment_snapshot_sha256"),"Environment configuration changed after authorization")
     approval=check_native_approval(gh_json("repos/"+SOURCE+"/actions/runs/"+run_id+"/approvals"),environment)
     approval.update(run_id=int(run_id),run_attempt=1,initiator=os.environ.get("GITHUB_ACTOR"),environment_snapshot_sha256=environment_sha)

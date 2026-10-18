@@ -46,3 +46,10 @@ to actual repository limits. Artifacts can expire or be deleted; record exact ex
 and stop if unavailable. Retain producer/acceptance/audit evidence independently.
 Private cross-repository API access, expired/invalid artifacts and integrity failures
 must be tested before staging; fail closed without public or write-token fallback.
+
+Option A reviewer-model approval does not approve artifact transfer. The selected
+configuration requires no organization-team membership credential. A private intake
+credential remains a separate read-only repository access decision: choose the
+private holding repository/owner, Actions artifact versus private release, approved
+producer and retention/backup policy, then separately authorize an adapter and its
+minimum access. No artifact transfer or credential is implemented here.

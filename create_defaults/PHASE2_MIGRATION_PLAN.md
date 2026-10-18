@@ -379,3 +379,8 @@ self-review) is required per fresh run; no independent dispatcher or actor-based
 auto-approval. Current read-only API admin-bypass verification is a fail-closed
 blocker. Setup, private artifact intake and staging permission remain separate.
 See the [current setup guide](canary/STAGING_INFRASTRUCTURE.md).
+
+The maintainer has now approved Option A (five explicit users) for the reviewer model
+only. Selected configuration and helper no longer support teams or require membership
+lookups/organization credentials. Setup, artifact transfer, ownership and execution
+still require separate approval. See the [final authorization checklist](canary/STAGING_AUTHORIZATION_CHECKLIST.md).

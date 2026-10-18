@@ -75,13 +75,14 @@ no remote or local staging ref/PR is created and local baseline refs/worktree st
 unchanged. Failure-path tests cover disabled credentials/network, stale HEAD,
 extra/case-drift paths, unsafe archives, unauthorized API methods and immutable audits.
 
-The [trusted-maintainer update](bulk/evidence/english-canary/trusted-maintainer-approval-20261018-v2.json)
+The [trusted-maintainer update](bulk/evidence/english-canary/explicit-user-infrastructure-20261018.json)
 supersedes the prior independent-dispatcher proposal. All five identities and effective
 roles are verified, including badja-dev (admin on both repositories); the existing
 Developers team matches that exact roster. Any one of the five may explicitly approve
 their own run or another GitHub-permitted initiator's run; no actor auto-approval.
-The disabled default uses five explicit users; optional pinned-team mode requires
-fresh exact membership checks and separately approved read access. Native environment
+The maintainer subsequently approved Option A: exactly five explicit users. Team
+mode/configuration/runtime membership reads are removed; no organization Members
+credential is required by the selected configuration. Native environment
 controls remain authoritative, with explicit approval-history checks before token
 minting. Unknown/enabled admin-bypass readback stops; current documented REST lacks
 that field, leaving an explicit staging blocker. Local fixtures are not hosted
@@ -969,3 +970,18 @@ team/control drift, preflight before target-token access and unchanged seven-ima
 acceptance. The offline Git rehearsal verified seven exact hashes with no network
 or ref/PR creation. Normal PR CI is separate from the still-pending GitHub-hosted
 protected-environment approval exercise.
+
+Option A decision: the [immutable reviewer-model acceptance](bulk/evidence/english-canary/explicit-user-model-decision-20261018.json)
+binds the verified five-account roster and exact model requirements. It grants no
+setup, credential, artifact-upload, staging or production authority. The reviewer
+model is confirmed; proposed coordinator/rollback ownership remains separately
+unconfirmed. Exact source repository-admin versus organization-owner/App-manager
+setup instructions are in the [final checklist](canary/STAGING_AUTHORIZATION_CHECKLIST.md).
+Private holding-repository intake remains recommended and separately undecided;
+native no-bypass readback remains a fail-closed blocker. All historical artwork,
+Gate E, renderer/font/layout/validation and comparison evidence is unchanged.
+
+Option A focused validation: **129 local checks passed**, with 38 unrelated checks
+deselected. Final helper rehearsal verified all seven accepted hashes, exact paths,
+unchanged local refs/worktree and zero network/target writes. Full PR CI runs
+separately; hosted native approval testing remains unperformed and unauthorized.

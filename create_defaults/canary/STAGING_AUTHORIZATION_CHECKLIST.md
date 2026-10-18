@@ -1,31 +1,47 @@
 # Separate English canary staging-authorization checklist
 
-**All unchecked.** The five-person approval policy is specified; setup, staging,
+**Reviewer model approved; infrastructure setup checklist remains unchecked.** Setup, staging,
 publication and merge are not authorized. `bullmoose20` remains proposed primary
 coordinator/rollback owner pending separate confirmation. Follow the exact conditional
 [setup guide and operator UI walkthrough](STAGING_INFRASTRUCTURE.md).
 
+## Decision recorded - no setup authorization
+
+- [x] Maintainer approved **Option A**: `reviewer_representation: explicit_users`;
+      exactly bullmoose20, YozoraXCII, chazlarson, meisnate12 and badja-dev; one
+      explicit approval per deployment, self-review allowed, administrator bypass
+      disabled, trusted main restriction and separate production approval retained.
+      [Immutable model decision](../bulk/evidence/english-canary/explicit-user-model-decision-20261018.json).
+- [x] Removed supported team mode, team ID/configuration and organization lookup
+      dependency. Team substitution is rejected; no Members credential is required.
+
 ## Setup changes requiring explicit setup approval
 
-- [ ] Confirm the verified roster: bullmoose20, YozoraXCII, chazlarson, meisnate12,
-      badja-dev; confirm rollback owner and actual legacy launcher/window.
-- [ ] Choose reviewer representation explicitly: five usernames (prepared default),
-      or existing Developers team ID 13883129 with separately approved read-only
-      membership lookup. Team membership must remain exactly these five users.
-      No new team or access grant is authorized. Resolve retained API limitations.
-- [ ] Source administrator creates `english-canary-stage`: Required reviewers,
-      exactly the selected users/team; **Prevent self-review off**, **Allow
-      administrators to bypass configured protection rules off**, only branch main.
+- [ ] **Maintainer/rollback owner:** confirm bullmoose20 as coordinator/rollback
+      owner, actual legacy launcher, competing-writer reservation and observation
+      window. Reviewer-model approval does not confirm operational ownership.
+- [ ] **Source repository admin:** Settings > Environments > New environment >
+      `english-canary-stage` > Configure environment. Enable Required reviewers;
+      add exactly the five **User** accounts above. Leave Prevent self-review
+      unchecked; uncheck Allow administrators to bypass configured protection rules;
+      Save protection rules. One listed reviewer suffices. Selected branches and tags
+      > Add deployment branch or tag rule > Branch > `main`; no tags/wildcards.
 - [ ] Establish authoritative no-bypass readback. Current documented REST data omits
       the setting; the helper intentionally blocks on missing state. A settings
       checkbox/manual boolean alone does not satisfy the runtime check. Resolve
       this blocker by a separately reviewed supported verification mechanism.
-- [ ] Register the organization-owned target App, generate its private key and install
-      on **Default-Images only**. Metadata read, Contents write, Pull requests write;
+- [ ] **Organization owner / authorized App manager:** register `Kometa English
+      Canary Stager`, disable webhook/OAuth/device flow, select Only on this account
+      and generate/download its private key. **Organization owner:** approve/install
+      with Only select repositories > **Default-Images only**. Metadata read, Contents write, Pull requests write;
       no Administration, Workflows, source or organization access.
-- [ ] Configure source protected environment App-ID variable/private-key secret.
-      Keep repository `ENGLISH_CANARY_STAGING_ENABLED` absent/false.
-- [ ] Separately authorize infrastructure-only source deployment using the exact
+- [ ] **Source repository admin:** environment Variables > Add variable >
+      `ENGLISH_CANARY_APP_ID`; environment Secrets > Add secret >
+      `ENGLISH_CANARY_APP_PRIVATE_KEY` (PEM). Never commit/log the private key.
+      Keep repository `ENGLISH_CANARY_STAGING_ENABLED` absent/false. App-ID is a
+      variable; the private key is an environment secret, never a repository-wide
+      secret. Source token remains Contents read + Actions read.
+- [ ] **Source writer + authorized reviewer/merger:** separately authorize infrastructure-only source deployment using the exact
       deployment manifest and reviewed installed implementation commit A. Do not
       merge PR #12 or replace PowerShell. Installing YAML alone is insufficient.
 - [ ] Run a separately approved GitHub-hosted approval exercise with **no target App
@@ -55,7 +71,7 @@ coordinator/rollback owner pending separate confirmation. Follow the exact condi
       `59e49ede8d41ac5991f971e66e93af596402329a`. Drift requires additive review.
 - [ ] Reserve competing writers/legacy job for the observation window.
 - [ ] Approve commit B changing only disabled policy/authorization JSON relative to A:
-      exact A/helper/workflow, five-account roster and chosen representation, live
+      exact A/helper/workflow, approved five-user roster/model-decision hash, live
       environment snapshot, seven paths and archive/preparation/acceptance hashes,
       immutable asset identity, target base, owner/window/retention/bypass confirmations
       and <=24-hour UTC expiry. Publishing/merging remain false.
@@ -70,8 +86,8 @@ coordinator/rollback owner pending separate confirmation. Follow the exact condi
 
 After native approval and preflight, the exact authorized staging run may:
 
-1. Read source artifact/authorization/environment/run/approval evidence; team mode
-   additionally reads pinned team membership. Write source run logs/local audit.
+1. Read source artifact/authorization/environment/run/approval evidence; no
+   organization/team lookup. Write source run logs/local audit.
 2. Mint one short-lived target-only installation token after all checks pass.
 3. Read target installation scope, master HEAD, complete tree and old blobs.
 4. POST seven already accepted image blobs, one candidate tree and one sole-parent
@@ -94,3 +110,8 @@ A future distinct production environment requires another explicit trusted-maint
 approval, reviewed target PR/exact candidate commit, verified backups and separately
 authorized execution. Staging approval/history cannot authorize publication. No
 production environment, credential or publisher is configured by this task.
+
+The [full setup guide](STAGING_INFRASTRUCTURE.md) contains exact App form values,
+permission boundaries and the conditional operator walkthrough. These unchecked
+steps are the requested **setup checklist for separate authorization**; do not
+execute them based on reviewer-model approval.

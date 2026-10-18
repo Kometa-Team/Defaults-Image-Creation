@@ -33,7 +33,7 @@ archive and its checksum inventory. No artwork needs reapproval while these exac
 bytes and contexts remain valid; changed artifacts require new review.
 
 **No staging or Default-Images write is authorized.** The proposed operational plan,
-workflow implementation/deployment, credentials, reviewers/rollback owner, durable
+workflow implementation/deployment, credentials, environment assignments/rollback owner, durable
 artifact transfer and explicit staging permission remain outstanding. Visual acceptance
 does not approve those steps, publication, PR #12 merge or PowerShell replacement.
 
@@ -80,12 +80,12 @@ or upload was performed. If private intake is required, leave this template disa
 until an alternative adapter is reviewed. Preparation/visual approval does not grant
 artifact publication, App installation, staging or any Default-Images write.
 
-The [trusted-maintainer update](bulk/evidence/english-canary/trusted-maintainer-approval-20261018-v2.json)
+The [trusted-maintainer update](bulk/evidence/english-canary/explicit-user-infrastructure-20261018.json)
 adds exact account/team checks and read-only native approval history before target
 token minting. The existing Developers team now matches all five authorized accounts;
-the default explicit-user configuration avoids unapproved organization credentials.
-Team mode requires fresh pinned team/membership readback and fails closed on missing
-access. Native bypass readback remains an explicit blocker: documented REST omits
+the selected explicit-user configuration requires no organization membership credentials.
+Option A is now approved: only five explicit User reviewers are supported; no
+team field, membership API, organization Members credential or team-mode fallback remains. Native bypass readback remains an explicit blocker: documented REST omits
 that setting, and the helper rejects unknown/true state. Normal CI/local policy
 fixtures do not prove GitHub-hosted protected-environment behavior.
 
@@ -375,3 +375,22 @@ team/control drift, preflight before target-token access and unchanged seven-ima
 acceptance. The offline Git rehearsal verified seven exact hashes with no network
 or ref/PR creation. Normal PR CI is separate from the still-pending GitHub-hosted
 protected-environment approval exercise.
+
+## Option A reviewer model approved - setup remains unauthorized
+
+The [maintainer decision](bulk/evidence/english-canary/explicit-user-model-decision-20261018.json)
+accepts exactly five explicit users, one authorized approval per deployment, self-review
+allowed, no admin bypass and trusted main restrictions. Policy and authorization bind
+that decision's exact envelope hash. `reviewer_confirmed: true` records only model
+acceptance; staging/authorization/rollback-owner confirmation remain false. There is
+no team-mode code/configuration or organization membership lookup dependency.
+The [final setup checklist](canary/STAGING_AUTHORIZATION_CHECKLIST.md) distinguishes
+organization-owner/App-manager tasks, source repository-admin tasks and ordinary
+writer/reviewer operations. It remains wholly unexecuted. No native no-bypass gap,
+private artifact-delivery decision, hosted approval check or staging permission is
+resolved by approval of the reviewer model.
+
+Option A focused validation: **129 local checks passed**, with 38 unrelated checks
+deselected. Final helper rehearsal verified all seven accepted hashes, exact paths,
+unchanged local refs/worktree and zero network/target writes. Full PR CI runs
+separately; hosted native approval testing remains unperformed and unauthorized.

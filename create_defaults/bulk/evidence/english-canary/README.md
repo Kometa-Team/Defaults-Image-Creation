@@ -56,3 +56,15 @@ code/deployment checks bind the additive trusted-maintainer records instead.
 - `staging-deployment-manifest-20261018-v1.json` and
   `trusted-maintainer-deployment-manifest-20261018-v1.json`: exact historical manifest
   snapshots corresponding to earlier preparation proofs.
+
+- `explicit-user-model-decision-20261018.json`: maintainer acceptance of Option A,
+  five explicit users only; exact reviewer IDs and prior verification binding;
+  one explicit approval, self-review allowed, no bypass, main only. No setup or
+  staging/credential/artifact-upload/production/merge authorization.
+- `explicit-user-infrastructure-20261018.json` and
+  `explicit-user-dry-run-20261018.json`: selected explicit-user implementation,
+  current deployment identities and offline seven-image rehearsal. Team mode and
+  organization membership API dependency are removed. Earlier implementation
+  snapshots remain immutable historical evidence, not the selected configuration.
+- `trusted-maintainer-deployment-manifest-20261018-v2.json`: previous exact
+  deployment manifest, retained because the prior preparation proof binds its hash.

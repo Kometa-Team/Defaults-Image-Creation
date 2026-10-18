@@ -3,7 +3,9 @@
 **Prepared, not installed or activated.** All staging gates are disabled. Read-only
 GitHub identity/permission inspection was performed; no ref/PR creation, credential
 enabling, App installation, workflow installation, image publication or merge occurred.
-PR #12 remains draft. This is implementation preparation, not staging authority.
+PR #12 remains draft. **Option A is approved for the reviewer model only.** The
+[maintainer decision](../bulk/evidence/english-canary/explicit-user-model-decision-20261018.json)
+binds exactly five explicit accounts; it grants no setup or staging authority.
 
 ## Reviewable files and fixed identities
 
@@ -15,7 +17,8 @@ PR #12 remains draft. This is implementation preparation, not staging authority.
   dry-run, and writes immutable SQLite events plus hash-chained exclusive JSON files.
 - [Disabled policy](staging-policy.json): `staging_enabled: false`;
   `bullmoose20` is the **proposed** primary reviewer and rollback owner. Both
-  confirmations remain false pending explicit maintainer confirmation.
+  rollback-owner confirmation remains false. `reviewer_confirmed: true` records
+  only the approved five-user reviewer model, not GitHub setup or staging authority.
 - [Unauthorized template](staging-authorization.json): `authorized: false`.
   Unknown implementation/workflow hashes, asset ID and expiry are null, not invented.
 - [Deployment manifest](deployment-files.json): exact source/target files and hashes
@@ -91,6 +94,23 @@ No token, private key or Authorization header is written to audit evidence.
 These steps change GitHub configuration and require **separate setup authorization**.
 Nothing below has been applied.
 
+### Permission boundaries for future setup
+
+| Action | Required operator/access | Current recorded finding |
+| --- | --- | --- |
+| Register/manage organization-owned App and private key | Organization owner or authorized GitHub App manager | YozoraXCII, chazlarson, meisnate12 and badja-dev were verified active owners. |
+| Approve/install App on the organization and selected repository | Organization owner under organization installation policy | App management alone must not be assumed to grant installation authority. |
+| Create/configure protected environment, reviewer/no-bypass/branch rules and its secrets | **Defaults-Image-Creation repository admin** | Those four were verified source admins; bullmoose20 has source write, which does not permit environment configuration. |
+| Prepare infrastructure-only source PR | Source writer; eventual merge follows protected-branch rules and separate authorization | No installation/merge is authorized here. |
+| Dispatch trusted workflow manually | Source write access and enabled workflow | All five had at least source write; no access is granted to other users. |
+| Approve pending protected deployment | One configured reviewer with source read access | Any one of the five, including the initiator; repository-admin access is not needed to approve. |
+
+These findings refer to the retained permission audit, not a new access grant. An
+administrator must verify access at setup. The target App requests no repository
+Administration or organization Members permission. GitHub's [environment requirements](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments)
+and [App registration](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app)
+describe these distinct responsibilities.
+
 ### 1. Confirm people and operating window
 
 The intended approval roster is `bullmoose20`, `YozoraXCII`, `chazlarson`,
@@ -140,41 +160,23 @@ Each user's effective target role was independently verified as shown above.
 Repository-level team-list GETs returned 404 on both repositories; hidden team
 access remains an organization-admin verification item, not an invented absence.
 
-**Preferred team option: existing `Kometa-Team/developers`**, provided its exact
-five-user effective membership and source eligibility are reverified at setup and
-before minting a write token. Team mode pins organization, slug, numeric ID and
-member account IDs, rejects parent hierarchy changes and stops on missing/changed
-team/membership. The member-list API includes child-team members; more than five
-entries on its first 100-result page already fails closed. See
-[team member API permissions and inheritance](https://docs.github.com/en/rest/teams/members).
-A future GitHub Actions token with only source Contents/Actions read cannot be
-assumed to read a closed organization team: the endpoint requires organization
-Members read. Do not expand the target App's scope or add credentials in this task.
-An authorized read-only team-lookup mechanism must be separately reviewed if this
-mode is selected; unavailable team reads stop without fallback.
+**Selected and approved: Option A, five explicit GitHub users.** Both policy and
+authorization templates use `reviewer_representation: explicit_users`, bind the
+immutable model-decision SHA-256 and include the five verified numeric account IDs.
+The policy now records reviewer-model confirmation. Staging remains false;
+authorization, rollback-owner confirmation and infrastructure permissions remain false.
+There is no reviewer-team field, supported team mode or runtime organization/team
+lookup. A team entry or mode substitution is rejected. Historical Developers-team
+observations above remain evidence only; their API access limitations are **not
+blockers or prerequisites for the selected configuration**. No organization Members
+credential, team creation, permission grant or renewed membership check is needed.
 
-**Prepared least-privilege alternative: five explicit verified users.** This is the
-current disabled policy's `reviewer_representation: explicit_users`; the helper also
-supports a separately selected `team` mode. GitHub permits up to six user/team entries;
-one listed reviewer approves, and reviewers need source repository read access.
-Both repositories are public and the observed organization plan is Free, where
-native required reviewers are supported. See
-[reviewer limits](https://docs.github.com/en/rest/deployments/environments) and
-[plan availability](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments).
-
-If an administrator prefers a dedicated team `image-publishing-approvers`, its
-intended effective membership must be exactly the **same five accounts**. Creation,
-access grants and a newly pinned team identity require separate approval; the helper
-will reject an unpinned replacement team. No team was created or changed here.
-
-Organization-admin verification, if access is incomplete: Organization Settings >
-People: check each account's active status and owner/member role; Teams: inspect
-all visible and secret teams, effective/nested members and repository access; each
-repository Settings > Collaborators and teams: inspect direct, team, base and owner
-access and effective role. With appropriately authorized read access, paginate
-`GET /orgs/Kometa-Team/teams`, each `/teams/{slug}/members` and `/teams/{slug}/repos`,
-plus `GET /repos/Kometa-Team/{repo}/collaborators/{login}/permission` and `/teams`.
-Capture exact responses/errors. A 403/404 must remain unknown, never inferred absent.
+GitHub supports up to six user/team reviewer entries and requires any one listed
+reviewer; the approved configuration uses exactly five User entries. Reviewers need
+source read access, and manual workflow dispatch follows actual source write access.
+Both repositories were observed public on Free, where native required reviewers
+are supported. See [native reviewer controls and plan availability](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments).
+No native team configuration is part of the selected implementation.
 
 ### 2. Register the target-only GitHub App
 
@@ -207,10 +209,8 @@ In **Defaults-Image-Creation**, not Default-Images:
 1. Settings → Environments → New environment → `english-canary-stage`.
 2. Enable **Required reviewers** and add exactly `bullmoose20`, `YozoraXCII`,
    `chazlarson`, `meisnate12`, `badja-dev`, checking the account IDs above. One of five approves.
-   Alternatively, after separately approving team-mode lookup access, select only
-   the verified Developers team and pin `reviewer_representation: team` in both
-   policy and authorization. Never select general collaborators or an unverified
-   team, and never switch representations automatically after a failed check.
+   Select **User** entries, not Developers or any team. Native GitHub requires
+   one of these reviewers; no second reviewer or independent dispatcher is needed.
 3. Leave **Prevent self-review unchecked**. Deselect **Allow administrators to bypass
    configured protection rules**. Save protection rules and retain settings evidence.
 4. Deployment branches/tags: Selected branches and tags → Branch → exactly `main`.
@@ -265,7 +265,8 @@ on source `main` changing only the policy/authorization JSON relative to A.
 No other source change is permitted by preflight. This is a separately approved
 activation/configuration change, not part of this task.
 
-- Policy: enable staging and confirm both proposed roles only after confirmation.
+- Policy: keep the approved explicit-user roster/model binding; enable staging and
+  confirm the proposed rollback owner only under separate staging/owner approval.
 - Authorization: `authorized=true`, action `stage_seven_english_images_only`;
   record implementation commit A, full helper and installed-workflow SHA-256 values
   (hash normalized LF text), integer source asset ID, all seven exact destinations,
@@ -335,7 +336,8 @@ extra paths, case conflicts, bad approval/artifact pins, unsafe ZIPs, environmen
 review, forbidden force/update/merge routes and immutable audit verification.
 
 **Ready for implementation/configuration review; NOT authorized or configured to stage.**
-App/env/installation/intake/authorization/role confirmations remain outstanding.
+App/env/installation/intake/staging authorization and rollback-owner confirmation
+remain outstanding. The reviewer model is approved; team membership is not a dependency.
 Real App access, token revocation and GitHub staging have deliberately not been tested.
 No production-changing action may proceed on the basis of this report.
 
@@ -362,13 +364,13 @@ activating staging. No such hosted approval exercise occurred in this task.
 
 Local fixtures cover all five self-review identities, cross-review and outside-writer
 initiation followed by trusted approval, denial without explicit review, outsider
-reviews, roster/ID/team drift, wrong source/attempt, missing/changed native controls,
+reviews, roster/ID drift and team substitution, wrong source/attempt, missing/changed native controls,
 artifact and seven-path safeguards. They validate parsing/policy logic, **not GitHub's
 server-side authorization or UI behavior**. Existing immutable evidence is preserved;
 new implementation and dry-run evidence are additive.
 
 Roster changes require disabling staging, verifying account IDs/membership/access,
-reviewing a new pinned implementation/environment configuration and exact staging
+reviewing a new pinned explicit-user implementation/environment configuration and exact staging
 authorization, and repeating the no-write hosted checks. PR content/inputs cannot
 amend the roster. Repository/organization administrators can edit settings or trusted
 source code; native reviewers do not remove that administrative authority. The helper

@@ -170,37 +170,30 @@ def test_local_environment_policy_fails_closed(native_environment,mutation):
     with pytest.raises(BulkError):s.check_environment(env,branches)
 
 
-def team_environment(env):
-    env=deepcopy(env)
-    env['protection_rules'][0]['reviewers']=[{'type':'Team','reviewer':{'slug':'developers','id':13883129}}]
-    team={'id':13883129,'slug':'developers','organization':{'login':'Kometa-Team'},'parent':None}
-    members=[{'login':login,'id':uid} for login,uid in s.MAINTAINERS.items()]
-    return env,team,members
+@pytest.mark.parametrize('mutation',['team_mode','policy_team_field','policy_receipt','authorization_receipt','authorization_team_mode'])
+def test_option_a_rejects_team_substitution_or_changed_model_decision(authorized,mutation):
+    policy,auth=deepcopy(authorized)
+    if mutation=='team_mode':policy['reviewer_representation']=auth['reviewer_representation']='team'
+    elif mutation=='policy_team_field':policy['reviewer_team']={'id':13883129,'slug':'developers'}
+    elif mutation=='policy_receipt':policy['reviewer_model_approval_sha256']='f'*64
+    elif mutation=='authorization_receipt':auth['reviewer_model_approval_sha256']='f'*64
+    elif mutation=='authorization_team_mode':auth['reviewer_representation']='team'
+    with pytest.raises(BulkError):s.validate_authorization(policy,auth,source_sha='1'*40,helper_sha='2'*64,workflow_sha='3'*64)
 
 
-def test_existing_team_requires_exact_pinned_five_member_roster(native_environment):
-    env,team,members=team_environment(native_environment)
-    assert s.check_environment(env,[{'name':'main','type':'branch'}],representation='team',team=team,members=members)
-    for login in s.MAINTAINERS:
-        assert s.check_native_approval([review(login)],env)['approvers'][0]['login']==login
-
-
-@pytest.mark.parametrize('mutation',['missing_team','missing_members','wrong_id','wrong_slug','wrong_org','parent',
-    'removed_member','new_outside_member','duplicate_member','wrong_member_id','wrong_reviewer_team'])
-def test_team_membership_and_identity_drift_fails_closed(native_environment,mutation):
-    env,team,members=team_environment(native_environment)
-    if mutation=='missing_team':team=None
-    elif mutation=='missing_members':members=None
-    elif mutation=='wrong_id':team['id']=999
-    elif mutation=='wrong_slug':team['slug']='image-publishing-approvers'
-    elif mutation=='wrong_org':team['organization']['login']='outside'
-    elif mutation=='parent':team['parent']={'id':999}
-    elif mutation=='removed_member':members.pop()
-    elif mutation=='new_outside_member':members.append({'login':'outside-writer','id':999})
-    elif mutation=='duplicate_member':members[-1]=members[0]
-    elif mutation=='wrong_member_id':members[-1]['id']=999
-    elif mutation=='wrong_reviewer_team':env['protection_rules'][0]['reviewers'][0]['reviewer']['id']=999
-    with pytest.raises(BulkError):s.check_environment(env,[{'name':'main','type':'branch'}],representation='team',team=team,members=members)
+def test_option_a_records_only_model_acceptance_without_organization_lookup_or_setup_authority():
+    decision=s.envelope(s.EVIDENCE/'explicit-user-model-decision-20261018.json')
+    policy=s.envelope(s.SETUP/'staging-policy.json');auth=s.envelope(s.SETUP/'staging-authorization.json')
+    assert decision['sha256']==policy['reviewer_model_approval_sha256']==auth['reviewer_model_approval_sha256']==s.REVIEWER_MODEL_SHA
+    assert decision['decision']=='accepted' and decision['reviewer_representation']=='explicit_users'
+    assert decision['authorized_maintainers']==policy['authorized_maintainers']==s.MAINTAINERS
+    assert decision['required_approvals']==1 and decision['prevent_self_review'] is False
+    assert decision['organization_team_lookup_required'] is False and 'reviewer_team' not in policy
+    assert policy['reviewer_confirmed'] is True and policy['rollback_owner_confirmed'] is False
+    assert policy['staging_enabled'] is auth['authorized'] is False
+    assert not any(decision[k] for k in ['workflow_installation_authorized','environment_creation_authorized',
+        'credentials_authorized','artifact_upload_authorized','staging_authorized','publication_authorized','merge_authorized'])
+    assert 'orgs/Kometa-Team/teams' not in Path(s.__file__).read_text(encoding='utf-8')
 
 
 @pytest.mark.parametrize('history',[[review('outside-writer')],[review('unlisted-admin')],
@@ -273,15 +266,15 @@ def test_workflow_template_is_uninstalled_and_defaults_disabled():
     assert steps[token]['with']['repositories']=='Default-Images'
     assert steps[token]['with']['skip-token-revoke']=='false'
     assert s.envelope(s.SETUP/'staging-policy.json')['staging_enabled'] is False
-    assert s.envelope(s.SETUP/'staging-policy.json')['reviewer_confirmed'] is False
+    assert s.envelope(s.SETUP/'staging-policy.json')['reviewer_confirmed'] is True
     assert s.envelope(s.SETUP/'staging-authorization.json')['authorized'] is False
 
 
 def test_deployment_subset_and_final_dry_run_bind_current_implementation(tmp_path):
     import os, subprocess, sys
     manifest=s.envelope(s.SETUP/'deployment-files.json')
-    proof=s.envelope(s.EVIDENCE/'trusted-maintainer-approval-20261018-v2.json')
-    dry=s.envelope(s.EVIDENCE/'trusted-maintainer-dry-run-20261018-v2.json')
+    proof=s.envelope(s.EVIDENCE/'explicit-user-infrastructure-20261018.json')
+    dry=s.envelope(s.EVIDENCE/'explicit-user-dry-run-20261018.json')
     assert proof['deployment_manifest_sha256']==manifest['sha256']
     assert proof['local_dry_run']==dry
     assert dry['archive_sha256']==s.BUNDLE_SHA and dry['acceptance_sha256']==s.ACCEPTANCE_SHA
@@ -313,7 +306,7 @@ def test_permission_addendum_verifies_fifth_account_without_rewriting_initial_ob
     assert {r['login']:r['id'] for r in members}==s.MAINTAINERS
 
 
-@pytest.mark.parametrize('scenario',['authorized','no_review','outside_review','changed_environment','unobservable_bypass','missing_team_access','production_requested'])
+@pytest.mark.parametrize('scenario',['authorized','no_review','outside_review','changed_environment','unobservable_bypass','forbidden_team_mode','production_requested'])
 def test_preflight_requires_native_proof_before_target_token(authorized,native_environment,tmp_path,monkeypatch,scenario):
     policy,auth=deepcopy(authorized)
     root=tmp_path/'create_defaults';root.mkdir()
@@ -337,7 +330,7 @@ def test_preflight_requires_native_proof_before_target_token(authorized,native_e
     elif scenario=='outside_review':history=[review('outside-writer')]
     elif scenario=='changed_environment':auth['environment_snapshot_sha256']='f'*64
     elif scenario=='unobservable_bypass':native_environment.pop('can_admins_bypass')
-    elif scenario=='missing_team_access':policy['reviewer_representation']=auth['reviewer_representation']='team'
+    elif scenario=='forbidden_team_mode':policy['reviewer_representation']=auth['reviewer_representation']='team'
     elif scenario=='production_requested':auth['publish_authorized']=True
     def api(endpoint):
         if endpoint.endswith('/environments/english-canary-stage'):return native_environment
@@ -345,7 +338,7 @@ def test_preflight_requires_native_proof_before_target_token(authorized,native_e
         if endpoint.endswith('/approvals'):return history
         if endpoint.endswith('/actions/runs/202'):return run
         if endpoint.startswith('orgs/'):
-            raise BulkError('canary_staging_stop','Team membership API access unavailable')
+            pytest.fail('No organization/team API call is permitted for Option A')
         pytest.fail('Unexpected API endpoint: '+endpoint)
     monkeypatch.setattr(s,'gh_json',api)
     if scenario=='authorized':
