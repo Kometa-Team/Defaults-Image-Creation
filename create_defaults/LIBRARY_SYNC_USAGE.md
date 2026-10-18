@@ -1,0 +1,134 @@
+# English library synchronization tooling
+
+These commands inventory and compare existing Package E outputs. They do not
+publish artwork, record approvals, merge PRs, install workflows, or select the
+production generator. Use Python 3.13 with `requirements-bulk.txt`; the established
+local environment is `config/package-e/dependency-trial/venv/Scripts/python.exe`.
+
+```powershell
+$python = 'config/package-e/dependency-trial/venv/Scripts/python.exe'
+$root = 'config/library-sync-20261018'
+& $python -m create_defaults.bulk.e_validation baseline --root "$root/catalog"
+& $python -m create_defaults.bulk.library_sync snapshot --root $root
+& $python -m create_defaults.bulk.library_sync inventory --root $root --kind english --output config/package-e/full-en-final/output --catalog "$root/catalog" --local-published C:/Users/bullmoose20/Default-Images --workers 2
+& $python -m create_defaults.bulk.library_sync inventory --root $root --kind overlays --output config/package-e/overlays-full-corrected/output --local-published C:/Users/bullmoose20/Default-Images --workers 2
+& $python -m create_defaults.bulk.library_review fonts --root $root
+& $python -m create_defaults.bulk.library_review calibrate --root $root --output config/package-e/full-en-final/output --local-published C:/Users/bullmoose20/Default-Images
+& $python -m create_defaults.bulk.library_review calibrate-overlays --root $root
+& $python -m create_defaults.bulk.library_review plan --root $root --inventory "$root/english-inventory.json"
+& $python -m create_defaults.bulk.library_review plan --root $root --inventory "$root/overlays-inventory.json"
+& $python -m create_defaults.bulk.library_report --root $root
+```
+
+Supply the actual checkout path on your machine. The checkout is read-only and
+its bytes are reused only after checking the exact blob identity in the freshly
+fetched production tree. Missing/different blobs are downloaded by pinned commit,
+with a 20 MB per-file bound. Canary bytes are fetched independently of the old
+checkout. Git SHA-1 establishes the tree-to-blob binding; candidate and published
+SHA-256 are computed from actual file bytes and retained separately.
+
+The snapshot uses the existing GET-only inventory and verifies merged PR #198
+and production ancestry. Refresh it before a subsequent rollout; a stored
+snapshot is a dated comparison baseline, not an assertion of live HEAD.
+
+The Package E compressed ledger, payload, complete manifest, receipts, rendering
+dependencies and assets are checked. English outputs must match fresh preflight
+identities. The one accepted public destination case correction is applied from
+the additive canary acceptance record, retaining its old identity. Other drift
+fails closed. Overlay planning is checked against a fresh existing overlay plan.
+
+The comparator uses unaligned decoded RGB stripes, channel MAE, percentile and
+changed-pixel distributions, conservative text/logo/background regions, full-size
+edge error, and explicitly named global luminance SSIM. Transparent artwork is
+compared over black and white, with alpha and coverage diagnostics retained.
+It does not certify clipping, infer fonts from raster pixels, or perform OCR.
+Font/layout provenance and existing preflight diagnostics remain review gates.
+
+SQLite caches measured comparisons by both SHA-256 hashes, parameters and visual
+algorithm source identity. A rerun rehashes candidates and inputs before reuse.
+Each completed comparison is checkpointed. The default comparison concurrency is
+two, with an explicit four-worker option; per-image comparisons are bounded to
+24 million pixels. The default time
+budget is three hours after setup. A `STOP` file stops new comparisons and records
+remaining destinations as blocked. Remove only a STOP file you intentionally
+created, then rerun the same command to resume. Prior comparison caches and
+historical Package E evidence are retained.
+
+Results include `*-inventory.json`, complete replacement inventories, proposed
+approval-group memberships and representative `*-review/review.html` galleries.
+Full-resolution links may point into the read-only local checkout; preview images
+are local to the gallery. Font matrices contain every member and deterministic
+samples. Calibration records separately identify seven accepted historical
+positive pairs, current category samples, and eight deliberately defective
+controls. Passing a proposed screen grants no approval.
+
+## Planning from explicit maintainer decisions
+
+Without `--approvals`, no new decisions are inferred. The 64 original overlay
+decisions can enter the plan only when their image, render, validation, policy
+and historical published comparison identities still match. Their old and current
+worker receipts are recorded separately. All other unapproved binary-different
+images remain withheld in the replacement inventory. An
+externally supplied approval receipt must contain:
+
+- `reviewer`, `decision: approved`, `scope`, `inventory_sha256`, exact `baseline`,
+  `policy_sha256`, and an envelope `sha256` over canonical JSON excluding itself.
+- Complete `members`, each with `destination`, `candidate_sha256`,
+  `published_sha256`, `context_sha256`, and `membership_sha256` over that list.
+- For `renderer_equivalent`, explicit `policy_approved: true`. Every member must
+  pass the approved screen and have no font-change or unresolved layout warnings.
+- For `font_layout_group` or `overlay_group`, an exact approved `group_policy`,
+  `group_policy_sha256`, `policy_approved: true`, and explicit
+  `accepted_layout_warnings`. Every member must pass those bounds. Unexpected
+  differences and layout exceptions require `individual` approval.
+
+The allowed attributed reviewers follow the existing five-user model. As with
+the existing local Reviews service, a JSON hash establishes version binding, not
+reviewer authentication. Supply only decisions actually made by maintainers;
+this CLI intentionally has no approve command. The resulting manifest still
+grants no remote-write or merge authority.
+
+```powershell
+& $python -m create_defaults.bulk.library_review plan --root $root --inventory "$root/english-inventory.json" --approvals path/to/actual-maintainer-decision.json --max-files 300 --max-bytes 209715200
+```
+
+Only exact SHA-256 matches are skipped. Every eligible binary-different image,
+including renderer-equivalent artwork, enters the exact upload manifest. No
+encoding or optimization occurs during transport.
+
+## Offline Git exercise
+
+```powershell
+& $python -m create_defaults.bulk.library_transport --plan "$root/english-git-batch-plan.json" --root config/library-offline-exercise --base-repository path/to/local-test-baseline
+```
+
+Use a local baseline repository whose HEAD equals the manifest baseline. The
+exercise root must be new or already owned by that exact plan. All local commits
+and non-forced pushes go to an isolated bare repository inside that root. No
+network remote is accepted or configured. Existing baseline repositories remain
+read-only. This command does not stage a Default-Images branch or PR.
+
+The exercise verifies exact changed paths and SHA-256 bytes in every commit and
+offline remote, measures incremental packs and enforces their byte cap, rejects
+changed baselines/artifacts and unrelated worktree edits,
+and recovers after a commit or successful push with a missing journal update.
+Transport batches are independent of visual groups and publication PRs.
+
+An actual-artifact benchmark can be created from a nonempty approved manifest:
+
+```powershell
+& $python -m create_defaults.bulk.library_exercise --manifest "$root/overlays-publication-manifest.json" --inventory "$root/overlays-reconciled-inventory.json" --root config/library-offline-benchmark-new
+```
+
+It copies verified prior image bytes into a synthetic baseline and rehearses the
+approved replacements, including both ambiguous interruption cases. Its baseline
+is explicitly distinct from production, and its results measure local transport.
+The final report preserves the original analysis inventory, then reconciles
+historical layout warnings independently from observed layout changes. It records
+all remaining mismatches, missing destinations and verification gaps.
+
+After any separately authorized real publication, use
+`library_publication.verify_published` with actual downloaded remote bytes and
+the refreshed production identity. A successful transport response is not remote
+SHA-256 verification. Rerun the entire inventory to reconcile all remaining
+mismatches and missing/unverified files.
