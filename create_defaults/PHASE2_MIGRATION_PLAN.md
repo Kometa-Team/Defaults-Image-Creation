@@ -363,3 +363,11 @@ preserve image/context/published-difference bindings and all earlier evidence.
 This resolves the seven-artifact visual review requirement only. Operational plan,
 workflow/credential setup, owner/window and explicit staging permission remain
 outstanding; no Default-Images write, PR #12 merge or production change is authorized.
+
+Staging infrastructure has been prepared as inactive, reviewable code only. See
+[configuration and implementation](canary/STAGING_INFRASTRUCTURE.md) and the
+[separate authorization checklist](canary/STAGING_AUTHORIZATION_CHECKLIST.md).
+All gates remain disabled; bullmoose20 roles are proposed/unconfirmed. The final-code
+local dry-run creates no staging ref or remote write. App/env/credential installation,
+artifact intake/sharing, infrastructure deployment and exact staging permission
+remain separately required. Nothing merges PR #12, replaces PowerShell or publishes.

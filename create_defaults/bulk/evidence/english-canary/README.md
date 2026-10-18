@@ -28,3 +28,10 @@ inferred from parity, old reviews or this technical preparation.
 
 Original preparation, gallery/archive and Gate E/earlier review records are unchanged.
 The acceptance is an additional record, not a rewritten preparation report.
+
+- `staging-infrastructure-20261018.json`: preparation-only implementation/config
+  identities, proposed unconfirmed bullmoose20 roles, disabled gates and final-code
+  local audit evidence; no App/settings/token/workflow/staging action executed.
+- `staging-infrastructure-dry-run-20261018.json`: seven exact accepted images in
+  a real local Git commit, unchanged local refs/worktree and zero network/remote
+  writes/ref/PR creation. See the [implementation guide](../../../canary/STAGING_INFRASTRUCTURE.md).

@@ -41,7 +41,7 @@ does not approve those steps, publication, PR #12 merge or PowerShell replacemen
 | --- | --- |
 | Gate E scope | Approved at `83ed3d1`; unchanged. |
 | Exact canary artwork | **7/7 personally inspected and accepted**; current renderer/validation bindings verified. |
-| Operational plan and workflow | Proposed mechanism still needs approval; guarded publisher is not implemented, installed or enabled. |
+| Operational plan and workflow | Staging-only implementation prepared for review; not installed or enabled. Publishing/merging remain unimplemented. |
 | Scoped credentials and environments | Separate setup authorization/review required; no write credential enabled. |
 | Ownership and coordination | Name environment reviewers and rollback owner; confirm actual legacy launcher/configuration and a 30-minute single-writer/observation window. |
 | Durable handoff | Local sealed archive verified; approve durable transfer/retention and retain the separate acceptance/audit records without repacking it. |
@@ -51,6 +51,29 @@ does not approve those steps, publication, PR #12 merge or PowerShell replacemen
 Validation of this acceptance update: twelve focused Windows checks pass, including
 seven-member/image/context bindings, retained historical difference records and
 explicit rejection of any staging/production authority. Full PR CI runs separately.
+
+## Staging infrastructure prepared for review — not installed
+
+The [staging-only implementation and exact setup guide](canary/STAGING_INFRASTRUCTURE.md)
+now include a real YAML template outside `.github/workflows`, disabled policy and
+unauthorized templates, seven-file guarded helper, minimal deployment manifest,
+failure-path tests and a local-only Git dry-run. The
+[separate action/authorization checklist](canary/STAGING_AUTHORIZATION_CHECKLIST.md)
+lists every future configuration and staging operation. `bullmoose20` is proposed
+as primary reviewer and rollback owner; no confirmation or GitHub assignment is inferred.
+
+The prepared workflow implements **verify/stage only**. No publish, merge or rollback
+mode exists. The broader publication ideas later in this plan remain future proposals,
+not this implementation. All gates remain disabled, no App/environment/credential
+is installed, and PR #12 is still draft. A separate infrastructure-only source
+deployment is needed because source main lacks the shared runtime; copying YAML
+alone is insufficient and merging PR #12 is not authorized.
+
+The proposed read-only intake uses a source prerelease asset. Public exposure of
+the unchanged ZIP requires a separate artifact-sharing decision; no source release
+or upload was performed. If private intake is required, leave this template disabled
+until an alternative adapter is reviewed. Preparation/visual approval does not grant
+artifact publication, App installation, staging or any Default-Images write.
 
 ## Concrete candidate and observed results
 
@@ -257,8 +280,8 @@ If production verification fails after publication:
 
 ## Remaining approvals and exact operator steps
 
-**Not executable yet:** the proposed publisher is documented, not implemented or
-installed. There is no current Run workflow button for `english-poster-canary.yml`,
+**Not executable yet:** the staging-only helper/workflow is prepared for review,
+not installed or enabled. The production publisher remains a future proposal. There is no current Run workflow button for `english-poster-canary.yml`,
 no enabled write credential and no canary branch/PR. The steps below are conditional
 instructions after the stated approvals, not commands to run now.
 
@@ -271,26 +294,31 @@ instructions after the stated approvals, not commands to run now.
    configuration, preserve them, and confirm a single-writer reservation for the seven
    paths. These operational ownership details were not inferred from a validation workflow. Approve the
    proposed PR-stage/non-forced-publication mechanism or request changes.
-3. Separately authorize implementation/review/deployment of the guarded workflow
-   and narrowly scoped App/environment setup. The setup review must provide the
+3. Separately authorize review/deployment of the prepared staging-only workflow
+   and narrowly scoped App/environment setup, following the infrastructure guide. The setup review must provide the
    exact workflow/helper/action SHAs and proof that all missing/stale approvals and
    stale-base paths fail closed. Installing it on the source default branch needs
    its own reviewed change; **PR #12 remains draft and unmerged**.
-4. Authorize uploading this exact review archive to the chosen durable Actions
-   artifact/storage location. Verify downloaded bytes equal the archive SHA above;
+4. Approve the artifact-intake backend before any upload. The current proposal uses
+   a published source prerelease asset, which would make the ZIP public; that sharing
+   needs explicit approval. A private backend would require its own reviewed adapter.
+   Verify downloaded bytes equal the archive SHA above;
    record the artifact ID, digest and retention. Do not rerender in a Linux publisher:
    these reviewed artifacts are bound to the recorded Windows renderer context.
 5. After setup verification and a fresh target comparison, give a **staging-only**
    approval naming the bundle SHA, seven paths, source/workflow SHA and target base.
    In source repo Actions → English Poster Canary → Run workflow, select the trusted
-   deployed ref, mode `stage`, and enter the exact approved artifact/hash/base values.
+   deployed ref, mode `stage`, exact source release asset ID and explicit confirmation.
+   The helper reads approved hashes/base from the reviewed authorization JSON, not
+   arbitrary workflow inputs.
    Approve only the staging environment. Verify the resulting seven-file target PR;
    master must remain at the approved base. No automatic merge.
 6. Inspect that PR and its exact candidate commit. Give a **separate production
    approval** naming the candidate commit, target PR, base head, bundle/preparation
-   SHA, seven paths, observation window and rollback owner. Run the same deployed
-   workflow with mode `publish` and those values; approve the protected production
-   environment only after its final read-only checks match. This step is the first
+   SHA, seven paths, observation window and rollback owner. A future production
+   implementation must first be separately prepared, reviewed and deployed.
+   The prepared staging workflow has no `publish` mode; never treat it as permission
+   or code to execute this future production operation. This step is the first
    authorization to change production files; nothing in Gate E/preparation substitutes.
 7. Watch its retained verification receipts and 0/5/30-minute checks. On failure,
    follow the stop/explicit-rollback procedure. On success, report the result and

@@ -62,6 +62,27 @@ No new publishing workflow, secret, production environment or credential was ena
 Gate E approval remains bound to `83ed3d1`; preparation does not extend it to new
 artwork approvals or production changes. PR #12 remains draft and unmerged.
 
+## English staging infrastructure preparation only
+
+The [reviewable staging implementation/setup guide](canary/STAGING_INFRASTRUCTURE.md)
+and [separate authorization checklist](canary/STAGING_AUTHORIZATION_CHECKLIST.md)
+now provide actual inactive YAML, disabled policy/authorization templates, exact
+seven-file staging safeguards and a minimal standalone deployment manifest.
+[Preparation evidence](bulk/evidence/english-canary/staging-infrastructure-20261018.json)
+binds code/config hashes and the [local dry-run](bulk/evidence/english-canary/staging-infrastructure-dry-run-20261018.json).
+All seven accepted image hashes pass through a real local Git candidate commit;
+no remote or local staging ref/PR is created and local baseline refs/worktree stay
+unchanged. Failure-path tests cover disabled credentials/network, stale HEAD,
+extra/case-drift paths, unsafe archives, unauthorized API methods and immutable audits.
+
+`bullmoose20` is proposed as primary reviewer/rollback owner, pending confirmation;
+an independent dispatcher is required by self-review protection. No GitHub setting,
+App, credential, workflow, staging branch or Default-Images file changed. The proposed
+public source-prerelease intake needs separate artifact-sharing approval or a
+reviewed private adapter. All staging gates stay false pending separate setup,
+implementation/deployment and exact staging authorization. No publisher/merge/rollback
+implementation or automatic subsequent phase is included. PR #12 remains draft.
+
 ## Maintainer decisions recorded on 2026-10-17
 
 The maintainer explicitly reports inspection and acceptance of the presented
