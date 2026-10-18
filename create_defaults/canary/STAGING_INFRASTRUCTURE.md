@@ -185,7 +185,10 @@ $bundlePath = 'C:\Users\bullmoose20\Defaults-Image-Creation\config\english-canar
 (Get-FileHash -LiteralPath $bundlePath -Algorithm SHA256).Hash
 # Must equal 97d82b19eb237908cbd4657c67ca16eefe089b5a6d6a5f9e1690fda6cdb597c5
 # FUTURE AUTHORIZED ACTION ONLY; do not run under preparation/visual approval:
-gh release create english-canary-approved-v1 $bundlePath --repo Kometa-Team/Defaults-Image-Creation --target main --prerelease --title 'English canary reviewed bundle — not production' --notes 'Immutable accepted review archive; no Default-Images publication authorization.'
+$sourceImplementationCommit = '<approved full source infrastructure commit A>'
+# Require the source release/tag name to be absent; stop if either already exists.
+# This creates a new source tag at exactly A as well as the prerelease and asset.
+gh release create english-canary-approved-v1 $bundlePath --repo Kometa-Team/Defaults-Image-Creation --target $sourceImplementationCommit --prerelease --title 'English canary reviewed bundle — not production' --notes 'Immutable accepted review archive; no Default-Images publication authorization.'
 gh api repos/Kometa-Team/Defaults-Image-Creation/releases/tags/english-canary-approved-v1 --jq '.assets[] | {id,name,size,digest}'
 ```
 

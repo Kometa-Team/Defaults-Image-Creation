@@ -26,7 +26,8 @@ Use the [configuration instructions](STAGING_INFRASTRUCTURE.md). No action was e
       ZIP publicly downloadable in the source repo; no such publication is currently
       authorized. If privacy is required, remain disabled until a private adapter
       has been separately reviewed. Do not silently use write credentials for drafts.
-- [ ] Authorize source prerelease creation and uploading **only the existing ZIP**,
+- [ ] Authorize a new source tag `english-canary-approved-v1` at exact approved
+      implementation commit A, source prerelease creation and uploading **only the existing ZIP**,
       not a new render/repack. Record tag, source asset ID, size and exact SHA/digest.
       Source release notifications can occur. No release in Default-Images.
 - [ ] Retain a second verified backup and the separate seven-image approval records.
