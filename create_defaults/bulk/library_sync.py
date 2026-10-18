@@ -180,12 +180,12 @@ def gallery(root, rows, groups):
                         image.thumbnail((400, 600))
                         image.save(preview)
                     href = Path(os.path.relpath(path, root)).as_posix()
-                    content += '<figure><figcaption>' + label + '</figcaption><a href="' + html.escape(href, quote=True) + '"><img loading="lazy" src="previews/' + key + '.png"></a></figure>'
+                    content += '<figure><figcaption>' + label + '</figcaption><a href="' + html.escape(href, quote=True) + '"><img loading="lazy" alt="' + html.escape(label + ': ' + row["destination"], quote=True) + '" src="previews/' + key + '.png"></a></figure>'
             content += '</div><details><summary>Hashes, metrics and exceptions</summary><pre>' + html.escape(json.dumps(row, indent=2)) + '</pre></details></article>'
         cards.append(content)
     page = ('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-            '<title>English library synchronization review</title><style>body{font:16px system-ui;margin:24px;background:#eee;color:#222}'
-            '.pair{display:flex;gap:20px;flex-wrap:wrap}figure{margin:0}img{max-width:100%;background:#888}pre{white-space:pre-wrap;overflow-wrap:anywhere}'
+            '<title>English library synchronization review</title><style>body{font:16px system-ui;margin:24px;background:#eee;color:#222;overflow-wrap:anywhere}'
+            '.pair{display:flex;gap:20px;flex-wrap:wrap}figure{margin:0;max-width:100%;min-width:0}img{max-width:100%;background:#888}pre{white-space:pre-wrap;overflow-wrap:anywhere}'
             'article{background:white;padding:16px;margin:16px 0}h2{margin-top:48px}</style><h1>Library review: no publication authorized</h1>'
             '<p>Representative deterministic samples, not complete visual coverage. Click an image for full resolution. All decisions remain pending.</p>'
             + ''.join(cards) + '</html>')

@@ -222,12 +222,15 @@ def test_reconciliation_preserves_original_evidence_and_outstanding_mismatch(tmp
     assert result["layout_review_required"] == 1
 
 
-def test_retained_overlay_acceptance_requires_unchanged_comparison():
+def test_retained_overlay_acceptance_requires_unchanged_comparison(monkeypatch):
     from create_defaults.bulk.config import ROOT
     from create_defaults.bulk.library_sources import load_json
     from create_defaults.bulk.library_publication import retained_overlay_decisions
     record = load_json(ROOT / "bulk/evidence/package-e/maintainer-visual-acceptance-20261017.json")
     decision = next(d for d in record["decisions"] if d["kind"] == "overlay")
+    # Replay the recorded runtime for this fixture. A Linux CI process must not
+    # be mistaken for the Windows renderer that produced these accepted bytes.
+    monkeypatch.setattr("create_defaults.bulk.overlays.identity", lambda: decision["review_context"]["renderer"])
     row = {"id": decision["id"], "destination": decision["local_relative"], "technical_valid": True,
            "difference_class": "unexpected_difference", "candidate_sha256": decision["image_sha256"],
            "render_fingerprint": decision["render_fingerprint"], "validation_fingerprint": decision["validation_fingerprint"],
@@ -239,6 +242,8 @@ def test_retained_overlay_acceptance_requires_unchanged_comparison():
         altered = deepcopy(report)
         altered["rows"][0][field] = "changed"
         assert not retained_overlay_decisions(altered)
+    monkeypatch.setattr("create_defaults.bulk.overlays.identity", lambda: {"platform": "different"})
+    assert not retained_overlay_decisions(report)
 
 
 def offline_fixture(tmp_path):
