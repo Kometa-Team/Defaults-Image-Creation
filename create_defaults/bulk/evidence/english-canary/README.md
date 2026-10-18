@@ -6,7 +6,8 @@ Preparation only; no publication or production credentials. See
 - `preparation-20261017.json`: exact seven English candidates, real generated Year
   parent/child hashes, strict validation, cold/warm verification, validated full-run
   parity and fresh GET-only published snapshot/comparison. All seven differ from
-  published bytes and remain pending exact canary artifact acceptance.
+  published bytes; that historical pending state is superseded by the separate
+  seven-image visual acceptance below.
 - `bundle-index-20261017.json`: exact local archive SHA/size, 25-file checksum
   inventory plus its checksum file, backed-up old image/source/workflow identities
   and limits. Archive/images remain local under ignored `config/english-canary`.
@@ -17,3 +18,13 @@ Preparation only; no publication or production credentials. See
 Envelope hashes use canonical JSON excluding `sha256`. Image, archive and inventory
 file hashes identify exact bytes. No visual approval or production authority is
 inferred from parity, old reviews or this technical preparation.
+
+- `visual-acceptance-20261017.json`: explicit personal inspection and acceptance of
+  the seven exact canary images, each bound to image/source/font/layout/renderer,
+  current validation/policy, receipt and original published pixel differences.
+- `visual-acceptance-20261017-events.json`: fully inspected seven-member batch and
+  seven individual existing-service decisions with exact warning codes. No group,
+  staging, publishing, credential, PowerShell, PR merge or production authority.
+
+Original preparation, gallery/archive and Gate E/earlier review records are unchanged.
+The acceptance is an additional record, not a rewritten preparation report.

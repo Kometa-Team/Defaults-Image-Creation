@@ -355,3 +355,11 @@ canary artifact acceptance, guarded workflow/setup, remote staging and productio
 publication are separately gated. Nothing is published, no credentials enabled,
 PowerShell replaced, PR merged/marked ready, canary started or subsequent phase
 automatically begun. Keep PR #12 draft and stop for explicit authorization.
+
+The maintainer has now personally inspected and accepted all seven exact English
+canary candidates. The separate [visual acceptance record](bulk/evidence/english-canary/visual-acceptance-20261017.json)
+and [individual audit events](bulk/evidence/english-canary/visual-acceptance-20261017-events.json)
+preserve image/context/published-difference bindings and all earlier evidence.
+This resolves the seven-artifact visual review requirement only. Operational plan,
+workflow/credential setup, owner/window and explicit staging permission remain
+outstanding; no Default-Images write, PR #12 merge or production change is authorized.

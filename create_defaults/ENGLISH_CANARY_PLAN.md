@@ -8,6 +8,50 @@ are additive records. This preparation grants no production permission and does
 not approve uninspected artwork, activate translated layouts or adopt all overlays.
 PR #12 stays draft. Existing PowerShell remains intact.
 
+## Current readiness: seven images visually accepted; staging not authorized
+
+The maintainer personally inspected every proposed image in the preparation-v1
+review gallery and explicitly accepted **all seven exact images** for the controlled
+English canary. The [individual visual acceptance record](bulk/evidence/english-canary/visual-acceptance-20261017.json)
+and [portable review-service events](bulk/evidence/english-canary/visual-acceptance-20261017-events.json)
+bind each decision to the exact image SHA-256, renderer/source/font/layout identities,
+current validation fingerprint/policy version, owned receipt and documented published
+comparison. Seven individual `Reviews.decide` approvals, with the exact current
+nonblocking warnings, were recorded; no group or unrelated artwork was approved.
+
+All **7/7 image hashes** were verified against the preparation report, actual gallery
+files and sealed archive. The gallery HTML and archive SHA are unchanged. Published
+RGB MAE/max differences and old/new blob/hash identities remain historical evidence;
+acceptance applies to those exact comparisons, not a general pixel tolerance.
+Acceptance-record envelope SHA-256: `139ed5b73c5ee555488163e024c85e33850207a401aa65b546d87c6b1a7f3919`.
+
+This acceptance is a separate, version-bound record; do not repack the archive to
+insert it or rewrite its historical pending-review labels. Future workflow validation
+must retrieve the acceptance/audit records from a trusted pinned preparation revision,
+verify their envelope hashes and seven-member bindings, and verify the unchanged
+archive and its checksum inventory. No artwork needs reapproval while these exact
+bytes and contexts remain valid; changed artifacts require new review.
+
+**No staging or Default-Images write is authorized.** The proposed operational plan,
+workflow implementation/deployment, credentials, reviewers/rollback owner, durable
+artifact transfer and explicit staging permission remain outstanding. Visual acceptance
+does not approve those steps, publication, PR #12 merge or PowerShell replacement.
+
+| Requirement before staging | Current status |
+| --- | --- |
+| Gate E scope | Approved at `83ed3d1`; unchanged. |
+| Exact canary artwork | **7/7 personally inspected and accepted**; current renderer/validation bindings verified. |
+| Operational plan and workflow | Proposed mechanism still needs approval; guarded publisher is not implemented, installed or enabled. |
+| Scoped credentials and environments | Separate setup authorization/review required; no write credential enabled. |
+| Ownership and coordination | Name environment reviewers and rollback owner; confirm actual legacy launcher/configuration and a 30-minute single-writer/observation window. |
+| Durable handoff | Local sealed archive verified; approve durable transfer/retention and retain the separate acceptance/audit records without repacking it. |
+| Fresh target preconditions | Recheck exact target base/tree and seven old blob/hash identities before any later write; drift stops for review. |
+| Staging permission | **Not authorized**; a later approval must name workflow/source, artifact, bundle/preparation/acceptance hashes, target base and seven paths. |
+
+Validation of this acceptance update: twelve focused Windows checks pass, including
+seven-member/image/context bindings, retained historical difference records and
+explicit rejection of any staging/production authority. Full PR CI runs separately.
+
 ## Concrete candidate and observed results
 
 Seven English posters in five categories, with a real generated Year parent/child
@@ -48,8 +92,9 @@ fetching. All paths exist exactly: zero missing paths or case conflicts. All sev
 candidate images differ in both file bytes and decoded pixels from published
 artwork. The MAE values above are observations, **not acceptance tolerances**.
 Parity with validated Python outputs does not approve these seven for publication;
-no old visual acceptance is automatically transferred. Inspect the actual side-by-side
-images before accepting the exact candidates.
+no old visual acceptance is automatically transferred. The maintainer subsequently
+inspected and accepted these seven exact candidates as recorded above; publication
+authority remains separate.
 
 Local review page: `config/english-canary/preparation-20261017-v1/review.html`.
 Click each image for full resolution; left is proposed and right is pinned published.
@@ -217,10 +262,10 @@ installed. There is no current Run workflow button for `english-poster-canary.ym
 no enabled write credential and no canary branch/PR. The steps below are conditional
 instructions after the stated approvals, not commands to run now.
 
-1. Open the local review page, inspect **all seven** candidates against published
-   images, and accept/reject each exact candidate. Record decisions against the full
-   hashes and preparation envelope above; leave rejected or uninspected images out
-   of any publication authority. A changed scope needs a fresh sealed proposal.
+1. **Completed: visual acceptance of all seven exact images is recorded.** Preserve
+   the acceptance and audit records alongside the unchanged bundle. Verify their
+   exact hash/context bindings before a later operation; a changed artifact/scope
+   needs a fresh sealed proposal and appropriate new review.
 2. Choose the named rollback owner, environment reviewers and 30-minute observation
    window. Identify the actual existing PowerShell launcher/scheduler, arguments and
    configuration, preserve them, and confirm a single-writer reservation for the seven
@@ -251,10 +296,11 @@ instructions after the stated approvals, not commands to run now.
    follow the stop/explicit-rollback procedure. On success, report the result and
    stop. No wider cutover, extra categories, overlays, translations or phase starts.
 
-Suggested review/setup approval wording, **after inspecting the seven images**:
+Suggested subsequent plan/setup authorization wording — **not granted by visual acceptance**:
 
-> I accept the seven exact English candidates in preparation envelope
-> `bc7657363fb253bb41965b56bd73ef650be5dc9606bfff486ac8aa76eb2d77be` and the proposed staged-canary/rollback plan. I authorize preparation
+> I approve the proposed staged-canary/rollback plan for the seven already visually
+> accepted images in preparation envelope
+> `bc7657363fb253bb41965b56bd73ef650be5dc9606bfff486ac8aa76eb2d77be`. I authorize preparation
 > and review of the guarded workflow and scoped credential setup for approval.
 > Do not create the target canary branch/PR or publish until separately authorized.
 

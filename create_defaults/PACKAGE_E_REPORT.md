@@ -9,7 +9,7 @@ Earlier reports, fixtures, original Package D/E audits and the four exact Packag
 No artwork or translation was published; no production PowerShell was replaced,
 production permissions granted, PR merged or ready transition performed.
 
-**Automated Package E acceptance is complete for the recorded scope.** Gate E is approved for the recorded scope at `83ed3d1`; English canary preparation only is authorized. Publication, deployment and cutover are not authorized. The maintainer has accepted 64 exact overlay previews and six exact language poster/layout previews and resolved the public destination case; all other artwork/font/layout decisions remain pending. Historical validation identities below describe the measured pre-mapping checkpoint; the destination-only correction requires fresh production preflight and does not change renderer inputs. The corrected multilingual audit makes 41,417 variants newly technically eligible; 14,899 retain final needs_layout_review status. All 9,957 English validation identities were unchanged by the multilingual correction at that audit checkpoint. The later public destination mapping changes that one poster definition/preflight identity while preserving its render fingerprint. Technical eligibility grants no artwork approval.
+**Automated Package E acceptance is complete for the recorded scope.** Gate E is approved for the recorded scope at `83ed3d1`; English canary preparation only is authorized. Publication, deployment and cutover are not authorized. The maintainer has accepted 64 exact overlay previews, six exact language poster/layout previews and the seven exact English canary images, and resolved the public destination case; other artwork/font/layout decisions remain pending. Historical validation identities below describe the measured pre-mapping checkpoint; the destination-only correction requires fresh production preflight and does not change renderer inputs. The corrected multilingual audit makes 41,417 variants newly technically eligible; 14,899 retain final needs_layout_review status. All 9,957 English validation identities were unchanged by the multilingual correction at that audit checkpoint. The later public destination mapping changes that one poster definition/preflight identity while preserving its render fingerprint. Technical eligibility grants no artwork approval.
 
 ## Gate E approval and authorized next scope
 
@@ -36,8 +36,18 @@ records fresh strict validation, seven exact approved full-run render matches,
 zero-render/zero-worker warm reuse, full decoding and GET-only comparison with
 all seven exact public paths on the pinned current master. The required uppercase
 `genre/Action & Adventure.jpg` mapping passes focused planner/preflight checks.
-All seven candidate images differ from published bytes and pixels; no visual or
-publication approval is inferred. Exact canary artifact acceptance remains pending.
+All seven candidate images differ from published bytes and pixels. The maintainer
+subsequently personally inspected and accepted every exact candidate. The
+[individual seven-image acceptance](bulk/evidence/english-canary/visual-acceptance-20261017.json)
+and [audit events](bulk/evidence/english-canary/visual-acceptance-20261017-events.json)
+record seven current-context individual decisions, exact warning acceptance and
+unchanged published comparison metrics. Actual gallery/report/archive hashes agree
+for all 7/7 images. No acceptance is inherited by other images or changed artifacts;
+no staging, publication or other production authority is granted.
+Twelve focused acceptance/scope/destination integrity tests pass. Staging remains
+blocked on operational plan/setup approval, a reviewed deployed workflow, scoped
+credentials, named reviewers/rollback owner, writer reservation, durable artifact
+handoff, fresh target checks and a separately explicit staging authorization.
 
 The [local handoff/backup index](bulk/evidence/english-canary/bundle-index-20261017.json)
 binds a 7,256,318-byte review archive, all seven verified old image blobs and
@@ -879,21 +889,21 @@ rewritten to remove failures or reduce the PR size.
 | Dependency/license and complete-PR static audit | Passed with documented limitation | Direct-pin advisory screen and source audit; no full transitive/native SBOM. |
 | CI / regressions / documentation | Passed | Detailed report, archived evidence and safe CI. |
 | Gate E maintainer acceptance | Approved at `83ed3d1` | Exact recorded validation scope; no blanket visual approval. |
-| English-only canary preparation | Passed; awaiting canary review/setup decisions | Seven exact full-run matches, seven current public-path comparisons, sealed local archive and offline rollback rehearsal. |
+| English-only canary preparation | Passed; awaiting canary review/setup decisions | Seven exact full-run matches, seven public-path comparisons, sealed local archive and offline rollback rehearsal; all seven exact images now personally accepted. No staging authority. |
 | Production cutover / publication / rollback execution | Not tested | Not authorized; detailed canary plan only. |
 
 Readiness recommendations are scoped:
 
 | Scope | Technical assessment | Remaining decision |
 | --- | --- | --- |
-| English | All 9,957 outputs/receipts, unchanged warm reuse and exact approved-API parity pass; technically validated migration candidate. | Gate E approved; seven-output canary preparation passes. Exact canary artifact acceptance, reviewed workflow/setup and separate staging/publication authority remain pending. |
+| English | All 9,957 outputs/receipts, unchanged warm reuse and exact approved-API parity pass; technically validated migration candidate. | Gate E approved; seven-output preparation passes and all seven exact canary images are visually accepted. Operational plan/setup, ownership and separate staging/publication authority remain pending. |
 | Overlays | All 4,122 transforms verify; selected corrected outputs reproduce across worker counts. The small Python control did not beat grouped legacy performance. | 64 exact current samples accepted; remaining visual scope and an explicit adoption/performance decision remain pending. |
 | German / Spanish / French | All 960 required keys are valid; current fits and pending typography proposals are separately enumerated. | Six presented FR/DE/BG image/layout samples accepted separately; current-policy validation and explicit activation plus all other artwork review remain pending. |
 | Arabic / other multilingual | Use each language's independent key/geometry/glyph/RTL assessment; Arabic script-font/RTL acceptance and Bulgarian unsupported glyph cases remain explicit. | Missing-value corrections, approved fonts/layouts where needed, and current artwork review. No complete multilingual collection is automatically production-approved. |
 
 Priority maintainer decisions before any future production operation:
 
-1. Gate E is approved at `83ed3d1`. Review the seven exact English canary candidates and the separate preparation plan before any staging or production authorization.
+1. Gate E is approved at `83ed3d1`. Seven exact English canary candidates are now visually accepted. Review/approve the operational plan and setup before any separate staging or production authorization.
 2. Enforce the resolved exact public path `genre/Action & Adventure.jpg` in fresh preflight; no published rename is needed.
 3. Preserve the new acceptance of 64 exact overlay previews, including corrected ICC samples; review any additional transforms required for the chosen adoption scope.
 4. Preserve acceptance of the six presented language image/layout previews; validate their current context and obtain explicit activation scope before changing catalog typography. Other language artwork/proposals and Arabic font/RTL/anchor decisions remain pending.

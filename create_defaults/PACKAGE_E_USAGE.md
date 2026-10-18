@@ -203,3 +203,11 @@ This helper has no publisher. It requires a fresh root, approved renderer/catalo
 inputs, explicit seven-English-output scope and unchanged full-run parity. It uses
 GET-only network requests and never dispatches a workflow or changes credentials.
 The original prepared v1 archive and decisions must not be overwritten.
+
+The seven preparation-v1 English canary images have now been individually visually
+accepted. Their separate [acceptance record](bulk/evidence/english-canary/visual-acceptance-20261017.json)
+and [review-service events](bulk/evidence/english-canary/visual-acceptance-20261017-events.json)
+bind exact bytes, renderer/font/layout/validation and the retained published
+differences. Preserve the original gallery/archive/preparation unchanged. Visual
+acceptance authorizes no staging, credentials, publication or production changes;
+use the canary plan's remaining requirements and separate authorization sequence.
