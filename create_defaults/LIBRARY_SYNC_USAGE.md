@@ -195,3 +195,13 @@ owned journal resumes known prefixes. Synthetic test approvals cannot use the
 network remote. Complete remote tree comparison covers all planned files without
 depending on the PR files endpoint's pagination cap. PR creation remains a separate
 explicitly authorized draft-only operation after all batches verify.
+
+Individually accepted font changes and visual exceptions use a dedicated
+`migration/english-python-exceptions-<manifest-prefix>` branch. The transport
+requires every exact original visual-review decision and a version-bound bridge
+to the current publication context. Candidate/published hashes and original
+context must match, and unchanged material review context must be verified.
+Exception classes remain `font_changed` or `unexpected_difference`; these are
+not automatically accepted by the renderer-equivalence policy. Staging still
+requires the maintainer's operation authorization and never merges or updates
+master directly.

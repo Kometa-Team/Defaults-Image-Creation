@@ -166,3 +166,54 @@ def test_group_b_cannot_escape_approved_policy_review_or_branch(tmp_path,defect)
     else:auth.pop('population')
     with pytest.raises(BulkError,match='Group B'):
         gate(plan,sealed(auth))
+
+
+def individual_authorization(plan,auth):
+    members=deepcopy([m for b in plan['batches'] for m in b['members']])
+    for m,kind in zip(members,['font_changed','unexpected_difference']):m['difference_class']=kind
+    manifest=sealed(dict(kind='approved-library-publication-manifest',baseline=plan['baseline'],members=members))
+    plan=batch_plan(manifest,max_files=1,max_bytes=1024**2)
+    auth=deepcopy(auth);auth.pop('sha256');receipt=auth['approval_receipt'];receipt.pop('sha256')
+    originals=[dict(m,context_sha256='previous-'+m['context_sha256']) for m in receipt['members']]
+    review=sealed(dict(reviewer='bullmoose20',visual_review_accepted=True,members=originals,membership_sha256=fingerprint(originals)))
+    bridge=sealed(dict(members=[dict(m,previous_context_sha256='previous-'+m['context_sha256'],
+        original_review_receipt_sha256=review['sha256'],material_review_context_unchanged=True,
+        difference_class=member['difference_class']) for m,member in zip(receipt['members'],members)]))
+    policy={'mode':'exact-individual-visual-acceptance','original_review_receipts':[review['sha256']]}
+    receipt.update(population='individual-exceptions',scope='individual',candidate_manifest_sha256='c'*64,
+        policy_sha256=fingerprint(policy),preserved_individual_reviews_sha256=bridge['sha256'])
+    auth.update(population='individual-exceptions',branch='migration/english-python-exceptions-cccccccc',
+        candidate_manifest_sha256='c'*64,policy_sha256=fingerprint(policy),approval_receipt=sealed(receipt),
+        approved_individual_policy=policy,preserved_individual_reviews=bridge,original_individual_reviews=[review],
+        plan_sha256=plan['sha256'],publication_manifest_sha256=manifest['sha256'])
+    return plan,sealed(auth)
+
+
+def test_individually_reviewed_exceptions_resume_without_reclassifying_as_equivalent(tmp_path):
+    plan,auth,remote=fixture(tmp_path);plan,auth=individual_authorization(plan,auth)
+    root=tmp_path/'individual-transport'
+    with pytest.raises(BulkError,match='After push'):
+        run(plan,auth,root,test_remote=remote,fail_at='after_push')
+    value=run(plan,auth,root,test_remote=remote)
+    assert value['complete'] and value['master_unchanged']
+    assert {m['difference_class'] for m in gate(plan,auth)}=={'font_changed','unexpected_difference'}
+
+
+@pytest.mark.parametrize('defect',['candidate','old-context','changed-material','missing-individual',
+    'wrong-branch','policy','branch-suffix'])
+def test_individual_acceptance_cannot_be_reused_for_other_bytes_context_or_scope(tmp_path,defect):
+    plan,auth,_=fixture(tmp_path);plan,auth=individual_authorization(plan,auth);auth.pop('sha256')
+    if defect in {'candidate','old-context','changed-material'}:
+        bridge=auth['preserved_individual_reviews'];bridge.pop('sha256')
+        field={'candidate':'candidate_sha256','old-context':'previous_context_sha256','changed-material':'material_review_context_unchanged'}[defect]
+        bridge['members'][0][field]=False if defect=='changed-material' else 'unreviewed-value'
+        auth['preserved_individual_reviews']=sealed(bridge)
+        receipt=auth['approval_receipt'];receipt.pop('sha256')
+        receipt['preserved_individual_reviews_sha256']=auth['preserved_individual_reviews']['sha256'];auth['approval_receipt']=sealed(receipt)
+    elif defect=='missing-individual':
+        review=auth['original_individual_reviews'][0];review.pop('sha256');review['members'].pop()
+        review['membership_sha256']=fingerprint(review['members']);auth['original_individual_reviews']=[sealed(review)]
+    elif defect=='wrong-branch':auth['branch']='migration/english-python-group-a-cccccccc'
+    elif defect=='policy':auth['approved_individual_policy']['mode']='blanket-warning-waiver'
+    else:auth['branch']='migration/english-python-exceptions-dddddddd'
+    with pytest.raises(BulkError):gate(plan,sealed(auth))

@@ -48,7 +48,8 @@ def gate(plan, authorization):
             or not authorization.get('draft_only') or authorization.get('merge_authorized')
             or authorization.get('repository')!=REPOSITORY
             or not authorization.get('branch','').startswith(('migration/english-python-group-a-',
-                                                             'migration/english-python-group-b-'))):
+                                                             'migration/english-python-group-b-',
+                                                             'migration/english-python-exceptions-'))):
         raise BulkError('missing_authorization','Exact approved plan, draft branch and operation authorization required')
     members=[m for b in plan['batches'] for m in b['members']]
     validate_paths(members)
@@ -56,13 +57,48 @@ def gate(plan, authorization):
     approved={m['destination']:(m['candidate_sha256'],m['published_sha256'],m['context_sha256']) for m in receipt.get('members',[])}
     actual={m['destination']:(m['sha256'],m['previous_sha256'],m['context_sha256']) for m in members}
     if (receipt.get('decision')!='approved' or receipt.get('reviewer') not in REVIEWERS
-            or not receipt.get('policy_approved') or receipt.get('scope')!='renderer_equivalent'
+            or not receipt.get('policy_approved') or receipt.get('scope') not in {'renderer_equivalent','individual'}
             or receipt.get('candidate_manifest_sha256')!=authorization.get('candidate_manifest_sha256')
             or receipt.get('policy_sha256')!=authorization.get('policy_sha256')
             or receipt.get('baseline')!=plan['baseline'] or approved!=actual
             or receipt.get('membership_sha256')!=fingerprint(receipt.get('members'))):
         raise BulkError('missing_approval','Exact externally approved candidate membership required')
-    if authorization['branch'].startswith('migration/english-python-group-b-'):
+    individual=authorization['branch'].startswith('migration/english-python-exceptions-')
+    if individual:
+        policy=authorization.get('approved_individual_policy')
+        bridge=check_seal(authorization.get('preserved_individual_reviews',{}))
+        reviews=[check_seal(r) for r in authorization.get('original_individual_reviews',[])]
+        originals={}
+        for review in reviews:
+            if (not review.get('visual_review_accepted') or review.get('reviewer') not in REVIEWERS
+                    or review.get('membership_sha256')!=fingerprint(review.get('members'))):
+                raise BulkError('individual_review','Actual exact individual visual decisions required')
+            for m in review['members']:
+                if m['destination'] in originals:raise BulkError('individual_review','Overlapping visual decisions')
+                originals[m['destination']]=(m,review['sha256'])
+        preserved={m['destination']:m for m in bridge.get('members',[])}
+        candidate=authorization.get('candidate_manifest_sha256','')
+        if (authorization.get('population')!='individual-exceptions' or receipt.get('population')!='individual-exceptions'
+                or receipt.get('scope')!='individual' or len(candidate)!=64
+                or authorization['branch']!='migration/english-python-exceptions-'+candidate[:8]
+                or not policy or fingerprint(policy)!=authorization['policy_sha256']
+                or policy.get('mode')!='exact-individual-visual-acceptance'
+                or receipt.get('preserved_individual_reviews_sha256')!=bridge['sha256']
+                or set(originals)!=set(actual) or set(preserved)!=set(actual)):
+            raise BulkError('individual_review','Exact individual approvals, policy and manifest-bound branch required')
+        for m in members:
+            original,review_sha=originals[m['destination']];kept=preserved[m['destination']]
+            if (original['candidate_sha256']!=m['sha256'] or original['published_sha256']!=m['previous_sha256']
+                    or kept.get('original_review_receipt_sha256')!=review_sha
+                    or kept.get('previous_context_sha256')!=original['context_sha256']
+                    or (kept.get('candidate_sha256'),kept.get('published_sha256'),kept.get('context_sha256'))!=actual[m['destination']]
+                    or kept.get('material_review_context_unchanged') is not True
+                    or m.get('difference_class')!=kept.get('difference_class')
+                    or m.get('difference_class') not in {'font_changed','unexpected_difference'}):
+                raise BulkError('individual_review','Individual visual approval bytes, context or exception class changed')
+    elif receipt.get('scope')!='renderer_equivalent':
+        raise BulkError('approval_scope','Individual decisions require a dedicated exception branch')
+    elif authorization['branch'].startswith('migration/english-python-group-b-'):
         policy=authorization.get('approved_warning_policy')
         candidate=authorization.get('candidate_manifest_sha256','')
         if (authorization.get('population')!='B' or receipt.get('population')!='B'
@@ -75,7 +111,7 @@ def gate(plan, authorization):
             raise BulkError('group_b_approval','Group B requires its exact approved warning policy and preserved review binding')
     elif authorization.get('population')=='B' or receipt.get('population')=='B':
         raise BulkError('group_b_approval','Group B approval cannot use a Group A branch')
-    if any(m['difference_class']!='renderer_equivalent' for m in members):
+    if not individual and any(m['difference_class']!='renderer_equivalent' for m in members):
         raise BulkError('scope','Only exact approved renderer-equivalent members supported')
     for b in plan['batches']:
         if (fingerprint(b['members'])!=b['membership_sha256'] or len(b['members'])>plan['max_files']
