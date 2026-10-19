@@ -194,20 +194,20 @@ def run(plan,authorization,root,*,test_remote=None,verify_remote=None,guard=None
             if shutil.disk_usage(root).free<8*1024**3+batch['bytes']*3:
                 raise BulkError('disk_floor','Insufficient reserved disk space before batch')
             state.update(phase='copying',active_batch=n+1);save(journal_path,state)
-            pending=root/'pending';pending.mkdir(exist_ok=True)
             for m in batch['members']:
                 source=reject_links(m['source'])
                 if sha256(source)!=m['sha256'] or source.stat().st_size!=m['size']:
                     raise BulkError('candidate_drift','Approved Python bytes changed')
-                temp=pending/(m['git_blob']+'.tmp');shutil.copyfile(source,temp)
-                if sha256(temp)!=m['sha256']:
-                    raise BulkError('copy_hash','Staged bytes differ from approved Python output')
-                target=confined(repo,m['destination']);target.parent.mkdir(parents=True,exist_ok=True)
-                os.replace(temp,target)
+            sources=b''.join((Path(m['source']).as_posix()+'\n').encode('utf-8') for m in batch['members'])
+            objects=git(repo,'hash-object','-w','--no-filters','--stdin-paths',data=sources).decode().splitlines()
+            if objects!=[m['git_blob'] for m in batch['members']]:
+                raise BulkError('copy_hash','Stored Git bytes differ from exact approved candidate blobs')
+            # Index-only staging avoids a second full artwork worktree. Every
+            # object is independently SHA-256 verified from the resulting commit.
+            index=b''.join(('100644 '+m['git_blob']+'\t'+m['destination']).encode('utf-8')+b'\0' for m in batch['members'])
+            git(repo,'update-index','-z','--index-info',data=index)
             paths=b''.join(m['destination'].encode('utf-8')+b'\0' for m in batch['members'])
-            git(repo,'update-index','--no-skip-worktree','-z','--stdin',data=paths)
-            spec=root/'batch.pathspec';spec.write_bytes(b''.join((':(literal)'+m['destination']).encode('utf-8')+b'\0' for m in batch['members']))
-            git(repo,'add','--sparse','--pathspec-from-file='+str(spec),'--pathspec-file-nul')
+            git(repo,'update-index','--skip-worktree','-z','--stdin',data=paths)
             git(repo,'commit','--quiet','-m',f"Approved English Python replacement batch {n+1}/{len(plan['batches'])}: {batch['membership_sha256']}")
             commit=git(repo,'rev-parse','HEAD').decode().strip();chain.append(commit)
             verify_diff(repo,before,commit,batch['members'])
@@ -238,6 +238,7 @@ def run(plan,authorization,root,*,test_remote=None,verify_remote=None,guard=None
         print(f"[BATCH {n+1}/{len(plan['batches'])}] {len(batch['members'])} images; pack {entry['pack_bytes']} bytes; local diff/hash verified",flush=True)
         if prepare_only:
             entry['state']='local_verified';state['phase']='prepared';save(journal_path,state)
+            if stop_after and n+1>=stop_after:break
             continue
         observed=remote_head(repo,branch)
         target_index=chain.index(observed) if observed in chain else -1
@@ -352,7 +353,8 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--root',type=Path,required=True)
     p.add_argument('--prepare-only',action='store_true')
-    p.add_argument('--execution-version',choices=['v1','v2'],default='v1')
+    p.add_argument('--execution-version',choices=['v1','v2','v3'],default='v1')
+    p.add_argument('--stop-after',type=int)
     args=p.parse_args();root=reject_links(args.root).resolve()
     plan=check_seal(load_json(root/'approved-git-batch-plan.json'))
     suffix='' if args.execution_version=='v1' else '-'+args.execution_version
@@ -367,7 +369,8 @@ def main():
             if stat.st_size!=item['size'] or stat.st_mtime_ns!=item['mtime_ns']:
                 raise BulkError('source_drift','Source/native/font identity changed during staging: '+item['path'])
     verifier=RemoteBytes(root/'actual-remote-verification',plan)
-    result=run(plan,auth,root/('transport'+suffix),verify_remote=verifier,guard=guard,prepare_only=args.prepare_only)
+    result=run(plan,auth,root/('transport'+suffix),verify_remote=verifier,guard=guard,
+        prepare_only=args.prepare_only,stop_after=args.stop_after)
     if result['complete']:final_remote_diff(root,plan,auth,result)
     print(json.dumps({'complete':result['complete'],'head':result['head'],'batches':len(result['batches'])}))
 

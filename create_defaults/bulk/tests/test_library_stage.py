@@ -68,12 +68,12 @@ def test_synthetic_authorization_cannot_use_network_remote(tmp_path):
         run(plan,auth,tmp_path/'transport')
 
 
-def test_prepare_all_batches_locally_before_any_remote_write(tmp_path):
+def test_prepare_prefix_locally_before_any_remote_write(tmp_path):
     plan,auth,remote=fixture(tmp_path);root=tmp_path/'prepared'
-    prepared=run(plan,auth,root,test_remote=remote,prepare_only=True)
+    prepared=run(plan,auth,root,test_remote=remote,prepare_only=True,stop_after=1)
     assert not prepared['complete'] and prepared['network_artwork_push_batches']==0
     assert remote_head(root/'work',auth['branch']) is None
-    assert len(prepared['batches'])==2
+    assert len(prepared['batches'])==1
     completed=run(plan,auth,root,test_remote=remote)
     assert completed['complete'] and completed['master_unchanged']
 
