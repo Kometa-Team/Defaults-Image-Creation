@@ -208,21 +208,30 @@ def run(plan,authorization,root,*,test_remote=None,verify_remote=None,guard=None
             git(repo,'update-index','--no-skip-worktree','-z','--stdin',data=paths)
             spec=root/'batch.pathspec';spec.write_bytes(b''.join((':(literal)'+m['destination']).encode('utf-8')+b'\0' for m in batch['members']))
             git(repo,'add','--sparse','--pathspec-from-file='+str(spec),'--pathspec-file-nul')
-            git(repo,'commit','-m',f"Approved English Python replacement batch {n+1}/{len(plan['batches'])}: {batch['membership_sha256']}")
+            git(repo,'commit','--quiet','-m',f"Approved English Python replacement batch {n+1}/{len(plan['batches'])}: {batch['membership_sha256']}")
             commit=git(repo,'rev-parse','HEAD').decode().strip();chain.append(commit)
             verify_diff(repo,before,commit,batch['members'])
             if fail_at=='after_commit':raise BulkError('injected_interruption','After commit before checkpoint')
         commit=chain[n];entry['commit']=commit
-        pack=root/'packs'/(commit+'.pack');pack.parent.mkdir(exist_ok=True)
-        if not pack.exists():
-            temporary=pack.with_suffix('.tmp')
-            with temporary.open('wb') as stream:
-                subprocess.run(['git','-C',str(repo),'pack-objects','--stdout','--revs','--window=0','--no-reuse-delta'],
-                    input=(commit+'\n^'+before+'\n').encode(),stdout=stream,stderr=subprocess.PIPE,check=True,timeout=300)
-            os.replace(temporary,pack)
-        if entry.get('pack_sha256') and sha256(pack)!=entry['pack_sha256']:
-            raise BulkError('pack_drift','Measured pack changed after checkpoint')
-        entry.update(pack_bytes=pack.stat().st_size,pack_sha256=sha256(pack),artifact_bytes=batch['bytes'])
+        measurement=root/'packs'/(commit+'.json');measurement.parent.mkdir(exist_ok=True)
+        if measurement.exists():
+            pack=check_seal(load_json(measurement))
+            if pack['commit']!=commit or pack['before']!=before or pack['plan_sha256']!=plan['sha256']:
+                raise BulkError('pack_drift','Measured pack belongs to another commit/plan')
+        else:
+            process=subprocess.Popen(['git','-C',str(repo),'pack-objects','--stdout','--revs','--window=0','--no-reuse-delta'],
+                stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            process.stdin.write((commit+'\n^'+before+'\n').encode());process.stdin.close()
+            digest=hashlib.sha256();size=0
+            while chunk:=process.stdout.read(1024*1024):
+                size+=len(chunk);digest.update(chunk)
+            error=process.stderr.read();code=process.wait(timeout=300)
+            if code:raise BulkError('pack_failed',error.decode('utf-8',errors='replace')[-2000:])
+            pack=sealed({'commit':commit,'before':before,'plan_sha256':plan['sha256'],
+                'bytes':size,'sha256_pack_stream':digest.hexdigest(),'measurement':'complete_actual_git_pack_stream',
+                'pack_window':0,'pack_compression':1})
+            save(measurement,pack)
+        entry.update(pack_bytes=pack['bytes'],pack_sha256=pack['sha256_pack_stream'],artifact_bytes=batch['bytes'])
         if entry['pack_bytes']>plan['max_pack_bytes']:
             raise BulkError('pack_limit','Measured incremental pack exceeds approved technical cap')
         state.update(commits=chain,phase='local_verified');save(journal_path,state)
@@ -343,11 +352,13 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--root',type=Path,required=True)
     p.add_argument('--prepare-only',action='store_true')
+    p.add_argument('--execution-version',choices=['v1','v2'],default='v1')
     args=p.parse_args();root=reject_links(args.root).resolve()
     plan=check_seal(load_json(root/'approved-git-batch-plan.json'))
-    auth=check_seal(load_json(root/'draft-staging-authorization.json'))
+    suffix='' if args.execution_version=='v1' else '-'+args.execution_version
+    auth=check_seal(load_json(root/('draft-staging-authorization'+suffix+'.json')))
     # Fresh source sentinel was created by the final verified publication preflight.
-    sentinel=check_seal(load_json(root/'source-sentinel.json'))
+    sentinel=check_seal(load_json(root/('source-sentinel'+suffix+'.json')))
     if sentinel['sha256']!=auth['source_sentinel_sha256']:
         raise BulkError('source_drift','Final publication preflight sentinel differs')
     def guard():
@@ -356,7 +367,7 @@ def main():
             if stat.st_size!=item['size'] or stat.st_mtime_ns!=item['mtime_ns']:
                 raise BulkError('source_drift','Source/native/font identity changed during staging: '+item['path'])
     verifier=RemoteBytes(root/'actual-remote-verification',plan)
-    result=run(plan,auth,root/'transport',verify_remote=verifier,guard=guard,prepare_only=args.prepare_only)
+    result=run(plan,auth,root/('transport'+suffix),verify_remote=verifier,guard=guard,prepare_only=args.prepare_only)
     if result['complete']:final_remote_diff(root,plan,auth,result)
     print(json.dumps({'complete':result['complete'],'head':result['head'],'batches':len(result['batches'])}))
 
