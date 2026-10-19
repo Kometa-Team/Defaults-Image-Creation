@@ -137,3 +137,44 @@ After any separately authorized real publication, use
 the refreshed production identity. A successful transport response is not remote
 SHA-256 verification. Rerun the entire inventory to reconcile all remaining
 mismatches and missing/unverified files.
+
+## Unsigned first-wave preparation
+
+The 9,785 renderer screen passes include 4,179 candidates with recorded layout
+warnings. Screen passage does not resolve those warnings or establish unchanged
+layout. The remaining 5,606 diagnostic-free members still need exact policy and
+manifest approval. Do not silently reduce the requested wave or approve warnings.
+
+Use a new preparation root, a fresh GET-only snapshot, a fresh `e_validation
+baseline`, and a blob-filtered Git fetch into that root's `baseline.git`. Then run:
+
+```powershell
+& $python -m create_defaults.bulk.library_first_wave --root config/library-first-wave-20261018 --analysis config/library-sync-20261018 --output config/package-e/full-en-final/output
+```
+
+This rehashes every proposed candidate and comparison, checks current source,
+native runtime, fonts, receipts, layout diagnostics and fetched remote identities,
+and writes an unsigned decision request, exact candidate membership, exclusions,
+warning inventory, non-executable transport proposal and unstarted upload journal.
+Existing package JSON cannot be replaced with different content; use a new root
+for changed evidence. Its hashes bind content and do not authenticate a reviewer.
+It records no maintainer approval and makes no remote write. The existing local
+transport rejects its proposal kind. Only a separately attributed exact approval
+may produce an executable publication manifest after all diagnostics are resolved.
+
+For the separately requested clean population, use a new root with fresh snapshot,
+Git fetch and catalog preflight, then run `library_first_wave --population A` with
+the same `--root`, `--analysis` and `--output` arguments. Counts are computed from
+the verified membership; no historical count is padded. `group-a-population.json`
+and `group-b-population.json` are disjoint sealed memberships. The Group A request
+binds the exact proposed policy and complete candidate/context hashes and leaves
+the reviewer and decision pending. It rechecks all Group A candidates and rejects
+any current warning/error, source, receipt, font dependency or baseline drift.
+
+Run `library_warnings --root <new-root> --analysis <analysis-root>` independently
+for Group B. It rehashes both images, measures white caption cores in original
+coordinates, compares row bands and bounds, and records historical typography
+provenance. Foreground contamination and geometry differences remain withheld.
+Its numerical geometry bounds are diagnostic proposals, not artwork approvals,
+OCR, or readability certification. The SQLite cache resumes measured comparisons;
+the report and worst-case galleries preserve every warning and exact membership.
