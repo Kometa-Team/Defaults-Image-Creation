@@ -16,6 +16,10 @@ from .library_sources import check_seal, load_json, save, sealed, blob_id
 from .library_sync import gallery
 from .preflight import _historical_index
 
+# Exact implementation from source commit d837fe6. Only cache transport and
+# classification of accent-band ambiguity changed; retain its measured pixels.
+COMPATIBLE_CACHE_SOURCE = '13e29694d11d308da750b61bddea506ba1df64f51674464b8e6b381624ec2ae8'
+
 DIAGNOSTIC_POLICY = {'version': 'group-b-caption-diagnostic-v1', 'status': 'unapproved-diagnostic-only',
     'white_core_minimum_channel': 250, 'expected_alpha_support': 16,
     'pixel_neighbourhood_radius': 2, 'maximum_bounds_delta_pixels': 2,
@@ -94,8 +98,10 @@ def diagnose(row, job):
     risks = row['layout_risks']
     if not geometry['measurement_reliable']:
         classification = 'foreground_contamination_or_insufficient_measurement'
-    elif not geometry['geometry_within_proposed_diagnostic_bounds'] or not exact_expected_bands:
+    elif not geometry['geometry_within_proposed_diagnostic_bounds']:
         classification = 'observed_geometry_difference_requires_review'
+    elif not exact_expected_bands:
+        classification = 'projection_band_textline_ambiguity'
     elif not unchanged:
         classification = 'historical_typography_provenance_requires_review'
     elif 'caption_clipping' in risks:
@@ -135,6 +141,9 @@ def build(root, analysis):
     cache = root/'group-b-diagnostics.sqlite'
     with sqlite3.connect(cache) as db:
         db.execute('CREATE TABLE IF NOT EXISTS measured (identity TEXT PRIMARY KEY, payload TEXT NOT NULL)')
+        db.execute('PRAGMA journal_mode=WAL')
+        cached = dict(db.execute('SELECT identity,payload FROM measured'))
+    implementation = sha256(Path(__file__))
     def one(row):
         job = jobs[row['destination']]
         entry = entries[row['destination']]
@@ -143,19 +152,28 @@ def build(root, analysis):
                 or sha256(row['published_path']) != row['published_sha256']
                 or blob_id(row['published_path']) != entry['sha']):
             raise BulkError('comparison_drift','Group B comparison identity changed: '+row['destination'])
-        key = fingerprint([row['candidate_sha256'],row['published_sha256'],job,DIAGNOSTIC_POLICY,sha256(Path(__file__))])
+        binding = [row['candidate_sha256'],row['published_sha256'],job,DIAGNOSTIC_POLICY]
+        key = fingerprint(binding+[implementation])
         import json
-        with sqlite3.connect(cache) as db:
-            old = db.execute('SELECT payload FROM measured WHERE identity=?',(key,)).fetchone()
+        old = cached.get(key) or cached.get(fingerprint(binding+[COMPATIBLE_CACHE_SOURCE]))
         if old:
-            return json.loads(old[0])
+            value = json.loads(old)
+            if (value['observed']['geometry_within_proposed_diagnostic_bounds']
+                    and len(value['observed']['candidate']['row_bands']) != len(value['expected_caption_lines'])):
+                value['classification'] = 'projection_band_textline_ambiguity'
+            value['retained_measurement_source_sha256'] = COMPATIBLE_CACHE_SOURCE
+            return key,value
         value = diagnose(row,job)
-        with sqlite3.connect(cache) as db:
-            db.execute('INSERT OR REPLACE INTO measured VALUES (?,?)',(key,json.dumps(value)))
-        return value
+        value['measurement_source_sha256'] = implementation
+        return key,value
     measured = []
-    with ThreadPoolExecutor(max_workers=4) as pool:
-        for n,value in enumerate(pool.map(one,rows),1):
+    # Only the consuming thread writes SQLite. Workers perform read-only image
+    # analysis; one completed pair is committed at a time for safe interruption.
+    import json
+    with ThreadPoolExecutor(max_workers=4) as pool, sqlite3.connect(cache,timeout=30) as db:
+        for n,(key,value) in enumerate(pool.map(one,rows),1):
+            db.execute('INSERT OR REPLACE INTO measured VALUES (?,?)',(key,json.dumps(value)))
+            db.commit()
             measured.append(value)
             if n % 250 == 0:
                 print(f'[GROUP B] {n}/{len(rows)} actual caption-pixel pairs measured',flush=True)
