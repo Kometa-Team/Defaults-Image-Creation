@@ -178,3 +178,16 @@ provenance. Foreground contamination and geometry differences remain withheld.
 Its numerical geometry bounds are diagnostic proposals, not artwork approvals,
 OCR, or readability certification. The SQLite cache resumes measured comparisons;
 the report and worst-case galleries preserve every warning and exact membership.
+
+After an explicit exact-hash policy/member decision, `library_stage --root
+<final-staging-root>` consumes the externally attributed approval receipt, derived
+publication manifest/plan and sealed draft-operation authorization. It has a fixed
+Default-Images remote and a dedicated Group A branch; it never pushes master or
+merges. A metadata-only base and skipped index entries preserve untouched files.
+Each batch checks the complete raw Git diff and exact stored bytes, measures and
+caps its incremental pack, uses a normal push, reconciles ambiguous outcomes and
+streams pinned remote image bytes for SHA-256/Git-blob verification. A single
+owned journal resumes known prefixes. Synthetic test approvals cannot use the
+network remote. Complete remote tree comparison covers all planned files without
+depending on the PR files endpoint's pagination cap. PR creation remains a separate
+explicitly authorized draft-only operation after all batches verify.
