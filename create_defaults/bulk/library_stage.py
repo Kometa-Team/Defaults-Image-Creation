@@ -47,7 +47,8 @@ def gate(plan, authorization):
             or not authorization.get('remote_writes_authorized')
             or not authorization.get('draft_only') or authorization.get('merge_authorized')
             or authorization.get('repository')!=REPOSITORY
-            or not authorization.get('branch','').startswith('migration/english-python-group-a-')):
+            or not authorization.get('branch','').startswith(('migration/english-python-group-a-',
+                                                             'migration/english-python-group-b-'))):
         raise BulkError('missing_authorization','Exact approved plan, draft branch and operation authorization required')
     members=[m for b in plan['batches'] for m in b['members']]
     validate_paths(members)
@@ -61,6 +62,19 @@ def gate(plan, authorization):
             or receipt.get('baseline')!=plan['baseline'] or approved!=actual
             or receipt.get('membership_sha256')!=fingerprint(receipt.get('members'))):
         raise BulkError('missing_approval','Exact externally approved candidate membership required')
+    if authorization['branch'].startswith('migration/english-python-group-b-'):
+        policy=authorization.get('approved_warning_policy')
+        candidate=authorization.get('candidate_manifest_sha256','')
+        if (authorization.get('population')!='B' or receipt.get('population')!='B'
+                or len(candidate)!=64
+                or authorization['branch']!='migration/english-python-group-b-'+candidate[:8]
+                or not policy or fingerprint(policy)!=authorization['policy_sha256']
+                or receipt.get('warning_policy_sha256')!=authorization['policy_sha256']
+                or receipt.get('preserved_visual_review_receipt_sha256')!=policy.get('preserved_visual_review_receipt_sha256')
+                or not policy.get('preserved_visual_review_receipt_sha256')):
+            raise BulkError('group_b_approval','Group B requires its exact approved warning policy and preserved review binding')
+    elif authorization.get('population')=='B' or receipt.get('population')=='B':
+        raise BulkError('group_b_approval','Group B approval cannot use a Group A branch')
     if any(m['difference_class']!='renderer_equivalent' for m in members):
         raise BulkError('scope','Only exact approved renderer-equivalent members supported')
     for b in plan['batches']:

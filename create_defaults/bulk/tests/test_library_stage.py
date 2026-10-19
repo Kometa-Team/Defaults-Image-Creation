@@ -125,3 +125,44 @@ def test_remote_verification_hashes_actual_response_bytes(tmp_path,wrong):
         assert receipt['actual_sha256']==member['sha256']
         assert receipt['actual_git_blob']==member['git_blob']
         assert receipt['provenance']=='actual_pinned_raw_remote_response'
+
+
+def group_b_authorization(auth):
+    auth=deepcopy(auth);auth.pop('sha256')
+    policy={'rules':{'legacy':'measured only'},'preserved_visual_review_receipt_sha256':'preserved-exact-review'}
+    receipt=auth['approval_receipt'];receipt.pop('sha256')
+    receipt.update(population='B',candidate_manifest_sha256='b'*64,policy_sha256=fingerprint(policy),
+        warning_policy_sha256=fingerprint(policy),preserved_visual_review_receipt_sha256='preserved-exact-review')
+    auth.update(population='B',branch='migration/english-python-group-b-bbbbbbbb',
+        candidate_manifest_sha256='b'*64,policy_sha256=fingerprint(policy),approved_warning_policy=policy,
+        approval_receipt=sealed(receipt))
+    return sealed(auth)
+
+
+def test_group_b_real_git_resume_preserves_master_and_exact_membership(tmp_path):
+    plan,auth,remote=fixture(tmp_path);auth=group_b_authorization(auth)
+    root=tmp_path/'group-b-transport'
+    with pytest.raises(BulkError,match='After push'):
+        run(plan,auth,root,test_remote=remote,fail_at='after_push')
+    result=run(plan,auth,root,test_remote=remote)
+    assert result['complete'] and result['master_unchanged']
+    assert sum(b['remote_hash_verified'] for b in result['batches'])==2
+    assert run(plan,auth,root,test_remote=remote)['head']==result['head']
+
+
+@pytest.mark.parametrize('defect',['missing-policy','different-policy','missing-review','different-review',
+    'wrong-branch-suffix','group-a-branch','missing-population'])
+def test_group_b_cannot_escape_approved_policy_review_or_branch(tmp_path,defect):
+    plan,auth,_=fixture(tmp_path);auth=group_b_authorization(auth);auth.pop('sha256')
+    if defect=='missing-policy':auth.pop('approved_warning_policy')
+    elif defect=='different-policy':auth['approved_warning_policy']['rules']['legacy']='waive everything'
+    elif defect in {'missing-review','different-review'}:
+        receipt=auth['approval_receipt'];receipt.pop('sha256')
+        if defect=='missing-review':receipt.pop('preserved_visual_review_receipt_sha256')
+        else:receipt['preserved_visual_review_receipt_sha256']='other-review'
+        auth['approval_receipt']=sealed(receipt)
+    elif defect=='wrong-branch-suffix':auth['branch']='migration/english-python-group-b-cccccccc'
+    elif defect=='group-a-branch':auth['branch']='migration/english-python-group-a-bbbbbbbb'
+    else:auth.pop('population')
+    with pytest.raises(BulkError,match='Group B'):
+        gate(plan,sealed(auth))

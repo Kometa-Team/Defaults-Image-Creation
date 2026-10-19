@@ -182,8 +182,12 @@ the report and worst-case galleries preserve every warning and exact membership.
 After an explicit exact-hash policy/member decision, `library_stage --root
 <final-staging-root>` consumes the externally attributed approval receipt, derived
 publication manifest/plan and sealed draft-operation authorization. It has a fixed
-Default-Images remote and a dedicated Group A branch; it never pushes master or
-merges. A metadata-only base and skipped index entries preserve untouched files.
+Default-Images remote and dedicated Group A or policy-bound Group B branches; it
+never pushes master or merges. Group B additionally requires matching population
+attribution, the exact approved warning-policy content hash, its preserved visual
+review receipt binding, and a branch suffix matching the approved manifest hash.
+This does not grant warning acceptance or extend an approved population. A
+metadata-only base and skipped index entries preserve untouched files.
 Each batch checks the complete raw Git diff and exact stored bytes, measures and
 caps its incremental pack, uses a normal push, reconciles ambiguous outcomes and
 streams pinned remote image bytes for SHA-256/Git-blob verification. A single
