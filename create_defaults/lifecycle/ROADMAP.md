@@ -1,7 +1,7 @@
 | Phase | Name | Status | Detailed documentation | Approval |
 | --- | --- | --- | --- | --- |
-| 1 | Discovery and Baseline | IN PROGRESS | [PHASE1_DISCOVERY.md](PHASE1_DISCOVERY.md) | PENDING |
-| 2 | Business Rules and Category Contracts | NOT STARTED | TBD | Not requested |
+| 1 | Discovery and Baseline | COMPLETE | [PHASE1_DISCOVERY.md](PHASE1_DISCOVERY.md) | Maintainer accepted 2026-10-20 |
+| 2 | Business Rules and Category Contracts | NOT STARTED | TBD | Design proposal only; implementation not authorized |
 | 3 | Translation and Destination Safeguards | NOT STARTED | TBD | Not requested |
 | 4 | Lifecycle Operations | NOT STARTED | TBD | Not requested |
 | 5 | Review and Publication Integration | NOT STARTED | TBD | Not requested |
@@ -9,7 +9,9 @@
 
 ## Decision log
 
-- **2026-10-20:** Maintainer requested Phase 1 documentation and read-only discovery only. [Phase 1 draft PR #13](https://github.com/Kometa-Team/Defaults-Image-Creation/pull/13) contains the five discovery documents and local read-only validation results. Phase 1 findings await explicit acceptance; approval remains PENDING. No later phase is authorized.
+- **2026-10-20:** Maintainer explicitly accepted the discovery findings, category rules matrix, exception register and gap analysis as the factual baseline for future work. Phase 1 is COMPLETE. This accepts the discovery baseline, **not every proposed future contract, lock, permission, exception policy or implementation recommendation**. PR #13 remains draft and must not be merged without separate authorization. Its pre-acceptance head `4b3df333215a5eb18440eea0547ededadc2bfde0` passed Windows and Linux [CI run 39372962607](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39372962607); acceptance metadata updates require CI at their own final head.
+- **2026-10-20:** Maintainer authorized a separate documentation-only Phase 2 design proposal using this accepted baseline. This does not authorize contract enforcement, definition changes, image generation, translation/publication changes, merges or Phase 2 implementation. Phases 2–6 remain NOT STARTED. The proposal must remain outside PR #13.
+- **2026-10-20, original draft checkpoint (superseded by acceptance above):** Maintainer requested Phase 1 documentation and read-only discovery only. [Phase 1 draft PR #13](https://github.com/Kometa-Team/Defaults-Image-Creation/pull/13) contained the five discovery documents and local read-only validation results. At initial delivery, findings were IN PROGRESS / PENDING and no later phase was authorized.
 - **2026-10-20:** Fresh GitHub reads confirmed source `main` at `e7febf88d1dc8f8b93408e88da78e524b191acea` ([source cutover PR #12](https://github.com/Kometa-Team/Defaults-Image-Creation/pull/12)) and artwork `master` at `dfff31ab08446353844bb97de601c3a64edc8220` ([overlay PR #202](https://github.com/Kometa-Team/Default-Images/pull/202)). Neither head had advanced beyond the supplied historical baseline. Source repository default/development target is `main`.
 
 ## Permanent roadmap

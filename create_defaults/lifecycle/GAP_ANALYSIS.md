@@ -1,6 +1,6 @@
 # Gap analysis and maintainer decisions
 
-**Phase 1 findings; acceptance PENDING.** Observed capabilities are in [discovery](PHASE1_DISCOVERY.md); exact current variants are in the [category matrix](CATEGORY_RULES_MATRIX.md). Everything described as a future contract, operation or safeguard below is proposed, not implemented or approved.
+**Phase 1 factual findings accepted by the maintainer on 2026-10-20.** Observed capabilities are in [discovery](PHASE1_DISCOVERY.md); exact current variants are in the [category matrix](CATEGORY_RULES_MATRIX.md). Acceptance of this baseline does not approve every future contract, operation or safeguard below. Those remain proposals, not implementation authorization.
 
 ## Priorities by risk and impact
 
@@ -35,14 +35,14 @@ Category constants proposed for locking are the design portion of each category'
 
 ## Decisions for maintainer review
 
-1. **Accept or amend the Phase 1 baseline and exception inventory.** Confirm intentional variants and whether the measured facts are sufficient to progress. Acceptance marks Phase 1 COMPLETE only after an explicit decision; Phase 2 work still requires authorization.
+1. **Phase 1 baseline acceptance — recorded 2026-10-20.** The maintainer explicitly accepted the factual findings and exception inventory, completing Phase 1. This does not approve every proposed contract. A separate documentation-only Phase 2 design proposal is authorized; Phase 2 implementation remains NOT STARTED and requires explicit authorization.
 2. **Category ownership and edit boundary (Phase 2).** Decide who approves contracts, which named variants are first-class, permitted brand/color content and whether Playlist's proposed locked values reflect the intended design. Decide the separate category-wide design-change review boundary.
 3. **Language and routing policy (Phase 3).** Choose the supported language set, freshness/update cadence, incomplete-language blocking/report policy, English-source requirement, authenticated Weblate component mapping, fallback authority and RTL/font review scope. Choose user-repository configuration and final destination enforcement.
 4. **Identity and removal policy (Phase 4).** Decide how generated identities persist across path/name changes, whether old paths are retained or explicitly renamed, exact deletion authority and rollback retention. Preserve source spelling without normalization-driven public renames.
 5. **Review and pilot acceptance (Phases 5–6).** Confirm reuse of exact Package E approvals/transport, limits for bulk changes and the Playlist pilot cases, followed by representative era, generated-family, captionless, language-template and overlay examples. Define unchanged-output and rollback acceptance.
 
-No new gallery review, candidate regeneration or publication approval is requested by this document. Existing decisions are retained for unchanged artifacts. The review required now is acceptance of these discovery findings, followed by a separate decision about the next phase.
+No new gallery review, candidate regeneration or publication approval is requested by this document. Existing decisions are retained for unchanged artifacts. The factual discovery findings are now accepted; review of the separate Phase 2 proposal and implementation authorization remain distinct decisions.
 
 ## Phase 1 delivery validation
 
-The draft PR contains exactly `ROADMAP.md`, `PHASE1_DISCOVERY.md`, `CATEGORY_RULES_MATRIX.md`, `EXCEPTIONS_REGISTER.md` and `GAP_ANALYSIS.md` under this directory. Validation must confirm no tracked renderer, Python, YAML, fonts, assets, translation files or production workflows differ from the pinned source baseline. Read-only graph/metadata audits and documentation link/count checks are sufficient local checks; rendering suites are not rerun solely for Markdown. Automatic PR CI results are reported by actual run/head separately. Source and artwork production branches are checked again at delivery. Stop at the draft PR; do not merge or begin Phase 2.
+The draft PR contains exactly `ROADMAP.md`, `PHASE1_DISCOVERY.md`, `CATEGORY_RULES_MATRIX.md`, `EXCEPTIONS_REGISTER.md` and `GAP_ANALYSIS.md` under this directory. Validation must confirm no tracked renderer, Python, YAML, fonts, assets, translation files or production workflows differ from the pinned source baseline. Read-only graph/metadata audits and documentation link/count checks are sufficient local checks; rendering suites are not rerun solely for Markdown. Automatic PR CI results are reported by actual run/head separately. Source and artwork production branches are checked again at delivery. Keep PR #13 draft and do not merge it. The separately authorized Phase 2 proposal stays on a separate documentation branch/PR; implementation is not authorized.

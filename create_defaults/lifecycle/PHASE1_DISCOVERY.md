@@ -1,6 +1,6 @@
 # Phase 1 discovery and baseline
 
-**Status: IN PROGRESS. Maintainer acceptance: PENDING.** Scope is documentation and read-only discovery. See the [roadmap](ROADMAP.md), [complete category inventory](CATEGORY_RULES_MATRIX.md), [exceptions register](EXCEPTIONS_REGISTER.md) and [prioritized gaps](GAP_ANALYSIS.md).
+**Status: COMPLETE. Factual baseline accepted by the maintainer on 2026-10-20.** Acceptance does not approve every proposed future contract or authorize implementation. Scope is documentation and read-only discovery. See the [roadmap and acceptance decision](ROADMAP.md), [complete category inventory](CATEGORY_RULES_MATRIX.md), [exceptions register](EXCEPTIONS_REGISTER.md) and [prioritized gaps](GAP_ANALYSIS.md). PR #13 remains draft; merge is not authorized.
 
 ## Pinned baseline and method
 
@@ -124,4 +124,4 @@ The binary synchronization rule remains explicit: only equal SHA-256 is `exact_m
 
 Delivery changes exactly the five Markdown files under `create_defaults/lifecycle/`. Definition loading, graph expansion, font/PNG metadata inspection, local collision checks and verified translation GETs are read-only with respect to tracked source and production. Audit scratch/cache files are ignored under `config/lifecycle-phase1-20261020/` and are not product features. No renderer, definition, profile, font, asset, translation pipeline, production image or Default-Images ref is modified.
 
-Validation checks exact changed-file allowlisting, baseline source diff, relative documentation targets, measured count consistency and PR target/draft state. Existing rendering tests are cited as evidence of implemented behavior, not falsely reported as newly executed. Any automatic PR CI results must be attributed to their actual commit/run. Phase 1 remains IN PROGRESS / PENDING after draft delivery; acceptance and Phase 2 authorization are separate maintainer decisions.
+Validation checks exact changed-file allowlisting, baseline source diff, relative documentation targets, measured count consistency and PR target/draft state. Existing rendering tests are cited as evidence of implemented behavior, not falsely reported as newly executed. Any automatic PR CI results must be attributed to their actual commit/run. The maintainer subsequently accepted this factual baseline on 2026-10-20, completing Phase 1. Only a separate documentation-only Phase 2 proposal is authorized; Phases 2–6 remain NOT STARTED and no implementation or merge is authorized.
