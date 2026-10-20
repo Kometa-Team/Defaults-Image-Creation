@@ -92,9 +92,11 @@ Defaults-Image-Creation/
 │  ├─ .env.example                 # copied to ./config/.env on first run
 │  └─ ...                          # pipeline config, logs, QA outputs
 ├─ create_defaults/
-│  ├─ create_default_posters.ps1   # bulk defaults generator
-│  ├─ create_poster.ps1            # single‑poster composer
-│  └─ README.md                    # usage & requirements for PowerShell defaults
+│  ├─ bulk/operations.py          # native defaults generation and review
+│  ├─ bulk/operator_publication.py # exact approval and resumable draft staging
+│  ├─ create_default_posters.ps1   # legacy rollback reference
+│  ├─ create_poster.ps1            # legacy rollback composer
+│  └─ PYTHON_OPERATIONS.md         # defaults commands, approval and rollback
 └─ README.md                       # (this file) overview & entry points
 ```
 
@@ -102,7 +104,8 @@ Defaults-Image-Creation/
 
 ## Requirements (consolidated)
 
-- **Python path:** Python 3.10+, `pip`, network access to TMDB, optional Selenium/Chrome if you use background removal.
+- **Default posters and overlays:** Python 3.13, `create_defaults/requirements-bulk.txt`, and the bundled validated fonts. Git/GitHub CLI are needed for explicit publication operations.
+- **People Python path:** Python 3.10+, `pip`, network access to TMDB, optional Selenium/Chrome if you use background removal.
 - **Legacy PowerShell reference only:** PowerShell 7+, ImageMagick CLI (`magick`), required fonts (Comfortaa, Bebas Neue, Jura, Limelight, Rye, etc.; Cairo for Arabic text).
 - **Git:** for People‑Images updates (SSH key or HTTPS token configured for `origin`).
 
@@ -138,9 +141,10 @@ python -m create_defaults.bulk.operations generate --category Genre --category R
 
 ## Troubleshooting (quick)
 
-- **'magick' not recognized** — Install ImageMagick and reopen your shell; verify with `magick -version`.
-- **Fonts missing / wrong glyphs** — Install required fonts system‑wide so ImageMagick can find them.
-- **Execution policy (Windows)** — `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force`
+- **Default font/source/case errors** — Use the Python preflight diagnostics and bundled font paths; resolve the exact source spelling before generation.
+- **Legacy rollback only: 'magick' not recognized** — Install ImageMagick and reopen your shell; verify with `magick -version`.
+- **Legacy rollback only: missing system fonts** — Install the historical fonts required by ImageMagick.
+- **Legacy rollback only: execution policy (Windows)** — `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force`
 - **Nothing to push** — the push step skips commit when the working tree is clean.
 - **Repo drift** — The update step resets to `origin/<branch>` each run; local changes are intentionally discarded before syncing.
 

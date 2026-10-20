@@ -268,7 +268,7 @@ def test_workflow_template_is_uninstalled_and_defaults_disabled():
     assert s.envelope(s.SETUP/'staging-authorization.json')['authorized'] is False
 
 
-def test_deployment_subset_and_final_dry_run_bind_current_implementation(tmp_path):
+def test_frozen_deployment_subset_and_final_dry_run_remain_reproducible(tmp_path):
     import os, subprocess, sys
     manifest=s.envelope(s.SETUP/'deployment-files.json')
     proof=s.envelope(s.EVIDENCE/'infrastructure-readiness-20261018-v2.json')
@@ -280,9 +280,17 @@ def test_deployment_subset_and_final_dry_run_bind_current_implementation(tmp_pat
     assert dry['network_requests']==dry['remote_writes']==dry['staging_branches_created']==dry['pull_requests_created']==0
     assert dry['verified_candidate_hashes']==7 and dry['local_refs_unchanged'] and dry['local_worktree_unchanged']
     assert proof['staging_enabled'] is proof['workflow_installed'] is proof['credentials_enabled'] is proof['roles_confirmed'] is False
+    historical=s.envelope(s.SETUP/'historical-runtime/index.json')
+    assert historical['deployment_manifest_sha256']==manifest['sha256']
+    assert historical['current_deployment_authorized'] is False
+    assert set(historical['files'])=={'create_defaults/bulk/common.py'}
     runtime=tmp_path/'isolated-runtime';runtime.mkdir()
     for entry in manifest['files']:
-        data=(s.ROOT.parent/entry['source']).read_bytes().replace(b'\r\n',b'\n')
+        frozen=historical['files'].get(entry['source'])
+        source=(s.SETUP/'historical-runtime'/frozen['snapshot']) if frozen else s.ROOT.parent/entry['source']
+        if frozen:
+            assert frozen['sha256_normalized_lf']==entry['sha256_normalized_lf']
+        data=source.read_bytes().replace(b'\r\n',b'\n')
         assert hashlib.sha256(data).hexdigest()==entry['sha256_normalized_lf']
         target=runtime/entry['future_target'];target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(data)
     # A local fixture validates the separate minimal deployment, never GitHub installation.
