@@ -29,15 +29,18 @@ eligible visually equivalent but binary-different outputs remain replacements.
 Source basename checks enumerate physical entries on Windows and audit Git
 spelling; approved case renames use paired index changes in one commit.
 
-See [Python operator commands](../../../PYTHON_OPERATIONS.md). Root entrypoints
-and legacy PowerShell source remain unchanged pending the cutover decision.
-The proposed cutover retains PowerShell only for documented rollback. No source
+See [Python operator commands](../../../PYTHON_OPERATIONS.md). The draft includes
+the proposed Python-first README changes; production entrypoints remain pending
+the authorized cutover/source merge. Legacy PowerShell source is unchanged and
+retained only for documented rollback. No source
 or artwork PR merge is authorized by this implementation checkpoint. Production
 cutover and 4,122/4,122 overlay reconciliation remain pending their explicit
 approval/publication steps. No new Timeline posters have been started.
 
-Local evidence includes 49 passing canonical/transport tests and 23 passing final
-operator tests. The former full infrastructure run passed 520 tests with two
+Local evidence includes 49 passing canonical/transport tests, 23 passing final
+operator tests, 134 catalog/migration regressions (one Windows symlink skip),
+and 35 Phase 2 tests. All 4,122 overlays pass a full cache-only operation with
+zero renders and no publications. The former full infrastructure run passed 520 tests with two
 Windows symlink skips; its optional sandbox-restricted legacy probe passed when
 rerun with process-launch permission. Current source CI must be checked at the
 new commit; prior-commit green CI is not reported as current acceptance.

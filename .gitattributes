@@ -1,2 +1,5 @@
 # Preserve the exact reviewed evidence bytes on Windows and Linux checkouts.
 create_defaults/bulk/evidence/package-d/overlay-observations.json text eol=lf
+create_defaults/bulk/evidence/production-20261019/*.json text eol=lf
+create_defaults/bulk/evidence/production-20261019/*.md text eol=lf
+create_defaults/bulk/evidence/production-20261019/*.xml text eol=lf

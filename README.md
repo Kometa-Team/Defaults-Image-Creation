@@ -3,7 +3,7 @@
 This repository brings together **two complementary toolsets** for building and maintaining visual assets used across your media libraries:
 
 - **Cross‑Platform People Posters Pipeline (Python)** — an end‑to‑end workflow that discovers missing people, fetches images, removes backgrounds, updates your People‑Images repos with a *remote‑always‑wins* strategy, generates README grids, and optionally pushes changes. See **Orchestrator** below.
-- **Create Defaults (PowerShell)** — a purpose‑built defaults generator that produces standardized “default” posters (genres, networks, countries, ratings, etc.) plus a one‑off poster composer. See **create_defaults** below.
+- **Create Defaults (Python)** — a purpose‑built defaults generator that produces standardized “default” posters (genres, networks, countries, ratings, etc.) plus a one‑off poster composer. See **create_defaults** below.
 
 ---
 
@@ -11,7 +11,7 @@ This repository brings together **two complementary toolsets** for building and 
 
 Default-poster Python migration review: see the [team review guide](create_defaults/REVIEW_GUIDE.md)
 and [current PowerShell/Python image samples](create_defaults/review/README.md).
-The single-poster Python candidate is available; the bulk workflow has not switched.
+Use the [Python operator workflow](create_defaults/PYTHON_OPERATIONS.md) for native generation, reconciliation, exact review and draft publication staging.
 
 Choose the path that matches your task.
 
@@ -57,24 +57,29 @@ needed only for the optional legacy renderer, not the normal People workflow.
 
 > For full details of steps, env vars, and QA utilities, see the orchestrator README in this repo.
 
-### B) Generate default poster sets (PowerShell)
+### B) Generate default posters and overlays (Python)
 
-1. PowerShell 7+ (`pwsh`) and **ImageMagick** (`magick`) on PATH
-2. Fonts used by the default styles installed system‑wide
-3. From `create_defaults/`:
-   ```powershell
-   # Run everything
-   pwsh -File ./create_defaults/create_default_posters.ps1 All
+Use Python 3.13 and bundled, validated fonts. From the repository root:
 
-   # Or pick specific sets (run in order)
-   pwsh -File ./create_defaults/create_default_posters.ps1 AudioLanguage Playlist Chart
-   ```
+```powershell
+python -m pip install -r create_defaults/requirements-bulk.txt
+python -m create_defaults.bulk.operations generate --category Based --report config/based-generation.json
+python -m create_defaults.bulk.operations overlays --group aspect --report config/aspect-overlays.json
+```
 
-**What it makes (examples)**
-- Audio Language, Awards, Based, Charts, Content Rating, Country, Franchise, Genres, Network, Playlist, Resolution, Streaming, Studio, Seasonal, Separators, Subtitle Language, Universe, Video Format, Year, Overlays.
-- One‑off composer `create_defaults/create_poster.ps1` builds a single 2000×3000 poster from base/gradient/logo/border/text layers.
+Repeat `--category` or use exact `--poster` identities and authored definition files.
+`--category All` selects the complete English poster catalog; overlays have their own
+explicit command. Adopt the verified migration cache with the documented `adopt`
+command before a full unchanged run; `--cache-only` refuses unexpected rendering.
 
-> See `create_defaults/README.md` for requirements (ImageMagick, fonts, Windows execution policy), category details, and examples.
+See [Python operations and rollback](create_defaults/PYTHON_OPERATIONS.md) for
+single-poster, selected/category generation, previews, exact approvals, incremental
+reuse, bounded/resumable Git staging and remote verification. Publication uses one
+draft PR per logical approved set and always requires explicit approval. Merging
+requires a separate decision.
+
+The PowerShell/ImageMagick implementation is retained for legacy reference and
+rollback. Python rendering does not invoke it.
 
 ---
 
@@ -98,7 +103,7 @@ Defaults-Image-Creation/
 ## Requirements (consolidated)
 
 - **Python path:** Python 3.10+, `pip`, network access to TMDB, optional Selenium/Chrome if you use background removal.
-- **PowerShell path:** PowerShell 7+, ImageMagick CLI (`magick`), required fonts (Comfortaa, Bebas Neue, Jura, Limelight, Rye, etc.; Cairo for Arabic text).
+- **Legacy PowerShell reference only:** PowerShell 7+, ImageMagick CLI (`magick`), required fonts (Comfortaa, Bebas Neue, Jura, Limelight, Rye, etc.; Cairo for Arabic text).
 - **Git:** for People‑Images updates (SSH key or HTTPS token configured for `origin`).
 
 ---
@@ -126,7 +131,7 @@ alpha contact; bottom/left/right are optional edge-contact diagnostics only.
 
 ### Generate a few common default sets
 ```powershell
-pwsh -File ./create_defaults/create_default_posters.ps1 Genres Resolution Studio
+python -m create_defaults.bulk.operations generate --category Genre --category Resolution --category Studio --report config/common-defaults.json
 ```
 
 ---

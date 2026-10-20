@@ -235,10 +235,14 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(change["new_name"], "Death in Paradise (2011)")
 
     def test_overlay_globs_count_files_not_operations(self):
+        from create_defaults.bulk.asset_cases import historical
         for item in self.audit["overlays"]:
             directory = ROOT / str(Path(item["input_pattern"]).parent)
             actual = {path.relative_to(ROOT).as_posix() for path in directory.iterdir() if path.suffix.lower() == ".png"}
-            self.assertEqual(set(item["inputs"]), actual)
+            # Frozen observations retain their historical spellings; only the
+            # explicit byte-preserving source-case ledger can bridge to today.
+            expected = {historical(ROOT, path).relative_to(ROOT).as_posix() for path in item["inputs"]}
+            self.assertEqual(expected, actual)
             self.assertEqual(item["matching_files"], len(actual))
         self.assertEqual(self.audit["summary"]["overlay_file_transforms"], sum(item["matching_files"] for item in self.audit["overlays"]))
 

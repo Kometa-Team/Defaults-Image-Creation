@@ -522,6 +522,12 @@ class ComparisonTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "random fallback font"):
                 reuse_legacy(case, result(), args, destination)
             log.unlink()
+            outside = root / "outside.jpg"
+            outside.write_bytes(source.read_bytes())
+            previous["images"]["legacy"]["report_file"] = "../../outside.jpg"
+            with self.assertRaisesRegex(ValueError, "escapes its local report"):
+                reuse_legacy(case, result(), args, destination)
+            previous["images"]["legacy"]["report_file"] = "legacy.jpg"
             source.write_bytes(b"changed after baseline")
             with self.assertRaisesRegex(ValueError, "Cached legacy image changed"):
                 reuse_legacy(case, result(), args, destination)

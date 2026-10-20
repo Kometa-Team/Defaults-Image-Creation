@@ -304,6 +304,9 @@ def reuse_legacy(case, result, args, directory):
     if not entry or args.python_only:
         return False
     root, previous = entry
+    # Resolve the allowed root as well as the candidate: Windows temp-directory
+    # aliases/junctions may otherwise make an owned file appear outside its root.
+    root = Path(root).resolve()
     if previous.get("parameters") != result["parameters"] or previous.get("input_hashes") != result["input_hashes"]:
         return False
     if previous.get("resolved_font", {}).get("sha256") != result.get("resolved_font", {}).get("sha256"):

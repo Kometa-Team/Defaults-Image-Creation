@@ -1,8 +1,9 @@
-# Python operator workflow candidate
+# Python operator workflow
 
-This workflow is implemented in draft source PR #12. Activation as the supported
-production entry point requires the separate cutover decision. The legacy
-PowerShell entry points and the root README remain unchanged until that decision.
+Draft source PR #12 proposes this as the supported English production workflow.
+The README changes in this draft are ready for review; activating them in the
+production source branch requires explicit cutover and source-merge authorization.
+Legacy PowerShell scripts remain available for documented emergency rollback.
 
 Use Python 3.13 and `python -m pip install -r create_defaults/requirements-bulk.txt`.
 Rendering uses the existing Pillow composer, planner, validation and persistent
@@ -175,10 +176,11 @@ CI validates Python; it does not publish production artwork. External schedulers
 cannot be inferred from repository contents and must use the approved commands
 when their operators switch them.
 
-The cutover approval covers promoting these commands in the root README and
-marking the two PS rendering scripts legacy in operator documentation. It does
-not authorize merging PR #12, deleting scripts, publishing unapproved mappings,
-or merging artwork PRs. Keep old scripts for rollback. To roll back operational
+The proposed cutover promotes these commands in the root README and marks the
+two PS rendering scripts legacy in operator documentation. Source PR #12 must
+receive explicit cutover and merge authorization before these changes become
+production entry points. It does not delete scripts or approve any artwork or
+artwork merge. Keep old scripts for rollback. To roll back operational
 entry points, restore the prior documented command selection from the source
 baseline; do not automatically render/publish legacy bytes over migrated artwork.
 Any production-artwork rollback needs its own exact reviewed diff and approval.
