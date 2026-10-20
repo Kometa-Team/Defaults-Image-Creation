@@ -11,7 +11,7 @@ definitions:
     row_sha256: 884e4356dbc417cae061b75f27f8a8a9f407e24b6cff5d47f103a15e5b57e8a2
   composer:
     base_color: '#B26AAA'
-    logo: logos_award/pca.png
+    logo: logos_award/PCA.png
     logo_offset: -500
     logo_resize: 1800
     out_name: winner
@@ -54,7 +54,7 @@ definitions:
   composer:
     base_color: '#B26AAA'
     font_size: 229
-    logo: logos_award/pca.png
+    logo: logos_award/PCA.png
     logo_offset: -500
     logo_resize: 1800
     out_name: nomination
@@ -96,7 +96,7 @@ definitions:
     row_sha256: e6571f0dbb073315030b164ada503e2003caae4780cd0f09652e06ed4a5b320c
   composer:
     base_color: '#B26AAA'
-    logo: logos_award/pca.png
+    logo: logos_award/PCA.png
     logo_offset: -500
     logo_resize: 1800
     out_name: best_director_winner
@@ -138,7 +138,7 @@ definitions:
     row_sha256: 9e98290424d3c3ea2290a132c0733a9af52325d2408ebd26df94d19c22bdb686
   composer:
     base_color: '#B26AAA'
-    logo: logos_award/pca.png
+    logo: logos_award/PCA.png
     logo_offset: -500
     logo_resize: 1800
     out_name: best_picture_winner
@@ -180,7 +180,7 @@ definitions:
     row_sha256: bf62300a0e5e25b87131a7d5fbf46da4876069302dec3c92e9618fec17348dac
   composer:
     base_color: '#B26AAA'
-    logo: logos_award/pca.png
+    logo: logos_award/PCA.png
     logo_offset: -500
     logo_resize: 1800
     out_name: PCA
@@ -3884,7 +3884,7 @@ definitions:
     row_sha256: 884e4356dbc417cae061b75f27f8a8a9f407e24b6cff5d47f103a15e5b57e8a2
   composer:
     base_color: '#B26AAA'
-    logo: logos_award/pca.png
+    logo: logos_award/PCA.png
     logo_offset: -500
     logo_resize: 1800
     out_name: '1975'
@@ -4100,7 +4100,7 @@ definitions:
     row_sha256: 884e4356dbc417cae061b75f27f8a8a9f407e24b6cff5d47f103a15e5b57e8a2
   composer:
     base_color: '#B26AAA'
-    logo: logos_award/pca.png
+    logo: logos_award/PCA.png
     logo_offset: -500
     logo_resize: 1800
     out_name: '1975'
@@ -4317,7 +4317,7 @@ definitions:
   composer:
     base_color: '#B26AAA'
     font_size: 229
-    logo: logos_award/pca.png
+    logo: logos_award/PCA.png
     logo_offset: -500
     logo_resize: 1800
     out_name: '1975'
@@ -4533,7 +4533,7 @@ definitions:
     row_sha256: 8ba5514867b924d244c50cba19cb897b1a4a4fe8ddd58ef2c41bf9546504ae4b
   composer:
     base_color: '#B26AAA'
-    logo: logos_award/pca.png
+    logo: logos_award/PCA.png
     logo_offset: -500
     logo_resize: 1800
     out_name: '1975'

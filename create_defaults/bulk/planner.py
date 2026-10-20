@@ -91,6 +91,11 @@ def validate_manifest(value):
                 or not job["local_relative"].endswith(".png")
                 or not any(i["role"] == "overlay_source" and i["path"] == job["parameters"]["input"] for i in job["inputs"])):
             raise BulkError("invalid_overlay", "Overlay parameters/encoding differ from executable contract")
+        if job['kind'] == 'overlay' and job['render_ready']:
+            source_name = Path(job['parameters']['input']).name
+            if (Path(job['local_relative']).name != source_name
+                    or job['remote_relative'] is not None and Path(job['remote_relative']).name != source_name):
+                raise BulkError('overlay_basename', 'Both overlay destinations must preserve the exact authoritative source basename')
         expected = fingerprint({key: job[key] for key in ("kind", "parameters", "inputs", "dependencies", "language_behavior")} | {"renderer": value["renderer"]})
         if expected != job["render_fingerprint"]:
             raise BulkError("corrupt_manifest", "Render fingerprint mismatch")

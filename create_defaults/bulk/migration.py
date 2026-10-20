@@ -94,7 +94,8 @@ def definition_for(job, translations, calls, paths):
             matches = [path for path in job["assets"] if path.casefold() == composer[role].casefold()]
             if len(matches) != 1:
                 raise BulkError("ambiguous_asset", f"Cannot bind exact asset identity: {composer[role]}")
-            composer[role] = matches[0]
+            from .asset_cases import canonical as canonical_asset
+            composer[role] = canonical_asset(matches[0])
     fitting = job["fitting"]
     measurement = None
     if fitting is not None and job["text"] and all(fitting["box"]):
@@ -237,14 +238,16 @@ def reconcile(category, definitions, translations):
             if role in job["generated_inputs"]:
                 original[role] = "defaults-en/" + original[role]
             elif original[role]:
-                original[role] = next(path for path in job["assets"] if path.casefold() == original[role].casefold())
+                from .asset_cases import canonical as canonical_asset
+                original[role] = canonical_asset(next(path for path in job["assets"] if path.casefold() == original[role].casefold()))
         for field in original:
             if actual[field] != original[field]:
                 discrepancies.append({"output": output, "field": field, "expected": original[field], "actual": actual[field]})
         for path, checksum in {**job["assets"], job["font"]["path"]: job["font"]["sha256"]}.items():
             if checksum is not None:
                 if path not in hashes:
-                    hashes[path] = sha256(ROOT / path)
+                    from .asset_cases import historical
+                    hashes[path] = sha256(historical(ROOT, path, checksum))
                 if hashes[path] != checksum:
                     discrepancies.append({"output": output, "field": "source_asset_sha256", "path": path})
         expected_dependencies = [{"poster_id": stable_id(category, parent["relative"]), "input": role} for role, parent in job["generated_inputs"].items()]

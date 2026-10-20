@@ -13,8 +13,15 @@ concurrency:
 
 jobs:
   python-validation:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -46,7 +53,7 @@ jobs:
       - name: Retain local-only review evidence for the team
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: package-d-focused-review
+          name: package-d-focused-review-${{ matrix.os }}
           retention-days: 14
           if-no-files-found: error
           path: |
@@ -60,7 +67,7 @@ jobs:
       - name: Retain focused Package E acceptance evidence
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: package-e-focused-acceptance
+          name: package-e-focused-acceptance-${{ matrix.os }}
           retention-days: 14
           if-no-files-found: error
           path: |

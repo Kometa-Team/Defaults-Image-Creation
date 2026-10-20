@@ -224,6 +224,12 @@ class PersistentWorkers:
     def _cached(self, task, state_id, *, expected_renderer=None):
         path = self._receipt_path(state_id)
         target = confined(self.config.output_dir, task.local_relative)
+        if not target.is_file() and task.payload.get('kind') == 'overlay':
+            from .asset_cases import migrations, overlay_relative, historical
+            source = task.payload['parameters']['input']
+            if source in migrations():
+                historical(self.config.asset_dir, source, migrations()[source]['sha256'])
+                target = confined(self.config.output_dir, overlay_relative(source, task.local_relative))
         if not path.is_file() or not target.is_file():
             return None
         if path.stat().st_size > 1_000_000:
@@ -241,6 +247,10 @@ class PersistentWorkers:
             # promotion; recheck the header contract without decoding them again.
             # Old receipts remain immutable; no mtime-based shortcut is used.
             _check_image(target, task, decode=False)
+            from .asset_cases import exact, overlay_relative
+            physical_relative = (overlay_relative(task.payload['parameters']['input'], task.local_relative)
+                                 if task.payload.get('kind') == 'overlay' else task.local_relative)
+            exact(self.config.output_dir, physical_relative)
         return value
 
     def _publish(self, task, state_id, source, checksum):
@@ -273,6 +283,8 @@ class PersistentWorkers:
                 raise BulkError("corrupt_artifact", "Previously verified output disappeared before replacement")
             else:
                 atomic_bytes(target, data)
+            from .asset_cases import exact
+            exact(self.config.output_dir, task.local_relative)
         row = self.store.job(state_id)
         receipt = {"schema_version": 1, "job_id": state_id, "logical_id": task.id, "job_fingerprint": row["fingerprint"],
                    "render_fingerprint": task.render_fingerprint, "renderer_identity": self.renderer_identity,
@@ -305,14 +317,14 @@ class PersistentWorkers:
                 return receipt
         return None
 
-    def run(self, tasks, *, cancel=None, retry_failed=False):
+    def run(self, tasks, *, cancel=None, retry_failed=False, cache_only=False):
         # Keep WAL open across short transactions; the last-close checkpoint must
         # not be repeated for every receipt on Windows. No transaction is held.
         with self.store.connection() as anchor:
             anchor.execute("SELECT count(*) FROM sqlite_master").fetchone()
-            return self._run(tasks, cancel=cancel, retry_failed=retry_failed)
+            return self._run(tasks, cancel=cancel, retry_failed=retry_failed, cache_only=cache_only)
 
-    def _run(self, tasks, *, cancel=None, retry_failed=False):
+    def _run(self, tasks, *, cancel=None, retry_failed=False, cache_only=False):
         if not self.active:
             raise BulkError("inactive_pool", "Use PersistentWorkers as a context manager")
         started, initial_starts = time.monotonic(), self.starts
@@ -389,14 +401,17 @@ class PersistentWorkers:
                     elif claim["state_id"] != state_id:
                         old = db.execute("SELECT * FROM jobs WHERE id=?", (claim["state_id"],)).fetchone()
                         old_spec = json.loads(old["spec"]) if old else {}
-                        if not old or old["status"] != "verified" or fingerprint(old_spec) != old["fingerprint"] or old_spec["task"]["id"] != task.id or claim["relative"] != task.local_relative:
+                        from .asset_cases import replacement as case_replacement
+                        case_only = bool(old_spec and case_replacement(RenderTask(**old_spec['task']), task))
+                        if (not old or old["status"] != "verified" or fingerprint(old_spec) != old["fingerprint"]
+                                or (old_spec["task"]["id"] != task.id or claim["relative"] != task.local_relative) and not case_only):
                             raise BulkError("output_collision", "Output is reserved by another job or unfinished replacement")
                         previous = RenderTask(**old_spec["task"])
                         receipt = self._cached(previous, claim["state_id"], expected_renderer=old_spec["renderer_identity"])
                         if receipt is None or old["receipt"] != canonical(receipt).decode():
                             raise BulkError("corrupt_artifact", "Cannot replace an unverified or corrupted owned output")
-                        db.execute("UPDATE output_claims SET state_id=?,fingerprint=?,previous_sha256=?,previous_state_id=? WHERE root=? AND path_key=?",
-                                   (state_id, task.render_fingerprint, receipt["sha256"], claim["state_id"], root_id, path_key(task.local_relative)))
+                        db.execute("UPDATE output_claims SET state_id=?,fingerprint=?,previous_sha256=?,previous_state_id=?,relative=? WHERE root=? AND path_key=?",
+                                   (state_id, task.render_fingerprint, receipt["sha256"], claim["state_id"], task.local_relative, root_id, path_key(task.local_relative)))
                         self.store.event(db, "output_replacement_reserved", state_id,
                                          {"previous_state_id": claim["state_id"], "previous_sha256": receipt["sha256"]})
                     self.store.add_job_in_transaction(db, state_id, {"task": task.spec(), "renderer_identity": self.renderer_identity})
@@ -512,6 +527,8 @@ class PersistentWorkers:
                         continue
                     if task.render_fingerprint in running_fingerprints:
                         continue
+                    if cache_only:
+                        raise BulkError('cache_miss', 'Cache-only execution refuses to render an unverified identity: ' + identity)
                     idle = next((index for index, slot in self.slots.items() if slot["request"] is None), None)
                     if idle is None and len(self.slots) >= self.limits.workers:
                         break

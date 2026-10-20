@@ -57,7 +57,7 @@ def blob_id(path):
     return digest.hexdigest()
 
 
-def reference(kind):
+def reference(kind, *, original=False):
     index = check_seal(load_json(EVIDENCE / "full-ledger-index.json"))
     binding = index["evidence"][kind]
     path = confined(EVIDENCE, binding["path"], must_exist=True)
@@ -95,6 +95,35 @@ def reference(kind):
                     "old_validation": row["validation"]["fingerprint"], "acceptance_sha256": accepted["sha256"]}
                 job["remote_relative"] = decision["destination"]
                 row["validation"]["fingerprint"] = decision["validation_fingerprint"]
+    if kind == 'overlays' and not original:
+        from .asset_cases import LEDGER
+        case_index = EVIDENCE / 'overlay-canonical-case-index-20261019.json'
+        if LEDGER.exists():
+            if not case_index.exists():
+                raise BulkError('case_reference_pending', 'Canonical overlay receipts must be refreshed after source-case corrections')
+            binding = check_seal(load_json(case_index))
+            if binding['source_case_ledger_sha256'] != check_seal(load_json(LEDGER))['sha256']:
+                raise BulkError('case_reference_drift', 'Canonical reference belongs to another exact source-case ledger')
+            payload_path = confined(EVIDENCE, binding['path'], must_exist=True)
+            if sha256(payload_path) != binding['file_sha256']:
+                raise BulkError('case_reference_drift', 'Canonical overlay ledger bytes changed')
+            current = json.loads(gzip.decompress(payload_path.read_bytes()))
+            if fingerprint(current) != binding['payload_sha256'] or current['manifest_header']['renderer'] != data['manifest_header']['renderer']:
+                raise BulkError('case_reference_drift', 'Canonical overlay payload or material renderer changed')
+            validate_manifest(dict(current['manifest_header'], jobs=[r['job'] for r in current['rows']]))
+            from .asset_cases import overlay_relative
+            previous = {overlay_relative(r['job']['parameters']['input'], r['job']['remote_relative']): r for r in data['rows']}
+            if len(previous) != len(current['rows']):
+                raise BulkError('case_reference_drift', 'Canonical overlay membership changed')
+            for row in current['rows']:
+                before = previous.get(row['job']['remote_relative'])
+                receipt = row['receipt']
+                if (not before or before['receipt']['sha256'] != receipt['sha256']
+                        or receipt['receipt_sha256'] != fingerprint({k: v for k, v in receipt.items() if k != 'receipt_sha256'})
+                        or receipt['logical_id'] != row['job']['id']
+                        or receipt['render_fingerprint'] != row['job']['render_fingerprint']):
+                    raise BulkError('case_reference_drift', 'A case-only refresh changed artwork bytes or receipt identity')
+            return current
     return data
 
 
@@ -155,5 +184,11 @@ def published_file(root, state, entry, local=None, *, force_remote=False):
                 raise BulkError("oversize_blob", "Remote response exceeds byte cap")
     if hashlib.sha1(f"blob {len(data)}\0".encode() + data).hexdigest() != entry["sha"] or len(data) != entry["size"]:
         raise BulkError("remote_identity", "Downloaded bytes differ from pinned tree")
-    atomic_bytes(target, bytes(data))
+    try:
+        atomic_bytes(target, bytes(data))
+    except FileExistsError:
+        # Different destinations can reference one immutable blob. A concurrent
+        # verified download may win promotion; accept only those exact bytes.
+        if target.stat().st_size != entry['size'] or blob_id(target) != entry['sha']:
+            raise BulkError('corrupt_cache', 'Concurrent published cache bytes differ')
     return target, "pinned_remote_download"

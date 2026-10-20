@@ -453,7 +453,7 @@ definitions:
     row_sha256: 71b5047fd2228e125e7a6ba6feb4520aaab638682780845a6b2b9ce79efda778
   composer:
     base_color: '#00CC30'
-    logo: logos_network/ALTBalaji.png
+    logo: logos_network/AltBalaji.png
     logo_resize: 1600
     out_name: AltBalaji
     white_wash: false
@@ -6043,7 +6043,7 @@ definitions:
     row_sha256: 2a86c9640ec54cda5727a0fa2b68fc420e6bba9d0103212d6e1c5bb339c000c8
   composer:
     base_color: '#0407A9'
-    logo: logos_network/tokyo mx.png
+    logo: logos_network/Tokyo MX.png
     logo_resize: 1600
     out_name: Tokyo MX
     white_wash: false
@@ -7785,7 +7785,7 @@ definitions:
     row_sha256: 71b5047fd2228e125e7a6ba6feb4520aaab638682780845a6b2b9ce79efda778
   composer:
     base_color: '#00CC30'
-    logo: logos_network/white/ALTBalaji.png
+    logo: logos_network/white/AltBalaji.png
     logo_resize: 1600
     out_name: AltBalaji
     white_wash: false

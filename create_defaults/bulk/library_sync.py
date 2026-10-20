@@ -21,7 +21,7 @@ import requests
 from .common import BulkError, canonical, confined, fingerprint, path_key, reject_links, sha256
 from .config import ROOT
 from .library_sources import (CANARY_COMMIT, check_seal, blob_id, load_json,
-                              published_file, reference, save, sealed, snapshot)
+                              published_file, reference, runtime_identity, save, sealed, snapshot)
 from .library_visual import PROPOSED_POLICY, compare_images, evaluate
 
 FONT_REPLACEMENTS = {
@@ -262,7 +262,8 @@ def inventory(root, *, kind, output, catalog=None, local_published=None, workers
     input_hashes = {}
     for path in sorted(source_paths):
         try:
-            input_hashes[path] = sha256(confined(ROOT, path, must_exist=True))
+            from .asset_cases import historical
+            input_hashes[path] = sha256(historical(ROOT, path))
         except (OSError, BulkError):
             input_hashes[path] = None
     required_parents = {d["job_id"] for r in records for d in r["job"]["dependencies"]}
@@ -301,13 +302,21 @@ def inventory(root, *, kind, output, catalog=None, local_published=None, workers
             row.update(candidate_path=str(candidate), candidate_blob=blob_id(candidate), candidate_bytes=candidate.stat().st_size,
                        technical_valid=True, layout_risks=[d["code"] for d in variant.get("diagnostics", []) if d["severity"] == "warning"],
                        layout_probe=variant.get("layout_probe"))
+            if job['kind'] == 'overlay':
+                row.update(authoritative_source=job['parameters']['input'], output_variant=job['variant'],
+                           authoritative_basename=Path(job['parameters']['input']).name)
             row["context_sha256"] = fingerprint({"job": job, "validation": reference_row["validation"],
                 "renderer": data["manifest_header"]["renderer"], "policy": policy, "baseline": state["head"]})
-            if remote_keys.get(path_key(destination), []) not in ([], [destination]):
-                raise BulkError("case_conflict", "Published path case conflicts with canonical destination")
-            entry = entries.get(destination)
+            names = remote_keys.get(path_key(destination), [])
+            if names not in ([], [destination]):
+                if (job['kind'] == 'overlay' and len(names) == 1
+                        and Path(names[0]).parent == Path(destination).parent):
+                    row['rename_from'] = names[0]
+                else:
+                    raise BulkError("case_conflict", "Published path case conflicts with canonical destination")
+            entry = entries.get(row.get('rename_from', destination))
             if not entry:
-                row.update(hash_state="missing_published", difference_class="missing_published")
+                row.update(hash_state="missing_published", difference_class="missing_published", required_publication_action='add')
                 return row
             if time.monotonic() - started > seconds or (root / "STOP").exists():
                 raise BulkError("resource_stop", "Time bound or STOP file reached; rerun to resume")
@@ -315,10 +324,13 @@ def inventory(root, *, kind, output, catalog=None, local_published=None, workers
             row.update(published_path=str(published), published_provenance=provenance,
                        published_sha256=sha256(published), published_blob=entry["sha"], published_bytes=published.stat().st_size)
             if row["candidate_sha256"] == row["published_sha256"]:
-                row.update(difference_class="exact_match", hash_state="exact_match", approval="not_required")
+                row.update(difference_class="filename_case_only" if row.get('rename_from') else "exact_match",
+                           hash_state="exact_match", approval="pending" if row.get('rename_from') else "not_required",
+                           required_publication_action='case_rename' if row.get('rename_from') else 'skip')
                 row["canary_remote_verified"] = destination in canary_hashes and row["candidate_sha256"] == canary_hashes[destination]
                 return row
             row["hash_state"] = "unequal"
+            row['required_publication_action'] = 'rename_and_replace' if row.get('rename_from') else 'replace'
             identity = fingerprint([row["candidate_sha256"], row["published_sha256"], comparator, job["parameters"]])
             with sqlite3.connect(cache, timeout=60) as db:
                 previous = db.execute("SELECT payload FROM comparisons WHERE identity=?", (identity,)).fetchone()
@@ -350,6 +362,7 @@ def inventory(root, *, kind, output, catalog=None, local_published=None, workers
     baseline_identity = {k: state[k] for k in ("repository", "branch", "head", "tree")}
     groups = _group_manifests(rows, policy, baseline_identity)
     report = sealed({"schema_version": 1, "kind": kind, "baseline": baseline_identity,
+        "runtime": runtime_identity(),
         "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
         "observed_utc": datetime.now(timezone.utc).isoformat(), "reference_manifest": data["manifest_header"]["sha256"],
         "catalog_preflight_sha256": baseline.get("preflight_sha256"), "policy_sha256": fingerprint(policy),

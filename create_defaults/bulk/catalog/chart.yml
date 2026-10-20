@@ -3426,7 +3426,7 @@ definitions:
   composer:
     base_color: '#0E2A42'
     font_size: 221
-    logo: logos_chart/tracearr.png
+    logo: logos_chart/Tracearr.png
     logo_offset: -500
     logo_resize: 1500
     out_name: Tracearr Completed
@@ -3470,7 +3470,7 @@ definitions:
   composer:
     base_color: '#0E2A42'
     font_size: 201
-    logo: logos_chart/tracearr.png
+    logo: logos_chart/Tracearr.png
     logo_offset: -500
     logo_resize: 1500
     out_name: Tracearr Most Transcoded
@@ -3513,7 +3513,7 @@ definitions:
     row_sha256: c37ae8eb0c4465d081f95064564ade3f4d1cc32d519316033086b7a2a2b70c4c
   composer:
     base_color: '#0E2A42'
-    logo: logos_chart/tracearr.png
+    logo: logos_chart/Tracearr.png
     logo_offset: -500
     logo_resize: 1500
     out_name: Tracearr Popular
@@ -3557,7 +3557,7 @@ definitions:
   composer:
     base_color: '#0E2A42'
     font_size: 229
-    logo: logos_chart/tracearr.png
+    logo: logos_chart/Tracearr.png
     logo_offset: -500
     logo_resize: 1500
     out_name: Tracearr Rewatched
@@ -3600,7 +3600,7 @@ definitions:
     row_sha256: 5d8e4ad7ee569a1631e1123d1811b3e18650e7bef0fcd7d69643ebe4fd6499e9
   composer:
     base_color: '#0E2A42'
-    logo: logos_chart/tracearr.png
+    logo: logos_chart/Tracearr.png
     logo_offset: -500
     logo_resize: 1500
     out_name: Tracearr Trending
@@ -3643,7 +3643,7 @@ definitions:
     row_sha256: 0f0e63e27927a66923a4aecceded98d4e818cd934957c134a087d0a13adc2fd8
   composer:
     base_color: '#0E2A42'
-    logo: logos_chart/tracearr.png
+    logo: logos_chart/Tracearr.png
     logo_offset: -500
     logo_resize: 1500
     out_name: Tracearr Watched
@@ -3686,7 +3686,7 @@ definitions:
     row_sha256: ad2c433242af8e5a924e6cc93b55617a94c5862705c666228cfa4eb426e335fa
   composer:
     base_color: '#0E2A42'
-    logo: logos_chart/tracearr.png
+    logo: logos_chart/Tracearr.png
     logo_offset: -500
     logo_resize: 1500
     out_name: Tracearr Binged
@@ -7771,7 +7771,7 @@ definitions:
     row_sha256: dfad1c01a8bb28622dcadbff1fe64f4a8af52dd1682ad3c1a3108c10b5a6d834
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_1
@@ -8330,7 +8330,7 @@ definitions:
     row_sha256: 24d13a4f6213bb527f126a394353b6c4403eb00c5e831ba0703dbe3918640da3
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_2
@@ -8889,7 +8889,7 @@ definitions:
     row_sha256: 7b0689a99f216b031db93154b349a0386b6ba8eed71e193d06dfe614f8c42df2
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_3
@@ -9448,7 +9448,7 @@ definitions:
     row_sha256: 15ef3c296a482f04ee522de261ac2e239da9b1172d619d3ca6ead82bd40e8b20
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_4
@@ -10007,7 +10007,7 @@ definitions:
     row_sha256: b5b771c402ca482e20ada948879d3dcf8c9168bed1577f958a93fa0c4552a7b5
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_5
@@ -10566,7 +10566,7 @@ definitions:
     row_sha256: 6e118fe75d9fcce3eaa68086f6bc3410887002a313159ff470e0f7adf82da4ee
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_6
@@ -11125,7 +11125,7 @@ definitions:
     row_sha256: 6679fc4b1a29daf6b9301dfa3138111dfd3886197bac0c67672e2ff8a6907455
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_7
@@ -11684,7 +11684,7 @@ definitions:
     row_sha256: dcf2332268b753216292400eeda02ff42717ff6732f52f6440f5e1d44e74ea68
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_8
@@ -12243,7 +12243,7 @@ definitions:
     row_sha256: 41e443dcc0b2f2ce644ae5164766beadb5b92c869663b4e0a6226d6e3a24825d
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_9
@@ -12802,7 +12802,7 @@ definitions:
     row_sha256: 96d7e2f333d89ca940818903aa2186969936b38d80557a7a20de1f433dde235f
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_10
@@ -13404,7 +13404,7 @@ definitions:
     row_sha256: e663369ecd235ede094d94cb8b8f992748435c7988ffaf0a467caa149a156f67
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top
@@ -13963,7 +13963,7 @@ definitions:
     row_sha256: c702415b041200c5414e0528b845981c4a4f3870231ea44320c246c05968f90d
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_11
@@ -14522,7 +14522,7 @@ definitions:
     row_sha256: 8b331117bb6a17efce121c6305452f0f41801865a881b99c367d2066b9860d45
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_12
@@ -15081,7 +15081,7 @@ definitions:
     row_sha256: 47908a9fcf58d112cbf1a6b6a431d616ac2cf0a26436b1706e4f636838503091
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_13
@@ -15640,7 +15640,7 @@ definitions:
     row_sha256: 6ee42f550421a66b5f473ea13b8cbf0f92a5ddc7ac2babbbeb6a27ef1b3f5ab4
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_14
@@ -16199,7 +16199,7 @@ definitions:
     row_sha256: e64f33f0c97fd68b4db357bb6e227f28d2031e46b0796fdf310167967aae3183
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_15
@@ -16758,7 +16758,7 @@ definitions:
     row_sha256: 4fcd88c82add76462e8325a91f3fc55a4b21c452558877e1401e340f71dc4910
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_16
@@ -17317,7 +17317,7 @@ definitions:
     row_sha256: 20807b6e7f7552311f0e56f2fdc98ed31794826f64213fe4c179c47dde186e43
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_17
@@ -17876,7 +17876,7 @@ definitions:
     row_sha256: bcdd4ddaa69a8ff74c96cc66962889ddab02f828dcc9abce56cec60f7677144d
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_18
@@ -18435,7 +18435,7 @@ definitions:
     row_sha256: 749f5cca64389c14b6385ed08e53f549543c7bd8407f617024fa6d1cb697f62c
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_19
@@ -18994,7 +18994,7 @@ definitions:
     row_sha256: 5992402961a23f61f5a2d9858babebf4daa0877d6cb98d1504a110a3bc6b3bd2
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_20
@@ -19553,7 +19553,7 @@ definitions:
     row_sha256: ab6dcbc1f79bb21a0eb41db33c7b39982c09a5c97de9171a49ace7d479650b3c
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_21
@@ -20112,7 +20112,7 @@ definitions:
     row_sha256: fd4af71ca721d21114c0facd163e817d654a4980248c2cf9f67021f734072617
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_22
@@ -20671,7 +20671,7 @@ definitions:
     row_sha256: 1f858a67b6e55b4af99541b7d135e8c57e9c4973b23d51e7a999ab4253d8b40c
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_23
@@ -21230,7 +21230,7 @@ definitions:
     row_sha256: 4743fde6a82f1ee5d2ae1959d7be0a72ef8e5576cfedf6930c844b781a4eb650
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_24
@@ -21789,7 +21789,7 @@ definitions:
     row_sha256: c9c1113bda5728b2bc67e326e689999754e4ea01175a18d489c0bd72a5b35739
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_25
@@ -22348,7 +22348,7 @@ definitions:
     row_sha256: c24a27885ded01c6cf90873a8b0116a60f71b1e24c7111909a9268bbcc412770
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_26
@@ -22907,7 +22907,7 @@ definitions:
     row_sha256: 13986fad8cbb51cc93511fee49633eb5cb8aea89250c40ea5b547fb77f2d3015
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_27
@@ -23466,7 +23466,7 @@ definitions:
     row_sha256: f1a28ef162a7972d700f57925df266e88905c3ea9489e12423ee1bd44db4235f
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_28
@@ -24025,7 +24025,7 @@ definitions:
     row_sha256: 069dcd1b4cef40518329255f853346b49f0a10e1e3623c1fa3d57f3de1a23dad
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_29
@@ -24584,7 +24584,7 @@ definitions:
     row_sha256: 57eca5549db4c681e9f77cb1cfc12a8bd877c518d86001ca1bb41474a4d1e7c9
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/Hulu.png
+    logo: logos_chart/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_30
@@ -28082,7 +28082,7 @@ definitions:
     row_sha256: 703c1083b6e6a1e03ff9f80a8ec6b1032f9a86908bf930a98f6ffcb326cd83ff
   composer:
     base_color: '#FF7E17'
-    logo: logos_chart/white/aniDB.png
+    logo: logos_chart/white/AniDB.png
     logo_offset: -500
     logo_resize: 1800
     out_name: AniDB Popular
@@ -28859,7 +28859,7 @@ definitions:
   composer:
     base_color: '#0E2A42'
     font_size: 221
-    logo: logos_chart/white/tracearr.png
+    logo: logos_chart/white/Tracearr.png
     logo_offset: -500
     logo_resize: 1500
     out_name: Tracearr Completed
@@ -28903,7 +28903,7 @@ definitions:
   composer:
     base_color: '#0E2A42'
     font_size: 201
-    logo: logos_chart/white/tracearr.png
+    logo: logos_chart/white/Tracearr.png
     logo_offset: -500
     logo_resize: 1500
     out_name: Tracearr Most Transcoded
@@ -28946,7 +28946,7 @@ definitions:
     row_sha256: c37ae8eb0c4465d081f95064564ade3f4d1cc32d519316033086b7a2a2b70c4c
   composer:
     base_color: '#0E2A42'
-    logo: logos_chart/white/tracearr.png
+    logo: logos_chart/white/Tracearr.png
     logo_offset: -500
     logo_resize: 1500
     out_name: Tracearr Popular
@@ -28990,7 +28990,7 @@ definitions:
   composer:
     base_color: '#0E2A42'
     font_size: 229
-    logo: logos_chart/white/tracearr.png
+    logo: logos_chart/white/Tracearr.png
     logo_offset: -500
     logo_resize: 1500
     out_name: Tracearr Rewatched
@@ -29033,7 +29033,7 @@ definitions:
     row_sha256: 5d8e4ad7ee569a1631e1123d1811b3e18650e7bef0fcd7d69643ebe4fd6499e9
   composer:
     base_color: '#0E2A42'
-    logo: logos_chart/white/tracearr.png
+    logo: logos_chart/white/Tracearr.png
     logo_offset: -500
     logo_resize: 1500
     out_name: Tracearr Trending
@@ -29076,7 +29076,7 @@ definitions:
     row_sha256: 0f0e63e27927a66923a4aecceded98d4e818cd934957c134a087d0a13adc2fd8
   composer:
     base_color: '#0E2A42'
-    logo: logos_chart/white/tracearr.png
+    logo: logos_chart/white/Tracearr.png
     logo_offset: -500
     logo_resize: 1500
     out_name: Tracearr Watched
@@ -29119,7 +29119,7 @@ definitions:
     row_sha256: ad2c433242af8e5a924e6cc93b55617a94c5862705c666228cfa4eb426e335fa
   composer:
     base_color: '#0E2A42'
-    logo: logos_chart/white/tracearr.png
+    logo: logos_chart/white/Tracearr.png
     logo_offset: -500
     logo_resize: 1500
     out_name: Tracearr Binged
@@ -33204,7 +33204,7 @@ definitions:
     row_sha256: dfad1c01a8bb28622dcadbff1fe64f4a8af52dd1682ad3c1a3108c10b5a6d834
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_1
@@ -33763,7 +33763,7 @@ definitions:
     row_sha256: 24d13a4f6213bb527f126a394353b6c4403eb00c5e831ba0703dbe3918640da3
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_2
@@ -34322,7 +34322,7 @@ definitions:
     row_sha256: 7b0689a99f216b031db93154b349a0386b6ba8eed71e193d06dfe614f8c42df2
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_3
@@ -34881,7 +34881,7 @@ definitions:
     row_sha256: 15ef3c296a482f04ee522de261ac2e239da9b1172d619d3ca6ead82bd40e8b20
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_4
@@ -35440,7 +35440,7 @@ definitions:
     row_sha256: b5b771c402ca482e20ada948879d3dcf8c9168bed1577f958a93fa0c4552a7b5
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_5
@@ -35999,7 +35999,7 @@ definitions:
     row_sha256: 6e118fe75d9fcce3eaa68086f6bc3410887002a313159ff470e0f7adf82da4ee
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_6
@@ -36558,7 +36558,7 @@ definitions:
     row_sha256: 6679fc4b1a29daf6b9301dfa3138111dfd3886197bac0c67672e2ff8a6907455
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_7
@@ -37117,7 +37117,7 @@ definitions:
     row_sha256: dcf2332268b753216292400eeda02ff42717ff6732f52f6440f5e1d44e74ea68
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_8
@@ -37676,7 +37676,7 @@ definitions:
     row_sha256: 41e443dcc0b2f2ce644ae5164766beadb5b92c869663b4e0a6226d6e3a24825d
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_9
@@ -38235,7 +38235,7 @@ definitions:
     row_sha256: 96d7e2f333d89ca940818903aa2186969936b38d80557a7a20de1f433dde235f
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_10
@@ -38837,7 +38837,7 @@ definitions:
     row_sha256: e663369ecd235ede094d94cb8b8f992748435c7988ffaf0a467caa149a156f67
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top
@@ -39396,7 +39396,7 @@ definitions:
     row_sha256: c702415b041200c5414e0528b845981c4a4f3870231ea44320c246c05968f90d
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_11
@@ -39955,7 +39955,7 @@ definitions:
     row_sha256: 8b331117bb6a17efce121c6305452f0f41801865a881b99c367d2066b9860d45
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_12
@@ -40514,7 +40514,7 @@ definitions:
     row_sha256: 47908a9fcf58d112cbf1a6b6a431d616ac2cf0a26436b1706e4f636838503091
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_13
@@ -41073,7 +41073,7 @@ definitions:
     row_sha256: 6ee42f550421a66b5f473ea13b8cbf0f92a5ddc7ac2babbbeb6a27ef1b3f5ab4
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_14
@@ -41632,7 +41632,7 @@ definitions:
     row_sha256: e64f33f0c97fd68b4db357bb6e227f28d2031e46b0796fdf310167967aae3183
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_15
@@ -42191,7 +42191,7 @@ definitions:
     row_sha256: 4fcd88c82add76462e8325a91f3fc55a4b21c452558877e1401e340f71dc4910
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_16
@@ -42750,7 +42750,7 @@ definitions:
     row_sha256: 20807b6e7f7552311f0e56f2fdc98ed31794826f64213fe4c179c47dde186e43
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_17
@@ -43309,7 +43309,7 @@ definitions:
     row_sha256: bcdd4ddaa69a8ff74c96cc66962889ddab02f828dcc9abce56cec60f7677144d
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_18
@@ -43868,7 +43868,7 @@ definitions:
     row_sha256: 749f5cca64389c14b6385ed08e53f549543c7bd8407f617024fa6d1cb697f62c
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_19
@@ -44427,7 +44427,7 @@ definitions:
     row_sha256: 5992402961a23f61f5a2d9858babebf4daa0877d6cb98d1504a110a3bc6b3bd2
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_20
@@ -44986,7 +44986,7 @@ definitions:
     row_sha256: ab6dcbc1f79bb21a0eb41db33c7b39982c09a5c97de9171a49ace7d479650b3c
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_21
@@ -45545,7 +45545,7 @@ definitions:
     row_sha256: fd4af71ca721d21114c0facd163e817d654a4980248c2cf9f67021f734072617
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_22
@@ -46104,7 +46104,7 @@ definitions:
     row_sha256: 1f858a67b6e55b4af99541b7d135e8c57e9c4973b23d51e7a999ab4253d8b40c
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_23
@@ -46663,7 +46663,7 @@ definitions:
     row_sha256: 4743fde6a82f1ee5d2ae1959d7be0a72ef8e5576cfedf6930c844b781a4eb650
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_24
@@ -47222,7 +47222,7 @@ definitions:
     row_sha256: c9c1113bda5728b2bc67e326e689999754e4ea01175a18d489c0bd72a5b35739
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_25
@@ -47781,7 +47781,7 @@ definitions:
     row_sha256: c24a27885ded01c6cf90873a8b0116a60f71b1e24c7111909a9268bbcc412770
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_26
@@ -48340,7 +48340,7 @@ definitions:
     row_sha256: 13986fad8cbb51cc93511fee49633eb5cb8aea89250c40ea5b547fb77f2d3015
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_27
@@ -48899,7 +48899,7 @@ definitions:
     row_sha256: f1a28ef162a7972d700f57925df266e88905c3ea9489e12423ee1bd44db4235f
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_28
@@ -49458,7 +49458,7 @@ definitions:
     row_sha256: 069dcd1b4cef40518329255f853346b49f0a10e1e3623c1fa3d57f3de1a23dad
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_29
@@ -50017,7 +50017,7 @@ definitions:
     row_sha256: 57eca5549db4c681e9f77cb1cfc12a8bd877c518d86001ca1bb41474a4d1e7c9
   composer:
     base_color: '#1BB68A'
-    logo: logos_chart/white/Hulu.png
+    logo: logos_chart/white/hulu.png
     logo_offset: -500
     logo_resize: 1500
     out_name: hulu_top_30

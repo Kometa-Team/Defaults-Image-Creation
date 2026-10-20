@@ -87,6 +87,9 @@ def confined(root, relative, *, must_exist=False):
         raise BulkError("unsafe_path", "Path escapes its declared root")
     if must_exist and not path.is_file():
         raise BulkError("missing_input", f"Required input is missing: {relative}")
+    if must_exist:
+        from .asset_cases import exact
+        path = exact(root, relative)
     return path
 
 

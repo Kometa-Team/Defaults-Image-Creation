@@ -40,6 +40,9 @@ def remote_head(repo, branch):
 
 def gate(plan, authorization):
     check_seal(plan);check_seal(authorization)
+    if authorization.get('kind') == 'approved-operator-draft-staging':
+        from .operator_publication import gate as operator_gate
+        return operator_gate(plan, authorization)
     if (plan.get('kind')!='local-git-batch-plan' or authorization.get('kind')!='approved-draft-staging-authorization'
             or authorization.get('plan_sha256')!=plan['sha256']
             or authorization.get('baseline')!=plan['baseline']
@@ -53,6 +56,8 @@ def gate(plan, authorization):
         raise BulkError('missing_authorization','Exact approved plan, draft branch and operation authorization required')
     members=[m for b in plan['batches'] for m in b['members']]
     validate_paths(members)
+    if any(m.get('previous_sha256') is None for m in members):
+        raise BulkError('mapping_approval_required', 'Legacy migration authorizations permit replacements only')
     receipt=check_seal(authorization.get('approval_receipt',{}))
     approved={m['destination']:(m['candidate_sha256'],m['published_sha256'],m['context_sha256']) for m in receipt.get('members',[])}
     actual={m['destination']:(m['sha256'],m['previous_sha256'],m['context_sha256']) for m in members}
@@ -124,13 +129,21 @@ def verify_diff(repo,before,after,members):
     """Complete raw Git diff, including old/new modes and both blob identities."""
     output=git(repo,'diff-tree','--no-commit-id','--raw','--no-abbrev','--no-renames','-r','-z',before,after).split(b'\0')
     actual={}
+    expected = {}
+    zero = '0' * 40
+    for m in members:
+        old_path = m.get('rename_from')
+        if old_path:
+            expected[old_path] = (':100644', '000000', m['previous_git_blob'], zero, 'D')
+            expected[m['destination']] = (':000000', '100644', zero, m['git_blob'], 'A')
+        elif m.get('previous_sha256') is None:
+            expected[m['destination']] = (':000000', '100644', zero, m['git_blob'], 'A')
+        else:
+            expected[m['destination']] = (':100644', '100644', m['previous_git_blob'], m['git_blob'], 'M')
     for n in range(0,len(output)-1,2):
         mode1,mode2,old,new,status=output[n].decode().split()
         path=output[n+1].decode('utf-8')
-        if (mode1,mode2,status)!=(':100644','100644','M'):
-            raise BulkError('unexpected_diff','Only ordinary modified image files may change')
-        actual[path]=(old,new)
-    expected={m['destination']:(m['previous_git_blob'],m['git_blob']) for m in members}
+        actual[path]=(mode1,mode2,old,new,status)
     if actual!=expected:
         raise BulkError('unexpected_diff','Complete Git diff differs from approved image membership')
     content=git(repo,'cat-file','--batch',data=b''.join((after+':'+m['destination']+'\n').encode('utf-8') for m in members))
@@ -154,6 +167,7 @@ def initialize(root,plan,auth,remote):
         return work
     subprocess.run(['git','init',str(work)],check=True,capture_output=True)
     for key,value in {'core.autocrlf':'false','core.filemode':'false','core.longpaths':'true',
+        'core.ignorecase':'false',
         'core.hooksPath':str(root/'no-hooks'),'gc.auto':'0','maintenance.auto':'false',
         'pack.window':'0','pack.threads':'2','pack.compression':'1',
         'user.name':'Kometa approved poster migration','user.email':'bullmoose20@users.noreply.github.com'}.items():
@@ -254,11 +268,15 @@ def run(plan,authorization,root,*,test_remote=None,verify_remote=None,guard=None
                 raise BulkError('copy_hash','Stored Git bytes differ from exact approved candidate blobs')
             # Index-only staging avoids a second full artwork worktree. Every
             # object is independently SHA-256 verified from the resulting commit.
+            removals = b''.join(('0 ' + '0' * 40 + '\t' + m['rename_from']).encode('utf-8') + b'\0'
+                                for m in batch['members'] if m.get('rename_from'))
+            if removals:
+                git(repo,'update-index','-z','--index-info',data=removals)
             index=b''.join(('100644 '+m['git_blob']+'\t'+m['destination']).encode('utf-8')+b'\0' for m in batch['members'])
             git(repo,'update-index','-z','--index-info',data=index)
             paths=b''.join(m['destination'].encode('utf-8')+b'\0' for m in batch['members'])
             git(repo,'update-index','--skip-worktree','-z','--stdin',data=paths)
-            git(repo,'commit','--quiet','-m',f"Approved English Python replacement batch {n+1}/{len(plan['batches'])}: {batch['membership_sha256']}")
+            git(repo,'commit','--quiet','-m',f"Approved Python artwork batch {n+1}/{len(plan['batches'])}: {batch['membership_sha256']}")
             commit=git(repo,'rev-parse','HEAD').decode().strip();chain.append(commit)
             verify_diff(repo,before,commit,batch['members'])
             if fail_at=='after_commit':raise BulkError('injected_interruption','After commit before checkpoint')
@@ -387,13 +405,20 @@ def final_remote_diff(root,plan,auth,report):
     after={e['path']:(e['sha'],e['mode'],e['type']) for e in actual['tree'] if e['type']!='tree'}
     members=[m for b in plan['batches'] for m in b['members']]
     expected=dict(original)
-    for m in members:expected[m['destination']]=(m['git_blob'],'100644','blob')
+    for m in members:
+        if m.get('rename_from'):
+            if m['rename_from'] not in expected:
+                raise BulkError('unexpected_remote_diff', 'Approved rename source is absent')
+            del expected[m['rename_from']]
+        expected[m['destination']]=(m['git_blob'],'100644','blob')
     if after!=expected:raise BulkError('unexpected_remote_diff','Complete remote file tree differs from approved modifications')
-    changes={p for p in after if after[p]!=original[p]}
+    changes={p for p in after if after[p]!=original.get(p)}
     if changes!={m['destination'] for m in members}:raise BulkError('unexpected_remote_diff','Modified file count/membership differs')
     if client.head(auth['branch'])!=(head,tree):raise BulkError('remote_drift','Remote moved during tree audit')
-    result=sealed({'baseline':plan['baseline'],'head':head,'tree':tree,'modified':len(changes),
-        'additions':0,'deletions':0,'renames':0,'unexpected_paths':[],
+    renames = sum(bool(m.get('rename_from')) for m in members)
+    additions = len(set(after) - set(original)) - renames
+    result=sealed({'baseline':plan['baseline'],'head':head,'tree':tree,'modified':len(changes)-additions-renames,
+        'additions':additions,'deletions':0,'renames':renames,'unexpected_paths':[],
         'all_remote_blob_identities_match':True,'actual_response_hash_receipts':len(members)})
     save(Path(root)/'complete-remote-diff.json',result)
     return result

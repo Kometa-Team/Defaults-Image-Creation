@@ -304,7 +304,11 @@ def validate_manifest(manifest, assets=ROOT, *, source_root=None):
         if text_digest(source_root / name) != checksum:
             raise ValueError(f"Frozen renderer/source changed: {name}")
     for path, checksum in manifest["asset_hashes"].items():
-        if checksum is not None and digest(assets / path) != checksum:
+        try:
+            from create_defaults.bulk.asset_cases import historical
+        except ImportError:
+            from bulk.asset_cases import historical
+        if checksum is not None and digest(historical(assets, path, checksum)) != checksum:
             raise ValueError(f"Frozen asset changed: {path}")
     for font in manifest["fonts"].values():
         if digest(assets / font["path"]) != font["sha256"]:

@@ -159,7 +159,7 @@ definitions:
     row_sha256: dedd3e1ec9329948ece8c3db2f7727f1e29f7db3805ed8be659b2b0b815bcb9c
   composer:
     base_color: '#FF7D13'
-    logo: logos_content_rating/uk12a.png
+    logo: logos_content_rating/uk12A.png
     logo_resize: 1500
     out_name: 12A
   output:
@@ -934,7 +934,7 @@ definitions:
     row_sha256: 65d37444bf6694456055103ad5af75f2681ca0dd82b29273597179c3ed59388d
   composer:
     base_color: '#FF0000'
-    logo: logos_content_rating/nz_rp18.png
+    logo: logos_content_rating/nz_RP18.png
     logo_resize: 1500
     out_name: RP18
   output:

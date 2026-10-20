@@ -9,7 +9,8 @@ from .workers import PersistentWorkers, WorkerLimits, tasks_from_manifest
 
 def generate(definitions, translations, *, config=None, limits=None, generators=None,
              categories=(), posters=(), languages=("en",), cancel=None, retry_failed=False,
-             policy="partial", registry=None, color_registry=None, preview_ids=None, variant_ids=None, preview_selection=None):
+             policy="partial", registry=None, color_registry=None, preview_ids=None, variant_ids=None, preview_selection=None,
+             cache_only=False):
     config = config or Config()
     planner = Planner(config, generators=generators, scope="Package D preflight-validated local output; rendering is not approval or publication")
     if registry is not None:
@@ -117,7 +118,7 @@ def generate(definitions, translations, *, config=None, limits=None, generators=
                 scoped = tuple(value for (identity, lang), value in effective.items() if lang == language and variant_id(identity, lang) in eligible)
                 # Parents are planned only after their bytes have been verified.
                 manifest = planner.plan(scoped, translations, posters=ready, languages=[language], dependency_artifacts=artifacts)
-                result = pool.run(tasks_from_manifest(manifest), cancel=cancel, retry_failed=retry_failed)
+                result = pool.run(tasks_from_manifest(manifest), cancel=cancel, retry_failed=retry_failed, cache_only=cache_only)
                 stages.append({"depth": depth, "manifest": manifest, "execution": result})
                 if any(item["status"] not in {"rendered", "cache_reuse", "dedup_reuse"} for item in result["jobs"].values()):
                     return {"status": "incomplete", "stages": stages, "preflight": report}
