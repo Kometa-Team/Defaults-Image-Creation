@@ -1,0 +1,90 @@
+{
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "active": [
+    {
+      "poster_id": "videoformat.video-format-bluray.e477ac75",
+      "legacy_id": "videoformat-09651-1f997075c817",
+      "job_sha256": "33d48ce1d30a80355bf77abc6d10ec3b4cef1f64f6a9c2aef55e9b09c066073b",
+      "source": {
+        "definition_line": 6601,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6618
+      },
+      "row_sha256": "be7eccd49901491b71bd656b674be1ee0c2c59539e7e5238419888b2dc399699",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "videoformat.video-format-dvd.a5204bbe",
+      "legacy_id": "videoformat-09652-d56e1016247e",
+      "job_sha256": "c399b3dc8ae32888e051dfe9f527c1927017c0056cee48ded858a35eb8d0630a",
+      "source": {
+        "definition_line": 6602,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6618
+      },
+      "row_sha256": "91143ef46f19c473dd5c31d1ab2f0632f6f4e8254781573cab59450ecde76157",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "videoformat.video-format-hdtv.40cad2e5",
+      "legacy_id": "videoformat-09653-2b0b364d9947",
+      "job_sha256": "e942d2dd6914688dd39d05893d43f83c65b05ceaebd801532d51aa4e4eb80728",
+      "source": {
+        "definition_line": 6603,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6618
+      },
+      "row_sha256": "6d680929cc343f3943dd16cee180222ee025901358b0e238c3a7d1007ff924d6",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "videoformat.video-format-moviesanywhere.c30994c4",
+      "legacy_id": "videoformat-09654-de522f1e8ff7",
+      "job_sha256": "6dee7861d6aaa6ec1f8aed7fe8c616361ad1d992e66dd8de2ca94e74e1e8f2ee",
+      "source": {
+        "definition_line": 6604,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6618
+      },
+      "row_sha256": "98df0d0eae196c53ad26debcfd146298120a7d2cefaf546a4c0f16618f331288",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "videoformat.video-format-remux.688bba6b",
+      "legacy_id": "videoformat-09655-c82ae9eefc35",
+      "job_sha256": "92a99794e48eead7c65eadb7f9e67fd4ef0c78601b0c5e83abd234d4983e470f",
+      "source": {
+        "definition_line": 6605,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6618
+      },
+      "row_sha256": "4d376651fc6bc862d2164f01266d1ca5dc104d232ae30c342be72c75fd70881e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "videoformat.video-format-web.21875add",
+      "legacy_id": "videoformat-09656-15e74616527f",
+      "job_sha256": "eaf894c1564d119331df8533cd5b831cf5113b7d2357a424605178e95426a74a",
+      "source": {
+        "definition_line": 6606,
+        "path": "create_default_posters.ps1",
+        "producer_line": 6618
+      },
+      "row_sha256": "d88ecbc8cb23aec5034c53bdfd8e50ec386511ff3b8db3e3a32dd4eefe7d01a8",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    }
+  ],
+  "retired": []
+}

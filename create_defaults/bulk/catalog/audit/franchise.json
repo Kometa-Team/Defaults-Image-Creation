@@ -1,0 +1,1658 @@
+{
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "active": [
+    {
+      "poster_id": "franchise.franchise-spartacus.01bcc280",
+      "legacy_id": "franchise-06941-e8896cadaffa",
+      "job_sha256": "69297285d6bb42ace6a74b4e700e693eba2835852fdad1a3baa918d7d96edf7b",
+      "source": {
+        "definition_line": 4489,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "1ed7630a7382de449a427b5a6756067b1812bb71c023f0ff143d42737499adf0",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-reacher.95f21e9f",
+      "legacy_id": "franchise-06942-c1bc2582545e",
+      "job_sha256": "fe07f62d340b81dee68f0d8fc49640c55b0ef6aa6f30c7c7679b673f66f00cf5",
+      "source": {
+        "definition_line": 4490,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "358cf25442595e6dc896b3ca085fcf77303e3c8537ed5d296f4bbe3433f72b3c",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-inspector-morse.004a087c",
+      "legacy_id": "franchise-06943-7e79b868a5bf",
+      "job_sha256": "8d27644b64ab0bde6dcff0056b128ecf29fc23a91209a2aa79f2572d679fa167",
+      "source": {
+        "definition_line": 4491,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "85d08226e3528fd0b472bb5555bf006a1559467fc2aeeb1a47941db5e9b1b63c",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-father-brown.4a26f656",
+      "legacy_id": "franchise-06944-945f29ea1c45",
+      "job_sha256": "4ee7d1c9553511392d2f3ea6bd0df47d9f986ec42595afc94aabdfd792d5a63d",
+      "source": {
+        "definition_line": 4492,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "2aa363b3cfff1fd4e311e64ee162d1b544840b3b753126fbbfd6725f89080b29",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-death-in-paradise-2011.e5339def",
+      "legacy_id": "franchise-06945-8e8134ef709a",
+      "job_sha256": "77ef766f37025bdb68240b34fe929dd4c3bbb5ae021577f5811bdefbe6fcb1ed",
+      "source": {
+        "definition_line": 4493,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "540a6b163e5ee4755e63efc9949ce61339cdd9c3fa43b813dc3abda589d75e40",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-john-wick.608715da",
+      "legacy_id": "franchise-06946-c949db886c1e",
+      "job_sha256": "bb34d8ffeb3689e5d55a6b9dc5103dfcc4dfed3e66f460fd5509de4863b0f6d9",
+      "source": {
+        "definition_line": 4494,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "bbd861584d10f46148dec4f365d62e6d6d152666c79aa359fcc4f2faea2a9a5b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-john-wick2.6da235fa",
+      "legacy_id": "franchise-06947-15a548a31724",
+      "job_sha256": "486be63bc10ce1258d5c379138c427c2f73692fb19c09f538c80072f7c53f964",
+      "source": {
+        "definition_line": 4495,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "5fb690dfbf702c207bdaa7637c6af799a66d87d8c1d4185421783a112c06e233",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-bosch.05307794",
+      "legacy_id": "franchise-06948-6f8ad73d571c",
+      "job_sha256": "bc88216215fed647c3909846ba3b8ba2f86995fcd6cb2cd5266a065f97657224",
+      "source": {
+        "definition_line": 4496,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "417053dbf7aef895f58f00c0d718111dba63e680ba16d4877a895df1afda7e82",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-hellboy.9b3b389c",
+      "legacy_id": "franchise-06949-2b775723ed4f",
+      "job_sha256": "fd6af07ddafd5b98c4b0c94f374a233cb318031dc3b7422e577e23e1cc67428f",
+      "source": {
+        "definition_line": 4497,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "be8ebecef85c2920d0707c1b42652da0c8e9a3542060f9c252853547310fc67f",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-robocop.079b602d",
+      "legacy_id": "franchise-06950-347dcb24f003",
+      "job_sha256": "e5bb5f2f5e06b9e7756c703554703a9f996af659b8b9310635c1031fd9cf38e8",
+      "source": {
+        "definition_line": 4498,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "6391a096abeee4af679398a9f44e564d18d10976b2fa04256b48431557d35601",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-28-days-weeks-later.ef9f23c8",
+      "legacy_id": "franchise-06951-e0e921a9e9a3",
+      "job_sha256": "ce4b72479064971b3357db2d9baae4ee3b29a542c68f7da7488caaae33bcd519",
+      "source": {
+        "definition_line": 4499,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "010aac06d65a5ec18e830607cae115e1701d8663af86a1d2e3ae27149c673293",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-power.cd51a6b5",
+      "legacy_id": "franchise-06952-64ba2e07b7f9",
+      "job_sha256": "1668f7c3ed64cf64cce43f04908b41197eff856ea54e0713cc5c6a67b51a87ab",
+      "source": {
+        "definition_line": 4500,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "bb84c957f77ff64c64dabb332972410475a74306fb325116f373943e39468854",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-game-of-thrones.2a6e1294",
+      "legacy_id": "franchise-06953-a89e0dd532b8",
+      "job_sha256": "4642e81f45b5a311dde57c9c74e717c55dfe3a5dd880cc0263f87343571ee0e1",
+      "source": {
+        "definition_line": 4501,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "7d2b073862048cb521ab4d4285754002c25554215af9117f58a878e9f4b8306c",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-9-1-1.baa7affb",
+      "legacy_id": "franchise-06954-101141ba6a49",
+      "job_sha256": "c58415d89f1d9f7f602fa7b1f7519611f6f402bc9c03893e80c9f7cce84e751e",
+      "source": {
+        "definition_line": 4502,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "297feabd2c167ce5775aca32c4af3ac96f9dfea3fe8f2ab00802ed7f1fdd344d",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-a-nightmare-on-elm-street.9b8e42ba",
+      "legacy_id": "franchise-06955-059142b216d0",
+      "job_sha256": "171e8d5f080d202277d6ec0db62f1fa232d2b5d13ee33ab3e18ef7e1d378cd52",
+      "source": {
+        "definition_line": 4503,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "035367e48ff089d545f5faac80874ffcfa2896ae63566b063f8243cb8915f87d",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-alien-predator.54f5113e",
+      "legacy_id": "franchise-06956-a1056a74ee52",
+      "job_sha256": "3712e5c050f3ac3f66854136fea414375861d12cadd42e26554225a0b4443d1d",
+      "source": {
+        "definition_line": 4504,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "07ed7d3da939a810d557266fe0ee07be9f16aa47f12567d52d47207d9cf17e2b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-alien.f5932699",
+      "legacy_id": "franchise-06957-cc59a23e7ef4",
+      "job_sha256": "f47c8e786b3de50750c685ba8747d888d6e2a2296f167399ab5371d31ecc9578",
+      "source": {
+        "definition_line": 4505,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "582aa0cc6af16853589bdda2045269a0ee6561330a0165303d5f0095c222e500",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-american-pie.80d27367",
+      "legacy_id": "franchise-06958-7eaf77a146eb",
+      "job_sha256": "1c93cafd1a41bbf9feb5a038f1a6fcf7ed32af86ede5967db8570acb82adae82",
+      "source": {
+        "definition_line": 4506,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "3eddef34805163e2e292ead39185d3b9cb45efb1c5ba26008fea3a05e46b9c37",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-anaconda.a27b54c4",
+      "legacy_id": "franchise-06959-04b2a587b6c5",
+      "job_sha256": "6dc188325d4d58d7834de5a405f742cb8fcceda18c20329778f837c9e5afcd90",
+      "source": {
+        "definition_line": 4507,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "72c18a60fa32c03181ac73a1ab9a1cd2996c6b33f3822d9f0eee8bffe2cdbde5",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-angels-in-the.75d46005",
+      "legacy_id": "franchise-06960-34da0bb1d87d",
+      "job_sha256": "1bfb3c9d86e0569f6368103d13429b55dda3dad5bd281692f4b5f28eb692ca93",
+      "source": {
+        "definition_line": 4508,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "0a6612f677e306a0b1b07550bc214cd1458ac639606d3d5b49e185e88596e781",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-appleseed.153cbc70",
+      "legacy_id": "franchise-06961-ffd6e0421ba2",
+      "job_sha256": "c316a2cf5bcf1cd3f827e800e8e67fdf8a8f465dcaefe482403f38efa71d6927",
+      "source": {
+        "definition_line": 4509,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "2f3284c305b899fbeb779e2bdd4655a523b81235605f0eebe95b2bb259656b9c",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-archie-comics.973dd4de",
+      "legacy_id": "franchise-06962-ea6509e55526",
+      "job_sha256": "8b412b82b2ec16b38ff9c89b61da4904ef7885e8649b1730a87dabaec0d60372",
+      "source": {
+        "definition_line": 4510,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "184b7eeca7a835030ba2a8a8168d5a7b0b385c60b441f96dd4d39acde8013c5d",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-arrowverse.25e978aa",
+      "legacy_id": "franchise-06963-bb47815f98c4",
+      "job_sha256": "006c3f2246f171c243ff0be3aaa772599f8ef4823d3831db3c7a293a0b67e3f0",
+      "source": {
+        "definition_line": 4511,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "221e6d484bfd2027e552517c3dd0b81ff24797ac36dca1059a6a1f02734bceb3",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-barbershop.94a90fe3",
+      "legacy_id": "franchise-06964-a59009925467",
+      "job_sha256": "4036cadb6e360b5de4591d565ec35df188d856784cbed1c05132436421f813e2",
+      "source": {
+        "definition_line": 4512,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "a3acab858eaf70d07c20d13e902855e24e6b25b1635d226e41abac2c1aeb4f9e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-batman.63e2f2d5",
+      "legacy_id": "franchise-06965-e29d13957639",
+      "job_sha256": "e951025791740c538e81ecd0ed062ec4ef45ca55e4c73c4c8d2134cca3c46927",
+      "source": {
+        "definition_line": 4513,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "2c09f58251601a8ca40b4e34ad8b49e82178182a7d485b2ea16c28a62f897efe",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-bourne.32197673",
+      "legacy_id": "franchise-06966-04790714ea98",
+      "job_sha256": "31d002977acf80e891fd73403a2ebc3347d5e51dbbfdbc9169c1210c65d485d6",
+      "source": {
+        "definition_line": 4514,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "3228cc96f148d15d57a85fbb5162eb7a282a838d42d92df15290d2d25248b14e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-charlie-brown.cbe021bf",
+      "legacy_id": "franchise-06967-e6ab74ffd256",
+      "job_sha256": "7780a1e15c1f974f7aa482a1296e94dfde46dc78092337ba7d5a4f9e3abd46bb",
+      "source": {
+        "definition_line": 4515,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "bced4a3f85a054845fd34bb9026fa6c067e0e8b74fbf0a17758c49747171a01c",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-cloverfield.379b4284",
+      "legacy_id": "franchise-06968-f77372115329",
+      "job_sha256": "dc1ae7d3817f194c7fd8de0195b1f849cf01a963bdbe5172b5f04e723f36ae5d",
+      "source": {
+        "definition_line": 4516,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "9468e33b66e75d006d9823f5998cf01167351b04277527603af790e31719e6ea",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-cornetto-trilogy.64c0807f",
+      "legacy_id": "franchise-06969-01816d2fed66",
+      "job_sha256": "28f0c17f7c77c1be5446cf47c7d0c799aaf5a389c9a442742ae2f5e7a0bc8f3b",
+      "source": {
+        "definition_line": 4517,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "92127b8033446146a98ad1ae61884196e9fa8c02a6d4003b4b17f2cc584afaa7",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-csi.b4b6612e",
+      "legacy_id": "franchise-06970-ac7045db1cd6",
+      "job_sha256": "966fc8bf57e227201cd13567162f5fe6eef8199c0e7a0b51ee4aceb1fbfcde1a",
+      "source": {
+        "definition_line": 4518,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "7b2fa75450dae588d6d7075b89fa3fb3523d65a816d90746b21f6eba00fa1a7d",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-dc-super-hero-girls.ee422b1d",
+      "legacy_id": "franchise-06971-2ac22919aafe",
+      "job_sha256": "3a195b76bca6bdfb839216073a7eb81880c2a190c4ec1f0fefd9a30750cbd4f5",
+      "source": {
+        "definition_line": 4519,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "be303f75e790be53c1a48725d41b31ccfce3e681c10311f8b0432d62bb4b6061",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-dc-universe.9077f353",
+      "legacy_id": "franchise-06972-35a37b82999f",
+      "job_sha256": "e8ab14cb97f61317914de394386184a1c8a0688e657143a6282b13f7ef43d04f",
+      "source": {
+        "definition_line": 4520,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "2ddd5de5d8a402e05ec88f598085a201a455e959b08ed88a2e214d69b43e4a89",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-deadpool.efd33582",
+      "legacy_id": "franchise-06973-165bfc8b274d",
+      "job_sha256": "b6c11886e3064e8ec39c9b7efcef38963ac4568ea4dacb4916aa6079acc2f70d",
+      "source": {
+        "definition_line": 4521,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "a742a47920a00b650f75663f43294443e0cc365680a2a9260c990b8dd4c40df0",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-despicable-me.d810da61",
+      "legacy_id": "franchise-06974-bed38373d902",
+      "job_sha256": "f14233d6a6f35dc9700cbe62ab7b31ade08a23fb58a540d4f73981df796fc7aa",
+      "source": {
+        "definition_line": 4522,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "6f6573e284a5a30ed32e8f2e9144c2dd137a0b47410a57812be2bfb32bb1469e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-doctor-who.7fc76271",
+      "legacy_id": "franchise-06975-53d052629251",
+      "job_sha256": "3db8c4ce8d1ed92989348536cdb2a8441eff2c8a8900b1f73e16dbaaaf6f4eb8",
+      "source": {
+        "definition_line": 4523,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "69a8c1cfb371063b688c30a3171e77b334358c8466881b3a6dee5efdccf1c4f6",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-escape-from.9c76f3ed",
+      "legacy_id": "franchise-06976-eb5fb0f1cb17",
+      "job_sha256": "70ec53ae2145f812267712b195a3de6f0faf6b3cb718489329ad3b15ce78efac",
+      "source": {
+        "definition_line": 4524,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "8963bbf1267acb027c781ed84125e4b4e6fc795aacf38d758e07768c2370d760",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-fantastic-beasts.4dee9ee6",
+      "legacy_id": "franchise-06977-2283afaebbfd",
+      "job_sha256": "83098ba22c971e89baa84e164ab897c4ebdce22872e07e0e9e4a24db3b8b391a",
+      "source": {
+        "definition_line": 4525,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "70353f1fd736932ab74819caa8fb4d4d660a80096fb7160a8277bda6fbc5e511",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-fast-furious.4aada360",
+      "legacy_id": "franchise-06978-8871f41dfa91",
+      "job_sha256": "5c5bd84c3c8e2c6dfa4ba0fd7017cf99c10e151ce4f8eda6174c5695302a031b",
+      "source": {
+        "definition_line": 4526,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "9d9e30935dd9b3932b2a39b4f61cda734f97e30306aa0f8f37acf2ac89dddd45",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-fbi.f21c3866",
+      "legacy_id": "franchise-06979-e722150510a7",
+      "job_sha256": "d378312cd0c46267b66a27542285603c3b99f9cea2fca354c2ed91e8ef0c2399",
+      "source": {
+        "definition_line": 4527,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "e964d52b57f85952171991838d8282c156545629ba32b71017c2b1e5939e2db4",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-final-fantasy.d4eb6eda",
+      "legacy_id": "franchise-06980-ba149accce9a",
+      "job_sha256": "0f1a7eb038e407aedefe04b59f4855a4279d3c3077556aa13e19deebe6e8cbf3",
+      "source": {
+        "definition_line": 4528,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "98848404119a43c06a07256701d42da234d28768dd4a66d2d52a40c01812e818",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-friday-the-13th.0fdaa3d5",
+      "legacy_id": "franchise-06981-f8cf8d197237",
+      "job_sha256": "0b651b0df1c0bdd3c1b7d3ee7a194ca385dffff0dbfadc47896be40b6a931205",
+      "source": {
+        "definition_line": 4529,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "b4c64f7c404e7f9f37ffd44291d99adfb1e0c67e10b2e743965bd6f9ab94afe8",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-frozen.8b6a73c8",
+      "legacy_id": "franchise-06982-e5cde838d8f9",
+      "job_sha256": "a07c6d1e74904bee6857d954755e236ae85b80c002afa13b4a0e0b5a7df2bd88",
+      "source": {
+        "definition_line": 4530,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "dbec90efcf542d3c2485934ac4b464a6c719ca06d53355e91fa4ffc8e69cbf74",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-garfield.3c1e2555",
+      "legacy_id": "franchise-06983-d0dfa0c8b980",
+      "job_sha256": "e12afa904cf773c0d8b496ea974e7c6e984473e38b15a99c577ffa6b6f00ebfc",
+      "source": {
+        "definition_line": 4531,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "3bcd4fd66a7f3cf3ea84c261ea35cf194f5dcd966713a80ae42851ec631c7af6",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-ghostbusters.39dba724",
+      "legacy_id": "franchise-06984-d88288095144",
+      "job_sha256": "6f10edd76a12d5a3b8ae3d8332edfff147e593443e530e9fdf2b48a5bf36b34c",
+      "source": {
+        "definition_line": 4532,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "4dd2a3c1e32d0bb155757e19850093cd1e66ddbb9021a4af3f63a1fd324f1a64",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-godzilla-heisei.ded5486e",
+      "legacy_id": "franchise-06985-7d079267ca5b",
+      "job_sha256": "3046c0963e797dde7b00ce5429081ca798be0091c71eddf76f3c3dcfa42bc0aa",
+      "source": {
+        "definition_line": 4533,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "fd1474a1dc2383b030b7f78b25704b4565dbefe1a737f169f1f89ab609cec2fd",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-godzilla-showa.29a42054",
+      "legacy_id": "franchise-06986-8c8533272f85",
+      "job_sha256": "bca581ec13d6d19757198dff3f71d9855a21180e1a1c55e6106924a24eddb7bc",
+      "source": {
+        "definition_line": 4534,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "35c0e00a020a1a1d47bf746cfc3232ee9f417a13070f671a56dd198d009cb7de",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-godzilla.772fd74c",
+      "legacy_id": "franchise-06987-a0af7c4cf66f",
+      "job_sha256": "e26b0b324838222c35a45992086f2cc913e3ccb7b1791f99c929d4348875a141",
+      "source": {
+        "definition_line": 4535,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "f97a3aa80248f882ca874835d4a03ddd5116ad54659793a845d52a6bd09241aa",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-halloween.06521065",
+      "legacy_id": "franchise-06988-987bace4e6eb",
+      "job_sha256": "82594ab486b91678b72705d959836a68ec522ca0733e9eb1927f4473381c2b88",
+      "source": {
+        "definition_line": 4536,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "1b7a8d79988923810ceb483908836620178093526e5e4349a7b730d600bd4929",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-halo.17f46414",
+      "legacy_id": "franchise-06989-8993eee91946",
+      "job_sha256": "3c3ef261ee6503ce92cdfdf71b7aa93e2736c44cc295b92209d03b25de588e60",
+      "source": {
+        "definition_line": 4537,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "39672b47cdd3dfa745375bfb5eb9978e859f2e9cd2cd8c77c7bc4da20ab40218",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-hannibal-lecter.112c884e",
+      "legacy_id": "franchise-06990-a5df660781d6",
+      "job_sha256": "c2d274b09274fb92e6a55b1e80b33593012635257711f10b18f36025b96cf192",
+      "source": {
+        "definition_line": 4538,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "06dc3768ce5f291c91410fe9e13fa0705ea7d89ef24f5efb0fa932420dfc59eb",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-harry-potter.12344fb9",
+      "legacy_id": "franchise-06991-27c979517b99",
+      "job_sha256": "a89ab8fc6069fcbfd979190ac0e3a7cb67b22f27b20f73d121f6467b284f2f7a",
+      "source": {
+        "definition_line": 4539,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "4082e84c3c08fe75fe8c1d1f90ec1f730ee1902511286955a1acb387e77a866a",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-has-fallen.971af7c8",
+      "legacy_id": "franchise-06992-d93cca25bd1e",
+      "job_sha256": "7cbae00ea517ae20ae1acd87ebb49a7057343d7c25791ee9ef3f1c75506c65ae",
+      "source": {
+        "definition_line": 4540,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "1c7af3c21f5dc2074422f756cfd7704c58d10d4932b151070e12c6c514ec6fdd",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-ice-age.870ec843",
+      "legacy_id": "franchise-06993-df07a9d88461",
+      "job_sha256": "0a598be320c3290652173d889b57a261ce21ddf82a237eed22cdb0d78bae9360",
+      "source": {
+        "definition_line": 4541,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "530d8685550b2b8186dae12112fd0d72a911f295c3f6fde94803ba3fbebf87ca",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-in-association-with-marvel.2a800bac",
+      "legacy_id": "franchise-06994-a09fd9f8133e",
+      "job_sha256": "bfe17eb765c5874c53292fe46ab6fac88f16b7de2e70e5cc1b0c3a611c684797",
+      "source": {
+        "definition_line": 4542,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "50c9062bf6af93549487106a427efac53cab110c328ab2c172776de98cff87c2",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-indiana-jones.2d434499",
+      "legacy_id": "franchise-06995-94c36833ded6",
+      "job_sha256": "d74e46ca05d06ab942cc62e70b94726ab6c7ab723ed393ee234151beeee91c8c",
+      "source": {
+        "definition_line": 4543,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "d27a967988907ff40fa9ccf09e8ca08c0182bcd3e70c94f04e357663d0926bd0",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-ip-man.f4eef708",
+      "legacy_id": "franchise-06996-3e540466b7e1",
+      "job_sha256": "b6d6adee4199726d6bf2e1ff8aeaf84e4caa401b11e5c5a0ca06922c31cb40d0",
+      "source": {
+        "definition_line": 4544,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "9b57d61dbb609b1b129ffca6d573635dadb96b4e3d25428f103c155c92f661ce",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-james-bond-007.6b7d0ab8",
+      "legacy_id": "franchise-06997-882ef77bc5bb",
+      "job_sha256": "9e29e2b3e8d6378a4a40d198ba0f7525e3ab77dad0eb2f0fed550646be28c8fd",
+      "source": {
+        "definition_line": 4545,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "c970709150d087323b9a8d93444841453745eed27a504578f4ed6d448f84fbce",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-jurassic-park.6ce728ac",
+      "legacy_id": "franchise-06998-d27a227b9de2",
+      "job_sha256": "ed7001a4d8e37adfac7f2271a14f82ca2f2f70356a036c3c19c0b2b8ed32eee3",
+      "source": {
+        "definition_line": 4546,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "af3c4b201f6cde12ed7eb39466f1e1a3c940168d8a5f8e12ac164e1925c820c9",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-karate-kid.5d44caee",
+      "legacy_id": "franchise-06999-3abc65899fe3",
+      "job_sha256": "f36e54930acdf294df916fc561d4026da0b39329f080ef6f3bbb8d7e7c98906a",
+      "source": {
+        "definition_line": 4547,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "7feed5eff42282fc569028a1f7b33628a0788997f83fbf92b96acab1a0f4deb6",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-law-order.698b49f1",
+      "legacy_id": "franchise-07000-86ff38a1e5e6",
+      "job_sha256": "273f9b2349e0da78fc913716759878641f053eaf3fbd3126a94fd7d51714e01d",
+      "source": {
+        "definition_line": 4548,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "05e15e2d277117c6e45c69f01b42c19fc09cbdcfea4821a0c4ebaa49a07d8a5b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-lord-of-the-rings.662eb14f",
+      "legacy_id": "franchise-07001-8321678a254c",
+      "job_sha256": "db34c5c2b02783ff23332cc79aa5ea8ed208f7e1f62fa48c73521afa217f98e6",
+      "source": {
+        "definition_line": 4549,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "d1a90953b147f00b09685de116cc2350bc2e891db6ea757a9c3929c0ddf8f069",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-madagascar.7e755d69",
+      "legacy_id": "franchise-07002-3df644c12451",
+      "job_sha256": "ba6d10251db9c8d265d755b42c7b19c22cdd5de452f0014fcf7fb9f2560af7d9",
+      "source": {
+        "definition_line": 4550,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "35cf65d378ca0b4182cffa8fca9d13de9faeaff5e5282b28d48dfec65378e6fc",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-marvel-cinematic-universe.cab4d3b3",
+      "legacy_id": "franchise-07003-653461341964",
+      "job_sha256": "78c82f6ab5adcc7eec5b1369d2df281606c355fbb44e17314ab56a8558454f17",
+      "source": {
+        "definition_line": 4551,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "90d115d427d00e40450ed29fbad1047d2542344f0291971f667ac76083813407",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-marx-brothers.22dde88d",
+      "legacy_id": "franchise-07004-de12c9457e09",
+      "job_sha256": "afda2a4faaab9b05e5097810f893c8f6d53132e55068795e0da9d3d224ccadc2",
+      "source": {
+        "definition_line": 4552,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "60970f7ba9199b6ded1b7977ad8660e73255e9f5219fa4852b0d6231d59a7ff3",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-middle-earth.d1762912",
+      "legacy_id": "franchise-07005-d4b41bf3481d",
+      "job_sha256": "3944ea21d6a597b0364d7a8a09da78f80c0ae575e5196dcf855855f97ceb5115",
+      "source": {
+        "definition_line": 4553,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "c70d471bb5871cf4641afbc65119041bf54b73be379cf3677e21a7572791d8d3",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-mission-impossible.0ca29070",
+      "legacy_id": "franchise-07006-be9523a6d419",
+      "job_sha256": "2db1b928778881501af89ba691f703d3b0ed7ce2a4bcd87e14339ad5618fbbcf",
+      "source": {
+        "definition_line": 4554,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "e008429d81f3894394f31d0d0035b6f9e606b6212642079ff0c4951fb666aa6d",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-monty-python.87abd03d",
+      "legacy_id": "franchise-07007-c7ef63689ce3",
+      "job_sha256": "41bfc1d130e57eb5cacaa433fe76e745dfb779f9a48f9dcbe19619689108eee2",
+      "source": {
+        "definition_line": 4555,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "35e45058673e56670b0e57745106abdc5c2ecb57de816a47e715fb7eca8a47ce",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-mortal-kombat.89a8fc01",
+      "legacy_id": "franchise-07008-db9e9c3d2f00",
+      "job_sha256": "4479e689d99a33c01512078219cff1a5cefcd2997b9b109721a587189986ba30",
+      "source": {
+        "definition_line": 4556,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "7b43ceddb2ca45beda7fab47f2dfac32daee5e581ea4382ff0d883cc79e118bd",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-mothra.00a6ad94",
+      "legacy_id": "franchise-07009-cb428667ec52",
+      "job_sha256": "edef05327c841a96bb0fe33c6e4b3076b4c22ab5a6fcef865c81f13210bbd294",
+      "source": {
+        "definition_line": 4557,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "69f1abaea13c8a952d9ae2759e4bda3b64ae4042381910d9c8f743493645e4c2",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-ncis.17c4ec7d",
+      "legacy_id": "franchise-07010-a0f3a7c3a603",
+      "job_sha256": "7d15f2006e1f4a7728ad88478c2d8dc6e1896ebb799f2352a25de79bceaa294c",
+      "source": {
+        "definition_line": 4558,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "d934e837c54a83f19db6583003817d46429e03e96befc54129887c799c0ab86c",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-one-chicago.d0a63b92",
+      "legacy_id": "franchise-07011-adf5dfbe47cf",
+      "job_sha256": "b53e8c0dfc86cbc33b169e36701f69fce95df0910c604a2d62bd0781267e7d7e",
+      "source": {
+        "definition_line": 4559,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "e55319d4106945685fcba7e607875890ad70ffe115602c2242003c8a1545ee72",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-oz.e92b28ef",
+      "legacy_id": "franchise-07012-b6531073ecc5",
+      "job_sha256": "77b8f8a95c6c874a7f1f7e367c5ce17e019f6fa7af59727dfa26275af30512a9",
+      "source": {
+        "definition_line": 4560,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "174f0ab83d851dacd626a7f1942fe27069656e81ce18faad077b5c16ab33ad82",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-pet-sematary.5d09b901",
+      "legacy_id": "franchise-07013-23283dd5fc69",
+      "job_sha256": "d118c67b0dc180a5272f03f7fc95562489774a31adfdcc85b286b38fe40a0668",
+      "source": {
+        "definition_line": 4561,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "6f92d13b8f8d6a47f970ded2b462533278515f9a8241316c0b6c7ed45e78a74e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-pirates-of-the-caribbean.d2510f11",
+      "legacy_id": "franchise-07014-c0dc3114b25b",
+      "job_sha256": "fc172580ae04eb51e27c812323b7dd1eab8f73e46bf433dfed33c32a25a7f740",
+      "source": {
+        "definition_line": 4562,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "42a0417b3c34a5d51c7921353f323b1dbbadbab48cc8d47a1c2b97052de7b53d",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-planet-of-the-apes.638a944e",
+      "legacy_id": "franchise-07015-191651afcdcd",
+      "job_sha256": "91f894c76991c02f59d30ffc0f9e90e89631a595fb908aa58f3766a2ca2eec11",
+      "source": {
+        "definition_line": 4563,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "3cfef37443a1c8ad7571fd40f839b34ae6b0008eb8d9d41c1614f43b0f8c745f",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-pok-mon.37a4a27c",
+      "legacy_id": "franchise-07016-1f64cbf035d0",
+      "job_sha256": "fcd69b211c9d65bf045d802f221a62d9cfe66bb122c54df83c92289a51f70938",
+      "source": {
+        "definition_line": 4564,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "aa1113b56e03d1fd8d4bc95238f8180e10e1fca446b990500dc5f03925cf7a6c",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-power-rangers.5b9a9911",
+      "legacy_id": "franchise-07017-9017c3d2d453",
+      "job_sha256": "3890e14ed59223abed79cdab12e385a44a57afbbc657a5098f86f6396aa43e5b",
+      "source": {
+        "definition_line": 4565,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "6e2d77c1a4502f49eee8651e1e4e4ea52cdcbcfb4bb7571db202220346ba0656",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-pretty-little-liars.f5391109",
+      "legacy_id": "franchise-07018-d34e59c4190c",
+      "job_sha256": "067249bc994af0e3ff2a8fb9251879dd7fff5908b104f05825c772c743081233",
+      "source": {
+        "definition_line": 4566,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "7a646837b7654a8626107105917f081e75ee104a2408f0cf30e0fc769107ad0a",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-resident-evil-biohazard.e5a33a26",
+      "legacy_id": "franchise-07019-ebfd8b49295f",
+      "job_sha256": "544c7c43f4ca71247ff6eb6b09c2ff5d607003a737abf7ecfa9b0f0da1013658",
+      "source": {
+        "definition_line": 4567,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "86fdf5cd188a745d11a816b30cab8d2e8a326bf8b615fdc7da8f7088df0620ec",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-resident-evil.87a471a5",
+      "legacy_id": "franchise-07020-f8cdf1eaa4b7",
+      "job_sha256": "3cfe0266cea153a4f865d8599ec157e401042c4f650b64ec9a2fa4e2871b1fa4",
+      "source": {
+        "definition_line": 4568,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "4aa649d3b9014f9c68c5775a6cfab20a39ad7ec1048c578cc761afd8bdd80ac2",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-rocky-creed.878aba9d",
+      "legacy_id": "franchise-07021-fe38cd94ce0a",
+      "job_sha256": "3753cabfe6e3a3bfaca8cee58d2cfd7301633164608b1dbdf0936fa711936546",
+      "source": {
+        "definition_line": 4569,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "1c03fae5e803b90795faa5ab1a38f27e09d8c8d465de0978343c01f45e211e47",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-rocky.374d9dab",
+      "legacy_id": "franchise-07022-ff2e659d3c13",
+      "job_sha256": "14b88fb9bbf891fcc3864751f2e788d1860ac100b55845815009e5942a6a5297",
+      "source": {
+        "definition_line": 4570,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "b3981db79637e8a94f1d25928e586ca33ad2827c1825d763fde1e835bbbcbff3",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-rupaul-s-drag-race.e1641df2",
+      "legacy_id": "franchise-07023-dba8597cd12e",
+      "job_sha256": "ce3727abd088907530b06fbe447f7d9f3793b9417592773ffd457d35a643c29c",
+      "source": {
+        "definition_line": 4571,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "5ef5dded6a7cf83ab30830b888cf150a947c6f4d28645de715a367abc035503f",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-scooby-doo.617075cb",
+      "legacy_id": "franchise-07024-61fa25e67cfe",
+      "job_sha256": "626f51767e165e904a904aacc1990a500013ed2c8b054e12ec0549bb2c8cf553",
+      "source": {
+        "definition_line": 4572,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "190e3e7ca246786cb5eab6960d38b8f91656045c9d7c7ffde1ed67a49d95ed7b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-shaft.949672ac",
+      "legacy_id": "franchise-07025-5102e9b97ffc",
+      "job_sha256": "f4bad7c39ef846aa3545d18b3e938fa0d6e64176cf854d8b9c364c8f10e0f9db",
+      "source": {
+        "definition_line": 4573,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "a9e4f91a6e8a44ff5f0bdd53a0e7cfd9979ae7a595484482a16ad00969bcaf43",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-shrek.760b44cb",
+      "legacy_id": "franchise-07026-f5fc02d9f0a3",
+      "job_sha256": "182604d5effbf534226ac59a6ecdd29c548e357bd8f634171fe3b7eed19ad3c9",
+      "source": {
+        "definition_line": 4574,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "62f4728de40a56c62c2d2c7455f6fa45277396a453a4e26e41af271ff28d8dbd",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-spider-man.9d960b52",
+      "legacy_id": "franchise-07027-00dd42ebbfa1",
+      "job_sha256": "8eb956438d2c9efdeac8e819c20d2f6d7eec5a4b187a48fc276219307a562747",
+      "source": {
+        "definition_line": 4575,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "364df6d6d11358d2081a1df0d42ae4ce7809c43d1952bac83bf014073673a82d",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-star-trek-alternate-reality.00f6638a",
+      "legacy_id": "franchise-07028-6be61da2e77c",
+      "job_sha256": "3d7abb3abd0b1e2976a0fb78d5334b095d9ca1ad4fe9f7bbec05e7a9cf714f4e",
+      "source": {
+        "definition_line": 4576,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "2f5afa1bb7b6ef8a7b2201d4dcbe068626e61d74aabe5e713d87b79ca241920f",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-star-trek-the-next-generation.84126b95",
+      "legacy_id": "franchise-07029-b7fffb956359",
+      "job_sha256": "9a09738bd63d090d8f11e3424e666b7fe37f13e0d14be0fed0fd9beae512a1b1",
+      "source": {
+        "definition_line": 4577,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "0042c7bbbbc08f8a3807e4d3a69761ba67d2171f999d85a204f6fc0920f881d8",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-star-trek-the-original-series.4582c2eb",
+      "legacy_id": "franchise-07030-502133b8007f",
+      "job_sha256": "794283d42ff3ea004dd638bf406daf3c4f9171980d9ee0e59dd2bcd944bf7f2e",
+      "source": {
+        "definition_line": 4578,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "e74033069c10e93c3446bc90b48092546d1b39dda2a9190691a205e9475ab43a",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-star-trek.90597f0e",
+      "legacy_id": "franchise-07031-65273a94dd5f",
+      "job_sha256": "79202342143d55ca877e5927d15dfc8e0f99af45463c1af604191ca3655ad1e7",
+      "source": {
+        "definition_line": 4579,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "438192ec94c2cfb7e5e4b8e5db6cbf753f93bfa65b70ffa7a05241010988384f",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-star-wars-legends.54b58c9c",
+      "legacy_id": "franchise-07032-91d4de494154",
+      "job_sha256": "02e92bb94fb0429eac91a6714827d50266d408d4e1494d886bd67e16b31bcef7",
+      "source": {
+        "definition_line": 4580,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "ad18047053446f2927ff94873356be621ae35ba651938e66b847e853a7baa831",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-star-wars-skywalker-saga.dada5b9f",
+      "legacy_id": "franchise-07033-b3f15403bde9",
+      "job_sha256": "0edab06517395e875b3d9669d9701189a50c315c840d0e4ba1c3a35309efbd49",
+      "source": {
+        "definition_line": 4581,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "69ab6fcc773d45e45c4b59f055b42ddb9b7f31d7c9e1719953253f5ee144ce56",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-star-wars.eda4fef2",
+      "legacy_id": "franchise-07034-5039f7000b0c",
+      "job_sha256": "8bdb8533b9e2765ccb5d4ed9c2046ef269790b9812e893af52af239b19589171",
+      "source": {
+        "definition_line": 4582,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "da91257290f35b1fce1dd1155d87e893e079c569cdbd6b22b32d2cf8aba22f2d",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-stargate.e9da6be4",
+      "legacy_id": "franchise-07035-27f21d120487",
+      "job_sha256": "f6b309bac1a0209f64b8cfa11929e045fbaa19ae5377b47d18c120262d43f9b2",
+      "source": {
+        "definition_line": 4583,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "cd0a5ae000e825f626f2ee6e75c8c4c8cffa60b1fbb00e75d259f2b5410d7eb4",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-street-fighter.0c2bd192",
+      "legacy_id": "franchise-07036-4b5215eecabc",
+      "job_sha256": "0f7b79dcacfb233b7ff67f2ccfe7f54fb52aafeeff136b2309b3c1e53b757953",
+      "source": {
+        "definition_line": 4584,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "f1787ca3a885d8ad19baf1ccaaabbdea7b9b8300f4b4cad8cf0bc7046f3432c5",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-superman.195b62c8",
+      "legacy_id": "franchise-07037-9d41060c6a4b",
+      "job_sha256": "d010eb3e7c32d345a4759e55bc7762f80bb7b034bae68ac4742532a5d1da0649",
+      "source": {
+        "definition_line": 4585,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "e9d46ca3c41b72da7e8827b1a1f9344d8bb7ccc7eda7f7c70263ca1fdea3bff7",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-teenage-mutant-ninja-turtles.a5180667",
+      "legacy_id": "franchise-07038-bd1304b269f8",
+      "job_sha256": "dcd45f18f7fdcfe59a2c19fd8123bcab64bac4a0e49d02f13773b91c8cb421e8",
+      "source": {
+        "definition_line": 4586,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "6238c60f090d769e0661577c375c6356b1f0b00478bb7b2542590b8e602ba8a3",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-the-hunger-games.f6c008be",
+      "legacy_id": "franchise-07039-125c0812858e",
+      "job_sha256": "a8fbd063ac742c795b970705ea868c11e4531663ac3e163e7e1bdcdffdf796c0",
+      "source": {
+        "definition_line": 4587,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "a3dd48fe569c69cd5c469068ae419b9356d06f2ccaa9f5b3af8932afebff5c1e",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-the-man-with-no-name.82604835",
+      "legacy_id": "franchise-07040-5abc1fbc912f",
+      "job_sha256": "e20cdb0bc4516497314b53216b9e7932176c3200b7db39c6a75858fe15c0268b",
+      "source": {
+        "definition_line": 4588,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "fcc3dc87b2103b358f1da45e4eeb56a23a845fa84aa3362d0d59abde3a9ac3e9",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-the-mummy.7d5130ab",
+      "legacy_id": "franchise-07041-0a87ec2f6cde",
+      "job_sha256": "a3bcbd5c4c3be918ccf99f25c827fbed7da1621b53f1844927b28fddc80fbf12",
+      "source": {
+        "definition_line": 4589,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "8874ca71732087d4a766243c59f48781657a3b1e8ef769db084857a43a2d6170",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-the-real-housewives.77225e06",
+      "legacy_id": "franchise-07042-5b1e4033fda0",
+      "job_sha256": "0ea3f63c4fc0dee595902c802e28906b9c2a6e512d82faf7f8b308b8df106e0a",
+      "source": {
+        "definition_line": 4590,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "84715e643697386f6afb713482fbae9c58a40f22f0c7edc5be9a8a2dab817997",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-the-rookie.dfa35be6",
+      "legacy_id": "franchise-07043-908205150813",
+      "job_sha256": "7d48bfa1daaa152012b47f91f8a8f71e6d06518a327b26ab8bdcc3c74fcd8e3e",
+      "source": {
+        "definition_line": 4591,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "c53e301cb20558fbcce3027e90a4872461e4277871e1f348239d8c3565c420a8",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-the-texas-chainsaw-massacre.b09e968a",
+      "legacy_id": "franchise-07044-4967daa193ad",
+      "job_sha256": "61b6fcca8b95910355062f19c1e20af0254d9df39c0557c60d9dd6ad6ebeb34c",
+      "source": {
+        "definition_line": 4592,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "72067d9855473861861d6196dbbfee147776f00dc9565dd4e075b1421b129710",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-the-three-stooges.c3fb545e",
+      "legacy_id": "franchise-07045-f60db9688793",
+      "job_sha256": "deccba279ba42c5f2e2f5818ee51a85086adf12e2fca67e79423ef2eb75db942",
+      "source": {
+        "definition_line": 4593,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "d4510b13c57d5a2c9aa8ab1765aa192a240e8f8ed981baa3bf1dbd4163cd0e47",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-the-twilight-zone.4b33b80d",
+      "legacy_id": "franchise-07046-a2b06ba08489",
+      "job_sha256": "1e77fd4b1852d50600d9a956133f990c93cc0a59da9336bd0495272ef83b0dce",
+      "source": {
+        "definition_line": 4594,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "67ac20d1c85dc218a50445bc573da0cc88018d46221b57d23e762c863091a41d",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-the-walking-dead.ac865175",
+      "legacy_id": "franchise-07047-c9946c2f58c5",
+      "job_sha256": "67016698d04a0ef1e9266020689e567a6efeb1e418afa318f7b092ad03c4300b",
+      "source": {
+        "definition_line": 4595,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "f582db56d401282840c57a214ad8c556010a0ae54716a88715d2258563a137e7",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-tom-and-jerry.46d2bf20",
+      "legacy_id": "franchise-07048-f8125df364f1",
+      "job_sha256": "c605ccbe6ab7b2cc06a949e4d58ecc9f808cb8d19e2cb318e4c0a8c75dd781e4",
+      "source": {
+        "definition_line": 4596,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "688c425cedfc62b506b98a162d2c1ef57b452e795cc2fe0a0ac337baf1ae7508",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-tomb-raider.b57f664c",
+      "legacy_id": "franchise-07049-9d0d0fd76e62",
+      "job_sha256": "3d40f3a2902f56b2059637de7051f4a80a9ec17d87fbaf8e9f6ae174c15db835",
+      "source": {
+        "definition_line": 4597,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "bb90188e7747d0070134577a71bbc5df66a2ad3832c4ab687354661101e5556b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-toy-story.ef675667",
+      "legacy_id": "franchise-07050-c75e48f4813e",
+      "job_sha256": "1c0f9943b24c0e80fc2efbe455b82410a78054cfe0e140e606e3307db0466af1",
+      "source": {
+        "definition_line": 4598,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "b811361e2772af9968bf108f749f72b5bd76d29da6eac18530bd13f74607bd0b",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-transformers.d39577be",
+      "legacy_id": "franchise-07051-75a05fa28d8e",
+      "job_sha256": "aaa01e30af55fd7fa79d624107507f488356253e7ef7f6e5b744c16cb5c0ab6c",
+      "source": {
+        "definition_line": 4599,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "1cdeaec6e1fe7aee979f2c59926a6b4acbe460472120eb05205bc40fe4316ea6",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-tron.1bfa2515",
+      "legacy_id": "franchise-07052-807fccbafd96",
+      "job_sha256": "b36292cdade298f327fde2994dfcb4a3753aaac53a7d0f5a20c2b3531d78abd1",
+      "source": {
+        "definition_line": 4600,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "5a556bc1efca15b60a4fbba8270460bd32d793271872c3d83ad97b3320e9a827",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-twilight.76e2004d",
+      "legacy_id": "franchise-07053-405d5edb9ef3",
+      "job_sha256": "d3910b3246ff1b40cf56544c8af5f1bc60ef132ae5bb858b552dfde4bf6ce4ea",
+      "source": {
+        "definition_line": 4601,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "db4e1492e8a1096da946008299832dcca307786dcadb5d3a4c9bd390779401c2",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-unbreakable.8c4f5c55",
+      "legacy_id": "franchise-07054-df4a0285272b",
+      "job_sha256": "66600a4f54522de71bb2489fc928b041cdd9d2cdbafa70c66a21e35200c86e57",
+      "source": {
+        "definition_line": 4602,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "195ad8d6dcd709d785cec8939335ee7919dea6029f6892093368fd4fd1908aee",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-wallace-gromit.ae67758e",
+      "legacy_id": "franchise-07055-76fce732fb5a",
+      "job_sha256": "e55bc865971f12dc984ee2e08be47f205215aeafcfc51c135b8b3f63bee94745",
+      "source": {
+        "definition_line": 4603,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "76a76ccc8873b2846a80a84a1822eee2995cbf0a7d16686b2d6099c7886cdad8",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-wizarding-world.02799aca",
+      "legacy_id": "franchise-07056-4f5c09e35639",
+      "job_sha256": "fe85d01e163baf4b3ad66d8ac55f48e058f31bd78807269358b559ae0ba6b4c5",
+      "source": {
+        "definition_line": 4604,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "dd10bcff3d60531039004272a3dd648f6d0fa3142db307e1ced5ba8c16268354",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-x-men.218982b6",
+      "legacy_id": "franchise-07057-611208c1b3cc",
+      "job_sha256": "8261973880dd033c9b9ff1ae7049ae6ec492ccfaa18ee659b4a7e71b1c28071a",
+      "source": {
+        "definition_line": 4605,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "816905bda87a0a1931f88f7958081a04fce19fd11deacebf4e783b39c5709aa8",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    },
+    {
+      "poster_id": "franchise.franchise-yellowstone.da3708ef",
+      "legacy_id": "franchise-07058-5b6b3ecdae12",
+      "job_sha256": "0790897c944c68ffe4a087d951d3f88b744e5de37b2e16b439ba8aabe7e7f587",
+      "source": {
+        "definition_line": 4606,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4618
+      },
+      "row_sha256": "6f8a00cec7d6fea1a601e327e193b1069c76e23c6e2952339563c9fac3ae5d4d",
+      "frozen_choices": [
+        "legacy out-of-range font_size resets to 250"
+      ]
+    }
+  ],
+  "retired": []
+}

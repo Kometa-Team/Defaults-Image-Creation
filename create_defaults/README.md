@@ -1,3 +1,26 @@
+# Default posters and overlays: Python operations
+
+The supported English generation and publication workflow is Python 3.13.
+See [operator commands, exact approval gates and rollback](PYTHON_OPERATIONS.md).
+
+```powershell
+python -m pip install -r create_defaults/requirements-bulk.txt
+python -m create_defaults.bulk.operations generate --category Based --report config/based-generation.json
+python -m create_defaults.bulk.operations overlays --group aspect --report config/aspect-overlays.json
+```
+
+Run from the repository root. Adopt verified existing migration caches before a
+full unchanged run. Publication requires exact maintainer decisions and uses the
+resumable draft-PR transport; generation never approves or publishes artwork.
+
+The following PowerShell documentation is preserved as a legacy reproduction and
+rollback reference. Those scripts are deprecated for normal English operations;
+they remain present and are not invoked by the Python workflow.
+
+---
+
+## Legacy PowerShell reference
+
 # create_defaults — Bulk Default Poster Generator (PowerShell)
 
 This folder centers on **`create_default_posters.ps1`**, a bulk generator that produces many sets of *default* posters used across the Default Images repos. It orchestrates individual creator functions and (when needed) calls the one‑off composer internally. You normally **do not** run the helper yourself.

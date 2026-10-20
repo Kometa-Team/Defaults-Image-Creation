@@ -1,0 +1,62 @@
+schema_version: 1
+category: Franchise
+definitions:
+- id: franchise.death-in-paradise-2011
+  category: Franchise
+  display_name: Death in Paradise (2011)
+  source:
+    path: create_default_posters.ps1
+    line: 4493
+    row_sha256: 540a6b163e5ee4755e63efc9949ce61339cdd9c3fa43b813dc3abda589d75e40
+  composer:
+    avg_color: false
+    avg_color_image: null
+    base_color: '#9034AF'
+    border: false
+    border_color: '#FFFFFF'
+    border_width: 15
+    clean: true
+    dom_color: false
+    dom_color_image: null
+    font: fonts/Comfortaa-Medium.ttf
+    font_color: '#FFFFFF'
+    font_size: 0
+    gradient: 1
+    logo: logos_franchise/Death in Paradise (2011).png
+    logo_offset: 0
+    logo_resize: 1600
+    out_name: Death in Paradise (2011)
+    text: ''
+    text_offset: 0
+    white_wash: false
+  caption:
+    mode: none
+    key: null
+    template_key: null
+    text: ''
+    case: upper
+    direction: auto
+    fallback: null
+  layout:
+    kind: fixed
+    measurement: null
+  languages:
+  - en
+  applicability:
+    en:
+      status: applicable
+      reason: Representative English infrastructure example only
+  output:
+    directory: franchise
+    filename: Death in Paradise (2011).jpg
+    remote_paths:
+      en: franchise/Death in Paradise (2011).jpg
+  color_assignment:
+    id: franchise.death-in-paradise-2011.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+  dependencies: []
+  overrides: []
+  generator: null

@@ -1,0 +1,114 @@
+{
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "active": [
+    {
+      "poster_id": "playlist.playlist-arrowverse-timeline-order.09b7e4b8",
+      "legacy_id": "playlist-07903-d46c66411ad8",
+      "job_sha256": "d6b803c49440755d75be53f5fb4cbb969a4851569681cbf21e524aca1e971e38",
+      "source": {
+        "definition_line": 5350,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5370
+      },
+      "row_sha256": "d223d67dc619a5955bb6fc9675a1706c78637d33c0c911348119602a05e9a495",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "playlist.playlist-dragon-ball-timeline-order.24c7063f",
+      "legacy_id": "playlist-07904-499f22f79389",
+      "job_sha256": "cafc59f0504a4c209ea6e62daf83fc1a87de794f8907a73bdac19d7fc66bef2a",
+      "source": {
+        "definition_line": 5351,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5370
+      },
+      "row_sha256": "9a41d01e18b8e89d1bc3aafb97a735e1e85b84725fd76bb1241c81eb9c324e5e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "playlist.playlist-marvel-cinematic-universe-timeline-order.d704757c",
+      "legacy_id": "playlist-07905-a5849c8e1275",
+      "job_sha256": "04c20021f5ed14ca3f97868e0967609859ec53e7d204760e1ca3958f06e81ddd",
+      "source": {
+        "definition_line": 5352,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5370
+      },
+      "row_sha256": "44531e256254ec0b36c04b07d40023ad4ec6e826570b4ea4751c4e386d3e9535",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "playlist.playlist-star-trek-timeline-order.53320ead",
+      "legacy_id": "playlist-07906-ce13577661b6",
+      "job_sha256": "69a90b8e4f30128fc716525cf7a5e6f0e79d536327b5d6adcec75e2c252f932f",
+      "source": {
+        "definition_line": 5353,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5370
+      },
+      "row_sha256": "23b77c9b6919de986ddff85f12c982a72850f9ae21bab6d6e91313468f0b8611",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "playlist.playlist-pok-mon-timeline-order.efe5925f",
+      "legacy_id": "playlist-07907-aa2c7c00f4b2",
+      "job_sha256": "414a8a2719e688225df190ccb4f78682cb552e9d5a45f226817ab99b90b70095",
+      "source": {
+        "definition_line": 5354,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5370
+      },
+      "row_sha256": "079adcc80f9f487e150f8c0a237a18f4f9064fe396905f1da88a2422afa45ff3",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "playlist.playlist-dc-animated-universe-timeline-order.66af9f87",
+      "legacy_id": "playlist-07908-ff03dc4e3116",
+      "job_sha256": "01c04aa6b5ce2bf141534bff5019b9a89dfda2af127c3fc03ec57f032b8790c3",
+      "source": {
+        "definition_line": 5355,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5370
+      },
+      "row_sha256": "2125e95a0dbec6e42d9902e7409352cdd46aa2135f5499b724a95905127d6ab1",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "playlist.playlist-x-men-timeline-order.627ce505",
+      "legacy_id": "playlist-07909-8ba18ce83fb1",
+      "job_sha256": "74e2819f2b112af8a973cc366d1fa9b36b4c33b32fdbfd83dc7e7a03bfb8ffc4",
+      "source": {
+        "definition_line": 5356,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5370
+      },
+      "row_sha256": "44f72c162ca8871dae0f91165e7bc3ed827342fdba8e70e62c93daab99ea52e9",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "playlist.playlist-star-wars-the-clone-wars-timeline-order.c6750e0c",
+      "legacy_id": "playlist-07910-72c9e3bc6177",
+      "job_sha256": "5025581c6ccd6f77b562a9d177dca8daa880d03340043a52a74a5b9dcd32c261",
+      "source": {
+        "definition_line": 5357,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5370
+      },
+      "row_sha256": "2241efbd8a89a66d043b0c7224b514c624421733034938a025b11dfbfdf8add2",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "playlist.playlist-star-wars-timeline-order.0af9472c",
+      "legacy_id": "playlist-07911-c1bae1a2a6ac",
+      "job_sha256": "11a621ba0f21016cca7b98b0136f54039b4382aafb19eb50bb5de8e45c4fd6dd",
+      "source": {
+        "definition_line": 5358,
+        "path": "create_default_posters.ps1",
+        "producer_line": 5370
+      },
+      "row_sha256": "332fc3c74c9ff6785cfbc6e5351c6bbcb54fa4d92a6d665117ba23fd2bc9c1ae",
+      "frozen_choices": []
+    }
+  ],
+  "retired": []
+}

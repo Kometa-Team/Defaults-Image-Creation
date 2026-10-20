@@ -1,0 +1,549 @@
+{
+  "schema_version": 1,
+  "api": "create_defaults.bulk.state.Store.event",
+  "acceptance_record_sha256": "8d1f295011673c1d2a64882d8e39e0731c6bb0ceebb12dfd4be3296f075b2d67",
+  "events": [
+    {
+      "sequence": 1,
+      "kind": "review_external_sample_acceptance",
+      "subject": "package-d.sample-acceptance.c3f4fc456bb93fc75e67a8b3",
+      "created": 1792256312.3311846,
+      "payload": {
+        "acceptance_record_sha256": "8d1f295011673c1d2a64882d8e39e0731c6bb0ceebb12dfd4be3296f075b2d67",
+        "artifact": {
+          "artifact_id": 12098711636,
+          "executable_source_sha": "ebfa162239235feabbd7d81999ea258bbd693a7b",
+          "head_sha": "c058e758fcf02a2952093f56a8ca6ef26ae10864",
+          "name": "package-d-focused-review",
+          "repository": "Kometa-Team/Defaults-Image-Creation",
+          "run_id": 39025655177,
+          "size_bytes": 606146,
+          "url": "https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39025655177/artifacts/12098711636",
+          "zip_sha256": "3bb8675be01c3d9e86f11039a5eb431711cb5c7dcf30e0e2e5081f2b96eacb9d"
+        },
+        "authorization_source": "Explicit maintainer visual acceptance in the user message titled Package D - Maintainer Visual Review Decision; applies to inspected samples only",
+        "decision": {
+          "accepted_difference": "Pillow/ImageMagick filter, alpha and visible-composite differences documented in overlay-observations.json are accepted for these presented samples; no pixel-parity claim or changed threshold. The four historical comparison cases are context, not additional individually approved images.",
+          "accepted_warning_codes": [
+            "overlay_transform_review"
+          ],
+          "artifact_image": "output/genre/overlays/standard/Experimental.png",
+          "caption": null,
+          "decision": "accept_presented_sample_with_documented_warnings",
+          "decision_id": "package-d.sample-acceptance.c3f4fc456bb93fc75e67a8b3",
+          "definition_fingerprint": "14b5059c12fb3e899f7aa828342883385f49c1b12a613b366f51cd7000153899",
+          "diagnostics": [
+            {
+              "code": "overlay_transform_review",
+              "details": {
+                "transform": {
+                  "colorspace": "sRGB",
+                  "compress_level": 9,
+                  "filter": "Pillow-LANCZOS",
+                  "format": "PNG",
+                  "resize": "fit-including-upscale-round-half-up",
+                  "trim": "top-left-RGBA-background-exact",
+                  "version": "overlay-pillow-d1"
+                }
+              },
+              "message": "Pillow filter/alpha differences require explicit overlay review",
+              "severity": "warning"
+            }
+          ],
+          "dimensions": [
+            126,
+            85
+          ],
+          "font_identity": null,
+          "image_sha256": "a25ee66f60519c36a8ccf078efe6b43d9772632c8d1e1c34229b166d2c26c5e3",
+          "inputs": {
+            "overlay_source": {
+              "path": "logos_genre/Experimental.png",
+              "sha256": "38daa50bc4f9a9d83c6f9444a56cca1ae5e7acaf8151e1fc8d27b4571f3c7766"
+            }
+          },
+          "kind": "overlay",
+          "language": "en",
+          "layout_identity": {
+            "catalog_file_sha256": "87fecce16a921ee9fff743d2a339744d6140f792e74c04ef9c6bbba6001de441",
+            "catalog_payload_sha256": "7085533956e5b2d6a2f2ad694e17118fb5082168691bb70fe2b13b1d18403e81",
+            "group": "genre",
+            "size": "standard",
+            "size_contract": {
+              "box": [
+                285,
+                85
+              ],
+              "destination": "genre/overlays/standard",
+              "source_line": 6939
+            },
+            "transform": {
+              "colorspace": "sRGB",
+              "compress_level": 9,
+              "filter": "Pillow-LANCZOS",
+              "format": "PNG",
+              "resize": "fit-including-upscale-round-half-up",
+              "trim": "top-left-RGBA-background-exact",
+              "version": "overlay-pillow-d1"
+            },
+            "trim": false
+          },
+          "mode": "RGBA",
+          "policy_sha256": "2b7b123ab1e6b82404d731095a1f4f07006eaab434230d399efc378368f283ca",
+          "poster_id": "overlay.genre.6ec7ab704b9b",
+          "preflight_payload_sha256": "348029c94d7470d0d16bc9ce62e3c33ef9ca7bcb964bacf19b3599d41b564779",
+          "renderer_identity_sha256": "b29ab7bf7052a5553a8382fdf378dc54096a2e635232e9fdbfc619307c4f1d67",
+          "risk": {
+            "level": "high",
+            "reasons": [
+              "overlay_transform_review"
+            ],
+            "requires_individual": true,
+            "version": "review-risk-d1"
+          },
+          "runtime_review_state_changed": false,
+          "scope": "Exact presented CI sample only; maintainer-reported inspection, no inferred variant/group inspection",
+          "source_review_version": 1,
+          "translation_dependencies": [],
+          "validation_fingerprint": "d442f8599fb6517a207524c048b2f04378b4633dec0c3193c498d7bd7a2f9895",
+          "variant_id": "overlay.348da6be724b26abbe714597"
+        },
+        "reviewer": "maintainer"
+      }
+    },
+    {
+      "sequence": 2,
+      "kind": "review_external_sample_acceptance",
+      "subject": "package-d.sample-acceptance.beadf5a86cb724c3005252c6",
+      "created": 1792256312.3311846,
+      "payload": {
+        "acceptance_record_sha256": "8d1f295011673c1d2a64882d8e39e0731c6bb0ceebb12dfd4be3296f075b2d67",
+        "artifact": {
+          "artifact_id": 12098711636,
+          "executable_source_sha": "ebfa162239235feabbd7d81999ea258bbd693a7b",
+          "head_sha": "c058e758fcf02a2952093f56a8ca6ef26ae10864",
+          "name": "package-d-focused-review",
+          "repository": "Kometa-Team/Defaults-Image-Creation",
+          "run_id": 39025655177,
+          "size_bytes": 606146,
+          "url": "https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39025655177/artifacts/12098711636",
+          "zip_sha256": "3bb8675be01c3d9e86f11039a5eb431711cb5c7dcf30e0e2e5081f2b96eacb9d"
+        },
+        "authorization_source": "Explicit maintainer visual acceptance in the user message titled Package D - Maintainer Visual Review Decision; applies to inspected samples only",
+        "decision": {
+          "accepted_difference": "Pillow/ImageMagick filter, alpha and visible-composite differences documented in overlay-observations.json are accepted for these presented samples; no pixel-parity claim or changed threshold. The four historical comparison cases are context, not additional individually approved images.",
+          "accepted_warning_codes": [
+            "overlay_transform_review"
+          ],
+          "artifact_image": "output/genre/overlays/bigger/Experimental.png",
+          "caption": null,
+          "decision": "accept_presented_sample_with_documented_warnings",
+          "decision_id": "package-d.sample-acceptance.beadf5a86cb724c3005252c6",
+          "definition_fingerprint": "ec34ff96db9d80587bc982fcbefe50e06baf89a8a2ec3028cf6f1929eca8152d",
+          "diagnostics": [
+            {
+              "code": "overlay_transform_review",
+              "details": {
+                "transform": {
+                  "colorspace": "sRGB",
+                  "compress_level": 9,
+                  "filter": "Pillow-LANCZOS",
+                  "format": "PNG",
+                  "resize": "fit-including-upscale-round-half-up",
+                  "trim": "top-left-RGBA-background-exact",
+                  "version": "overlay-pillow-d1"
+                }
+              },
+              "message": "Pillow filter/alpha differences require explicit overlay review",
+              "severity": "warning"
+            }
+          ],
+          "dimensions": [
+            148,
+            100
+          ],
+          "font_identity": null,
+          "image_sha256": "7734ba4b403ff5dee4eeb954f18cfa8dbd8a338b80817cbf189803001f419b74",
+          "inputs": {
+            "overlay_source": {
+              "path": "logos_genre/Experimental.png",
+              "sha256": "38daa50bc4f9a9d83c6f9444a56cca1ae5e7acaf8151e1fc8d27b4571f3c7766"
+            }
+          },
+          "kind": "overlay",
+          "language": "en",
+          "layout_identity": {
+            "catalog_file_sha256": "87fecce16a921ee9fff743d2a339744d6140f792e74c04ef9c6bbba6001de441",
+            "catalog_payload_sha256": "7085533956e5b2d6a2f2ad694e17118fb5082168691bb70fe2b13b1d18403e81",
+            "group": "genre",
+            "size": "bigger",
+            "size_contract": {
+              "box": [
+                440,
+                100
+              ],
+              "destination": "genre/overlays/bigger",
+              "source_line": 6963
+            },
+            "transform": {
+              "colorspace": "sRGB",
+              "compress_level": 9,
+              "filter": "Pillow-LANCZOS",
+              "format": "PNG",
+              "resize": "fit-including-upscale-round-half-up",
+              "trim": "top-left-RGBA-background-exact",
+              "version": "overlay-pillow-d1"
+            },
+            "trim": false
+          },
+          "mode": "RGBA",
+          "policy_sha256": "2b7b123ab1e6b82404d731095a1f4f07006eaab434230d399efc378368f283ca",
+          "poster_id": "overlay.genre.6ec7ab704b9b",
+          "preflight_payload_sha256": "348029c94d7470d0d16bc9ce62e3c33ef9ca7bcb964bacf19b3599d41b564779",
+          "renderer_identity_sha256": "b29ab7bf7052a5553a8382fdf378dc54096a2e635232e9fdbfc619307c4f1d67",
+          "risk": {
+            "level": "high",
+            "reasons": [
+              "overlay_transform_review"
+            ],
+            "requires_individual": true,
+            "version": "review-risk-d1"
+          },
+          "runtime_review_state_changed": false,
+          "scope": "Exact presented CI sample only; maintainer-reported inspection, no inferred variant/group inspection",
+          "source_review_version": 1,
+          "translation_dependencies": [],
+          "validation_fingerprint": "d6426dbeb74c310b01ae87a35c379837f12cf6a55089eb18479559f54a51d996",
+          "variant_id": "overlay.5d2c27bbd7d3be20296ae9fb"
+        },
+        "reviewer": "maintainer"
+      }
+    },
+    {
+      "sequence": 3,
+      "kind": "review_external_sample_acceptance",
+      "subject": "package-d.sample-acceptance.9fd5d476003f0460343c17ce",
+      "created": 1792256312.3311846,
+      "payload": {
+        "acceptance_record_sha256": "8d1f295011673c1d2a64882d8e39e0731c6bb0ceebb12dfd4be3296f075b2d67",
+        "artifact": {
+          "artifact_id": 12098711636,
+          "executable_source_sha": "ebfa162239235feabbd7d81999ea258bbd693a7b",
+          "head_sha": "c058e758fcf02a2952093f56a8ca6ef26ae10864",
+          "name": "package-d-focused-review",
+          "repository": "Kometa-Team/Defaults-Image-Creation",
+          "run_id": 39025655177,
+          "size_bytes": 606146,
+          "url": "https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39025655177/artifacts/12098711636",
+          "zip_sha256": "3bb8675be01c3d9e86f11039a5eb431711cb5c7dcf30e0e2e5081f2b96eacb9d"
+        },
+        "authorization_source": "Explicit maintainer visual acceptance in the user message titled Package D - Maintainer Visual Review Decision; applies to inspected samples only",
+        "decision": {
+          "accepted_warning_codes": [
+            "wrapped_caption"
+          ],
+          "artifact_image": "output/defaults-fr/based/Book.jpg",
+          "caption": "BAS\u00c9S SUR UN LIVRE",
+          "decision": "accept_presented_sample_with_documented_warnings",
+          "decision_id": "package-d.sample-acceptance.9fd5d476003f0460343c17ce",
+          "definition_fingerprint": "a40d8ca5e430c7284868e3fcfdc5134ca4df9a02374db1c108ad41034baf561d",
+          "diagnostics": [
+            {
+              "code": "wrapped_caption",
+              "details": {
+                "lines": [
+                  "BAS\u00c9S SUR",
+                  "UN LIVRE"
+                ]
+              },
+              "message": "Composer wraps caption into multiple rows",
+              "severity": "warning"
+            },
+            {
+              "code": "historical_color_preserved",
+              "details": {},
+              "message": "Existing color retained, not automatically declared an approved exception",
+              "severity": "info"
+            }
+          ],
+          "dimensions": [
+            2000,
+            3000
+          ],
+          "fitting_proposal_decision": "Accept this exact French captured-fit proposal and resulting reviewed sample; no catalog/YAML activation or other French-poster approval.",
+          "font_identity": {
+            "path": "fonts/Comfortaa-Medium.ttf",
+            "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+          },
+          "image_sha256": "8e258dc7a9273ea09144962d52472c9e4b1975cd7dfb418ab04e71d00590c352",
+          "inputs": {
+            "fades/@bottom-top-fade.png": {
+              "path": "fades/@bottom-top-fade.png",
+              "sha256": "79d93b7455a694820a4df4b27b4418ea0063af59400ed778fc66f83648daa110"
+            },
+            "fades/@bottom-up-fade.png": {
+              "path": "fades/@bottom-up-fade.png",
+              "sha256": "7ed182e395a08b4035b687e6f0661029ef938f8027923ec9434ebcbc5d144cfd"
+            },
+            "fades/@center-out-fade.png": {
+              "path": "fades/@center-out-fade.png",
+              "sha256": "6d36359197363ddc092fdaa8aa4590838b01b8a22c3bf4b6ded76d65bc85a87c"
+            },
+            "fades/@none.png": {
+              "path": "fades/@none.png",
+              "sha256": "5e89879184510e91e477d41c61bd86a0e9209e9ecc17909a7b0ee20427950cbc"
+            },
+            "fades/@top-down-fade.png": {
+              "path": "fades/@top-down-fade.png",
+              "sha256": "cbbf0b235a893410e02977419c89ee6ad97df253cbaee382e01d088d2cce6b39"
+            },
+            "font": {
+              "path": "fonts/Comfortaa-Medium.ttf",
+              "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+            },
+            "logo": {
+              "path": "transparent.png",
+              "sha256": "64a0a1d637ff0687ccbcaeca31b8e6b7235002b1ee8528e7a60be6a7d636f1fc"
+            },
+            "transparent.png": {
+              "path": "transparent.png",
+              "sha256": "64a0a1d637ff0687ccbcaeca31b8e6b7235002b1ee8528e7a60be6a7d636f1fc"
+            }
+          },
+          "kind": "poster",
+          "language": "fr",
+          "layout_identity": {
+            "composer_text_offset": 0,
+            "layout": {
+              "kind": "captured_fit",
+              "measurement": {
+                "box": [
+                  1900,
+                  1000
+                ],
+                "evidence_sha256": "d653dc016f37e75db0a301a267b32bd87f5c5c41adc20ebad669152cf8f237b8",
+                "font_sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c",
+                "maximum": 250,
+                "minimum": 100,
+                "point_size": 250,
+                "text": "BAS\u00c9S SUR UN LIVRE"
+              }
+            },
+            "layout_probe": {
+              "clipped": false,
+              "ink_bounds": [
+                222.0,
+                176.0,
+                1677.25,
+                725.0
+              ],
+              "line_height": 280,
+              "line_widths": [
+                1456,
+                1227
+              ],
+              "lines": [
+                "BAS\u00c9S SUR",
+                "UN LIVRE"
+              ],
+              "method": "existing-FontLayout-and-FreeType-no-poster-raster",
+              "near_edge": false
+            },
+            "point_size": 250,
+            "proposal_file_sha256": "dac288b0cd3e0e736e2719ad43023d250686aeb49d017e2989e4fe1488608f8e"
+          },
+          "mode": "RGB",
+          "policy_sha256": "2b7b123ab1e6b82404d731095a1f4f07006eaab434230d399efc378368f283ca",
+          "poster_id": "based.based-book.217e49bd",
+          "preflight_payload_sha256": "724f6e8d32213719a75c3d4e02ea1d7c1464a6650af21d49b457b90f74ff2f49",
+          "renderer_identity_sha256": "0c60e2a6cb4ad935fef80283deb5db9c98fe20073af1f7006c314375b74a7920",
+          "risk": {
+            "level": "high",
+            "reasons": [
+              "translated_caption",
+              "wrapped_caption"
+            ],
+            "requires_individual": true,
+            "version": "review-risk-d1"
+          },
+          "runtime_review_state_changed": false,
+          "scope": "Exact presented CI sample only; maintainer-reported inspection, no inferred variant/group inspection",
+          "source_review_version": 1,
+          "translation_dependencies": [
+            {
+              "key": "key_names.BASED_ON_A_BOOK",
+              "language": "fr",
+              "value_sha256": "718362a6b0506d644f6e8723cc06dc4eaca4f71da6e3e27236b785369d019965"
+            }
+          ],
+          "validation_fingerprint": "e85f0d55ea29ab1e0942a64e7e45fbd694d9f757f5edbdfa3ff84432c7b5534d",
+          "variant_id": "poster.19c32b6b4da5479878de4230"
+        },
+        "reviewer": "maintainer"
+      }
+    },
+    {
+      "sequence": 4,
+      "kind": "review_external_sample_acceptance",
+      "subject": "package-d.sample-acceptance.7da2c710866d6660ebcb5b2e",
+      "created": 1792256312.3311846,
+      "payload": {
+        "acceptance_record_sha256": "8d1f295011673c1d2a64882d8e39e0731c6bb0ceebb12dfd4be3296f075b2d67",
+        "artifact": {
+          "artifact_id": 12098711636,
+          "executable_source_sha": "ebfa162239235feabbd7d81999ea258bbd693a7b",
+          "head_sha": "c058e758fcf02a2952093f56a8ca6ef26ae10864",
+          "name": "package-d-focused-review",
+          "repository": "Kometa-Team/Defaults-Image-Creation",
+          "run_id": 39025655177,
+          "size_bytes": 606146,
+          "url": "https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39025655177/artifacts/12098711636",
+          "zip_sha256": "3bb8675be01c3d9e86f11039a5eb431711cb5c7dcf30e0e2e5081f2b96eacb9d"
+        },
+        "authorization_source": "Explicit maintainer visual acceptance in the user message titled Package D - Maintainer Visual Review Decision; applies to inspected samples only",
+        "decision": {
+          "accepted_warning_codes": [
+            "wrapped_caption"
+          ],
+          "artifact_image": "output/defaults-en/based/Book.jpg",
+          "caption": "BASED ON A BOOK",
+          "decision": "accept_presented_sample_with_documented_warnings",
+          "decision_id": "package-d.sample-acceptance.7da2c710866d6660ebcb5b2e",
+          "definition_fingerprint": "868c55d4198bc32c692be4614241fd1979f8c1ddc99d1fb6f66248646e9ed4a9",
+          "diagnostics": [
+            {
+              "code": "wrapped_caption",
+              "details": {
+                "lines": [
+                  "BASED ON A",
+                  "BOOK"
+                ]
+              },
+              "message": "Composer wraps caption into multiple rows",
+              "severity": "warning"
+            },
+            {
+              "code": "historical_color_preserved",
+              "details": {},
+              "message": "Existing color retained, not automatically declared an approved exception",
+              "severity": "info"
+            }
+          ],
+          "dimensions": [
+            2000,
+            3000
+          ],
+          "font_identity": {
+            "path": "fonts/Comfortaa-Medium.ttf",
+            "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+          },
+          "image_sha256": "366a97b27d8e9d637297113f26fd567bed5289fcfaf65ccfb6ac4cd6181e0ce5",
+          "inputs": {
+            "fades/@bottom-top-fade.png": {
+              "path": "fades/@bottom-top-fade.png",
+              "sha256": "79d93b7455a694820a4df4b27b4418ea0063af59400ed778fc66f83648daa110"
+            },
+            "fades/@bottom-up-fade.png": {
+              "path": "fades/@bottom-up-fade.png",
+              "sha256": "7ed182e395a08b4035b687e6f0661029ef938f8027923ec9434ebcbc5d144cfd"
+            },
+            "fades/@center-out-fade.png": {
+              "path": "fades/@center-out-fade.png",
+              "sha256": "6d36359197363ddc092fdaa8aa4590838b01b8a22c3bf4b6ded76d65bc85a87c"
+            },
+            "fades/@none.png": {
+              "path": "fades/@none.png",
+              "sha256": "5e89879184510e91e477d41c61bd86a0e9209e9ecc17909a7b0ee20427950cbc"
+            },
+            "fades/@top-down-fade.png": {
+              "path": "fades/@top-down-fade.png",
+              "sha256": "cbbf0b235a893410e02977419c89ee6ad97df253cbaee382e01d088d2cce6b39"
+            },
+            "font": {
+              "path": "fonts/Comfortaa-Medium.ttf",
+              "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+            },
+            "logo": {
+              "path": "transparent.png",
+              "sha256": "64a0a1d637ff0687ccbcaeca31b8e6b7235002b1ee8528e7a60be6a7d636f1fc"
+            },
+            "transparent.png": {
+              "path": "transparent.png",
+              "sha256": "64a0a1d637ff0687ccbcaeca31b8e6b7235002b1ee8528e7a60be6a7d636f1fc"
+            }
+          },
+          "kind": "poster",
+          "language": "en",
+          "layout_identity": {
+            "composer_text_offset": 0,
+            "layout": {
+              "kind": "captured_fit",
+              "measurement": {
+                "box": [
+                  1800,
+                  1000
+                ],
+                "evidence_sha256": "e3fd5414607524fabb70e97881540cab7c10f957ad9ba192461cf36d2b49afbb",
+                "font_sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c",
+                "maximum": 250,
+                "minimum": 100,
+                "point_size": 250,
+                "text": "BASED ON A BOOK"
+              }
+            },
+            "layout_probe": {
+              "clipped": false,
+              "ink_bounds": [
+                131.0,
+                243.0,
+                1769.25,
+                723.0
+              ],
+              "line_height": 280,
+              "line_widths": [
+                1638,
+                792
+              ],
+              "lines": [
+                "BASED ON A",
+                "BOOK"
+              ],
+              "method": "existing-FontLayout-and-FreeType-no-poster-raster",
+              "near_edge": false
+            },
+            "point_size": 250,
+            "proposal_file_sha256": "dac288b0cd3e0e736e2719ad43023d250686aeb49d017e2989e4fe1488608f8e"
+          },
+          "mode": "RGB",
+          "policy_sha256": "2b7b123ab1e6b82404d731095a1f4f07006eaab434230d399efc378368f283ca",
+          "poster_id": "based.based-book.217e49bd",
+          "preflight_payload_sha256": "724f6e8d32213719a75c3d4e02ea1d7c1464a6650af21d49b457b90f74ff2f49",
+          "renderer_identity_sha256": "0c60e2a6cb4ad935fef80283deb5db9c98fe20073af1f7006c314375b74a7920",
+          "risk": {
+            "level": "high",
+            "reasons": [
+              "wrapped_caption"
+            ],
+            "requires_individual": true,
+            "version": "review-risk-d1"
+          },
+          "runtime_review_state_changed": false,
+          "scope": "Exact presented CI sample only; maintainer-reported inspection, no inferred variant/group inspection",
+          "source_review_version": 1,
+          "translation_dependencies": [
+            {
+              "key": "key_names.BASED_ON_A_BOOK",
+              "language": "en",
+              "value_sha256": "a3d985b0a850a46ea66c20a6ea79a7818a1400ddb98a68e54caf083a61b4a949"
+            }
+          ],
+          "validation_fingerprint": "5875462cfec48b082b2b7da37eb64f8a4482e66ff1e9a2bcc9d3fd8f25bf08f6",
+          "variant_id": "poster.f2085c6d67f7f4e48804ac6b"
+        },
+        "reviewer": "maintainer"
+      }
+    }
+  ],
+  "runtime_approvals_created": 0,
+  "sha256": "6f28d008746dcfa21302bff3839ee041608021dc82bdc616ad63879d1fec4889"
+}

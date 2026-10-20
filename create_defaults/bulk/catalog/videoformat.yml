@@ -1,0 +1,159 @@
+schema_version: 1
+category: VideoFormat
+definitions:
+- extends: legacy-poster
+  id: videoformat.video-format-bluray.e477ac75
+  category: VideoFormat
+  display_name: bluray
+  source:
+    path: create_default_posters.ps1
+    line: 6601
+    row_sha256: be7eccd49901491b71bd656b674be1ee0c2c59539e7e5238419888b2dc399699
+  composer:
+    base_color: '#A66321'
+    logo: logos_video_format/bluray.png
+    logo_resize: 1800
+    out_name: bluray
+    white_wash: false
+  output:
+    directory: video_format
+    filename: bluray.jpg
+    remote_paths:
+      en: video_format/bluray.jpg
+  generator: null
+  color_assignment:
+    id: videoformat.video-format-bluray.e477ac75.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: videoformat.video-format-dvd.a5204bbe
+  category: VideoFormat
+  display_name: dvd
+  source:
+    path: create_default_posters.ps1
+    line: 6602
+    row_sha256: 91143ef46f19c473dd5c31d1ab2f0632f6f4e8254781573cab59450ecde76157
+  composer:
+    base_color: '#E4CB63'
+    logo: logos_video_format/dvd.png
+    logo_resize: 1600
+    out_name: dvd
+    white_wash: false
+  output:
+    directory: video_format
+    filename: dvd.jpg
+    remote_paths:
+      en: video_format/dvd.jpg
+  generator: null
+  color_assignment:
+    id: videoformat.video-format-dvd.a5204bbe.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: videoformat.video-format-hdtv.40cad2e5
+  category: VideoFormat
+  display_name: hdtv
+  source:
+    path: create_default_posters.ps1
+    line: 6603
+    row_sha256: 6d680929cc343f3943dd16cee180222ee025901358b0e238c3a7d1007ff924d6
+  composer:
+    base_color: '#27B618'
+    logo: logos_video_format/hdtv.png
+    logo_resize: 1600
+    out_name: hdtv
+    white_wash: false
+  output:
+    directory: video_format
+    filename: hdtv.jpg
+    remote_paths:
+      en: video_format/hdtv.jpg
+  generator: null
+  color_assignment:
+    id: videoformat.video-format-hdtv.40cad2e5.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: videoformat.video-format-moviesanywhere.c30994c4
+  category: VideoFormat
+  display_name: MoviesAnywhere
+  source:
+    path: create_default_posters.ps1
+    line: 6604
+    row_sha256: 98df0d0eae196c53ad26debcfd146298120a7d2cefaf546a4c0f16618f331288
+  composer:
+    base_color: '#77A5B2'
+    logo: logos_video_format/MoviesAnywhere.png
+    logo_resize: 1800
+    out_name: MoviesAnywhere
+    white_wash: false
+  output:
+    directory: video_format
+    filename: MoviesAnywhere.jpg
+    remote_paths:
+      en: video_format/MoviesAnywhere.jpg
+  generator: null
+  color_assignment:
+    id: videoformat.video-format-moviesanywhere.c30994c4.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: videoformat.video-format-remux.688bba6b
+  category: VideoFormat
+  display_name: remux
+  source:
+    path: create_default_posters.ps1
+    line: 6605
+    row_sha256: 4d376651fc6bc862d2164f01266d1ca5dc104d232ae30c342be72c75fd70881e
+  composer:
+    base_color: '#32C493'
+    logo: logos_video_format/remux.png
+    logo_resize: 1800
+    out_name: remux
+    white_wash: false
+  output:
+    directory: video_format
+    filename: remux.jpg
+    remote_paths:
+      en: video_format/remux.jpg
+  generator: null
+  color_assignment:
+    id: videoformat.video-format-remux.688bba6b.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: videoformat.video-format-web.21875add
+  category: VideoFormat
+  display_name: web
+  source:
+    path: create_default_posters.ps1
+    line: 6606
+    row_sha256: d88ecbc8cb23aec5034c53bdfd8e50ec386511ff3b8db3e3a32dd4eefe7d01a8
+  composer:
+    base_color: '#56CECE'
+    logo: logos_video_format/web.png
+    logo_resize: 1600
+    out_name: web
+    white_wash: false
+  output:
+    directory: video_format
+    filename: web.jpg
+    remote_paths:
+      en: video_format/web.jpg
+  generator: null
+  color_assignment:
+    id: videoformat.video-format-web.21875add.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null

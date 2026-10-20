@@ -1,0 +1,225 @@
+{
+  "active_jobs": 568,
+  "approved_exceptions": [],
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "category": "Network",
+  "cold_metrics": [
+    {
+      "cache_hit_rate": 0.0,
+      "cache_hits": 0,
+      "dedup_reuses": 0,
+      "executed": 2,
+      "jobs_per_second": 0.5426897386266142,
+      "max_inflight": 2,
+      "peak_parent_rss": 82571264,
+      "peak_worker_rss": 178397184,
+      "peak_workers_rss_sum": 308424704,
+      "process_start": "spawn",
+      "read_bytes": 18872185,
+      "wall_seconds": 3.68534699967131,
+      "worker_pids": [
+        91744,
+        94528
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 2,
+      "write_bytes": 2291884
+    }
+  ],
+  "contract_parity": true,
+  "definitions": 568,
+  "discrepancies": [],
+  "human_visual_approval": false,
+  "incremental_metrics": [
+    {
+      "cache_hit_rate": 0.5,
+      "cache_hits": 1,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 0.4397218803063941,
+      "max_inflight": 1,
+      "peak_parent_rss": 133816320,
+      "peak_worker_rss": 164843520,
+      "peak_workers_rss_sum": 164843520,
+      "process_start": "spawn",
+      "read_bytes": 8945314,
+      "wall_seconds": 4.548329500015825,
+      "worker_pids": [
+        71572
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 768258
+    }
+  ],
+  "legacy_effective_jobs": 568,
+  "limitations": [
+    "Fresh direct Pillow parity, not a new legacy ImageMagick comparison",
+    "English only; full multilingual layout belongs to D",
+    "Representative sample, not every category output rendered"
+  ],
+  "normalizations": [
+    "HEX letter case only",
+    "Bind actual bundled asset/font paths instead of Windows case-insensitive aliases",
+    "Destination directories are separate from composer basenames"
+  ],
+  "private_intermediates": [],
+  "restore_metrics": [
+    {
+      "cache_hit_rate": 0.5,
+      "cache_hits": 1,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 0.6149215510298901,
+      "max_inflight": 1,
+      "peak_parent_rss": 132939776,
+      "peak_worker_rss": 164356096,
+      "peak_workers_rss_sum": 164356096,
+      "process_start": "spawn",
+      "read_bytes": 9409885,
+      "wall_seconds": 3.2524474002420902,
+      "worker_pids": [
+        78796
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 1077972
+    }
+  ],
+  "resume_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 7.017748242663622,
+      "max_inflight": 0,
+      "peak_parent_rss": 134324224,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.28499169973656535,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ],
+  "sample_comparisons": [
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#7BE7A1",
+        "border_color": "#FFFFFF",
+        "engine": "python",
+        "font": null,
+        "gradient": 1,
+        "logo_size": [
+          1600,
+          574
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#7BE7A1",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 250,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\logos_network\\#0.png",
+          "logo_offset": 0,
+          "logo_resize": 1600,
+          "out_name": "#0",
+          "text": "",
+          "text_offset": 0,
+          "white_wash": false
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\network\\reference\\poster.11ba23c68a3ae83369c58db8.jpg",
+        "sha256": "a73975cb828238e3a058a5007b99fd59f18666d273577b26e47f50cf9bc79ad9",
+        "size_bytes": 538856
+      },
+      "output": "network/color/#0.jpg",
+      "poster_id": "network.network-color-0.f00264b7",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "a73975cb828238e3a058a5007b99fd59f18666d273577b26e47f50cf9bc79ad9",
+      "sha256": "a73975cb828238e3a058a5007b99fd59f18666d273577b26e47f50cf9bc79ad9"
+    },
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#049D9A",
+        "border_color": "#FFFFFF",
+        "engine": "python",
+        "font": null,
+        "gradient": 1,
+        "logo_size": [
+          1600,
+          2327
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#049D9A",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 250,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\logos_network\\5.png",
+          "logo_offset": 0,
+          "logo_resize": 1600,
+          "out_name": "5",
+          "text": "",
+          "text_offset": 0,
+          "white_wash": false
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\network\\reference\\poster.7437e5aed69c4d54c2a42302.jpg",
+        "sha256": "e94e87453597734ebcf68dc55676bfca55b71e6f2e27ce8d22e17e0545a78c01",
+        "size_bytes": 606826
+      },
+      "output": "network/color/5.jpg",
+      "poster_id": "network.network-color-5.f334cba8",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "e94e87453597734ebcf68dc55676bfca55b71e6f2e27ce8d22e17e0545a78c01",
+      "sha256": "e94e87453597734ebcf68dc55676bfca55b71e6f2e27ce8d22e17e0545a78c01"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Resolved English contract parity; generated inputs require separately verified real parent artifacts before render planning",
+  "status": "automated_sample_passed",
+  "wall_seconds": 27.321417199913412,
+  "warm_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 8.9339676974348,
+      "max_inflight": 0,
+      "peak_parent_rss": 83464192,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.22386470017954707,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ]
+}

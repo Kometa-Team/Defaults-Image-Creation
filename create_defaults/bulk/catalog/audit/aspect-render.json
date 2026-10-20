@@ -1,0 +1,218 @@
+{
+  "active_jobs": 9,
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "category": "Aspect",
+  "cold_metrics": [
+    {
+      "cache_hit_rate": 0.0,
+      "cache_hits": 0,
+      "dedup_reuses": 0,
+      "executed": 2,
+      "jobs_per_second": 1.0075990094835474,
+      "max_inflight": 2,
+      "peak_parent_rss": 49876992,
+      "peak_worker_rss": 169443328,
+      "peak_workers_rss_sum": 299094016,
+      "process_start": "spawn",
+      "read_bytes": 18061110,
+      "wall_seconds": 1.984916599933058,
+      "worker_pids": [
+        38252,
+        62640
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 2,
+      "write_bytes": 2283128
+    }
+  ],
+  "contract_parity": true,
+  "definitions": 9,
+  "discrepancies": [],
+  "human_visual_approval": false,
+  "incremental_metrics": [
+    {
+      "cache_hit_rate": 0.5,
+      "cache_hits": 1,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 1.1138717805381333,
+      "max_inflight": 1,
+      "peak_parent_rss": 126156800,
+      "peak_worker_rss": 155156480,
+      "peak_workers_rss_sum": 155156480,
+      "process_start": "spawn",
+      "read_bytes": 8691438,
+      "wall_seconds": 1.7955387998372316,
+      "worker_pids": [
+        44044
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 919944
+    }
+  ],
+  "legacy_effective_jobs": 9,
+  "limitations": [
+    "Fresh direct Pillow parity, not a new legacy ImageMagick comparison",
+    "English only; full multilingual layout belongs to D",
+    "Representative sample, not every category output rendered"
+  ],
+  "restore_metrics": [
+    {
+      "cache_hit_rate": 0.5,
+      "cache_hits": 1,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 1.1568628516932171,
+      "max_inflight": 1,
+      "peak_parent_rss": 126287872,
+      "peak_worker_rss": 157794304,
+      "peak_workers_rss_sum": 157794304,
+      "process_start": "spawn",
+      "read_bytes": 9095274,
+      "wall_seconds": 1.7288134000264108,
+      "worker_pids": [
+        41092
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 1189168
+    }
+  ],
+  "resume_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 10.273063149763036,
+      "max_inflight": 0,
+      "peak_parent_rss": 126476288,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.19468390010297298,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ],
+  "sample_comparisons": [
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#93B69F",
+        "border_color": "#FFFFFF",
+        "engine": "python",
+        "font": null,
+        "gradient": 1,
+        "logo_size": [
+          1800,
+          1506
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#93B69F",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 250,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\logos_aspect\\1.33.png",
+          "logo_offset": 0,
+          "logo_resize": 1800,
+          "out_name": "1.33",
+          "text": "",
+          "text_offset": 0,
+          "white_wash": true
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\aspect\\reference\\poster.4325039b10da3ffa4acc4fc7.jpg",
+        "sha256": "a35aa2d55ea6bdd67bd2df030d62bcacda763f67ac4282ecd1054dd7da5bfae4",
+        "size_bytes": 594454
+      },
+      "output": "aspect/1.33.jpg",
+      "poster_id": "aspect.aspect-1-33.f23e8bae",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "a35aa2d55ea6bdd67bd2df030d62bcacda763f67ac4282ecd1054dd7da5bfae4",
+      "sha256": "a35aa2d55ea6bdd67bd2df030d62bcacda763f67ac4282ecd1054dd7da5bfae4"
+    },
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#FB0AA1",
+        "border_color": "#FFFFFF",
+        "engine": "python",
+        "font": null,
+        "gradient": 1,
+        "logo_size": [
+          1800,
+          1216
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#FB0AA1",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 250,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\logos_aspect\\1.65.png",
+          "logo_offset": 0,
+          "logo_resize": 1800,
+          "out_name": "1.65",
+          "text": "",
+          "text_offset": 0,
+          "white_wash": true
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\aspect\\reference\\poster.79cfa3cfcffb6e365b5d4882.jpg",
+        "sha256": "4cc16005567d0e85e7ce80d1b5813bb7e5c41b51ac94f221d4e80378573d3afd",
+        "size_bytes": 546850
+      },
+      "output": "aspect/1.65.jpg",
+      "poster_id": "aspect.aspect-1-65.f7d5b971",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "4cc16005567d0e85e7ce80d1b5813bb7e5c41b51ac94f221d4e80378573d3afd",
+      "sha256": "4cc16005567d0e85e7ce80d1b5813bb7e5c41b51ac94f221d4e80378573d3afd"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Resolved English contract parity; generated inputs require separately verified real parent artifacts before render planning",
+  "status": "automated_sample_passed",
+  "wall_seconds": 10.275290600024164,
+  "warm_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 8.474403907912626,
+      "max_inflight": 0,
+      "peak_parent_rss": 50003968,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.23600480007007718,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ]
+}

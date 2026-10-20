@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "gate_a": "approved",
+  "authorized_package": "B",
+  "decisions": {"D01": "approved", "D02": "approved", "D03": "approved", "D04": "approved", "D05": "approved", "D06": "approved", "D07": "approved", "D08": "approved"},
+  "color_rules": "defaults-colors-v1",
+  "splatter": {
+    "output": "genre/Splatter.jpg",
+    "source": "create_default_posters.ps1",
+    "authoritative": {"line": 4884, "row_sha256": "8bcb2829b0a97f6bf4f2128f823d897e8e5598c02bdfc344ad3c2011c4172aa0", "hex": "#990000", "white_wash": false},
+    "retired": {"line": 4883, "row_sha256": "dfe1647bfcc9280f73712a32ef0235dca741f6d96a8569649eda33c9b691e18f", "hex": "#416939", "white_wash": true},
+    "active_category_migration": "Package C only; neither original source row is edited by Package B"
+  }
+}

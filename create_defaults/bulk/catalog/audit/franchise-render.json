@@ -1,0 +1,218 @@
+{
+  "active_jobs": 118,
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "category": "Franchise",
+  "cold_metrics": [
+    {
+      "cache_hit_rate": 0.0,
+      "cache_hits": 0,
+      "dedup_reuses": 0,
+      "executed": 2,
+      "jobs_per_second": 0.4799082108700251,
+      "max_inflight": 2,
+      "peak_parent_rss": 56389632,
+      "peak_worker_rss": 144969728,
+      "peak_workers_rss_sum": 281714688,
+      "process_start": "spawn",
+      "read_bytes": 19933564,
+      "wall_seconds": 4.167463599704206,
+      "worker_pids": [
+        102316,
+        71428
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 2,
+      "write_bytes": 3243674
+    }
+  ],
+  "contract_parity": true,
+  "definitions": 118,
+  "discrepancies": [],
+  "human_visual_approval": false,
+  "incremental_metrics": [
+    {
+      "cache_hit_rate": 0.5,
+      "cache_hits": 1,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 0.4876585210456686,
+      "max_inflight": 1,
+      "peak_parent_rss": 126713856,
+      "peak_worker_rss": 145375232,
+      "peak_workers_rss_sum": 145375232,
+      "process_start": "spawn",
+      "read_bytes": 10973502,
+      "wall_seconds": 4.101230499800295,
+      "worker_pids": [
+        20948
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 2236892
+    }
+  ],
+  "legacy_effective_jobs": 118,
+  "limitations": [
+    "Fresh direct Pillow parity, not a new legacy ImageMagick comparison",
+    "English only; full multilingual layout belongs to D",
+    "Representative sample, not every category output rendered"
+  ],
+  "restore_metrics": [
+    {
+      "cache_hit_rate": 0.5,
+      "cache_hits": 1,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 0.7146335877294867,
+      "max_inflight": 1,
+      "peak_parent_rss": 126767104,
+      "peak_worker_rss": 155267072,
+      "peak_workers_rss_sum": 155267072,
+      "process_start": "spawn",
+      "read_bytes": 10997811,
+      "wall_seconds": 2.79863699991256,
+      "worker_pids": [
+        10012
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 2253098
+    }
+  ],
+  "resume_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 4.454203110721536,
+      "max_inflight": 0,
+      "peak_parent_rss": 126550016,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.44901409978047013,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ],
+  "sample_comparisons": [
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#B93033",
+        "border_color": "#FFFFFF",
+        "engine": "python",
+        "font": null,
+        "gradient": 1,
+        "logo_size": [
+          1600,
+          1487
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#B93033",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 250,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\logos_franchise\\28 Days Weeks Later.png",
+          "logo_offset": 0,
+          "logo_resize": 1600,
+          "out_name": "28 Days Weeks Later",
+          "text": "",
+          "text_offset": 0,
+          "white_wash": false
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\franchise\\reference\\poster.6cd5ffe9571c7505db34917d.jpg",
+        "sha256": "69ef986a7221ff189f1669a4a02788d0b816e23cd41b99193161aaffb5718484",
+        "size_bytes": 1126419
+      },
+      "output": "franchise/28 Days Weeks Later.jpg",
+      "poster_id": "franchise.franchise-28-days-weeks-later.ef9f23c8",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "69ef986a7221ff189f1669a4a02788d0b816e23cd41b99193161aaffb5718484",
+      "sha256": "69ef986a7221ff189f1669a4a02788d0b816e23cd41b99193161aaffb5718484"
+    },
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#C62B2B",
+        "border_color": "#FFFFFF",
+        "engine": "python",
+        "font": null,
+        "gradient": 1,
+        "logo_size": [
+          1600,
+          660
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#C62B2B",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 250,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\logos_franchise\\9-1-1.png",
+          "logo_offset": 0,
+          "logo_resize": 1600,
+          "out_name": "9-1-1",
+          "text": "",
+          "text_offset": 0,
+          "white_wash": true
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\franchise\\reference\\poster.4042cefc57b11efdf59d6006.jpg",
+        "sha256": "b7ca4a250f801d61f6f98e2920333cef8bc4216e249e321026fb99a6e843b33d",
+        "size_bytes": 495158
+      },
+      "output": "franchise/9-1-1.jpg",
+      "poster_id": "franchise.franchise-9-1-1.baa7affb",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "b7ca4a250f801d61f6f98e2920333cef8bc4216e249e321026fb99a6e843b33d",
+      "sha256": "b7ca4a250f801d61f6f98e2920333cef8bc4216e249e321026fb99a6e843b33d"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Resolved English contract parity; generated inputs require separately verified real parent artifacts before render planning",
+  "status": "automated_sample_passed",
+  "wall_seconds": 18.12042440008372,
+  "warm_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 9.299362760157798,
+      "max_inflight": 0,
+      "peak_parent_rss": 56651776,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.21506850002333522,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ]
+}

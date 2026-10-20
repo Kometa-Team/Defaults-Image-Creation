@@ -1,0 +1,155 @@
+schema_version: 1
+category: Based
+definitions:
+- extends: legacy-poster
+  id: based.based-book.217e49bd
+  category: Based
+  display_name: Book
+  source:
+    path: create_default_posters.ps1
+    line: 2788
+    row_sha256: 8be1ea042f4a5c36637912df6e776a744f138aa1329aea2f24677f589f4abfff
+  composer:
+    base_color: '#131CA1'
+    out_name: Book
+  caption:
+    mode: translation
+    key: key_names.BASED_ON_A_BOOK
+  layout:
+    kind: captured_fit
+    measurement:
+      text: BASED ON A BOOK
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: e3fd5414607524fabb70e97881540cab7c10f957ad9ba192461cf36d2b49afbb
+  output:
+    directory: based
+    filename: Book.jpg
+    remote_paths:
+      en: based/Book.jpg
+  generator: null
+  color_assignment:
+    id: based.based-book.217e49bd.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: based.based-comic.a8c42da9
+  category: Based
+  display_name: Comic
+  source:
+    path: create_default_posters.ps1
+    line: 2789
+    row_sha256: b1cb3205151ba537aead3681a02a26fa62942eb9d8fdc163caaca2c2159db1b3
+  composer:
+    base_color: '#7856EF'
+    out_name: Comic
+  caption:
+    mode: translation
+    key: key_names.BASED_ON_A_COMIC
+  layout:
+    kind: captured_fit
+    measurement:
+      text: BASED ON A COMIC
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: ca53a85baaf37900c01cc962f2b0adbef0a45e71671f2e59577c1432346a1ddd
+  output:
+    directory: based
+    filename: Comic.jpg
+    remote_paths:
+      en: based/Comic.jpg
+  generator: null
+  color_assignment:
+    id: based.based-comic.a8c42da9.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: based.based-true-story.b7922d94
+  category: Based
+  display_name: True Story
+  source:
+    path: create_default_posters.ps1
+    line: 2790
+    row_sha256: ca0b09a0badd6d5e887bf82bc340168fcbe484cc04f1ae87fbfc9c1b64d1b4d1
+  composer:
+    base_color: '#BC0638'
+    out_name: True Story
+  caption:
+    mode: translation
+    key: key_names.BASED_ON_A_TRUE_STORY
+  layout:
+    kind: captured_fit
+    measurement:
+      text: BASED ON A TRUE STORY
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 541d5ccd8e9790bea65d1796ddbd2cd5820ebf50cbc77bd592203951e449848b
+  output:
+    directory: based
+    filename: True Story.jpg
+    remote_paths:
+      en: based/True Story.jpg
+  generator: null
+  color_assignment:
+    id: based.based-true-story.b7922d94.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: based.based-video-game.6cbef0b1
+  category: Based
+  display_name: Video Game
+  source:
+    path: create_default_posters.ps1
+    line: 2791
+    row_sha256: 534c8a0b7c51c8557b9ac92352ea0678b32a0fd36d73e838329ef5d1e1fb93d3
+  composer:
+    base_color: '#38CC66'
+    out_name: Video Game
+  caption:
+    mode: translation
+    key: key_names.BASED_ON_A_VIDEO_GAME
+  layout:
+    kind: captured_fit
+    measurement:
+      text: BASED ON A VIDEO GAME
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 433d36fc16d11aa1e4b343c6017ac785aed3f51f97df932bb8d12a774c3ccbb5
+  output:
+    directory: based
+    filename: Video Game.jpg
+    remote_paths:
+      en: based/Video Game.jpg
+  generator: null
+  color_assignment:
+    id: based.based-video-game.6cbef0b1.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null

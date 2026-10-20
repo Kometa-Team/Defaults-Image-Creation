@@ -1,0 +1,274 @@
+{
+  "active_jobs": 749,
+  "approved_exceptions": [],
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "category": "Separators",
+  "cold_metrics": [
+    {
+      "cache_hit_rate": 0.0,
+      "cache_hits": 0,
+      "dedup_reuses": 0,
+      "executed": 2,
+      "jobs_per_second": 0.9285735212057016,
+      "max_inflight": 2,
+      "peak_parent_rss": 60489728,
+      "peak_worker_rss": 157143040,
+      "peak_workers_rss_sum": 288550912,
+      "process_start": "spawn",
+      "read_bytes": 19887774,
+      "wall_seconds": 2.1538412999361753,
+      "worker_pids": [
+        84636,
+        41976
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 2,
+      "write_bytes": 2210160
+    }
+  ],
+  "contract_parity": true,
+  "definitions": 749,
+  "discrepancies": [],
+  "human_visual_approval": false,
+  "incremental_metrics": [
+    {
+      "cache_hit_rate": 0.5,
+      "cache_hits": 1,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 1.1373674925368178,
+      "max_inflight": 1,
+      "peak_parent_rss": 142848000,
+      "peak_worker_rss": 147591168,
+      "peak_workers_rss_sum": 147591168,
+      "process_start": "spawn",
+      "read_bytes": 10036149,
+      "wall_seconds": 1.7584465998224914,
+      "worker_pids": [
+        78496
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 1114214
+    }
+  ],
+  "legacy_effective_jobs": 749,
+  "limitations": [
+    "Fresh direct Pillow parity, not a new legacy ImageMagick comparison",
+    "English only; full multilingual layout belongs to D",
+    "Representative sample, not every category output rendered"
+  ],
+  "normalizations": [
+    "HEX letter case only",
+    "Bind actual bundled asset/font paths instead of Windows case-insensitive aliases",
+    "Destination directories are separate from composer basenames"
+  ],
+  "private_intermediates": [],
+  "restore_metrics": [
+    {
+      "cache_hit_rate": 0.5,
+      "cache_hits": 1,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 1.0920362111336919,
+      "max_inflight": 1,
+      "peak_parent_rss": 147030016,
+      "peak_worker_rss": 166797312,
+      "peak_workers_rss_sum": 166797312,
+      "process_start": "spawn",
+      "read_bytes": 10591923,
+      "wall_seconds": 1.8314411002211273,
+      "worker_pids": [
+        98392
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 1484730
+    }
+  ],
+  "resume_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 12.48423866238285,
+      "max_inflight": 0,
+      "peak_parent_rss": 145690624,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.16020199982449412,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ],
+  "sample_comparisons": [
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#DC9924",
+        "border_color": "#FFFFFF",
+        "caption": {
+          "advances": [
+            1909.0500000000004
+          ],
+          "glyph_bounds_source": "original font outline bounds",
+          "ink_bounds": [
+            7,
+            408,
+            1892,
+            565
+          ],
+          "line_height": 218,
+          "line_widths": [
+            1910
+          ],
+          "lines": [
+            "COLLECTIONLESS"
+          ],
+          "point_size": 195
+        },
+        "engine": "python",
+        "font": {
+          "path": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+        },
+        "gradient": 1,
+        "logo_size": [
+          1500,
+          692
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#DC9924",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 195,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\logos_chart\\Plex.png",
+          "logo_offset": -500,
+          "logo_resize": 1500,
+          "out_name": "collectionless",
+          "text": "COLLECTIONLESS",
+          "text_offset": 850,
+          "white_wash": true
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\separators\\reference\\poster.3a8b025ebb0ab23437e252cb.jpg",
+        "sha256": "8a43e817ebbfca75d97815d9c70f4729ebcef207c3e1022eb25bd3c59246b531",
+        "size_bytes": 742235
+      },
+      "output": "collectionless.jpg",
+      "poster_id": "separators.collectionless.a76f3038",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "8a43e817ebbfca75d97815d9c70f4729ebcef207c3e1022eb25bd3c59246b531",
+      "sha256": "8a43e817ebbfca75d97815d9c70f4729ebcef207c3e1022eb25bd3c59246b531"
+    },
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#3A9635",
+        "border_color": "#FFFFFF",
+        "caption": {
+          "advances": [
+            731.612,
+            1581.3700000000001
+          ],
+          "glyph_bounds_source": "original font outline bounds",
+          "ink_bounds": [
+            172,
+            292,
+            1727,
+            681
+          ],
+          "line_height": 227,
+          "line_widths": [
+            732,
+            1582
+          ],
+          "lines": [
+            "ACTOR",
+            "COLLECTIONS"
+          ],
+          "point_size": 203
+        },
+        "engine": "python",
+        "font": {
+          "path": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "sha256": "992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c"
+        },
+        "gradient": 0,
+        "logo_size": [
+          2000,
+          3000
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#3A9635",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\Comfortaa-Medium.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 203,
+          "gradient": 0,
+          "logo": "{REPOSITORY}\\create_defaults\\@base\\amethyst.png",
+          "logo_offset": 0,
+          "logo_resize": 2000,
+          "out_name": "actor",
+          "text": "ACTOR COLLECTIONS",
+          "text_offset": 0,
+          "white_wash": false
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\separators\\reference\\poster.efb029f762fd28f7f9e982cd.jpg",
+        "sha256": "3e3db8b6a5ddf9ceb65a01cc2c74e10ff18e26bd4c412afbbd20938a3696d10e",
+        "size_bytes": 362585
+      },
+      "output": "separators/amethyst/actor.jpg",
+      "poster_id": "separators.separators-amethyst-actor.25eacd1b",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "3e3db8b6a5ddf9ceb65a01cc2c74e10ff18e26bd4c412afbbd20938a3696d10e",
+      "sha256": "3e3db8b6a5ddf9ceb65a01cc2c74e10ff18e26bd4c412afbbd20938a3696d10e"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Resolved English contract parity; generated inputs require separately verified real parent artifacts before render planning",
+  "status": "automated_sample_passed",
+  "wall_seconds": 34.43146889982745,
+  "warm_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 13.608163819840353,
+      "max_inflight": 0,
+      "peak_parent_rss": 63504384,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.14697059988975525,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ]
+}

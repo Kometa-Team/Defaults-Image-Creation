@@ -1,0 +1,3313 @@
+{
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "active": [
+    {
+      "poster_id": "genre.genre-other.5b43fd4e",
+      "legacy_id": "genre-07059-a5c725ff547b",
+      "job_sha256": "96aa0d1411fc99760059880bb3dc12a4c1736564fbaaa4fe4f996cb2ee9c80c6",
+      "source": {
+        "definition_line": 4645,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4657
+      },
+      "row_sha256": "6efe38f9585a5e6dfaed18f24d9fb20af9fa9bf448b694198e856be2e7d05847",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-award-shows.1d45af1a",
+      "legacy_id": "genre-07060-9f4193ef5436",
+      "job_sha256": "90146a2df1497c36493403f14201e2bb7b469f2062baa9d8c083aac85368a710",
+      "source": {
+        "definition_line": 4663,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "82f7b4486496c4bd4e8d8e02d76c33d5c4051404e010f9c22b3015cee2eceb23",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-bottle.7de5c226",
+      "legacy_id": "genre-07061-18864aff59dd",
+      "job_sha256": "a740896796f0d093e8ff9b88f2284f04e1e0622938375af462fa73229adc569e",
+      "source": {
+        "definition_line": 4664,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "10f6a132da8ee009c1cab91fc7fbf770a1736ed46f1c6317883dbd538f65cc0b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-wedding.658d7c6b",
+      "legacy_id": "genre-07062-1d7384752c12",
+      "job_sha256": "93564764f3d07464d6a9aaf524fa8f92fbbbff51b8ff6e311e8bf6b1c82fd787",
+      "source": {
+        "definition_line": 4665,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "b57e4e79629feef8de5da219be4691a75ea25072773f1049fa770ea04b1966e6",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-movies-that-defined-our-childhood.055f0d5f",
+      "legacy_id": "genre-07063-a6828f6845d3",
+      "job_sha256": "e18584ccd7d32af043246ae943d336f327f00481181ed1b6f2bae50657fbfd4b",
+      "source": {
+        "definition_line": 4666,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "47d779527824182c50b1eeb5682ac5143e6f96f359dc3bf8224ac9da608cdac4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-1001-movies-you-must-see-before-you-die.ca982ba3",
+      "legacy_id": "genre-07064-18bfc611603b",
+      "job_sha256": "a0e2d673f43d859cf25b655a2a15d01edb885730566ae84786fa3ce4379e51b4",
+      "source": {
+        "definition_line": 4667,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "5c58651ca6e291d0af41ae93f23e7a6480df55126de4404df6686e0af4b2a1f4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-may-the-fourth.54d0e0bb",
+      "legacy_id": "genre-07065-0b6ce0ec283c",
+      "job_sha256": "c379093a12d896fbd717278fca4be7c180a976c58cc69f6ee3907cff3727baa0",
+      "source": {
+        "definition_line": 4668,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "12fe4509f4017ecfe27d5133bc92ea73b4faf6b7ae7ca409958f291bdb483ba0",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-new-years-eve.587fa576",
+      "legacy_id": "genre-07066-e37d8fde9c34",
+      "job_sha256": "0110fb574ffa410cb3e4063494df02fdd2632015d14beb4bc3792844146a6948",
+      "source": {
+        "definition_line": 4669,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "7c6835f845a1d79624bddb17398bc158659ea2eab49cfbd45a8be3eaeed61746",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-disney.4165c786",
+      "legacy_id": "genre-07067-1eaeeef79bdd",
+      "job_sha256": "f18546a02b579c03151fdb31f24face742b9e4c2651b4aaf7f61c19331662984",
+      "source": {
+        "definition_line": 4670,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "2f8c7db8542e875997cee029527553bcfb7143178ce09c3c79911785f3a813c5",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-pixar.051afe70",
+      "legacy_id": "genre-07068-f0adedebb61b",
+      "job_sha256": "dcbfcc7a3321a390bc1b5820d0c0af43d686aed8529c02311fb91f38d9c3b7f3",
+      "source": {
+        "definition_line": 4671,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "ccebe56f0b6cea59b094c2695a55c895297899f8899be864a4922836355f3700",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-dreamworks.caf04b23",
+      "legacy_id": "genre-07069-797ecb6d604d",
+      "job_sha256": "6d091b7006f46f783a88e7228b8b0c1bd706b3c6e1a9adaa5c15cfa1288f0c31",
+      "source": {
+        "definition_line": 4672,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "77e81d09535e7b7c1a1e9a9e9e4406fa2bd7a879c44fb23385d5e32d3e1cad62",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-disney-pixar-dreamworks.25339433",
+      "legacy_id": "genre-07070-83aa433174f5",
+      "job_sha256": "d378b2e96223497404a0cde7a0db35a6a1caf39362c89157f3a3ffa2a75208da",
+      "source": {
+        "definition_line": 4673,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "137440db3a3bedced76501f81c48664029560ebf3b44c3356ba5c632a1811956",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-visually-insane.0e1ac619",
+      "legacy_id": "genre-07071-b3ad77811810",
+      "job_sha256": "207da5b8d4887e8011fc9430632350fe5ecfa0288b348d4a0653b3bbe22bc7f9",
+      "source": {
+        "definition_line": 4674,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "fe46ef34be2a45a96843d4ae1775830ef279ab1ca24c72170e8930c203e44638",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-guilty-pleasure.7a5bbc0d",
+      "legacy_id": "genre-07072-716264bdc803",
+      "job_sha256": "00cb6d3177177efdcdc689b97043f73ede18503f42e1b47850bdf8968f215942",
+      "source": {
+        "definition_line": 4675,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "4e38e9f8de3ff376af74c2a1b3d63c14b1260a7886a861c486109d5f6ba528dc",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-lost-treasure.33163302",
+      "legacy_id": "genre-07073-7ece5c44b63f",
+      "job_sha256": "257ca9e23337a1fe7c431f6f84a3d73d78df90a742548f9943771e45b76961ae",
+      "source": {
+        "definition_line": 4676,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "bc6339e3f6d93d0f61d9aa04b0ddf4db3257d3cf8fc82c50adbca60433495d53",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-absurdism.37df6b33",
+      "legacy_id": "genre-07074-d8c56784b137",
+      "job_sha256": "8fea605c6abf12cf4b4008415406be243c59123cf5af5938b58fa4838f71cc7a",
+      "source": {
+        "definition_line": 4677,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "5f7f31218ea8dbcfde7d1e93c0df1ac6c850e85ea8172ac0ce6bb3e8fcdae757",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-absurd-comedy.a6975754",
+      "legacy_id": "genre-07075-cd2649fad0a5",
+      "job_sha256": "69f4922e4f82126e7ad6e5181b3f5d620c7490a2bbb7786de85b3284cabad414",
+      "source": {
+        "definition_line": 4678,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "a62a953ae60a8f120d48038aff669c043ca03984a9c71266d9040b06dd8e2b64",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-action-adventure.96dd0142",
+      "legacy_id": "genre-07076-664e4b6dc49f",
+      "job_sha256": "f4aa2de72b1f795d3558c32327582b1683d0720dc5c12efb95a0f1df15334969",
+      "source": {
+        "definition_line": 4679,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "e2b197d2cc009934e0dd323dd79daa3d80d00b2cb72fb03fb7df1d57d29dac2f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-action-comedy.136b7cdc",
+      "legacy_id": "genre-07077-9aec4e8a895d",
+      "job_sha256": "cb92ce85137acd0fb95edd22c9b73e36a373a2f48a0e159abc5ccf59ad5dd46b",
+      "source": {
+        "definition_line": 4680,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "93e602f0b7e8e0f7e215dccaee95c991b9a20d4a984da994c435382633d8f6ed",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-action.788cc851",
+      "legacy_id": "genre-07078-51b961b826a1",
+      "job_sha256": "fe6919990f94e6a3f734e8edb67246f34d16f2e70ee11875cebaf96b7dae6cf1",
+      "source": {
+        "definition_line": 4681,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "967e8b9998eec67d4e36bd75b177c6fb8347850fe9973a856a5a3306efdfb1f8",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-adult-cartoons.1418eac0",
+      "legacy_id": "genre-07079-b29d517b70da",
+      "job_sha256": "502b23e92a81cac2631ed53d4d4e95b40fa3131578fc0326a50713cdd848f6f9",
+      "source": {
+        "definition_line": 4682,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "c42ed4c4130d568ecc9fb14d9f63799a12a14455ce11ee32ba1e058dbde4e5b6",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-adult-cartoon.66e2b5bd",
+      "legacy_id": "genre-07080-627afd38d5aa",
+      "job_sha256": "697e9c40acbe728e082309c2f53add70fc87e6560c589010405ef77eadb13905",
+      "source": {
+        "definition_line": 4683,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "0c935c69f2b74694282a7e056ad377fdf8b702dfd36e123963acc07038e9d5b0",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-adult.2b4dd63d",
+      "legacy_id": "genre-07081-ba1c22fa409e",
+      "job_sha256": "888d3196141bafd1b82c00858edf23fbc0e4a6f75c6c89f8defcc7573964ccbd",
+      "source": {
+        "definition_line": 4684,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "887da7409651764f83f056e6946c3df190487052c52d653b4df165f37c19c654",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-adventure.38db5829",
+      "legacy_id": "genre-07082-04b602cb8954",
+      "job_sha256": "8c4cd454ac7d1e0fc2ded2dd2b87ff240e8d911f5009be723f78164b56d9c5e7",
+      "source": {
+        "definition_line": 4685,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "522003c57006dcfdf2c22992a2b4f6ac6bc0127fe05f9bdfe1aaffaf3c90ac1d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-alien.3b77f93a",
+      "legacy_id": "genre-07083-3bbaf21023a7",
+      "job_sha256": "091943e949f577203acc8f54266fe84a71cc6000f29f0a4700aa36595c9ef457",
+      "source": {
+        "definition_line": 4686,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "c0dd5ad4ac7e5ba5419c2b005853ebbf2a22764f70db1019b15f2c6d0b60a013",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-alternate-history.18a503ac",
+      "legacy_id": "genre-07084-cdeb49a1270a",
+      "job_sha256": "6566e2c2faac9f15824f41fbc262c36949b584ff5514efda1f4a0f8a095e3905",
+      "source": {
+        "definition_line": 4687,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "04162dd660f9f159f4835892b8dcf1967e6d1608239e8777c8a68b2e6441dd5e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-america.68a03db4",
+      "legacy_id": "genre-07085-315278230964",
+      "job_sha256": "13f8f8d823a5f19d9c54fea6c21b29fad044fa680ad8b15fe9759aeb8ce36cd2",
+      "source": {
+        "definition_line": 4688,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "f76dc5d999487c5f11891cde2c1fe88cf0391489843aecd965655e450542ac33",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-animals.95b425f7",
+      "legacy_id": "genre-07086-a77ac2fee4a3",
+      "job_sha256": "f86b20f861e118f143a6a26f1d0bd6dabf01358e2c0235a7645d455f2082eb15",
+      "source": {
+        "definition_line": 4689,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "b2d49a862df3eee28c8c4e236bd916012e477cb0ff47e480ab8bc674566557b8",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-animal.1d007476",
+      "legacy_id": "genre-07087-b52f293a8391",
+      "job_sha256": "e41c12caa6de0c2cc4a0f199ec51a86880a250f0aa01fd0f0867662b3203de7a",
+      "source": {
+        "definition_line": 4690,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "91f4ac6fd2ab753aaed9aae18973cc42a7d5881c38ce37ad1d2bc701d72a9819",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-animated-shorts.c81b8251",
+      "legacy_id": "genre-07088-43ee8416fd43",
+      "job_sha256": "742261573a64753e2236d64dadd4fe0c517db60c64b8a0bf316d660dc2028b75",
+      "source": {
+        "definition_line": 4691,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "abcc7a0eebf139c5ed64d656a9d4570d9439cdb134812b45824127c651dc066e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-animated-short.78382f49",
+      "legacy_id": "genre-07089-348c2bc24b0e",
+      "job_sha256": "77c9fa302915adb7160823c2806088d6fdf27520498e068bdd31cf4d74c8a0c9",
+      "source": {
+        "definition_line": 4692,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "8c25d2133cd22f216f20008839f0b4d12ec9a59a4e89edbcd885d8e8e1e92998",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-animation.1c47a883",
+      "legacy_id": "genre-07090-4f5051ebdaa1",
+      "job_sha256": "ffa0a213679b5f9d55ff94d2e1bde63221e1171a9e2f008af5726d4bdd6cc603",
+      "source": {
+        "definition_line": 4693,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "f84d2bcbb10818d059358ba059a184d7d8431c258b5f2be6a50ea56056ab0d67",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-anime.8f97660d",
+      "legacy_id": "genre-07091-1b8b5cc34c04",
+      "job_sha256": "ab34e45cc8aaa4d5fdb9d87a632d38e58ead4de085f833a83c1ba528d8783ce5",
+      "source": {
+        "definition_line": 4694,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "f21bf046b530904ccc7e16156c85337569d069460c264608da6ca08ca5a59bf3",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-anthology.2334fa22",
+      "legacy_id": "genre-07092-7b9ed3f232ea",
+      "job_sha256": "32add68fb8695662c39f0fc18d1aecb9f446ebf4859c5f0d322ecb2bf2613716",
+      "source": {
+        "definition_line": 4695,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "1a3d0c8725246c265dd86713742bd8999d84fd0ddc65b171c23d606ca87f2d30",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-anti-hero.0bcc9095",
+      "legacy_id": "genre-07093-7849bd9194e7",
+      "job_sha256": "8be460e3e1298422df3ffd04deb9a6802ef5006e28a8a75025adf92e20224311",
+      "source": {
+        "definition_line": 4696,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "f2cab582b9a286ef51f55ef22d7535e80aadbfb86a08b6e1c8d196d3a2eff348",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-apocalypse.2cb46026",
+      "legacy_id": "genre-07094-c341ae4b8770",
+      "job_sha256": "dfdd9a5b0e3ce10d41a3650a8f0c9b58ebd28f8156d110a8c6d6fc17270bcef2",
+      "source": {
+        "definition_line": 4697,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "02802c25115a0691d4337c60c2dd108164f5532fe0434af00edef8a7394b94cb",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-arthouse.5fc4f6c7",
+      "legacy_id": "genre-07095-1febdf42b927",
+      "job_sha256": "3c8ca9a711a5335a470605678b675fb33d18217fd1d9abb7be00482ebf201aa1",
+      "source": {
+        "definition_line": 4698,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "d68e0198f82e5580fd901735121d5384d92e524305ea53a2551309d032515622",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-artificial-intelligence.c56d904f",
+      "legacy_id": "genre-07096-d56a9bb40fb0",
+      "job_sha256": "1c9f27eb199b794380882c609b0e5f914889d2dbc6caa31ad4ae40cb857c1fbb",
+      "source": {
+        "definition_line": 4699,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "144745a3f7022eda6b0e69298e6e8fb4587969e5f7ab23b040af9cd4fe080391",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-assassin.1d037b66",
+      "legacy_id": "genre-07097-40410c226c1c",
+      "job_sha256": "45f3c841f73199e90509ff2fdf10920041b95855511fb8e440f34465fcd12367",
+      "source": {
+        "definition_line": 4700,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "6adbf1b873a8aa228e103c8c19a332b776eb1fbab96f60a6aef005f9347b31c0",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-astronaut.07b3956e",
+      "legacy_id": "genre-07098-17fb402b79ad",
+      "job_sha256": "54fbf7e787bdab0ddf3ffaf0c65f8190c7d2739718810383870ae85b31ba8292",
+      "source": {
+        "definition_line": 4701,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "f5cc3df98ff5c8b3cb276fd4fe41c02852e9843ecf360dbc29119973a173d3a2",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-backroads-horror.807e67c6",
+      "legacy_id": "genre-07099-276fb8120997",
+      "job_sha256": "bc08aac764d9c0d05647d0c3b709f21f8fab3a6e463fdb7d82cbfe3a10ce63f0",
+      "source": {
+        "definition_line": 4702,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "e4ef87b3e9220c013d89b561cc13fcd7c91fdea68eb064e918e0c01893dc4333",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-betrayal.7aead013",
+      "legacy_id": "genre-07100-03a6e0aa1fba",
+      "job_sha256": "f78979a9e1b68ae2e34fd0038c5bbffda817c783f5eb07d2a4d443188060ed79",
+      "source": {
+        "definition_line": 4703,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "3a2d7fd5d5d514f10edff590b5695dff1c273b50f5419df90784adcee62aac0c",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-biography.17d1769e",
+      "legacy_id": "genre-07101-9a8cdf11fd6a",
+      "job_sha256": "ac13b1263e43107afab90430f2ff92b4a0a34a0b9a96f027f51b31d2ced99c15",
+      "source": {
+        "definition_line": 4704,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "43c7c88265828266dfb6127181d1dfe008f6768ccad8eb6845cf765f312224b4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-biopic.4097617d",
+      "legacy_id": "genre-07102-96e3bc0a8b2e",
+      "job_sha256": "fd979ce2a10f827568b542b437772bed3abd2fd6610deb2e9120cbdadcc3f269",
+      "source": {
+        "definition_line": 4705,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "add56117de4f61f7ad74ca9701a59dcb81dc0886d1a1503443b4101040831850",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-blaxploitation.b6c8f938",
+      "legacy_id": "genre-07103-3daad52108f8",
+      "job_sha256": "9881acdf1540512ed4de223177de23ad7b7514d29f1fb75be2dbbfd7ca1c3f63",
+      "source": {
+        "definition_line": 4706,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "98604b43ad016ad1ed70b2f3490239dc94dc3821d387a33e830ae484d4f9fb41",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-body-horror.bf3d2db6",
+      "legacy_id": "genre-07104-ed6cea2e4fce",
+      "job_sha256": "6d46e5dc69523129d2bb46c2b04abd3f34dc4ad3b3cffab116c67c6482efc598",
+      "source": {
+        "definition_line": 4707,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "498a5c37a6ab5fce85943b8113bb436bd129ea21346dc7cdd7849f37e6e25c6a",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-boxing.57dbf7c5",
+      "legacy_id": "genre-07105-4b90e06b2f9c",
+      "job_sha256": "0cec398113eae707e3e33284bf51760f543cd7ea167a1580c408499d8ea439e0",
+      "source": {
+        "definition_line": 4708,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "3f45ae761b80df1305240e66ab51f73d585a0d709c1209db1221f1f8312fb19f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-boys-love.e3c2c0e9",
+      "legacy_id": "genre-07106-12ce646d64d9",
+      "job_sha256": "4f8339d8c6362247035ceaf8ebf62bdbd9555d5d45b41103a8ba47efd92b0831",
+      "source": {
+        "definition_line": 4709,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "66b0d9379d7fa1263e230d658ed03946283b51adb954c910959124685c05a7e6",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-buddy-comedy.b4c21862",
+      "legacy_id": "genre-07107-2e6579e6db09",
+      "job_sha256": "50ccfc6aa80cc2a18720001d941c8694fb3a22d0d643917fd48ffd9e14f9190d",
+      "source": {
+        "definition_line": 4710,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "f49cc95a0cd1963fc108b640c5ffb50d8d9323ebd83f0af4426047304d938f96",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-bug.8989936f",
+      "legacy_id": "genre-07108-6f18ddb1039d",
+      "job_sha256": "4f6eeefac0ec54d5ef5734c720390ae83eb516db63c2f81957c70b99b24eca80",
+      "source": {
+        "definition_line": 4711,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "ea8d1d8811e4ec6b1bbb08c7e6b43c99969f2e081840c3a12dd6ebb7343117b0",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-building.394d3766",
+      "legacy_id": "genre-07109-ac961806f6be",
+      "job_sha256": "1bc2ae51f61e18bd7b61594cd246dbc8382846bf144cbcb6c2beb4333e72e500",
+      "source": {
+        "definition_line": 4712,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "81c47d0213ccc1f9255eb01cf6bbceb9b4c93e11f39de14cd3fda03b2a518071",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-cannibal.40959ff3",
+      "legacy_id": "genre-07110-e737ecfaeda4",
+      "job_sha256": "9e9d081376557c20e293567775c47a7dee900d2e7136be9f78ffface0c3b2d95",
+      "source": {
+        "definition_line": 4713,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "e3e51c7516c61cc22f5706b5a6888445b8bee3ba2fbc089be68e62ab0aec1ca3",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-caper.c50d6b0d",
+      "legacy_id": "genre-07111-c7387e9d24e3",
+      "job_sha256": "42902ea6a76c95d89363623faa00c13791fcff88b0a5562c8ba2fa032ea2b348",
+      "source": {
+        "definition_line": 4714,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "350123ad6ff2ede4bffcb49418104c0e92b1d004a33bd4b39a9bba66066c5f3b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-cars.644470bd",
+      "legacy_id": "genre-07112-45669890dd8d",
+      "job_sha256": "e8de8f873ec87188104d4b746e0e25fd0adf5dc3e53ccea8678951277a1f9fd3",
+      "source": {
+        "definition_line": 4715,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "e64b8dc90024d616e00f74d1ff321eb11999e840f565171fb1e364f2ba26fc3b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-chick-flick.569360d5",
+      "legacy_id": "genre-07113-69ff8ec07764",
+      "job_sha256": "7963e045f4e51b71e8e70fe32d9d97208009d7f1932c8a0adf7ee7807566abf6",
+      "source": {
+        "definition_line": 4716,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "f181d58905d9b715b419ac6eddc0d5201be5126ad430ef75eb7d381418c8abe4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-children-s-cartoons.3ed56d6d",
+      "legacy_id": "genre-07114-99a23982d813",
+      "job_sha256": "8878263bb5148f50f41831ff9cd15861eb8ce8c1476a9db4601ffb4b1e435f9a",
+      "source": {
+        "definition_line": 4717,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "40c4f1cffb71338df2b10c8199c912568efe10c2636bb2698930aa09e9328df2",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-children-s-cartoon.b744d513",
+      "legacy_id": "genre-07115-0bee9c89123e",
+      "job_sha256": "f699cdac2b7c0c23aefd5660485e7438bc001b7a5b07043493608b7c3c6458d1",
+      "source": {
+        "definition_line": 4718,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "baa0548ef53b70770d734eddd89e5097cfe5c3c3d29916513c25419c2bd652d5",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-children.092d7baa",
+      "legacy_id": "genre-07116-a17e0887088f",
+      "job_sha256": "1e9f2c21e6a25d107f153a5596a399790e7d6e2532c6f152ffeb02530256b2c6",
+      "source": {
+        "definition_line": 4719,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "d76771d4d77c9c70334e92bb7e0d47648c4006cadbe1d6d11c47132176a61058",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-christmas.2342b63e",
+      "legacy_id": "genre-07117-406a3fb07637",
+      "job_sha256": "9604515f0b31f6a3ef32895697ea18be0da39f797f840f25d399daaa3018c0bc",
+      "source": {
+        "definition_line": 4720,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "0d0dea233ab09b8a5a1f1f92eacd30abf51e141b4fc071e58f54b612632414e7",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-colorado.b35f2845",
+      "legacy_id": "genre-07118-769341daf23c",
+      "job_sha256": "c18f3259dae4af148f68f096574163eb208480360a0bd164f6dd3e7f77d02e9a",
+      "source": {
+        "definition_line": 4721,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "3580e93a45deb13abf1c22dbb389fc97611b080912264a87946241f5e85c66ca",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-comedy-horror.74e7bdd5",
+      "legacy_id": "genre-07119-da6d85a17b6c",
+      "job_sha256": "7539ac2fdea592e2c50bab357d92ff7574dc6abf8b9c4bda1a92e359693933c7",
+      "source": {
+        "definition_line": 4722,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "87dec95026843f729d8db77d8928dba83568452291d329949fd125d1bffaa794",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-comedy.e3bb9bc1",
+      "legacy_id": "genre-07120-6263c544da4d",
+      "job_sha256": "a110347a7c56749d61dc32e86a2445b1dd530afa68bd485297c36a02742031ad",
+      "source": {
+        "definition_line": 4723,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "c824aa4800d0cd3906b04a538fdad5ee36a8792c594235794c54a0d64cf7efaa",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-coming-of-age.bbeda4fa",
+      "legacy_id": "genre-07121-032eb5a98a47",
+      "job_sha256": "ae0633c7213d21584a50e8ed45a965712ec86df73ddc7c0f7865bba4251bf982",
+      "source": {
+        "definition_line": 4724,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "615c2f19cd95de5eca49d81583ad204febe0697b2f3fc3c9f1cc0f977f749466",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-competition.54d98fe9",
+      "legacy_id": "genre-07122-d82b53abed30",
+      "job_sha256": "8798cca9dcb0aeaa9d7541a77ad50e913f15e82a7a4f4b9a36973c9a23aa5718",
+      "source": {
+        "definition_line": 4725,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "c247ae2efa7851b59c3351de1716efd61603c0fe89ee62cadac50559f2dc621f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-conspiracy.df70e9c8",
+      "legacy_id": "genre-07123-24e9a6304070",
+      "job_sha256": "3289fc3f6e65e47ba676ca1596a01d5ea82e18765adfbec0b9aade7f505495c9",
+      "source": {
+        "definition_line": 4726,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "d7fc3e1d0d11837bdddf5dec736cc01339f14e11fc7b40942988667b154b388e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-con-artist.01a09fa2",
+      "legacy_id": "genre-07124-6d965cc093ec",
+      "job_sha256": "dd833001c18a1afe61821ea72324b63868ce52dff3bd2b60b1e8ec24d5e5e14c",
+      "source": {
+        "definition_line": 4727,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "04640a717d7283ea15d05eaa79cbe3d61fa166f6d36aecea9f0a6a144154cb3c",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-cop.8d4cd49d",
+      "legacy_id": "genre-07125-5b13df04bec7",
+      "job_sha256": "a2b7289102980b0739c6a263edd3204d715a6f2cc2599a40cc353f46126ef408",
+      "source": {
+        "definition_line": 4728,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "70f3f743e3d85f987e86618a7a90dad8593c3685451628b53dc3087be92f49fc",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-costume-drama.9dbaed7a",
+      "legacy_id": "genre-07126-d79c4ca17db4",
+      "job_sha256": "e278fe0a26b77be256e684462643dc6e05f31292bcd31de8cb6568b2346c3e2f",
+      "source": {
+        "definition_line": 4729,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "9d780cdcd0137d5153ecfc976cfea59eb1ce0a87673f3480119935531802935b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-courtroom.09a625d6",
+      "legacy_id": "genre-07127-91963f6145eb",
+      "job_sha256": "f6cf7ccbb37cf25cb047aa2e57b477ded60ed826b6e783e86c205c0449b3f84f",
+      "source": {
+        "definition_line": 4730,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "0e6d46b07555f6122141d5b7526509ebe9ac6401739da2abf0bb88b6a493ee39",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-creature-feature.d8a5ab38",
+      "legacy_id": "genre-07128-bb405f4f6d0a",
+      "job_sha256": "24f2da15c7dad059ecda044d3a9320afc353cf0da82891df239d4e4160e0fdab",
+      "source": {
+        "definition_line": 4731,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "06036a000879692e3c6afcdb225baf53c877af650c774ccf571343ddfc5559bb",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-creature-horror.5c59c274",
+      "legacy_id": "genre-07129-8eb22efb0316",
+      "job_sha256": "3fc83aaf06991e1f55e01a1f68faed0fe523c1fa91e7c9b2400da98c41b6a4ff",
+      "source": {
+        "definition_line": 4732,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "52b723dccda22896e4630640031575242050377dddab322cb96db9093bafc1fc",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-crime-comedy.9f1c0b6f",
+      "legacy_id": "genre-07130-ec92c64f1a00",
+      "job_sha256": "3d48ef6976490fe48f3b789412ea88ca80dd11a568ee39ff553f3c4f68d1e348",
+      "source": {
+        "definition_line": 4733,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "5e15648f87e0ab3039aa872766d8fa3073289689396ec18c79d67986757ae759",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-crime.dd5af198",
+      "legacy_id": "genre-07131-e5e6b342db1e",
+      "job_sha256": "ffe5c70a4d519ed4b31cac0ab8506d8e1851894850ffc639c1abaca46212645e",
+      "source": {
+        "definition_line": 4734,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "dc4a33c47089fc58fddf43ac070ecae94696bf163f70a93ef0f067d231f5b8bc",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-criterion-collection.3a27afea",
+      "legacy_id": "genre-07132-6467bc220563",
+      "job_sha256": "1642bff593336ca30fadc4f2d30a12e0c65e35878aab6a975265540f418aa5c2",
+      "source": {
+        "definition_line": 4735,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "404f6b4e801ec41f8348df5cb31ea261b07c2064b1795f2cc38e54a813e0a593",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-cult-classics.eac993a8",
+      "legacy_id": "genre-07133-8a43599ef494",
+      "job_sha256": "ccf9878507793b56bb07d13ef4714663ce369e9befd7a83566c3037cae0ca643",
+      "source": {
+        "definition_line": 4736,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "3a993d056b6ba20b6a069e7e2ac16d451b680d75d2ecf93308bb00291a452773",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-cyberpunk.7b979295",
+      "legacy_id": "genre-07134-4daf2024c25d",
+      "job_sha256": "aa73fb8f9aa2939652cf27db6eb6f143d4ee141aaf193e135db8abffdb475529",
+      "source": {
+        "definition_line": 4737,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "371405684da9361ed91f4a0c461c8538e2d3dd6ec0fc146b580a83023525a512",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-cyber-thriller.8084da2e",
+      "legacy_id": "genre-07135-bd8eb2ed0ce3",
+      "job_sha256": "afb780b53290b8c8562b4381bcc2d8f1b675310bcb4e01f47a369f343ff4ceb7",
+      "source": {
+        "definition_line": 4738,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "cc37a511d39abf0dfe747beccbf1c55ecaf703fd81ead2432c3d4c02d14ca402",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-dark-comedy.ef612a76",
+      "legacy_id": "genre-07136-26412c82bb33",
+      "job_sha256": "f00d7ea099386fdca5e89b2d0f40308db9d8979fccbc031db8521cc0dc488acb",
+      "source": {
+        "definition_line": 4739,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "8b0dfbf30a314c45161419bcf4e370b649b2a648b266c69efc135673d19618b8",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-dark-fantasy.d2e24798",
+      "legacy_id": "genre-07137-d56d04633767",
+      "job_sha256": "3c9a9d3b2e8127874af999fa0bbb7a6399fa93c29c6b2cb536c9a8923c23b84f",
+      "source": {
+        "definition_line": 4740,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "b8005499c74de9b0eb47c49541fe60dcc39b956369d97736b1b7b36dd3260ee8",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-demons.c56573be",
+      "legacy_id": "genre-07138-6fbcd545729e",
+      "job_sha256": "a2b8a02659529508c69ea96e70efc81ef6d3dfc201832bbcdd0fd7f30676ef3e",
+      "source": {
+        "definition_line": 4741,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "f44d5cbec896f42114344d1219b2e7a1c02db18365e8b2536359e969614e1367",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-detective.37f02fe3",
+      "legacy_id": "genre-07139-afd18ef6d93d",
+      "job_sha256": "5112d1937b5160fa7b033034e33a9904c702bac3f731f863fc4a753a92a6da1b",
+      "source": {
+        "definition_line": 4742,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "ad4695b2a003db50b18d6143225eb5301bf9f042cc4f57cc0f01d312d5730c81",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-dinosaurs.36855979",
+      "legacy_id": "genre-07140-ffef93481977",
+      "job_sha256": "db30150e46c53046e3b7e8d425388d22c9f1c6bb6da2dfa84851a64a6742a34d",
+      "source": {
+        "definition_line": 4743,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "15367288e8cff87511c2e8af7cdd227d8bc958f7e2eca2b2a4968106b8366669",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-dinosaur.ee247d8b",
+      "legacy_id": "genre-07141-04ba75f14b97",
+      "job_sha256": "9541b94e1196d1fdf4778191d95a213fb27d0b83d23d0002cb1cc928d6f31ec7",
+      "source": {
+        "definition_line": 4744,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "2568e0a5d83ddc1bf3216917e4d0ef2c7b34a99241c3accc678139456822fbaa",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-documentary.d588650b",
+      "legacy_id": "genre-07142-04cbd84809a0",
+      "job_sha256": "5412744d64dc773f64855639bd9899ca4a478b7b317cfd4699926c4677abd3b6",
+      "source": {
+        "definition_line": 4745,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "8572f3d0a233500318ab40fd737b5eb617f244618cf4d770167f756b252e936b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-dragon.993c50ac",
+      "legacy_id": "genre-07143-36c6d1d026ad",
+      "job_sha256": "620acc769d8fdd6308c6bac7b900072f44e45b35b23d48d841ace049b5d08329",
+      "source": {
+        "definition_line": 4746,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "22a9f124365ad5ac30ced4a214fd177375c47a899cae5f6887e16b827d051cfa",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-drama.50b694ed",
+      "legacy_id": "genre-07144-36c511066ee4",
+      "job_sha256": "7b8a5df5787b42bce3cf7516f10e0cc9f25948cc4a6b61839b4651e48a4a2a85",
+      "source": {
+        "definition_line": 4747,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "ab38caf3f8a2adc7e9d93d7b835d1b9094f8fe762653e2943dd6b1ebd2f53ceb",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-dramedy.70016e42",
+      "legacy_id": "genre-07145-50ba764e8206",
+      "job_sha256": "5999544c57bc9f4990578159921147a4c6fe464e301b587eb05d4f5fdd8c1f19",
+      "source": {
+        "definition_line": 4748,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "06607179ebd660e796f8b346250b91c9a5389e7b5d87e709cf9fe87121974634",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-dystopian.555196e0",
+      "legacy_id": "genre-07146-9f5dbffaa5d3",
+      "job_sha256": "b3ed9c303dcc27a8ca5854ed7416f7e23a51a25e3446d8918c3c74fe564cfe31",
+      "source": {
+        "definition_line": 4749,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "9621dba51453133c03bc75db7c19958f46535c24c2553646e855fd9b734bdb9d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-ecchi.cb0d4930",
+      "legacy_id": "genre-07147-9d3ca5346eea",
+      "job_sha256": "2b1cebaf4e572fb703372b494db17efc63ac5694fb41dd4c508606f8c48e64b4",
+      "source": {
+        "definition_line": 4750,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "9e14f8cb73d08632586f9159dfdd14460e27787c05bced0a1ed858b15a550dee",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-elevated-horror.21b730d9",
+      "legacy_id": "genre-07148-c0af4520a0a8",
+      "job_sha256": "18904b89a285de1fb69dd3feeaaffd52850ac5507a830cfe6d92f9747b08363e",
+      "source": {
+        "definition_line": 4751,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "022dcf916d3f5ffd6aea7f8097e33d882e96d764fab0df63691799fe54e45c0c",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-engineering-disasters.ab30ab67",
+      "legacy_id": "genre-07149-ad690d25325d",
+      "job_sha256": "851856a132e3a56c41f2d56516de71c3d5c19c99b7bb2fda2d4efb4d7dbd5151",
+      "source": {
+        "definition_line": 4752,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "dd07e9404a134157f6e3ead3eb7416fd38a97f1d9294bec0baa6b71892e72331",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-engineering-disaster.194eb3ae",
+      "legacy_id": "genre-07150-4d261684a8d7",
+      "job_sha256": "369d0778424108542b3d9af9fe09cf11e6f2b12e6560f6bb30c344c344066ae6",
+      "source": {
+        "definition_line": 4753,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "ed0747d27976ce49c2b9ec2ea52ffb0b4f03c13f3f7bac0fc20b636b246118d9",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-engineering.28c0624b",
+      "legacy_id": "genre-07151-c076bb1352f3",
+      "job_sha256": "43b18f577247b5c5650c3998980097e45557335bfced152e8c6ed6eef957e83a",
+      "source": {
+        "definition_line": 4754,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "2b9ad4f5bdf64c06cb24bc74b5307336e6c607489b8c73866ecd69a2c730d732",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-epic.223ed61d",
+      "legacy_id": "genre-07152-a6dc5078a05d",
+      "job_sha256": "d605dc39fb47c9059eb6918c59a3da86181c517dbe54dc461717e10b17bc015e",
+      "source": {
+        "definition_line": 4755,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "fbc96bdc95854ed8545369161838d0275a0914a4eeccec989c81f3a6ec25befe",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-erotica.17c35690",
+      "legacy_id": "genre-07153-56c0d2041bff",
+      "job_sha256": "69938478008248bfc7935fca002311be6d7c6b0a1f6f0c36a749e7c185acfc43",
+      "source": {
+        "definition_line": 4756,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "6720123d983cec211a4ee27b86feeb25eb08a34a74df09d8d29a8eafe52ef5de",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-espionage.9bdeb33b",
+      "legacy_id": "genre-07154-22d4bfef258c",
+      "job_sha256": "8f30df96f13ffd9f2f5eb5f0c38340131b031b408eed9778ac4ef253529c9fcc",
+      "source": {
+        "definition_line": 4757,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "288fe473c6e2522ce4221cd9129380a295410a3f7f9f302986d29d62afd3a899",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-experimental.ba5d2f08",
+      "legacy_id": "genre-07155-bcfc75464065",
+      "job_sha256": "41bf4a20ac4d6cec1b188606c0c666b1c2dca7c0c3fcd23f50ba7ca8054d7cfa",
+      "source": {
+        "definition_line": 4758,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "6d672220e08e1aa3e2b551c4e626c2ffac808d9d1796e888a4a52d048a6b2fc1",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-exploitation.2dfb69b0",
+      "legacy_id": "genre-07156-b68486dad695",
+      "job_sha256": "0499fe7717a6000e5a403e715c7083dcb868494ebc1ef9f3bf6eb7ba7294fe10",
+      "source": {
+        "definition_line": 4759,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "9d3fca54cea9408eb674ea424710ba5ccafe8b5766b452fb88bb47ab9c7f1eb2",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-extreme.1e1677c5",
+      "legacy_id": "genre-07157-662ac636d48e",
+      "job_sha256": "2069d77c2c3165aa6604eb7b86f94dc88988f12f6d7a6a760293b2b81d6dac79",
+      "source": {
+        "definition_line": 4760,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "cb6ce6596b423bc5f273ab812653376d6cab5cf34a7c1a2f0a496c8b267ac36f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-fairy-tale.ac5dc33c",
+      "legacy_id": "genre-07158-ed1835f552dc",
+      "job_sha256": "e35aae5f1b77f9514ecff04c31153c29cfb8523073effea706152aa03cbc900a",
+      "source": {
+        "definition_line": 4761,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "8dd0db4cb9e5dae998f2dec9e980cd2ee6dbf6e316be196e1aad0a4952a7028d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-family.fe4bdc77",
+      "legacy_id": "genre-07159-90d62be73fb2",
+      "job_sha256": "3bb1614cef0bb7fc9afa7b406a6ae392fe8a5fe9fc3bda22827ee391c87f5940",
+      "source": {
+        "definition_line": 4762,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "06bed15278392309089e4fadfbcbcf9bc998423b5bf5fe43c3f6533df66b16b8",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-fantasy-horror.15659a80",
+      "legacy_id": "genre-07160-40d9493626a8",
+      "job_sha256": "36e1fa53b40d712c4b30d79c30379b994816d98ff69ddd8948a734424b08f6de",
+      "source": {
+        "definition_line": 4763,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "d911edb07dc1d48b148ebb2bc4e856a373261140e55c2d74532a5a82435511de",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-fantasy.2d9b71c1",
+      "legacy_id": "genre-07161-c6ff772fb4d2",
+      "job_sha256": "8c819318eae26a631a8e69ea6787ade9116e5b153f799468c31e32f841fd2733",
+      "source": {
+        "definition_line": 4764,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "52617ff8e75d7212b7cd4047f5a79e3e9cfbd4063d51806812be7262a60fe347",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-film-noir.2b4eaf03",
+      "legacy_id": "genre-07162-d5b1f48592a7",
+      "job_sha256": "28ef3590979d180d836f9086eb74a772410bec9e1cd1699f5460da51dcd10e0e",
+      "source": {
+        "definition_line": 4765,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "b1131588f2b117e32a517e5a3db998e41d195846c075621e9843387830b8d1b8",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-first-responder.32f5d607",
+      "legacy_id": "genre-07163-6beeb7dbe5f9",
+      "job_sha256": "8eda1e7dfca9d455673cbd257c3b5443bdd539364630fb4153c9e05982ffe576",
+      "source": {
+        "definition_line": 4766,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "45420dbd2d54bacb5d6c7055ccf3d6e0739ae6242a81d41929ec8a5d84315b4f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-folk-horror.ce53c9bd",
+      "legacy_id": "genre-07164-361f3be7f82f",
+      "job_sha256": "d19cefce4937d4a89dbeb9a70092f623aee1279fecbe3ea65639e0a100e89e55",
+      "source": {
+        "definition_line": 4767,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "7ee53b37a815747e1612fd52d2ca27e9620d8b2467db6289204af446f9f6b227",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-food.802ff953",
+      "legacy_id": "genre-07165-14d4a73a689e",
+      "job_sha256": "e38560724e1aa4d0c294a98b7401b45e91fc23cc52b6d8dc045b1bb28d143ecd",
+      "source": {
+        "definition_line": 4768,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "60f2d7d435885c50fdc1f04ca35da54a8b2aa4d2f5e48700099751ed00d70fc9",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-football.d0633b6e",
+      "legacy_id": "genre-07166-461e44221c3d",
+      "job_sha256": "a690ec26b88603bf80c4aabdd4e2a0a4c2bd1ec2b8984631fcf1e807b3b0fa94",
+      "source": {
+        "definition_line": 4769,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "ecd75065b195ba4b04ac024807fdc4e940baaef4d0ef1fa320c2095084131c36",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-foreign-giallo.c323abe0",
+      "legacy_id": "genre-07167-0de24cfc97c2",
+      "job_sha256": "257ab34a14e44c511b9313bb6a39898973bec8b084673207628b6db0ad902e0c",
+      "source": {
+        "definition_line": 4770,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "d26e4ae03859e909ed5848ece9e9fc01c0557d26dc0e7795a30c3b77bc2662e3",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-foreign-noir.e6845e9b",
+      "legacy_id": "genre-07168-f86838360fd6",
+      "job_sha256": "22654da9bd8654db6a0ea12823a9d79fe3bcfd6a0f47d59735b7d75c69c3259e",
+      "source": {
+        "definition_line": 4771,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "cfe5d23efeeca251578cb6172e0dcf74b8b635a8aadedd7d23c3a2a949f62e02",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-foreign.88097b19",
+      "legacy_id": "genre-07169-bbf2d17f461c",
+      "job_sha256": "3d55b8f18cd27786ede41ce70bc25ffcefdaa99806db7a0d72a8735dad501d21",
+      "source": {
+        "definition_line": 4772,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "efb9c24d769dc3e08aac9008d670dea134c916143887c4cc892970025848d494",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-found-footage-horror.23d17e9d",
+      "legacy_id": "genre-07170-539f83994891",
+      "job_sha256": "49497a897835509e1f52a37d42e064276319ebe83553ad5417d2d768766b6b9c",
+      "source": {
+        "definition_line": 4773,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "1749eb6eacfd07ad01bb256ac6e9ea7e554ec1b8025ee9bcdd4f4e3075667447",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-found-footage.10fd612a",
+      "legacy_id": "genre-07171-642eaf4d18a4",
+      "job_sha256": "bbb15d00a001f5143c19d8c90f73dc80726b076968a8d409fe784a05742b38ce",
+      "source": {
+        "definition_line": 4774,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "b8e6cda142422dab39e808bbb6314ffefe4e11fffef3b93956756c78dd96543d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-fringe.2dc7df8c",
+      "legacy_id": "genre-07172-8a6e7e429658",
+      "job_sha256": "de86b8cc6de3d8b5d733a85aa2d3bf5aa533682d1a65d0e221b07abc920ca3e6",
+      "source": {
+        "definition_line": 4775,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "9da71144c468c8bafe642aa03de428755ad930630e6589d201cc1ec697b68448",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-fugitive.6dab0379",
+      "legacy_id": "genre-07173-3051677ad6f3",
+      "job_sha256": "2dee65c73ccad6aeab14829061052196e91bfe478cf03346e7e4896d3a359270",
+      "source": {
+        "definition_line": 4776,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "6d1ad12b44f587fc02407c5350a09c81eb8ff0c24749252adc5b68624f784c66",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-funny-sci-fi.25b1f560",
+      "legacy_id": "genre-07174-52ff915720ff",
+      "job_sha256": "971695d68ebc52b2892dedc1e64c8b89d72b3108f612a39c7486bad70dce6488",
+      "source": {
+        "definition_line": 4777,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "e40c4698aa645cdebe024955afaab9c85fd0655dddaac77ad542318c923ec941",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-gaijinsploitation.45515f7b",
+      "legacy_id": "genre-07175-52043d885f0c",
+      "job_sha256": "b4820f170cc2c903b12ea46b2eb80a1d94a5c3ea8608372e8135730c2e9fe339",
+      "source": {
+        "definition_line": 4778,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "ac80c23716c99c949ddb62e2f28c7ebb5543201e5cc9ca58ff9a0f23e2dee4de",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-game-show.44b45dd9",
+      "legacy_id": "genre-07176-b169337d05f4",
+      "job_sha256": "911b42fe48abff7fb3ad6009fc384c2cdc29101d13a13efbec7cf29620a9bb43",
+      "source": {
+        "definition_line": 4779,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "8e8af5290bd2d4dba8ca8a59f1cada735c8fb4d0f16f7584da6f863e73ee43bc",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-game.474493c2",
+      "legacy_id": "genre-07177-5143e45edcb2",
+      "job_sha256": "dd0e768ae20294a1d7801575aa0cd5dca91b1cfc7419939236905f0d052788fd",
+      "source": {
+        "definition_line": 4780,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "de04f4d0572814ebc45a94d851c8c0b7f1d5d2331e4a67362225723ab1f6bebb",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-gangster.277a6b78",
+      "legacy_id": "genre-07178-a0e013fc6f7e",
+      "job_sha256": "278760ff54811b970de1f12d9534558346064e36e65d7c0a99cb9ca9679b88fd",
+      "source": {
+        "definition_line": 4781,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "bfd1bf0190149e1600d4666d2588489bf3a1846d69c867579f03fe326a9ff8b1",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-ghost.4511324e",
+      "legacy_id": "genre-07179-cd1cf4be8d12",
+      "job_sha256": "5f03520e3e1db1b04c61d3b342fefbdcca5e7cea4b2d91ce9f6f97cc654eabde",
+      "source": {
+        "definition_line": 4782,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "56c38877ad13374000f55f68122a8ac498d00d14399a4ca2d616bf0be961e40b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-girls-love.9fe3dde2",
+      "legacy_id": "genre-07180-3266bc3a6674",
+      "job_sha256": "8cf21356b8d9fd2f64598d941944c85eb3a8ce6e560b9d4b1ecf1b390914c973",
+      "source": {
+        "definition_line": 4783,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "7b8e1a1b811d00991195a294b528098d7e482f38f7cbe5da3bf7a4c988c2899f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-gothic.190b6965",
+      "legacy_id": "genre-07181-b83d78c9e96a",
+      "job_sha256": "aa1749d2f310ada09fae2059e2da22b38f929feb718b259d2ac529f3ead19b3e",
+      "source": {
+        "definition_line": 4784,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "7c97beff80550f234ff11778492bc73167fea8111d5273e3ce86d62ed113ecde",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-gourmet.63259bfd",
+      "legacy_id": "genre-07182-c6a2228d2f8f",
+      "job_sha256": "e0a1c78dbc874d4fced11fb844aabf477c7cfdc45cc87c7540299c30b0ffa1f3",
+      "source": {
+        "definition_line": 4785,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "06040fb7c3667cbe35b71ccbd8c18b6aed19ccaab249ba2367c420e2573a08f9",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-harem.ca012a40",
+      "legacy_id": "genre-07183-ebf5de9e3157",
+      "job_sha256": "1404114bcdbf1b25883e6cba2af11ac04e1e2e0ee3967e91e77e8f90352b3a66",
+      "source": {
+        "definition_line": 4786,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "fcc4384269c99a1d64d67cfab1534d61ff7fc411914ee2a4e7ce151499b753e5",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-heartbreak.03d68027",
+      "legacy_id": "genre-07184-c3a09dabaf49",
+      "job_sha256": "a9e69bb3aeab23947cd317d27e204df75d79da3a7a98bcb615514583b9ed87b2",
+      "source": {
+        "definition_line": 4787,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "f2adead89ecf9f3d5c1e4a3848ae3d670804994d0481d235423ce3b1fbe04289",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-heist.7bffa91a",
+      "legacy_id": "genre-07185-f7e78fe1345b",
+      "job_sha256": "66bc057c5a956e6cd17c7c9c3024213d718c917453db3c8efd09ed665b3bb867",
+      "source": {
+        "definition_line": 4788,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "0f60c4ce5a8585eff0cf841ab50fba2f4779027520328945103888a2854f4786",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-hentai.e726db3b",
+      "legacy_id": "genre-07186-2916b4374d95",
+      "job_sha256": "507ed96de6079323495efe439a2e3e25d6d5b022e0a3ccebf844e766fe332771",
+      "source": {
+        "definition_line": 4789,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "12e5f2afb7871fe35d3a9526b734fd95ca81a27745f31bf151de0fc782a5dd9f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-historical-event.b17a41a2",
+      "legacy_id": "genre-07187-877f580ab5ca",
+      "job_sha256": "de9cf62f3afc1314a49480989f173a67b5360f6b55c9a5c961df57c837566a90",
+      "source": {
+        "definition_line": 4790,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "577811d3a5d1d6beadf473c3bbb29bd894efe4a48f8a20a189861bb20ada2f6b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-historical-fiction.31a3981e",
+      "legacy_id": "genre-07188-6d88029e4356",
+      "job_sha256": "38e60a4609d2bf6824c4eac99aed0d24dc2e3e02e61c330dd55289582443e460",
+      "source": {
+        "definition_line": 4791,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "58edd7a42da461d03dd4645b0817d651578d6ececb2656f0c9a4b053b3e0b164",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-history.a7b0cabf",
+      "legacy_id": "genre-07189-33bcf54e76ed",
+      "job_sha256": "4ff23c948a66f2a95fa1d7b78f9f5df1aaede4d03af249358da5da3aa3023642",
+      "source": {
+        "definition_line": 4792,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "a8230f448690438f2e673ec6dbb9585eb80e32b3e891308a9e18d8bad438c421",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-home-and-garden.a8f1b6f5",
+      "legacy_id": "genre-07190-255a7e9589ef",
+      "job_sha256": "e60bdd290d29cbc2aeb0504552c3f4e6f8f195b346dc69c789e47ae9cd18099f",
+      "source": {
+        "definition_line": 4793,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "8593e7c84ed2fb95bbc7548cf853fe47c5429e5f43722e1ad9982958e6030107",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-horror-parody.8e41b6a0",
+      "legacy_id": "genre-07191-272a938c0d39",
+      "job_sha256": "f4b9a6536ab7b31afd05c97242c828a117025a83c7e5b177aa5bdd5f1491a968",
+      "source": {
+        "definition_line": 4794,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "a6fd3a0dc3ba834b3db84b4dd6c1b8782a624bd5bfe279384d63499d3c87faa2",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-horror.4b2c835d",
+      "legacy_id": "genre-07192-d93e887b1d61",
+      "job_sha256": "e3993b029fdc7230949f8725dcff41c538f9bebf78f3648fe95b4a8fa7ae4319",
+      "source": {
+        "definition_line": 4795,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "f8afb372e52a80227d4f832c6f7573260adcd70d92ab01cc760f51a63c2def05",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-hostage.f3fe294c",
+      "legacy_id": "genre-07193-339e3fe1271b",
+      "job_sha256": "d9f45d3e92a5ad1b4d59899d5a2b1747b06a89b7b1a5e4393087ae639332ff4e",
+      "source": {
+        "definition_line": 4796,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "e4735346b29115f2f149d45553a95abe1785046a3570b48292a1b3b32dda44ec",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-human-body.bb48b252",
+      "legacy_id": "genre-07194-63e54a19df2e",
+      "job_sha256": "6ad10af64e137e410f27a7e69ce3d71bed9788456fd193b402a59473ebd00169",
+      "source": {
+        "definition_line": 4797,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "b5e08fc02bfef06dc446e5cdb757979acaa51c80ad72b6b46390c88319d455e2",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-hustle.027e9fb0",
+      "legacy_id": "genre-07195-6c557cca9cf6",
+      "job_sha256": "2bb1a32c63deb4325c076ff1a9cd40b8261bbbd5197d8c4fbc9e386d302ec559",
+      "source": {
+        "definition_line": 4798,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "860f48a1a497eeed115991c6dd2c4f4ff08877fe9d8eeb79beef87a26d90927d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-indie.ed11a923",
+      "legacy_id": "genre-07196-b7e57f8f944f",
+      "job_sha256": "3dafb5986e9ad8e1eb15ddb3eac32091f53fde0e231fe34f73e104802ef063a9",
+      "source": {
+        "definition_line": 4799,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "055e4fb58e0fecc522800ced2e8d6fead561b67d2f298fd23a019eeec25ea88c",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-inspirational.0420de99",
+      "legacy_id": "genre-07197-af828859547a",
+      "job_sha256": "48966b8e0732690d71a94cd38e876d78bfbd8ab3cb7291c8208c8b6b101d16a1",
+      "source": {
+        "definition_line": 4800,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "34700cfb657a25aafe67725f3f3bc634e1fcb95d2ae708fefef7dedde8f1b393",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-jungle-adventure.504bb07a",
+      "legacy_id": "genre-07198-8453c6f71256",
+      "job_sha256": "db9c34847fb64208f78bce6a4c08d4fa045cad6399c3a422868272bff676ed33",
+      "source": {
+        "definition_line": 4801,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "55cace32fa41c31fb04ee823f26cd31c48efb3a3c3303bf42b6a99a47e80f780",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-kids.6cd33f36",
+      "legacy_id": "genre-07199-d86c15befdcf",
+      "job_sha256": "9a9fe42dcd616d9626750ca28a0ad4923291233fd51b26e12760bcb0f6dc0a11",
+      "source": {
+        "definition_line": 4802,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "e9678aa118a787c6a012fd12f0d6c32cd7c2341c5506285e5a63f8be05bef784",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-lgbtq.7cc62f84",
+      "legacy_id": "genre-07200-71660420a7b7",
+      "job_sha256": "e748b8ff62077281c8c231071984fa26dff83db95b6de9d76c34c0a014cae1a7",
+      "source": {
+        "definition_line": 4803,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "048b82b8d84c8af44ff9be51d7673f46ba4fa1f67d70de9f494a9e75b412492a",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-louisiana.bd8a42bd",
+      "legacy_id": "genre-07201-4ec67ecd0d45",
+      "job_sha256": "0e26a1631a7f56573e5f7233fb7ad9753b4d1abc5669d8dfbf1fea9bf8f50601",
+      "source": {
+        "definition_line": 4804,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "76116d83ebca01011a2ff3ced039e366b4e04eb21028119e38d6d203bff05ed3",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-lovecraftian.fedbf2fc",
+      "legacy_id": "genre-07202-3db244bf2ee3",
+      "job_sha256": "52d7ec34e191ffbc3bd3fbb293a5e1198aeceabfd1a9b29340bafd66f1be88f3",
+      "source": {
+        "definition_line": 4805,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "a56bf14fb50684a1509735c4eff9ca8fc5c54998b3cf37280c40cc8d80adf589",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-manufacturing.ff2856f5",
+      "legacy_id": "genre-07203-20ca875629b2",
+      "job_sha256": "a6e5555254ac44c9b1f103cd3787ced9df7e8e5744152728c769187b97e19798",
+      "source": {
+        "definition_line": 4806,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "45a9ea46a9bcc898f470a98612f05436426a40826f87820f56a4035747d04f77",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-martial-arts.20401c3c",
+      "legacy_id": "genre-07204-2adad729963d",
+      "job_sha256": "bdabe3f1cda93051a6c761616de3dde64394e797f3f0c47b19f4db7c4701714e",
+      "source": {
+        "definition_line": 4807,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "ce38b0cabb0b7c527b08e913324ace4c75d8b532999691ba274deceecdfd4ae7",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-mecha.ba9ef842",
+      "legacy_id": "genre-07205-7a823f0d6b01",
+      "job_sha256": "aaeafe3e7e320efcb81a51cc1e6dfd911b4c41e58cea0f837aadbcc70ea9d0dd",
+      "source": {
+        "definition_line": 4808,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "1881df294422db389d51e9d018c54b37f37d8c50e934e2c6e4deeeeccf19fd5e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-medical.978be4fb",
+      "legacy_id": "genre-07206-dad979d2196a",
+      "job_sha256": "7ea1aaa0b8275adeea90efb849cdbf4c8ff8ced302c7f0b8f4f11097906292ed",
+      "source": {
+        "definition_line": 4809,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "08daa8a8ee87c300554293b0ede07a4a4a70bb88a3c2559bacd6cc2a8b6620a6",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-medieval.c957faf4",
+      "legacy_id": "genre-07207-aaed6034f347",
+      "job_sha256": "174c8302d2b07bf0bec87d2330eb97881e8f34e4eb80e18eeaf1b4371f0657b3",
+      "source": {
+        "definition_line": 4810,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "f40e4af608656463035eed18f08cd4d0443618f57230ff90b412db2899878499",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-melodrama.8868fef7",
+      "legacy_id": "genre-07208-8bf33035511a",
+      "job_sha256": "5be1d70ac6fbcc0edde24dfcfb3c1328d88f923333d5796c2b1b84dc9cc1cebb",
+      "source": {
+        "definition_line": 4811,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "b9ed0384a838e66efd818ecc4683405869abd699a663fcf24c4a8fdfd368e7a1",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-military.dbf26e8a",
+      "legacy_id": "genre-07209-af80c5eea61b",
+      "job_sha256": "dfb1698d7c1b9edac2280b7dedb1b82356a92b5b931e3115d068a10573b8940e",
+      "source": {
+        "definition_line": 4812,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "d0d4447899cfbd29c9afcc55911fe4bc8392b210684575e98df07b40d0aea6ab",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-mind-bend.9377f9ee",
+      "legacy_id": "genre-07210-7b22f20f1a75",
+      "job_sha256": "6ebc9bbbc33021eae9a8036f70333b4de2c36ba23ac67b2b9a1646475f9a566a",
+      "source": {
+        "definition_line": 4813,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "3baa142be8175a43fa751cafb6d28b12a83afada6c1704a1f9eed894f2a0c59d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-mind-fuck2.8b9831a2",
+      "legacy_id": "genre-07211-937a7f1637e8",
+      "job_sha256": "1ec8cb6b5124c69de3fa38e84ac2d8dbda745ef363456242cdb2b0f011e8e3aa",
+      "source": {
+        "definition_line": 4814,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "527cec2c151d363f6ce729db77a6eab5cc9a09282782b29ffd17f83544c3858f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-mind-fuck.a3c0288b",
+      "legacy_id": "genre-07212-312eed9961c5",
+      "job_sha256": "ece2bfc1baa460d062b22c297a5cd7e6bbe286ce870532e714d643a2f082997d",
+      "source": {
+        "definition_line": 4815,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "46fa93adbd26d14075ad6d4c076c068f01118b7b3997a15e4f2885da57ef9cb5",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-mini-series.d8e17d2d",
+      "legacy_id": "genre-07213-19d4b1cf081c",
+      "job_sha256": "cf2dee2fcd1496006402e841138ed11190f88f34c0d5f098490e98a84b720829",
+      "source": {
+        "definition_line": 4816,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "a7807cdc348e65ec586be20e68851f50e8ebb5c49261e60fff92a58705f0dc45",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-mma.a1b103e7",
+      "legacy_id": "genre-07214-c7460b29dd02",
+      "job_sha256": "8f5f971af03ebf7b21966bf7a3c6af0dc883b8975400569c6ab03ee182e4f999",
+      "source": {
+        "definition_line": 4817,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "a72c262fc982967c26657b8f1a0420fc933b76678de07d9a54a714582563f7ae",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-mockumentary.2981a333",
+      "legacy_id": "genre-07215-47e75646861b",
+      "job_sha256": "019dec32b851c0faa82df594eb17bd54c0854da38f29602cbe4e8b9751b10262",
+      "source": {
+        "definition_line": 4818,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "7526042dfc811ba15c275c9506aa8563c78e9a1f2a6644034b53f740e03b1b4d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-monster.cf6d6705",
+      "legacy_id": "genre-07216-ffc41e0a363e",
+      "job_sha256": "073ca4425a3b3616dc27a2b95af2ff397a020b7ea2d717e316854f383159db45",
+      "source": {
+        "definition_line": 4819,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "11dfcbbb9478acda82d895af784aaf4f3c29a523b18d1303ab1784392b332259",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-musical.740adc10",
+      "legacy_id": "genre-07217-bf9cb2e92351",
+      "job_sha256": "c1e6a0444d8b2063b2924c17d0c49eeb51daf355fa7540c76b1af7060e1bda17",
+      "source": {
+        "definition_line": 4820,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "093c88c2cca607b44c492d569867eb14caa8c19ed1f0015c2e55a512d1441146",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-music.f401c7eb",
+      "legacy_id": "genre-07218-0669ecc48298",
+      "job_sha256": "3819b7e85859b62000ac7e05f38974d5588fee9f15dba361eb005e2bac1a6c5d",
+      "source": {
+        "definition_line": 4821,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "47da0590005015312a411b7ef7bd83a872948b03320dc0becb1bfc106762d623",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-mystery-box.0252e7e9",
+      "legacy_id": "genre-07219-7121f1e8d0d3",
+      "job_sha256": "3982279576c2b0d8e82b5d7b9d7de99d5e60ffea63f3061475757cfe873bccf7",
+      "source": {
+        "definition_line": 4822,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "cd1446f5c8c080dfb8a62e6fd2f91409e160ae1bfcf61cfbffcf1231e40153a7",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-mystery.0fe39df9",
+      "legacy_id": "genre-07220-d616c1803ef3",
+      "job_sha256": "37867293587f688e3c41103320839fe32b4a9d65321bf9b91d3f3dec8abb5646",
+      "source": {
+        "definition_line": 4823,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "aeb958b86fbf4aa887cf4f08ce26dbdc377d6eaf59075362b8de275819dbfac3",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-mythology.28ac9859",
+      "legacy_id": "genre-07221-8a52edcf2ad1",
+      "job_sha256": "0872ae3bdb314077ba62079c2df3eaccb7c1e3fd05cd1fd3fec5c423dc4bd5ff",
+      "source": {
+        "definition_line": 4824,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "8fd05dcb482a422ebdd4e343cce1fd9d2098c87aae62df9c39f8b79d18ce561b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-natural-disaster.8fa4f05b",
+      "legacy_id": "genre-07222-eb81f297686f",
+      "job_sha256": "33714253bcc125b4139ecd37f7d5e3da385a06e0b4fad4504b3dfe250c2a5ca9",
+      "source": {
+        "definition_line": 4825,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "2da6e7edb9a19ab41e4f5ebc941d4d986b5e607d7f46c49bf41a3eb6ec41ad78",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-nature.18442df5",
+      "legacy_id": "genre-07223-f61b273d0ed8",
+      "job_sha256": "b51811aecaf77d33e3e0bb93e34b98ea2d708a31f7455eb9174228cd05cf677f",
+      "source": {
+        "definition_line": 4826,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "0eadc467e845c28bceb2ead41368aab12629e1d3aff617a0f733f1d9f3df1336",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-naval.b44c96ea",
+      "legacy_id": "genre-07224-2488e1c36962",
+      "job_sha256": "05fa65d3629cffc0c3fc7ab64e01bc0115b5f3d86b9b78df63d5d8a7babc9629",
+      "source": {
+        "definition_line": 4827,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "b6bc94832b6675c4e91c9ec906c697081577b7f1d1ec3812b492db0de79f842c",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-neo-noir.119f08ff",
+      "legacy_id": "genre-07225-2592338cd5b6",
+      "job_sha256": "847008260557b52983bb56dd6d8cffe97dd915eff2860e86c7758014b3006850",
+      "source": {
+        "definition_line": 4828,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "1fb7803b2e002f25fd3e34cbc5c5d90ab3531d84358c5cbe40bcdca5d6975417",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-news-politics.77acf3eb",
+      "legacy_id": "genre-07226-8db5fa9dfc36",
+      "job_sha256": "dc4b884f0936ca2401b1f7928a581b932bae5c9c07ce623a7b8cdc954e89d70b",
+      "source": {
+        "definition_line": 4829,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "a7e1ca53ec989c67ee64a89adfc6efa52b5073f28fc14d1ae371c49da06f5801",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-news.5ac3e11d",
+      "legacy_id": "genre-07227-c63a44001c1a",
+      "job_sha256": "2df5836618c2623b1e6c8299630fd8cebaa28fd18c14d49b498ca109d03ac3dc",
+      "source": {
+        "definition_line": 4830,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "ab8527cf3d62b44ab9092d5aaf47184ad65792f3f07160399b8bdb3f50403c92",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-ninja.9f5dbba6",
+      "legacy_id": "genre-07228-1a72b341ec2e",
+      "job_sha256": "34feacf325a48d0fd52e0a9a7e4aa67e26a380c400a17708712e53c2ca7c55c0",
+      "source": {
+        "definition_line": 4831,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "85d1289d621be48a17c07b0dc2053164c3664d2fa4fde92e405dc4ff0eb4b83f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-occult.2fe1f881",
+      "legacy_id": "genre-07229-7fc47b3b98ae",
+      "job_sha256": "06146a5bff54d13426f101ce835551ad52419c9aa7c328bcbd7edc8f5a12f80f",
+      "source": {
+        "definition_line": 4832,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "50cdcd2e83d396fa52d797f063a73aa4378cdbf1e5585195d88b2571df9216a2",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-outdoor-adventure.7849d6cf",
+      "legacy_id": "genre-07230-1a6691a26b76",
+      "job_sha256": "01c9d347c03584e63bc1b2c84f32993c3bc90e2cb68ca0a56fc2ec42d8b2e924",
+      "source": {
+        "definition_line": 4833,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "dae1b85949843d4f4604a374c7112e7a061e9802875d4c7f7d5a0520bcce4715",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-outlaw.7b3c7ce1",
+      "legacy_id": "genre-07231-2495c79343a2",
+      "job_sha256": "09b78b9aa1a7fe20c3101b61865461dea1fc889226b950e5e294a8867bac0d2c",
+      "source": {
+        "definition_line": 4834,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "769d2133fdfc86df7667a53e9c2b95d7b0ec2623091a9de9789ebe3a11815dbb",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-pandemic.81da0cb6",
+      "legacy_id": "genre-07232-5b475e1f9034",
+      "job_sha256": "1ba818490dbbc4f35c962c1d1f5e6673e881682bcafea18a7b29e89a355d22ad",
+      "source": {
+        "definition_line": 4835,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "78b2b3c0e9aa86d3651f2291e6850a9f3d4db1cffc6536d7174fc239c1b12e4b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-paranormal.9bdfa7ae",
+      "legacy_id": "genre-07233-c7cc4eca582e",
+      "job_sha256": "4667cdcef9424b68d1b15bd345bc8c20be91a3ebc0cfe9d45159672b597a399d",
+      "source": {
+        "definition_line": 4836,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "f549483e1fb6b40ef9d8a787d0096414d21069346d7f6940542879fbee65d6bc",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-parody.0c3882fe",
+      "legacy_id": "genre-07234-cc0b7bab09cc",
+      "job_sha256": "ade29b404c4a6a4b5e0a210ccc199987206d5df501f4c01f116b0c2a0992d901",
+      "source": {
+        "definition_line": 4837,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "3412e8baac74c875b03e36da20859adf97990a960519025a32def41f46936c99",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-period-drama.ec99c904",
+      "legacy_id": "genre-07235-4b3b9ba2de08",
+      "job_sha256": "4ffd9be51be4f2a7085c1da5a583aef2059f076a97ea7b5d65a6d38e119ef5ce",
+      "source": {
+        "definition_line": 4838,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "26b91efaacca22ab35e88ca05a1c738ba58937b3a6cf15565c79e1910e30739a",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-philosophy.8d932fd2",
+      "legacy_id": "genre-07236-8ca6b8a0374f",
+      "job_sha256": "20199c418a7f56e9ab093b9f2ca3ec21c63aab7ccdef7eca4e724400cd4c700f",
+      "source": {
+        "definition_line": 4839,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "3b1e4e9a0576bfb59fb9c6d70ae90325db72525a0e23ab44a7d5fad98a6459a0",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-pinku.33e34e5d",
+      "legacy_id": "genre-07237-d46cffdc6e56",
+      "job_sha256": "d130dd8b6b6acfdc0d18cc86b502e22bc854e762b440024602801df22f7ad530",
+      "source": {
+        "definition_line": 4840,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "db8ffb75fa2ae44f5507e83ca248c3e678c115645a088cd424076ae6cead0456",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-plants.684b0b12",
+      "legacy_id": "genre-07238-dc92c21b57c1",
+      "job_sha256": "f412618c8ead96512b1fd24b7e741b4d7e36bcce76453e0ab733a3955ff743ef",
+      "source": {
+        "definition_line": 4841,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "4abbc1cd66ae4bdc8e03b197f28d1268b55546c8c5676ba7a4dac35de76e8ecc",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-plant.b967a9fa",
+      "legacy_id": "genre-07239-5bda9a31bb5f",
+      "job_sha256": "551aac50f714e8e960625fe36060a77203633fe885fcbd4fb51c9345f8af221f",
+      "source": {
+        "definition_line": 4842,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "ea537a253a4b79e97c70887ca3c417aef16114e0bfff56dbf06c78e3c560c3c5",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-police.8f63ba5c",
+      "legacy_id": "genre-07240-54d7335b09ca",
+      "job_sha256": "9a3a1a1ff5e6720fe130bcedadd3b3149bdbf0adff7b38d8126bd08e263c9936",
+      "source": {
+        "definition_line": 4843,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "4b70a059fc7279d7a2630b64dc16305ea699dc02fa3c8f1a42392626d80fcf49",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-politics.91b581ed",
+      "legacy_id": "genre-07241-7d2bbeecdbed",
+      "job_sha256": "d4d5aec608d175c8451ebd62b849e9814aa2a63541d022ca4b8f63901e61df7b",
+      "source": {
+        "definition_line": 4844,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "801d7bebc4c4b269a6a25d8132df49e465db737d75c7bb99004cb0c530e8be9e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-post-apocalyptic.c65b9f1a",
+      "legacy_id": "genre-07242-8fddec70de19",
+      "job_sha256": "95a9e7e8d4ed21bd2f9349e876a3024dfbb53dcc4fbe64c9ff02c3470637527a",
+      "source": {
+        "definition_line": 4845,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "3ac36a619061f3efea45c7cd55f14975f5873ef2390e57f58be5241fdb3b5a3c",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-prehistoric.3cc7427b",
+      "legacy_id": "genre-07243-dc86ddf25967",
+      "job_sha256": "584ef01e17db579afb524068ecb1c748302c6c37bb66a560871e4098d84a9dff",
+      "source": {
+        "definition_line": 4846,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "f9204f3a185b0277755f577ccb24219ac79d90fd75ad01744805fe0326c8c80e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-president.d23d7124",
+      "legacy_id": "genre-07244-5d520ce05f44",
+      "job_sha256": "e6e1cea24117977a7f4442b3bf51a9be6d84dd5f82d02f0acf0a59909f17a28b",
+      "source": {
+        "definition_line": 4847,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "93e1d2646a6607a2ea977deb7468ded6727f9ca90678512796647cce1b492a70",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-prison.4ac000de",
+      "legacy_id": "genre-07245-b092d0c634e0",
+      "job_sha256": "1fd841c2850ef1175aeab93d0c905a25aa8d9204f30bcb649dbbc30df2800164",
+      "source": {
+        "definition_line": 4848,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "a23581065ba1ee3865b4600a775ab02b408975bf52343b7358ebc668a9fb6da6",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-psychedelic.ddef70d5",
+      "legacy_id": "genre-07246-ac6206a4e9f1",
+      "job_sha256": "fd904eae24299e163fa58f3315626bc75c8986f8773226efd73dbad617d5b4c7",
+      "source": {
+        "definition_line": 4849,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "4e03aa91096da299cc261b01779f524e7497b04698c7172e8af88ae8677f6185",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-psychological-horror.ca8dc62a",
+      "legacy_id": "genre-07247-061dec359a87",
+      "job_sha256": "b8b3ed40825b41e31034e4b187b57e87e210c53368ea1d3813a55f39b0e5e2af",
+      "source": {
+        "definition_line": 4850,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "d3ce8f82b6bb8216a7afc51d4e4aaee32a0e49048cf064e6cba8ad5bec418eb6",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-psychological.e7cfd070",
+      "legacy_id": "genre-07248-399805cb3c43",
+      "job_sha256": "104c0ee7194d6a4877e97acb8fbe3b0fccd43fc250ae864ce420b31eb6224569",
+      "source": {
+        "definition_line": 4851,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "dafa715413310ffd05597b9ee5669dc7a191103c045546fe23f6861fdab629d9",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-reality.502dcc98",
+      "legacy_id": "genre-07249-7bd999865309",
+      "job_sha256": "67466050ad2b1a8d1e0def462b0eb0074de14e722dbc65f6c700df2d7dfdd2ce",
+      "source": {
+        "definition_line": 4852,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "93e7d29737764a7102b21735766fcaea7ab977f2ecc5b2e037ebc9862f208540",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-religion.2fe9ae21",
+      "legacy_id": "genre-07250-391132e7bc24",
+      "job_sha256": "d2ed1e57ef88b372bb6962e7921eb4a4031004666e9be4841f94198a1a2287fc",
+      "source": {
+        "definition_line": 4853,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "73be405f66455df48a45ff3feb8c3cc36399083ff73e838cb272f1bc31352a54",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-remake.7d085f32",
+      "legacy_id": "genre-07251-1f5b7013bc93",
+      "job_sha256": "2fd90fd65011fe773504075275ba1b680981bfcf9bfa70ca4f396f5c8a3a011c",
+      "source": {
+        "definition_line": 4854,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "15ee599ab2e58a462d1dc7c0adde26f203fcb2d7c4aa6fc26139a65313b45142",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-revenge.dc9b1b37",
+      "legacy_id": "genre-07252-ccc71343468b",
+      "job_sha256": "9738d196a45822353397a36714acaa4ae467685e87af1dcf9eb2961dec63c421",
+      "source": {
+        "definition_line": 4855,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "e47b310dc93c4c88e0d36084b73b81b8f2855105992262db7cbd642133c59b9b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-robot.faa3d12e",
+      "legacy_id": "genre-07253-7f427596d2b9",
+      "job_sha256": "6a214580a1ac3e672af8e2579dc2188dc115471407a9e50f1c1fd29ef42e52dc",
+      "source": {
+        "definition_line": 4856,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "486231834faace6e7d3b6dd31e8031160982e4e072d14ced2ba6444c81c7fa5d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-romance.790f05f9",
+      "legacy_id": "genre-07254-95f35567b94a",
+      "job_sha256": "c97a64a661d4541539c8849d8ccf434d841e86939478a26d5b4b46851481b5ce",
+      "source": {
+        "definition_line": 4857,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "7e65e64a4d15a9d822df93c775f52dd74abd3d914423db4bba57cbfa5c228ddd",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-romantic-comedy.fe4a7879",
+      "legacy_id": "genre-07255-800aa2315c29",
+      "job_sha256": "cdccb2c83f1e2df61ab0d159f7665d423980653286b12f7e201f51170648e81b",
+      "source": {
+        "definition_line": 4858,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "153ce843059f4fc60a30cc43ecc2889d7d9f42dd36cf59af1a19ff42964c05bd",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-romantic-drama.ab40fc9f",
+      "legacy_id": "genre-07256-395dcfb3fa11",
+      "job_sha256": "e42a6707cdf7c41d5bca3cf94d6ee08975def4ae4edbd73f82ded682d94157ac",
+      "source": {
+        "definition_line": 4859,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "0e0acece0c8028b5df9a4811d3f62004e77450fb2de8d2079fdb3398ea9ca176",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-samurai.9b3d52a4",
+      "legacy_id": "genre-07257-eeb618525e50",
+      "job_sha256": "7c645b31ea8df7c07b01bc764a1ae6b60af33533c03e38d6576e525b4d23fdaf",
+      "source": {
+        "definition_line": 4860,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "6034ac4efe6030d57cb26282c481642b143f733e321d9f9a3fce5ad6d3cd5423",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-satire.dbd566ae",
+      "legacy_id": "genre-07258-6353342731bf",
+      "job_sha256": "b228878dccea729d908be39e4948f18fd6987ec76a36b233f035925bf8917f29",
+      "source": {
+        "definition_line": 4861,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "de0d3a2d673072575377323568945e86b8dd6472cc3fcab78f43af722a1cbd06",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-school.80947101",
+      "legacy_id": "genre-07259-dfc1332f4e5a",
+      "job_sha256": "d31cc7ffbbbb4822c02005bf38c364c50a94fe3ee1177eb8432c11bea801a357",
+      "source": {
+        "definition_line": 4862,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "319621662b9972febe6fcc767926b55e003e80b8bb0ff9cd69a385a1fefb3487",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-sci-fi-fantasy.aa28857b",
+      "legacy_id": "genre-07260-3376916757b2",
+      "job_sha256": "719c3626e1a27c54d5dce1e1b9058ef682fb34d6574ccbf5dca185276701b59d",
+      "source": {
+        "definition_line": 4863,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "5efd372e7997739b414604d27941d0eee73f67f5fb874e6a33cde2e4d3c72750",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-sci-fi-horror.93a1aa7f",
+      "legacy_id": "genre-07261-c7383cc69b01",
+      "job_sha256": "9214b46d62158cbc08ef4272be95d311a03333c25d308b41bfe87f963e013707",
+      "source": {
+        "definition_line": 4864,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "fff7d7b1e023eb782e55c914ffd9888b95fcc3ee34f7d00e727537a60e4cbc5b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-science-fiction.c29e7346",
+      "legacy_id": "genre-07262-a20c9df2b761",
+      "job_sha256": "3ecf2e18ba4f09e132970b3b4f471ad21a18d9211864fcd8e9dfbea6a72335c2",
+      "source": {
+        "definition_line": 4865,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "4d35ceb556beb7a0c58ba618842645f718cdd33a2a963bd66be62fd752427c1c",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-seductive.971a3202",
+      "legacy_id": "genre-07263-256ee5989a68",
+      "job_sha256": "fdcd5b7b6161786d61323d0f42ae0754319488843ae2d349c9d26fdb32787757",
+      "source": {
+        "definition_line": 4866,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "92023cec6c503682d0bb5482e7c083ae0eea3ebe815efc8ad4d3604eb36ffc2d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-serial-killer.afc3a44e",
+      "legacy_id": "genre-07264-7edc02ed1054",
+      "job_sha256": "ded7e173fff18dd3699345bbba1bce7c248a50b242cec663f1dcf4db00c696c7",
+      "source": {
+        "definition_line": 4867,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "780bef5dd18466331f6a5bcefdefd4765766086064bfccf4dd3d003860f87c53",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-sexploitation.a388d874",
+      "legacy_id": "genre-07265-5bedf07905fe",
+      "job_sha256": "b0d3369f6027fd7ad521e74a0c6d4a7a7336b0bfb93ff2fce1083d3f4ceb8531",
+      "source": {
+        "definition_line": 4868,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "ae997cc16839b04baa221357547b4d9c1442b5cca5eb000aa9c87117f21135fd",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-short.899c718e",
+      "legacy_id": "genre-07266-0e875347c0aa",
+      "job_sha256": "5311f7103a038bed19240f395e2176d1d25622f34ac7349bdfdef055c873a1c3",
+      "source": {
+        "definition_line": 4869,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "961f5856544946d5644c1f4da97cf3a2e218cc5a1c57105c826a30eb295068b1",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-shoujo.4ece8908",
+      "legacy_id": "genre-07267-10b872ff09b4",
+      "job_sha256": "82155164d72af690d9e940dfa7c039c8e140842b30208b618b6aa45c13d1b2c0",
+      "source": {
+        "definition_line": 4870,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "bb141dda3c3cd855f0f46ade90a7adce4d3fbd5c03f4a954c76ee0f263c17946",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-shounen.c3cbdf00",
+      "legacy_id": "genre-07268-aa1d141c6c4a",
+      "job_sha256": "37db1e0b6698f166090a946e11d9914a7d31a1c5908bb3ff836c7cd285462388",
+      "source": {
+        "definition_line": 4871,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "346b329ddeec11b8dcc614639f85f44e3e1a8bf160b6842ecd0ca78286744d84",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-silent2.d01980e7",
+      "legacy_id": "genre-07269-ce1b57b53ca7",
+      "job_sha256": "4965a1985475630bc0d1fa629e5fee08747e07bc7d90d57a3e5da517998b290c",
+      "source": {
+        "definition_line": 4872,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "646f1545435410ec62c3dd0c993178af87373c9675325b7d9a19d696dfd70a8b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-silent.d570d2f4",
+      "legacy_id": "genre-07270-511745cb31ef",
+      "job_sha256": "48d3d3e9edd995d576cc33b5f5a0ebe004822b5c56b41d203a5cbf1df15c4de0",
+      "source": {
+        "definition_line": 4873,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "02927ebefbbde8e4d1487ba64c15bf05889d15f673bcba13d8423d9cf9374b90",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-sinister-screens.323c37e6",
+      "legacy_id": "genre-07271-3ce851ec4761",
+      "job_sha256": "3218dadf31e2fb273e1e3e4623195456669b85a478494c4fb8d7b0eabc0568aa",
+      "source": {
+        "definition_line": 4874,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "5a162a8b84c8a092798a6dca9c5d74999c9c09f2ac7d9b86b286c84a0a9423bc",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-slapstick.610fbf68",
+      "legacy_id": "genre-07272-1203cda86264",
+      "job_sha256": "6cea900f17b869030add4bbed4b9a248ca2c8607d8e1f650783044558ccbe64f",
+      "source": {
+        "definition_line": 4875,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "878d413e4499332183dde44a1b3f9a4f2e509d92216b336cc23b129ffab58fb4",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-slasher.13cda820",
+      "legacy_id": "genre-07273-a046d8f18573",
+      "job_sha256": "9a9735564421001324c629eeb9dff3eff7bce4a9750863f92d19bf9b2ad53ba3",
+      "source": {
+        "definition_line": 4876,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "87c31df3accff48b101cd1676a46f8357590d9256fc2c5b328c9f0d101cef29e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-sleazy.4a16f074",
+      "legacy_id": "genre-07274-86af64e75f32",
+      "job_sha256": "7f488407d3fbbb8f496db57cbcf8ab93d168c57730498eddf1c66b6fc02fd0a1",
+      "source": {
+        "definition_line": 4877,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "357a2f65f1a9cc65924a981bbb96628a98d7e325a477cb5e52a871745aa94e36",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-slice-of-life.604db72c",
+      "legacy_id": "genre-07275-fc8334c8c600",
+      "job_sha256": "4e9dba6da9944a718a30166c9f808197654da33e28434bddcd764884f7209d10",
+      "source": {
+        "definition_line": 4878,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "78c71293bcf2bd9bdb823500278d71794807574bc557f4f2f5f898a930f15b5e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-soap.ffd43c25",
+      "legacy_id": "genre-07276-6810e0788d4a",
+      "job_sha256": "734c5bed46243d11af6454b7108e376f9e51163adc9e6b7c021c28eed46e402c",
+      "source": {
+        "definition_line": 4879,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "7a6bcdb1a03f4d967db84355ce21e77dc4957a13deb1d6ba02c62be27950a71b",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-space-opera.31926b79",
+      "legacy_id": "genre-07277-5e70e4c282f8",
+      "job_sha256": "9e6fa60814ef381efa64827cf6ec483c0ce459be39a8c70cba4f491377082f6c",
+      "source": {
+        "definition_line": 4880,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "cb0d036be4850f4e4b0c22b06277a45d2851ce689b7ac408c03dd1ce494943ad",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-space.4f9be9f1",
+      "legacy_id": "genre-07278-4d507737e64d",
+      "job_sha256": "862cfeeaeafa45fcb1f1a4c019c68c386fd4465749ec04ce96b1a9f892e896c3",
+      "source": {
+        "definition_line": 4881,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "ebd316f507b223d1a1d75c5e61ca939e4a258ea507597b5a992aa01952e9b510",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-spaghetti-western.acbdb8bd",
+      "legacy_id": "genre-07279-5615dcd728f7",
+      "job_sha256": "8f472cd3f17da4f7e054e160523402e4cf8b92b693ff19752fbb27bd7e3e2aec",
+      "source": {
+        "definition_line": 4882,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "5f8755c8d1623c8bf9e440ca539a48d12ef05e2772dd68072c4ed8e44d1cbd12",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-splatter.d3e4161c",
+      "legacy_id": "genre-07281-32c18034fbe9",
+      "job_sha256": "0ed73b6f419bd415cce8cc50d64e2d1de1396e622fe9e37f2056940baa04792f",
+      "source": {
+        "definition_line": 4884,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "8bcb2829b0a97f6bf4f2128f823d897e8e5598c02bdfc344ad3c2011c4172aa0",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-sport.996a33c7",
+      "legacy_id": "genre-07282-5b3eca933035",
+      "job_sha256": "8553517fdafa465bec55ea5d57107ee3ddf17faa411d0c351cf98d7a76ce1e3b",
+      "source": {
+        "definition_line": 4885,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "be91b1415c895c3d33d81357c1b22f8b1f48ed4000807d2273dcf9f7e71dcece",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-spy.b3dbc9c1",
+      "legacy_id": "genre-07283-78f21af0aa02",
+      "job_sha256": "757e7832a4c1742774eec1eb543b71fe7d22b0bc0b94810e4fe087257ac29de4",
+      "source": {
+        "definition_line": 4886,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "d668db94caae2de99bc87c1ecd0de4cf7c0c7d3cf4d383bffad21cafa99f1aae",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-stand-up-comedy.3d331325",
+      "legacy_id": "genre-07284-f0e8b6db2dfd",
+      "job_sha256": "3053237b4044ca6672c02586afb65c5a1adaece181b93ae0096c24365b657bb9",
+      "source": {
+        "definition_line": 4887,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "d3cfeb33cbe74567ad9e76eb459bd4bc5cd7359f9d631a5997eb8c0797370ac2",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-steampunk.e2fc3563",
+      "legacy_id": "genre-07285-7e553d12de67",
+      "job_sha256": "2f65f24f6684ed29c831afecbd19a702087c03298b867ce455bffbcb27ec9625",
+      "source": {
+        "definition_line": 4888,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "d635d13ba76dd0489454cfa479dee1354c4cb0edcc206b2d7cfc671d74e40582",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-stephen-king.c806a4bb",
+      "legacy_id": "genre-07286-a26d0dcdad51",
+      "job_sha256": "4080876682db26d6d8f6af6ac8f776d10f5f3b1bd6d36a528cd47c00e88eac5c",
+      "source": {
+        "definition_line": 4889,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "a7b76a21e1dd43cc7bde0244ab85d8497ff994e8b474509d2b52c5893cd2c425",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-stoner-comedy.82869c8f",
+      "legacy_id": "genre-07287-13392460b0d4",
+      "job_sha256": "428fa365434be866f58a3ed171cb36652f44382e2ed49d0dd9702c69038f46c2",
+      "source": {
+        "definition_line": 4890,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "df9e90b3d771a50f0912d9af71f47ab3e97db025a2c475cd193271c2274e5cb6",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-stop-motion.5f2ae13d",
+      "legacy_id": "genre-07288-db5d02717aa6",
+      "job_sha256": "f485900ccd3d2fa23c08d18ca920662cba6f1c94e1dbcee0deec58793f405103",
+      "source": {
+        "definition_line": 4891,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "323025233385339e6d625bd4c24e5c581fd8cd8c2c82400f4cf47331094fc4bf",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-superhero.7500201e",
+      "legacy_id": "genre-07289-0804f8c53ea2",
+      "job_sha256": "cba32daf9b2faee65b6157e897fab4d041a151b97ec0e4098f3bfe3e1539e760",
+      "source": {
+        "definition_line": 4892,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "c6ce31817d38e8c1208a083902029dd1b1fe69c39f0f6660780ab959ab05d2fd",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-supernatural.5ac3a5fb",
+      "legacy_id": "genre-07290-a3579aa118d3",
+      "job_sha256": "2b8222750a5bf08ce252c9e67b68d8f6d6bd48602731b235c8444366bbe56f8b",
+      "source": {
+        "definition_line": 4893,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "1bb18b5d52440efe29841bf6784f7d4871b239190a95e5683d953f0d715e9a6d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-super-power.3e75e8fa",
+      "legacy_id": "genre-07291-8ff521decc55",
+      "job_sha256": "dfb6f478a8a70845794c0bbef1cb8ae90c101fc6897500b59a24b99f868a460f",
+      "source": {
+        "definition_line": 4894,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "f9a0533c216bfe9ab7573a1a75e1d1b84def8b848e15239a69d0897ce48b96b2",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-surrealism.1c2f31a5",
+      "legacy_id": "genre-07292-8eab7764bccf",
+      "job_sha256": "23c9e151940778c8ad99c946836955212542688d1e436d2f36d0986caac8a11c",
+      "source": {
+        "definition_line": 4895,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "66b25f1a0939007b43bdd7dc41dd42dcee4bab2e31c7ae1d5cbd23ce0d417580",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-surreal-comedy.1085c456",
+      "legacy_id": "genre-07293-4aca84c6bbe8",
+      "job_sha256": "449b2ec0a4e5eaeef6bc56d8f560e5b16f6007bc1d2ce0e8973341e245ac9ae2",
+      "source": {
+        "definition_line": 4896,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "d75743a064d7338be8a3d3b91c95bf07b8e1248d51ac87e199a881dedd42899c",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-surreal-horror.d73a66ac",
+      "legacy_id": "genre-07294-aec1ff2fa9c8",
+      "job_sha256": "63eb8afc3d2245660591ac7a8e6b70f08e03cc9e05164edffc5f7b1b204175f5",
+      "source": {
+        "definition_line": 4897,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "42b162d1af6d7141eb32176bd8c91c320d5bb08f4f57e6dda687e2bcde0be7b9",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-surreal.888b4264",
+      "legacy_id": "genre-07295-77becfb83844",
+      "job_sha256": "c1e2df994986660893580d6afaa7404acb0b707f6331de77ca45e748adafcdc4",
+      "source": {
+        "definition_line": 4898,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "2fb60bea08aea0d517a0cdc81f75149bf7aa64732dac9aa954856772e6de6ae5",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-survival.37116c77",
+      "legacy_id": "genre-07296-76f939eb7d3c",
+      "job_sha256": "807cfd2722975e17a42722caa6efc5b7836522d11758953a09035ca25c8ef905",
+      "source": {
+        "definition_line": 4899,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "73300c0e4ffba3021ef7578774295a652905b21ac1eddf99c21133a342a0430f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-suspense.e27981f3",
+      "legacy_id": "genre-07297-0ef514f07b76",
+      "job_sha256": "b76c32b24838bd0f2e081afbf3e22b1eea9bce02459bc2418f2aa1f32e67f2c3",
+      "source": {
+        "definition_line": 4900,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "ba019abfa06c5ac326d6d33cd79f9f0ceb415a33b6690267aca697af8319a0e7",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-swashbuckler.7f408394",
+      "legacy_id": "genre-07298-cb07c35305cd",
+      "job_sha256": "d9998478bae685577ea133a85c97698014b6b8b50dcca089c75ec13a3bbc9d62",
+      "source": {
+        "definition_line": 4901,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "c9d647299a14a3ee049a983023489cfbbe8a10711b4e30c32bfaa053feb8e476",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-sword-sandal.7c9257b5",
+      "legacy_id": "genre-07299-54d2aa4ef711",
+      "job_sha256": "cfa001a93aad2b8a1be4be338f7333fe1ca327c8e139381756cd5ff7d408e4a2",
+      "source": {
+        "definition_line": 4902,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "90ded0aa0de25964e9443bd9d9dac0b7ea2c084aacc8fb7818221bbb6f9a789d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-sword-sorcery.875b1e71",
+      "legacy_id": "genre-07300-26795983ca51",
+      "job_sha256": "09d144f2b7e7d5b82d92eabe7538f9eae50820c386ecd2eba3e8838c2d518cea",
+      "source": {
+        "definition_line": 4903,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "d7fc4517bcfcfffa4de4f71180fa8d078ddcdaf962d0e61dcee97bfdeb171769",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-talk-show.c0cf2ef2",
+      "legacy_id": "genre-07301-ca2768f21adf",
+      "job_sha256": "a1255567e3ef9a5742cc1d48409db704e0ee1741023ced5711b8dbc0ef2bce3b",
+      "source": {
+        "definition_line": 4904,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "d81fd63441aacbdadd1bab0e73cabec3528c13ee5f7450820fc60d0a287d5671",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-technology.844a34c9",
+      "legacy_id": "genre-07302-a78d57adcb16",
+      "job_sha256": "7b1a24448a52d4fb6469f2dba5512ef70a68c3ef3a5b48e2a230cd15497adf3d",
+      "source": {
+        "definition_line": 4905,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "1051f11a778670321c2fcb54e4c2e93a31c0da7c12c4133f2d9d64fd08bc5665",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-the-arts.36774737",
+      "legacy_id": "genre-07303-7243ce714eb9",
+      "job_sha256": "98316c953713eebb4beba68720121d019b70a1f30bffc1643463a684c14d9007",
+      "source": {
+        "definition_line": 4906,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "2276bfe2de70a693b225271f4671a101ef31b1b573c1592724e156ab725fd673",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-thriller.0caa3319",
+      "legacy_id": "genre-07304-517b012419b4",
+      "job_sha256": "71e71c0f4079fa232caf973bd8dd0583a6c7d2e768c657ab3d68213565861405",
+      "source": {
+        "definition_line": 4907,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "ae6a042558016eb7f1868d1793e6e6287419aba3907eb6aee750bbb0a5e4eb6f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-time-travel.39758d51",
+      "legacy_id": "genre-07305-6dfbcfc727c4",
+      "job_sha256": "e1c918022e6c19901868fc35dd228a90a031bcc0ddbaa765a1c18f53b8d2253a",
+      "source": {
+        "definition_line": 4908,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "1fcf2a3b5844fa78ce348e521d62fdffad87a4215fb8649cbb4a31bb774aa892",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-time-loop.0a44e6a5",
+      "legacy_id": "genre-07306-a3de509e20e8",
+      "job_sha256": "f7ee8c293257299905f0421d827cf8d1f77497d5c0b5fe524dcaefb25775938f",
+      "source": {
+        "definition_line": 4909,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "908cbae880d93a778ebe734676b3955bdf3a2a2b3fbf379d00e2fa74f199684d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-top-grossing-films-annually.1bbec0ec",
+      "legacy_id": "genre-07307-4e2e1f7a91ed",
+      "job_sha256": "8257b997c863263db38915a8ad8a2779a97c402c0e7d2179fed3de75da6ee7b0",
+      "source": {
+        "definition_line": 4910,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "d9c35d0e4c7ee4dc2a6ae3c6f968d11272e9535b049703d121a2719bac03b9d8",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-top-grossing-films-of-all-time.3af26294",
+      "legacy_id": "genre-07308-ede1568c124b",
+      "job_sha256": "9a20c142b946ba29e4466337544131d7e86fd62cb378bc64b3c38e6ce1ce718d",
+      "source": {
+        "definition_line": 4911,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "d68ca04caaa3cadcfd7f6873d7fa087d65ed56a243b2dec209eafc6f153a929e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-trains.7c179194",
+      "legacy_id": "genre-07309-cec0a87f61df",
+      "job_sha256": "fed58476a33316e70145dcf3b69d5e1cf22d673a7fc563a8cd4bc6657e6fe4b7",
+      "source": {
+        "definition_line": 4912,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "ac05598fc31c5f76a98520079b5794b14f04be7978e7a06daad944b177baef6a",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-travel.133748da",
+      "legacy_id": "genre-07310-53e351d51a19",
+      "job_sha256": "dfa8fb1b17ecf163ae901165eb8257b14270b8e0f587fc6148a748e5e29baa99",
+      "source": {
+        "definition_line": 4913,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "7f6fcb54399e7ea277cc06e7977b12589f05d48d06d74272e80c962de6642b83",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-treasure-hunt.86f2a791",
+      "legacy_id": "genre-07311-94cfadfd98ce",
+      "job_sha256": "7631d2aadfae3d3b179d0423dd2c5d28a6d8671fe454fe58bb3193ffd022370d",
+      "source": {
+        "definition_line": 4914,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "e593cf715ec87c4bfc39f698279f4b545b38b40e066ee45f2b50c25827bd4273",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-true-crime.25b5a8f4",
+      "legacy_id": "genre-07312-6265dfa275f2",
+      "job_sha256": "3aeea379692da6b8eaa40b14de2fc80c2a480b36465eb2e5129777d397576cc8",
+      "source": {
+        "definition_line": 4915,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "92949e63520c0b33e529dec13476973f5687af6f24fcdbce08720f5a767b7e74",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-tv-movie.0c38cd1c",
+      "legacy_id": "genre-07313-01e080cd3f1a",
+      "job_sha256": "eb85c07417a91410f484db99699db7ab56a6cc070a824401ef43c0bd2fc30f85",
+      "source": {
+        "definition_line": 4916,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "5eaafda0011f955726f8a044824551f2e1def6d4006c9a9a0a6177c352a0977f",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-ufo.21a922f8",
+      "legacy_id": "genre-07314-692c9f35e8fa",
+      "job_sha256": "8c0b84c1f6267e107f592b559e275bde360ca0d71e6805ede972e3bbfaea0e52",
+      "source": {
+        "definition_line": 4917,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "4a91875496c9d1b4b4e9f77da05256c14623117005ad8a3d4146a62ded37cf7e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-ultimate-bass.ff0f5861",
+      "legacy_id": "genre-07315-a1546110d3b4",
+      "job_sha256": "5c6ab266dc08de44f6ec48e0066f0d0fc1f60b1a0c7a9deae138f4afda450f86",
+      "source": {
+        "definition_line": 4918,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "b783664f50c221bf649cd109d526af302866302663987a70fff27a8aa7bf3d66",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-unexpectedly-amazing.6eb2a9ac",
+      "legacy_id": "genre-07316-ff91bf0397e8",
+      "job_sha256": "f4d3e7285a2718a383b7079bb260f0678d9fcaeabb913b45fbdc6ee988a875dc",
+      "source": {
+        "definition_line": 4919,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "7cfcdb6b952b4f624a00ae9940a83a6f3532e414dd854c25db76127b5ed2401d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-urban-fantasy.61201fcf",
+      "legacy_id": "genre-07317-d3231692f9d7",
+      "job_sha256": "6b21dd8af4cec0fee07238524b3caddb9a05ad4d6440630cca5a24f619dc0047",
+      "source": {
+        "definition_line": 4920,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "940c062fa618ce5afeb085ca4a2aaa89b1497ede771dd8dd2b9160939ed7a20e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-utopia.a8273d14",
+      "legacy_id": "genre-07318-7bc20918ce1f",
+      "job_sha256": "391b0738a6fc9a55260dae4aea27603a5f3dd5e2162098914d8dddc3192b7e6e",
+      "source": {
+        "definition_line": 4921,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "5177233ff7a88f499f9d4c235c9390ce0f5f4b801c3c487e6cece17b23d73518",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-vampire.8ed3cf07",
+      "legacy_id": "genre-07319-526b165b361a",
+      "job_sha256": "ad5a50e3f5dc2b84845667a18a8b120c1fcc76b8ad897278459ff8e8adcf7751",
+      "source": {
+        "definition_line": 4922,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "82fceb177df8ba3f62638b6304782edbf0c8d5db98e2a7a39141ba9af1034184",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-video-game.a474a62e",
+      "legacy_id": "genre-07320-63ec82f3b850",
+      "job_sha256": "805125f63417fd502f007086e4549c69bbc980e74a84cac1ee85db9f83b96243",
+      "source": {
+        "definition_line": 4923,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "41cb27011e7b69ea086370f2474bb7d5ff8953c4fa50d1b1d134d7c0040657e8",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-video-nasty.48379628",
+      "legacy_id": "genre-07321-dc1e5d9b6c06",
+      "job_sha256": "df15127012c261a96962d1593effc0bd5befc40e6200bd027e038d54b2dec5c9",
+      "source": {
+        "definition_line": 4924,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "e15671c24dd7cfb99db74b45a9e40e77b921a3778657884f5aa0b189c54c43da",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-war-politics.a67cad9c",
+      "legacy_id": "genre-07322-6422eb9a665b",
+      "job_sha256": "c6225d305f2c96ee340c55fecda2d5b2b8d49893a1f754b0642110cffffc590c",
+      "source": {
+        "definition_line": 4925,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "92bdd6d35f81961ac4176efd3d734e925a0bdc7a000652a76e4376f2fea55e29",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-war.bc5e6614",
+      "legacy_id": "genre-07323-3fe4553db2da",
+      "job_sha256": "a937f028df5a8651cb22ba1606bb2e86e24040d68889f333f2935aa87830974a",
+      "source": {
+        "definition_line": 4926,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "481023e15a71dd88fe9098e306dd5280815f09dcf1780e4f006d23c9f23bc2a3",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-weather.f2880a1e",
+      "legacy_id": "genre-07324-c2cfcb7fe2ba",
+      "job_sha256": "f272b7fe15da765dfdc0e50664119fee8e7849c74ca9f3a1f173b2de7ac0328e",
+      "source": {
+        "definition_line": 4927,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "d57fc2d05d1e7bb97f55a6306cb725f437844d6c5b9a9b190c6a99d06d74ddca",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-werewolf.6efaf79b",
+      "legacy_id": "genre-07325-96d997a0cbff",
+      "job_sha256": "dc95b1695374ce67157b095f7b8edad4f6d1ce8422522dd7a795de816f7d0c7c",
+      "source": {
+        "definition_line": 4928,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "20d4af5b72fa7c5e4d9a12eb75e4e0b39381103958597840186cc9c3337a4a7e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-western.8c3717ea",
+      "legacy_id": "genre-07326-6b75e79a5afa",
+      "job_sha256": "b60d7c2fdc1b6ceeabb58eb1d91c7ffac7adbf6932265bb15f70f6f6e2dfe20b",
+      "source": {
+        "definition_line": 4929,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "5bf6cd0a33b4ba59fda96d0ea26c178c078ecee4f60e3be05e30932fb7e5b716",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-whodunit.189a5553",
+      "legacy_id": "genre-07327-5690e0eebe70",
+      "job_sha256": "a71eb01bc6934b422a054a4d616e2d7ceded7946b39450f15a8e8ed4067b8ef9",
+      "source": {
+        "definition_line": 4930,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "29ad42e5061b09f0f3c167dafbdaac1de4c1ea0c5cb88110c48d4ce53d2ffb21",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-witch.0345d918",
+      "legacy_id": "genre-07328-02453c21f6b4",
+      "job_sha256": "47ecac80f85c62b6805abc47bcb392fd7f5cc86311ce4de8b80f281b2603a8fa",
+      "source": {
+        "definition_line": 4931,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "96a97071447bd4489fd858f25a0e9206225e104edde6d4f987b5e1e6e00f9fc8",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-wizardry-witchcraft.0ca89d47",
+      "legacy_id": "genre-07329-c6cb161bf2a1",
+      "job_sha256": "00dc2ef697089eb06e5c9a8b75fcd0774283d10421f60089c9d7dd0f1ad2d9a8",
+      "source": {
+        "definition_line": 4932,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "3d336c7f8127c9e15b8372e7bd794220dc750d7f26029d350f6fd85faa93e5d7",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-world-war.e26d8ba6",
+      "legacy_id": "genre-07330-891cc9b25fc1",
+      "job_sha256": "8618932d9a0a70420fa0536055887b7d98739ae5e044c2ca159a40922f9e9051",
+      "source": {
+        "definition_line": 4933,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "3504450ce4c921cc8482c7d2032734b42ee0c0bcbc5e13d8afe562f65b5f4f1a",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-wuxia.7c52980f",
+      "legacy_id": "genre-07331-6071d905b94d",
+      "job_sha256": "e2e2002d74a60df2f8491188ae14980123e91ac1e928727a248f6d0a35f30511",
+      "source": {
+        "definition_line": 4934,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "557e98f8870a4c811e3a3531fc15091a9148f7d3fc855610009eee8a439d8f96",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-zombie-comedy.258f8248",
+      "legacy_id": "genre-07332-daf34475c60f",
+      "job_sha256": "9469501822c3a0af5e81f55bbd55d80f5f4a0d5196ef3001867c3750b563e50c",
+      "source": {
+        "definition_line": 4935,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "66f4baa33eb0d4b246d311bbf8909e0f28ccafdf1deca79c65fd06a747813ba3",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-zombie-horror.703d7488",
+      "legacy_id": "genre-07333-cc08f5b7389d",
+      "job_sha256": "3006f0b1654369dca622a15f33b5563d7529227d9d6300a6186f8ea09fe9e245",
+      "source": {
+        "definition_line": 4936,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "80870ce3a3dec4181ee301c32484b1978d5de9a5fef3f09c9fa1f254a6ca6122",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "genre.genre-zombie.492ec45a",
+      "legacy_id": "genre-07334-e1f7e67a1825",
+      "job_sha256": "95413932f4f881f5a65632b565fef1a9bc0a68be550596b68a68a6ab1575a039",
+      "source": {
+        "definition_line": 4937,
+        "path": "create_default_posters.ps1",
+        "producer_line": 4949
+      },
+      "row_sha256": "6e92ca2de5c7f1934887e34d95b84fcfd0d25373f6ba8dfa8a9ab10feb98ae0e",
+      "frozen_choices": []
+    }
+  ],
+  "retired": [
+    {
+      "legacy_id": "genre-07280-eea9bdae1f16",
+      "line": 4883,
+      "reason": "D02: unintended green Splatter; red line 4884 is authoritative",
+      "sha256": "d6a543f95324828d48a5bcfa35f0ebfd672729c5410dbab3645856cfe6a1111c"
+    }
+  ]
+}

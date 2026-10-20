@@ -1,0 +1,8 @@
+# Offline bulk validation and selected People compatibility regressions.
+-r requirements.txt
+jsonschema==4.26.0
+requests==2.34.2
+pytest==9.1.1
+# Existing People regression helpers need these on clean CI runners.
+python-dotenv==1.2.4
+alive-progress==3.3.0

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Package A canonical poster-job envelope v1 (sample scope only)",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "scope", "source", "renderer", "jobs"],
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "path": {"type": "string", "format": "relative-artwork-path"},
+    "nullablePath": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/path"}]},
+    "hex": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+    "effective": {
+      "type": "object", "additionalProperties": false,
+      "required": ["logo", "logo_offset", "logo_resize", "base_color", "gradient", "text", "text_offset", "font", "font_color", "font_size", "out_name", "avg_color", "avg_color_image", "dom_color", "dom_color_image", "border", "border_width", "border_color", "white_wash", "clean"],
+      "properties": {
+        "logo": {"$ref": "#/$defs/nullablePath"}, "logo_offset": {"type": "integer"}, "logo_resize": {"type": "integer", "minimum": 1},
+        "base_color": {"$ref": "#/$defs/hex"}, "gradient": {"type": "integer", "minimum": 0, "maximum": 4},
+        "text": {"type": "string"}, "text_offset": {"type": "integer"}, "font": {"$ref": "#/$defs/path"},
+        "font_color": {"$ref": "#/$defs/hex"}, "font_size": {"type": "integer", "minimum": 10, "maximum": 500},
+        "out_name": {"$ref": "#/$defs/path"}, "avg_color": {"type": "boolean"}, "avg_color_image": {"$ref": "#/$defs/nullablePath"},
+        "dom_color": {"const": false}, "dom_color_image": {"$ref": "#/$defs/nullablePath"}, "border": {"type": "boolean"},
+        "border_width": {"type": "integer", "minimum": 0}, "border_color": {"$ref": "#/$defs/hex"}, "white_wash": {"type": "boolean"}, "clean": {"type": "boolean"}
+      }
+    }
+  },
+  "properties": {
+    "schema_version": {"const": 1},
+    "scope": {"const": "package-a-capture-sample-not-rendered"},
+    "source": {
+      "type": "object", "additionalProperties": false, "required": ["commit", "bulk_text_sha256", "capture_sha256", "translation_sha256"],
+      "properties": {"commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "bulk_text_sha256": {"$ref": "#/$defs/sha"}, "capture_sha256": {"$ref": "#/$defs/sha"}, "translation_sha256": {"$ref": "#/$defs/sha"}}
+    },
+    "renderer": {
+      "type": "object", "additionalProperties": false, "required": ["composer_text_sha256", "text_engine_text_sha256", "encoding"],
+      "properties": {"composer_text_sha256": {"$ref": "#/$defs/sha"}, "text_engine_text_sha256": {"$ref": "#/$defs/sha"}, "encoding": {"const": {"format": "JPEG", "quality": 100, "subsampling": 0}}}
+    },
+    "jobs": {"type": "array", "minItems": 1, "items": {
+      "type": "object", "additionalProperties": false,
+      "required": ["poster_id", "language", "variant", "legacy_job_id", "definition", "effective", "canvas", "inputs", "local_relative", "remote_relative", "spec_sha256"],
+      "properties": {
+        "poster_id": {"type": "string", "pattern": "^[a-z][a-z0-9.-]*$"}, "language": {"enum": ["ar", "en", "da", "de", "es", "fr", "it", "nb_NO", "nl", "pt-br", "sv"]},
+        "variant": {"const": "base"}, "legacy_job_id": {"type": "string", "minLength": 1},
+        "definition": {"type": "object", "additionalProperties": false, "required": ["line", "producer_line", "row_sha256"], "properties": {"line": {"type": "integer", "minimum": 1}, "producer_line": {"type": "integer", "minimum": 1}, "row_sha256": {"$ref": "#/$defs/sha"}}},
+        "effective": {"$ref": "#/$defs/effective"}, "canvas": {"const": [2000, 3000]},
+        "inputs": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"$ref": "#/$defs/path"}, "sha256": {"$ref": "#/$defs/sha"}}}},
+        "local_relative": {"$ref": "#/$defs/path"}, "remote_relative": {"$ref": "#/$defs/path"}, "spec_sha256": {"$ref": "#/$defs/sha"}
+      }
+    }}
+  }
+}

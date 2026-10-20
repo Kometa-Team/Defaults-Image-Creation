@@ -1,0 +1,114 @@
+{
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "active": [
+    {
+      "poster_id": "aspect.aspect-other.141aed4b",
+      "legacy_id": "aspect-00000-cf45cabc7191",
+      "job_sha256": "8da2ebc9954892905de7bfb7640609813ccc5731fc63de33fbdbff407947451a",
+      "source": {
+        "definition_line": 831,
+        "path": "create_default_posters.ps1",
+        "producer_line": 843
+      },
+      "row_sha256": "4e425168e805115824a0b02d9efcd1a72c0c93181af2dbdcfda3470bebf1fba2",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "aspect.aspect-1-33.f23e8bae",
+      "legacy_id": "aspect-00001-1315a4d034d5",
+      "job_sha256": "ee5d2be4bc073e60cd3452011520641ae162075d13022a71c8fdac7fb0151f70",
+      "source": {
+        "definition_line": 849,
+        "path": "create_default_posters.ps1",
+        "producer_line": 868
+      },
+      "row_sha256": "8de871b4c1ac9ae68fdaba96e5f2425d91b772e538b6bd1c22467288f0beab04",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "aspect.aspect-1-65.f7d5b971",
+      "legacy_id": "aspect-00002-70641a0d2635",
+      "job_sha256": "db36bd4480cb3d31cea7952b8e82dd0103817f37bcfeed8e8ba8640602a488cb",
+      "source": {
+        "definition_line": 850,
+        "path": "create_default_posters.ps1",
+        "producer_line": 868
+      },
+      "row_sha256": "96d1ef56cc43052d73b0bffc99245c3c363c980542d8b6324f88ce9a1731b4fd",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "aspect.aspect-1-66.63fbfc6c",
+      "legacy_id": "aspect-00003-b0e280c72c9b",
+      "job_sha256": "5be5b4e90738d38930cdb5df434dc901a1d7788cc14464b87e8d76301805d3a9",
+      "source": {
+        "definition_line": 851,
+        "path": "create_default_posters.ps1",
+        "producer_line": 868
+      },
+      "row_sha256": "d95c57d481656321c42155c290e7eaca431547f1531557e7185143f7eea3baaf",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "aspect.aspect-1-78.77cd3af1",
+      "legacy_id": "aspect-00004-3e3e9651e62b",
+      "job_sha256": "5cfdc3d8d8f9938f6de36f94c7667f58a7085cda9565afa1de3f3d2893638345",
+      "source": {
+        "definition_line": 852,
+        "path": "create_default_posters.ps1",
+        "producer_line": 868
+      },
+      "row_sha256": "164c32ea90b0f644aa4cf0b3abb64059cf4646dc8d88c0f79cd84ae422a4e76d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "aspect.aspect-1-85.6dc70aed",
+      "legacy_id": "aspect-00005-838fcbab93ea",
+      "job_sha256": "691995547d67141775e44c47fe192dbc11e747edc34f3005b08163ed8e599feb",
+      "source": {
+        "definition_line": 853,
+        "path": "create_default_posters.ps1",
+        "producer_line": 868
+      },
+      "row_sha256": "ef43732e231300552cbbad0ffcc4940c51dc09bdb3ff9ada09b4faf20f40a39e",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "aspect.aspect-2-2.9daf5484",
+      "legacy_id": "aspect-00006-cce92e6af21c",
+      "job_sha256": "47ce795c8609d1ea746b9856ef816cbb49c1be92278ff39c6335e402510a152d",
+      "source": {
+        "definition_line": 854,
+        "path": "create_default_posters.ps1",
+        "producer_line": 868
+      },
+      "row_sha256": "eb3a23441cfa75bca46ef59d4a253996112485e32002c61e55fcac716d32241d",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "aspect.aspect-2-35.2b7eda2b",
+      "legacy_id": "aspect-00007-abc28cee6d30",
+      "job_sha256": "b40c5cffd79ba0ea65cac6d1f052477c07587301b2f792859059221af96ee6f8",
+      "source": {
+        "definition_line": 855,
+        "path": "create_default_posters.ps1",
+        "producer_line": 868
+      },
+      "row_sha256": "c79e0b6aacc8663c810cdcc1e6103a688ca9458c252ca38a34edd6a5d8712552",
+      "frozen_choices": []
+    },
+    {
+      "poster_id": "aspect.aspect-2-77.d9c63a28",
+      "legacy_id": "aspect-00008-c45711c77b86",
+      "job_sha256": "033ba0cf5ebb3b9e90661be5f945b561a0f01026e443bb69532a54e011a960a5",
+      "source": {
+        "definition_line": 856,
+        "path": "create_default_posters.ps1",
+        "producer_line": 868
+      },
+      "row_sha256": "f80cbf4bf3ae2993fa2e8b9613206e6d5e4bd76cc166c18915e879edc7b3f9cf",
+      "frozen_choices": []
+    }
+  ],
+  "retired": []
+}

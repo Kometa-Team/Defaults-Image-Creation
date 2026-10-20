@@ -1,0 +1,743 @@
+schema_version: 1
+category: Decade
+definitions:
+- extends: legacy-poster
+  id: decade.decade-other.b9d2114d
+  category: Decade
+  display_name: other
+  source:
+    path: create_default_posters.ps1
+    line: 4396
+    row_sha256: c41110045a1304c2753ee8eced243150023d24d9714c8b0cdf11e5d9c9348fa5
+  composer:
+    base_color: '#FF2000'
+    logo_resize: 1600
+    out_name: other
+  caption:
+    mode: translation
+    key: collections.decade_other.name
+  layout:
+    kind: captured_fit
+    measurement:
+      text: OTHER DECADES
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 250
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 250
+      evidence_sha256: 89caa9cda245ec6eca2011fba8ad4f63050b7a8feb12e3e9d14e3a78836fa655
+  output:
+    directory: decade
+    filename: other.jpg
+    remote_paths:
+      en: decade/other.jpg
+  generator: null
+  color_assignment:
+    id: decade.decade-other.b9d2114d.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: decade.decade-1880.a3636532
+  category: Decade
+  display_name: '1880'
+  source:
+    path: create_default_posters.ps1
+    line: 4419
+    row_sha256: 339275c7fb5263a5b409fa01c3ae3699bc10974dc4c4c80ebf9aa253d33685ba
+  composer:
+    base_color: '#44EF10'
+    font: fonts/Rye-Regular.ttf
+    font_size: 400
+    out_name: '1880'
+  caption:
+    mode: shared
+    text: 1880s
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: 1880s
+      font_sha256: 722825f800cf7ceae4791b274d45da9df517db7cf7a07bfafd34452b787c5354
+      point_size: 400
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 6a97b9b168037d0775cc7ea87f1a6b435d4da83b3b80608381cc690ec7cda50e
+  output:
+    directory: decade
+    filename: 1880.jpg
+    remote_paths:
+      en: decade/1880.jpg
+  generator: null
+  color_assignment:
+    id: decade.decade-1880.a3636532.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: decade.decade-1890.f61e8ab8
+  category: Decade
+  display_name: '1890'
+  source:
+    path: create_default_posters.ps1
+    line: 4420
+    row_sha256: a458dd4b302bf0ca4c8056e7bfefe0e6f6caaedcf721c956a9c4993241bf32b8
+  composer:
+    base_color: '#44EF10'
+    font: fonts/Limelight-Regular.ttf
+    font_size: 425
+    out_name: '1890'
+  caption:
+    mode: shared
+    text: 1890s
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: 1890s
+      font_sha256: 5d2c9f43d8cb4d49481a39a33cdc2a9157b1fcbfb381063a11617ede209a105c
+      point_size: 425
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: 7652c532619a6cf6a2cb86d19e156e82ea5b0d7af82220b91a88c50fbd26f51d
+  output:
+    directory: decade
+    filename: 1890.jpg
+    remote_paths:
+      en: decade/1890.jpg
+  generator: null
+  color_assignment:
+    id: decade.decade-1890.f61e8ab8.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: decade.decade-1900.7066c0d1
+  category: Decade
+  display_name: '1900'
+  source:
+    path: create_default_posters.ps1
+    line: 4421
+    row_sha256: d594a02593bef22bd228a75972db7309326062c3e1e93ce9ceb10c4355387bc1
+  composer:
+    base_color: '#44EF10'
+    font: fonts/BoecklinsUniverse.ttf
+    font_size: 453
+    out_name: '1900'
+  caption:
+    mode: shared
+    text: 1900s
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: 1900s
+      font_sha256: 5f6f6396edee3fa1fe9443258d7463f82e6b2512a03c5102a90295a095339fb5
+      point_size: 453
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 453
+      evidence_sha256: d03d8062be88d03d1f42415aab3a72149497770ae814ba9fca519c0f0dccf642
+  output:
+    directory: decade
+    filename: 1900.jpg
+    remote_paths:
+      en: decade/1900.jpg
+  generator: null
+  color_assignment:
+    id: decade.decade-1900.7066c0d1.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: decade.decade-1910.218f522c
+  category: Decade
+  display_name: '1910'
+  source:
+    path: create_default_posters.ps1
+    line: 4422
+    row_sha256: da4f9fa515ac502507f670f8dd5f29431710094939fdca738fc5cce6b22da487
+  composer:
+    base_color: '#44EF10'
+    font: fonts/UnifrakturCook-Bold.ttf
+    font_size: 418
+    out_name: '1910'
+  caption:
+    mode: shared
+    text: 1910s
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: 1910s
+      font_sha256: b9ed8da80463792a29675199b0f6580871025c35b2c539cad7d5de050d216a0c
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: 09d5d863a240c01e8d69fdca3b882b1690a6132642f80e918e56ee7d9f0b65fd
+  output:
+    directory: decade
+    filename: 1910.jpg
+    remote_paths:
+      en: decade/1910.jpg
+  generator: null
+  color_assignment:
+    id: decade.decade-1910.218f522c.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: decade.decade-1920.9b6eae4a
+  category: Decade
+  display_name: '1920'
+  source:
+    path: create_default_posters.ps1
+    line: 4423
+    row_sha256: 1a841e410ee4af02141df2450208fc262912ffd113f29af6c77d3366d3bc2141
+  composer:
+    base_color: '#44EF10'
+    font: fonts/Trochut-Regular.ttf
+    font_size: 418
+    out_name: '1920'
+  caption:
+    mode: shared
+    text: 1920s
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: 1920s
+      font_sha256: ec48b8641254bdcacc417b77992f7776a747a14f8a16c5d5af9d1b75f4bec17d
+      point_size: 418
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: eabb4c7edb113ad2da8772d4860dabbf1757bf003d226c1858cd56fbda8fb638
+  output:
+    directory: decade
+    filename: 1920.jpg
+    remote_paths:
+      en: decade/1920.jpg
+  generator: null
+  color_assignment:
+    id: decade.decade-1920.9b6eae4a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: decade.decade-1930.a405123a
+  category: Decade
+  display_name: '1930'
+  source:
+    path: create_default_posters.ps1
+    line: 4424
+    row_sha256: ec9bf8481ddf731d734a8532193f1fd6bbff044754798014d8c1130b8dc9f972
+  composer:
+    base_color: '#44EF10'
+    font: fonts/Righteous-Regular.ttf
+    font_size: 398
+    out_name: '1930'
+  caption:
+    mode: shared
+    text: 1930s
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: 1930s
+      font_sha256: 4c3cdc5de2d70c4ee75fc9c1723a6b8f2d7316f49b383335fd8257a17dd88ade
+      point_size: 398
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: ee991dd3605117034683a49074b9a078a465ad4e81d65db95f5c88626a77de5b
+  output:
+    directory: decade
+    filename: 1930.jpg
+    remote_paths:
+      en: decade/1930.jpg
+  generator: null
+  color_assignment:
+    id: decade.decade-1930.a405123a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: decade.decade-1940.46b7ef22
+  category: Decade
+  display_name: '1940'
+  source:
+    path: create_default_posters.ps1
+    line: 4425
+    row_sha256: 0e1d6aa8517c9018bfa06e5f8699aba0f307fb24e83e4cdd7bcdcb8fce87164e
+  composer:
+    base_color: '#44EF10'
+    font: fonts/Yesteryear-Regular.ttf
+    font_size: 342
+    out_name: '1940'
+  caption:
+    mode: shared
+    text: 1940s
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: 1940s
+      font_sha256: b9d7736030dca2b5849f4fa565a75f91065cc5ded8b6023444bd74445a263c77
+      point_size: 342
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 700
+      evidence_sha256: 9ea111b8f3d7f344ea2a542f9bc9d6cf307050e30b416a6adc0749580ebd0375
+  output:
+    directory: decade
+    filename: 1940.jpg
+    remote_paths:
+      en: decade/1940.jpg
+  generator: null
+  color_assignment:
+    id: decade.decade-1940.46b7ef22.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: decade.decade-1950.6267b17f
+  category: Decade
+  display_name: '1950'
+  source:
+    path: create_default_posters.ps1
+    line: 4426
+    row_sha256: 7c97e3cf0358b71803a6867491968e0b39e6463bc531c1ca8b3f9a755dbfbad8
+  composer:
+    base_color: '#44EF10'
+    font: fonts/CherryCreamSoda-Regular.ttf
+    font_size: 414
+    out_name: '1950'
+  caption:
+    mode: shared
+    text: 1950s
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: 1950s
+      font_sha256: d70eafe96abbaad50d94538b11077d88bb91ac3538dd0e70f0bdc0ce04e410e9
+      point_size: 414
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: bf4197e9e63264ffc4c559bbf15b1ee8988e52809960ebaae7f54b84b9e818e0
+  output:
+    directory: decade
+    filename: 1950.jpg
+    remote_paths:
+      en: decade/1950.jpg
+  generator: null
+  color_assignment:
+    id: decade.decade-1950.6267b17f.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: decade.decade-1960.842f289e
+  category: Decade
+  display_name: '1960'
+  source:
+    path: create_default_posters.ps1
+    line: 4427
+    row_sha256: e5f1dfdb855784f9f8b10d6dc3efc4c9613bfb4325cbe59f21dba460ebe8df94
+  composer:
+    base_color: '#44EF10'
+    font: fonts/Boogaloo-Regular.ttf
+    font_size: 393
+    out_name: '1960'
+  caption:
+    mode: shared
+    text: 1960s
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: 1960s
+      font_sha256: 6aa7c9f7096b090a6783e31278abf907ec84a4bd98f280c925ab033d1fe91eb7
+      point_size: 393
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 6a1949539e447b8b413398919b54916fc622d3652240ef18f9e0f321d5aa6868
+  output:
+    directory: decade
+    filename: 1960.jpg
+    remote_paths:
+      en: decade/1960.jpg
+  generator: null
+  color_assignment:
+    id: decade.decade-1960.842f289e.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: decade.decade-1970.fe52ec50
+  category: Decade
+  display_name: '1970'
+  source:
+    path: create_default_posters.ps1
+    line: 4428
+    row_sha256: 4d189ba7925163c884a565433b666791638449d5a026cd3059b000f0a26090d2
+  composer:
+    base_color: '#44EF10'
+    font: fonts/Monoton-Regular.ttf
+    font_size: 340
+    out_name: '1970'
+  caption:
+    mode: shared
+    text: 1970s
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: 1970s
+      font_sha256: 951c4cea65ffede784a7c9672feec5d329a7e1e12216c42d53ecf36c90d04dea
+      point_size: 340
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 4718fd6600f8c578d9b825a64948af9f7c40a0b2ad26ca3840754f759e0b6fc5
+  output:
+    directory: decade
+    filename: 1970.jpg
+    remote_paths:
+      en: decade/1970.jpg
+  generator: null
+  color_assignment:
+    id: decade.decade-1970.fe52ec50.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: decade.decade-1980.be33b98b
+  category: Decade
+  display_name: '1980'
+  source:
+    path: create_default_posters.ps1
+    line: 4429
+    row_sha256: 0b5f08fd885ecc65f3cc2d64feb394e621c97d5e7dbee107a9565ea5568751e2
+  composer:
+    base_color: '#44EF10'
+    font: fonts/Press-Start-2P.ttf
+    font_size: 300
+    out_name: '1980'
+  caption:
+    mode: shared
+    text: 1980s
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: 1980s
+      font_sha256: 17ec7d250ff590971a6d966b4fdc5aa04d5e39a7694f4a0becb515b6a70a7228
+      point_size: 300
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 300
+      evidence_sha256: c1f0a923674ebf9a2752493a985cf8b1d0991af11920fa836b9c4f977e46fcef
+  output:
+    directory: decade
+    filename: 1980.jpg
+    remote_paths:
+      en: decade/1980.jpg
+  generator: null
+  color_assignment:
+    id: decade.decade-1980.be33b98b.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: decade.decade-1990.0237b3fc
+  category: Decade
+  display_name: '1990'
+  source:
+    path: create_default_posters.ps1
+    line: 4430
+    row_sha256: cf9ac7ee0ea64a42e72134f6ec44d0514bdc56984813921b6552f76316d72c71
+  composer:
+    base_color: '#44EF10'
+    font: fonts/Jura-Bold.ttf
+    font_size: 439
+    out_name: '1990'
+  caption:
+    mode: shared
+    text: 1990s
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: 1990s
+      font_sha256: 1a3b4d7412f10cc17c34289c357e00c5e91bb2ec61b123c2a72cb975e0cbe94d
+      point_size: 439
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 2954e39b748cc9454c0bfce0594ab8158a6e22a71e0d5a0794a7826c4309a0e1
+  output:
+    directory: decade
+    filename: 1990.jpg
+    remote_paths:
+      en: decade/1990.jpg
+  generator: null
+  color_assignment:
+    id: decade.decade-1990.0237b3fc.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: decade.decade-2000.3d2a25be
+  category: Decade
+  display_name: '2000'
+  source:
+    path: create_default_posters.ps1
+    line: 4431
+    row_sha256: c3e56687a160d2c78f36e22afdcbe504e834598bf5e130ae2c8331e6e14b48f6
+  composer:
+    base_color: '#44EF10'
+    font: fonts/SpecialElite-Regular.ttf
+    font_size: 500
+    out_name: '2000'
+  caption:
+    mode: shared
+    text: 2000s
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: 2000s
+      font_sha256: 14780ea85064dcb150c23c9a87e2b870439c38668b6d8f1dad5c6db701ab9520
+      point_size: 500
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 3c1c6d391d7f8d8b657265251887004bb594e67285ffee13660b2cd780a87462
+  output:
+    directory: decade
+    filename: 2000.jpg
+    remote_paths:
+      en: decade/2000.jpg
+  generator: null
+  color_assignment:
+    id: decade.decade-2000.3d2a25be.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: decade.decade-2010.e896b17a
+  category: Decade
+  display_name: '2010'
+  source:
+    path: create_default_posters.ps1
+    line: 4432
+    row_sha256: 5e9909079f058c5d58ded67f6428e6fc7e366bd05da67a18f8ff543c18c318af
+  composer:
+    base_color: '#44EF10'
+    font: fonts/Barlow-Regular.ttf
+    font_size: 421
+    out_name: '2010'
+  caption:
+    mode: shared
+    text: 2010s
+    case: exact
+  layout:
+    kind: captured_fit
+    measurement:
+      text: 2010s
+      font_sha256: 77fb1ac54d2ceb980e3ebdfa7a9d0f64e85a66e4fdfb7f914a7b0aa08fb33a5d
+      point_size: 421
+      box:
+      - 1900
+      - 550
+      minimum: 250
+      maximum: 500
+      evidence_sha256: 15eaca689a22b92b61bb0a899678bb512818c4ade4b4f46fa123dacbdab287ff
+  output:
+    directory: decade
+    filename: 2010.jpg
+    remote_paths:
+      en: decade/2010.jpg
+  generator: null
+  color_assignment:
+    id: decade.decade-2010.e896b17a.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: decade.decade-2020.6b12c5db
+  category: Decade
+  display_name: '2020'
+  source:
+    path: create_default_posters.ps1
+    line: 4433
+    row_sha256: 2ce35c8f12fb3a1e118613228b48b83bc2d4fbffdf1a7a79c4052502e76291d4
+  composer:
+    base_color: '#44EF10'
+    font: fonts/PlusJakartaSans-Bold.ttf
+    font_size: 409
+    out_name: '2020'
+  caption:
+    mode: shared
+    text: 2020s
+    case: exact
+  output:
+    directory: decade
+    filename: 2020.jpg
+    remote_paths:
+      en: decade/2020.jpg
+  generator: null
+  color_assignment:
+    id: decade.decade-2020.6b12c5db.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null
+- extends: legacy-poster
+  id: decade.series.3a2231ca80c3c565114380cb
+  category: Decade
+  display_name: '1880'
+  source:
+    path: create_default_posters.ps1
+    line: 4433
+    row_sha256: 2ce35c8f12fb3a1e118613228b48b83bc2d4fbffdf1a7a79c4052502e76291d4
+  composer:
+    font_size: 200
+    logo: defaults-en/decade/1880.jpg
+    out_name: '1880'
+    text_offset: -400
+    white_wash: false
+  caption:
+    mode: translation
+    key: key_names.BEST_OF
+  layout:
+    kind: captured_fit
+    measurement:
+      text: BEST OF
+      font_sha256: 992f89f3c26be37ccebf784b294d36f40b96ed96ad9a3cc1396f4d389fc69d0c
+      point_size: 200
+      box:
+      - 1800
+      - 1000
+      minimum: 100
+      maximum: 200
+      evidence_sha256: 656da775d01ff61ae677c5fbfd6e6c32beadc71684162ecda616b03b374868ac
+  output:
+    directory: decade/best
+    filename: 1880.jpg
+    remote_paths:
+      en: decade/best/1880.jpg
+  dependencies:
+  - poster_id: decade.decade-1880.a3636532
+    input: logo
+  generator:
+    name: best-of-years
+    version: 1
+    parameters:
+      start: 1880
+      stop: 2030
+      step: 10
+      directory: decade/best
+      measurements:
+        '1880':
+          point_size: 200
+          evidence_sha256: 656da775d01ff61ae677c5fbfd6e6c32beadc71684162ecda616b03b374868ac
+        '1890':
+          point_size: 200
+          evidence_sha256: b58a899517e6eee955a6a897f3748453b88b8eb4c54db1a1402379a3b2d09dcd
+        '1900':
+          point_size: 200
+          evidence_sha256: fd211d13f66c88820decb65422e58458e72191b26d568dfc1b52284fbc6cd164
+        '1910':
+          point_size: 200
+          evidence_sha256: 6bcd523e6f6ea9d9644915e34a79ee71f9565b966797605c1a13c765c1af5a16
+        '1920':
+          point_size: 200
+          evidence_sha256: 567ea835ba3ea820771334c19183bf78836fc79b8f1e03cb6ff3b1d500fb665c
+        '1930':
+          point_size: 200
+          evidence_sha256: 3fc1d74a6fa58f2bf8a46be0972fa045fb3dede805b2a66d35077ced0cbddb88
+        '1940':
+          point_size: 200
+          evidence_sha256: 2b3c38147dcb7205d9729894e6fbd129a46037cb26989becad5eeea9de66855f
+        '1950':
+          point_size: 200
+          evidence_sha256: 674641ab12797c43206b4c9a2294b1519ee260998b306690677b907d92c97c3a
+        '1960':
+          point_size: 200
+          evidence_sha256: d7daa8669605baf8b65a8209f25ad791937afde794bb1b06c89acae6cb33d4f1
+        '1970':
+          point_size: 200
+          evidence_sha256: 0231e164733b737be2960cc72ad6d2be23615a5928910ce48538693c72f6f21f
+        '1980':
+          point_size: 200
+          evidence_sha256: 29e01f9d1ff4be56759f122d93345f0a8949d6f30f15c3235440c25f867d521f
+        '1990':
+          point_size: 200
+          evidence_sha256: 913b00972572d6303aa765666bafd743c83280ba7a1fa5cf4cc91efbc171250a
+        '2000':
+          point_size: 200
+          evidence_sha256: 3f0f8b74e1d198bc86c716a38c9410ab724ac9505237f2bae4bbd67ef200032e
+        '2010':
+          point_size: 200
+          evidence_sha256: 3cf4f2d38ee49578d5e298d3168633e87a7cebc06e3bce491993d73c50f157d5
+        '2020':
+          point_size: 200
+          evidence_sha256: b121c38ae36fa4aa6a065af9b3ab4a422dfd2014dcaed59ae8295a666796d680
+      parent_directory: decade
+  color_assignment:
+    id: decade.series.3a2231ca80c3c565114380cb.background
+    origin: historical
+    parent: null
+    relationship: null
+    exception: null

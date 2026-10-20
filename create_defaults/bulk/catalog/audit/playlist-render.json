@@ -1,0 +1,264 @@
+{
+  "active_jobs": 9,
+  "baseline_sha256": "968476aff980f2cbb3e0d5b870360450c723150f34f5751af9aef6dee19643ac",
+  "category": "Playlist",
+  "cold_metrics": [
+    {
+      "cache_hit_rate": 0.0,
+      "cache_hits": 0,
+      "dedup_reuses": 0,
+      "executed": 2,
+      "jobs_per_second": 0.961095849052639,
+      "max_inflight": 2,
+      "peak_parent_rss": 49102848,
+      "peak_worker_rss": 139935744,
+      "peak_workers_rss_sum": 276660224,
+      "process_start": "spawn",
+      "read_bytes": 20610352,
+      "wall_seconds": 2.0809579002670944,
+      "worker_pids": [
+        40916,
+        26696
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 2,
+      "write_bytes": 2731612
+    }
+  ],
+  "contract_parity": true,
+  "definitions": 9,
+  "discrepancies": [],
+  "human_visual_approval": false,
+  "incremental_metrics": [
+    {
+      "cache_hit_rate": 0.5,
+      "cache_hits": 1,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 0.953342557226983,
+      "max_inflight": 1,
+      "peak_parent_rss": 131522560,
+      "peak_worker_rss": 149450752,
+      "peak_workers_rss_sum": 149450752,
+      "process_start": "spawn",
+      "read_bytes": 9775028,
+      "wall_seconds": 2.097881800029427,
+      "worker_pids": [
+        82716
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 984872
+    }
+  ],
+  "legacy_effective_jobs": 9,
+  "limitations": [
+    "Fresh direct Pillow parity, not a new legacy ImageMagick comparison",
+    "English only; full multilingual layout belongs to D",
+    "Representative sample, not every category output rendered"
+  ],
+  "restore_metrics": [
+    {
+      "cache_hit_rate": 0.5,
+      "cache_hits": 1,
+      "dedup_reuses": 0,
+      "executed": 1,
+      "jobs_per_second": 1.1988384452665604,
+      "max_inflight": 1,
+      "peak_parent_rss": 131682304,
+      "peak_worker_rss": 156008448,
+      "peak_workers_rss_sum": 156008448,
+      "process_start": "spawn",
+      "read_bytes": 10054043,
+      "wall_seconds": 1.6682815002277493,
+      "worker_pids": [
+        72448
+      ],
+      "worker_recycles": 0,
+      "worker_starts": 1,
+      "write_bytes": 1170882
+    }
+  ],
+  "resume_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 8.00348312747159,
+      "max_inflight": 0,
+      "peak_parent_rss": 131887104,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.2498911996372044,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ],
+  "sample_comparisons": [
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#2B8F40",
+        "border_color": "#FFFFFF",
+        "caption": {
+          "advances": [
+            757.372
+          ],
+          "glyph_bounds_source": "original font outline bounds",
+          "ink_bounds": [
+            572,
+            438,
+            1325,
+            547
+          ],
+          "line_height": 186,
+          "line_widths": [
+            758
+          ],
+          "lines": [
+            "TIMELINE ORDER"
+          ],
+          "point_size": 154
+        },
+        "engine": "python",
+        "font": {
+          "path": "{REPOSITORY}\\create_defaults\\fonts\\BebasNeue-Regular.ttf",
+          "sha256": "08e4623805102d819f58601e46e345648846075e363b2ceb23313c2d1c83ec73"
+        },
+        "gradient": 1,
+        "logo_size": [
+          1600,
+          330
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#2B8F40",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\BebasNeue-Regular.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 154,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\logos_playlist\\Arrowverse.png",
+          "logo_offset": -200,
+          "logo_resize": 1600,
+          "out_name": "Arrowverse (Timeline Order)",
+          "text": "TIMELINE ORDER",
+          "text_offset": 450,
+          "white_wash": true
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\playlist\\reference\\poster.20a61d96a5b75e65e0d76bb2.jpg",
+        "sha256": "c793c1320b66f94d445828c5709f806c935739679b5d1c35d04de65dd758d8d3",
+        "size_bytes": 585311
+      },
+      "output": "playlist/Arrowverse (Timeline Order).jpg",
+      "poster_id": "playlist.playlist-arrowverse-timeline-order.09b7e4b8",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "c793c1320b66f94d445828c5709f806c935739679b5d1c35d04de65dd758d8d3",
+      "sha256": "c793c1320b66f94d445828c5709f806c935739679b5d1c35d04de65dd758d8d3"
+    },
+    {
+      "byte_identical": true,
+      "composer_metadata": {
+        "alpha": "Source alpha retained; premultiplied-alpha Lanczos resize, source-over compositing",
+        "base_color": "#2832C4",
+        "border_color": "#FFFFFF",
+        "caption": {
+          "advances": [
+            757.372
+          ],
+          "glyph_bounds_source": "original font outline bounds",
+          "ink_bounds": [
+            572,
+            438,
+            1325,
+            547
+          ],
+          "line_height": 186,
+          "line_widths": [
+            758
+          ],
+          "lines": [
+            "TIMELINE ORDER"
+          ],
+          "point_size": 154
+        },
+        "engine": "python",
+        "font": {
+          "path": "{REPOSITORY}\\create_defaults\\fonts\\BebasNeue-Regular.ttf",
+          "sha256": "08e4623805102d819f58601e46e345648846075e363b2ceb23313c2d1c83ec73"
+        },
+        "gradient": 1,
+        "logo_size": [
+          1600,
+          496
+        ],
+        "options": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#2832C4",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "{REPOSITORY}\\create_defaults\\fonts\\BebasNeue-Regular.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 154,
+          "gradient": 1,
+          "logo": "{REPOSITORY}\\create_defaults\\logos_playlist\\dca.png",
+          "logo_offset": -200,
+          "logo_resize": 1600,
+          "out_name": "DC Animated Universe (Timeline Order)",
+          "text": "TIMELINE ORDER",
+          "text_offset": 450,
+          "white_wash": true
+        },
+        "output_path": "{REPOSITORY}\\config\\package-c\\validation-02\\playlist\\reference\\poster.37a3418978de5b296b6b06f3.jpg",
+        "sha256": "172552814739e0585b793945e7eec0e4942f540ab6a33842a1349289167c28e3",
+        "size_bytes": 780235
+      },
+      "output": "playlist/DC Animated Universe (Timeline Order).jpg",
+      "poster_id": "playlist.playlist-dc-animated-universe-timeline-order.66af9f87",
+      "reference": "Fresh approved Pillow API using corrected captured parameters; generated inputs use verified Python parents",
+      "reference_sha256": "172552814739e0585b793945e7eec0e4942f540ab6a33842a1349289167c28e3",
+      "sha256": "172552814739e0585b793945e7eec0e4942f540ab6a33842a1349289167c28e3"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Resolved English contract parity; generated inputs require separately verified real parent artifacts before render planning",
+  "status": "automated_sample_passed",
+  "wall_seconds": 9.868324799928814,
+  "warm_metrics": [
+    {
+      "cache_hit_rate": 1.0,
+      "cache_hits": 2,
+      "dedup_reuses": 0,
+      "executed": 0,
+      "jobs_per_second": 9.325287484952465,
+      "max_inflight": 0,
+      "peak_parent_rss": 49594368,
+      "peak_worker_rss": 0,
+      "peak_workers_rss_sum": 0,
+      "process_start": "spawn",
+      "read_bytes": 0,
+      "wall_seconds": 0.21447059977799654,
+      "worker_pids": [],
+      "worker_recycles": 0,
+      "worker_starts": 0,
+      "write_bytes": 0
+    }
+  ]
+}

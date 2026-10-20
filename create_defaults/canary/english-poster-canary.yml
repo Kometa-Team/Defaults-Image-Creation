@@ -1,0 +1,126 @@
+# REVIEW TEMPLATE ONLY. Not installed/enabled; no production operation exists.
+name: English Poster Canary Staging
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        options: [verify, stage]
+        default: verify
+        required: true
+      confirm_staging:
+        description: Separate exact staging authorization and native approval required
+        type: boolean
+        default: false
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: default-images-english-canary
+  cancel-in-progress: false
+jobs:
+  verify:
+    if: github.repository == 'Kometa-Team/Defaults-Image-Creation' && github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      stage_allowed: ${{ steps.policy.outputs.stage_allowed }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r create_defaults/canary/requirements-staging.txt
+      - id: policy
+        name: Read-only authorization summary; no artifact credentials
+        run: |
+          python - <<'PY'
+          import os
+          from create_defaults.bulk.canary_staging import envelope, SETUP
+          from create_defaults.bulk.canary_protection import approval_comment
+          policy = envelope(SETUP / 'staging-policy.json')
+          auth = envelope(SETUP / 'staging-authorization.json')
+          allowed = policy.get('staging_enabled') is True and auth.get('authorized') is True
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('stage_allowed=' + str(allowed).lower() + '\n')
+          if allowed:
+              with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+                  summary.write('Review the pinned setup receipt and staging scope. Required native approval comment:\n\n`' + approval_comment(auth, os.environ['GITHUB_RUN_ID']) + '`\n')
+          PY
+  stage:
+    needs: verify
+    if: >-
+      needs.verify.outputs.stage_allowed == 'true' && inputs.mode == 'stage' &&
+      inputs.confirm_staging == true && vars.ENGLISH_CANARY_STAGING_ENABLED == 'true' &&
+      github.ref == 'refs/heads/main'
+    environment: english-canary-stage
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CANARY_STAGING_CONFIRMED: ${{ inputs.confirm_staging }}
+      CANARY_POLICY_VARIABLE: ${{ vars.ENGLISH_CANARY_STAGING_ENABLED }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r create_defaults/canary/requirements-staging.txt
+      - name: Verify source, setup receipt, actual hosted evidence and native approval BEFORE either App token
+        run: >-
+          python -m create_defaults.bulk.canary_staging authorize-metadata
+          --audit-root "$RUNNER_TEMP/canary-audit/metadata"
+      - uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349
+        id: reader
+        with:
+          app-id: ${{ vars.ENGLISH_CANARY_ARTIFACT_APP_ID }}
+          private-key: ${{ secrets.ENGLISH_CANARY_ARTIFACT_APP_PRIVATE_KEY }}
+          owner: Kometa-Team
+          repositories: english-canary-artifacts
+          permission-contents: read
+          skip-token-revoke: false
+      - name: Retrieve pinned private ZIP; verify original bytes and all seven decisions
+        env:
+          CANARY_ARTIFACT_TOKEN: ${{ steps.reader.outputs.token }}
+        run: >-
+          python -m create_defaults.bulk.canary_staging fetch
+          --out "$RUNNER_TEMP/canary-intake"
+          --audit-root "$RUNNER_TEMP/canary-audit/private-intake"
+      - name: Verify full bundle and authorization BEFORE minting target writer token
+        run: >-
+          python -m create_defaults.bulk.canary_staging authorize
+          --bundle "$RUNNER_TEMP/canary-intake/english-canary-review-bundle.zip"
+          --audit-root "$RUNNER_TEMP/canary-audit/preflight"
+      - uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349
+        id: writer
+        with:
+          app-id: ${{ vars.ENGLISH_CANARY_APP_ID }}
+          private-key: ${{ secrets.ENGLISH_CANARY_APP_PRIVATE_KEY }}
+          owner: Kometa-Team
+          repositories: Default-Images
+          permission-contents: write
+          permission-pull-requests: write
+          skip-token-revoke: false
+      - name: Create exactly seven replacements on one new branch and draft PR; never update master
+        env:
+          CANARY_APP_TOKEN: ${{ steps.writer.outputs.token }}
+        run: >-
+          python -m create_defaults.bulk.canary_staging stage
+          --bundle "$RUNNER_TEMP/canary-intake/english-canary-review-bundle.zip"
+          --audit-root "$RUNNER_TEMP/canary-audit/stage"
+      - name: Retain safe audit evidence, including partial failures; never upload private ZIP or UI screenshots
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: english-canary-staging-audit-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/canary-audit/**
+          if-no-files-found: warn
+          retention-days: 90
