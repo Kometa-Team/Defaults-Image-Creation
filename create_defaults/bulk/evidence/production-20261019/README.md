@@ -44,3 +44,11 @@ zero renders and no publications. The former full infrastructure run passed 520 
 Windows symlink skips; its optional sandbox-restricted legacy probe passed when
 rerun with process-launch permission. Current source CI must be checked at the
 new commit; prior-commit green CI is not reported as current acceptance.
+
+The complete native English unchanged-operation proof now also passes: 9,957
+distinct outputs (9,955 public and two private), zero renders, and 10,122 cache
+hits including revisited dependencies. All 9,955 resulting public SHA-256 values
+match the approved inventory and pinned production verification. The compressed
+`english-complete-native-noop.json.gz` binds every destination and native worker
+receipt. Explicit historical cache adoption was verified for all eleven renamed
+sources without changing original receipts; ordinary generation remains case-exact.

@@ -266,3 +266,35 @@ def test_new_overlay_uses_existing_transform_and_repeat_is_noop(tmp_path):
     with pytest.raises(BulkError, match='source or asset changed'):
         validate_generation(report)
     assert generate(args, config)['executed'] == 1
+
+
+def test_cache_adoption_reads_only_explicit_byte_bound_historical_case_aliases(tmp_path, monkeypatch):
+    from PIL import Image
+    import yaml
+    from create_defaults.bulk import asset_cases
+    from create_defaults.bulk.operations import verified_receipts
+    assets = tmp_path / 'assets'; assets.mkdir()
+    old_source = assets / 'logo.png'
+    Image.new('RGBA', (20, 20), (120, 130, 140, 255)).save(old_source)
+    definition = tmp_path / 'overlay.yml'
+    definition.write_text(yaml.safe_dump({'schema_version': 1, 'overlays': [
+        {'source': 'logo.png', 'destination': 'genre/overlays/standard/logo.png',
+         'box': [285, 85], 'trim': False}]}))
+    config = Config(asset_dir=assets, cache_dir=tmp_path / 'cache', workspace_dir=tmp_path / 'work', output_dir=tmp_path / 'output')
+    args = SimpleNamespace(command='overlays', definitions=[definition], group=[], source=[], size=[],
+                           workers=1, report=tmp_path / 'generation.json')
+    assert generate(args, config)['executed'] == 1
+    result = load_json(args.report)['result']
+    original_receipts = {p: p.read_bytes() for p in (config.cache_dir / 'worker-receipts').glob('*.json')}
+    record = {'from': 'logo.png', 'to': 'Logo.png', 'sha256': sha256(old_source)}
+    for path in (old_source, config.output_dir / 'genre/overlays/standard/logo.png'):
+        temporary = path.with_name('case-transition.tmp')
+        path.rename(temporary); temporary.rename(path.with_name('Logo.png'))
+    monkeypatch.setattr(asset_cases, 'migrations', lambda: {'logo.png': record})
+    with pytest.raises(BulkError):
+        verified_receipts(result, config)
+    assert len(verified_receipts(result, config, historical_cases=True)) == 1
+    assert all(p.read_bytes() == body for p, body in original_receipts.items())
+    (assets / 'Logo.png').write_bytes(b'changed')
+    with pytest.raises(BulkError, match='Historical case alias bytes differ'):
+        verified_receipts(result, config, historical_cases=True)

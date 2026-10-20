@@ -1,8 +1,7 @@
 # Python operator workflow
 
-Draft source PR #12 proposes this as the supported English production workflow.
-The README changes in this draft are ready for review; activating them in the
-production source branch requires explicit cutover and source-merge authorization.
+Use this workflow for native English posters and overlays. Production source
+activation and artwork publication require their separate explicit approvals.
 Legacy PowerShell scripts remain available for documented emergency rollback.
 
 Use Python 3.13 and `python -m pip install -r create_defaults/requirements-bulk.txt`.
@@ -176,13 +175,42 @@ CI validates Python; it does not publish production artwork. External schedulers
 cannot be inferred from repository contents and must use the approved commands
 when their operators switch them.
 
-The proposed cutover promotes these commands in the root README and marks the
-two PS rendering scripts legacy in operator documentation. Source PR #12 must
-receive explicit cutover and merge authorization before these changes become
-production entry points. It does not delete scripts or approve any artwork or
-artwork merge. Keep old scripts for rollback. To roll back operational
-entry points, restore the prior documented command selection from the source
-baseline; do not automatically render/publish legacy bytes over migrated artwork.
-Any production-artwork rollback needs its own exact reviewed diff and approval.
+The cutover promotes these commands in the root README and marks the two PS
+rendering scripts legacy in operator documentation. It does not delete scripts
+or approve any artwork merge. Execute the following only after explicit cutover
+and source PR #12 merge authorization, with its exact approved head and green CI:
+
+```powershell
+gh pr ready 12 --repo Kometa-Team/Defaults-Image-Creation
+gh pr merge 12 --repo Kometa-Team/Defaults-Image-Creation --merge --match-head-commit APPROVED_SOURCE_HEAD
+```
+
+Record the actual merged source commit, prior source-main rollback commit, native
+runtime, cache profiles and both final production verification seals. In a fresh
+checkout of the merged source, use the retained profiles to run `generate
+--category All --cache-only` and `overlays --cache-only`; then run both complete
+`verify-production` commands above. After the separately authorized artwork merge,
+these must account for 9,955 English and 4,122 canonical overlay outputs, zero
+SHA-256 mismatches and zero proposed uploads. No scheduled generation job exists
+in this repository; external operators must explicitly switch their own launchers.
+
+For an authorized emergency operational rollback, use an isolated checkout of
+the recorded pre-cutover source commit. The observed source-main baseline during
+preparation was `57ef136833a3f54da2bf1e4ddef98addfa36d583`; use the actual recorded
+baseline if it changed before cutover. With the historical ImageMagick and font
+prerequisites from the legacy guide:
+
+```powershell
+git worktree add --detach config/legacy-defaults-rollback APPROVED_LEGACY_SOURCE_COMMIT
+Push-Location config/legacy-defaults-rollback/create_defaults
+pwsh -NoLogo -NoProfile -File ./create_default_posters.ps1 Based
+Pop-Location
+```
+
+Select only the needed category. Keep legacy outputs separate from Python-owned
+cache/output directories. To return to Python, select the merged source checkout
+and retained operator profiles again. These commands change local generation
+selection; any production-artwork rollback needs its own exact reviewed diff,
+approved baseline, bounded staging, remote verification and explicit merge decision.
 Development-only PS capture/legacy comparison helpers can remain for historical
 reproduction and be removed separately after retention/rollback decisions.

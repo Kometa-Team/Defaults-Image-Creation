@@ -23,7 +23,7 @@ def native_guard(config):
     return current
 
 
-def verified_receipts(result, config):
+def verified_receipts(result, config, *, historical_cases=False):
     """Recheck the existing worker's artifact, input, receipt and finalized state guards."""
     from .state import Store
     from .workers import PersistentWorkers, tasks_from_manifest, _check_inputs
@@ -42,7 +42,19 @@ def verified_receipts(result, config):
                 if (not receipt or not state or state['status'] != 'verified'
                         or state['receipt'] != canonical(receipt).decode()):
                     raise BulkError('stale_receipt', 'Worker receipt, artifact or finalized state changed')
-                _check_inputs(task.payload, config)
+                payload = task.payload
+                if historical_cases:
+                    # Adoption reads frozen evidence only. Resolve an old spelling
+                    # through the explicit byte-bound migration ledger without
+                    # changing any original task, fingerprint or receipt.
+                    from copy import deepcopy
+                    from .asset_cases import historical
+                    payload = deepcopy(payload)
+                    for item in payload['inputs']:
+                        if not item.get('generated'):
+                            actual = historical(config.asset_dir, item['path'], item['sha256'])
+                            item['path'] = actual.relative_to(config.asset_dir).as_posix()
+                _check_inputs(payload, config)
                 bindings[task.id] = receipt['receipt_sha256']
                 if len(bindings) % 1000 == 0:
                     print('[RECEIPTS]', len(bindings), 'verified', flush=True)
@@ -64,7 +76,7 @@ def adopt(inventory_path, config, kind, profile_path):
     # The additive approved Action & Adventure public-path correction preserves
     # the original ledger/header. Bind that corrected metadata in this new plan.
     manifest['sha256'] = fingerprint({k: v for k, v in manifest.items() if k != 'sha256'})
-    bindings = verified_receipts({'stages': [{'manifest': manifest}]}, config)
+    bindings = verified_receipts({'stages': [{'manifest': manifest}]}, config, historical_cases=True)
     native_guard(config)
     profile = sealed({'kind': 'operator-cache-profile', 'runtime': runtime_identity(),
                       'adopted_inventory_sha256': inventory['sha256'],
