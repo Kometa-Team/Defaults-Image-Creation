@@ -2,7 +2,7 @@
 
 **Proposal only — implementation NOT STARTED.** Prepared 2026-10-20. The maintainer accepted the Phase 1 factual baseline, not every suggested contract or permission. This document proposes decisions for review; it implements no schema, registry, validator, generator, translation or publication change. Phases 2–6 remain NOT STARTED in the [six-phase roadmap](ROADMAP.md).
 
-This proposal is on a separate documentation branch based on Phase 1 acceptance commit `fa276ab5ba1508457c6767f92b21f835794aa483`. Its draft PR targets the Phase 1 documentation branch so the proposal's review diff is independent; **it is not part of [PR #13](https://github.com/Kometa-Team/Defaults-Image-Creation/pull/13)**. Neither PR may be merged without separate authorization. Proposal PR: pending creation.
+This proposal is on a separate documentation branch based on Phase 1 acceptance commit `fa276ab5ba1508457c6767f92b21f835794aa483`. Its [draft PR #14](https://github.com/Kometa-Team/Defaults-Image-Creation/pull/14) targets the Phase 1 documentation branch so the proposal's review diff is independent; **it is not part of [PR #13](https://github.com/Kometa-Team/Defaults-Image-Creation/pull/13)**. Neither PR may be merged without separate authorization.
 
 ## Evidence and design objectives
 
