@@ -9,7 +9,7 @@
 
 ## Decision log
 
-- **2026-10-20:** Maintainer requested Phase 1 documentation and read-only discovery only, including a dedicated draft PR. Phase 1 findings await explicit acceptance. Phase 1 PR: pending creation.
+- **2026-10-20:** Maintainer requested Phase 1 documentation and read-only discovery only. [Phase 1 draft PR #13](https://github.com/Kometa-Team/Defaults-Image-Creation/pull/13) contains the five discovery documents and local read-only validation results. Phase 1 findings await explicit acceptance; approval remains PENDING. No later phase is authorized.
 - **2026-10-20:** Fresh GitHub reads confirmed source `main` at `e7febf88d1dc8f8b93408e88da78e524b191acea` ([source cutover PR #12](https://github.com/Kometa-Team/Defaults-Image-Creation/pull/12)) and artwork `master` at `dfff31ab08446353844bb97de601c3a64edc8220` ([overlay PR #202](https://github.com/Kometa-Team/Default-Images/pull/202)). Neither head had advanced beyond the supplied historical baseline. Source repository default/development target is `main`.
 
 ## Permanent roadmap
