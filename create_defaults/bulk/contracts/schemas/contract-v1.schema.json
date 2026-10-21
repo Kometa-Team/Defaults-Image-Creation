@@ -1,0 +1,866 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "category": {
+      "enum": [
+        "Aspect",
+        "AudioLanguage",
+        "Awards",
+        "Based",
+        "Chart",
+        "ContentRating",
+        "Country",
+        "Decade",
+        "Franchise",
+        "Genre",
+        "Network",
+        "Playlist",
+        "Resolution",
+        "Seasonal",
+        "Separators",
+        "Streaming",
+        "Studio",
+        "SubtitleLanguage",
+        "Universe",
+        "VideoFormat",
+        "Year",
+        "Overlays"
+      ]
+    },
+    "kind": {
+      "enum": [
+        "poster",
+        "overlay"
+      ]
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "provenance": {
+      "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/provenance"
+    },
+    "naming": {
+      "type": "object",
+      "properties": {
+        "new_names": {
+          "const": "NFC"
+        },
+        "historical_names": {
+          "const": "exact"
+        },
+        "collision_key": {
+          "const": "NFC+casefold"
+        },
+        "identity": {
+          "const": "persisted"
+        }
+      },
+      "required": [
+        "new_names",
+        "historical_names",
+        "collision_key",
+        "identity"
+      ],
+      "additionalProperties": false
+    },
+    "variants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+          },
+          "contributor_fields": {
+            "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/content_fields"
+          },
+          "exception_refs": {
+            "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/exceptions"
+          },
+          "design": {
+            "oneOf": [
+              {
+                "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/poster_design"
+              },
+              {
+                "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/overlay_design"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "contributor_fields",
+          "exception_refs",
+          "design"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "schema_version",
+    "category",
+    "kind",
+    "version",
+    "owner",
+    "provenance",
+    "naming",
+    "variants"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "poster"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "category": {
+            "enum": [
+              "Aspect",
+              "AudioLanguage",
+              "Awards",
+              "Based",
+              "Chart",
+              "ContentRating",
+              "Country",
+              "Decade",
+              "Franchise",
+              "Genre",
+              "Network",
+              "Playlist",
+              "Resolution",
+              "Seasonal",
+              "Separators",
+              "Streaming",
+              "Studio",
+              "SubtitleLanguage",
+              "Universe",
+              "VideoFormat",
+              "Year"
+            ]
+          },
+          "variants": {
+            "items": {
+              "properties": {
+                "design": {
+                  "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/poster_design"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "overlay"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "category": {
+            "const": "Overlays"
+          },
+          "variants": {
+            "items": {
+              "properties": {
+                "design": {
+                  "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/overlay_design"
+                },
+                "contributor_fields": {
+                  "items": {
+                    "enum": [
+                      "display_name",
+                      "description",
+                      "source"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "path": {
+      "type": "string",
+      "format": "lifecycle-path",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "asset": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "format": "lifecycle-path",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "package": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "enum": [
+            "Aspect",
+            "AudioLanguage",
+            "Awards",
+            "Based",
+            "Chart",
+            "ContentRating",
+            "Country",
+            "Decade",
+            "Franchise",
+            "Genre",
+            "Network",
+            "Playlist",
+            "Resolution",
+            "Seasonal",
+            "Separators",
+            "Streaming",
+            "Studio",
+            "SubtitleLanguage",
+            "Universe",
+            "VideoFormat",
+            "Year",
+            "Overlays"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "poster",
+            "overlay"
+          ]
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "category",
+        "kind",
+        "version",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "actor": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "role": {
+          "enum": [
+            "maintainer",
+            "submitter",
+            "validator"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "evidence_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "actor",
+        "role",
+        "source",
+        "evidence_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "font": {
+      "type": "object",
+      "properties": {
+        "asset": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/asset"
+        },
+        "family": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "weight": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        }
+      },
+      "required": [
+        "asset",
+        "family",
+        "weight",
+        "size",
+        "color"
+      ],
+      "additionalProperties": false
+    },
+    "fitting": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "enum": [
+            "fixed",
+            "captured_fit"
+          ]
+        },
+        "measurement_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "minimum_size": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "maximum_size": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "mode",
+        "measurement_sha256",
+        "width",
+        "height",
+        "minimum_size",
+        "maximum_size"
+      ],
+      "additionalProperties": false
+    },
+    "caption": {
+      "type": "object",
+      "properties": {
+        "requirement": {
+          "enum": [
+            "required",
+            "conditional",
+            "prohibited"
+          ]
+        },
+        "case": {
+          "enum": [
+            "exact",
+            "upper",
+            "lower"
+          ]
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "registry_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "content_types": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+              },
+              "mode": {
+                "enum": [
+                  "none",
+                  "literal",
+                  "translation",
+                  "shared"
+                ]
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 2048
+              },
+              "template": {
+                "type": "string",
+                "maxLength": 2048
+              }
+            },
+            "required": [
+              "id",
+              "mode",
+              "value",
+              "template"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "requirement",
+        "case",
+        "languages",
+        "registry_sha256",
+        "content_types"
+      ],
+      "additionalProperties": false
+    },
+    "logo": {
+      "type": "object",
+      "properties": {
+        "treatment": {
+          "enum": [
+            "WHITE_ONLY",
+            "COLOR_ONLY",
+            "SOURCE_PRESERVING",
+            "BOTH_REQUIRED",
+            "SPECIAL",
+            "NOT_APPLICABLE"
+          ]
+        },
+        "source_preserving_exception": {
+          "type": "boolean"
+        },
+        "transparent_png_default": {
+          "const": true
+        },
+        "intentional_background_exception": {
+          "type": "boolean"
+        },
+        "transformation": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "id",
+            "sha256"
+          ],
+          "additionalProperties": false
+        },
+        "historical_acceptance_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "treatment",
+        "source_preserving_exception",
+        "transparent_png_default",
+        "intentional_background_exception",
+        "transformation",
+        "historical_acceptance_refs"
+      ],
+      "additionalProperties": false
+    },
+    "content_fields": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "display_name",
+          "description",
+          "source",
+          "separate_white_source",
+          "content_type",
+          "background_proposal",
+          "filename_proposal"
+        ]
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "exceptions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "poster_design": {
+      "type": "object",
+      "properties": {
+        "typography": {
+          "oneOf": [
+            {
+              "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/font"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "fitting": {
+          "oneOf": [
+            {
+              "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/fitting"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "caption": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/caption"
+        },
+        "logo": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/logo"
+        },
+        "geometry": {
+          "type": "object",
+          "properties": {
+            "logo_width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "logo_offset": {
+              "type": "integer"
+            },
+            "caption_offset": {
+              "type": "integer"
+            },
+            "caption_width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "caption_height": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "logo_width",
+            "logo_offset",
+            "caption_offset",
+            "caption_width",
+            "caption_height"
+          ],
+          "additionalProperties": false
+        },
+        "background": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "assigned",
+                "palette",
+                "average",
+                "dominant"
+              ]
+            },
+            "assignments_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "proposals_allowed": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "mode",
+            "assignments_sha256",
+            "proposals_allowed"
+          ],
+          "additionalProperties": false
+        },
+        "effects": {
+          "type": "object",
+          "properties": {
+            "gradient": {
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "border": {
+              "type": "boolean"
+            },
+            "border_color": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "border_width": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "clean": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "gradient",
+            "border",
+            "border_color",
+            "border_width",
+            "clean"
+          ],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "format": {
+              "const": "JPEG"
+            },
+            "mode": {
+              "const": "RGB"
+            },
+            "quality": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "subsampling": {
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "encoding_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "width",
+            "height",
+            "format",
+            "mode",
+            "quality",
+            "subsampling",
+            "encoding_sha256"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "typography",
+        "fitting",
+        "caption",
+        "logo",
+        "geometry",
+        "background",
+        "effects",
+        "output"
+      ],
+      "additionalProperties": false
+    },
+    "overlay_design": {
+      "type": "object",
+      "properties": {
+        "treatment": {
+          "const": "SOURCE_PRESERVING"
+        },
+        "source_branch": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+        },
+        "trim": {
+          "type": "boolean"
+        },
+        "sizes": {
+          "type": "object",
+          "properties": {
+            "standard": {
+              "type": "object",
+              "properties": {
+                "width": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "height": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "width",
+                "height"
+              ],
+              "additionalProperties": false
+            },
+            "bigger": {
+              "type": "object",
+              "properties": {
+                "width": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "height": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "width",
+                "height"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "standard",
+            "bigger"
+          ],
+          "additionalProperties": false
+        },
+        "rounding": {
+          "const": "half-up"
+        },
+        "resampling": {
+          "const": "Lanczos"
+        },
+        "format": {
+          "const": "PNG"
+        },
+        "mode": {
+          "const": "RGBA"
+        },
+        "color_space": {
+          "const": "sRGB"
+        },
+        "compression": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9
+        },
+        "preserve_basename": {
+          "const": true
+        },
+        "transformation": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "id",
+            "sha256"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "treatment",
+        "source_branch",
+        "trim",
+        "sizes",
+        "rounding",
+        "resampling",
+        "format",
+        "mode",
+        "color_space",
+        "compression",
+        "preserve_basename",
+        "transformation"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
