@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kometa.wiki/schemas/lifecycle/historical-registry-v1.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "historical-adoption-registry"
+    },
+    "id": {
+      "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/id"
+    },
+    "version": {
+      "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/version"
+    },
+    "source_pins_sha256": {
+      "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+    },
+    "basis_registry_json": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 1000000
+    },
+    "basis_registry_sha256": {
+      "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+    },
+    "schema_pins": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/path"
+          },
+          "sha256": {
+            "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+          }
+        },
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "members": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/id"
+          },
+          "job_id": {
+            "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/id"
+          },
+          "sha256": {
+            "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+          }
+        },
+        "required": [
+          "id",
+          "job_id",
+          "sha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "audit_json": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 1000000
+    },
+    "publication_authorized": {
+      "const": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "id",
+    "version",
+    "source_pins_sha256",
+    "basis_registry_json",
+    "basis_registry_sha256",
+    "schema_pins",
+    "members",
+    "audit_json",
+    "publication_authorized"
+  ],
+  "additionalProperties": false
+}

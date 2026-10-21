@@ -1,0 +1,272 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kometa.wiki/schemas/lifecycle/historical-output-v1.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "historical-output-adoption"
+    },
+    "identity": {
+      "$ref": "https://kometa.wiki/schemas/lifecycle/identity-v1.schema.json"
+    },
+    "job_id": {
+      "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/id"
+    },
+    "observed_variant": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_identity": {
+      "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/id"
+    },
+    "source_kind": {
+      "enum": [
+        "source_asset",
+        "generated_parent",
+        "historical_template"
+      ]
+    },
+    "family": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/id"
+            },
+            "member_key": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "id",
+            "member_key"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "paired_identity": {
+      "oneOf": [
+        {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/id"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "effective_definition_json": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 1000000
+    },
+    "job_json": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 1000000
+    },
+    "baseline_job_sha256": {
+      "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+    },
+    "baseline_renderer_sha256": {
+      "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+    },
+    "fingerprints": {
+      "type": "object",
+      "properties": {
+        "effective_definition": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+        },
+        "sources": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+        },
+        "font": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+        },
+        "caption": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+        },
+        "style": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+        },
+        "membership": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+        },
+        "dependencies": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+        },
+        "transformation": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+        },
+        "exceptions": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+        },
+        "material_context": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+        }
+      },
+      "required": [
+        "effective_definition",
+        "sources",
+        "font",
+        "caption",
+        "style",
+        "membership",
+        "dependencies",
+        "transformation",
+        "exceptions",
+        "material_context"
+      ],
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "native_report_sha256": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+        },
+        "owned_receipt_sha256": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+        },
+        "worker_spec_sha256": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+        },
+        "original_receipt_sha256": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+        },
+        "output_sha256": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+        },
+        "response_receipt_sha256": {
+          "oneOf": [
+            {
+              "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "approval_refs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "record_sha256": {
+                "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+              },
+              "member_sha256": {
+                "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+              },
+              "scope": {
+                "enum": [
+                  "exact_visual",
+                  "renderer_equivalent_population",
+                  "individual_font_or_visual",
+                  "approved_overlay_membership"
+                ]
+              }
+            },
+            "required": [
+              "record_sha256",
+              "member_sha256",
+              "scope"
+            ],
+            "additionalProperties": false
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "native_report_sha256",
+        "owned_receipt_sha256",
+        "worker_spec_sha256",
+        "original_receipt_sha256",
+        "output_sha256",
+        "response_receipt_sha256",
+        "approval_refs"
+      ],
+      "additionalProperties": false
+    },
+    "bridges": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "accepted_source_case",
+          "accepted_public_mapping",
+          "flattened_generator_provenance"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "historical_exceptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence_sha256": {
+            "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/sha256"
+          }
+        },
+        "required": [
+          "code",
+          "evidence_sha256"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "historical_compatibility": {
+      "const": "verified_unchanged_material"
+    },
+    "contract_compatibility": {
+      "const": "not_assessed_no_category_contract"
+    },
+    "maintainer_approval": {
+      "enum": [
+        "historical_record_found",
+        "not_found_private",
+        "not_found"
+      ]
+    },
+    "publication_authorized": {
+      "const": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "identity",
+    "job_id",
+    "observed_variant",
+    "source_identity",
+    "source_kind",
+    "family",
+    "paired_identity",
+    "effective_definition_json",
+    "job_json",
+    "baseline_job_sha256",
+    "baseline_renderer_sha256",
+    "fingerprints",
+    "evidence",
+    "bridges",
+    "historical_exceptions",
+    "historical_compatibility",
+    "contract_compatibility",
+    "maintainer_approval",
+    "publication_authorized"
+  ],
+  "additionalProperties": false
+}
