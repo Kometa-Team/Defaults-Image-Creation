@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kometa.wiki/schemas/lifecycle/identity-v1.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "item-identity"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+      "not": {
+        "pattern": "\\n"
+      }
+    },
+    "category": {
+      "enum": [
+        "Aspect",
+        "AudioLanguage",
+        "Awards",
+        "Based",
+        "Chart",
+        "ContentRating",
+        "Country",
+        "Decade",
+        "Franchise",
+        "Genre",
+        "Network",
+        "Playlist",
+        "Resolution",
+        "Seasonal",
+        "Separators",
+        "Streaming",
+        "Studio",
+        "SubtitleLanguage",
+        "Universe",
+        "VideoFormat",
+        "Year",
+        "Overlays"
+      ]
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "rendered_caption": {
+      "type": "string",
+      "maxLength": 4096
+    },
+    "source": {
+      "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/asset"
+    },
+    "local_path": {
+      "type": "string",
+      "format": "lifecycle-path",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "public_path": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "lifecycle-path",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "semantic_member": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "family_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+              "not": {
+                "pattern": "\\n"
+              }
+            },
+            "key": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            }
+          },
+          "required": [
+            "family_id",
+            "key"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "id",
+    "category",
+    "display_name",
+    "rendered_caption",
+    "source",
+    "local_path",
+    "public_path",
+    "semantic_member"
+  ],
+  "additionalProperties": false
+}

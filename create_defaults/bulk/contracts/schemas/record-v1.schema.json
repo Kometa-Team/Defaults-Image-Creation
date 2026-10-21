@@ -1,0 +1,727 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kometa.wiki/schemas/lifecycle/record-v1.schema.json",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/contract-approval"
+    },
+    {
+      "$ref": "#/$defs/contract-adoption"
+    },
+    {
+      "$ref": "#/$defs/logo-exception-request"
+    },
+    {
+      "$ref": "#/$defs/logo-preview-manifest"
+    },
+    {
+      "$ref": "#/$defs/submitter-confirmation"
+    },
+    {
+      "$ref": "#/$defs/maintainer-exception-decision"
+    },
+    {
+      "$ref": "#/$defs/effective-job-attestation"
+    }
+  ],
+  "$defs": {
+    "contract-approval": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "contract-approval"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+          "not": {
+            "pattern": "\\n"
+          }
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "provenance": {
+          "allOf": [
+            {
+              "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/provenance"
+            },
+            {
+              "properties": {
+                "role": {
+                  "const": "maintainer"
+                }
+              }
+            }
+          ]
+        },
+        "package": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/package"
+        },
+        "decision": {
+          "enum": [
+            "approved",
+            "rejected"
+          ]
+        },
+        "scope": {
+          "const": "category-contract"
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "id",
+        "revision",
+        "provenance",
+        "package",
+        "decision",
+        "scope"
+      ],
+      "additionalProperties": false
+    },
+    "contract-adoption": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "contract-adoption"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+          "not": {
+            "pattern": "\\n"
+          }
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "provenance": {
+          "allOf": [
+            {
+              "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/provenance"
+            },
+            {
+              "properties": {
+                "role": {
+                  "const": "maintainer"
+                }
+              }
+            }
+          ]
+        },
+        "package": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/package"
+        },
+        "basis_registry_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "membership_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "previous_validation_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "compatibility_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "id",
+        "revision",
+        "provenance",
+        "package",
+        "basis_registry_sha256",
+        "membership_sha256",
+        "previous_validation_sha256",
+        "compatibility_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "logo-exception-request": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "logo-exception-request"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+          "not": {
+            "pattern": "\\n"
+          }
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "provenance": {
+          "allOf": [
+            {
+              "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/provenance"
+            },
+            {
+              "properties": {
+                "role": {
+                  "const": "submitter"
+                }
+              }
+            }
+          ]
+        },
+        "context": {
+          "$ref": "#/$defs/context"
+        },
+        "justification": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "requested_treatment": {
+          "enum": [
+            "WHITE_ONLY",
+            "SOURCE_PRESERVING",
+            "BOTH_REQUIRED",
+            "COLOR_ONLY",
+            "SPECIAL",
+            "NOT_APPLICABLE"
+          ]
+        },
+        "intentional_background": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "id",
+        "revision",
+        "provenance",
+        "context",
+        "justification",
+        "requested_treatment",
+        "intentional_background"
+      ],
+      "additionalProperties": false
+    },
+    "logo-preview-manifest": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "logo-preview-manifest"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+          "not": {
+            "pattern": "\\n"
+          }
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "provenance": {
+          "allOf": [
+            {
+              "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/provenance"
+            },
+            {
+              "properties": {
+                "role": {
+                  "const": "validator"
+                }
+              }
+            }
+          ]
+        },
+        "context": {
+          "$ref": "#/$defs/context"
+        },
+        "request_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "default": {
+          "$ref": "#/$defs/panel"
+        },
+        "requested": {
+          "$ref": "#/$defs/panel"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+                "not": {
+                  "pattern": "\\n"
+                }
+              },
+              "treatment": {
+                "enum": [
+                  "white",
+                  "source",
+                  "color",
+                  "special"
+                ]
+              },
+              "artifact_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$",
+                "minLength": 64,
+                "maxLength": 64
+              },
+              "worker_receipt_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$",
+                "minLength": 64,
+                "maxLength": 64
+              }
+            },
+            "required": [
+              "id",
+              "treatment",
+              "artifact_sha256",
+              "worker_receipt_sha256"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "comparison_evidence_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "id",
+        "revision",
+        "provenance",
+        "context",
+        "request_sha256",
+        "default",
+        "requested",
+        "members",
+        "comparison_evidence_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "submitter-confirmation": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "submitter-confirmation"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+          "not": {
+            "pattern": "\\n"
+          }
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "provenance": {
+          "allOf": [
+            {
+              "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/provenance"
+            },
+            {
+              "properties": {
+                "role": {
+                  "const": "submitter"
+                }
+              }
+            }
+          ]
+        },
+        "context": {
+          "$ref": "#/$defs/context"
+        },
+        "request_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "preview_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "membership_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "decision": {
+          "enum": [
+            "approved",
+            "rejected"
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "id",
+        "revision",
+        "provenance",
+        "context",
+        "request_sha256",
+        "preview_sha256",
+        "membership_sha256",
+        "decision"
+      ],
+      "additionalProperties": false
+    },
+    "maintainer-exception-decision": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "maintainer-exception-decision"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+          "not": {
+            "pattern": "\\n"
+          }
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "provenance": {
+          "allOf": [
+            {
+              "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/provenance"
+            },
+            {
+              "properties": {
+                "role": {
+                  "const": "maintainer"
+                }
+              }
+            }
+          ]
+        },
+        "context": {
+          "$ref": "#/$defs/context"
+        },
+        "request_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "preview_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "confirmation_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "membership_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "selected_treatment": {
+          "enum": [
+            "WHITE_ONLY",
+            "SOURCE_PRESERVING",
+            "BOTH_REQUIRED",
+            "COLOR_ONLY",
+            "SPECIAL",
+            "NOT_APPLICABLE"
+          ]
+        },
+        "intentional_background": {
+          "type": "boolean"
+        },
+        "decision": {
+          "enum": [
+            "approved",
+            "rejected"
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "id",
+        "revision",
+        "provenance",
+        "context",
+        "request_sha256",
+        "preview_sha256",
+        "confirmation_sha256",
+        "membership_sha256",
+        "selected_treatment",
+        "intentional_background",
+        "decision"
+      ],
+      "additionalProperties": false
+    },
+    "effective-job-attestation": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "effective-job-attestation"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+          "not": {
+            "pattern": "\\n"
+          }
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "provenance": {
+          "allOf": [
+            {
+              "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/provenance"
+            },
+            {
+              "properties": {
+                "role": {
+                  "const": "validator"
+                }
+              }
+            }
+          ]
+        },
+        "context": {
+          "$ref": "#/$defs/context"
+        },
+        "job_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "dependencies_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "resolved_rules_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "diagnostics_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "adoption_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "exception_sha256": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "minLength": 64,
+            "maxLength": 64
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "worker_receipt_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "id",
+        "revision",
+        "provenance",
+        "context",
+        "job_sha256",
+        "dependencies_sha256",
+        "resolved_rules_sha256",
+        "diagnostics_sha256",
+        "adoption_sha256",
+        "exception_sha256",
+        "worker_receipt_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "package": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/package"
+        },
+        "variant": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+          "not": {
+            "pattern": "\\n"
+          }
+        },
+        "identities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+            "not": {
+              "pattern": "\\n"
+            }
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "source": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/asset"
+        },
+        "material_context_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "transformations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+                "not": {
+                  "pattern": "\\n"
+                }
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$",
+                "minLength": 64,
+                "maxLength": 64
+              }
+            },
+            "required": [
+              "id",
+              "sha256"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "package",
+        "variant",
+        "identities",
+        "source",
+        "material_context_sha256",
+        "transformations"
+      ],
+      "additionalProperties": false
+    },
+    "panel": {
+      "type": "object",
+      "properties": {
+        "artifact_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "worker_receipt_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "validation": {
+          "enum": [
+            "compliant",
+            "blocked",
+            "review_required"
+          ]
+        }
+      },
+      "required": [
+        "artifact_sha256",
+        "worker_receipt_sha256",
+        "validation"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

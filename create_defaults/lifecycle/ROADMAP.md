@@ -1,7 +1,7 @@
 | Phase | Name | Status | Detailed documentation | Approval |
 | --- | --- | --- | --- | --- |
 | 1 | Discovery and Baseline | COMPLETE | [PHASE1_DISCOVERY.md](PHASE1_DISCOVERY.md) | Maintainer accepted 2026-10-20 |
-| 2 | Business Rules and Category Contracts | NOT STARTED | TBD | Design proposal only; implementation not authorized |
+| 2 | Business Rules and Category Contracts | IN PROGRESS | [Approved architecture](PHASE2_DESIGN_PROPOSAL.md); [M1 foundations](../bulk/contracts/README.md) | D01–D09 architecture approved; M1 only authorized 2026-10-20 |
 | 3 | Translation and Destination Safeguards | NOT STARTED | TBD | Not requested |
 | 4 | Lifecycle Operations | NOT STARTED | TBD | Not requested |
 | 5 | Review and Publication Integration | NOT STARTED | TBD | Not requested |
@@ -9,6 +9,7 @@
 
 ## Decision log
 
+- **2026-10-20, M1 implementation:** The maintainer confirmed PRs #12, #13 and #14 merged, approved the D01–D09 architecture and seven-milestone plan, and explicitly authorized **M1 only**. Implementation starts from `main` at `f4baedf0d02059278737d11232a17a37ca99082f` on `feat/lifecycle-m1-contract-foundations`: strict versioned schemas, exact-pinned registry, typed evidence and isolated Package E state interfaces with automated tests. Phase 2 is IN PROGRESS, not COMPLETE. M2–M7, production enforcement, artwork generation/publication and merging remain unauthorized. Phases 3–6 remain NOT STARTED. The merged discovery and design documents remain the accepted baseline; their earlier authorization checkpoints are historical.
 - **2026-10-20:** Maintainer explicitly accepted the discovery findings, category rules matrix, exception register and gap analysis as the factual baseline for future work. Phase 1 is COMPLETE. This accepts the discovery baseline, **not every proposed future contract, lock, permission, exception policy or implementation recommendation**. PR #13 remains draft and must not be merged without separate authorization. Its pre-acceptance head `4b3df333215a5eb18440eea0547ededadc2bfde0` passed Windows and Linux [CI run 39372962607](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39372962607); acceptance metadata updates require CI at their own final head.
 - **2026-10-20:** Maintainer authorized a separate documentation-only Phase 2 design proposal using this accepted baseline. This does not authorize contract enforcement, definition changes, image generation, translation/publication changes, merges or Phase 2 implementation. Phases 2–6 remain NOT STARTED. The proposal must remain outside PR #13.
 - **2026-10-20, original draft checkpoint (superseded by acceptance above):** Maintainer requested Phase 1 documentation and read-only discovery only. [Phase 1 draft PR #13](https://github.com/Kometa-Team/Defaults-Image-Creation/pull/13) contained the five discovery documents and local read-only validation results. At initial delivery, findings were IN PROGRESS / PENDING and no later phase was authorized.
@@ -25,4 +26,4 @@ This is the Kometa Defaults Lifecycle Management project. Status values are **NO
 5. **Review and Publication Integration:** reuse Package E previews, exact approvals, verified workers, bounded resumable transport, draft PRs, remote hashes and full-tree reconciliation. Extend the operation model for authorized general renames, deletions and category-wide changes. Transport batches, review populations and publication PRs remain independent.
 6. **Pilot and Acceptance:** start with Playlist, then representative other categories. Exercise additions, edits, renames, removals, translation failures, shared dependencies and category-wide changes; prove unchanged outputs, destination boundaries and rollback. Record explicit final production acceptance.
 
-Phases 2–6 are prospective scope only. Phase 1 authorizes no generation, artwork writes, merges, translation changes or lifecycle implementation.
+Phase 2 is underway only within the separately authorized M1 scope above; M2–M7 and Phases 3–6 remain prospective. Phase 1 itself authorizes no generation, artwork writes, merges, translation changes or lifecycle implementation.
