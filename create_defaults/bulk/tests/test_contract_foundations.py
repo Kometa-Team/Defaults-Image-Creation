@@ -121,6 +121,9 @@ def test_strict_json_parser(encoded):
     lambda v: v["provenance"].update(actor="contributor"),
     lambda v: v["variants"][0]["design"]["typography"].update(size=True),
     lambda v: v["variants"][0]["design"]["fitting"].update(maximum_size=120),
+    lambda v: v.update(version="1.0.0\n"),
+    lambda v: v["variants"][0].update(id="example\n"),
+    lambda v: v["variants"][0]["design"]["typography"]["asset"].update(sha256=H+"\n"),
 ])
 def test_strict_contract_rejects_malformed_or_permission_widening_content(mutate):
     value = package()
@@ -136,6 +139,7 @@ def test_strict_contract_rejects_malformed_or_permission_widening_content(mutate
     {"source": {"path": "../logo.png", "sha256": H}},
     {"display_name": {"font": "other.ttf"}}, {"background_proposal": {"color": "#123456", "reviewer": ACTOR}},
     {"background_proposal": "#123456; white_wash=false"}, {"filename_proposal": {"value": "x.jpg", "role": "maintainer"}},
+    {"background_proposal": "#123456\n"},
     {"variant": "example"}, {"contract": {"version": "2.0.0"}},
     {"approved": True}, {"exception_refs": [H]}, {"content_type": "injected-key"},
     {"source": {"path": "logos/Poke\u0301mon.png", "sha256": H}},

@@ -190,7 +190,7 @@ class Contract(Document):
             "description": {"type": "string", "maxLength": 4096},
             "source": definitions["asset"], "separate_white_source": definitions["asset"],
             "filename_proposal": definitions["path"],
-            "background_proposal": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"},
+            "background_proposal": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$", "minLength": 7, "maxLength": 7},
         }
         if "content_type" in content:
             fields["content_type"] = {"enum": [t["id"] for t in variant["design"]["caption"]["content_types"]]}

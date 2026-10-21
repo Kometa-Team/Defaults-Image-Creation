@@ -40,7 +40,10 @@
     },
     "version": {
       "type": "string",
-      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "not": {
+        "pattern": "\\n"
+      }
     },
     "owner": {
       "type": "string",
@@ -81,7 +84,10 @@
         "properties": {
           "id": {
             "type": "string",
-            "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+            "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+            "not": {
+              "pattern": "\\n"
+            }
           },
           "contributor_fields": {
             "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/content_fields"
@@ -209,15 +215,23 @@
   "$defs": {
     "id": {
       "type": "string",
-      "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+      "not": {
+        "pattern": "\\n"
+      }
     },
     "sha256": {
       "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
+      "pattern": "^[0-9a-f]{64}$",
+      "minLength": 64,
+      "maxLength": 64
     },
     "version": {
       "type": "string",
-      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "not": {
+        "pattern": "\\n"
+      }
     },
     "path": {
       "type": "string",
@@ -236,7 +250,9 @@
         },
         "sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         }
       },
       "required": [
@@ -282,11 +298,16 @@
         },
         "version": {
           "type": "string",
-          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+          "not": {
+            "pattern": "\\n"
+          }
         },
         "sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         }
       },
       "required": [
@@ -319,7 +340,9 @@
         },
         "evidence_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         }
       },
       "required": [
@@ -352,7 +375,9 @@
         },
         "color": {
           "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "minLength": 7,
+          "maxLength": 7
         }
       },
       "required": [
@@ -375,7 +400,9 @@
         },
         "measurement_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "width": {
           "type": "integer",
@@ -433,7 +460,9 @@
         },
         "registry_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "content_types": {
           "type": "array",
@@ -442,7 +471,10 @@
             "properties": {
               "id": {
                 "type": "string",
-                "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+                "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+                "not": {
+                  "pattern": "\\n"
+                }
               },
               "mode": {
                 "enum": [
@@ -509,11 +541,16 @@
           "properties": {
             "id": {
               "type": "string",
-              "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+              "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+              "not": {
+                "pattern": "\\n"
+              }
             },
             "sha256": {
               "type": "string",
-              "pattern": "^[0-9a-f]{64}$"
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
             }
           },
           "required": [
@@ -526,7 +563,9 @@
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^[0-9a-f]{64}$"
+            "pattern": "^[0-9a-f]{64}$",
+            "minLength": 64,
+            "maxLength": 64
           },
           "minItems": 0,
           "uniqueItems": true
@@ -562,7 +601,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[0-9a-f]{64}$"
+        "pattern": "^[0-9a-f]{64}$",
+        "minLength": 64,
+        "maxLength": 64
       },
       "minItems": 0,
       "uniqueItems": true
@@ -640,7 +681,9 @@
             },
             "assignments_sha256": {
               "type": "string",
-              "pattern": "^[0-9a-f]{64}$"
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
             },
             "proposals_allowed": {
               "type": "boolean"
@@ -668,7 +711,9 @@
             },
             "border_color": {
               "type": "string",
-              "pattern": "^#[0-9A-Fa-f]{6}$"
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "minLength": 7,
+              "maxLength": 7
             },
             "border_width": {
               "type": "integer",
@@ -718,7 +763,9 @@
             },
             "encoding_sha256": {
               "type": "string",
-              "pattern": "^[0-9a-f]{64}$"
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
             }
           },
           "required": [
@@ -753,7 +800,10 @@
         },
         "source_branch": {
           "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+          "not": {
+            "pattern": "\\n"
+          }
         },
         "trim": {
           "type": "boolean"
@@ -832,11 +882,16 @@
           "properties": {
             "id": {
               "type": "string",
-              "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+              "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+              "not": {
+                "pattern": "\\n"
+              }
             },
             "sha256": {
               "type": "string",
-              "pattern": "^[0-9a-f]{64}$"
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
             }
           },
           "required": [

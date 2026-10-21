@@ -36,7 +36,10 @@
         },
         "id": {
           "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+          "not": {
+            "pattern": "\\n"
+          }
         },
         "revision": {
           "type": "integer",
@@ -92,7 +95,10 @@
         },
         "id": {
           "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+          "not": {
+            "pattern": "\\n"
+          }
         },
         "revision": {
           "type": "integer",
@@ -117,19 +123,27 @@
         },
         "basis_registry_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "membership_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "previous_validation_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "compatibility_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         }
       },
       "required": [
@@ -157,7 +171,10 @@
         },
         "id": {
           "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+          "not": {
+            "pattern": "\\n"
+          }
         },
         "revision": {
           "type": "integer",
@@ -223,7 +240,10 @@
         },
         "id": {
           "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+          "not": {
+            "pattern": "\\n"
+          }
         },
         "revision": {
           "type": "integer",
@@ -248,7 +268,9 @@
         },
         "request_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "default": {
           "$ref": "#/$defs/panel"
@@ -263,7 +285,10 @@
             "properties": {
               "id": {
                 "type": "string",
-                "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+                "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+                "not": {
+                  "pattern": "\\n"
+                }
               },
               "treatment": {
                 "enum": [
@@ -275,11 +300,15 @@
               },
               "artifact_sha256": {
                 "type": "string",
-                "pattern": "^[0-9a-f]{64}$"
+                "pattern": "^[0-9a-f]{64}$",
+                "minLength": 64,
+                "maxLength": 64
               },
               "worker_receipt_sha256": {
                 "type": "string",
-                "pattern": "^[0-9a-f]{64}$"
+                "pattern": "^[0-9a-f]{64}$",
+                "minLength": 64,
+                "maxLength": 64
               }
             },
             "required": [
@@ -295,7 +324,9 @@
         },
         "comparison_evidence_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         }
       },
       "required": [
@@ -324,7 +355,10 @@
         },
         "id": {
           "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+          "not": {
+            "pattern": "\\n"
+          }
         },
         "revision": {
           "type": "integer",
@@ -349,15 +383,21 @@
         },
         "request_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "preview_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "membership_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "decision": {
           "enum": [
@@ -391,7 +431,10 @@
         },
         "id": {
           "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+          "not": {
+            "pattern": "\\n"
+          }
         },
         "revision": {
           "type": "integer",
@@ -416,19 +459,27 @@
         },
         "request_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "preview_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "confirmation_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "membership_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "selected_treatment": {
           "enum": [
@@ -478,7 +529,10 @@
         },
         "id": {
           "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+          "not": {
+            "pattern": "\\n"
+          }
         },
         "revision": {
           "type": "integer",
@@ -503,36 +557,50 @@
         },
         "job_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "dependencies_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "resolved_rules_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "diagnostics_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "adoption_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "exception_sha256": {
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^[0-9a-f]{64}$"
+            "pattern": "^[0-9a-f]{64}$",
+            "minLength": 64,
+            "maxLength": 64
           },
           "minItems": 0,
           "uniqueItems": true
         },
         "worker_receipt_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         }
       },
       "required": [
@@ -560,13 +628,19 @@
         },
         "variant": {
           "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+          "not": {
+            "pattern": "\\n"
+          }
         },
         "identities": {
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+            "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+            "not": {
+              "pattern": "\\n"
+            }
           },
           "minItems": 1,
           "uniqueItems": true
@@ -576,7 +650,9 @@
         },
         "material_context_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "transformations": {
           "type": "array",
@@ -585,11 +661,16 @@
             "properties": {
               "id": {
                 "type": "string",
-                "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+                "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$",
+                "not": {
+                  "pattern": "\\n"
+                }
               },
               "sha256": {
                 "type": "string",
-                "pattern": "^[0-9a-f]{64}$"
+                "pattern": "^[0-9a-f]{64}$",
+                "minLength": 64,
+                "maxLength": 64
               }
             },
             "required": [
@@ -617,11 +698,15 @@
       "properties": {
         "artifact_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "worker_receipt_sha256": {
           "type": "string",
-          "pattern": "^[0-9a-f]{64}$"
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
         },
         "validation": {
           "enum": [
