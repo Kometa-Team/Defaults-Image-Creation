@@ -216,6 +216,15 @@ def test_tampered_registry_and_category_contract_scope():
     value["schema_pins"][0]["sha256"] = OTHER
     with pytest.raises(BulkError):
         HistoricalRegistry.from_dict(value).verify_schema_pins()
+
+
+def test_historical_v1_pins_ignore_unselected_future_schemas(tmp_path):
+    record, _ = synthetic()
+    snapshot = registry([record])
+    for pin in snapshot.to_dict()["schema_pins"]:
+        (tmp_path / pin["path"]).write_bytes((HERE.parent / "schemas" / pin["path"]).read_bytes())
+    (tmp_path / "unrelated-v2.schema.json").write_bytes(canonical({"$schema": "https://json-schema.org/draft/2020-12/schema", "type": "object"}))
+    snapshot.verify_schema_pins(schema_root=tmp_path)
     value = registry([record]).to_dict()
     value["schema_pins"] = []
     with pytest.raises(BulkError):

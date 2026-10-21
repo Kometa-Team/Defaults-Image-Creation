@@ -9,11 +9,15 @@ import json
 from functools import lru_cache
 from pathlib import Path
 
-from ...common import BulkError, canonical, fingerprint, path_key
+from ...common import BulkError, canonical, confined, fingerprint, path_key
 from ...definitions import Definition, schema_validator
 from ...planner import _composer_validator, effective_parameters
 from ..models import Document, Identity, RegistryDocument, decode_json
 from ..registry import require_hash
+
+
+V1_SCHEMA_NAMES = {"contract-v1.schema.json", "registry-v1.schema.json", "identity-v1.schema.json",
+                   "record-v1.schema.json", "historical-output-v1.schema.json", "historical-registry-v1.schema.json"}
 
 
 class AdoptionError(BulkError):
@@ -132,15 +136,18 @@ class HistoricalRegistry(Document):
                 seen.add(member[field])
         read_canonical(value["audit_json"])
 
-    def verify_schema_pins(self):
-        root = Path(__file__).parents[1] / "schemas"
+    def verify_schema_pins(self, *, schema_root=None):
+        root = Path(schema_root) if schema_root is not None else Path(__file__).parents[1] / "schemas"
         for pin in self.to_dict()["schema_pins"]:
             if Path(pin["path"]).name != pin["path"]:
                 raise BulkError("adoption_schema_pin", "Only bundled schema basenames are permitted")
-            path = root / pin["path"]
+            path = confined(root, pin["path"], must_exist=True)
             actual = fingerprint(json.loads(path.read_bytes())) if path.is_file() else None
             equal(pin["sha256"], actual, category="registry", identity=self.sha256, path=pin["path"], code="adoption_schema_pin")
-        expected = {p.name for p in root.glob("*.schema.json")}
+        # A v1 snapshot depends on its selected v1 schemas, not on unrelated
+        # schemas added alongside them in a later milestone. Unknown selected
+        # versions still fail closed; the existing v1 files remain immutable.
+        expected = V1_SCHEMA_NAMES
         equal(expected, {p["path"] for p in self.to_dict()["schema_pins"]}, category="registry", identity=self.sha256, path="schema_pins", code="adoption_schema_pin")
 
 
