@@ -40,7 +40,9 @@ def verify_owned_receipt(row, jobs):
     context = {"category": "Overlays" if job["kind"] == "overlay" else job["poster_id"].split(".")[0],
                "identity": job["id"]}
     expected_spec = {"task": _task(job, jobs, row["renderer"]).spec(), "renderer_identity": receipt["renderer_identity"]}
-    checks = {"receipt_sha256": (receipt["receipt_sha256"], fingerprint({k: v for k, v in receipt.items() if k != "receipt_sha256"})),
+    calculated_render = fingerprint({key: job[key] for key in ("kind", "parameters", "inputs", "dependencies", "language_behavior")} | {"renderer": row["renderer"]})
+    checks = {"calculated_render_fingerprint": (calculated_render, job["render_fingerprint"]),
+              "receipt_sha256": (receipt["receipt_sha256"], fingerprint({k: v for k, v in receipt.items() if k != "receipt_sha256"})),
               "logical_id": (job["id"], receipt["logical_id"]),
               "render_fingerprint": (job["render_fingerprint"], receipt["render_fingerprint"]),
               "relative": (job["local_relative"], receipt["relative"]),
@@ -48,6 +50,32 @@ def verify_owned_receipt(row, jobs):
               "job_fingerprint": (fingerprint(spec), receipt["job_fingerprint"])}
     for path, (expected, actual) in checks.items():
         equal(expected, actual, path=path, code="adoption_owned_receipt", **context)
+
+
+def verify_production_lane(verification, plan, responses, pins):
+    """Verify original receipt membership and raw-response identity against its plan."""
+    planned = {m["destination"]: m for m in plan["members"]}
+    equal(len(plan["members"]), len(planned), category="production", identity=plan["sha256"], path="unique_members")
+    for path, expected, actual in (("plan_sha256", plan["sha256"], verification["plan_sha256"]),
+                                   ("baseline.head", pins["artwork_commit"], plan["baseline"]["head"]),
+                                   ("baseline.tree", pins["artwork_tree"], plan["baseline"]["tree"]),
+                                   ("response_membership", set(planned), set(verification["response_receipts"])),
+                                   ("discrepancies", [], plan["discrepancies"] + verification["discrepancies"]),
+                                   ("expected", len(planned), verification["expected"]),
+                                   ("exact_sha256_matches", len(planned), verification["exact_sha256_matches"])):
+        equal(expected, actual, category="production", identity=plan["sha256"], path=path, code="adoption_response_binding")
+    for destination, member in planned.items():
+        response = responses.get(destination)
+        if response is None:
+            mismatch("adoption_response_binding", "production", destination, destination, "actual historical response", None)
+        checks = {"receipt_sha256": (verification["response_receipts"][destination], response["sha256"]),
+                  "plan_sha256": (plan["sha256"], response["plan_sha256"]),
+                  "actual_sha256": (member["sha256"], response["actual_sha256"]),
+                  "actual_git_blob": (member["git_blob"], response["actual_git_blob"]),
+                  "bytes": (member["size"], response["bytes"]),
+                  "production_commit": (pins["artwork_commit"], response["commit_at_actual_download"])}
+        for path, (expected, actual) in checks.items():
+            equal(expected, actual, category="production", identity=destination, path=path, code="adoption_response_binding")
 
 
 def _material(job):
@@ -123,7 +151,9 @@ def _overlay(job, groups):
                                    ("remote_relative", destination, job["remote_relative"]),
                                    ("transform", {"transform": TRANSFORM}, job["layout_evidence"])):
         equal(expected, actual, category="Overlays", identity=job["id"], path=path)
-    return {"group": group_id, "parameters": parameters, "transform": TRANSFORM}
+    definition = {"group": group_id, "parameters": parameters, "transform": TRANSFORM}
+    equal(fingerprint(definition), job["definition_fingerprint"], category="Overlays", identity=job["id"], path="definition_fingerprint")
+    return definition
 
 
 def _exceptions(item, job, approval, normal_assets, pins):
@@ -158,6 +188,8 @@ def discover(*, progress=None):
     progress("verify pinned production sources and historical evidence")
     verify_sources(pins)
     documents, native, responses = load_history(pins)
+    for lane in ("english", "overlay"):
+        verify_production_lane(documents[lane + "-production-verification"], documents[lane + "-production-plan"], responses, pins)
     approvals = approval_index(documents)
     progress("expand the 21-category catalog read-only")
     definitions = load_catalog(("all",))

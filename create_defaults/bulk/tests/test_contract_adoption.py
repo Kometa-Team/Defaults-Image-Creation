@@ -14,7 +14,7 @@ from create_defaults.bulk.common import BulkError, Conflict, canonical, fingerpr
 from create_defaults.bulk.contracts import ContractApproval, read_document
 from create_defaults.bulk.contracts.adoption import AdoptionArchive, HistoricalOutput, HistoricalRegistry, audit_membership
 from create_defaults.bulk.contracts.adoption.inventory import (
-    _task, assemble_registry, discover, verify_baseline_job, verify_owned_receipt,
+    _overlay, _task, assemble_registry, discover, verify_baseline_job, verify_owned_receipt, verify_production_lane,
 )
 from create_defaults.bulk.contracts.adoption.models import AdoptionError, encoded_json, fingerprints
 from create_defaults.bulk.contracts.adoption.sources import HERE, load_pins, verify_sources
@@ -144,6 +144,44 @@ def test_owned_receipt_requires_exact_task_and_worker_spec():
     bad["job"]["parameters"]["trim"] = not bad["job"]["parameters"]["trim"]
     with pytest.raises(BulkError):
         verify_baseline_job(bad, row)
+
+
+def test_internally_resealed_receipt_still_needs_correct_render_fingerprint():
+    _, row = synthetic()
+    row["job"]["render_fingerprint"] = OTHER
+    row["worker_spec"]["task"]["render_fingerprint"] = OTHER
+    row["receipt"]["render_fingerprint"] = OTHER
+    row["receipt"]["job_fingerprint"] = fingerprint(row["worker_spec"])
+    row["receipt"]["receipt_sha256"] = fingerprint({k: v for k, v in row["receipt"].items() if k != "receipt_sha256"})
+    with pytest.raises(BulkError, match="calculated_render_fingerprint"):
+        verify_owned_receipt(row, {row["job"]["id"]: row})
+
+
+def test_overlay_definition_hash_is_recomputed():
+    _, row = synthetic()
+    job = row["job"]
+    group = {"inputs": [job["parameters"]["input"]], "trim": job["parameters"]["trim"],
+             "sizes": {"standard": {"box": job["parameters"]["box"], "destination": "synthetic/overlays/standard"}}}
+    _overlay(job, {"synthetic": group})
+    job["definition_fingerprint"] = OTHER
+    with pytest.raises(BulkError, match="definition_fingerprint"):
+        _overlay(job, {"synthetic": group})
+
+
+def test_actual_response_receipt_must_match_pinned_plan_membership():
+    pins = {"artwork_commit": "a" * 40, "artwork_tree": "b" * 40}
+    member = {"destination": "synthetic/Example.png", "sha256": H, "git_blob": "c" * 40, "size": 100}
+    plan = sealed({"members": [member], "baseline": {"head": pins["artwork_commit"], "tree": pins["artwork_tree"]}, "discrepancies": []})
+    response = sealed({"destination": member["destination"], "plan_sha256": plan["sha256"], "actual_sha256": H,
+                       "actual_git_blob": member["git_blob"], "bytes": 100, "commit_at_actual_download": pins["artwork_commit"]})
+    verification = sealed({"plan_sha256": plan["sha256"], "response_receipts": {member["destination"]: response["sha256"]},
+                           "expected": 1, "exact_sha256_matches": 1, "discrepancies": []})
+    verify_production_lane(verification, plan, {member["destination"]: response}, pins)
+    bad = dict(response, actual_git_blob="d" * 40)
+    bad = sealed({k: v for k, v in bad.items() if k != "sha256"})
+    verification["response_receipts"][member["destination"]] = bad["sha256"]
+    with pytest.raises(BulkError, match="actual_git_blob"):
+        verify_production_lane(verification, plan, {member["destination"]: bad}, pins)
 
 
 def test_snapshot_mutation_has_actionable_diagnostics(tmp_path):
