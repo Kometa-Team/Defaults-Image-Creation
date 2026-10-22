@@ -86,7 +86,7 @@ and resolution controls, complete pairs/sizes/branches, missing receipts,
 source/derived/context/runtime/contract mutation, fully resealed fake previews,
 forged attribution/self-review/replay, skipped/rejected/withdrawn confirmations,
 idempotence, blob/transaction interruption, corruption/restart, new material
-revisions and unrelated-review preservation. M1/M2/M3 regression suites remain
+revisions, gallery symlink/junction isolation and unrelated-review preservation. M1/M2/M3 regression suites remain
 part of existing Windows/Linux CI. Final-head counts/results are recorded in the
 draft PR rather than claimed from an earlier commit.
 

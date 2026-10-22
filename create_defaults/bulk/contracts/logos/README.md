@@ -194,3 +194,6 @@ The second command creates only explicitly synthetic/private galleries and pendi
 fixture reviews in a guarded M1 state root. It records no actual submitter or
 maintainer approval. Existing different evidence is not overwritten as a new
 approval; choose a fresh root after material implementation changes.
+Gallery directories, PNGs and report files also use the existing confined-path,
+link/reparse-point rejection and atomic-write primitives; an existing gallery
+link cannot redirect writes into unrelated or production files.

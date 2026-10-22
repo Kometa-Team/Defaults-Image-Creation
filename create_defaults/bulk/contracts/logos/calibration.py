@@ -95,32 +95,44 @@ def evaluate(*, grid=64):
             "limitation":"Synthetic diagnostic validation only; real maintainer labels, stability studies and exact policy approval remain required"}
 
 
+def write_report(root,name,encoded):
+    from ...common import atomic_bytes,confined
+    atomic_bytes(confined(root,name),encoded,replace=True)
+
+
 def gallery(root, report):
     """Private synthetic evidence only, no official artwork filenames/destinations."""
     from html import escape
-    root = Path(root)
+    from ...common import atomic_bytes, confined, reject_links
+    root = reject_links(Path(root))
     root.mkdir(parents=True,exist_ok=True)
     corpus = load_corpus()
     for checksum,encoded in corpus["png_base64"].items():
-        path=root/(checksum+".png")
+        path=confined(root,checksum+".png")
         raw=base64.b64decode(encoded,validate=True)
-        if path.exists() and path.read_bytes()!=raw: raise BulkError("logo_gallery_conflict","Evidence path differs")
-        path.write_bytes(raw)
+        try:atomic_bytes(path,raw)
+        except FileExistsError:
+            if path.read_bytes()!=raw: raise BulkError("logo_gallery_conflict","Evidence path differs")
     washed={}
     for pair in corpus["pairs"]:
         source=pair["master_sha256"]
         if source not in washed:
             image=inspect_png(base64.b64decode(corpus["png_base64"][source])).image()
             white,_=white_wash(image);raw=encode_png(white);h=hashlib.sha256(raw).hexdigest()
-            (root/(h+".png")).write_bytes(raw);washed[source]=h
+            path=confined(root,h+".png")
+            try:atomic_bytes(path,raw)
+            except FileExistsError:
+                if path.read_bytes()!=raw:raise BulkError("logo_gallery_conflict","Derived evidence path differs")
+            washed[source]=h
     cards=[]
     for row in report["measurements"]:
         cards.append(f'<article><h2>{escape(row["id"])}</h2><p>{escape(row["split"])} · {escape(row["label"])} · {escape(row["diagnostics"]["outcome"])}</p>'
                      f'<figure><img src="{row["master_sha256"]}.png"><figcaption>Original synthetic master</figcaption></figure>'
                      f'<figure><img src="{washed[row["master_sha256"]]}.png"><figcaption>Derived default white: unchanged renderer operation</figcaption></figure>'
                      f'<figure><img src="{row["white_sha256"]}.png"><figcaption>Separate white candidate</figcaption></figure></article>')
-    (root/"review.html").write_text('<!doctype html><meta charset="utf-8"><title>M4 synthetic calibration controls</title><style>body{font:16px sans-serif;background:#ddd}article{border:1px solid #888;padding:16px;margin:16px}figure{display:inline-block;background:#567;padding:16px}img{max-width:300px;image-rendering:auto}</style><h1>Synthetic M4 controls — no policy or artwork approval</h1><p>Logo-only evidence. Families are disjoint. Original source bytes are preserved. No automatic MATCH is enabled.</p>'+''.join(cards),encoding="utf-8")
-    (root/"calibration-report.json").write_bytes(canonical(report))
+    text='<!doctype html><meta charset="utf-8"><title>M4 synthetic calibration controls</title><style>body{font:16px sans-serif;background:#ddd}article{border:1px solid #888;padding:16px;margin:16px}figure{display:inline-block;background:#567;padding:16px}img{max-width:300px;image-rendering:auto}</style><h1>Synthetic M4 controls — no policy or artwork approval</h1><p>Logo-only evidence. Families are disjoint. Original source bytes are preserved. No automatic MATCH is enabled.</p>'+''.join(cards)
+    write_report(root,"review.html",text.encode("utf-8"))
+    write_report(root,"calibration-report.json",canonical(report))
 
 
 def stability_report():

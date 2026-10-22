@@ -5,8 +5,10 @@ from io import BytesIO
 import base64
 import hashlib
 import json
+import os
 from pathlib import Path
 import struct
+import subprocess
 import zlib
 
 from PIL import Image, ImageDraw
@@ -476,3 +478,32 @@ def test_required_outputs_and_nested_context_cannot_be_overridden(setup_review,c
     else:spec["expires_at"]="2000-01-01T00:00:00Z"
     payload["spec_json"]=encoded_json(spec);forged=replace(prepared,bundle=Evidence.make("logo-review-bundle",payload))
     with pytest.raises(BulkError):verify(forged,selection,root)
+
+
+@pytest.mark.parametrize("target_kind",["directory","png","report"])
+def test_gallery_writes_reject_links_and_leave_targets_unchanged(tmp_path,target_kind):
+    from create_defaults.bulk.contracts.logos.calibration import gallery
+    root=tmp_path/"gallery";root.mkdir();outside=tmp_path/"unrelated";outside.mkdir()
+    sentinel=outside/"original.txt";sentinel.write_bytes(b"keep unrelated files unchanged")
+    corpus=load_corpus();checksum,encoded=next(iter(corpus["png_base64"].items()))
+    target=outside/(checksum+".png" if target_kind=="png" else "review.html")
+    target.write_bytes(base64.b64decode(encoded) if target_kind=="png" else b"existing report")
+    link=tmp_path/"linked-gallery" if target_kind=="directory" else root/(checksum+".png" if target_kind=="png" else "review.html")
+    try:os.symlink(outside if target_kind=="directory" else target,link,target_is_directory=target_kind=="directory")
+    except OSError as error:pytest.skip("OS account cannot create test symlink: "+str(error))
+    before=target.read_bytes()
+    with pytest.raises(BulkError):gallery(link if target_kind=="directory" else root,{"measurements":[]})
+    assert target.read_bytes()==before and sentinel.read_bytes()==b"keep unrelated files unchanged"
+
+
+@pytest.mark.skipif(os.name!="nt",reason="Windows junction integration test")
+def test_gallery_rejects_windows_junction_without_touching_its_target(tmp_path):
+    from create_defaults.bulk.contracts.logos.calibration import gallery
+    target=tmp_path/"unrelated";target.mkdir();sentinel=target/"keep.txt";sentinel.write_bytes(b"unchanged")
+    link=tmp_path/"gallery-junction"
+    result=subprocess.run(["cmd","/c","mklink","/J",str(link),str(target)],capture_output=True)
+    if result.returncode:pytest.skip("Account/filesystem cannot create test junction")
+    try:
+        with pytest.raises(BulkError):gallery(link,{"measurements":[]})
+        assert list(target.iterdir())==[sentinel] and sentinel.read_bytes()==b"unchanged"
+    finally:os.rmdir(link)
