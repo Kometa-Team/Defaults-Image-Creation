@@ -76,8 +76,11 @@ def check_job(package,definition,job,assignment,*,historical_member=None,_prepar
     same(job["kind"],c["kind"],"poster versus overlay")
     same(job["language"],"en","implemented English scope")
     actual_sources=[{k:i[k] for k in ("path","sha256")} for i in job["inputs"] if i["path"]==source["path"]]
-    if source not in actual_sources and rule["source_kind"]!="composition":
-        raise BulkError("category_source_substitution","Assigned source path/hash is not the final job input")
+    if source not in actual_sources:
+        generated=rule["source_kind"]=="composition" and any(d["sha256"]==source["sha256"]
+            and job["parameters"].get(d["input"])==source["path"] for d in job["dependencies"])
+        if not generated:
+            raise BulkError("category_source_substitution","Assigned source path/hash is not an actual input or owned generated dependency")
     expected=read_canonical(rule["style_json"])
     if c["kind"]=="overlay":
         same(definition["group"].replace("/","."),assignment.variant,"overlay branch")

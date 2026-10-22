@@ -232,3 +232,11 @@ def test_controlled_coloured_master_can_supply_both_presentations_without_style_
     assert not w["artifact_approved"]
     if not read_canonical(data[1][a.variant]["style_json"])["white_wash"]:
         with pytest.raises(BulkError):check_job(p,d,j,replace(assigned,derived_white=False),_prepared=data)
+
+
+def test_generated_parent_source_hash_cannot_be_replaced_by_an_unowned_reference(prepared):
+    case=next(c for c in CASES if c["job"]["dependencies"])
+    p,data,a,member=context(case,prepared)
+    assert check_job(p,case["definition"],case["job"],a,historical_member=member,_prepared=data)
+    source=read_canonical(a.source_json);source["sha256"]="c"*64
+    with pytest.raises(BulkError):check_job(p,case["definition"],case["job"],replace(a,source_json=encoded_json(source)),_prepared=data)
