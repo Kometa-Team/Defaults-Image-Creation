@@ -313,7 +313,7 @@ def test_no_adoption_record_can_authorize_publication_or_fabricate_approval():
             authorize(manifest, {}, sealed(value))
 
 
-def test_complete_historical_inventory_against_frozen_mapping(monkeypatch):
+def test_complete_historical_inventory_against_frozen_mapping(monkeypatch, verified_historical_discovery):
     """One real read-only discovery; no full image generation or live state."""
     import requests
     from create_defaults import create_poster
@@ -327,7 +327,7 @@ def test_complete_historical_inventory_against_frozen_mapping(monkeypatch):
     monkeypatch.setattr(PersistentWorkers, "__init__", prohibited)
     monkeypatch.setattr(Store, "__init__", prohibited)
     monkeypatch.setattr(requests.Session, "request", prohibited)
-    snapshot, records = discover()
+    snapshot, records, _ = verified_historical_discovery
     frozen = HistoricalRegistry.from_bytes(gzip.decompress((HERE / "baseline/frozen-registry-v1.json.gz").read_bytes()))
     assert snapshot.encoded == frozen.encoded
     report = json.loads(snapshot.to_dict()["audit_json"])

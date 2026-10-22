@@ -112,6 +112,13 @@ report writes. The complete historical test constructs its expected-output
 oracle by independently scanning original verified jobs and parent references;
 it does not use graph edges or a second copy of the graph algorithm.
 
+M2 and M5 share one session-scoped, guarded discovery fixture containing only
+immutable M1 documents. Before graph reuse, M5 rechecks all 299 source pins,
+every declared actual asset/font hash and the freshly expanded definitions.
+Both complete historical assertions/oracles still run. This avoids repeating
+the same full discovery within the existing Windows CI limit; no assertion,
+workflow timeout or production behavior is changed.
+
 Local Windows validation: **72 focused M5 tests passed**. The separate complete
 historical audit and oracle passed; the earlier combined M1/M3/M4/M5 regression
 run passed **346 tests with four OS-permission skips**. The final PR must also
@@ -176,10 +183,14 @@ M6 work follows automatically.
 - `create_defaults/bulk/contracts/expanded/README.md`
 - `create_defaults/bulk/tests/test_expanded_validation.py`
 - `create_defaults/bulk/tests/test_expanded_historical.py`
+- `create_defaults/bulk/tests/conftest.py`
+- `create_defaults/bulk/tests/test_contract_adoption.py`
 - `create_defaults/lifecycle/PHASE2_M5_IMPLEMENTATION.md`
 - `create_defaults/lifecycle/ROADMAP.md`
 
-Only ROADMAP.md modifies an existing tracked file. No production Python,
+Only ROADMAP.md and the M2 test's fixture handoff modify existing tracked files.
+The latter retains all original assertions and shares a guarded immutable
+discovery with M5. No production Python,
 catalog definition, font/logo/artwork, translation, renderer, workflow,
 publication destination, Default-Images repository, old schema or receipt is
 changed. No historical images are generated, uploaded or removed.
