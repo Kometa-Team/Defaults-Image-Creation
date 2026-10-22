@@ -1,13 +1,15 @@
 | Phase | Name | Status | Detailed documentation | Approval |
 | --- | --- | --- | --- | --- |
 | 1 | Discovery and Baseline | COMPLETE | [PHASE1_DISCOVERY.md](PHASE1_DISCOVERY.md) | Maintainer accepted 2026-10-20 |
-| 2 | Business Rules and Category Contracts | IN PROGRESS | [Approved architecture](PHASE2_DESIGN_PROPOSAL.md); [M1 foundations](../bulk/contracts/README.md); [M2 audit](PHASE2_M2_IMPLEMENTATION.md); [M3 Playlist contract](PHASE2_M3_IMPLEMENTATION.md); [M4 logo foundations](PHASE2_M4_IMPLEMENTATION.md); [M5 expanded validation](PHASE2_M5_IMPLEMENTATION.md); [M6 category contracts](PHASE2_M6_IMPLEMENTATION.md) | M1 COMPLETE (merged PR #15); M2 COMPLETE (merged PR #16); M3 COMPLETE (merged PR #17); M4 COMPLETE (merged PR #18); M5 COMPLETE (merged PR #19); M6 IN PROGRESS under explicit authorization; M7 NOT STARTED |
+| 2 | Business Rules and Category Contracts | IN PROGRESS | [Approved architecture](PHASE2_DESIGN_PROPOSAL.md); [M1 foundations](../bulk/contracts/README.md); [M2 audit](PHASE2_M2_IMPLEMENTATION.md); [M3 Playlist contract](PHASE2_M3_IMPLEMENTATION.md); [M4 logo foundations](PHASE2_M4_IMPLEMENTATION.md); [M5 expanded validation](PHASE2_M5_IMPLEMENTATION.md); [M6 category contracts](PHASE2_M6_IMPLEMENTATION.md); [M7 safeguards and acceptance dossier](PHASE2_M7_IMPLEMENTATION.md) | M1 COMPLETE (merged PR #15); M2 COMPLETE (merged PR #16); M3 COMPLETE (merged PR #17); M4 COMPLETE (merged PR #18); M5 COMPLETE (merged PR #19); M6 COMPLETE (merged PR #20); M7 IN PROGRESS under explicit authorization |
 | 3 | Translation and Destination Safeguards | NOT STARTED | TBD | Not requested |
 | 4 | Lifecycle Operations | NOT STARTED | TBD | Not requested |
 | 5 | Review and Publication Integration | NOT STARTED | TBD | Not requested |
 | 6 | Pilot and Acceptance | NOT STARTED | TBD | Not requested |
 
 ## Decision log
+
+- **2026-10-22, M7 implementation:** M6 PR #20 is merged at `c00a0f0b8efcb98857d24da659a30eb06043d6b0`. The maintainer authorized M7 only: combined read-only regression, isolated activation safeguards, missing-approval inventory, recovery/impact tests and the Phase 2 acceptance dossier. M1-M6 are COMPLETE; M7 and Phase 2 remain IN PROGRESS pending review. All 22 exact-package approvals remain missing. No authenticated intake or production hook is available; synthetic ACTIVE states grant no operational authority. No artwork generation/publication, lifecycle pilot, production enforcement, merge or Phase 3-6 implementation is authorized.
 
 - **2026-10-22, M6 implementation:** The maintainer confirmed M5 PR #19 merged at `e611076e23cab31efa578ee92f1514bc993e9f93` and explicitly authorized M6 only. M1?M5 are COMPLETE; M6 and Phase 2 are IN PROGRESS on `feat/lifecycle-m6-category-contracts`. M6 adds the remaining category packages and read-only full-library compatibility checks, preserving the exact M3 Playlist contract, accepted historical exceptions and M1?M5 authority boundaries. Exact contract approval, production activation, new complete-poster approval and publication remain separate. No artwork generation/publication, production enforcement or merge is authorized. M7 and Phases 3?6 remain NOT STARTED.
 
@@ -33,4 +35,4 @@ This is the Kometa Defaults Lifecycle Management project. Status values are **NO
 5. **Review and Publication Integration:** reuse Package E previews, exact approvals, verified workers, bounded resumable transport, draft PRs, remote hashes and full-tree reconciliation. Extend the operation model for authorized general renames, deletions and category-wide changes. Transport batches, review populations and publication PRs remain independent.
 6. **Pilot and Acceptance:** start with Playlist, then representative other categories. Exercise additions, edits, renames, removals, translation failures, shared dependencies and category-wide changes; prove unchanged outputs, destination boundaries and rollback. Record explicit final production acceptance.
 
-Phase 2 has completed M1?M5 and is underway only within the separately authorized M6 scope above; M7 and Phases 3?6 remain prospective. Phase 1 itself authorizes no generation, artwork writes, merges, translation changes or lifecycle implementation.
+Phase 2 has completed M1-M6 and is underway only within the separately authorized M7 scope above; Phases 3-6 remain NOT STARTED. Phase 1 itself authorizes no generation, artwork writes, merges, translation changes or lifecycle implementation.

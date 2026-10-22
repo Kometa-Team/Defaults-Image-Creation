@@ -1,4 +1,4 @@
-"""One guarded, immutable full M2 discovery per pytest session.
+"""One guarded, immutable full M2 discovery shared only while tests need it.
 
 M2 checks actual facts/receipts; M5 checks their graph and independent oracle.
 Sharing immutable values avoids repeating discovery within the existing CI
@@ -8,6 +8,52 @@ timeout. Production code has no such cache.
 from time import perf_counter
 
 import pytest
+
+
+_historical_cleanup_pending = False
+_historical_stage_seconds = {}
+
+
+@pytest.fixture
+def historical_stage_seconds():
+    return _historical_stage_seconds
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_protocol(item, nextitem):
+    """Collect released audit cycles after pytest clears fixture arguments.
+
+    Fixture finalizers still run with their yielded values in item.funcargs.
+    Collecting there cannot reclaim cycles referencing those large snapshots.
+    Leave test order, every original assertion and measured RSS untouched.
+    """
+    yield
+    global _historical_cleanup_pending
+    if _historical_cleanup_pending:
+        _historical_cleanup_pending = False
+        import json
+        import psutil
+        import gc
+        process = psutil.Process()
+        before = process.memory_info().rss
+        collected = gc.collect()
+        # glibc can retain freed large-audit heap pages in its arenas. Return
+        # only unused pages after all fixture references have expired; live
+        # data, production allocation and psutil/worker RSS are untouched.
+        # Other libc/OS implementations keep their normal allocator policy.
+        import sys
+        allocator_trimmed = False
+        if sys.platform == "linux":
+            import ctypes
+            trim = getattr(ctypes.CDLL(None), "malloc_trim", None)
+            if trim is not None:
+                trim.argtypes = (ctypes.c_size_t,)
+                trim.restype = ctypes.c_int
+                trim(0)
+                allocator_trimmed = True
+        print("M7 historical fixture release:", json.dumps({"before_rss":before,
+            "after_rss":process.memory_info().rss,"collected_cycles":collected,
+            "glibc_trim_requested":allocator_trimmed}), flush=True)
 
 
 @pytest.fixture(scope="session")
@@ -21,8 +67,7 @@ def category_prepared(category_implementation):
     return {p.contract.to_dict()["category"]:(p,(p.contract.to_dict(),*p.data())) for p in category_implementation.packages}
 
 
-@pytest.fixture(scope="session")
-def verified_historical_discovery():
+def _discover_historical():
     from create_defaults.bulk.contracts.adoption.inventory import discover
     import PIL.Image
     import requests
@@ -43,7 +88,37 @@ def verified_historical_discovery():
         registry,records=discover()
     # M1 Document instances are frozen canonical bytes. Native mutable ledgers
     # and worker state are not cached; all dictionaries are detached on access.
-    return registry,records,perf_counter()-started
+    seconds = perf_counter()-started
+    _historical_stage_seconds["M2_discovery"] = seconds
+    return registry,records,seconds
+
+
+@pytest.fixture(scope="session")
+def _historical_discovery_cache(request):
+    consumers=sum("verified_historical_discovery" in item.fixturenames for item in request.session.items)
+    return {"data":None,"remaining":consumers}
+
+
+@pytest.fixture
+def verified_historical_discovery(_historical_discovery_cache):
+    """Keep every M2/M5/M6/M7 assertion, release immutable records afterward.
+
+    M7 adds a complete audit before the other consumers. Keeping all 14,079
+    record blobs until session shutdown unnecessarily inflates later worker
+    memory measurements. Discovery still runs exactly once; no source, receipt
+    or output check is skipped and the 512 MiB worker-parent limit is unchanged.
+    """
+    cache=_historical_discovery_cache
+    if cache["data"] is None:
+        cache["data"]=_discover_historical()
+    try:
+        yield cache["data"]
+    finally:
+        cache["remaining"]-=1
+        if cache["remaining"]==0:
+            cache["data"]=None
+            global _historical_cleanup_pending
+            _historical_cleanup_pending = True
 
 
 def _build_historical_context(verified_historical_discovery):
@@ -72,10 +147,15 @@ def _build_historical_context(verified_historical_discovery):
         guard.setattr(workers.PersistentWorkers,"__init__",prohibited)
         guard.setattr(state.Store,"__init__",prohibited)
         guard.setattr(requests.Session,"request",prohibited)
-        verify_sources(load_pins())
-        sources=verify_inputs(records)
-        resolution=resolve()
-        graph=build(registry,records,resolution)
+        def timed(name, operation, *args):
+            began = perf_counter()
+            result = operation(*args)
+            _historical_stage_seconds[name] = perf_counter()-began
+            return result
+        timed("source_pins", verify_sources, load_pins())
+        sources=timed("physical_inputs", verify_inputs, records)
+        resolution=timed("expanded_definitions", resolve)
+        graph=timed("M5_graph", build, registry, records, resolution)
     return registry,records,resolution,graph,sources,seconds+perf_counter()-start
 
 
@@ -102,5 +182,5 @@ def verified_historical_context(verified_historical_discovery,_historical_contex
         cache["remaining"]-=1
         if cache["remaining"]==0:
             cache["data"]=None
-            import gc
-            gc.collect()
+            global _historical_cleanup_pending
+            _historical_cleanup_pending = True

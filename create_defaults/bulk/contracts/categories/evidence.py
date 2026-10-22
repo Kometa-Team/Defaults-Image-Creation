@@ -49,8 +49,8 @@ def verify_inputs(records,root=ROOT):
                 raise BulkError("category_source_conflict","Conflicting input hashes")
             found[item["path"]]=item["sha256"]
     # Same exact-case/ledger/link checks as confined+asset_cases.exact, but
-    # enumerate each immutable directory once rather than once per asset.
-    # Recheck directory identity/mtime at the end to reject a stale name index.
+    # build each directory lookup once rather than once per asset. Recheck
+    # directory identity/mtime and its exact entry set to reject stale indexes.
     from ...asset_cases import LEDGER,check_authority,declarations
     root=reject_links(Path(root)).resolve()
     if root==LEDGER.parents[2].resolve():check_authority()
@@ -81,6 +81,14 @@ def verify_inputs(records,root=ROOT):
             raise BulkError("category_source_changed","Actual source/font/background changed: "+path)
     if any(signature(path)!=old for path,old in signatures.items()):
         raise BulkError("category_unstable_directory","Source directory changed; retry from a stable snapshot")
+    # Build each lookup index once, then independently guard its exact filename
+    # set once. Windows may report the same directory mtime for a rapid entry
+    # change; timestamp equality alone cannot prove the indexed namespace still
+    # exists. This remains O(directories + entries), never a scan per input.
+    for path,index in names.items():
+        expected={name for group in index.values() for name in group}
+        if set(os.listdir(reject_links(path)))!=expected or signature(path)!=signatures[path]:
+            raise BulkError("category_unstable_directory","Source directory entries changed; retry from a stable snapshot")
     return found
 
 

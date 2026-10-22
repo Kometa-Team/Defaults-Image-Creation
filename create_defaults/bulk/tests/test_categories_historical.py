@@ -12,7 +12,7 @@ from create_defaults.bulk.contracts.categories.release import Implementation,REL
 from create_defaults.bulk.contracts.categories.dependencies import bind
 
 
-def test_complete_library_and_single_category_compatibility(monkeypatch,tmp_path,verified_historical_context,category_implementation,capsys):
+def test_complete_library_and_single_category_compatibility(monkeypatch,tmp_path,verified_historical_context,category_implementation,capsys,historical_stage_seconds):
     import PIL.Image
     import requests
     import create_defaults.create_poster as poster
@@ -45,6 +45,7 @@ def test_complete_library_and_single_category_compatibility(monkeypatch,tmp_path
     assert single["outputs"]==9 and len(single["categories"])==1
     report["performance"]={"capture_seconds":capture_seconds,"single_category_seconds":single["seconds"],
         "single_category":"Playlist","actual_inputs":len(sources),"immutable_context_reused":True}
+    report["performance"]["stages_seconds"]=dict(historical_stage_seconds)
     contract_graph=bind(graph,implementation);index=contract_graph.index()
     assert len(index.outputs)==14079 and not index.unresolved
     studio_ids=[i for i,o in index.outputs.items() if o["category"]=="Studio"]
@@ -61,3 +62,9 @@ def test_complete_library_and_single_category_compatibility(monkeypatch,tmp_path
     with capsys.disabled():
         print("M6 compatibility evidence:",json.dumps({"platform":platform.system(),
             **{k:v for k,v in report.items() if k!="categories"}}),flush=True)
+    # M7 consumes this exact fresh audit/graph, without repeating its large
+    # materialization in the same bounded worker-parent test process. All
+    # original M6 assertions above and all M7 reconciliation assertions remain.
+    from create_defaults.bulk.tests.test_activation_historical import assert_final_phase2_historical_and_approval_inventory
+    assert_final_phase2_historical_and_approval_inventory(monkeypatch,verified_historical_context,
+        implementation,capsys,report,contract_graph,index)
