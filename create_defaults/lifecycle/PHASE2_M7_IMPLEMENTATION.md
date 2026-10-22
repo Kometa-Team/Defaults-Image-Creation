@@ -137,6 +137,13 @@ machine-readable counts/pins in each platform log. Final commit, full test
 counts and run URLs are recorded in the draft PR and sealed local handoff;
 earlier M6 CI is not substituted for M7 results.
 
+The combined local run exposed a 517 MiB worker-parent measurement against the
+unchanged 512 MiB limit after historical audits. The test-only shared M2 discovery
+now releases its 14,079 immutable record blobs after its last actual consumer,
+as the M5/M6 graph fixture already does. Discovery still runs once, every
+historical assertion is retained, and no worker limit, test assertion or workflow
+timeout is raised. The final full suite must pass with this bounded lifetime.
+
 The automated nonintegration regression verifies **190** pre-M7 production code,
 catalog/config and workflow files against LF-normalized source hashes, checks
 imports/dispatch strings, and rejects changed files outside the explicit M7

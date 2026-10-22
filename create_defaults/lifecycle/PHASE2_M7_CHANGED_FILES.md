@@ -22,6 +22,7 @@ plus the explicitly requested roadmap status update.
 | `create_defaults/bulk/contracts/schemas/activation-v1.schema.json` | Additive strict schema; existing M1–M6 schemas unchanged |
 | `create_defaults/bulk/tests/test_activation.py` | Synthetic adversarial, impact, transaction/CAS, restart, rollback and nonintegration tests |
 | `create_defaults/bulk/tests/test_activation_historical.py` | Full read-only 14,079-record reconciliation and missing-approval inventory |
+| `create_defaults/bulk/tests/conftest.py` | Release shared immutable M2 records after the last audit consumer; all discovery/assertions and the existing 512 MiB worker limit remain intact |
 | `create_defaults/lifecycle/evidence/phase2-m7-acceptance-v1.json` | Fresh machine-readable historical/approval/nonactivation/handoff dossier |
 | `create_defaults/lifecycle/PHASE2_M7_IMPLEMENTATION.md` | Human-readable Phase 2 acceptance dossier and explicit Phases 3–6 handoff |
 | `create_defaults/lifecycle/PHASE2_M7_CHANGED_FILES.md` | This inventory |

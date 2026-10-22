@@ -1,4 +1,4 @@
-"""One guarded, immutable full M2 discovery per pytest session.
+"""One guarded, immutable full M2 discovery shared only while tests need it.
 
 M2 checks actual facts/receipts; M5 checks their graph and independent oracle.
 Sharing immutable values avoids repeating discovery within the existing CI
@@ -21,8 +21,7 @@ def category_prepared(category_implementation):
     return {p.contract.to_dict()["category"]:(p,(p.contract.to_dict(),*p.data())) for p in category_implementation.packages}
 
 
-@pytest.fixture(scope="session")
-def verified_historical_discovery():
+def _discover_historical():
     from create_defaults.bulk.contracts.adoption.inventory import discover
     import PIL.Image
     import requests
@@ -44,6 +43,34 @@ def verified_historical_discovery():
     # M1 Document instances are frozen canonical bytes. Native mutable ledgers
     # and worker state are not cached; all dictionaries are detached on access.
     return registry,records,perf_counter()-started
+
+
+@pytest.fixture(scope="session")
+def _historical_discovery_cache(request):
+    consumers=sum("verified_historical_discovery" in item.fixturenames for item in request.session.items)
+    return {"data":None,"remaining":consumers}
+
+
+@pytest.fixture
+def verified_historical_discovery(_historical_discovery_cache):
+    """Keep every M2/M5/M6/M7 assertion, release immutable records afterward.
+
+    M7 adds a complete audit before the other consumers. Keeping all 14,079
+    record blobs until session shutdown unnecessarily inflates later worker
+    memory measurements. Discovery still runs exactly once; no source, receipt
+    or output check is skipped and the 512 MiB worker-parent limit is unchanged.
+    """
+    cache=_historical_discovery_cache
+    if cache["data"] is None:
+        cache["data"]=_discover_historical()
+    try:
+        yield cache["data"]
+    finally:
+        cache["remaining"]-=1
+        if cache["remaining"]==0:
+            cache["data"]=None
+            import gc
+            gc.collect()
 
 
 def _build_historical_context(verified_historical_discovery):
