@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kometa.wiki/schemas/lifecycle/logo-evidence-v1.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": 1},
+    "kind": {"enum": ["isolated-logo-preview-receipt", "logo-review-bundle", "logo-review-session"]},
+    "payload_json": {"type": "string", "maxLength": 8000000}
+  },
+  "required": ["schema_version", "kind", "payload_json"],
+  "additionalProperties": false
+}
