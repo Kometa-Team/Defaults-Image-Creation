@@ -438,14 +438,92 @@ def test_production_integration_pins_and_cli_are_readonly(tmp_path,monkeypatch,c
 
 
 def test_changes_outside_explicit_m7_scope_are_rejected():
+    # Audit the accepted M7 implementation, not every future maintenance PR.
+    # Current production bytes remain checked by verify() against all 190 pins.
     root=Path(__file__).parents[3]
-    changed=subprocess.check_output(["git","diff","--name-only","c00a0f0b8efcb98857d24da659a30eb06043d6b0","HEAD"],cwd=root,text=True).splitlines()
+    changed=subprocess.check_output(["git","diff","--name-only","c00a0f0b8efcb98857d24da659a30eb06043d6b0","0b6f479f2ddb3c8d11fc48a92b9d0cfddd3b4293"],cwd=root,text=True).splitlines()
     allowed=("create_defaults/bulk/contracts/activation/",
         "create_defaults/bulk/tests/test_activation","create_defaults/bulk/tests/conftest.py",
         "create_defaults/bulk/tests/test_categories_historical.py","create_defaults/bulk/contracts/categories/evidence.py",
         "create_defaults/lifecycle/PHASE2_M7_",
         "create_defaults/lifecycle/evidence/phase2-m7-","create_defaults/lifecycle/ROADMAP.md")
     assert all(n.startswith(allowed) for n in changed),changed
+
+
+def test_authorized_people_maintenance_preserves_other_m7_pins():
+    from create_defaults.bulk.contracts.activation import protection
+    root=Path(__file__).parents[3]
+    path="create_defaults/bulk/contracts/activation/data/production-pins-v1.json"
+    accepted=json.loads(subprocess.check_output(["git","show",
+        "0b6f479f2ddb3c8d11fc48a92b9d0cfddd3b4293:"+path],cwd=root))
+    selected=json.loads((root/path).read_text(encoding="utf8"))
+    sweeper="create_people_posters/grayscale_sweeper.py"
+    assert len(accepted["files"])==len(selected["files"])==190
+    assert accepted["files"].keys()==selected["files"].keys()
+    assert {n for n in accepted["files"] if accepted["files"][n]!=selected["files"][n]}=={sweeper}
+    assert selected["files"][sweeper]==hashlib.sha256((root/sweeper).read_bytes().replace(b"\r\n",b"\n")).hexdigest()
+    assert selected["historical_syntax_exceptions"]==[]
+    assert selected["maintenance_context"]["previous_manifest_sha256"]==fingerprint(accepted)
+    assert selected["maintenance_context"]["overrides"]==[{
+        "path":sweeper,"previous_sha256":accepted["files"][sweeper],"sha256":selected["files"][sweeper]}]
+    assert fingerprint(selected)==protection.PRODUCTION_PINS_SHA256
+    assert verify()["production_files_verified"]==190
+
+
+@pytest.fixture
+def production_guard_copy(tmp_path,monkeypatch):
+    """Disposable copies only; never mutate real source or activation state."""
+    from create_defaults.bulk.contracts.activation import protection
+    root=Path(__file__).parents[3]
+    pins=json.loads((protection.HERE/"data/production-pins-v1.json").read_text(encoding="utf8"))
+    copied=tmp_path/"source"
+    for name in pins["files"]:
+        target=copied/name;target.parent.mkdir(parents=True,exist_ok=True)
+        shutil.copyfile(root/name,target)
+    here=tmp_path/"guard";data=here/"data/production-pins-v1.json"
+    data.parent.mkdir(parents=True);data.write_bytes(canonical(pins))
+    monkeypatch.setattr(protection,"HERE",here)
+    assert protection.verify(root=copied)["production_files_verified"]==190
+    return protection,copied,pins,data
+
+
+@pytest.mark.parametrize("name",[
+    "create_people_posters/grayscale_sweeper.py",
+    "create_defaults/create_poster.py",
+    ".github/workflows/default-poster-validation.yml",
+])
+def test_production_guard_rejects_unexpected_source_changes(production_guard_copy,name):
+    protection,root,_,_=production_guard_copy
+    path=root/name;path.write_bytes(path.read_bytes()+b"\n# unauthorized change\n")
+    with pytest.raises(BulkError) as error:protection.verify(root=root)
+    assert error.value.code=="activation_production_changed"
+    assert name in str(error.value)
+
+
+@pytest.mark.parametrize("addition",[
+    b"\nimport create_defaults.bulk.contracts.activation\n",
+    b"\nfrom create_defaults.bulk.contracts.activation import Controller\n",
+    b"\nactivation_command = 'activation-controller'\n",
+])
+def test_production_guard_rejects_activation_even_with_matching_test_pin(production_guard_copy,monkeypatch,addition):
+    protection,root,pins,data=production_guard_copy
+    name="create_people_posters/grayscale_sweeper.py";path=root/name
+    path.write_bytes(path.read_bytes()+addition)
+    # A matching synthetic pin deliberately gets past integrity validation to
+    # exercise the independent AST nonintegration guard. Never import/execute it.
+    pins["files"][name]=hashlib.sha256(path.read_bytes().replace(b"\r\n",b"\n")).hexdigest()
+    data.write_bytes(canonical(pins))
+    monkeypatch.setattr(protection,"PRODUCTION_PINS_SHA256",fingerprint(pins))
+    with pytest.raises(BulkError) as error:protection.verify(root=root)
+    assert error.value.code=="activation_production_import"
+
+
+def test_production_guard_rejects_unapproved_pin_removal(production_guard_copy):
+    protection,root,pins,data=production_guard_copy
+    del pins["files"]["create_people_posters/grayscale_sweeper.py"]
+    data.write_bytes(canonical(pins))
+    with pytest.raises(BulkError) as error:protection.verify(root=root)
+    assert error.value.code=="activation_production_pin"
 
 
 def test_simulation_cli_round_trip_never_activates_actual_contracts(tmp_path,capsys):

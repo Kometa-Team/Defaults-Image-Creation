@@ -1,4 +1,4 @@
-"""Read-only production nonintegration check at pinned pre-M7 source bytes."""
+"""Read-only production nonintegration check at pinned production source bytes."""
 
 import ast
 import hashlib
@@ -9,27 +9,27 @@ from ..models import decode_json, read_json_bytes
 
 
 HERE = Path(__file__).parent
-PRODUCTION_PINS_SHA256 = "8f2352cd8159ff8a68929917a55c05027fb0b7339f07a6169d8bafa94462a40a"
+PRODUCTION_PINS_SHA256 = "da118177d4c0d9bb9d697c1f282bff943e939b6797b262ca344c55703b772ffc"
 
 
 def verify(root=Path(__file__).parents[4]):
     pins = decode_json(read_json_bytes(HERE/"data/production-pins-v1.json"))
     if fingerprint(pins) != PRODUCTION_PINS_SHA256:
-        raise BulkError("activation_production_pin", "The selected pre-M7 production pin set changed")
+        raise BulkError("activation_production_pin", "The selected production pin set changed")
     checked = []
     for name, expected in pins["files"].items():
         raw = (root/name).read_bytes().replace(b"\r\n",b"\n")
         if hashlib.sha256(raw).hexdigest() != expected:
-            raise BulkError("activation_production_changed", "Production source differs from the M7 baseline: "+name)
+            raise BulkError("activation_production_changed", "Production source differs from the approved baseline: "+name)
         if name.endswith(".py"):
             try:
                 tree = ast.parse(raw,filename=name)
             except SyntaxError:
                 if name not in pins["historical_syntax_exceptions"]:
                     raise
-                # This unused historical utility is already syntactically
-                # invalid in main. Its exact bytes are still mandatory; do
-                # not repair unrelated People code during this milestone.
+                # An explicitly retained historical syntax exception still
+                # requires its exact pinned bytes. The repaired sweeper no
+                # longer has an exception in the selected manifest.
                 checked.append(name)
                 continue
             for node in ast.walk(tree):
