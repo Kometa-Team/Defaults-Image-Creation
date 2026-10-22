@@ -16,7 +16,7 @@ def category_implementation():
     return Implementation.load(expected_sha256=RELEASE_SHA256)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def category_prepared(category_implementation):
     return {p.contract.to_dict()["category"]:(p,(p.contract.to_dict(),*p.data())) for p in category_implementation.packages}
 
@@ -46,8 +46,7 @@ def verified_historical_discovery():
     return registry,records,perf_counter()-started
 
 
-@pytest.fixture(scope="session")
-def verified_historical_context(verified_historical_discovery):
+def _build_historical_context(verified_historical_discovery):
     """Share freshly checked immutable M5 facts across M5/M6 assertions.
 
     This is test-only snapshot reuse, never a production approval/cache. Every
@@ -78,3 +77,30 @@ def verified_historical_context(verified_historical_discovery):
         resolution=resolve()
         graph=build(registry,records,resolution)
     return registry,records,resolution,graph,sources,seconds+perf_counter()-start
+
+
+@pytest.fixture(scope="session")
+def _historical_context_cache(request):
+    consumers=sum("verified_historical_context" in item.fixturenames for item in request.session.items)
+    return {"data":None,"remaining":consumers}
+
+
+@pytest.fixture
+def verified_historical_context(verified_historical_discovery,_historical_context_cache):
+    """Reuse while needed, then release before bounded-worker memory tests.
+
+    Retaining this large graph until session teardown would make unrelated
+    worker parent-memory measurements include M6 audit data. Keep the existing
+    worker budget intact and bound this test cache's actual lifetime instead.
+    """
+    cache=_historical_context_cache
+    if cache["data"] is None:
+        cache["data"]=_build_historical_context(verified_historical_discovery)
+    try:
+        yield cache["data"]
+    finally:
+        cache["remaining"]-=1
+        if cache["remaining"]==0:
+            cache["data"]=None
+            import gc
+            gc.collect()

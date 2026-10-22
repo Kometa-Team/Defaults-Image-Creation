@@ -175,4 +175,7 @@ pair completeness, source/context swaps, protected fields, literal names,
 historical exceptions, forged approvals, dependency scope and the complete
 inventory. M2/M5/M6 tests share one freshly verified immutable context per session;
 all original receipt/source checks and the independent M5 impact oracle remain.
+The large graph cache is released after its last historical test consumer;
+decoded category indexes are module-scoped. This preserves the existing worker
+parent-memory budget instead of retaining audit data through unrelated tests.
 This is test-only reuse, not a production cache or activation mechanism.

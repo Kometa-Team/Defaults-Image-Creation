@@ -1,6 +1,6 @@
 # M6 complete changed-file inventory
 
-69 files in the current M6 diff. Source base: `e611076e23cab31efa578ee92f1514bc993e9f93`.
+70 files in the M6 diff. Source base: `e611076e23cab31efa578ee92f1514bc993e9f93`.
 
 Changes comprise opt-in category metadata/code, additive schemas, synthetic fixtures/tests and review documentation. Existing code outside M6 changes only in the shared historical test fixture and its M5 test consumer; production M1?M5 code is unchanged.
 
@@ -73,3 +73,4 @@ Changes comprise opt-in category metadata/code, additive schemas, synthetic fixt
 - [create_defaults/lifecycle/PHASE2_M6_CHANGED_FILES.md](PHASE2_M6_CHANGED_FILES.md)
 - [create_defaults/lifecycle/PHASE2_M6_IMPLEMENTATION.md](PHASE2_M6_IMPLEMENTATION.md)
 - [create_defaults/lifecycle/ROADMAP.md](ROADMAP.md)
+- [create_defaults/lifecycle/evidence/phase2-m6-compatibility-v1.json](evidence/phase2-m6-compatibility-v1.json)

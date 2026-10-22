@@ -88,19 +88,58 @@ behavior is changed to make M6 pass. Batch physical source verification retains
 exact case/ledger, collision, link and byte-hash checks, with directory-stability
 checks around its temporary name index.
 
+The large historical test cache is released after its last actual consumer;
+decoded category indexes are module-scoped. An initial local run exposed excess
+retention in a worker parent-memory assertion. Cache lifetime was corrected;
+the existing 512 MiB worker parent budget and all benchmark assertions remain
+unchanged. Exact-head CI must independently verify that correction.
+
 ## Historical compatibility and validation
 
-The complete read-only audit and final-head Windows/Linux CI are **pending in
-this draft**. Compatibility is not claimed from the compiler's membership
-counts. The full evidence will record every category/variant, accepted exception,
-receipt count, unresolved interpretation, incompatibility and performance cost.
+The [complete read-only compatibility report](evidence/phase2-m6-compatibility-v1.json)
+verifies **all 14,079 records**, with **zero incompatibilities and zero unresolved
+design interpretations**. This is measured compatibility, not inferred from the
+compiler's membership counts. It retains 14,079 owned/original receipt and worker
+specification references, 14,077 public response references and the two private
+Awards intermediates. The nine Playlist and 4,122 overlay records are unchanged.
+All 2,106 actual input files and the selected 299 code/catalog/source pins were
+checked without rendering or remote artwork access.
 
-Focused validation so far: 529 category/effective-job tests pass; 22 additional
-exact-authority checks pass; batch source tests pass (six passed, one Windows
+The report file SHA-256 is
+`d4054ebcb8820e56d406ba689e6121b046cd003ca1b937eda9f9181dd5338db8`.
+
+The mutually exclusive compatibility labels are 44 ordinary compatible uses and
+14,035 uses with accepted historical exceptions. The latter includes existing
+migration/encoding/source bridges, not 14,035 new design exceptions. Exact
+per-category/variant counts, source references and exception codes are in the
+report and full membership sidecars. There are still 22 intentionally unapproved
+contract packages; that is an independent status, not an incompatibility.
+
+The accepted M2 registry SHA is
+`0b0c2af06124379206d43c36a4c12fb456e3861dd335343f4382865a7aab6a05`;
+the unchanged M5 historical graph SHA is
+`6e23ff33bd3cba5b1bd69914b974ed9e2118b364e8f04b3a841376c1461f4197`.
+The local Windows audit used explicitly selected immutable M2/M5 snapshots,
+rechecking physical inputs and current expanded definitions. Total capture and
+audit cost was **327.949 seconds**, of which category validation was **50.247
+seconds**. Playlist evaluation within that full pass took 5.114 seconds. CI also
+measures a separate Playlist-only selection from the already verified complete
+context; its compact JSON evidence is printed in both platform job logs. No
+timing value is used as a correctness threshold.
+
+Focused local validation: 529 category/effective-job tests passed; 22 additional
+exact-authority checks passed; batch source tests passed (six passed, one Windows
 symlink privilege skip). Existing renderer/font tests: 120 passed. Existing
-Phase 2 tests: 35 passed. Historical baseline verification passes and the frozen
-effective-job check validates 9,958 entries. The complete regression run and
-read-only audit are still running; these are not substituted for final CI.
+Phase 2 tests: 35 passed. Historical baseline verification passed and the frozen
+effective-job check validated 9,958 entries. Final-head Windows/Linux CI outcomes
+and exact commit are tracked on [draft PR #20](https://github.com/Kometa-Team/Defaults-Image-Creation/pull/20).
+Those jobs run the complete Package A–E/M1–M6 suite, original/frozen baselines,
+font/license checks, Package D/E smoke tests and People compatibility. Both jobs
+must pass at the final head before this draft is handed back for review.
+
+See the [complete changed-file inventory](PHASE2_M6_CHANGED_FILES.md). The M6
+report and tests keep the milestone IN PROGRESS for maintainer acceptance; green
+CI is not automatic approval, activation or permission to start M7.
 
 ## Explicit remaining boundaries
 
