@@ -147,6 +147,12 @@ Collection is deferred until the test protocol has completed and pytest has
 cleared its fixture arguments. Collecting within the fixture finalizer still
 leaves those arguments referencing the released snapshots. This changes only
 test-data lifetime; it does not reorder tests or alter measured worker RSS.
+On glibc Linux, this final cleanup also returns unused allocator arena pages
+with `malloc_trim(0)` when available. Live audit objects cannot be freed by
+that operation. Other platforms retain their normal allocator policy. This
+test-only cleanup addresses the measured Linux RSS retained after full audits;
+the original worker assertions, actual psutil readings and all limits remain
+unchanged. Production code never calls this cleanup.
 Linux additionally exposed allocator retention from repeating the full graph
 build. M7's historical assertions now consume the actual same-run M6 audit and
 87,142-node contract graph inside that existing test, avoiding duplicate

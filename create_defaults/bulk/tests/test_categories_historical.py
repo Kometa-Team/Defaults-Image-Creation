@@ -12,7 +12,7 @@ from create_defaults.bulk.contracts.categories.release import Implementation,REL
 from create_defaults.bulk.contracts.categories.dependencies import bind
 
 
-def test_complete_library_and_single_category_compatibility(monkeypatch,tmp_path,verified_historical_context,category_implementation,capsys):
+def test_complete_library_and_single_category_compatibility(monkeypatch,tmp_path,verified_historical_context,category_implementation,capsys,historical_stage_seconds):
     import PIL.Image
     import requests
     import create_defaults.create_poster as poster
@@ -45,6 +45,7 @@ def test_complete_library_and_single_category_compatibility(monkeypatch,tmp_path
     assert single["outputs"]==9 and len(single["categories"])==1
     report["performance"]={"capture_seconds":capture_seconds,"single_category_seconds":single["seconds"],
         "single_category":"Playlist","actual_inputs":len(sources),"immutable_context_reused":True}
+    report["performance"]["stages_seconds"]=dict(historical_stage_seconds)
     contract_graph=bind(graph,implementation);index=contract_graph.index()
     assert len(index.outputs)==14079 and not index.unresolved
     studio_ids=[i for i,o in index.outputs.items() if o["category"]=="Studio"]

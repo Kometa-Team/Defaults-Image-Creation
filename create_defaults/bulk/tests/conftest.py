@@ -11,6 +11,12 @@ import pytest
 
 
 _historical_cleanup_pending = False
+_historical_stage_seconds = {}
+
+
+@pytest.fixture
+def historical_stage_seconds():
+    return _historical_stage_seconds
 
 
 @pytest.hookimpl(hookwrapper=True)
@@ -25,8 +31,29 @@ def pytest_runtest_protocol(item, nextitem):
     global _historical_cleanup_pending
     if _historical_cleanup_pending:
         _historical_cleanup_pending = False
+        import json
+        import psutil
         import gc
-        gc.collect()
+        process = psutil.Process()
+        before = process.memory_info().rss
+        collected = gc.collect()
+        # glibc can retain freed large-audit heap pages in its arenas. Return
+        # only unused pages after all fixture references have expired; live
+        # data, production allocation and psutil/worker RSS are untouched.
+        # Other libc/OS implementations keep their normal allocator policy.
+        import sys
+        allocator_trimmed = False
+        if sys.platform == "linux":
+            import ctypes
+            trim = getattr(ctypes.CDLL(None), "malloc_trim", None)
+            if trim is not None:
+                trim.argtypes = (ctypes.c_size_t,)
+                trim.restype = ctypes.c_int
+                trim(0)
+                allocator_trimmed = True
+        print("M7 historical fixture release:", json.dumps({"before_rss":before,
+            "after_rss":process.memory_info().rss,"collected_cycles":collected,
+            "glibc_trim_requested":allocator_trimmed}), flush=True)
 
 
 @pytest.fixture(scope="session")
@@ -61,7 +88,9 @@ def _discover_historical():
         registry,records=discover()
     # M1 Document instances are frozen canonical bytes. Native mutable ledgers
     # and worker state are not cached; all dictionaries are detached on access.
-    return registry,records,perf_counter()-started
+    seconds = perf_counter()-started
+    _historical_stage_seconds["M2_discovery"] = seconds
+    return registry,records,seconds
 
 
 @pytest.fixture(scope="session")
@@ -118,10 +147,15 @@ def _build_historical_context(verified_historical_discovery):
         guard.setattr(workers.PersistentWorkers,"__init__",prohibited)
         guard.setattr(state.Store,"__init__",prohibited)
         guard.setattr(requests.Session,"request",prohibited)
-        verify_sources(load_pins())
-        sources=verify_inputs(records)
-        resolution=resolve()
-        graph=build(registry,records,resolution)
+        def timed(name, operation, *args):
+            began = perf_counter()
+            result = operation(*args)
+            _historical_stage_seconds[name] = perf_counter()-began
+            return result
+        timed("source_pins", verify_sources, load_pins())
+        sources=timed("physical_inputs", verify_inputs, records)
+        resolution=timed("expanded_definitions", resolve)
+        graph=timed("M5_graph", build, registry, records, resolution)
     return registry,records,resolution,graph,sources,seconds+perf_counter()-start
 
 
