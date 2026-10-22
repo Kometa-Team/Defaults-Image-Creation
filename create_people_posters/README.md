@@ -854,8 +854,59 @@ python colorize_noncolor_ddcolor.py
 
 ### Sweep any tree for non‑color images (helper)
 ```bash
-python grayscale_sweeper.py --root "D:/Pictures/Headshots" --dest "./config/Downloads/other"
-# Skips files that already exist at the destination (by name).
+python grayscale_sweeper.py --src "D:/Pictures/Headshots" --dest-other "./config/Downloads/other"
+python grayscale_sweeper.py --src "D:/Pictures/Headshots" --method auto
+python grayscale_sweeper.py --help
+```
+
+This is an explicit local maintenance utility outside the normal orchestrator.
+It never downloads, colorizes or publishes images. **Copy is the default**;
+`--move` removes a source only after classification and a successful,
+byte-verified destination copy. `--overwrite` explicitly permits replacement
+of existing exact-name files. Failed staged replacements preserve the old file.
+
+| Method | Intended use and unchanged defaults |
+| --- | --- |
+| `exact` (default) | Strict RGB channel equality; grayscale `1`, `L` and `LA` modes remain supported. |
+| `sat` | Low-saturation heuristic: at least 98% of pixels have HSV saturation at or below `--sat-threshold` (default 8). |
+| `satq` | NumPy linear saturation quantile at or below the threshold; `--sat-quantile` defaults to 0.95. The CLI threshold defaults to 8. |
+| `colorfulness` | Original Hasler–Süsstrunk score strictly below `--colorfulness-cutoff` (default 12). |
+| `auto` | Exact first, then saturation quantile with `max(--sat-threshold, 35)`, then colorfulness. |
+
+The four heuristic methods can disagree about near-gray images; they do not
+establish visual or branding approval. RGB/RGBA conversion preserves the
+historical interpretation of hidden RGB values: alpha is not composited and
+transparent pixels are not discarded. A fully transparent colored RGB logo
+can therefore remain classified as colored.
+
+Thresholds must be 0–255; quantiles must satisfy `0 < q <= 1`; colorfulness
+cutoffs must be finite and non-negative. `--exts` accepts comma-separated
+extensions (default `jpg,jpeg,png,webp,bmp,tif,tiff`). Invalid arguments fail
+before processing. Exit 0 means scanning completed without errors, including
+ordinary collision skips; argument errors exit 2, and file/setup errors exit 1.
+Corrupt files and detector errors are logged and counted while other files
+continue.
+
+The recursive scan prunes its destination and the normal `Downloads/other`
+and `Downloads/color` trees. Source/destination symlinks and Windows reparse
+paths are rejected or reported and skipped. Source and destination cannot be
+the same directory/file, and the destination cannot contain the source root.
+Collection is flat: original basenames are kept. Sorted traversal makes
+duplicate basenames deterministic; without `--overwrite`, the first wins and
+later collisions are counted and skipped. With `--overwrite`, the last
+exact-name match wins. Case/Unicode-normalization aliases are skipped even
+with that flag. No conflicting file is silently renamed.
+
+Copies preserve original bytes and filesystem timestamps where supported.
+Default publication uses exclusive creation, preventing a concurrent same-name
+arrival from being overwritten. Each run appends its log to
+`DEST/.grayscale_sweeper.log`; importing the utility or requesting help creates
+no processing directories and does not configure or truncate real logs.
+
+Focused synthetic tests, from the repository root:
+
+```bash
+python -m pytest create_people_posters/tests/test_grayscale_sweeper.py -q
 ```
 
 ### Resolve original portraits from styled outputs

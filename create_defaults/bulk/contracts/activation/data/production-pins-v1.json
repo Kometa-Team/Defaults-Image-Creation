@@ -1,5 +1,5 @@
 {
-  "baseline_commit": "c00a0f0b8efcb98857d24da659a30eb06043d6b0",
+  "baseline_commit": "0058ac6f109054dd0a25e88f4c707b020460f875",
   "files": {
     ".github/workflows/default-poster-validation.yml": "4d7e31460d9b20d6a4d185d178347ae3e0a053cfb8483f2750ce3a4886d09279",
     "create_defaults/bulk/__init__.py": "a42d2db4d816008110a72532d38c85ea9cce465b455dd87e138d4091d8d5b617",
@@ -154,7 +154,7 @@
     "create_people_posters/fonts/OFL-Jost.txt": "82b806b20fb9d8f2c64669c12a44efb87d27971e743f38a78365e83641626dd2",
     "create_people_posters/fonts/OFL-Montserrat.txt": "861d64229728cd65a98d119612c12769582574d1a092f0b63c8b0fd474e7065f",
     "create_people_posters/github_inventory_core.py": "ff2a8b642257002dae593e7330a7a1e75c0baf0c88d08ff73f579d1e7dcd26f2",
-    "create_people_posters/grayscale_sweeper.py": "7a837330d56e9c8caed9269af794470bcd062492660493bd388edbf3fa5d6a6e",
+    "create_people_posters/grayscale_sweeper.py": "fc1f32c65a6952a284c93907eee1b24d2ac26951cd8823d9c549044dc81ed591",
     "create_people_posters/image_check.py": "dc0b9cc48041776ee396a24232221ee8873d5def786b79e5dca1256503be0925",
     "create_people_posters/jost_migration.py": "c1feaca038d8a838b73cc164a60d2a863d20bb39504672b40776803062936f1f",
     "create_people_posters/jost_migration_report.py": "7a7e3260ea2762ab4f1460db2ff6c3958588459d16a7637fd4fbb517137c85c5",
@@ -192,10 +192,19 @@
     "create_people_posters/update_people_repos.py": "d7bef63c23b7a41ee57749ed57c78de2dab5e5e3230f4473b637036c3d0174fa",
     "create_people_posters/verify_import_originals.py": "0e35e66e1c380509bb88844be205c58d1ff6bbc1e8a0776f6f18b7b433482822"
   },
-  "historical_syntax_exceptions": [
-    "create_people_posters/grayscale_sweeper.py"
-  ],
+  "historical_syntax_exceptions": [],
   "kind": "m7-production-nonintegration-pins",
   "schema_version": 1,
-  "text_normalization": "LF"
+  "text_normalization": "LF",
+  "maintenance_context": {
+    "purpose": "People grayscale sweeper repair; no lifecycle activation integration",
+    "previous_manifest_sha256": "8f2352cd8159ff8a68929917a55c05027fb0b7339f07a6169d8bafa94462a40a",
+    "overrides": [
+      {
+        "path": "create_people_posters/grayscale_sweeper.py",
+        "previous_sha256": "7a837330d56e9c8caed9269af794470bcd062492660493bd388edbf3fa5d6a6e",
+        "sha256": "fc1f32c65a6952a284c93907eee1b24d2ac26951cd8823d9c549044dc81ed591"
+      }
+    ]
+  }
 }

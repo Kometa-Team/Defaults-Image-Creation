@@ -41,6 +41,15 @@ skipped requirements of ordinary API publishing. They still require local
 image trees. `resolve_original_images.py` accepts selected reference trees;
 materialize selected remote names first when using it without clones.
 
+The sweeper is an explicit optional operation, for example from this directory:
+`python grayscale_sweeper.py --src "D:/Pictures/Headshots" --dest-other "./config/Downloads/other"`.
+It supports `exact` (default), `sat`, `satq`, `colorfulness` and `auto`;
+the [sweeper reference](README.md#sweep-any-tree-for-noncolor-images-helper)
+describes their thresholds and heuristic limitations. It copies by default,
+requires `--move` for removal and `--overwrite` for exact-name replacements,
+and appends `DEST/.grayscale_sweeper.log`. It is not invoked by API publishing
+or the orchestrator, and imports/help do not create folders or truncate logs.
+
 All seven destination `readme.yml` workflows were inspected read-only. They
 support workflow_dispatch and push, skip scripted [skip readme] commits, use
 per-repository concurrency, read tree metadata without image downloads and

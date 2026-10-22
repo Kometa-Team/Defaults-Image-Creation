@@ -3,6 +3,11 @@
 Reviewed 2026-10-14 from `C:\Users\bullmoose20\Defaults-Image-Creation`.
 Repository HEAD at review: `90f477a540b16bf02ad152193423b2bf417c1e6b`.
 
+Historical snapshot: the sweeper defect recorded below is repaired by the
+2026-10-22 maintenance follow-up at the end of this document. The original
+observations and other findings are retained; this is not a recertification
+of background removal, colorization or the orchestrator.
+
 This is a source audit, not a successful processing-run certification. The six
 requested scripts, both repository/people READMEs, both people requirements files,
 and `tests/test_ddcolor_colorizer.py` were read. Supporting orchestration,
@@ -370,3 +375,36 @@ Original recovery consumes `PEOPLE_IMPORT_DIR`, `ORIGINAL_RESOLVER_STYLES`,
 6. Repair/document the sweeper and add focused tests for root separation,
    original retention, partial runs, archive collisions, color-style isolation,
    and stale reports. Reconcile concurrent checkpoint tests before running them.
+
+## 2026-10-22 follow-up — grayscale sweeper repair
+
+The optional `grayscale_sweeper.py` is repaired on
+`fix/people-grayscale-sweeper`, based on merged M7 `0058ac6`.
+The breaking change was [e3bbfd102b231eadc8d969d8a40679dde426d2ed](https://github.com/Kometa-Team/Defaults-Image-Creation/commit/e3bbfd102b231eadc8d969d8a40679dde426d2ed)
+(2025-10-11, “updated sweeper”). Its parent had functioning `exact` and `sat`
+paths; the change added useful `satq`, `colorfulness` and `auto` helpers but
+broke the parser string/indentation and moved detection outside the open-image
+processing loop. The repair preserves those three algorithms rather than
+reverting them, including the original 98% saturation rule, NumPy quantile,
+colorfulness cutoff 12 and `auto` saturation floor 35.
+
+The actual arguments are `--src` and `--dest-other`; the obsolete README
+`--root`/`--dest` example is corrected. All five branches classify within the
+Pillow context. Unexpected detector errors receive tracebacks and error counts
+instead of being silently suppressed. Imports/help no longer create the old
+processing directories or truncate `config/logs/grayscale_sweeper.log`.
+Runtime logs now append to the selected destination's `.grayscale_sweeper.log`.
+
+Synthetic regressions execute the actual CLI and cover all five methods,
+RGB/RGBA/L/LA and transparent inputs, copy/move/overwrite/collision behavior,
+destination pruning, root and link protections, byte/timestamp preservation,
+source changes, corrupt images and partial failures. Heuristic disagreements
+about near-gray pixels are explicit expected outcomes rather than visual
+certification. Focused Windows/Linux CI runs these temporary fixtures only.
+Pillow, NumPy and alive-progress were already declared; no model or generator
+dependency changes are required. Exact test results are recorded in the repair
+PR after validation.
+
+This follow-up does not resolve or rewrite the other historical findings.
+DDColor, BiRefNet, production artwork, publication destinations and orchestrator
+processing behavior remain outside the repair.
