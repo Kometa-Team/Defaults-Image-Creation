@@ -19,7 +19,7 @@ plus the explicitly requested roadmap status update.
 | `create_defaults/bulk/contracts/activation/protection.py` | Frozen production source/import/nonactivation verification |
 | `create_defaults/bulk/contracts/activation/data/production-pins-v1.json` | 190 unchanged production source pins, including the explicit historical People parse exception |
 | `create_defaults/bulk/contracts/activation/README.md` | Authority boundary, commands, states, evidence and recovery guide |
-| `create_defaults/bulk/contracts/schemas/activation-v1.schema.json` | Additive strict schema; existing M1–M6 schemas unchanged |
+| `create_defaults/bulk/contracts/activation/schema-v1.json` | Isolated strict M7 schema/cache; existing M1–M6 schema directory and loader remain unchanged |
 | `create_defaults/bulk/tests/test_activation.py` | Synthetic adversarial, impact, transaction/CAS, restart, rollback and nonintegration tests |
 | `create_defaults/bulk/tests/test_activation_historical.py` | Full read-only 14,079-record reconciliation and missing-approval inventory |
 | `create_defaults/bulk/tests/conftest.py` | Release shared immutable M2 records after the last audit consumer; all discovery/assertions and the existing 512 MiB worker limit remain intact |

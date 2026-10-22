@@ -2,9 +2,14 @@
 
 from datetime import datetime, timezone
 from functools import lru_cache
+from pathlib import Path
+
+from jsonschema import Draft202012Validator
+from referencing import Registry, Resource
 
 from ...common import BulkError, canonical
-from ..models import Document, MAX_BYTES, _json_value, _validator
+from ...definitions import StrictValidator
+from ..models import Document, MAX_BYTES, FORMATS, _json_value, decode_json, read_json_bytes
 
 
 STATES = ("IMPLEMENTED", "COMPATIBLE", "APPROVED", "READY", "ACTIVE", "SUSPENDED", "REVOKED")
@@ -29,9 +34,17 @@ def utc_now():
 
 @lru_cache(maxsize=1)
 def activation_validator():
-    # Keep the additive schema outside M1's four-slot working cache. Do not
-    # change the frozen M1 source pins merely to accommodate M7's extra type.
-    return _validator("activation")
+    # M7 owns its schema/cache. M1's frozen loader checks every schema in its
+    # directory on a cache miss; do not make unrelated M1-M6 validation compile
+    # an activation schema it never uses. Reuse the same strict validator,
+    # parser, formats and pinned M1 package field definitions, offline.
+    here=Path(__file__).parent
+    schema=decode_json(read_json_bytes(here/"schema-v1.json"))
+    contract=decode_json(read_json_bytes(here.parent/"schemas/contract-v1.schema.json"))
+    for value in (schema,contract):
+        Draft202012Validator.check_schema(value)
+    resources=Registry().with_resources((s["$id"],Resource.from_contents(s)) for s in (schema,contract))
+    return StrictValidator(schema,registry=resources,format_checker=FORMATS)
 
 
 class ActivationDocument(Document):

@@ -148,6 +148,11 @@ build. M7's historical assertions now consume the actual same-run M6 audit and
 87,142-node contract graph inside that existing test, avoiding duplicate
 materialization. The standalone read-only M7 CLI still performs its own fresh
 full audit; serialized report data never supplies approval authority.
+Profiling also measured 23% extra cold-validator compilation cost when M7's
+schema lived in M1's shared schema directory. The strict M7 schema and its cached
+validator now live entirely under `activation/`, using the same M1 parser,
+formats and StrictValidator with offline references. M1-M6's schema directory,
+loader, assertions and the existing 15-minute CI limit remain unchanged.
 
 The automated nonintegration regression verifies **190** pre-M7 production code,
 catalog/config and workflow files against LF-normalized source hashes, checks
