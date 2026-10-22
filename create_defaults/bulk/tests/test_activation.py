@@ -259,6 +259,22 @@ def test_actual_m5_impact_preserves_unaffected_decisions_and_reports_unknown_sco
     assert companion["required_companions"]==["overlay.bigger"]
 
 
+def test_directory_namespace_change_with_preserved_timestamp_blocks_readiness(tmp_path,monkeypatch):
+    import os
+    from create_defaults.bulk.contracts.categories import evidence
+    from create_defaults.bulk.tests.test_categories_sources import record
+    source=tmp_path/"Logo.png";source.write_bytes(b"original")
+    before=tmp_path.stat();original=evidence.sha256
+    def changed(path):
+        checksum=original(path)
+        (tmp_path/"Unreviewed.png").write_bytes(b"new entry")
+        os.utime(tmp_path,ns=(before.st_atime_ns,before.st_mtime_ns))
+        return checksum
+    monkeypatch.setattr(evidence,"sha256",changed)
+    with pytest.raises(BulkError,match="entries changed"):
+        evidence.verify_inputs([record([{"path":"Logo.png","sha256":hashlib.sha256(b"original").hexdigest()}])],tmp_path)
+
+
 @pytest.mark.parametrize("missing",["synthetic.overlay.standard","synthetic.overlay.bigger"])
 def test_missing_companion_variants_block_before_approval(isolated,missing):
     a,c=isolated;value=a.graph.data();del value["outputs"][missing];del value["nodes"]["output:"+missing]
@@ -426,7 +442,8 @@ def test_changes_outside_explicit_m7_scope_are_rejected():
     changed=subprocess.check_output(["git","diff","--name-only","c00a0f0b8efcb98857d24da659a30eb06043d6b0","HEAD"],cwd=root,text=True).splitlines()
     allowed=("create_defaults/bulk/contracts/activation/",
         "create_defaults/bulk/tests/test_activation","create_defaults/bulk/tests/conftest.py",
-        "create_defaults/bulk/tests/test_categories_historical.py","create_defaults/lifecycle/PHASE2_M7_",
+        "create_defaults/bulk/tests/test_categories_historical.py","create_defaults/bulk/contracts/categories/evidence.py",
+        "create_defaults/lifecycle/PHASE2_M7_",
         "create_defaults/lifecycle/evidence/phase2-m7-","create_defaults/lifecycle/ROADMAP.md")
     assert all(n.startswith(allowed) for n in changed),changed
 

@@ -153,6 +153,12 @@ schema lived in M1's shared schema directory. The strict M7 schema and its cache
 validator now live entirely under `activation/`, using the same M1 parser,
 formats and StrictValidator with offline references. M1-M6's schema directory,
 loader, assertions and the existing 15-minute CI limit remain unchanged.
+The local full suite also exposed an existing directory-freshness race on
+Windows: creating an entry can leave the directory timestamp unchanged. The
+isolated M6 source verifier now independently checks the exact filename set
+after hashing, while still constructing each lookup index once. A new control
+preserves the original timestamp deliberately and must still block readiness.
+No production entry point or source asset is changed by this correction.
 
 The automated nonintegration regression verifies **190** pre-M7 production code,
 catalog/config and workflow files against LF-normalized source hashes, checks
