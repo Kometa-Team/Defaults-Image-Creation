@@ -1,0 +1,581 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kometa.wiki/schemas/lifecycle/activation-v1.schema.json",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "activation-proposal"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "package": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "$ref": "contract-v1.schema.json#/properties/category"
+            },
+            "kind": {
+              "enum": [
+                "poster",
+                "overlay"
+              ]
+            },
+            "version": {
+              "$ref": "contract-v1.schema.json#/properties/version"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
+            }
+          },
+          "required": [
+            "category",
+            "kind",
+            "version",
+            "sha256"
+          ],
+          "additionalProperties": false
+        },
+        "registry_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "compatibility_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "source_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$",
+          "minLength": 40,
+          "maxLength": 40
+        },
+        "adoption_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "graph_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "material_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "namespace": {
+          "enum": [
+            "isolated",
+            "synthetic"
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "id",
+        "package",
+        "registry_sha256",
+        "compatibility_sha256",
+        "source_commit",
+        "adoption_sha256",
+        "graph_sha256",
+        "material_sha256",
+        "namespace"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "activation-contract-approval-binding"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "package": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "$ref": "contract-v1.schema.json#/properties/category"
+            },
+            "kind": {
+              "enum": [
+                "poster",
+                "overlay"
+              ]
+            },
+            "version": {
+              "$ref": "contract-v1.schema.json#/properties/version"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
+            }
+          },
+          "required": [
+            "category",
+            "kind",
+            "version",
+            "sha256"
+          ],
+          "additionalProperties": false
+        },
+        "registry_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "compatibility_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "event_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "actor": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "auth_context_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "decided_at": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "expires_at": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "record_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "review_evidence": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "minLength": 64,
+            "maxLength": 64
+          },
+          "uniqueItems": true
+        },
+        "scope": {
+          "const": "category-contract"
+        },
+        "decision": {
+          "const": "approved"
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "id",
+        "package",
+        "registry_sha256",
+        "compatibility_sha256",
+        "event_id",
+        "actor",
+        "auth_context_sha256",
+        "decided_at",
+        "expires_at",
+        "record_sha256",
+        "review_evidence",
+        "scope",
+        "decision"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "activation-operator-decision"
+        },
+        "event_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "actor": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "auth_context_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "decided_at": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "expires_at": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "proposal_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "approval_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "gate_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "runtime_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "scope": {
+          "const": "isolated-enforcement-activation"
+        },
+        "decision": {
+          "const": "approved"
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "event_id",
+        "actor",
+        "auth_context_sha256",
+        "decided_at",
+        "expires_at",
+        "proposal_sha256",
+        "approval_sha256",
+        "gate_sha256",
+        "runtime_id",
+        "scope",
+        "decision"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "activation-gate-evidence"
+        },
+        "proposal_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "checks": {
+          "type": "object",
+          "properties": {
+            "exact_pins": {
+              "enum": [
+                "passed",
+                "missing",
+                "blocked"
+              ]
+            },
+            "effective_coverage": {
+              "enum": [
+                "passed",
+                "missing",
+                "blocked"
+              ]
+            },
+            "source_dependencies": {
+              "enum": [
+                "passed",
+                "missing",
+                "blocked"
+              ]
+            },
+            "m4_review": {
+              "enum": [
+                "passed",
+                "missing",
+                "blocked"
+              ]
+            },
+            "complete_design_previews": {
+              "enum": [
+                "passed",
+                "missing",
+                "blocked"
+              ]
+            },
+            "required_outputs": {
+              "enum": [
+                "passed",
+                "missing",
+                "blocked"
+              ]
+            },
+            "historical_compatibility": {
+              "enum": [
+                "passed",
+                "missing",
+                "blocked"
+              ]
+            },
+            "fresh_evidence": {
+              "enum": [
+                "passed",
+                "missing",
+                "blocked"
+              ]
+            },
+            "resolved_design": {
+              "enum": [
+                "passed",
+                "missing",
+                "blocked"
+              ]
+            },
+            "approved_exceptions": {
+              "enum": [
+                "passed",
+                "missing",
+                "blocked"
+              ]
+            },
+            "regression": {
+              "enum": [
+                "passed",
+                "missing",
+                "blocked"
+              ]
+            }
+          },
+          "required": [
+            "exact_pins",
+            "effective_coverage",
+            "source_dependencies",
+            "m4_review",
+            "complete_design_previews",
+            "required_outputs",
+            "historical_compatibility",
+            "fresh_evidence",
+            "resolved_design",
+            "approved_exceptions",
+            "regression"
+          ],
+          "additionalProperties": false
+        },
+        "proofs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "minLength": 64,
+            "maxLength": 64
+          },
+          "uniqueItems": true
+        },
+        "review_kind": {
+          "enum": [
+            "historical",
+            "new-poster",
+            "overlay"
+          ]
+        },
+        "preview_type": {
+          "enum": [
+            "retained-historical",
+            "complete-poster",
+            "logo-only",
+            "standard-and-bigger"
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "proposal_sha256",
+        "checks",
+        "proofs",
+        "review_kind",
+        "preview_type"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "activation-state-revision"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "previous_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "state": {
+          "enum": [
+            "IMPLEMENTED",
+            "COMPATIBLE",
+            "APPROVED",
+            "READY",
+            "ACTIVE",
+            "SUSPENDED",
+            "REVOKED"
+          ]
+        },
+        "proposal_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "gate_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "approval_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "operator_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "restored_from_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "production_enforcement": {
+          "const": false
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "id",
+        "revision",
+        "previous_sha256",
+        "state",
+        "proposal_sha256",
+        "gate_sha256",
+        "approval_sha256",
+        "operator_sha256",
+        "restored_from_sha256",
+        "reason",
+        "production_enforcement"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}
