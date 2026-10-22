@@ -425,7 +425,8 @@ def test_changes_outside_explicit_m7_scope_are_rejected():
     root=Path(__file__).parents[3]
     changed=subprocess.check_output(["git","diff","--name-only","c00a0f0b8efcb98857d24da659a30eb06043d6b0","HEAD"],cwd=root,text=True).splitlines()
     allowed=("create_defaults/bulk/contracts/activation/","create_defaults/bulk/contracts/schemas/activation-v1.schema.json",
-        "create_defaults/bulk/tests/test_activation","create_defaults/bulk/tests/conftest.py","create_defaults/lifecycle/PHASE2_M7_",
+        "create_defaults/bulk/tests/test_activation","create_defaults/bulk/tests/conftest.py",
+        "create_defaults/bulk/tests/test_categories_historical.py","create_defaults/lifecycle/PHASE2_M7_",
         "create_defaults/lifecycle/evidence/phase2-m7-","create_defaults/lifecycle/ROADMAP.md")
     assert all(n.startswith(allowed) for n in changed),changed
 

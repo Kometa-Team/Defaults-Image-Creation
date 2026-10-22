@@ -61,3 +61,9 @@ def test_complete_library_and_single_category_compatibility(monkeypatch,tmp_path
     with capsys.disabled():
         print("M6 compatibility evidence:",json.dumps({"platform":platform.system(),
             **{k:v for k,v in report.items() if k!="categories"}}),flush=True)
+    # M7 consumes this exact fresh audit/graph, without repeating its large
+    # materialization in the same bounded worker-parent test process. All
+    # original M6 assertions above and all M7 reconciliation assertions remain.
+    from create_defaults.bulk.tests.test_activation_historical import assert_final_phase2_historical_and_approval_inventory
+    assert_final_phase2_historical_and_approval_inventory(monkeypatch,verified_historical_context,
+        implementation,capsys,report,contract_graph,index)

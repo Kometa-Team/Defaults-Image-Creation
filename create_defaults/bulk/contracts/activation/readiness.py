@@ -58,15 +58,28 @@ def inventory(implementation, compatibility=None):
 def dossier(implementation, registry, records, resolution, graph, sources):
     """Fresh full read-only M2/M5/M6 reconciliation; never consumes signed claims."""
     report = audit(implementation,registry,records,resolution,graph)
+    contract_graph = bind(graph,implementation)
+    return assemble_dossier(implementation,registry,graph,sources,report,contract_graph)
+
+
+def assemble_dossier(implementation,registry,graph,sources,report,contract_graph,*,dependency_index=None):
+    """Assemble data from the actual same-run audit; never approval authority.
+
+    The CLI calls dossier() above. The combined regression passes its already
+    computed M6 audit and graph here, retaining every old/new assertion without
+    constructing a second complete 87,142-node graph in the worker parent.
+    Neither this report nor submitted compatibility JSON can approve a package.
+    """
+    if (report["release_sha256"],report["M2_registry_sha256"],report["M5_graph_sha256"]) != (implementation.release.sha256,registry.sha256,graph.sha256):
+        raise BulkError("activation_audit_scope", "Audit and current immutable context differ")
     if (report["outputs"],report["posters"],report["overlays"],report["public_outputs"],len(sources)) != (14079,9957,4122,14077,2106):
         raise BulkError("activation_historical_counts", "Accepted full baseline differs; no repair attempted")
-    contract_graph = bind(graph,implementation)
     if contract_graph.sha256 != M6_GRAPH or implementation.release.sha256 != RELEASE_SHA256:
         raise BulkError("activation_baseline", "Exact M6 implementation/dependency graph changed")
     readiness = inventory(implementation,report)
     if readiness["selectors"] != 22 or readiness["variants"] != 278:
         raise BulkError("activation_coverage", "Closed category/variant coverage differs")
-    index = contract_graph.index()
+    index = dependency_index if dependency_index is not None else contract_graph.index()
     small_impact = index.impact(["asset:logos_playlist/Arrowverse.png"])
     font_impact = index.impact(["asset:fonts/BebasNeue-Regular.ttf"])
     unknown = index.impact(["asset:unknown-new-dependency.png"])

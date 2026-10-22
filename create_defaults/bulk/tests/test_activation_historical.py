@@ -9,10 +9,10 @@ from time import perf_counter
 import pytest
 
 from create_defaults.bulk.common import canonical
-from create_defaults.bulk.contracts.activation.readiness import dossier, M6_GRAPH
+from create_defaults.bulk.contracts.activation.readiness import assemble_dossier, M6_GRAPH
 
 
-def test_final_phase2_historical_and_approval_inventory(monkeypatch,verified_historical_context,category_implementation,capsys):
+def assert_final_phase2_historical_and_approval_inventory(monkeypatch,verified_historical_context,category_implementation,capsys,compatibility,contract_graph,dependency_index):
     import PIL.Image
     import requests
     import create_defaults.create_poster as poster
@@ -23,7 +23,7 @@ def test_final_phase2_historical_and_approval_inventory(monkeypatch,verified_his
         monkeypatch.setattr(obj,name,prohibited)
     registry,records,resolution,graph,sources,capture_seconds=verified_historical_context
     started=perf_counter()
-    report=dossier(category_implementation,registry,records,resolution,graph,sources)
+    report=assemble_dossier(category_implementation,registry,graph,sources,compatibility,contract_graph,dependency_index=dependency_index)
     compatible=report["compatibility"];readiness=report["readiness"]
     assert (compatible["outputs"],compatible["posters"],compatible["overlays"],compatible["public_outputs"])==(14079,9957,4122,14077)
     assert report["pins"]["M6_material_graph"]==M6_GRAPH and report["pins"]["source_pin_count"]==299

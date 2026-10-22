@@ -143,6 +143,11 @@ now releases its 14,079 immutable record blobs after its last actual consumer,
 as the M5/M6 graph fixture already does. Discovery still runs once, every
 historical assertion is retained, and no worker limit, test assertion or workflow
 timeout is raised. The final full suite must pass with this bounded lifetime.
+Linux additionally exposed allocator retention from repeating the full graph
+build. M7's historical assertions now consume the actual same-run M6 audit and
+87,142-node contract graph inside that existing test, avoiding duplicate
+materialization. The standalone read-only M7 CLI still performs its own fresh
+full audit; serialized report data never supplies approval authority.
 
 The automated nonintegration regression verifies **190** pre-M7 production code,
 catalog/config and workflow files against LF-normalized source hashes, checks
