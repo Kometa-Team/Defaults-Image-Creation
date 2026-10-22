@@ -143,6 +143,10 @@ now releases its 14,079 immutable record blobs after its last actual consumer,
 as the M5/M6 graph fixture already does. Discovery still runs once, every
 historical assertion is retained, and no worker limit, test assertion or workflow
 timeout is raised. The final full suite must pass with this bounded lifetime.
+Collection is deferred until the test protocol has completed and pytest has
+cleared its fixture arguments. Collecting within the fixture finalizer still
+leaves those arguments referencing the released snapshots. This changes only
+test-data lifetime; it does not reorder tests or alter measured worker RSS.
 Linux additionally exposed allocator retention from repeating the full graph
 build. M7's historical assertions now consume the actual same-run M6 audit and
 87,142-node contract graph inside that existing test, avoiding duplicate

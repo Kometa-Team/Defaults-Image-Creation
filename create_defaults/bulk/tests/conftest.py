@@ -10,6 +10,25 @@ from time import perf_counter
 import pytest
 
 
+_historical_cleanup_pending = False
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_protocol(item, nextitem):
+    """Collect released audit cycles after pytest clears fixture arguments.
+
+    Fixture finalizers still run with their yielded values in item.funcargs.
+    Collecting there cannot reclaim cycles referencing those large snapshots.
+    Leave test order, every original assertion and measured RSS untouched.
+    """
+    yield
+    global _historical_cleanup_pending
+    if _historical_cleanup_pending:
+        _historical_cleanup_pending = False
+        import gc
+        gc.collect()
+
+
 @pytest.fixture(scope="session")
 def category_implementation():
     from create_defaults.bulk.contracts.categories.release import Implementation,RELEASE_SHA256
@@ -69,8 +88,8 @@ def verified_historical_discovery(_historical_discovery_cache):
         cache["remaining"]-=1
         if cache["remaining"]==0:
             cache["data"]=None
-            import gc
-            gc.collect()
+            global _historical_cleanup_pending
+            _historical_cleanup_pending = True
 
 
 def _build_historical_context(verified_historical_discovery):
@@ -129,5 +148,5 @@ def verified_historical_context(verified_historical_discovery,_historical_contex
         cache["remaining"]-=1
         if cache["remaining"]==0:
             cache["data"]=None
-            import gc
-            gc.collect()
+            global _historical_cleanup_pending
+            _historical_cleanup_pending = True
