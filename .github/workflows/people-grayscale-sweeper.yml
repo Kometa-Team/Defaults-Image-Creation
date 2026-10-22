@@ -1,0 +1,36 @@
+name: People Grayscale Sweeper Regression
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - create_people_posters/grayscale_sweeper.py
+      - create_people_posters/tests/test_grayscale_sweeper.py
+      - .github/workflows/people-grayscale-sweeper.yml
+
+permissions:
+  contents: read
+
+jobs:
+  sweeper:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: |
+            create_defaults/requirements.txt
+            create_defaults/requirements-bulk.txt
+      # Reuse the existing lightweight CI requirements; no dependency changes
+      # or model downloads, and no orchestration/publication is invoked.
+      - run: python -m pip install -r create_defaults/requirements-bulk.txt
+      - run: python -m pytest create_people_posters/tests/test_grayscale_sweeper.py -q -rs -p no:cacheprovider
