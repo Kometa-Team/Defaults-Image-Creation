@@ -71,6 +71,8 @@ gate evidence, operational scope, authorization context and runtime identity.
 Contract approval, submitter confirmation, logo/design approval, operational
 activation and publication remain distinct decisions. No publication field or
 single cross-stage decision can authorize staging or merge.
+An operator decision consumed by a committed ACTIVE transition cannot authorize
+another activation after suspension or rollback, even within the same runtime.
 
 ## States and freshness
 

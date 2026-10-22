@@ -75,7 +75,7 @@ class Archive:
             if checksum not in objects:
                 objects[checksum]=read_object(checksum)
             return objects[checksum]
-        result = [];previous = None
+        result = [];previous = None;consumed_operators=set()
         for number, checksum in rows:
             revision = Revision.from_bytes(load(checksum));v = revision.to_dict()
             if (revision.sha256,v["id"],v["revision"],v["previous_sha256"]) != (checksum,identity,len(result)+1,previous) or number != len(result)+1:
@@ -97,6 +97,10 @@ class Archive:
             gates = read(load(v["gate_sha256"])).to_dict()
             if proposal["id"] != identity or gates["proposal_sha256"] != v["proposal_sha256"]:
                 raise BulkError("activation_reference", "State identity/proposal/gate references disagree")
+            if v["state"] == "ACTIVE":
+                if not v["operator_sha256"] or v["operator_sha256"] in consumed_operators:
+                    raise BulkError("activation_operator_replay", "State history reuses or omits its independent activation decision")
+                consumed_operators.add(v["operator_sha256"])
             result.append(revision);previous = checksum
         return tuple(result)
 

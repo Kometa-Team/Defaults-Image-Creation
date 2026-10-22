@@ -377,6 +377,21 @@ def test_restored_database_snapshot_rechecks_current_external_revocation(tmp_pat
     assert len(restored.archive.history(identity))==5
 
 
+def test_committed_operator_decision_cannot_reactivate_after_rollback(isolated):
+    a,c=isolated;binding=active(a,c);identity=a.proposal.to_dict()["id"];history=c.archive.history(identity)
+    old_operator=OperatorDecision.from_bytes(c.archive.contracts.read_object(history[-1].to_dict()["operator_sha256"]))
+    c.rollback(identity,expected_revision=5,restore_sha256=history[1].sha256)
+    move(a,c,"COMPATIBLE",6)
+    move(a,c,"APPROVED",7,binding=binding,approval_record=a.record)
+    move(a,c,"READY",8)
+    with pytest.raises(BulkError,match="reactivation"):
+        move(a,c,"ACTIVE",9,operator=old_operator)
+    fresh=a.operate(c,binding,event_id="synthetic.operator.after-rollback")
+    move(a,c,"ACTIVE",9,operator=fresh)
+    assert c.inspect(identity)["state"]=="ACTIVE"
+    assert len(c.archive.history(identity))==10
+
+
 def test_exact_proposal_validation_never_authenticates_unsigned_context(tmp_path,isolated,category_implementation,monkeypatch,capsys):
     from create_defaults.bulk.contracts.categories.release import Implementation
     from create_defaults.bulk.contracts.registry import package_reference

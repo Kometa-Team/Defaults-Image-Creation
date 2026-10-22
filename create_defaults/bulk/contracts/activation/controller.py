@@ -118,6 +118,8 @@ class Controller:
                     raise BulkError("activation_approval", "Exact typed M1 receipt must be archived atomically")
             if target == "ACTIVE" and operator is None:
                 raise BulkError("activation_operator", "Independent operator activation decision missing")
+            if target == "ACTIVE" and any(r.to_dict()["state"] == "ACTIVE" and r.to_dict()["operator_sha256"] == operator.sha256 for r in history):
+                raise BulkError("activation_operator_replay", "A committed activation decision cannot authorize reactivation after suspension or rollback")
         if binding:documents.append(binding)
         if operator:documents.append(operator)
         revision = Revision.from_dict({"schema_version":1,"kind":Revision.KIND,"id":identity,
