@@ -15,7 +15,7 @@ from create_defaults.bulk.contracts.expanded.resolution import resolve
 from create_defaults.bulk.contracts.expanded.validation import validate_existing
 
 
-def test_complete_historical_expansion_and_exact_impact_oracle_without_rendering(monkeypatch,tmp_path,verified_historical_discovery):
+def test_complete_historical_expansion_and_exact_impact_oracle_without_rendering(monkeypatch,tmp_path,verified_historical_context):
     def prohibited(*a,**k):
         pytest.fail("M5 historical audit invoked renderer, workers, production state or network")
     import PIL.Image
@@ -28,22 +28,9 @@ def test_complete_historical_expansion_and_exact_impact_oracle_without_rendering
     monkeypatch.setattr(workers.PersistentWorkers,"__init__",prohibited)
     monkeypatch.setattr(state.Store,"__init__",prohibited)
     monkeypatch.setattr(requests.Session,"request",prohibited)
-    registry,records,discovery_seconds=verified_historical_discovery
-    started=perf_counter()
-    # Recheck code/catalog and every actual asset/font before reusing the
-    # immutable facts. A shared fixture cannot hide source changes by a test.
-    verify_sources(load_pins())
-    source_hashes={}
-    for record in records:
-        for item in read_canonical(record.to_dict()["job_json"])["inputs"]:
-            if item["path"] in source_hashes:
-                assert source_hashes[item["path"]]==item["sha256"]
-            else:
-                source_hashes[item["path"]]=item["sha256"]
-                assert sha256(confined(ROOT,item["path"],must_exist=True))==item["sha256"]
-    resolution=resolve()
-    graph=build(registry,records,resolution)
-    capture_seconds=discovery_seconds+perf_counter()-started
+    # The session fixture performs the same fresh code/catalog and physical
+    # input checks plus M5 build once; all assertions/oracles below are retained.
+    registry,records,resolution,graph,source_hashes,capture_seconds=verified_historical_context
     index=graph.index()
     assert len(records)==len(index.outputs)==14079
     assert sum(v["public_path"] is not None for v in index.outputs.values())==14077

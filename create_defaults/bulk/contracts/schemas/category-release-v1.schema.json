@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kometa.wiki/schemas/lifecycle/category-release-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "id",
+    "version",
+    "basis_sha256",
+    "entries",
+    "approval_registry_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "type": "integer"
+    },
+    "kind": {
+      "const": "category-contract-implementation"
+    },
+    "id": {
+      "const": "defaults-category-contracts"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "not": {
+        "pattern": "\\n"
+      }
+    },
+    "basis_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "minLength": 64,
+      "maxLength": 64
+    },
+    "approval_registry_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "minLength": 64,
+      "maxLength": 64
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 22,
+      "maxItems": 22,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "category",
+          "kind",
+          "version",
+          "contract_path",
+          "contract_sha256",
+          "rules_path",
+          "rules_sha256",
+          "approval"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]{0,199}$"
+          },
+          "category": {
+            "$ref": "https://kometa.wiki/schemas/lifecycle/contract-v1.schema.json#/$defs/package/properties/category"
+          },
+          "kind": {
+            "enum": [
+              "poster",
+              "overlay"
+            ]
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+            "not": {
+              "pattern": "\\n"
+            }
+          },
+          "contract_path": {
+            "type": "string",
+            "format": "lifecycle-path",
+            "minLength": 1
+          },
+          "contract_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "minLength": 64,
+            "maxLength": 64
+          },
+          "rules_path": {
+            "type": "string",
+            "format": "lifecycle-path",
+            "minLength": 1
+          },
+          "rules_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "minLength": 64,
+            "maxLength": 64
+          },
+          "approval": {
+            "const": "missing_exact_maintainer_decision"
+          }
+        }
+      }
+    }
+  }
+}
