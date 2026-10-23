@@ -156,4 +156,13 @@ def test_all_prior_test_ids_and_frozen_interfaces_are_preserved():
                  'create_defaults/bulk/contracts/destination_preflight/evidence-v1.schema.json',
                  'create_defaults/bulk/contracts/activation/data/production-pins-v1.json']:
         original=subprocess.check_output(['git','show',base+':'+name],cwd=ROOT)
-        assert original.replace(b'\r\n',b'\n')==(ROOT/name).read_bytes().replace(b'\r\n',b'\n')
+        if name in {'.github/workflows/default-poster-validation.yml',
+                    'create_defaults/bulk/contracts/activation/data/production-pins-v1.json'}:
+            from hashlib import sha256
+            from ci.phase4 import verify_maintenance
+            # Verify exact historical bytes AND the narrowly approved current
+            # maintenance bytes. Other schema/vector/selection pins stay frozen.
+            maintenance=verify_maintenance()
+            assert sha256(original.replace(b'\r\n',b'\n')).hexdigest()==maintenance['files'][name]['before_sha256']
+        else:
+            assert original.replace(b'\r\n',b'\n')==(ROOT/name).read_bytes().replace(b'\r\n',b'\n')

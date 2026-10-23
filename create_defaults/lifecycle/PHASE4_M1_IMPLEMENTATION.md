@@ -109,7 +109,7 @@ should require **Validation acceptance** plus the existing required checks; the
 new Phase 4 matrix checks can also be required explicitly. No settings changed.
 
 `ci/phase4-maintenance.json` pins the exact baseline and current bytes of the
-seven existing files necessarily maintained for this additive CI gate.
+eleven existing files necessarily maintained for this additive CI gate.
 The gate verifies that manifest's own canonical pin, each before/current hash,
 unchanged 190-file membership and the workflow as the **only** changed protected
 file. The previous protected-manifest hash and workflow hash remain recorded.
@@ -158,6 +158,8 @@ Existing files, exactly scoped:
   artifact download and aggregate dependency; old jobs/limits unchanged.
 * `ci/validation.py`: require/verify both Phase 4 reports in final acceptance.
 * `ci/tests/test_validation.py`: extend existing required-family negative checks.
+* `create_defaults/tests/test_validation.py`: require the added Phase 4 job in
+  the original read-only/pinned-actions workflow boundary assertion.
 * `create_defaults/bulk/contracts/activation/protection.py`: exact manifest pin only.
 * `create_defaults/bulk/contracts/activation/data/production-pins-v1.json`:
   workflow-only pin advance and explicit maintenance provenance.
@@ -165,6 +167,11 @@ Existing files, exactly scoped:
   original ID/core freeze while admitting only hash-pinned M1 maintenance.
 * `create_defaults/phase3/tests/test_isolation_ci.py`: include mandatory Phase 4
   success in the existing Phase 3 failure-control setup.
+* `create_defaults/phase3/tests/test_consumption_boundaries.py`,
+  `test_destination_isolation.py`, `test_translation_boundaries.py`: preserve
+  their historical ID/schema/vector/selection freezes and verify both historical
+  before hashes and exact approved current maintenance hashes for the workflow
+  and protection manifest. No other frozen comparison is waived.
 * `create_defaults/lifecycle/ROADMAP.md`: approved architecture and M1 pending
   review; M2-M7 and later phases remain unstarted; old decision logs retained.
 

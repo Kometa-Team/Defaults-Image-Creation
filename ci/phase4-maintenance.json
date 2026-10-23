@@ -24,6 +24,14 @@
       "before_sha256": "f62b64865b6ef7b632087d029cf45f492a5b2946fd529b3a8928ac0d166fd134",
       "sha256": "48748b056300f8a82ce269efa29aaf496b4525e004397e1122cbd469d3db2a76"
     },
+    "create_defaults/phase3/tests/test_consumption_boundaries.py": {
+      "before_sha256": "93c7073970830a7d6ace5c4c5a2a0357becda651edc2b051a8805195f1e8351d",
+      "sha256": "8be9077bc405717031ee4cf1c7e619103e96f65aa3d0418df3579884080dd9d3"
+    },
+    "create_defaults/phase3/tests/test_destination_isolation.py": {
+      "before_sha256": "e41bdda71ecf2512d1f2577fab44478a38e231ce2d71f7807e10a4e5da3987b3",
+      "sha256": "428459f74d0a76da3aee0b8ac6af659664d704dce69062528e6df5a7324c555d"
+    },
     "create_defaults/phase3/tests/test_final_phase3_acceptance.py": {
       "before_sha256": "48e0bb32cd681fdbd3b602c7bea7acea21af9f80f9263447ca6ab01b2d05ff5a",
       "sha256": "5fdfcb268c9d1f5c99da699066489a58f00771c54177e8c51bc1fed264d31331"
@@ -31,6 +39,14 @@
     "create_defaults/phase3/tests/test_isolation_ci.py": {
       "before_sha256": "ca0b75d28d4086e7184c8cb9f43781d85ad7a2faf3c0918d433826e0b4d49104",
       "sha256": "a70ca919bae2839413fbce85f6f40b24f28683dfb783ecd64b5a7366e2d069ca"
+    },
+    "create_defaults/phase3/tests/test_translation_boundaries.py": {
+      "before_sha256": "095a9fc055ba3984179bbdcdfb3a9d87b35aae59bcfa7697595b67bbd7b277dc",
+      "sha256": "c60eacebb941288bf666390a749974df0e6a572832d82c3c87400a78153c1720"
+    },
+    "create_defaults/tests/test_validation.py": {
+      "before_sha256": "7c32c0921e8c6774ccc5d49a812e26632de70610c7bba966d8379c76a5498bc1",
+      "sha256": "e7d0fee3f2783751d9e7122d137bb461d7b26e2ce427fbb94815be22b96f0c4d"
     }
   }
 }

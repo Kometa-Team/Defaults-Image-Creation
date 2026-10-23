@@ -107,7 +107,16 @@ def test_all_previous_additive_ids_schemas_vectors_and_workflow_are_preserved():
                  'create_defaults/bulk/contracts/translation_preflight/evidence-v1.schema.json',
                  'create_defaults/bulk/contracts/activation/data/production-pins-v1.json']:
         old=subprocess.check_output(['git','show',base+':'+name],cwd=ROOT)
-        assert old.replace(b'\r\n',b'\n')==(ROOT/name).read_bytes().replace(b'\r\n',b'\n')
+        if name in {'.github/workflows/default-poster-validation.yml',
+                    'create_defaults/bulk/contracts/activation/data/production-pins-v1.json'}:
+            from hashlib import sha256
+            from ci.phase4 import verify_maintenance
+            # Verify exact historical bytes AND the narrowly approved current
+            # maintenance bytes. Other schema/vector/selection pins stay frozen.
+            maintenance=verify_maintenance()
+            assert sha256(old.replace(b'\r\n',b'\n')).hexdigest()==maintenance['files'][name]['before_sha256']
+        else:
+            assert old.replace(b'\r\n',b'\n')==(ROOT/name).read_bytes().replace(b'\r\n',b'\n')
 
 
 def test_full_canonical_destination_fixture_matches_on_both_platforms(tmp_path):
