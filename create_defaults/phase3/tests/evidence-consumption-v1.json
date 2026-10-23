@@ -1,0 +1,147 @@
+{
+  "evidence": {
+    "active": false,
+    "binding_sha256": "42cdbcfa3f2b690c9b9a769c3fe8fe74def6c7cd14252dc9948aa665ce159ba4",
+    "blockers": [
+      "m2:fixture.playlist:source_currentness:synthetic-current",
+      "m3:authority:synthetic-only",
+      "m7:authenticated_decision_intake_not_integrated",
+      "m7:fresh_complete_historical_audit_required",
+      "m7:independent_operator_activation_not_authorized",
+      "m7:missing_approved_operational_registry",
+      "m7:missing_exact_hash_maintainer_approval",
+      "m7:production_integration_not_implemented_or_authorized",
+      "m7:selected_package_not_current_m6_release",
+      "synthetic_evidence_is_not_authority"
+    ],
+    "chain_compatible": true,
+    "destination_dependency_sha256": "96265491fb19f1f5282ad89066cb85b48d3091deac7160695c1ac66469a279af",
+    "destination_sha256": "5314d13d0c4df5649917762ba5f55ed100e66c128c5c7d9f03fee62116089ecb",
+    "evaluation_complete": true,
+    "graph_basis": "7e93050a2934ac8708d4b0d5e0317076272f73bbbe2c1e1b82938fc487d2b266",
+    "graph_snapshot_sha256": "d57f159c90c3c64c8e0a6cf779555af350d9f2ab6e02661848dff006a655336a",
+    "kind": "evidence-consumption",
+    "language_policy": {
+      "kind": "language-policy",
+      "sha256": "967b3ffc5790ec56b12d8c3df6677e2ad9e553994ca50598e8427d2834985f37",
+      "version": "1.0.0"
+    },
+    "m7": {
+      "active": 0,
+      "blockers": [
+        "authenticated_decision_intake_not_integrated",
+        "fresh_complete_historical_audit_required",
+        "independent_operator_activation_not_authorized",
+        "missing_approved_operational_registry",
+        "missing_exact_hash_maintainer_approval",
+        "production_integration_not_implemented_or_authorized",
+        "selected_package_not_current_m6_release"
+      ],
+      "exact_approvals_missing": 22,
+      "ready": 0,
+      "release_sha256": "926de31d1df4ee90e911c4e91df81ee3ca914f5179df784ff3d41e9b716ada2a",
+      "review_registry_sha256": "cac2b99657803fdf05994b1d26598ca1e6d4f8a295e1dc6d92c9482178797bb3",
+      "selected": [
+        {
+          "approved_registry_context": "missing",
+          "blockers": [
+            "missing_exact_hash_maintainer_approval",
+            "missing_approved_operational_registry",
+            "authenticated_decision_intake_not_integrated",
+            "independent_operator_activation_not_authorized",
+            "production_integration_not_implemented_or_authorized",
+            "fresh_complete_historical_audit_required"
+          ],
+          "category": "Playlist",
+          "contract_sha256": "5047d834ecd3f8e5a0ed76ae24760b6947ae6b83e95198ce602e1715e445016b",
+          "enforcement_state": "IMPLEMENTED",
+          "exact_contract_approval": "missing",
+          "historically_compatible": "not_freshly_checked",
+          "implemented": true,
+          "kind": "poster",
+          "prerequisites": {
+            "approved_operational_registry": "missing",
+            "authenticated_intake": "unavailable",
+            "complete_new_poster_previews": "later_workflow_required_for_new_posters",
+            "current_authorization": "unavailable",
+            "effective_coverage": "requires_fresh_audit",
+            "exact_final_head_ci": "separate_ci_evidence",
+            "exact_package_approval": "missing",
+            "historical_compatibility": "requires_fresh_audit",
+            "m4_new_artifact_reviews": "not_requested_no_new_artwork",
+            "operator_activation_decision": "missing",
+            "production_integration": "not_implemented_not_authorized",
+            "required_historical_outputs": "requires_fresh_audit",
+            "source_dependency_provenance": "requires_fresh_audit"
+          },
+          "production_enforcement": false,
+          "rules_sha256": "f8dabde54206a85aee1a2eb769dc066d0de47b7792bdd7a34c22bde145590932",
+          "variant_count": 1,
+          "version": "1.0.0"
+        }
+      ],
+      "selectors": 22,
+      "variants": 278
+    },
+    "output_membership_sha256": "0063749d54d54347178f33be95174a71d1e774e61bf4b9a5cd829c5f2a673ba7",
+    "production_enforcement": false,
+    "publication_authorized": false,
+    "ready": false,
+    "references": [],
+    "request_context_sha256": "0142e3d718b82b19bc896b18a56fc55df37d4b03ae0772a224a2ced0d11a0c30",
+    "request_id": "fixture.lifecycle-request",
+    "request_revision": 1,
+    "schema_version": 1,
+    "simulation": true,
+    "simulation_eligible": true,
+    "stage": "informational",
+    "subjects": [
+      {
+        "dependencies_sha256": "7a976193c5acf7273c9c8c7bba8736296383c8732b7f8c2575276bdc52970322",
+        "expanded_definition_sha256": "61b4c673b4354a36f715626ce5e0b91847984079b2831173f443d8868cfc3ab9",
+        "language": "fr",
+        "outputs": [
+          {
+            "id": "fixture.playlist",
+            "identity_sha256": "dcea7a12c28021c84c33e105cb63424f4e98135879c0e375d7c1340af223a854",
+            "local_path": "defaults-fr/playlist/Arrowverse (Timeline Order).jpg",
+            "public_path": "playlist/Reviewed.png"
+          }
+        ],
+        "requested_language": "fr",
+        "review_context_sha256": "308b2f8e4dc66607b4a85da6f5e8d03f68790f584a7fe509addd5d3ffc081e0d",
+        "scope": {
+          "contract_sha256": "395f76a4499989daf36a3395edbcae299c8bd86126adc1d0f007dfbc8ab7fc0b",
+          "design_sha256": "4a3f330e73f97bdb2bbae98a235f20a9483f6d352378b788246da6af06e812e6",
+          "exceptions_sha256": "f7da4bc1efcfbca20750d1842686c151ca94ac4761568a061aa9ffe3c2505bad",
+          "member_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "outputs": [
+            {
+              "companions": [],
+              "evidence": {
+                "confirmations": [],
+                "decisions": [],
+                "previews": [],
+                "receipts": []
+              },
+              "id": "fixture.playlist",
+              "material_sha256": "7d8060f21cd20c1f10bd09cadcc9df146460bbcab31421309ffd911a5f6ac259"
+            }
+          ],
+          "rule_sha256": "ffeff6c3b0f1291e12c0e91a5053f3658edb656fbd8b9da4f8acd1e11f914998",
+          "rules_sha256": "d3b36a3b1318ffc00b27215698e69639b5e62feeeb1e5aa1e30d8ff376963530",
+          "variant": "timeline-order"
+        },
+        "selection_sha256": "1499f9db5a7fdf318fc64b7b5be631912914c9d9f67369a8b61519eb1e435887",
+        "source_context_sha256": "c130633a44f3ed086edd7b9e4a461a3bbb9d3559679cb031271145c027a52c77",
+        "subject_id": "fixture.playlist",
+        "subject_sha256": "503cc9808548def97e53624df982084f315010653c6c1b1b0435902e6b657314",
+        "translation_dependency_sha256": "3bc2be146307f0065a39b7cbe863a45ba0118861675e3bd96a3731e875784abc",
+        "translation_sha256": "6f225c5967995730d6210b8fad7df4f7c6cf32c6b870d560b5d9f10c11206c70"
+      }
+    ],
+    "technical_eligible": false,
+    "version": "1.0.0"
+  },
+  "sha256": "b2fc04d5908fa392dfed840a7a75579f67cd4fd74f996fb1e40e8a232ae4144c"
+}
