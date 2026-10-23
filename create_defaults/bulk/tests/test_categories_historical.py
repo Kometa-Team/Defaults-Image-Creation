@@ -76,3 +76,5 @@ def test_complete_library_and_single_category_compatibility(monkeypatch,tmp_path
     with capsys.disabled():
         print("P3 final historical acceptance evidence:",json.dumps(exported),flush=True)
     assert_actual_overlay_chain(implementation,records,contract_graph,index)
+    from create_defaults.phase3.tests.final_acceptance import assert_actual_poster_chains
+    assert_actual_poster_chains(implementation,records,contract_graph,index)

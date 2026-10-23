@@ -82,7 +82,13 @@
     {
       "id": "relevant_dependency",
       "nodeids": [
-        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_archived_chain_replay_requires_current_material_context[relevant_dependency]"
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_archived_chain_replay_requires_current_material_context[relevant_dependency]",
+        "create_defaults/phase3/tests/test_historical_context_binding.py::test_substitution_in_either_context_or_its_material_dependencies_fails[definition]",
+        "create_defaults/phase3/tests/test_historical_context_binding.py::test_substitution_in_either_context_or_its_material_dependencies_fails[graph_context]",
+        "create_defaults/phase3/tests/test_historical_context_binding.py::test_substitution_in_either_context_or_its_material_dependencies_fails[output_node_context]",
+        "create_defaults/phase3/tests/test_historical_context_binding.py::test_substitution_in_either_context_or_its_material_dependencies_fails[record_pin]",
+        "create_defaults/phase3/tests/test_historical_context_binding.py::test_substitution_in_either_context_or_its_material_dependencies_fails[record_renderer]",
+        "create_defaults/phase3/tests/test_historical_context_binding.py::test_substitution_in_either_context_or_its_material_dependencies_fails[record_source]"
       ],
       "required_outcome": "fail_closed"
     },

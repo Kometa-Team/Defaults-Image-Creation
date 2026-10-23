@@ -1,19 +1,18 @@
 # Phase 3 final acceptance report
 
-2026-10-23. **BLOCKED: M4 rejects valid historical overlay review contexts.**
-M1–M4 are implemented and merged, and M5 acceptance/handoff tests are prepared.
-Phase 3 cannot be marked COMPLETE while the required historical integration check
-fails. Production operational readiness is separately blocked by absent external
-authorities, all 22 missing contract approvals and unimplemented production
-integration. Phases 4–6 remain NOT STARTED.
+2026-10-23. **Phase 3 implementation complete; final CI and maintainer acceptance
+are recorded separately in the draft PR. Production operational readiness remains
+BLOCKED.** M1–M4 are merged; M5 adds full acceptance and a narrow correction in
+the isolated M4 validator. Live external authorities, all 22 missing contract
+approvals and production integration remain unavailable. Phases 4–6 are NOT STARTED.
 
-## Findings and exact blocker
+## Defect discovered and corrected by acceptance
 
 The fresh read-only M2/M5/M6/M7 audit passes its original artwork, source,
 exception, name, dependency, receipt and nonactivation assertions. The added M5
 projection also reconciles all 14,079 records and all 278 current English contract
-variants. The actual standard/bigger overlay pair then passes M2 technical checks
-and complete synthetic M3 destination checks, but M4 raises
+variants. Before correction, the actual standard/bigger overlay pair passed M2
+technical checks and complete synthetic M3 destination checks, but M4 raised
 `p3m4_graph_review_context` in
 [`evidence_consumption/engine.py`](../bulk/contracts/evidence_consumption/engine.py).
 
@@ -28,7 +27,7 @@ M6's [compiler](../bulk/contracts/categories/compiler.py) captures the first.
 The [OverlayRequest adapter](../bulk/contracts/translation_preflight/adapters.py)
 preserves it in its immutable subject. The original
 [M5 historical graph](../bulk/contracts/expanded/historical.py) captures the
-second. M4 `_graph_scope` currently requires direct hash equality. These hashes
+second. The pre-correction M4 `_graph_scope` required direct hash equality. These hashes
 are not interchangeable even when every original record and dependency is valid.
 The existing small synthetic graph fixtures use the subject context for their
 output row, which is why their positive chains do not expose this real boundary.
@@ -50,33 +49,55 @@ graph `93b01e2261249185bd06982a9cb0823a61628104d327958cedefd97788a39d7d`.
 Its small, closed, exact node projection is
 `448cfc2d9aebf9eda5eada812c3a3d9683e2ca858ce3a7c47c2d5499507a60fa`.
 Only remote inventory/authority observations are synthetic. Neither graph review
-hash is replaced. The required existing historical test now retains this failure;
-it is not skipped, xfailed or made optional.
+hash is replaced. The required existing historical test retains the positive compatibility
+assertion that originally failed; it is not skipped, xfailed or made optional.
+It now also requires six actual-record negative controls to reject substitutions.
 
-## Correction requiring separate runtime authorization
+## Explicitly authorized narrow M4 correction
 
-M5 permits acceptance, validation and documentation only. No M1–M4 runtime source
-is modified by this PR. A narrow M4 correction should:
+On 2026-10-23 the maintainer explicitly authorized the prepared M4 correction
+within draft PR #30, starting at `3741e2d66f6c19a817bb887f4d1cc24a6ec2b5d6`.
+The reviewed proposal patch SHA-256 is
+`0ae3a6b05a207d11957e51ae3fbca7d6094268f70cde94d53fc4e81dc1ff61dd`.
+The only runtime source change is confined to the opt-in M4 evidence
+validator, which has no production caller. It changes no renderer, generator,
+business policy, contract, frozen schema/receipt, M7 gate or operational flag.
 
-1. Verify the exact original overlay record, member/contract/rules/variant pins,
-   complete companions and M2 subject against the M6 member context.
-2. Independently reconstruct/check the M5 historical context from that same pinned
-   record's identity, definition, job, exceptions and renderer, against the current
-   graph output and selected dependency closure.
-3. Bind both exact context hashes and their relationship in consumption. Preserve
-   every original source/exception/member/output/authority/request-head safeguard
-   and all false operational flags. Keep original records and graph kinds frozen.
-4. Require this real historical pair to pass technically with synthetic authority,
-   and add negative controls for either substituted context/record, wrong member,
-   changed exceptions, renderer/source/dependency or missing companion.
+For historical overlays in the exact pinned current M6 release, M4 now always
+checks the original record and both context namespaces independently. The M6/M2
+context must match the same pinned record's definition/job; the M5 context and
+output-node hash must match that record's identity/definition/job/exceptions/
+renderer. Every original job input must have its exact asset hash in the selected
+closure, and the overlay transform must retain its exact renderer hash. Existing
+variant/member/exception/complete-output/authority/request-head gates also remain.
+Current released packages cannot bypass this by relabeling the graph with the
+member context. Non-current synthetic fixtures preserve their explicit simulation
+semantics and never grant real eligibility.
 
-After authorization and correction, rerun all focused and complete exact-head
-Windows/Linux checks. Only a green mandatory acceptance plus maintainer review can
-close M5. Green synthetic-only tests cannot substitute for this historical proof.
+Both hashes were already bound by the unchanged attestation: the M2 subject holds
+its review hash, and the M5 material closure holds the graph hash and dependencies.
+The fix validates their exact relationship without replacing either or extending
+the frozen schema. Poster callers continue to select their explicit M5 review
+context; the overlay fix does not invent an implicit poster review mapping.
+The actual historical Playlist and captionless Aspect regressions independently
+reconstruct both original namespaces, verify their exact record/member/source/
+renderer pins, then explicitly select the M5 context for the existing poster API.
+
+Seven new focused controls cover valid distinct namespaces and altered graph,
+output-node, source, renderer, definition and record pins. The real historical
+pair adds six controls: graph substitution, member-context alias, changed source,
+renderer or exception, and withheld companion. Each real poster adds seven
+rejections: member-context alias, substituted graph context, definition, source,
+renderer, variant and output identity membership. Source and renderer mutations
+must invalidate the previous attestation even with a freshly pinned graph.
+These cases reuse the original historical fixture and remain mandatory under its
+original test ID. All false operational flags and
+22 missing exact approvals remain. Full Windows/Linux CI at the final commit is
+required; the PR records it separately from the retained pre-fix reproduction.
 
 ## Historical reconciliation
 
-Fresh local development audit results (not a prior CI run):
+Historical invariants required by both final-head platform jobs:
 
 | Invariant | Verified |
 | --- | ---: |
@@ -106,18 +127,18 @@ This is test evidence over current packages, not an approved production policy.
 
 ## Integration, security and CI evidence contract
 
-All 628 earlier focused IDs remain; 27 new cases give **655 mandatory focused
+All 628 earlier focused IDs remain; 34 new cases give **662 mandatory focused
 tests**. The [complete synthetic canonical fixture](../phase3/tests/phase3-final-acceptance-v1.json)
 contains actual stage evidence for five complete chains, archival and replay.
 The [17-family negative matrix](../phase3/tests/phase3-acceptance-matrix-v1.json)
 binds every requested security family to exact mandatory test IDs. Local new
-integration tests pass 27/27; a full focused run is recorded separately. Those
-results do not waive the real historical chain failure.
+integration tests passed 27/27 and context regression tests passed 7/7. Full focused
+and historical final-head results are recorded separately in the draft PR.
 
 The draft PR records final commit, all Windows/Linux check links, per-job counts
 and runtimes, original/new full-ID reconciliation and exact unresolved failures.
-The complete unchanged bounded workflow is required even when a known acceptance
-failure exists. Mandatory acceptance must reject failed historical jobs. Original
+The complete unchanged bounded workflow is required. Mandatory acceptance must
+reject failed historical jobs, as demonstrated by both pre-fix platform runs. Original
 15-minute caps, 512 MiB worker-parent test, all original assertions and production
 pins remain unchanged; no repository settings are modified.
 
@@ -128,18 +149,27 @@ Machine-readable outputs are retained by existing artifact globs:
 | `phase3-foundations-*` | `phase3-report.json`: fresh complete focused collection/execution and original canonical vectors |
 | `phase3-foundations-*` | `phase3-final-acceptance.json`: full five-chain evidence, canonical hash and exact head/platform |
 | `validation-*-historical` | `phase3-historical-acceptance.json`: all-category/name/source/exception/dependency projection and production integrity |
-| `validation-*-historical` | `phase3-historical-chain.json`: exact actual pair, both context namespaces, preceding-stage results and M4 error |
-| Collection / validation artifacts | Exact original IDs and per-phase reports, including every failed test and original worker safeguard |
+| `validation-*-historical` | `phase3-historical-chain.json`: exact actual pair, both context namespaces, preceding-stage results, consumption and six negative controls; pre-fix errors remain in the original run |
+| `validation-*-historical` | `phase3-historical-posters.json`: actual captioned Playlist and captionless Aspect records, both independently checked namespaces, exact scoped graphs and seven negative controls per poster |
+| Collection / validation artifacts | Exact original IDs and per-phase reports, including the original worker safeguard and retained pre-fix failure evidence |
 
-Because mandatory acceptance fails on the historical group, a successful aggregate
-`coverage-equivalence.json` must not be claimed. Final review must compare the raw
-per-platform collections/executions directly, retaining the real failed call and
-every documented platform skip. Both platforms must match canonical fixture and
-historical projection hashes; matching failures are not operational acceptance.
+A successful aggregate `coverage-equivalence.json` is valid only after every
+required final-head job passes. The final review checks full raw node identities,
+original unittest completion, canonical fixtures, both historical projections,
+actual worker-memory test and mandatory acceptance. The pre-fix failure remains
+historical evidence; it is never substituted for final green results.
+
+The [draft PR #30 evidence table](https://github.com/Kometa-Team/Defaults-Image-Creation/pull/30)
+records the exact final commit and Actions run, all 21 required checks, per-job
+execution counts/runtimes and artifact identities. Every report must name that
+same commit. The immutable pre-correction reproduction is
+[run 39948139950](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39948139950)
+at `3741e2d66f6c19a817bb887f4d1cc24a6ec2b5d6`; its two historical failures and
+failed mandatory acceptance are diagnostic evidence, never final acceptance.
 
 ## Remaining operational authorities and handoff
 
-Even after the technical defect is corrected, live authoritative source freshness,
+Independently of the technical correction, live authoritative source freshness,
 authenticated repository ownership/grants/permissions/revocation, trusted current
 heads and verification-to-consumption atomicity remain unimplemented. Local
 archival, content hashes and simulations cannot supply those authorities.

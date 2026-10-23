@@ -1,7 +1,7 @@
 # Phase 3 / M5 acceptance implementation dossier
 
-2026-10-23. **Acceptance tests and handoff prepared; M5 acceptance is BLOCKED by
-the real historical overlay chain failure `p3m4_graph_review_context`.** M1–M4 are merged.
+2026-10-23. **Implementation and handoff prepared; the real historical overlay context defect
+is corrected within isolated validation. Final CI/acceptance are recorded in the PR.** M1–M4 are merged.
 No claim of production operational readiness is made. Phases 4–6 are NOT STARTED.
 
 ## Verified baseline and scope
@@ -16,10 +16,18 @@ Fetched current main and independently verified M1 PR #26
 Reviewed [architecture](PHASE3_DESIGN_PROPOSAL.md), [M1](PHASE3_M1_IMPLEMENTATION.md),
 [M2](PHASE3_M2_IMPLEMENTATION.md), [M3](PHASE3_M3_IMPLEMENTATION.md),
 [M4](PHASE3_M4_IMPLEMENTATION.md) and the [six-phase roadmap](ROADMAP.md).
-Only acceptance tests, evidence fixtures, test-ID maintenance and documentation
-are changed. Runtime implementations, schemas, contracts and entry points are
-unchanged. The [acceptance report](PHASE3_ACCEPTANCE_REPORT.md) is authoritative
-for findings and unresolved failures; this dossier is not an approval receipt.
+Changes are acceptance tests, evidence fixtures, test-ID maintenance,
+documentation and one narrow correction in the isolated M4 validator. Production
+behavior, schemas, contracts and entry points are unchanged. The [acceptance report](PHASE3_ACCEPTANCE_REPORT.md) is authoritative
+for findings, the correction and remaining operational blockers; this dossier is not an approval receipt.
+
+The maintainer separately authorized the prepared narrow M4 context correction
+on 2026-10-23 from PR head `3741e2d66f6c19a817bb887f4d1cc24a6ec2b5d6`.
+The reviewed patch SHA-256 is
+`0ae3a6b05a207d11957e51ae3fbca7d6094268f70cde94d53fc4e81dc1ff61dd`.
+That runtime diff is applied unchanged; additions to the proposal are necessary
+historical poster regressions, their evidence export and documentation. No other
+M4 path or prior milestone runtime is changed.
 
 ## End-to-end integration and deterministic evidence
 
@@ -52,8 +60,8 @@ foreign subject/output membership, dependency changes, archived revision/authori
 replay, partial/corrupt archival and wrong heads, synthetic-as-real claims, and
 attempted rendering/network/controller effects.
 
-All **628 previous focused IDs** remain; **27 M5 cases** bring the mandatory
-focused selection to **655**. No test is deleted, skipped, xfailed or disabled.
+All **628 previous focused IDs** remain; **34 M5 cases** bring the mandatory
+focused selection to **662**. No test is deleted, skipped, xfailed or disabled.
 
 ## Fresh complete historical reconciliation
 
@@ -73,38 +81,56 @@ small closed projection. It executes M2, M3 and M4 using genuine historical
 record/contract/source/name/review contexts and explicitly synthetic remote
 authority. It requires technical compatibility while retaining all real M7 and
 publication blockers. It does not substitute synthetic graph review hashes for
-the actual historical contexts. A failure remains a required failure.
+the actual historical contexts. The pre-fix failure is retained as discovery
+evidence. The positive assertion remains required after the correction, together
+with six real-record negative controls. Representative actual Playlist and
+captionless Aspect records also pass the real loader/M2/M3/M4 chain. Their M6
+definition/job and M5 identity/definition/job/exception/renderer hashes are
+independently reconstructed. Poster requests explicitly use the M5 context, as
+their unchanged API requires. Seven adversarial mutations per poster cover alias,
+graph, definition, source, renderer, variant and membership substitution; stale
+source/renderer replay fails even when the enclosing graph has a fresh expected
+pin. No extra full capture or historical fixture consumer is added.
 
 Historical artifacts are exported inside the unchanged `config/ci-validation/**`
-upload: `phase3-historical-acceptance.json` and `phase3-historical-chain.json`.
+upload: `phase3-historical-acceptance.json`, `phase3-historical-chain.json` and
+`phase3-historical-posters.json`.
 The focused export `phase3-final-acceptance.json` is included by the unchanged
 `config/phase3-ci/**` upload. These names cannot masquerade as original group or
 collection reports. Head/platform envelopes are separate from canonical evidence.
 The final PR records exact-head URLs, conclusions, machine-readable coverage and
-both historical projections, including any unresolved real-chain failure.
+both historical projections, including the pre-fix real-chain failure and the corrected final-head result.
+
+The [PR #30 final-head evidence table](https://github.com/Kometa-Team/Defaults-Image-Creation/pull/30)
+is the commit-keyed evidence index: all 21 check links, per-job durations and
+passed/failed/skipped counts, complete raw-node/coverage reconciliation, canonical
+historical and focused evidence hashes, worker-memory safeguard and changed-file
+inventory. Final acceptance requires all of them to refer to the same exact PR
+head. It records the corrected run separately from the retained failing
+[pre-correction run](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39948139950).
 
 ## Validation, boundaries and changed-file inventory
 
-Local new integration tests: **27 passed**. A full local M1–M5 focused run and the
+Local new integration tests: **27 passed**, plus **7 context regression tests**. A full local M1–M5 focused run and the
 complete exact-head Windows/Linux pipeline are required for final evidence; the
 draft PR records those results separately. All original pytest/unittest IDs,
 non-pytest commands, historical assertions, 512 MiB worker-parent safeguard,
 15-minute job caps, production pin manifest and mandatory acceptance remain.
-No workflow, runner, original selection/baseline, repository setting or runtime
-source is modified to make the new acceptance check optional or green.
+No workflow, runner, original selection/baseline or repository setting is modified. The validator correction preserves both independent contexts and all original gates; no check is made optional.
 
 Complete scope:
 
 * New `phase3/tests/acceptance_samples.py`, `final_acceptance.py`,
-  `test_final_phase3_acceptance.py`, `phase3-final-acceptance-v1.json`,
+  `test_final_phase3_acceptance.py`, `test_historical_context_binding.py`, `phase3-final-acceptance-v1.json`,
   `phase3-acceptance-matrix-v1.json`.
+* Narrow `bulk/contracts/evidence_consumption/engine.py` correction validating both historical overlay context namespaces and exact source/renderer pins.
 * Additive historical assertions in `bulk/tests/test_categories_historical.py`;
   its original node IDs and every original assertion are retained.
 * Additive `ci/phase3-test-ids.json`.
 * This dossier, `PHASE3_ACCEPTANCE_REPORT.md`, `PHASE4_HANDOFF.md`; current
   progress/decision entries in `PHASE3_DESIGN_PROPOSAL.md` and `ROADMAP.md`.
 
-All prior milestone dossiers remain historical. No production Python, YAML,
+All prior milestone dossiers remain historical. No production generation Python, YAML,
 fonts/logos/artwork, translations, published repository, receipt, M1–M4 schema,
 M5 graph kind, M6 package, M7 gate or generation/publication entry point changes.
 
@@ -115,5 +141,4 @@ stable identities, complete poster previews, dependency-aware impact, immutable
 versioning, preservation and separate approvals. This is a checklist, not an
 implementation or authorization. The six Timeline Order requests remain deferred
 to Phase 6. No Phase 4, 5 or 6 work, actual contract approval, activation, generation,
-publication or merge is performed. Any failing acceptance remains explicit and
-requires separately authorized correction before claiming Phase 3 completion.
+publication or merge is performed. Any failing final acceptance remains explicit; implementation completeness does not establish production readiness or maintainer acceptance.
