@@ -1,0 +1,136 @@
+{
+  "commands": {
+    "core": [
+      [
+        "{python}",
+        "-m",
+        "compileall",
+        "-q",
+        "create_defaults"
+      ],
+      [
+        "{python}",
+        "ci/validation.py",
+        "unit",
+        "--",
+        "create_defaults/tests"
+      ],
+      [
+        "{python}",
+        "ci/validation.py",
+        "unit",
+        "--",
+        "create_defaults/phase2/tests"
+      ],
+      [
+        "{python}",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "ci/tests",
+        "-v"
+      ],
+      [
+        "git",
+        "diff",
+        "--check",
+        "{base}",
+        "HEAD"
+      ]
+    ],
+    "smoke": [
+      [
+        "{python}",
+        "-m",
+        "create_defaults.bulk.baselines",
+        "--check-historical"
+      ],
+      [
+        "{python}",
+        "create_defaults/validation_manifest.py",
+        "--check",
+        "create_defaults/bulk/baselines/effective-jobs-en-current.json.gz"
+      ],
+      [
+        "{python}",
+        "-m",
+        "create_defaults.bulk.d_evidence",
+        "smoke"
+      ],
+      [
+        "{python}",
+        "-m",
+        "create_defaults.bulk.e_smoke"
+      ]
+    ]
+  },
+  "original_pytest_commands": [
+    [
+      "create_defaults/bulk/tests"
+    ],
+    [
+      "create_people_posters/tests/test_people_github.py",
+      "create_people_posters/tests/test_people_sandbox.py",
+      "create_people_posters/tests/test_people_workspaces.py",
+      "create_people_posters/tests/test_people_api_orchestrator.py"
+    ]
+  ],
+  "original_workflow_commit": "d35b0684a096277dcdbdea70e4683e0c786325bc",
+  "pytest_groups": {
+    "categories": [
+      "create_defaults/bulk/tests/test_categories.py",
+      "create_defaults/bulk/tests/test_categories_sources.py",
+      "create_defaults/bulk/tests/test_categories_expanded.py"
+    ],
+    "contracts": [
+      "create_defaults/bulk/tests/test_activation.py",
+      "create_defaults/bulk/tests/test_contract_foundations.py",
+      "create_defaults/bulk/tests/test_playlist_contract.py",
+      "create_defaults/bulk/tests/test_logo_workflow.py",
+      "create_defaults/bulk/tests/test_expanded_validation.py"
+    ],
+    "generation": [
+      "create_defaults/bulk/tests/test_asset_cases.py",
+      "create_defaults/bulk/tests/test_baselines_cli.py",
+      "create_defaults/bulk/tests/test_catalog_generation.py",
+      "create_defaults/bulk/tests/test_colors_state.py",
+      "create_defaults/bulk/tests/test_definitions_planner.py",
+      "create_defaults/bulk/tests/test_legacy_reference.py",
+      "create_defaults/bulk/tests/test_remote_assets.py",
+      "create_defaults/bulk/tests/test_workers.py"
+    ],
+    "historical": [
+      "create_defaults/bulk/tests/test_categories_historical.py",
+      "create_defaults/bulk/tests/test_contract_adoption.py",
+      "create_defaults/bulk/tests/test_expanded_historical.py"
+    ],
+    "people": [
+      "create_people_posters/tests/test_people_github.py",
+      "create_people_posters/tests/test_people_sandbox.py",
+      "create_people_posters/tests/test_people_workspaces.py",
+      "create_people_posters/tests/test_people_api_orchestrator.py"
+    ],
+    "review": [
+      "create_defaults/bulk/tests/test_canary_readiness.py",
+      "create_defaults/bulk/tests/test_canary_staging.py",
+      "create_defaults/bulk/tests/test_english_canary.py",
+      "create_defaults/bulk/tests/test_english_canary_acceptance.py",
+      "create_defaults/bulk/tests/test_library_first_wave.py",
+      "create_defaults/bulk/tests/test_library_stage.py",
+      "create_defaults/bulk/tests/test_library_sync.py",
+      "create_defaults/bulk/tests/test_library_warnings.py",
+      "create_defaults/bulk/tests/test_multilingual_addendum.py",
+      "create_defaults/bulk/tests/test_operator_workflow.py",
+      "create_defaults/bulk/tests/test_overlay_review.py",
+      "create_defaults/bulk/tests/test_package_d.py",
+      "create_defaults/bulk/tests/test_package_e.py",
+      "create_defaults/bulk/tests/test_package_e_maintainer_acceptance.py"
+    ]
+  },
+  "schema_version": 1,
+  "unittest_roots": [
+    "create_defaults/tests",
+    "create_defaults/phase2/tests"
+  ]
+}
