@@ -11,7 +11,7 @@ from threading import Barrier
 import pytest
 
 from create_defaults.bulk.common import BulkError,Conflict,canonical,fingerprint
-from create_defaults.bulk.contracts.state import ContractStore
+from create_defaults.bulk.lifecycle.package_e import SidecarStore as ContractStore
 from create_defaults.bulk.lifecycle.models import Operation,Event,key,namespace_key
 from create_defaults.bulk.lifecycle.storage import OperationStore,TRIGGERS
 from .samples import sample,append,next_record
@@ -218,7 +218,7 @@ def test_partial_unreferenced_blob_is_retained_but_never_becomes_authoritative(s
 def test_actual_process_death_inside_transaction_recovers_without_partial_authority(store):
     import sys
     code='''import os,sys
-from create_defaults.bulk.contracts.state import ContractStore
+from create_defaults.bulk.lifecycle.package_e import SidecarStore as ContractStore
 from create_defaults.bulk.lifecycle.storage import OperationStore
 from create_defaults.phase4.tests.samples import sample,append
 original=ContractStore.event
@@ -292,6 +292,8 @@ def test_readonly_open_and_inspection_never_initialize_or_allow_writes(store,mon
         with pytest.raises(BulkError):OperationStore(missing)
     assert not missing.exists()
     with pytest.raises(BulkError):store.contracts.put_object(r.encoded,expected_sha256=r.sha256)
+    with pytest.raises(BulkError,match='writable archive'):store.contracts.pin(None)
+    with pytest.raises(BulkError,match='writable archive'):store.contracts.append(None,expected_revision=0)
     with pytest.raises(BulkError):
         with store.contracts.transaction():pass
 
@@ -348,11 +350,12 @@ def test_public_bridge_accepts_only_canonical_pinned_blobs_and_owned_transaction
 
 
 def test_public_bridge_stabilizes_owned_parent_before_new_blob_resolution(store,monkeypatch):
-    writer=ContractStore(store.root);original=ContractStore._blob_path
+    from create_defaults.bulk.lifecycle import package_e
+    writer=ContractStore(store.root);original=package_e.confined
     assert not (store.root/'objects').exists()
-    def stable_parent(self,pin):
-        assert (self.root/'objects').is_dir()
-        return original(self,pin)
-    monkeypatch.setattr(ContractStore,'_blob_path',stable_parent)
+    def stable_parent(root,relative):
+        assert (root/'objects').is_dir()
+        return original(root,relative)
+    monkeypatch.setattr(package_e,'confined',stable_parent)
     r=sample();writer.put_object(r.encoded,expected_sha256=r.sha256)
     assert writer.read_object(r.sha256)==r.encoded

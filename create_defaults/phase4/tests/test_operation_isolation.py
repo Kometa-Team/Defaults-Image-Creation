@@ -88,8 +88,12 @@ def test_immutable_store_uses_one_package_e_database_and_no_private_storage_api(
     import ast
     store=OperationStore.create(tmp_path/'isolated');append(store,sample())
     assert [p.name for p in store.root.glob('*.sqlite*') if p.suffix not in {'.sqlite3-wal','.sqlite3-shm'}]==['state.sqlite3']
-    tree=ast.parse((ROOT/'create_defaults/bulk/lifecycle/storage.py').read_text(encoding='utf8'))
-    assert not any(isinstance(n,ast.Attribute) and n.attr in {'_store','_write_blob','_blob_path'} for n in ast.walk(tree))
+    for name in ['storage.py','package_e.py']:
+        tree=ast.parse((ROOT/'create_defaults/bulk/lifecycle'/name).read_text(encoding='utf8'))
+        assert not any(isinstance(n,ast.Attribute) and n.attr in {'_store','_write_blob','_blob_path'} for n in ast.walk(tree))
+    # The additive public bridge must not alter any frozen M2 source pin.
+    from create_defaults.bulk.contracts.adoption.sources import load_pins,verify_sources
+    verify_sources(load_pins())
 
 
 def test_archive_event_and_record_vectors_match_fixed_cross_platform_evidence(tmp_path):

@@ -41,8 +41,9 @@ Record heads reference the exact operation hash, not a supposedly applied
 proposed snapshot. References are unverified metadata, not authenticated evidence.
 
 One isolated Package E database contains four additive append-only M1 tables.
-The supported public ContractStore bridge avoids new production private-helper
-calls. Multi-subject, namespace, evidence and dependency heads are compared in
+The additive public `SidecarStore` subclass avoids new production private-helper
+calls and leaves frozen ContractStore source bytes unchanged. Multi-subject,
+namespace, evidence and dependency heads are compared in
 one immediate transaction with both per-operation pins and journal insertion.
 Unchanged proposed bytes cannot override a stale selected read head. Disjoint
 prepared requests can proceed without a false global-head conflict.
@@ -79,6 +80,13 @@ on inspection. Deterministic regressions preserve confinement checks and reject
 foreign archives before SQLite is opened. These are M1 boundary fixes, not
 changes to generation or existing visual policy.
 
+The first complete hosted historical run also rejected the initial in-place
+ContractStore bridge against the frozen M2 source hash. The final bridge is an
+additive subclass in `bulk/lifecycle/package_e.py`; the original store was
+restored exactly. No M2 source-pin exception, pin refresh or historical assertion
+relaxation was added. A focused regression now verifies every frozen source pin
+before accepting the bridge's storage/isolation proof.
+
 The committed full canonical archive vector covers ADD/UPDATE/RENAME/DELETE,
 record/event chains, exact accented paths and all heads/inspection results.
 Archive SHA-256:
@@ -101,7 +109,7 @@ should require **Validation acceptance** plus the existing required checks; the
 new Phase 4 matrix checks can also be required explicitly. No settings changed.
 
 `ci/phase4-maintenance.json` pins the exact baseline and current bytes of the
-eight existing files necessarily maintained for this additive bridge/gate.
+seven existing files necessarily maintained for this additive CI gate.
 The gate verifies that manifest's own canonical pin, each before/current hash,
 unchanged 190-file membership and the workflow as the **only** changed protected
 file. The previous protected-manifest hash and workflow hash remain recorded.
@@ -137,6 +145,10 @@ hash. Existing contract-foundation, Phase 3 isolation/scope and M7 production
 guard compatibility checks passed 112 tests with one existing platform skip in
 108.01 seconds; all 12 CI gate controls passed. Compilation and whitespace checks
 also passed. These development results are not substituted for final-head CI.
+After relocating the bridge, the complete final M1 producer passed all **203**
+IDs with zero skips in **137.04 seconds**, including the new frozen-source-pin
+regression and concurrent rename case. The targeted additive-bridge/read-only/
+parent-confinement regressions also passed (3 tests, 18.94 seconds).
 
 ## Complete changed-file inventory
 
@@ -146,7 +158,6 @@ Existing files, exactly scoped:
   artifact download and aggregate dependency; old jobs/limits unchanged.
 * `ci/validation.py`: require/verify both Phase 4 reports in final acceptance.
 * `ci/tests/test_validation.py`: extend existing required-family negative checks.
-* `create_defaults/bulk/contracts/state.py`: minimal public isolated storage bridge.
 * `create_defaults/bulk/contracts/activation/protection.py`: exact manifest pin only.
 * `create_defaults/bulk/contracts/activation/data/production-pins-v1.json`:
   workflow-only pin advance and explicit maintenance provenance.
@@ -160,7 +171,7 @@ Existing files, exactly scoped:
 New files:
 
 * `ci/phase4.py`, `ci/phase4-maintenance.json`, `ci/phase4-test-ids.json`.
-* `create_defaults/bulk/lifecycle/__init__.py`, `models.py`, `storage.py`,
+* `create_defaults/bulk/lifecycle/__init__.py`, `models.py`, `storage.py`, `package_e.py`,
   `README.md`, `schemas/operations-v1.schema.json`.
 * `create_defaults/phase4/__init__.py`, `tests/__init__.py`, `tests/samples.py`,
   `tests/canonical-v1.json`, `tests/test_operation_models.py`,

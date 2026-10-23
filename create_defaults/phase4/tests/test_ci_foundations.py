@@ -94,6 +94,6 @@ def test_maintenance_cannot_waive_additional_source_or_pin_changes(monkeypatch,m
         value['base']='f'*40;monkeypatch.setattr(phase4,'MAINTENANCE_PIN',fingerprint(value))
     else:
         original_checksum=phase4.checksum
-        monkeypatch.setattr(phase4,'checksum',lambda path:'f'*64 if path.name=='state.py' else original_checksum(path))
+        monkeypatch.setattr(phase4,'checksum',lambda path:'f'*64 if path==phase4.ROOT/'ci/validation.py' else original_checksum(path))
     monkeypatch.setattr(phase4,'read',lambda path:value if path.name=='phase4-maintenance.json' else original_read(path))
     with pytest.raises(ValueError):phase4.verify_maintenance()

@@ -21,8 +21,8 @@ def require_hash(value):
 def _contracts():
     # Existing ContractStore imports its older registry/worker-related modules.
     # Load that framework only for an explicit storage action, never on import.
-    from ..contracts.state import ContractStore
-    return ContractStore
+    from .package_e import SidecarStore
+    return SidecarStore
 
 
 # Bounded record-only prototype metadata, not image/visual acceptance thresholds.

@@ -9,9 +9,9 @@ ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
 from ci.validation import identity,read,write,require,unique,pytest_run,validate_execution
 
 BASE='c33f792992ee704150799fe16536a64630fd8964'
-MAINTENANCE_PIN='5b754e909dcc2ae9b13586b751066a1eab978f598b678738850c7da80558cfca'
+MAINTENANCE_PIN='ae7ce352dffc8578ab00ba984cd39a9b099e02ef0e920dbe882fce4d343a407a'
 MAINTAINED={'.github/workflows/default-poster-validation.yml','ci/validation.py','ci/tests/test_validation.py',
- 'create_defaults/bulk/contracts/state.py','create_defaults/bulk/contracts/activation/protection.py',
+ 'create_defaults/bulk/contracts/activation/protection.py',
  'create_defaults/bulk/contracts/activation/data/production-pins-v1.json',
  'create_defaults/phase3/tests/test_final_phase3_acceptance.py','create_defaults/phase3/tests/test_isolation_ci.py'}
 IDS=ROOT/'ci/phase4-test-ids.json'

@@ -24,10 +24,6 @@
       "before_sha256": "f62b64865b6ef7b632087d029cf45f492a5b2946fd529b3a8928ac0d166fd134",
       "sha256": "48748b056300f8a82ce269efa29aaf496b4525e004397e1122cbd469d3db2a76"
     },
-    "create_defaults/bulk/contracts/state.py": {
-      "before_sha256": "a1163db317f330ee7d7213d7a0f5496a8cac37d6fb0026315ace59af7133fc53",
-      "sha256": "bba325cc7402c6724c8225e89ea0f3b86bd48e29354075deeb85084c594827d3"
-    },
     "create_defaults/phase3/tests/test_final_phase3_acceptance.py": {
       "before_sha256": "48e0bb32cd681fdbd3b602c7bea7acea21af9f80f9263447ca6ab01b2d05ff5a",
       "sha256": "5fdfcb268c9d1f5c99da699066489a58f00771c54177e8c51bc1fed264d31331"

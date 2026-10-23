@@ -102,11 +102,14 @@ immutable canonical objects and Package E event table. Four additive tables
 (`p4m1_schema`, `p4m1_records`, `p4m1_journal`, `p4m1_heads`) have UPDATE/DELETE
 rejection triggers. No second database or approval store is introduced.
 
-The narrow public ContractStore bridge provides `open_readonly`,
+The additive [`SidecarStore`](package_e.py) subclass provides `open_readonly`,
 `read_connection`, `put_object`, `transaction` and `event`. Event insertion
 requires the same explicitly writable instance's active transaction. New M1
-production code never calls `_store`, `_write_blob` or `_blob_path`. Existing
-contract pin/record APIs and frozen schemas remain unchanged.
+production code never calls `_store`, `_write_blob` or `_blob_path`. Original
+ContractStore bytes, contract pin/record APIs and frozen schemas remain unchanged.
+The bridge uses public `Store` transaction/event methods on that same database;
+its additional Python handle is not a separate persistence framework. Read-only
+instances also reject inherited pin/append entry points before any blob writes.
 
 1. Validate the typed canonical request and existing archive without migration.
 2. Write its content-addressed object; this may leave an unreferenced orphan.
