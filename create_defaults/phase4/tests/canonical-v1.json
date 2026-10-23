@@ -1,0 +1,976 @@
+{
+  "schema_version": 1,
+  "kind": "synthetic-operation-canonical-vectors",
+  "records": {
+    "ADD": {
+      "value": {
+        "active": false,
+        "applied": false,
+        "artwork_approved": false,
+        "content_revision": 1,
+        "contract_approved": false,
+        "id": "synthetic.operation.one",
+        "kind": "operation-record",
+        "namespaces": [
+          {
+            "namespace": "synthetic.repository",
+            "path": "posters/Pok\u00e9mon.jpg",
+            "subjects": [
+              "synthetic.subject.a"
+            ]
+          }
+        ],
+        "operation": "ADD",
+        "operation_accepted": false,
+        "previous_event_sha256": null,
+        "previous_sha256": null,
+        "production_enforcement": false,
+        "protocol_version": "1.0.0",
+        "publication_authorized": false,
+        "reads": [
+          {
+            "id": "synthetic.namespace.10ad49f6709de133d18a7ea2132f2533909b1e69e428516184d56a50864324b0",
+            "kind": "namespace",
+            "revision": 0,
+            "sha256": null,
+            "subjects": [
+              "synthetic.subject.a"
+            ]
+          },
+          {
+            "id": "synthetic.subject.a",
+            "kind": "subject",
+            "revision": 0,
+            "sha256": null,
+            "subjects": [
+              "synthetic.subject.a"
+            ]
+          }
+        ],
+        "ready": false,
+        "reason": null,
+        "record_only": true,
+        "references": [],
+        "request_sha256": "faaf3c791c88cc558cef9d2803f1b74746f451402a86afb91e1fcd87c57675fa",
+        "revision": 1,
+        "schema_version": 1,
+        "scope": "isolated-synthetic-records",
+        "simulation": true,
+        "state": "draft",
+        "subjects": [
+          {
+            "before_sha256": null,
+            "id": "synthetic.subject.a",
+            "proposed_sha256": "e057c25fe2cdb877bf69600482893679764df7d290bcb343ef574ccdcf529a01"
+          }
+        ],
+        "writes": [
+          {
+            "id": "synthetic.namespace.10ad49f6709de133d18a7ea2132f2533909b1e69e428516184d56a50864324b0",
+            "kind": "namespace"
+          },
+          {
+            "id": "synthetic.subject.a",
+            "kind": "subject"
+          }
+        ]
+      },
+      "sha256": "21d1f0ecc5c99b5c9e2eef6e0f102939da61979a3eb45d3e11646629261ac198"
+    },
+    "UPDATE": {
+      "value": {
+        "active": false,
+        "applied": false,
+        "artwork_approved": false,
+        "content_revision": 1,
+        "contract_approved": false,
+        "id": "synthetic.operation.one",
+        "kind": "operation-record",
+        "namespaces": [
+          {
+            "namespace": "synthetic.repository",
+            "path": "posters/Pok\u00e9mon.jpg",
+            "subjects": [
+              "synthetic.subject.a"
+            ]
+          }
+        ],
+        "operation": "UPDATE",
+        "operation_accepted": false,
+        "previous_event_sha256": null,
+        "previous_sha256": null,
+        "production_enforcement": false,
+        "protocol_version": "1.0.0",
+        "publication_authorized": false,
+        "reads": [
+          {
+            "id": "synthetic.namespace.10ad49f6709de133d18a7ea2132f2533909b1e69e428516184d56a50864324b0",
+            "kind": "namespace",
+            "revision": 0,
+            "sha256": null,
+            "subjects": [
+              "synthetic.subject.a"
+            ]
+          },
+          {
+            "id": "synthetic.subject.a",
+            "kind": "subject",
+            "revision": 0,
+            "sha256": null,
+            "subjects": [
+              "synthetic.subject.a"
+            ]
+          }
+        ],
+        "ready": false,
+        "reason": null,
+        "record_only": true,
+        "references": [],
+        "request_sha256": "faaf3c791c88cc558cef9d2803f1b74746f451402a86afb91e1fcd87c57675fa",
+        "revision": 1,
+        "schema_version": 1,
+        "scope": "isolated-synthetic-records",
+        "simulation": true,
+        "state": "draft",
+        "subjects": [
+          {
+            "before_sha256": "72e0aabdab3ca78485150be0cddb49cce17e49b16be962bd14498b899af0a9dd",
+            "id": "synthetic.subject.a",
+            "proposed_sha256": "e057c25fe2cdb877bf69600482893679764df7d290bcb343ef574ccdcf529a01"
+          }
+        ],
+        "writes": [
+          {
+            "id": "synthetic.namespace.10ad49f6709de133d18a7ea2132f2533909b1e69e428516184d56a50864324b0",
+            "kind": "namespace"
+          },
+          {
+            "id": "synthetic.subject.a",
+            "kind": "subject"
+          }
+        ]
+      },
+      "sha256": "3ce2c92412c02bafb383a750d9dd80be53955c15c87c7ad21bd7b768d5fbe3a1"
+    },
+    "RENAME": {
+      "value": {
+        "active": false,
+        "applied": false,
+        "artwork_approved": false,
+        "content_revision": 1,
+        "contract_approved": false,
+        "id": "synthetic.operation.one",
+        "kind": "operation-record",
+        "namespaces": [
+          {
+            "namespace": "synthetic.repository",
+            "path": "posters/Pok\u00e9mon.jpg",
+            "subjects": [
+              "synthetic.subject.a"
+            ]
+          }
+        ],
+        "operation": "RENAME",
+        "operation_accepted": false,
+        "previous_event_sha256": null,
+        "previous_sha256": null,
+        "production_enforcement": false,
+        "protocol_version": "1.0.0",
+        "publication_authorized": false,
+        "reads": [
+          {
+            "id": "synthetic.namespace.10ad49f6709de133d18a7ea2132f2533909b1e69e428516184d56a50864324b0",
+            "kind": "namespace",
+            "revision": 0,
+            "sha256": null,
+            "subjects": [
+              "synthetic.subject.a"
+            ]
+          },
+          {
+            "id": "synthetic.subject.a",
+            "kind": "subject",
+            "revision": 0,
+            "sha256": null,
+            "subjects": [
+              "synthetic.subject.a"
+            ]
+          }
+        ],
+        "ready": false,
+        "reason": null,
+        "record_only": true,
+        "references": [],
+        "request_sha256": "faaf3c791c88cc558cef9d2803f1b74746f451402a86afb91e1fcd87c57675fa",
+        "revision": 1,
+        "schema_version": 1,
+        "scope": "isolated-synthetic-records",
+        "simulation": true,
+        "state": "draft",
+        "subjects": [
+          {
+            "before_sha256": "72e0aabdab3ca78485150be0cddb49cce17e49b16be962bd14498b899af0a9dd",
+            "id": "synthetic.subject.a",
+            "proposed_sha256": "e057c25fe2cdb877bf69600482893679764df7d290bcb343ef574ccdcf529a01"
+          }
+        ],
+        "writes": [
+          {
+            "id": "synthetic.namespace.10ad49f6709de133d18a7ea2132f2533909b1e69e428516184d56a50864324b0",
+            "kind": "namespace"
+          },
+          {
+            "id": "synthetic.subject.a",
+            "kind": "subject"
+          }
+        ]
+      },
+      "sha256": "1a90985283ed068f5c6fb3d605e510461715a7481b5425b0502412af550adab5"
+    },
+    "DELETE": {
+      "value": {
+        "active": false,
+        "applied": false,
+        "artwork_approved": false,
+        "content_revision": 1,
+        "contract_approved": false,
+        "id": "synthetic.operation.one",
+        "kind": "operation-record",
+        "namespaces": [
+          {
+            "namespace": "synthetic.repository",
+            "path": "posters/Pok\u00e9mon.jpg",
+            "subjects": [
+              "synthetic.subject.a"
+            ]
+          }
+        ],
+        "operation": "DELETE",
+        "operation_accepted": false,
+        "previous_event_sha256": null,
+        "previous_sha256": null,
+        "production_enforcement": false,
+        "protocol_version": "1.0.0",
+        "publication_authorized": false,
+        "reads": [
+          {
+            "id": "synthetic.namespace.10ad49f6709de133d18a7ea2132f2533909b1e69e428516184d56a50864324b0",
+            "kind": "namespace",
+            "revision": 0,
+            "sha256": null,
+            "subjects": [
+              "synthetic.subject.a"
+            ]
+          },
+          {
+            "id": "synthetic.subject.a",
+            "kind": "subject",
+            "revision": 0,
+            "sha256": null,
+            "subjects": [
+              "synthetic.subject.a"
+            ]
+          }
+        ],
+        "ready": false,
+        "reason": null,
+        "record_only": true,
+        "references": [
+          {
+            "id": "synthetic.subject.a.tombstone",
+            "kind": "tombstone",
+            "sha256": "30dd5e25af62fb71110edaa817f6b988f47d66e44c94517881a2d05fd42ade45",
+            "subject": "synthetic.subject.a"
+          }
+        ],
+        "request_sha256": "faaf3c791c88cc558cef9d2803f1b74746f451402a86afb91e1fcd87c57675fa",
+        "revision": 1,
+        "schema_version": 1,
+        "scope": "isolated-synthetic-records",
+        "simulation": true,
+        "state": "draft",
+        "subjects": [
+          {
+            "before_sha256": "72e0aabdab3ca78485150be0cddb49cce17e49b16be962bd14498b899af0a9dd",
+            "id": "synthetic.subject.a",
+            "proposed_sha256": null
+          }
+        ],
+        "writes": [
+          {
+            "id": "synthetic.namespace.10ad49f6709de133d18a7ea2132f2533909b1e69e428516184d56a50864324b0",
+            "kind": "namespace"
+          },
+          {
+            "id": "synthetic.subject.a",
+            "kind": "subject"
+          }
+        ]
+      },
+      "sha256": "0f102a2ca09dec759720bbab698ffd2c2ed44da57ed99545085196a3751bddb0"
+    }
+  },
+  "archive": {
+    "records": [
+      {
+        "active": false,
+        "applied": false,
+        "artwork_approved": false,
+        "content_revision": 1,
+        "contract_approved": false,
+        "id": "synthetic.operation.add",
+        "kind": "operation-record",
+        "namespaces": [
+          {
+            "namespace": "synthetic.repository",
+            "path": "posters/Pok\u00e9mon-ADD.jpg",
+            "subjects": [
+              "synthetic.subject.add"
+            ]
+          }
+        ],
+        "operation": "ADD",
+        "operation_accepted": false,
+        "previous_event_sha256": null,
+        "previous_sha256": null,
+        "production_enforcement": false,
+        "protocol_version": "1.0.0",
+        "publication_authorized": false,
+        "reads": [
+          {
+            "id": "synthetic.namespace.8148b9e906bcea39baa9c26554f230f371e13451dae4b3492d741eb0e1b3ab99",
+            "kind": "namespace",
+            "revision": 0,
+            "sha256": null,
+            "subjects": [
+              "synthetic.subject.add"
+            ]
+          },
+          {
+            "id": "synthetic.subject.add",
+            "kind": "subject",
+            "revision": 0,
+            "sha256": null,
+            "subjects": [
+              "synthetic.subject.add"
+            ]
+          }
+        ],
+        "ready": false,
+        "reason": null,
+        "record_only": true,
+        "references": [],
+        "request_sha256": "5cf97708a4bea0ae9e1fe7a6493793e9966772515033616978f96812ce71bfff",
+        "revision": 1,
+        "schema_version": 1,
+        "scope": "isolated-synthetic-records",
+        "simulation": true,
+        "state": "draft",
+        "subjects": [
+          {
+            "before_sha256": null,
+            "id": "synthetic.subject.add",
+            "proposed_sha256": "296ef063d51fe2085d84110bec5e83b921d41ef436fd80529a0de29520ad7407"
+          }
+        ],
+        "writes": [
+          {
+            "id": "synthetic.namespace.8148b9e906bcea39baa9c26554f230f371e13451dae4b3492d741eb0e1b3ab99",
+            "kind": "namespace"
+          },
+          {
+            "id": "synthetic.subject.add",
+            "kind": "subject"
+          }
+        ]
+      },
+      {
+        "active": false,
+        "applied": false,
+        "artwork_approved": false,
+        "content_revision": 1,
+        "contract_approved": false,
+        "id": "synthetic.operation.update",
+        "kind": "operation-record",
+        "namespaces": [
+          {
+            "namespace": "synthetic.repository",
+            "path": "posters/Pok\u00e9mon-UPDATE.jpg",
+            "subjects": [
+              "synthetic.subject.update"
+            ]
+          }
+        ],
+        "operation": "UPDATE",
+        "operation_accepted": false,
+        "previous_event_sha256": null,
+        "previous_sha256": null,
+        "production_enforcement": false,
+        "protocol_version": "1.0.0",
+        "publication_authorized": false,
+        "reads": [
+          {
+            "id": "synthetic.namespace.75650ab68d4208a631aad189e00c8f785a04650efe1398541405411dcf8eb65f",
+            "kind": "namespace",
+            "revision": 0,
+            "sha256": null,
+            "subjects": [
+              "synthetic.subject.update"
+            ]
+          },
+          {
+            "id": "synthetic.subject.update",
+            "kind": "subject",
+            "revision": 0,
+            "sha256": null,
+            "subjects": [
+              "synthetic.subject.update"
+            ]
+          }
+        ],
+        "ready": false,
+        "reason": null,
+        "record_only": true,
+        "references": [],
+        "request_sha256": "74d67dc10cd5a953ccb5a5597a2f07e57e61ef693150b87a71fb009ba7a372dd",
+        "revision": 1,
+        "schema_version": 1,
+        "scope": "isolated-synthetic-records",
+        "simulation": true,
+        "state": "draft",
+        "subjects": [
+          {
+            "before_sha256": "6b5ccd1e7cae58e64cc315ff9845d7a1b39a1cffd1025ce59db30b4ad80e56cf",
+            "id": "synthetic.subject.update",
+            "proposed_sha256": "8b77e7a9a0fe536e8813f85a3d88e93ba037ac96ebeb7e147bb007fac714bd1c"
+          }
+        ],
+        "writes": [
+          {
+            "id": "synthetic.namespace.75650ab68d4208a631aad189e00c8f785a04650efe1398541405411dcf8eb65f",
+            "kind": "namespace"
+          },
+          {
+            "id": "synthetic.subject.update",
+            "kind": "subject"
+          }
+        ]
+      },
+      {
+        "active": false,
+        "applied": false,
+        "artwork_approved": false,
+        "content_revision": 1,
+        "contract_approved": false,
+        "id": "synthetic.operation.rename",
+        "kind": "operation-record",
+        "namespaces": [
+          {
+            "namespace": "synthetic.repository",
+            "path": "posters/Pok\u00e9mon-RENAME.jpg",
+            "subjects": [
+              "synthetic.subject.rename"
+            ]
+          }
+        ],
+        "operation": "RENAME",
+        "operation_accepted": false,
+        "previous_event_sha256": null,
+        "previous_sha256": null,
+        "production_enforcement": false,
+        "protocol_version": "1.0.0",
+        "publication_authorized": false,
+        "reads": [
+          {
+            "id": "synthetic.namespace.ffec2cd35a53cfc378594cda6ca8b412aa61cae860b889c75d3c6516b57e1f8b",
+            "kind": "namespace",
+            "revision": 0,
+            "sha256": null,
+            "subjects": [
+              "synthetic.subject.rename"
+            ]
+          },
+          {
+            "id": "synthetic.subject.rename",
+            "kind": "subject",
+            "revision": 0,
+            "sha256": null,
+            "subjects": [
+              "synthetic.subject.rename"
+            ]
+          }
+        ],
+        "ready": false,
+        "reason": null,
+        "record_only": true,
+        "references": [],
+        "request_sha256": "951b5595c18f027bdcdea06cd5b2ffa632b21afcad2f8f0fac33b9fe310f53d0",
+        "revision": 1,
+        "schema_version": 1,
+        "scope": "isolated-synthetic-records",
+        "simulation": true,
+        "state": "draft",
+        "subjects": [
+          {
+            "before_sha256": "37f84b37f1aa2d1785aa8c0fdb3527f5947f250cbe1260de997cdb76a823b60a",
+            "id": "synthetic.subject.rename",
+            "proposed_sha256": "e11deea7d9edc1b9d3543ef027e1739216d9c378afe10b9806677a1f690f62aa"
+          }
+        ],
+        "writes": [
+          {
+            "id": "synthetic.namespace.ffec2cd35a53cfc378594cda6ca8b412aa61cae860b889c75d3c6516b57e1f8b",
+            "kind": "namespace"
+          },
+          {
+            "id": "synthetic.subject.rename",
+            "kind": "subject"
+          }
+        ]
+      },
+      {
+        "active": false,
+        "applied": false,
+        "artwork_approved": false,
+        "content_revision": 1,
+        "contract_approved": false,
+        "id": "synthetic.operation.delete",
+        "kind": "operation-record",
+        "namespaces": [
+          {
+            "namespace": "synthetic.repository",
+            "path": "posters/Pok\u00e9mon-DELETE.jpg",
+            "subjects": [
+              "synthetic.subject.delete"
+            ]
+          }
+        ],
+        "operation": "DELETE",
+        "operation_accepted": false,
+        "previous_event_sha256": null,
+        "previous_sha256": null,
+        "production_enforcement": false,
+        "protocol_version": "1.0.0",
+        "publication_authorized": false,
+        "reads": [
+          {
+            "id": "synthetic.namespace.1f8cae88476b621aedb8dd1a2bfbdaf71b2ce60286850bd589f5541be603e8f2",
+            "kind": "namespace",
+            "revision": 0,
+            "sha256": null,
+            "subjects": [
+              "synthetic.subject.delete"
+            ]
+          },
+          {
+            "id": "synthetic.subject.delete",
+            "kind": "subject",
+            "revision": 0,
+            "sha256": null,
+            "subjects": [
+              "synthetic.subject.delete"
+            ]
+          }
+        ],
+        "ready": false,
+        "reason": null,
+        "record_only": true,
+        "references": [
+          {
+            "id": "synthetic.subject.delete.tombstone",
+            "kind": "tombstone",
+            "sha256": "f2b14c30057624aad70a72dfdcf083f475001f38bfb61bd0e5a0b519f912869b",
+            "subject": "synthetic.subject.delete"
+          }
+        ],
+        "request_sha256": "0a07735e968f55d483f094eb7e199107e95e663cc35e060c2934516dd28a3c2d",
+        "revision": 1,
+        "schema_version": 1,
+        "scope": "isolated-synthetic-records",
+        "simulation": true,
+        "state": "draft",
+        "subjects": [
+          {
+            "before_sha256": "de5a44dbe45e99d6de6ddbdefa564ab76823215c4e85aedaea817853192f708f",
+            "id": "synthetic.subject.delete",
+            "proposed_sha256": null
+          }
+        ],
+        "writes": [
+          {
+            "id": "synthetic.namespace.1f8cae88476b621aedb8dd1a2bfbdaf71b2ce60286850bd589f5541be603e8f2",
+            "kind": "namespace"
+          },
+          {
+            "id": "synthetic.subject.delete",
+            "kind": "subject"
+          }
+        ]
+      }
+    ],
+    "events": [
+      {
+        "active": false,
+        "applied": false,
+        "artwork_approved": false,
+        "changes": [
+          {
+            "after": {
+              "revision": 1,
+              "sha256": "60f5916965beb329e1366e70b5fe73f54dc6f041db39775b0b7b1588df7a439b"
+            },
+            "before": {
+              "revision": 0,
+              "sha256": null
+            },
+            "key": {
+              "id": "synthetic.namespace.8148b9e906bcea39baa9c26554f230f371e13451dae4b3492d741eb0e1b3ab99",
+              "kind": "namespace"
+            },
+            "subjects": [
+              "synthetic.subject.add"
+            ]
+          },
+          {
+            "after": {
+              "revision": 1,
+              "sha256": "60f5916965beb329e1366e70b5fe73f54dc6f041db39775b0b7b1588df7a439b"
+            },
+            "before": {
+              "revision": 0,
+              "sha256": null
+            },
+            "key": {
+              "id": "synthetic.subject.add",
+              "kind": "subject"
+            },
+            "subjects": [
+              "synthetic.subject.add"
+            ]
+          }
+        ],
+        "contract_approved": false,
+        "kind": "operation-event",
+        "operation_accepted": false,
+        "operation_id": "synthetic.operation.add",
+        "operation_revision": 1,
+        "previous_operation_event_sha256": null,
+        "previous_record_sha256": null,
+        "previous_sha256": null,
+        "production_enforcement": false,
+        "protocol_version": "1.0.0",
+        "publication_authorized": false,
+        "ready": false,
+        "record_only": true,
+        "record_sha256": "60f5916965beb329e1366e70b5fe73f54dc6f041db39775b0b7b1588df7a439b",
+        "schema_version": 1,
+        "scope": "isolated-synthetic-records",
+        "sequence": 1,
+        "simulation": true,
+        "state": "draft"
+      },
+      {
+        "active": false,
+        "applied": false,
+        "artwork_approved": false,
+        "changes": [
+          {
+            "after": {
+              "revision": 1,
+              "sha256": "5d64720c99355149b629870c5e43a7fb1da2129e00f02742eb0eded98032d88a"
+            },
+            "before": {
+              "revision": 0,
+              "sha256": null
+            },
+            "key": {
+              "id": "synthetic.namespace.75650ab68d4208a631aad189e00c8f785a04650efe1398541405411dcf8eb65f",
+              "kind": "namespace"
+            },
+            "subjects": [
+              "synthetic.subject.update"
+            ]
+          },
+          {
+            "after": {
+              "revision": 1,
+              "sha256": "5d64720c99355149b629870c5e43a7fb1da2129e00f02742eb0eded98032d88a"
+            },
+            "before": {
+              "revision": 0,
+              "sha256": null
+            },
+            "key": {
+              "id": "synthetic.subject.update",
+              "kind": "subject"
+            },
+            "subjects": [
+              "synthetic.subject.update"
+            ]
+          }
+        ],
+        "contract_approved": false,
+        "kind": "operation-event",
+        "operation_accepted": false,
+        "operation_id": "synthetic.operation.update",
+        "operation_revision": 1,
+        "previous_operation_event_sha256": null,
+        "previous_record_sha256": null,
+        "previous_sha256": "1ce552e88d8fd42ae47168237be6159dc92c8636d9b252034d660aea5526001d",
+        "production_enforcement": false,
+        "protocol_version": "1.0.0",
+        "publication_authorized": false,
+        "ready": false,
+        "record_only": true,
+        "record_sha256": "5d64720c99355149b629870c5e43a7fb1da2129e00f02742eb0eded98032d88a",
+        "schema_version": 1,
+        "scope": "isolated-synthetic-records",
+        "sequence": 2,
+        "simulation": true,
+        "state": "draft"
+      },
+      {
+        "active": false,
+        "applied": false,
+        "artwork_approved": false,
+        "changes": [
+          {
+            "after": {
+              "revision": 1,
+              "sha256": "14ae875409e4cb1b05532569af12ed4172ebf1b054d9f7b355099e5dc9d0c984"
+            },
+            "before": {
+              "revision": 0,
+              "sha256": null
+            },
+            "key": {
+              "id": "synthetic.namespace.ffec2cd35a53cfc378594cda6ca8b412aa61cae860b889c75d3c6516b57e1f8b",
+              "kind": "namespace"
+            },
+            "subjects": [
+              "synthetic.subject.rename"
+            ]
+          },
+          {
+            "after": {
+              "revision": 1,
+              "sha256": "14ae875409e4cb1b05532569af12ed4172ebf1b054d9f7b355099e5dc9d0c984"
+            },
+            "before": {
+              "revision": 0,
+              "sha256": null
+            },
+            "key": {
+              "id": "synthetic.subject.rename",
+              "kind": "subject"
+            },
+            "subjects": [
+              "synthetic.subject.rename"
+            ]
+          }
+        ],
+        "contract_approved": false,
+        "kind": "operation-event",
+        "operation_accepted": false,
+        "operation_id": "synthetic.operation.rename",
+        "operation_revision": 1,
+        "previous_operation_event_sha256": null,
+        "previous_record_sha256": null,
+        "previous_sha256": "817decbc1cac7796d3880d6a29e2b50aab6cb5447072275e0a9c38f67c8aabb9",
+        "production_enforcement": false,
+        "protocol_version": "1.0.0",
+        "publication_authorized": false,
+        "ready": false,
+        "record_only": true,
+        "record_sha256": "14ae875409e4cb1b05532569af12ed4172ebf1b054d9f7b355099e5dc9d0c984",
+        "schema_version": 1,
+        "scope": "isolated-synthetic-records",
+        "sequence": 3,
+        "simulation": true,
+        "state": "draft"
+      },
+      {
+        "active": false,
+        "applied": false,
+        "artwork_approved": false,
+        "changes": [
+          {
+            "after": {
+              "revision": 1,
+              "sha256": "ca51d2c3560da97d5c3e4304a689ae5afc7c188887afbeda37dc137b31612708"
+            },
+            "before": {
+              "revision": 0,
+              "sha256": null
+            },
+            "key": {
+              "id": "synthetic.namespace.1f8cae88476b621aedb8dd1a2bfbdaf71b2ce60286850bd589f5541be603e8f2",
+              "kind": "namespace"
+            },
+            "subjects": [
+              "synthetic.subject.delete"
+            ]
+          },
+          {
+            "after": {
+              "revision": 1,
+              "sha256": "ca51d2c3560da97d5c3e4304a689ae5afc7c188887afbeda37dc137b31612708"
+            },
+            "before": {
+              "revision": 0,
+              "sha256": null
+            },
+            "key": {
+              "id": "synthetic.subject.delete",
+              "kind": "subject"
+            },
+            "subjects": [
+              "synthetic.subject.delete"
+            ]
+          }
+        ],
+        "contract_approved": false,
+        "kind": "operation-event",
+        "operation_accepted": false,
+        "operation_id": "synthetic.operation.delete",
+        "operation_revision": 1,
+        "previous_operation_event_sha256": null,
+        "previous_record_sha256": null,
+        "previous_sha256": "4416f3d5ea4d96b227697bf0952b5a3bb7b6569a42ed59504a47e6b143a3347d",
+        "production_enforcement": false,
+        "protocol_version": "1.0.0",
+        "publication_authorized": false,
+        "ready": false,
+        "record_only": true,
+        "record_sha256": "ca51d2c3560da97d5c3e4304a689ae5afc7c188887afbeda37dc137b31612708",
+        "schema_version": 1,
+        "scope": "isolated-synthetic-records",
+        "sequence": 4,
+        "simulation": true,
+        "state": "draft"
+      }
+    ],
+    "inspection": {
+      "schema_version": 1,
+      "kind": "operation-store-inspection",
+      "scope": "isolated-synthetic-records",
+      "journal_sha256": "c5a925ceafa2c2e74a0884a1def54d8d6a7252239d7e04695f7d7581833cf9bb",
+      "sequence": 4,
+      "records": 4,
+      "heads": [
+        {
+          "id": "synthetic.namespace.1f8cae88476b621aedb8dd1a2bfbdaf71b2ce60286850bd589f5541be603e8f2",
+          "kind": "namespace",
+          "subjects": [
+            "synthetic.subject.delete"
+          ],
+          "revision": 1,
+          "sha256": "ca51d2c3560da97d5c3e4304a689ae5afc7c188887afbeda37dc137b31612708"
+        },
+        {
+          "id": "synthetic.namespace.75650ab68d4208a631aad189e00c8f785a04650efe1398541405411dcf8eb65f",
+          "kind": "namespace",
+          "subjects": [
+            "synthetic.subject.update"
+          ],
+          "revision": 1,
+          "sha256": "5d64720c99355149b629870c5e43a7fb1da2129e00f02742eb0eded98032d88a"
+        },
+        {
+          "id": "synthetic.namespace.8148b9e906bcea39baa9c26554f230f371e13451dae4b3492d741eb0e1b3ab99",
+          "kind": "namespace",
+          "subjects": [
+            "synthetic.subject.add"
+          ],
+          "revision": 1,
+          "sha256": "60f5916965beb329e1366e70b5fe73f54dc6f041db39775b0b7b1588df7a439b"
+        },
+        {
+          "id": "synthetic.namespace.ffec2cd35a53cfc378594cda6ca8b412aa61cae860b889c75d3c6516b57e1f8b",
+          "kind": "namespace",
+          "subjects": [
+            "synthetic.subject.rename"
+          ],
+          "revision": 1,
+          "sha256": "14ae875409e4cb1b05532569af12ed4172ebf1b054d9f7b355099e5dc9d0c984"
+        },
+        {
+          "id": "synthetic.subject.add",
+          "kind": "subject",
+          "subjects": [
+            "synthetic.subject.add"
+          ],
+          "revision": 1,
+          "sha256": "60f5916965beb329e1366e70b5fe73f54dc6f041db39775b0b7b1588df7a439b"
+        },
+        {
+          "id": "synthetic.subject.delete",
+          "kind": "subject",
+          "subjects": [
+            "synthetic.subject.delete"
+          ],
+          "revision": 1,
+          "sha256": "ca51d2c3560da97d5c3e4304a689ae5afc7c188887afbeda37dc137b31612708"
+        },
+        {
+          "id": "synthetic.subject.rename",
+          "kind": "subject",
+          "subjects": [
+            "synthetic.subject.rename"
+          ],
+          "revision": 1,
+          "sha256": "14ae875409e4cb1b05532569af12ed4172ebf1b054d9f7b355099e5dc9d0c984"
+        },
+        {
+          "id": "synthetic.subject.update",
+          "kind": "subject",
+          "subjects": [
+            "synthetic.subject.update"
+          ],
+          "revision": 1,
+          "sha256": "5d64720c99355149b629870c5e43a7fb1da2129e00f02742eb0eded98032d88a"
+        }
+      ],
+      "operations": [
+        {
+          "id": "synthetic.operation.add",
+          "revision": 1,
+          "sha256": "60f5916965beb329e1366e70b5fe73f54dc6f041db39775b0b7b1588df7a439b",
+          "event_sha256": "1ce552e88d8fd42ae47168237be6159dc92c8636d9b252034d660aea5526001d",
+          "state": "draft"
+        },
+        {
+          "id": "synthetic.operation.delete",
+          "revision": 1,
+          "sha256": "ca51d2c3560da97d5c3e4304a689ae5afc7c188887afbeda37dc137b31612708",
+          "event_sha256": "c5a925ceafa2c2e74a0884a1def54d8d6a7252239d7e04695f7d7581833cf9bb",
+          "state": "draft"
+        },
+        {
+          "id": "synthetic.operation.rename",
+          "revision": 1,
+          "sha256": "14ae875409e4cb1b05532569af12ed4172ebf1b054d9f7b355099e5dc9d0c984",
+          "event_sha256": "4416f3d5ea4d96b227697bf0952b5a3bb7b6569a42ed59504a47e6b143a3347d",
+          "state": "draft"
+        },
+        {
+          "id": "synthetic.operation.update",
+          "revision": 1,
+          "sha256": "5d64720c99355149b629870c5e43a7fb1da2129e00f02742eb0eded98032d88a",
+          "event_sha256": "817decbc1cac7796d3880d6a29e2b50aab6cb5447072275e0a9c38f67c8aabb9",
+          "state": "draft"
+        }
+      ],
+      "currentness": "integrity-only-currentness-unknown",
+      "operation_accepted": false,
+      "applied": false,
+      "contract_approved": false,
+      "artwork_approved": false,
+      "production_enforcement": false,
+      "publication_authorized": false,
+      "ready": false,
+      "active": false
+    }
+  },
+  "archive_sha256": "2c934c600bd9b3841378d96e62d781e856f3617145a7b9c11df2db15338650d7"
+}

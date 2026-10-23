@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "kind": "explicit-p4m1-maintenance",
+  "base": "c33f792992ee704150799fe16536a64630fd8964",
+  "scope": "Public isolated ContractStore bridge; mandatory Phase 4 CI and exact historical scope/provenance assertions only",
+  "files": {
+    ".github/workflows/default-poster-validation.yml": {
+      "before_sha256": "12c3934d2aa81b7c08c4b02d4b950f631c0ca5609d0468e8f9bd5754bf7779b7",
+      "sha256": "3bb163657012678f80c20282cd4d4b5d531d3e65ed4c58a61976c626b11e480f"
+    },
+    "ci/tests/test_validation.py": {
+      "before_sha256": "a7495201dbe2600f28cf9e1557fcb391589e98f4cfadee15f72265ff18d2f106",
+      "sha256": "cc1622b64476b60d51ca45d0bccbb3e501eae962ba32118bbac3dd959649c180"
+    },
+    "ci/validation.py": {
+      "before_sha256": "070e2da1992a1e341eaf9387a8bad0ec212734cb463f1b769a8ef2e3dbd18d3d",
+      "sha256": "89106eb0687f0040f8aba5ef63c5484efa15960ac4f9791c205060cf54a0e8c2"
+    },
+    "create_defaults/bulk/contracts/activation/data/production-pins-v1.json": {
+      "before_sha256": "b7b4d52ba88bf4a5861ab032c4fe6ac984fbe7abdf053a1075bdef8b4a13623e",
+      "sha256": "22ec01124f211dea03ea55230613fcc96304a3f1810a63a3ae793e8c50188e98"
+    },
+    "create_defaults/bulk/contracts/activation/protection.py": {
+      "before_sha256": "f62b64865b6ef7b632087d029cf45f492a5b2946fd529b3a8928ac0d166fd134",
+      "sha256": "48748b056300f8a82ce269efa29aaf496b4525e004397e1122cbd469d3db2a76"
+    },
+    "create_defaults/bulk/contracts/state.py": {
+      "before_sha256": "a1163db317f330ee7d7213d7a0f5496a8cac37d6fb0026315ace59af7133fc53",
+      "sha256": "bba325cc7402c6724c8225e89ea0f3b86bd48e29354075deeb85084c594827d3"
+    },
+    "create_defaults/phase3/tests/test_final_phase3_acceptance.py": {
+      "before_sha256": "48e0bb32cd681fdbd3b602c7bea7acea21af9f80f9263447ca6ab01b2d05ff5a",
+      "sha256": "5fdfcb268c9d1f5c99da699066489a58f00771c54177e8c51bc1fed264d31331"
+    },
+    "create_defaults/phase3/tests/test_isolation_ci.py": {
+      "before_sha256": "ca0b75d28d4086e7184c8cb9f43781d85ad7a2faf3c0918d433826e0b4d49104",
+      "sha256": "a70ca919bae2839413fbce85f6f40b24f28683dfb783ecd64b5a7366e2d069ca"
+    }
+  }
+}

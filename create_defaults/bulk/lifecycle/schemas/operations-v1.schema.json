@@ -1,0 +1,628 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kometa.wiki/schemas/lifecycle/operations-v1.schema.json",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/operation-record"
+    },
+    {
+      "$ref": "#/$defs/operation-event"
+    },
+    {
+      "$ref": "#/$defs/head-reference"
+    }
+  ],
+  "$defs": {
+    "head-key": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "subject",
+            "namespace",
+            "evidence",
+            "dependency"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^synthetic\\.[a-z0-9][a-z0-9._-]{0,180}$",
+          "maxLength": 191,
+          "not": {
+            "pattern": "[\\r\\n]"
+          }
+        }
+      },
+      "required": [
+        "kind",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "head-version": {
+      "type": "object",
+      "properties": {
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "revision",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "head-reference": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "subject",
+            "namespace",
+            "evidence",
+            "dependency"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^synthetic\\.[a-z0-9][a-z0-9._-]{0,180}$",
+          "maxLength": 191,
+          "not": {
+            "pattern": "[\\r\\n]"
+          }
+        },
+        "subjects": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^synthetic\\.[a-z0-9][a-z0-9._-]{0,180}$",
+            "maxLength": 191,
+            "not": {
+              "pattern": "[\\r\\n]"
+            }
+          },
+          "minItems": 1,
+          "maxItems": 4096
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "subjects",
+        "revision",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "operation-record": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "protocol_version": {
+          "const": "1.0.0"
+        },
+        "scope": {
+          "const": "isolated-synthetic-records"
+        },
+        "simulation": {
+          "const": true
+        },
+        "record_only": {
+          "const": true
+        },
+        "operation_accepted": {
+          "const": false
+        },
+        "applied": {
+          "const": false
+        },
+        "artwork_approved": {
+          "const": false
+        },
+        "contract_approved": {
+          "const": false
+        },
+        "ready": {
+          "const": false
+        },
+        "active": {
+          "const": false
+        },
+        "production_enforcement": {
+          "const": false
+        },
+        "publication_authorized": {
+          "const": false
+        },
+        "kind": {
+          "const": "operation-record"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^synthetic\\.operation\\.[a-z0-9][a-z0-9._-]{0,140}$",
+          "maxLength": 160,
+          "not": {
+            "pattern": "[\\r\\n]"
+          }
+        },
+        "operation": {
+          "enum": [
+            "ADD",
+            "UPDATE",
+            "RENAME",
+            "DELETE"
+          ]
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "content_revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "previous_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "previous_event_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "state": {
+          "enum": [
+            "draft",
+            "structurally_validated",
+            "conflicted",
+            "stale",
+            "cancelled"
+          ]
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048,
+              "pattern": "\\S"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "request_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "subjects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^synthetic\\.[a-z0-9][a-z0-9._-]{0,180}$",
+                "maxLength": 191,
+                "not": {
+                  "pattern": "[\\r\\n]"
+                }
+              },
+              "before_sha256": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$",
+                    "minLength": 64,
+                    "maxLength": 64
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "proposed_sha256": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$",
+                    "minLength": 64,
+                    "maxLength": 64
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "before_sha256",
+              "proposed_sha256"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 4096
+        },
+        "reads": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/head-reference"
+          },
+          "minItems": 1,
+          "maxItems": 4096
+        },
+        "writes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/head-key"
+          },
+          "minItems": 1,
+          "maxItems": 4096
+        },
+        "namespaces": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "namespace": {
+                "type": "string",
+                "pattern": "^synthetic\\.[a-z0-9][a-z0-9._-]{0,180}$",
+                "maxLength": 191,
+                "not": {
+                  "pattern": "[\\r\\n]"
+                }
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "subjects": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^synthetic\\.[a-z0-9][a-z0-9._-]{0,180}$",
+                  "maxLength": 191,
+                  "not": {
+                    "pattern": "[\\r\\n]"
+                  }
+                },
+                "minItems": 1,
+                "maxItems": 4096
+              }
+            },
+            "required": [
+              "namespace",
+              "path",
+              "subjects"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "maxItems": 4096
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "enum": [
+                  "evidence",
+                  "dependency",
+                  "tombstone",
+                  "journal"
+                ]
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^synthetic\\.[a-z0-9][a-z0-9._-]{0,180}$",
+                "maxLength": 191,
+                "not": {
+                  "pattern": "[\\r\\n]"
+                }
+              },
+              "subject": {
+                "type": "string",
+                "pattern": "^synthetic\\.[a-z0-9][a-z0-9._-]{0,180}$",
+                "maxLength": 191,
+                "not": {
+                  "pattern": "[\\r\\n]"
+                }
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$",
+                "minLength": 64,
+                "maxLength": 64
+              }
+            },
+            "required": [
+              "kind",
+              "id",
+              "subject",
+              "sha256"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "maxItems": 4096
+        }
+      },
+      "required": [
+        "schema_version",
+        "protocol_version",
+        "scope",
+        "simulation",
+        "record_only",
+        "operation_accepted",
+        "applied",
+        "artwork_approved",
+        "contract_approved",
+        "ready",
+        "active",
+        "production_enforcement",
+        "publication_authorized",
+        "kind",
+        "id",
+        "operation",
+        "revision",
+        "content_revision",
+        "previous_sha256",
+        "previous_event_sha256",
+        "state",
+        "reason",
+        "request_sha256",
+        "subjects",
+        "reads",
+        "writes",
+        "namespaces",
+        "references"
+      ],
+      "additionalProperties": false
+    },
+    "operation-event": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "protocol_version": {
+          "const": "1.0.0"
+        },
+        "scope": {
+          "const": "isolated-synthetic-records"
+        },
+        "simulation": {
+          "const": true
+        },
+        "record_only": {
+          "const": true
+        },
+        "operation_accepted": {
+          "const": false
+        },
+        "applied": {
+          "const": false
+        },
+        "artwork_approved": {
+          "const": false
+        },
+        "contract_approved": {
+          "const": false
+        },
+        "ready": {
+          "const": false
+        },
+        "active": {
+          "const": false
+        },
+        "production_enforcement": {
+          "const": false
+        },
+        "publication_authorized": {
+          "const": false
+        },
+        "kind": {
+          "const": "operation-event"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "previous_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "operation_id": {
+          "type": "string",
+          "pattern": "^synthetic\\.operation\\.[a-z0-9][a-z0-9._-]{0,140}$",
+          "maxLength": 160,
+          "not": {
+            "pattern": "[\\r\\n]"
+          }
+        },
+        "operation_revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "record_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "minLength": 64,
+          "maxLength": 64
+        },
+        "previous_record_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "previous_operation_event_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "state": {
+          "enum": [
+            "draft",
+            "structurally_validated",
+            "conflicted",
+            "stale",
+            "cancelled"
+          ]
+        },
+        "changes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "$ref": "#/$defs/head-key"
+              },
+              "subjects": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^synthetic\\.[a-z0-9][a-z0-9._-]{0,180}$",
+                  "maxLength": 191,
+                  "not": {
+                    "pattern": "[\\r\\n]"
+                  }
+                },
+                "minItems": 1,
+                "maxItems": 4096
+              },
+              "before": {
+                "$ref": "#/$defs/head-version"
+              },
+              "after": {
+                "$ref": "#/$defs/head-version"
+              }
+            },
+            "required": [
+              "key",
+              "subjects",
+              "before",
+              "after"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 4096
+        }
+      },
+      "required": [
+        "schema_version",
+        "protocol_version",
+        "scope",
+        "simulation",
+        "record_only",
+        "operation_accepted",
+        "applied",
+        "artwork_approved",
+        "contract_approved",
+        "ready",
+        "active",
+        "production_enforcement",
+        "publication_authorized",
+        "kind",
+        "sequence",
+        "previous_sha256",
+        "operation_id",
+        "operation_revision",
+        "record_sha256",
+        "previous_record_sha256",
+        "previous_operation_event_sha256",
+        "state",
+        "changes"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

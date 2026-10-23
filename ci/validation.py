@@ -107,7 +107,7 @@ class UnitEvidenceResult(unittest.TextTestResult):
 
 
 def require_jobs(needs):
-    require(set(needs) == {"collection", "validation", "phase3"} and all(v["result"] == "success" for v in needs.values()),
+    require(set(needs) == {"collection", "validation", "phase3", "phase4"} and all(v["result"] == "success" for v in needs.values()),
             "Failed, cancelled, skipped or missing required job")
 
 
@@ -272,6 +272,9 @@ def main():
         summary = reconcile(plan, reports, args.base)
         from ci.phase3 import verify_reports
         summary["phase3"] = verify_reports([read(p) for p in args.directory.rglob("phase3-report.json")])
+        from ci.phase4 import verify_reports as verify_phase4, verify_maintenance
+        verify_maintenance()
+        summary["phase4"] = verify_phase4([read(p) for p in args.directory.rglob("phase4-report.json")])
         write(OUTPUT/"coverage-equivalence.json", summary)
         print("All Windows/Linux groups passed; exact original/refactored node-ID sets are equal.")
     return 0
