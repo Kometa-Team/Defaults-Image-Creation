@@ -32,7 +32,7 @@ class WorkflowBoundaryTests(unittest.TestCase):
         workflow = yaml.load((ROOT.parent / ".github/workflows/default-poster-validation.yml").read_text(), Loader=yaml.BaseLoader)
         self.assertEqual(workflow["on"], {"pull_request": {"branches": ["main"]}})
         self.assertEqual(workflow["permissions"], {"contents": "read"})
-        self.assertEqual(set(workflow["jobs"]), {"collection", "validation", "acceptance"})
+        self.assertEqual(set(workflow["jobs"]), {"collection", "validation", "phase3", "acceptance"})
         job = workflow["jobs"]["validation"]
         self.assertEqual(job["runs-on"], "${{ matrix.os }}")
         self.assertEqual(job["strategy"]["matrix"]["os"], ["ubuntu-latest", "windows-latest"])

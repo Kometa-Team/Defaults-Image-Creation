@@ -1,7 +1,28 @@
 # Bounded Windows/Linux validation
 
-This is a CI reliability repair, separate from draft Phase 3 planning PR #24.
-It grants no contract approval, activation, publication or Phase 3 authority.
+The original reliability repair remains the full legacy validation baseline.
+Explicitly authorized P3/M1 adds a separate focused matrix, required by the same
+**Validation acceptance** check. It grants no contract approval, activation,
+publication or later-milestone authority.
+
+## Required Phase 3 foundation extension
+
+`ci/phase3.py` independently collects and executes the complete maintained
+`ci/phase3-test-ids.json` selection from `create_defaults/phase3/tests/` on both
+platforms. It reuses the original pytest phase-report validator and requires
+every focused ID, no skips/xfails, exact head/schema/selection pins and matching
+fixed canonical golden vectors. Both platform reports are downloaded by the
+existing aggregate and included in `coverage-equivalence.json`.
+
+`needs: [collection, validation, phase3]` and explicit strict result checks make
+this extension mandatory through existing **Validation acceptance**. A missing,
+failed, cancelled or skipped focused matrix fails acceptance. There are now 21
+required jobs/checks; the legacy 19 and every original test/command remain
+required, with their unchanged ID snapshot and deterministic group plan. Each
+job retains 15 minutes and independent Windows/Linux reporting. The workflow's
+exact M7 pin advances through authorized maintenance; all 190 memberships,
+other source pins and protection logic remain intact. No branch-protection
+settings are changed; the existing aggregate still needs to be required.
 
 ## Measurements before choosing boundaries
 
