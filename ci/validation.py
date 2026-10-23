@@ -107,7 +107,7 @@ class UnitEvidenceResult(unittest.TextTestResult):
 
 
 def require_jobs(needs):
-    require(set(needs) == {"collection", "validation"} and all(v["result"] == "success" for v in needs.values()),
+    require(set(needs) == {"collection", "validation", "phase3"} and all(v["result"] == "success" for v in needs.values()),
             "Failed, cancelled, skipped or missing required job")
 
 
@@ -223,6 +223,11 @@ def reconcile(plan, reports, base):
     return summary
 
 
+def legacy_reports(directory):
+    return [read(p) for p in directory.rglob("*.json")
+            if p.name == "collection.json" or p.name.startswith("group-")]
+
+
 def main():
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument("action", choices=["collect", "run", "verify", "pytest", "unit"])
@@ -263,8 +268,11 @@ def main():
     else:
         needs = json.loads(os.environ["REQUIRED_JOB_RESULTS"])
         require_jobs(needs)
-        reports = [read(p) for p in args.directory.rglob("*.json") if p.name == "collection.json" or p.name.startswith("group-")]
-        write(OUTPUT/"coverage-equivalence.json", reconcile(plan, reports, args.base))
+        reports = legacy_reports(args.directory)
+        summary = reconcile(plan, reports, args.base)
+        from ci.phase3 import verify_reports
+        summary["phase3"] = verify_reports([read(p) for p in args.directory.rglob("phase3-report.json")])
+        write(OUTPUT/"coverage-equivalence.json", summary)
         print("All Windows/Linux groups passed; exact original/refactored node-ID sets are equal.")
     return 0
 

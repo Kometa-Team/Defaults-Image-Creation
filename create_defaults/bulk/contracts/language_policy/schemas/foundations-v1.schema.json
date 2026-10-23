@@ -1,0 +1,1042 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,199}$",
+      "maxLength": 200,
+      "format": "phase3-id"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "maxLength": 64
+    },
+    "git": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$",
+      "maxLength": 40
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$",
+      "maxLength": 60,
+      "format": "phase3-version"
+    },
+    "language": {
+      "type": "string",
+      "format": "phase3-language",
+      "minLength": 2,
+      "maxLength": 32
+    },
+    "path": {
+      "type": "string",
+      "format": "phase3-path",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "branch": {
+      "type": "string",
+      "format": "phase3-branch",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "time": {
+      "type": "string",
+      "format": "phase3-time",
+      "maxLength": 20
+    },
+    "key": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+    },
+    "repository": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "const": "github.com"
+        },
+        "repository_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "owner_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "name": {
+          "type": "string",
+          "format": "phase3-repository",
+          "maxLength": 180
+        }
+      },
+      "required": [
+        "host",
+        "repository_id",
+        "owner_id",
+        "name"
+      ],
+      "additionalProperties": false
+    },
+    "package": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "enum": [
+            "Aspect",
+            "AudioLanguage",
+            "Awards",
+            "Based",
+            "Chart",
+            "ContentRating",
+            "Country",
+            "Decade",
+            "Franchise",
+            "Genre",
+            "Network",
+            "Playlist",
+            "Resolution",
+            "Seasonal",
+            "Separators",
+            "Streaming",
+            "Studio",
+            "SubtitleLanguage",
+            "Universe",
+            "VideoFormat",
+            "Year",
+            "Overlays"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "poster",
+            "overlay"
+          ]
+        },
+        "version": {
+          "$ref": "#/$defs/version"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "category",
+        "kind",
+        "version",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "language-policy-ref": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "language-policy"
+        },
+        "version": {
+          "$ref": "#/$defs/version"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "kind",
+        "version",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "translation-selection-ref": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "translation-selection"
+        },
+        "version": {
+          "$ref": "#/$defs/version"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "kind",
+        "version",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "destination-policy-ref": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "destination-policy"
+        },
+        "version": {
+          "$ref": "#/$defs/version"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "kind",
+        "version",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "destination-evidence-ref": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "destination-evidence"
+        },
+        "version": {
+          "$ref": "#/$defs/version"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "kind",
+        "version",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "validation-subject-ref": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "validation-subject"
+        },
+        "version": {
+          "$ref": "#/$defs/version"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "kind",
+        "version",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "repository": {
+          "$ref": "#/$defs/repository"
+        },
+        "commit": {
+          "$ref": "#/$defs/git"
+        },
+        "tree": {
+          "$ref": "#/$defs/git"
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "$ref": "#/$defs/path"
+              },
+              "blob_sha1": {
+                "$ref": "#/$defs/git"
+              },
+              "sha256": {
+                "$ref": "#/$defs/hash"
+              }
+            },
+            "required": [
+              "path",
+              "blob_sha1",
+              "sha256"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 20000,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "repository",
+        "commit",
+        "tree",
+        "resources"
+      ],
+      "additionalProperties": false
+    },
+    "source-verification": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "unavailable",
+            "unverifiable",
+            "verified",
+            "stale"
+          ]
+        },
+        "issuer": {
+          "$ref": "#/$defs/id"
+        },
+        "issuer_version": {
+          "$ref": "#/$defs/version"
+        },
+        "context_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "source_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "checked_at": {
+          "$ref": "#/$defs/time"
+        },
+        "synthetic": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "status",
+        "issuer",
+        "issuer_version",
+        "context_sha256",
+        "source_sha256",
+        "checked_at",
+        "synthetic"
+      ],
+      "additionalProperties": false
+    },
+    "target": {
+      "type": "object",
+      "properties": {
+        "repository": {
+          "$ref": "#/$defs/repository"
+        },
+        "branch": {
+          "$ref": "#/$defs/branch"
+        },
+        "root": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/path"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "paths": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/path"
+          },
+          "minItems": 1,
+          "maxItems": 20000,
+          "uniqueItems": true
+        },
+        "language": {
+          "$ref": "#/$defs/language"
+        },
+        "baseline_commit": {
+          "$ref": "#/$defs/git"
+        },
+        "baseline_tree": {
+          "$ref": "#/$defs/git"
+        },
+        "inventory_sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "repository",
+        "branch",
+        "root",
+        "paths",
+        "language",
+        "baseline_commit",
+        "baseline_tree",
+        "inventory_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "authorization": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "unavailable",
+            "unverifiable",
+            "verified",
+            "expired",
+            "revoked"
+          ]
+        },
+        "principal": {
+          "$ref": "#/$defs/id"
+        },
+        "issuer": {
+          "$ref": "#/$defs/id"
+        },
+        "issuer_version": {
+          "$ref": "#/$defs/version"
+        },
+        "assertion_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "verification_context_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "verified_at": {
+          "$ref": "#/$defs/time"
+        },
+        "expires_at": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "revocation": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "unknown",
+                "clear",
+                "revoked"
+              ]
+            },
+            "checked_at": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/time"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "revision_sha256": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/hash"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "status",
+            "checked_at",
+            "revision_sha256"
+          ],
+          "additionalProperties": false
+        },
+        "synthetic": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "status",
+        "principal",
+        "issuer",
+        "issuer_version",
+        "assertion_sha256",
+        "verification_context_sha256",
+        "verified_at",
+        "expires_at",
+        "revocation",
+        "synthetic"
+      ],
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "identity_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "local_path": {
+          "$ref": "#/$defs/path"
+        },
+        "public_path": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/path"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "identity_sha256",
+        "local_path",
+        "public_path"
+      ],
+      "additionalProperties": false
+    },
+    "language-policy": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "kind": {
+          "const": "language-policy"
+        },
+        "stage": {
+          "const": "policy"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "version": {
+          "$ref": "#/$defs/version"
+        },
+        "owner": {
+          "$ref": "#/$defs/id"
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "$ref": "#/$defs/language"
+              },
+              "aliases": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/language"
+                },
+                "minItems": 0,
+                "maxItems": 20000,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "code",
+              "aliases"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 20000,
+          "uniqueItems": true
+        },
+        "coverage": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "package": {
+                "$ref": "#/$defs/package"
+              },
+              "variant": {
+                "$ref": "#/$defs/id"
+              },
+              "languages": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/language"
+                },
+                "minItems": 1,
+                "maxItems": 20000,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "package",
+              "variant",
+              "languages"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "maxItems": 20000,
+          "uniqueItems": true
+        },
+        "freshness": {
+          "const": "verified-commit-and-content-with-explicit-reverification"
+        },
+        "external_authority_required": {
+          "const": true
+        },
+        "non_english_requires_versioned_contract": {
+          "const": true
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "stage",
+        "id",
+        "version",
+        "owner",
+        "languages",
+        "coverage",
+        "freshness",
+        "external_authority_required",
+        "non_english_requires_versioned_contract"
+      ],
+      "additionalProperties": false
+    },
+    "validation-subject": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "kind": {
+          "const": "validation-subject"
+        },
+        "stage": {
+          "const": "subject"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "version": {
+          "$ref": "#/$defs/version"
+        },
+        "language": {
+          "$ref": "#/$defs/language"
+        },
+        "contract": {
+          "$ref": "#/$defs/package"
+        },
+        "variant": {
+          "$ref": "#/$defs/id"
+        },
+        "expanded_definition_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "dependencies_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "review_context_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/output"
+          },
+          "minItems": 1,
+          "maxItems": 20000,
+          "uniqueItems": true
+        },
+        "membership_sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "stage",
+        "id",
+        "version",
+        "language",
+        "contract",
+        "variant",
+        "expanded_definition_sha256",
+        "dependencies_sha256",
+        "review_context_sha256",
+        "outputs",
+        "membership_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "translation-selection": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "kind": {
+          "const": "translation-selection"
+        },
+        "stage": {
+          "const": "selection"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "version": {
+          "$ref": "#/$defs/version"
+        },
+        "language_policy": {
+          "$ref": "#/$defs/language-policy-ref"
+        },
+        "subject": {
+          "$ref": "#/$defs/validation-subject-ref"
+        },
+        "requested_language": {
+          "$ref": "#/$defs/language"
+        },
+        "language": {
+          "$ref": "#/$defs/language"
+        },
+        "snapshot_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "resource_path": {
+                "$ref": "#/$defs/path"
+              },
+              "key": {
+                "$ref": "#/$defs/key"
+              },
+              "source_value_sha256": {
+                "$ref": "#/$defs/hash"
+              },
+              "value_sha256": {
+                "$ref": "#/$defs/hash"
+              }
+            },
+            "required": [
+              "resource_path",
+              "key",
+              "source_value_sha256",
+              "value_sha256"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "maxItems": 20000,
+          "uniqueItems": true
+        },
+        "verification": {
+          "$ref": "#/$defs/source-verification"
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "stage",
+        "id",
+        "version",
+        "language_policy",
+        "subject",
+        "requested_language",
+        "language",
+        "snapshot_sha256",
+        "source",
+        "values",
+        "verification"
+      ],
+      "additionalProperties": false
+    },
+    "destination-policy": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "kind": {
+          "const": "destination-policy"
+        },
+        "stage": {
+          "const": "policy"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "version": {
+          "$ref": "#/$defs/version"
+        },
+        "owner": {
+          "$ref": "#/$defs/id"
+        },
+        "language_policy": {
+          "$ref": "#/$defs/language-policy-ref"
+        },
+        "official_repository": {
+          "$ref": "#/$defs/repository"
+        },
+        "official_language": {
+          "const": "en"
+        },
+        "english_user_owned_allowed": {
+          "const": true
+        },
+        "external_authority_required": {
+          "const": true
+        },
+        "mappings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "language": {
+                "$ref": "#/$defs/language"
+              },
+              "repository": {
+                "$ref": "#/$defs/repository"
+              },
+              "branch": {
+                "$ref": "#/$defs/branch"
+              },
+              "root": {
+                "oneOf": [
+                  {
+                    "$ref": "#/$defs/path"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "paths": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/path"
+                },
+                "minItems": 1,
+                "maxItems": 20000,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "language",
+              "repository",
+              "branch",
+              "root",
+              "paths"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "maxItems": 20000,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "stage",
+        "id",
+        "version",
+        "owner",
+        "language_policy",
+        "official_repository",
+        "official_language",
+        "english_user_owned_allowed",
+        "external_authority_required",
+        "mappings"
+      ],
+      "additionalProperties": false
+    },
+    "destination-evidence": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "kind": {
+          "const": "destination-evidence"
+        },
+        "stage": {
+          "const": "observation"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "version": {
+          "$ref": "#/$defs/version"
+        },
+        "subject": {
+          "$ref": "#/$defs/validation-subject-ref"
+        },
+        "destination_policy": {
+          "$ref": "#/$defs/destination-policy-ref"
+        },
+        "target": {
+          "$ref": "#/$defs/target"
+        },
+        "authorization": {
+          "$ref": "#/$defs/authorization"
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "stage",
+        "id",
+        "version",
+        "subject",
+        "destination_policy",
+        "target",
+        "authorization"
+      ],
+      "additionalProperties": false
+    },
+    "phase3-attestation": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "kind": {
+          "const": "phase3-attestation"
+        },
+        "stage": {
+          "const": "informational"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "version": {
+          "$ref": "#/$defs/version"
+        },
+        "subject": {
+          "$ref": "#/$defs/validation-subject-ref"
+        },
+        "language_policy": {
+          "$ref": "#/$defs/language-policy-ref"
+        },
+        "translation_selection": {
+          "$ref": "#/$defs/translation-selection-ref"
+        },
+        "destination_policy": {
+          "$ref": "#/$defs/destination-policy-ref"
+        },
+        "destination_evidence": {
+          "$ref": "#/$defs/destination-evidence-ref"
+        },
+        "language": {
+          "$ref": "#/$defs/language"
+        },
+        "contract": {
+          "$ref": "#/$defs/package"
+        },
+        "output_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "minItems": 1,
+          "maxItems": 20000,
+          "uniqueItems": true
+        },
+        "membership_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "expanded_definition_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "dependencies_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "review_context_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "authority_context_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "verification_context_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "status": {
+          "const": "informational"
+        },
+        "publication_authorized": {
+          "const": false
+        },
+        "production_enforcement": {
+          "const": false
+        },
+        "ready": {
+          "const": false
+        },
+        "active": {
+          "const": false
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "stage",
+        "id",
+        "version",
+        "subject",
+        "language_policy",
+        "translation_selection",
+        "destination_policy",
+        "destination_evidence",
+        "language",
+        "contract",
+        "output_ids",
+        "membership_sha256",
+        "expanded_definition_sha256",
+        "dependencies_sha256",
+        "review_context_sha256",
+        "authority_context_sha256",
+        "verification_context_sha256",
+        "status",
+        "publication_authorized",
+        "production_enforcement",
+        "ready",
+        "active"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/language-policy"
+    },
+    {
+      "$ref": "#/$defs/translation-selection"
+    },
+    {
+      "$ref": "#/$defs/destination-policy"
+    },
+    {
+      "$ref": "#/$defs/destination-evidence"
+    },
+    {
+      "$ref": "#/$defs/validation-subject"
+    },
+    {
+      "$ref": "#/$defs/phase3-attestation"
+    }
+  ]
+}
