@@ -19,7 +19,8 @@ def package_ref(contract):
 
 def selected_design(package, variant, contract_pin, rules_pin):
     from ..categories.release import Package
-    if type(package) is not Package or type(package.contract) is not Contract:
+    from ..categories.models import Rules
+    if type(package) is not Package or type(package.contract) is not Contract or type(package.rules) is not Rules:
         fail("package_type")
     if package.contract.sha256 != require_hash(contract_pin) or package.rules.sha256 != require_hash(rules_pin):
         fail("package_pin")

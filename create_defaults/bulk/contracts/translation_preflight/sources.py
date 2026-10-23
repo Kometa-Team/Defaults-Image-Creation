@@ -70,6 +70,12 @@ class SnapshotInput:
     repository_json: bytes
     resources: tuple[tuple[str, bytes | None], ...]
 
+    def __post_init__(self):
+        if (type(self.repository_json) is not bytes or type(self.resources) is not tuple
+                or any(type(row) is not tuple or len(row) != 2 or type(row[0]) is not str
+                       or (row[1] is not None and type(row[1]) is not bytes) for row in self.resources)):
+            fail("immutable_snapshot_input")
+
     def selected(self, languages):
         from ...languages import LanguageSnapshot
         from ..models import decode_json

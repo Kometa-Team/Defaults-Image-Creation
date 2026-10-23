@@ -80,6 +80,8 @@ def test_missing_resource_is_not_a_missing_key(tmp_path,missing):
 def test_missing_cached_bytes_and_substituted_blob_are_distinct(tmp_path):
     request=synthetic_request(tmp_path,language='fr')
     snapshot=snapshot_for()
+    with pytest.raises(BulkError):replace(snapshot,resources=list(snapshot.resources))
+    with pytest.raises(BulkError):replace(snapshot,resources=(('defaults/fr.yml',bytearray(b'mutable')),))
     for raw,status in [(None,'resource_unavailable'),(b'key_names: {TIMELINE_ORDER: Forged}','unverifiable_provenance')]:
         altered=replace(snapshot,resources=tuple((p,raw if p=='defaults/fr.yml' else b) for p,b in snapshot.resources))
         report=run(request,altered,'fr').to_dict()
@@ -291,6 +293,8 @@ def test_real_m5_resolution_cannot_be_replaced_with_loose_expanded_json():
     forged=replace(request.resolution,encoded=canonical(data))
     with pytest.raises(BulkError,match='resolution_replay'):run(replace(request,resolution=forged))
     with pytest.raises(BulkError):run(replace(request,resolution=replace(forged,source_pins=())))
+    from create_defaults.bulk.contracts.categories.release import Package
+    with pytest.raises(BulkError):run(replace(request,package=Package(request.package.contract,None)))
 
 
 @pytest.mark.parametrize('override',[{'caption':{'mode':'none','key':None,'template_key':None}}, {'caption':{'key':'key_names.FORGED'}}, {'composer':{'font_size':1}}, {'layout':{'kind':'fixed','measurement':None}}])
