@@ -57,7 +57,7 @@ Metadata size/count bounds apply independently of the unchanged worker limits.
 
 ## Adversarial validation
 
-The explicitly collected 202 Phase 4 tests use temporary synthetic stores and
+The explicitly collected 203 Phase 4 tests use temporary synthetic stores and
 actual SQLite persistence, including simultaneous thread writers and subprocess
 death inside an uncommitted transaction. They cover all four operation types,
 schema/header/nested/encoding attacks, canonical hashes, invalid transitions,

@@ -116,6 +116,23 @@ def test_actual_concurrent_writers_are_atomic_and_disjoint_requests_proceed(stor
     assert [e.to_dict()['sequence'] for e in store.journal()]==list(range(1,check['sequence']+1))
 
 
+def test_concurrent_rename_requests_cannot_claim_the_same_casefolded_namespace_head(store):
+    barrier=Barrier(2)
+    requests=[sample(store,name=name,operation='RENAME',subjects=(name,),paths=[path])
+        for name,path in [('one','Posters/Reserved.jpg'),('two','posters/reserved.jpg')]]
+    def rename_request(record):
+        local=OperationStore(store.root);barrier.wait(timeout=15)
+        try:return append(local,record)
+        except Conflict:return None
+    with ThreadPoolExecutor(max_workers=2) as pool:results=list(pool.map(rename_request,requests))
+    assert sum(event is not None for event in results)==1
+    report=OperationStore(store.root).inspect()
+    assert report['records']==report['sequence']==1 and not report['applied']
+    assert len([h for h in report['heads'] if h['kind']=='namespace'])==1
+    # Coordination is not a filesystem move or persistent M2 name allocation.
+    assert not (store.root/'Posters').exists() and not (store.root/'posters').exists()
+
+
 def test_concurrent_identical_requests_are_idempotent_without_double_journal(store):
     r=sample();barrier=Barrier(2)
     def retry(_):
