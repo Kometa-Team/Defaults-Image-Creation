@@ -1,93 +1,176 @@
 name: Default Poster Candidate Validation
-
-on:
+'on':
   pull_request:
-    branches: [main]
-
+    branches:
+    - main
 permissions:
   contents: read
-
 concurrency:
   group: default-poster-${{ github.event.pull_request.number }}
   cancel-in-progress: true
-
 jobs:
-  python-validation:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest]
+  collection:
+    name: Collect original (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
+    env:
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+      PYTHONUNBUFFERED: '1'
     defaults:
       run:
         shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+        - ubuntu-latest
+        - windows-latest
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: '3.13'
-          cache: pip
-          cache-dependency-path: |
-            create_defaults/requirements.txt
-            create_defaults/requirements-bulk.txt
-      - name: Install Python dependencies
-        run: python -m pip install -r create_defaults/requirements-bulk.txt
-      - name: Compile candidate and validation modules
-        run: python -m compileall -q create_defaults
-      - name: Unit tests and approved font hash/license checks
-        run: python -m unittest discover -s create_defaults/tests -v
-      - name: Verify frozen effective-job manifest and fixtures
-        run: |
-          python -m create_defaults.bulk.baselines --check-historical
-          python create_defaults/validation_manifest.py --check create_defaults/bulk/baselines/effective-jobs-en-current.json.gz
-      - name: Packages A-E infrastructure and generation tests
-        run: |
-          python -m unittest discover -s create_defaults/phase2/tests -v
-          python -m pytest create_defaults/bulk/tests -q -rs -p no:cacheprovider
-      - name: Focused offline Package D review artifacts
-        run: python -m create_defaults.bulk.d_evidence smoke
-      - name: Retain local-only review evidence for the team
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: package-d-focused-review-${{ matrix.os }}
-          retention-days: 14
-          if-no-files-found: error
-          path: |
-            config/package-d-smoke/smoke-evidence.json
-            config/package-d-smoke/layout-proposal.json
-            config/package-d-smoke/cache/preview-reports/**
-            config/package-d-smoke/cache/preflight/**
-            config/package-d-smoke/output/**
-      - name: Bounded offline Package E acceptance smoke
-        run: python -m create_defaults.bulk.e_smoke
-      - name: Retain focused Package E acceptance evidence
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: package-e-focused-acceptance-${{ matrix.os }}
-          retention-days: 14
-          if-no-files-found: error
-          path: |
-            config/package-e-ci/ci-evidence.json
-            config/package-e-ci/posters/*summary.json
-            config/package-e-ci/posters/output-verification.json
-            config/package-e-ci/posters/verified-output-ledger.json
-            config/package-e-ci/posters/output/defaults-en/based/**
-            config/package-e-ci/posters/output/defaults-en/decade/2020.jpg
-            config/package-e-ci/posters/output/defaults-en/decade/best/2020.jpg
-            config/package-e-ci/overlays/overlay-summary.json
-            config/package-e-ci/overlays/output-ledger.json
-            config/package-e-ci/overlays/output/**
-      - name: People GitHub compatibility regressions
-        run: >-
-          python -m pytest
-          create_people_posters/tests/test_people_github.py
-          create_people_posters/tests/test_people_sandbox.py
-          create_people_posters/tests/test_people_workspaces.py
-          create_people_posters/tests/test_people_api_orchestrator.py
-          -q -rs -p no:cacheprovider
-      - name: Whitespace checks
-        run: git diff --check "${{ github.event.pull_request.base.sha }}" HEAD
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        fetch-depth: 0
+        persist-credentials: false
+        ref: ${{ github.event.pull_request.head.sha }}
+    - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+      with:
+        python-version: '3.13'
+        cache: pip
+        cache-dependency-path: |
+          create_defaults/requirements.txt
+          create_defaults/requirements-bulk.txt
+    - name: Install Python dependencies
+      run: python -m pip install -r create_defaults/requirements-bulk.txt
+    - name: Collect original pytest and unittest IDs
+      run: python ci/validation.py collect
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: collection-${{ matrix.os }}
+        path: config/ci-validation/**
+        retention-days: 14
+        if-no-files-found: error
+  validation:
+    name: Validate (${{ matrix.os }}, ${{ matrix.group }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    env:
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+      PYTHONUNBUFFERED: '1'
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+        - ubuntu-latest
+        - windows-latest
+        group:
+        - core
+        - historical
+        - contracts
+        - categories
+        - generation
+        - review
+        - people
+        - smoke
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        fetch-depth: 0
+        persist-credentials: false
+        ref: ${{ github.event.pull_request.head.sha }}
+    - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+      with:
+        python-version: '3.13'
+        cache: pip
+        cache-dependency-path: |
+          create_defaults/requirements.txt
+          create_defaults/requirements-bulk.txt
+    - name: Install Python dependencies
+      run: python -m pip install -r create_defaults/requirements-bulk.txt
+    - name: Run bounded required validation
+      env:
+        BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      run: python ci/validation.py run --group "${{ matrix.group }}" --base "$BASE_SHA"
+    - name: Retain local-only review evidence for the team
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      with:
+        name: package-d-focused-review-${{ matrix.os }}
+        retention-days: 14
+        if-no-files-found: error
+        path: |
+          config/package-d-smoke/smoke-evidence.json
+          config/package-d-smoke/layout-proposal.json
+          config/package-d-smoke/cache/preview-reports/**
+          config/package-d-smoke/cache/preflight/**
+          config/package-d-smoke/output/**
+      if: ${{ matrix.group == 'smoke' }}
+    - name: Retain focused Package E acceptance evidence
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      with:
+        name: package-e-focused-acceptance-${{ matrix.os }}
+        retention-days: 14
+        if-no-files-found: error
+        path: |
+          config/package-e-ci/ci-evidence.json
+          config/package-e-ci/posters/*summary.json
+          config/package-e-ci/posters/output-verification.json
+          config/package-e-ci/posters/verified-output-ledger.json
+          config/package-e-ci/posters/output/defaults-en/based/**
+          config/package-e-ci/posters/output/defaults-en/decade/2020.jpg
+          config/package-e-ci/posters/output/defaults-en/decade/best/2020.jpg
+          config/package-e-ci/overlays/overlay-summary.json
+          config/package-e-ci/overlays/output-ledger.json
+          config/package-e-ci/overlays/output/**
+      if: ${{ matrix.group == 'smoke' }}
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: validation-${{ matrix.os }}-${{ matrix.group }}
+        path: config/ci-validation/**
+        retention-days: 14
+        if-no-files-found: error
+  acceptance:
+    name: Validation acceptance
+    if: ${{ always() }}
+    needs:
+    - collection
+    - validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    env:
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+      REQUIRED_JOB_RESULTS: ${{ toJSON(needs) }}
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        fetch-depth: 0
+        persist-credentials: false
+        ref: ${{ github.event.pull_request.head.sha }}
+    - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+      with:
+        python-version: '3.13'
+        cache: pip
+        cache-dependency-path: |
+          create_defaults/requirements.txt
+          create_defaults/requirements-bulk.txt
+    - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+      with:
+        path: config/ci-downloaded
+        pattern: validation-*
+    - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+      with:
+        path: config/ci-downloaded
+        pattern: collection-*
+    - name: Require all groups and reconcile exact test IDs and non-pytest gates
+      run: python ci/validation.py verify --directory config/ci-downloaded --base "$BASE_SHA"
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      with:
+        name: coverage-equivalence
+        path: config/ci-validation/coverage-equivalence.json
+        retention-days: 14
+        if-no-files-found: error
