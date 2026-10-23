@@ -1,0 +1,514 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kometa.wiki/schemas/lifecycle/destination-preflight-v1.schema.json",
+  "$defs": {
+    "destination-inventory": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "kind": {
+          "const": "destination-inventory"
+        },
+        "version": {
+          "const": "1.0.0"
+        },
+        "repository": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/repository"
+        },
+        "branch": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/branch"
+        },
+        "commit": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/git"
+        },
+        "tree": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/git"
+        },
+        "commit_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{2})+$",
+          "maxLength": 524288,
+          "not": {
+            "pattern": "\\s"
+          }
+        },
+        "pages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sha": {
+                "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/git"
+              },
+              "entries": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/path"
+                    },
+                    "mode": {
+                      "enum": [
+                        "040000",
+                        "100644",
+                        "100755",
+                        "120000",
+                        "160000"
+                      ]
+                    },
+                    "sha": {
+                      "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/git"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "mode",
+                    "sha"
+                  ],
+                  "additionalProperties": false
+                },
+                "maxItems": 100000
+              }
+            },
+            "required": [
+              "sha",
+              "entries"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 100000
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "version",
+        "repository",
+        "branch",
+        "commit",
+        "tree",
+        "commit_hex",
+        "pages"
+      ],
+      "additionalProperties": false
+    },
+    "destination-attestation": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "kind": {
+          "const": "destination-attestation"
+        },
+        "version": {
+          "const": "1.0.0"
+        },
+        "stage": {
+          "const": "informational"
+        },
+        "language": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/language"
+        },
+        "language_policy": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/language-policy-ref"
+        },
+        "destination_policy": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/destination-policy-ref"
+        },
+        "destination_evidence": {
+          "oneOf": [
+            {
+              "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/destination-evidence-ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "inventory_sha256": {
+          "oneOf": [
+            {
+              "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "cohort": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "subject": {
+                "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/validation-subject-ref"
+              },
+              "translation": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "translation-preflight"
+                  },
+                  "version": {
+                    "const": "1.0.0"
+                  },
+                  "sha256": {
+                    "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/hash"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "version",
+                  "sha256"
+                ],
+                "additionalProperties": false
+              },
+              "contract": {
+                "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/package"
+              },
+              "variant": {
+                "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/id"
+              },
+              "language": {
+                "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/language"
+              },
+              "rules_sha256": {
+                "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/hash"
+              },
+              "membership_sha256": {
+                "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/hash"
+              },
+              "translation_blockers": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "maxLength": 4096
+                },
+                "maxItems": 20
+              }
+            },
+            "required": [
+              "subject",
+              "translation",
+              "contract",
+              "variant",
+              "language",
+              "rules_sha256",
+              "membership_sha256",
+              "translation_blockers"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 20000,
+          "minItems": 1
+        },
+        "cohort_sha256": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/hash"
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "output": {
+                "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/output"
+              },
+              "target_path": {
+                "oneOf": [
+                  {
+                    "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/path"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "status": {
+                "enum": [
+                  "clear",
+                  "blocked",
+                  "private"
+                ]
+              },
+              "diagnostics": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "existing_exact",
+                    "existing_alias",
+                    "existing_ancestor_alias",
+                    "symlink_ancestor",
+                    "existing_file_ancestor",
+                    "existing_directory",
+                    "proposed_collision"
+                  ]
+                },
+                "maxItems": 10
+              }
+            },
+            "required": [
+              "output",
+              "target_path",
+              "status",
+              "diagnostics"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 20000,
+          "minItems": 1
+        },
+        "output_membership_sha256": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/hash"
+        },
+        "target": {
+          "oneOf": [
+            {
+              "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/target"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "policy_route": {
+          "enum": [
+            "official_english",
+            "user_english",
+            "user_non_english",
+            "denied",
+            "private_only"
+          ]
+        },
+        "authority_status": {
+          "enum": [
+            "not_applicable",
+            "unavailable",
+            "unverifiable",
+            "expired",
+            "revoked",
+            "synthetic-only"
+          ]
+        },
+        "verified_observation": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "repository": {
+                  "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/repository"
+                },
+                "owner_kind": {
+                  "enum": [
+                    "user",
+                    "organization"
+                  ]
+                },
+                "principal_id": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "official_repository_id": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "official_owner_id": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "target_sha256": {
+                  "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/hash"
+                },
+                "inventory_sha256": {
+                  "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/hash"
+                },
+                "cohort_sha256": {
+                  "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/hash"
+                },
+                "permissions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "maxItems": 100
+                },
+                "revocation_revision_sha256": {
+                  "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/hash"
+                },
+                "revocation_checked_at": {
+                  "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/time"
+                },
+                "authority_context_sha256": {
+                  "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/hash"
+                }
+              },
+              "required": [
+                "repository",
+                "owner_kind",
+                "principal_id",
+                "official_repository_id",
+                "official_owner_id",
+                "target_sha256",
+                "inventory_sha256",
+                "cohort_sha256",
+                "permissions",
+                "revocation_revision_sha256",
+                "revocation_checked_at",
+                "authority_context_sha256"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "authority_context_sha256": {
+          "oneOf": [
+            {
+              "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "inventory_currentness": {
+          "enum": [
+            "not_applicable",
+            "unverifiable",
+            "synthetic-only"
+          ]
+        },
+        "repository_identity_status": {
+          "enum": [
+            "not_applicable",
+            "unverifiable",
+            "synthetic-only"
+          ]
+        },
+        "inventory_status": {
+          "enum": [
+            "not_applicable",
+            "unavailable",
+            "incomplete",
+            "integrity_verified"
+          ]
+        },
+        "missing_tree_pages": {
+          "type": "array",
+          "items": {
+            "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/git"
+          },
+          "maxItems": 100000
+        },
+        "missing_companions": {
+          "type": "array",
+          "items": {
+            "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/id"
+          },
+          "maxItems": 20000
+        },
+        "inventory_entries": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "proposed_outputs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20000
+        },
+        "evaluated_outputs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20000
+        },
+        "complete": {
+          "type": "boolean"
+        },
+        "evaluation_complete": {
+          "const": true
+        },
+        "destination_checks_passed": {
+          "type": "boolean"
+        },
+        "simulation_eligible": {
+          "type": "boolean"
+        },
+        "technical_eligible": {
+          "const": false
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "maxItems": 40000
+        },
+        "dependency_sha256": {
+          "$ref": "https://kometa.wiki/schemas/lifecycle/phase3-foundations-v1.schema.json#/$defs/hash"
+        },
+        "publication_authorized": {
+          "const": false
+        },
+        "production_enforcement": {
+          "const": false
+        },
+        "ready": {
+          "const": false
+        },
+        "active": {
+          "const": false
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "version",
+        "stage",
+        "language",
+        "language_policy",
+        "destination_policy",
+        "destination_evidence",
+        "inventory_sha256",
+        "cohort",
+        "cohort_sha256",
+        "outputs",
+        "output_membership_sha256",
+        "target",
+        "policy_route",
+        "authority_status",
+        "verified_observation",
+        "authority_context_sha256",
+        "inventory_currentness",
+        "repository_identity_status",
+        "inventory_status",
+        "missing_tree_pages",
+        "missing_companions",
+        "inventory_entries",
+        "proposed_outputs",
+        "evaluated_outputs",
+        "complete",
+        "evaluation_complete",
+        "destination_checks_passed",
+        "simulation_eligible",
+        "technical_eligible",
+        "blockers",
+        "dependency_sha256",
+        "publication_authorized",
+        "production_enforcement",
+        "ready",
+        "active"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
