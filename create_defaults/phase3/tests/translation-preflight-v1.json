@@ -1,0 +1,157 @@
+{
+  "sha256": "345dfe0adc961576940b0f59714caa953669d08f0e07fa216cfbde2f0117cbbd",
+  "evidence": {
+    "active": false,
+    "blockers": [
+      "source_currentness:synthetic-current"
+    ],
+    "complete": true,
+    "currentness": "synthetic-current",
+    "definition_dependencies_json": "{\"definition\":\"e4ebf3dc226ac89f0ef024b2ed3c3270c071179be974006ddbb897d5f00bf83c\",\"family\":[],\"generator\":null,\"origin\":{\"file\":\"fixture.yml\",\"inherited_sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\",\"profile\":null,\"profile_file\":\"profiles.yml\",\"row_sha256\":\"e4ebf3dc226ac89f0ef024b2ed3c3270c071179be974006ddbb897d5f00bf83c\"},\"rules\":\"b32ab31784816fe452c8cc0efe60c1efb7bc4e555ce7ba4ae38d5b0071648d55\"}",
+    "dependency_sha256": "90f321b564b9a0888da85c610c347ed27aac63135c4626d817678bded726a0b3",
+    "effective_definition_sha256": "e4ebf3dc226ac89f0ef024b2ed3c3270c071179be974006ddbb897d5f00bf83c",
+    "evaluated_row_count": 2,
+    "fallback_json": "null",
+    "independent_checks": [
+      "contract-approval",
+      "destination",
+      "font-glyphs",
+      "layout",
+      "logo",
+      "visual-review"
+    ],
+    "key_status": "applicable",
+    "kind": "translation-preflight",
+    "language": "fr",
+    "language_policy": {
+      "kind": "language-policy",
+      "sha256": "cdd0262715f8187035f5de16331378d22a8f928fb68075195ef722250595c364",
+      "version": "1.0.0"
+    },
+    "legacy_trace_json": "[{\"key\":\"key_names.TIMELINE_ORDER\",\"language\":\"fr\",\"source_sha256\":\"17e2503917b086537d831797f88bbaedf515075e67b31a5c9a3d05734317f16c\",\"value_sha256\":\"0ffb222a1f5e1a6b4d1835b232ead02a522feda1e4b3d9324ed81fac7fdf00e5\"}]",
+    "production_enforcement": false,
+    "publication_authorized": false,
+    "ready": false,
+    "requested_language": "fr",
+    "required_keys": [
+      {
+        "key": "key_names.TIMELINE_ORDER",
+        "roles": [
+          "caption"
+        ]
+      }
+    ],
+    "required_row_count": 2,
+    "resolution_error": null,
+    "resolved_caption": "\u00c9t\u00e9 \u2014 Ordre chronologique, d\u00e9j\u00e0 vu!",
+    "resource_observations": [
+      {
+        "declared_sha256": "a459671f78a576b1274cda98fbfe1ecdc3673cc9bc136041cb5d40497a40a96f",
+        "language": "en",
+        "observed_sha256": "a459671f78a576b1274cda98fbfe1ecdc3673cc9bc136041cb5d40497a40a96f",
+        "resource_path": "defaults/en.yml",
+        "status": "available"
+      },
+      {
+        "declared_sha256": "17e2503917b086537d831797f88bbaedf515075e67b31a5c9a3d05734317f16c",
+        "language": "fr",
+        "observed_sha256": "17e2503917b086537d831797f88bbaedf515075e67b31a5c9a3d05734317f16c",
+        "resource_path": "defaults/fr.yml",
+        "status": "available"
+      }
+    ],
+    "results": [
+      {
+        "actual_key": "key_names.TIMELINE_ORDER",
+        "key": "key_names.TIMELINE_ORDER",
+        "language": "en",
+        "provenance_status": "synthetic-current",
+        "raw_json": "\"Timeline Order\"",
+        "resource_path": "defaults/en.yml",
+        "roles": [
+          "caption"
+        ],
+        "source_sha256": "a459671f78a576b1274cda98fbfe1ecdc3673cc9bc136041cb5d40497a40a96f",
+        "status": "available",
+        "value": "Timeline Order",
+        "value_sha256": "b0b3b0c0130a31d2bc202968f503bba3fe29428ac1b5f2c278e3d2eb2bd205cc"
+      },
+      {
+        "actual_key": "key_names.TIMELINE_ORDER",
+        "key": "key_names.TIMELINE_ORDER",
+        "language": "fr",
+        "provenance_status": "synthetic-current",
+        "raw_json": "\"\\u00c9t\\u00e9 \\u2014 Ordre chronologique, d\\u00e9j\\u00e0 vu!\"",
+        "resource_path": "defaults/fr.yml",
+        "roles": [
+          "caption"
+        ],
+        "source_sha256": "17e2503917b086537d831797f88bbaedf515075e67b31a5c9a3d05734317f16c",
+        "status": "available",
+        "value": "\u00c9t\u00e9 \u2014 Ordre chronologique, d\u00e9j\u00e0 vu!",
+        "value_sha256": "0ffb222a1f5e1a6b4d1835b232ead02a522feda1e4b3d9324ed81fac7fdf00e5"
+      }
+    ],
+    "schema_version": 1,
+    "snapshot_sha256": "62ec7c4556cdc5db39358fda9cc1ee04e35f709e884b835d751902a4f5cc5e79",
+    "source": {
+      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "repository": {
+        "host": "github.com",
+        "name": "Fixture/Translations",
+        "owner_id": 1101,
+        "repository_id": 101
+      },
+      "resources": [
+        {
+          "blob_sha1": "d77f8c1382d0b8eccc0727404588d848f24604c3",
+          "path": "defaults/en.yml",
+          "sha256": "a459671f78a576b1274cda98fbfe1ecdc3673cc9bc136041cb5d40497a40a96f"
+        },
+        {
+          "blob_sha1": "821f3ced6ecf65683b03e54fe6e7604a82c41d38",
+          "path": "defaults/fr.yml",
+          "sha256": "17e2503917b086537d831797f88bbaedf515075e67b31a5c9a3d05734317f16c"
+        }
+      ],
+      "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "stage": "informational",
+    "subject": {
+      "contract": {
+        "category": "Playlist",
+        "kind": "poster",
+        "sha256": "de5fafca5af71c77fe8791f2af4cafc2db72722a55af37a128eb74021db3a4f3",
+        "version": "2.0.0"
+      },
+      "dependencies_sha256": "27073e0e6688d1a78137aa3ea74c0c6a9fb819cdb0b96b032bd51a9c112cbe64",
+      "expanded_definition_sha256": "e4ebf3dc226ac89f0ef024b2ed3c3270c071179be974006ddbb897d5f00bf83c",
+      "id": "fixture.playlist",
+      "kind": "validation-subject",
+      "language": "fr",
+      "membership_sha256": "be775da673ea94ba973eb3913243793a8e379e8aa1581a44d7b6f06b1a8e1fa0",
+      "outputs": [
+        {
+          "id": "fixture.playlist",
+          "identity_sha256": "dcea7a12c28021c84c33e105cb63424f4e98135879c0e375d7c1340af223a854",
+          "local_path": "defaults-fr/playlist/Arrowverse (Timeline Order).jpg",
+          "public_path": null
+        }
+      ],
+      "review_context_sha256": "308b2f8e4dc66607b4a85da6f5e8d03f68790f584a7fe509addd5d3ffc081e0d",
+      "schema_version": 1,
+      "stage": "subject",
+      "variant": "timeline-order",
+      "version": "1.0.0"
+    },
+    "technical_eligible": true,
+    "translation_eligible": false,
+    "translation_selection": {
+      "kind": "translation-selection",
+      "sha256": "ad03fe6ed4ada9b88e0cc41005268176770767786cfe3ba3be03552823c52482",
+      "version": "1.0.0"
+    },
+    "verification_context_sha256": "0a281d0ba6e654a470da059f72abda010f908f48924ac3c76633a487b099db33",
+    "version": "1.0.0"
+  }
+}
