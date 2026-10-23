@@ -121,4 +121,3 @@ class SidecarStore(ContractStore):
             raise BulkError("transaction_required", "Writable owned transaction required")
         self.backend.event(db, kind, subject, payload)
         return db.execute("SELECT last_insert_rowid()").fetchone()[0]
-
