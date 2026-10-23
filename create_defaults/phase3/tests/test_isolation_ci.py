@@ -98,6 +98,32 @@ def test_complete_focused_windows_linux_proof_is_accepted():
     assert set(result)=={"Linux","Windows"}
 
 
+def test_actual_focused_producer_does_not_pollute_legacy_artifact_discovery(tmp_path,monkeypatch):
+    """Exercise both producer paths and the real aggregate report selector."""
+    from ci.validation import write
+    from create_defaults.phase3.tests.samples import bundle
+    expected=simulated_reports()[0]
+    legacy={"kind":"collection","platform":"Linux","original":["legacy::test"]}
+    write(tmp_path/"collection-ubuntu-latest/collection.json",legacy)
+    actual_golden={d.KIND:d.sha256 for d in bundle()}
+    def collected(paths,destination,collect=False):
+        data=expected["collection"] if collect else expected["execution"]
+        write(destination,data)
+        return data
+    def selected(path):
+        return expected["collection"]["nodes"] if path==phase3.IDS else actual_golden
+    monkeypatch.setattr(phase3,"OUT",tmp_path/"phase3-foundations-ubuntu-latest")
+    monkeypatch.setattr(phase3,"identity",lambda:{"head":"head","platform":"Linux","plan_sha256":"plan"})
+    monkeypatch.setattr(phase3,"checksum",lambda path:"pin")
+    monkeypatch.setattr(phase3,"read",selected)
+    monkeypatch.setattr(phase3,"pytest_run",collected)
+    phase3.run()
+    assert validation.legacy_reports(tmp_path)==[legacy]
+    reports=[json.loads(p.read_text()) for p in tmp_path.rglob("phase3-report.json")]
+    assert len(reports)==1 and reports[0]["success"]
+    assert reports[0]["execution"]["nodes"]==expected["execution"]["nodes"]
+
+
 @pytest.mark.parametrize("mutation",["missing","duplicate-platform","head","plan_sha256","ids_sha256","schema_sha256","success","golden","missing-collection-id","missing-execution-id","missing-call","xfail","skip","collection-interrupted"])
 def test_missing_cancelled_stale_substituted_or_incomplete_focused_proof_fails(mutation):
     reports=simulated_reports()

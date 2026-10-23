@@ -42,6 +42,7 @@
   "create_defaults/phase3/tests/test_authority.py::test_wrong_principal_issuer_and_explicit_time_fail_closed[issuer-other.issuer]",
   "create_defaults/phase3/tests/test_authority.py::test_wrong_principal_issuer_and_explicit_time_fail_closed[issuer_version-2.0.0]",
   "create_defaults/phase3/tests/test_authority.py::test_wrong_principal_issuer_and_explicit_time_fail_closed[principal-other.actor]",
+  "create_defaults/phase3/tests/test_isolation_ci.py::test_actual_focused_producer_does_not_pollute_legacy_artifact_discovery",
   "create_defaults/phase3/tests/test_isolation_ci.py::test_all_190_pins_and_only_authorized_workflow_maintenance_are_preserved",
   "create_defaults/phase3/tests/test_isolation_ci.py::test_canonical_values_and_structural_binding_have_no_operational_side_effects",
   "create_defaults/phase3/tests/test_isolation_ci.py::test_cold_import_has_no_schema_io_network_clock_writes_or_activation",

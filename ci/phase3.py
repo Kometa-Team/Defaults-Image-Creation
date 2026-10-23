@@ -24,8 +24,8 @@ def run():
               "ids_sha256": checksum(IDS), "schema_sha256": checksum(SCHEMA)}
     try:
         paths = ["create_defaults/phase3/tests"]
-        collection = pytest_run(paths, OUT/"collection.json", collect=True)
-        execution = pytest_run(paths, OUT/"execution.json")
+        collection = pytest_run(paths, OUT/"phase3-collection.json", collect=True)
+        execution = pytest_run(paths, OUT/"phase3-execution.json")
         expected = unique(read(IDS), "focused expected IDs")
         require(unique(collection["nodes"], "focused original collection") == expected, "Focused collection changed")
         require(unique(execution["nodes"], "focused execution") == expected, "Focused execution differs")
