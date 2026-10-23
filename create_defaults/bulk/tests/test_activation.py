@@ -458,14 +458,23 @@ def test_authorized_people_maintenance_preserves_other_m7_pins():
         "0b6f479f2ddb3c8d11fc48a92b9d0cfddd3b4293:"+path],cwd=root))
     selected=json.loads((root/path).read_text(encoding="utf8"))
     sweeper="create_people_posters/grayscale_sweeper.py"
+    workflow=".github/workflows/default-poster-validation.yml"
     assert len(accepted["files"])==len(selected["files"])==190
     assert accepted["files"].keys()==selected["files"].keys()
-    assert {n for n in accepted["files"] if accepted["files"][n]!=selected["files"][n]}=={sweeper}
+    # Explicitly authorized CI maintenance changes one additional protected file.
+    # Keep the accepted M7 and People source identities independently anchored.
+    assert {n for n in accepted["files"] if accepted["files"][n]!=selected["files"][n]}=={sweeper,workflow}
     assert selected["files"][sweeper]==hashlib.sha256((root/sweeper).read_bytes().replace(b"\r\n",b"\n")).hexdigest()
     assert selected["historical_syntax_exceptions"]==[]
     assert selected["maintenance_context"]["previous_manifest_sha256"]==fingerprint(accepted)
     assert selected["maintenance_context"]["overrides"]==[{
-        "path":sweeper,"previous_sha256":accepted["files"][sweeper],"sha256":selected["files"][sweeper]}]
+        "path":sweeper,"previous_sha256":accepted["files"][sweeper],"sha256":selected["files"][sweeper]},
+        {"path":workflow,"previous_sha256":accepted["files"][workflow],"sha256":selected["files"][workflow]}]
+    people_baseline=json.loads(subprocess.check_output(["git","show",
+        "d35b0684a096277dcdbdea70e4683e0c786325bc:"+path],cwd=root))
+    assert selected["maintenance_context"]["ci_previous_manifest_sha256"]==fingerprint(people_baseline)
+    assert {n for n in people_baseline["files"] if people_baseline["files"][n]!=selected["files"][n]}=={workflow}
+    assert selected["files"][sweeper]==people_baseline["files"][sweeper]
     assert fingerprint(selected)==protection.PRODUCTION_PINS_SHA256
     assert verify()["production_files_verified"]==190
 

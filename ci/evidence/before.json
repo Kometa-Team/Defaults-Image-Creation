@@ -1,0 +1,739 @@
+[
+  {
+    "M6": {
+      "M2_registry_sha256": "0b0c2af06124379206d43c36a4c12fb456e3861dd335343f4382865a7aab6a05",
+      "M5_graph_sha256": "6e23ff33bd3cba5b1bd69914b974ed9e2118b364e8f04b3a841376c1461f4197",
+      "M6_contract_graph_sha256": "93b01e2261249185bd06982a9cb0823a61628104d327958cedefd97788a39d7d",
+      "artifact_approval_granted": false,
+      "artwork_regenerated": 0,
+      "compatibility": {
+        "accepted_historical_exception": 14035,
+        "compatible": 44
+      },
+      "contract_activation": false,
+      "contract_approval": "missing_exact_maintainer_decision",
+      "incompatibilities": [],
+      "kind": "m6-historical-compatibility",
+      "outputs": 14079,
+      "overlays": 4122,
+      "performance": {
+        "actual_inputs": 2106,
+        "capture_seconds": 144.6974464000001,
+        "immutable_context_reused": true,
+        "single_category": "Playlist",
+        "single_category_seconds": 1.835128900000086,
+        "stages_seconds": {
+          "M2_discovery": 103.92092589999999,
+          "M5_graph": 12.759029399999918,
+          "expanded_definitions": 24.54612910000003,
+          "physical_inputs": 3.2156552000000147,
+          "source_pins": 0.2509516000000076
+        }
+      },
+      "platform": "Windows",
+      "posters": 9957,
+      "production_enforcement": false,
+      "public_outputs": 14077,
+      "publication_authorized": false,
+      "release_sha256": "926de31d1df4ee90e911c4e91df81ee3ca914f5179df784ff3d41e9b716ada2a",
+      "remote_writes": 0,
+      "seconds": 16.555555599999934,
+      "unresolved_design_interpretations": []
+    },
+    "M7": {
+      "active": 0,
+      "actual_inputs": 2106,
+      "exact_approvals_missing": 22,
+      "outputs": 14079,
+      "performance": {
+        "M7_audit_seconds": 0.5449500999999373,
+        "capture_seconds": 144.6974464000001,
+        "platform": "Windows"
+      },
+      "pins": {
+        "M2_registry": "0b0c2af06124379206d43c36a4c12fb456e3861dd335343f4382865a7aab6a05",
+        "M2_source_pins": "b2006d1b1327bad2db15054871b3155d704a9c8a14a6efa651a3f90231d147e3",
+        "M5_graph": "6e23ff33bd3cba5b1bd69914b974ed9e2118b364e8f04b3a841376c1461f4197",
+        "M6_material_graph": "93b01e2261249185bd06982a9cb0823a61628104d327958cedefd97788a39d7d",
+        "M6_release": "926de31d1df4ee90e911c4e91df81ee3ca914f5179df784ff3d41e9b716ada2a",
+        "physical_input_set": "6fb65c05b32afaf077d9f5c97580d4179992e539676ebb54544bc0457adee964",
+        "source_pin_count": 299
+      },
+      "platform": "Windows",
+      "production_files_verified": 190,
+      "public_outputs": 14077,
+      "ready": 0,
+      "selectors": 22,
+      "unexplained_differences": 0,
+      "variants": 278
+    },
+    "conclusion": "success",
+    "head": "bb8ba48fffea73e98944681eee6d06279eeae743",
+    "job": 120135039343,
+    "job_seconds": 756.0,
+    "label": "PR22 final",
+    "platform": "Windows",
+    "pytest_summaries": [
+      "1541 passed, 4 warnings in 535.21s (0:08:55)",
+      "130 passed in 120.34s (0:02:00)"
+    ],
+    "run": 39864198685,
+    "steps": [
+      {
+        "completedAt": "2026-10-22T22:52:29Z",
+        "conclusion": "success",
+        "name": "Set up job",
+        "startedAt": "2026-10-22T22:52:28Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:52:49Z",
+        "conclusion": "success",
+        "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+        "startedAt": "2026-10-22T22:52:29Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:52:53Z",
+        "conclusion": "success",
+        "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+        "startedAt": "2026-10-22T22:52:49Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:53:07Z",
+        "conclusion": "success",
+        "name": "Install Python dependencies",
+        "startedAt": "2026-10-22T22:52:53Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:53:08Z",
+        "conclusion": "success",
+        "name": "Compile candidate and validation modules",
+        "startedAt": "2026-10-22T22:53:07Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:53:35Z",
+        "conclusion": "success",
+        "name": "Unit tests and approved font hash/license checks",
+        "startedAt": "2026-10-22T22:53:08Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:53:40Z",
+        "conclusion": "success",
+        "name": "Verify frozen effective-job manifest and fixtures",
+        "startedAt": "2026-10-22T22:53:35Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:02:40Z",
+        "conclusion": "success",
+        "name": "Packages A-E infrastructure and generation tests",
+        "startedAt": "2026-10-22T22:53:40Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:02:43Z",
+        "conclusion": "success",
+        "name": "Focused offline Package D review artifacts",
+        "startedAt": "2026-10-22T23:02:40Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:02:44Z",
+        "conclusion": "success",
+        "name": "Retain local-only review evidence for the team",
+        "startedAt": "2026-10-22T23:02:43Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:02:59Z",
+        "conclusion": "success",
+        "name": "Bounded offline Package E acceptance smoke",
+        "startedAt": "2026-10-22T23:02:44Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:03:00Z",
+        "conclusion": "success",
+        "name": "Retain focused Package E acceptance evidence",
+        "startedAt": "2026-10-22T23:02:59Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:05:01Z",
+        "conclusion": "success",
+        "name": "People GitHub compatibility regressions",
+        "startedAt": "2026-10-22T23:03:00Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:05:01Z",
+        "conclusion": "success",
+        "name": "Whitespace checks",
+        "startedAt": "2026-10-22T23:05:01Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:05:01Z",
+        "conclusion": "success",
+        "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+        "startedAt": "2026-10-22T23:05:01Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:05:03Z",
+        "conclusion": "success",
+        "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+        "startedAt": "2026-10-22T23:05:01Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:05:03Z",
+        "conclusion": "success",
+        "name": "Complete job",
+        "startedAt": "2026-10-22T23:05:03Z"
+      }
+    ],
+    "url": "https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39864198685/job/120135039343"
+  },
+  {
+    "M6": {
+      "M2_registry_sha256": "0b0c2af06124379206d43c36a4c12fb456e3861dd335343f4382865a7aab6a05",
+      "M5_graph_sha256": "6e23ff33bd3cba5b1bd69914b974ed9e2118b364e8f04b3a841376c1461f4197",
+      "M6_contract_graph_sha256": "93b01e2261249185bd06982a9cb0823a61628104d327958cedefd97788a39d7d",
+      "artifact_approval_granted": false,
+      "artwork_regenerated": 0,
+      "compatibility": {
+        "accepted_historical_exception": 14035,
+        "compatible": 44
+      },
+      "contract_activation": false,
+      "contract_approval": "missing_exact_maintainer_decision",
+      "incompatibilities": [],
+      "kind": "m6-historical-compatibility",
+      "outputs": 14079,
+      "overlays": 4122,
+      "performance": {
+        "actual_inputs": 2106,
+        "capture_seconds": 252.090518659,
+        "immutable_context_reused": true,
+        "single_category": "Playlist",
+        "single_category_seconds": 2.2074837979999984,
+        "stages_seconds": {
+          "M2_discovery": 183.717679664,
+          "M5_graph": 18.72824003100004,
+          "expanded_definitions": 44.466127153,
+          "physical_inputs": 4.943410878999998,
+          "source_pins": 0.23014426800000365
+        }
+      },
+      "platform": "Linux",
+      "posters": 9957,
+      "production_enforcement": false,
+      "public_outputs": 14077,
+      "publication_authorized": false,
+      "release_sha256": "926de31d1df4ee90e911c4e91df81ee3ca914f5179df784ff3d41e9b716ada2a",
+      "remote_writes": 0,
+      "seconds": 25.582223569999996,
+      "unresolved_design_interpretations": []
+    },
+    "M7": {
+      "active": 0,
+      "actual_inputs": 2106,
+      "exact_approvals_missing": 22,
+      "outputs": 14079,
+      "performance": {
+        "M7_audit_seconds": 0.9190225109999801,
+        "capture_seconds": 252.090518659,
+        "platform": "Linux"
+      },
+      "pins": {
+        "M2_registry": "0b0c2af06124379206d43c36a4c12fb456e3861dd335343f4382865a7aab6a05",
+        "M2_source_pins": "b2006d1b1327bad2db15054871b3155d704a9c8a14a6efa651a3f90231d147e3",
+        "M5_graph": "6e23ff33bd3cba5b1bd69914b974ed9e2118b364e8f04b3a841376c1461f4197",
+        "M6_material_graph": "93b01e2261249185bd06982a9cb0823a61628104d327958cedefd97788a39d7d",
+        "M6_release": "926de31d1df4ee90e911c4e91df81ee3ca914f5179df784ff3d41e9b716ada2a",
+        "physical_input_set": "6fb65c05b32afaf077d9f5c97580d4179992e539676ebb54544bc0457adee964",
+        "source_pin_count": 299
+      },
+      "platform": "Linux",
+      "production_files_verified": 190,
+      "public_outputs": 14077,
+      "ready": 0,
+      "selectors": 22,
+      "unexplained_differences": 0,
+      "variants": 278
+    },
+    "conclusion": "success",
+    "head": "bb8ba48fffea73e98944681eee6d06279eeae743",
+    "job": 120135041924,
+    "job_seconds": 717.0,
+    "label": "PR22 final",
+    "platform": "Linux",
+    "pytest_summaries": [
+      "1539 passed, 2 skipped, 4 warnings in 605.05s (0:10:05)",
+      "129 passed, 1 skipped in 5.20s"
+    ],
+    "run": 39864198685,
+    "steps": [
+      {
+        "completedAt": "2026-10-22T22:20:21Z",
+        "conclusion": "success",
+        "name": "Set up job",
+        "startedAt": "2026-10-22T22:20:20Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:20:35Z",
+        "conclusion": "success",
+        "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+        "startedAt": "2026-10-22T22:20:21Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:20:37Z",
+        "conclusion": "success",
+        "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+        "startedAt": "2026-10-22T22:20:35Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:20:46Z",
+        "conclusion": "success",
+        "name": "Install Python dependencies",
+        "startedAt": "2026-10-22T22:20:37Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:20:47Z",
+        "conclusion": "success",
+        "name": "Compile candidate and validation modules",
+        "startedAt": "2026-10-22T22:20:46Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:21:26Z",
+        "conclusion": "success",
+        "name": "Unit tests and approved font hash/license checks",
+        "startedAt": "2026-10-22T22:20:47Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:21:31Z",
+        "conclusion": "success",
+        "name": "Verify frozen effective-job manifest and fixtures",
+        "startedAt": "2026-10-22T22:21:26Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:31:43Z",
+        "conclusion": "success",
+        "name": "Packages A-E infrastructure and generation tests",
+        "startedAt": "2026-10-22T22:21:31Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:31:46Z",
+        "conclusion": "success",
+        "name": "Focused offline Package D review artifacts",
+        "startedAt": "2026-10-22T22:31:43Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:31:47Z",
+        "conclusion": "success",
+        "name": "Retain local-only review evidence for the team",
+        "startedAt": "2026-10-22T22:31:46Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:32:07Z",
+        "conclusion": "success",
+        "name": "Bounded offline Package E acceptance smoke",
+        "startedAt": "2026-10-22T22:31:47Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:32:08Z",
+        "conclusion": "success",
+        "name": "Retain focused Package E acceptance evidence",
+        "startedAt": "2026-10-22T22:32:07Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:32:13Z",
+        "conclusion": "success",
+        "name": "People GitHub compatibility regressions",
+        "startedAt": "2026-10-22T22:32:08Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:32:14Z",
+        "conclusion": "success",
+        "name": "Whitespace checks",
+        "startedAt": "2026-10-22T22:32:13Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:32:14Z",
+        "conclusion": "success",
+        "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+        "startedAt": "2026-10-22T22:32:14Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:32:14Z",
+        "conclusion": "success",
+        "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+        "startedAt": "2026-10-22T22:32:14Z"
+      },
+      {
+        "completedAt": "2026-10-22T22:32:14Z",
+        "conclusion": "success",
+        "name": "Complete job",
+        "startedAt": "2026-10-22T22:32:14Z"
+      }
+    ],
+    "url": "https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39864198685/job/120135041924"
+  },
+  {
+    "M6": {
+      "M2_registry_sha256": "0b0c2af06124379206d43c36a4c12fb456e3861dd335343f4382865a7aab6a05",
+      "M5_graph_sha256": "6e23ff33bd3cba5b1bd69914b974ed9e2118b364e8f04b3a841376c1461f4197",
+      "M6_contract_graph_sha256": "93b01e2261249185bd06982a9cb0823a61628104d327958cedefd97788a39d7d",
+      "artifact_approval_granted": false,
+      "artwork_regenerated": 0,
+      "compatibility": {
+        "accepted_historical_exception": 14035,
+        "compatible": 44
+      },
+      "contract_activation": false,
+      "contract_approval": "missing_exact_maintainer_decision",
+      "incompatibilities": [],
+      "kind": "m6-historical-compatibility",
+      "outputs": 14079,
+      "overlays": 4122,
+      "performance": {
+        "actual_inputs": 2106,
+        "capture_seconds": 290.44863269999996,
+        "immutable_context_reused": true,
+        "single_category": "Playlist",
+        "single_category_seconds": 2.509719099999984,
+        "stages_seconds": {
+          "M2_discovery": 212.15022929999998,
+          "M5_graph": 21.65730970000004,
+          "expanded_definitions": 49.03699519999998,
+          "physical_inputs": 7.014304300000049,
+          "source_pins": 0.5828463000000284
+        }
+      },
+      "platform": "Windows",
+      "posters": 9957,
+      "production_enforcement": false,
+      "public_outputs": 14077,
+      "publication_authorized": false,
+      "release_sha256": "926de31d1df4ee90e911c4e91df81ee3ca914f5179df784ff3d41e9b716ada2a",
+      "remote_writes": 0,
+      "seconds": 28.472768900000005,
+      "unresolved_design_interpretations": []
+    },
+    "M7": {
+      "active": 0,
+      "actual_inputs": 2106,
+      "exact_approvals_missing": 22,
+      "outputs": 14079,
+      "performance": {
+        "M7_audit_seconds": 0.8960681999999451,
+        "capture_seconds": 290.44863269999996,
+        "platform": "Windows"
+      },
+      "pins": {
+        "M2_registry": "0b0c2af06124379206d43c36a4c12fb456e3861dd335343f4382865a7aab6a05",
+        "M2_source_pins": "b2006d1b1327bad2db15054871b3155d704a9c8a14a6efa651a3f90231d147e3",
+        "M5_graph": "6e23ff33bd3cba5b1bd69914b974ed9e2118b364e8f04b3a841376c1461f4197",
+        "M6_material_graph": "93b01e2261249185bd06982a9cb0823a61628104d327958cedefd97788a39d7d",
+        "M6_release": "926de31d1df4ee90e911c4e91df81ee3ca914f5179df784ff3d41e9b716ada2a",
+        "physical_input_set": "6fb65c05b32afaf077d9f5c97580d4179992e539676ebb54544bc0457adee964",
+        "source_pin_count": 299
+      },
+      "platform": "Windows",
+      "production_files_verified": 190,
+      "public_outputs": 14077,
+      "ready": 0,
+      "selectors": 22,
+      "unexplained_differences": 0,
+      "variants": 278
+    },
+    "conclusion": "cancelled",
+    "head": "c0ca6b15f6cde4fe3c992e61504707c6a13f6d45",
+    "job": 120151521801,
+    "job_seconds": 914.0,
+    "label": "PR24 attempt 2",
+    "platform": "Windows",
+    "pytest_summaries": [],
+    "run": 39871173437,
+    "steps": [
+      {
+        "completedAt": "2026-10-22T23:36:57Z",
+        "conclusion": "success",
+        "name": "Set up job",
+        "startedAt": "2026-10-22T23:36:56Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:37:21Z",
+        "conclusion": "success",
+        "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+        "startedAt": "2026-10-22T23:36:57Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:37:24Z",
+        "conclusion": "success",
+        "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+        "startedAt": "2026-10-22T23:37:21Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:37:44Z",
+        "conclusion": "success",
+        "name": "Install Python dependencies",
+        "startedAt": "2026-10-22T23:37:24Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:37:45Z",
+        "conclusion": "success",
+        "name": "Compile candidate and validation modules",
+        "startedAt": "2026-10-22T23:37:44Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:38:30Z",
+        "conclusion": "success",
+        "name": "Unit tests and approved font hash/license checks",
+        "startedAt": "2026-10-22T23:37:45Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:38:37Z",
+        "conclusion": "success",
+        "name": "Verify frozen effective-job manifest and fixtures",
+        "startedAt": "2026-10-22T23:38:30Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:52:04Z",
+        "conclusion": "cancelled",
+        "name": "Packages A-E infrastructure and generation tests",
+        "startedAt": "2026-10-22T23:38:37Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:52:04Z",
+        "conclusion": "skipped",
+        "name": "Focused offline Package D review artifacts",
+        "startedAt": "2026-10-22T23:52:04Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:52:04Z",
+        "conclusion": "skipped",
+        "name": "Retain local-only review evidence for the team",
+        "startedAt": "2026-10-22T23:52:04Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:52:04Z",
+        "conclusion": "skipped",
+        "name": "Bounded offline Package E acceptance smoke",
+        "startedAt": "2026-10-22T23:52:04Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:52:04Z",
+        "conclusion": "skipped",
+        "name": "Retain focused Package E acceptance evidence",
+        "startedAt": "2026-10-22T23:52:04Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:52:04Z",
+        "conclusion": "skipped",
+        "name": "People GitHub compatibility regressions",
+        "startedAt": "2026-10-22T23:52:04Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:52:04Z",
+        "conclusion": "skipped",
+        "name": "Whitespace checks",
+        "startedAt": "2026-10-22T23:52:04Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:52:04Z",
+        "conclusion": "skipped",
+        "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+        "startedAt": "2026-10-22T23:52:04Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:52:06Z",
+        "conclusion": "success",
+        "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+        "startedAt": "2026-10-22T23:52:04Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:52:06Z",
+        "conclusion": "success",
+        "name": "Complete job",
+        "startedAt": "2026-10-22T23:52:06Z"
+      }
+    ],
+    "url": "https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39871173437/job/120151521801"
+  },
+  {
+    "M6": {
+      "M2_registry_sha256": "0b0c2af06124379206d43c36a4c12fb456e3861dd335343f4382865a7aab6a05",
+      "M5_graph_sha256": "6e23ff33bd3cba5b1bd69914b974ed9e2118b364e8f04b3a841376c1461f4197",
+      "M6_contract_graph_sha256": "93b01e2261249185bd06982a9cb0823a61628104d327958cedefd97788a39d7d",
+      "artifact_approval_granted": false,
+      "artwork_regenerated": 0,
+      "compatibility": {
+        "accepted_historical_exception": 14035,
+        "compatible": 44
+      },
+      "contract_activation": false,
+      "contract_approval": "missing_exact_maintainer_decision",
+      "incompatibilities": [],
+      "kind": "m6-historical-compatibility",
+      "outputs": 14079,
+      "overlays": 4122,
+      "performance": {
+        "actual_inputs": 2106,
+        "capture_seconds": 179.34808576399996,
+        "immutable_context_reused": true,
+        "single_category": "Playlist",
+        "single_category_seconds": 2.0797181730000034,
+        "stages_seconds": {
+          "M2_discovery": 128.42738623199998,
+          "M5_graph": 14.936879307000027,
+          "expanded_definitions": 31.89570451200001,
+          "physical_inputs": 3.9152222050000205,
+          "source_pins": 0.16840123100001847
+        }
+      },
+      "platform": "Linux",
+      "posters": 9957,
+      "production_enforcement": false,
+      "public_outputs": 14077,
+      "publication_authorized": false,
+      "release_sha256": "926de31d1df4ee90e911c4e91df81ee3ca914f5179df784ff3d41e9b716ada2a",
+      "remote_writes": 0,
+      "seconds": 19.899731657000018,
+      "unresolved_design_interpretations": []
+    },
+    "M7": {
+      "active": 0,
+      "actual_inputs": 2106,
+      "exact_approvals_missing": 22,
+      "outputs": 14079,
+      "performance": {
+        "M7_audit_seconds": 0.7256341729999463,
+        "capture_seconds": 179.34808576399996,
+        "platform": "Linux"
+      },
+      "pins": {
+        "M2_registry": "0b0c2af06124379206d43c36a4c12fb456e3861dd335343f4382865a7aab6a05",
+        "M2_source_pins": "b2006d1b1327bad2db15054871b3155d704a9c8a14a6efa651a3f90231d147e3",
+        "M5_graph": "6e23ff33bd3cba5b1bd69914b974ed9e2118b364e8f04b3a841376c1461f4197",
+        "M6_material_graph": "93b01e2261249185bd06982a9cb0823a61628104d327958cedefd97788a39d7d",
+        "M6_release": "926de31d1df4ee90e911c4e91df81ee3ca914f5179df784ff3d41e9b716ada2a",
+        "physical_input_set": "6fb65c05b32afaf077d9f5c97580d4179992e539676ebb54544bc0457adee964",
+        "source_pin_count": 299
+      },
+      "platform": "Linux",
+      "production_files_verified": 190,
+      "public_outputs": 14077,
+      "ready": 0,
+      "selectors": 22,
+      "unexplained_differences": 0,
+      "variants": 278
+    },
+    "conclusion": "success",
+    "head": "c0ca6b15f6cde4fe3c992e61504707c6a13f6d45",
+    "job": 120151522799,
+    "job_seconds": 560.0,
+    "label": "PR24 attempt 2",
+    "platform": "Linux",
+    "pytest_summaries": [
+      "1539 passed, 2 skipped, 4 warnings in 456.06s (0:07:36)",
+      "129 passed, 1 skipped in 4.36s"
+    ],
+    "run": 39871173437,
+    "steps": [
+      {
+        "completedAt": "2026-10-22T23:20:59Z",
+        "conclusion": "success",
+        "name": "Set up job",
+        "startedAt": "2026-10-22T23:20:58Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:21:14Z",
+        "conclusion": "success",
+        "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+        "startedAt": "2026-10-22T23:20:59Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:21:18Z",
+        "conclusion": "success",
+        "name": "Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+        "startedAt": "2026-10-22T23:21:14Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:21:28Z",
+        "conclusion": "success",
+        "name": "Install Python dependencies",
+        "startedAt": "2026-10-22T23:21:18Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:21:29Z",
+        "conclusion": "success",
+        "name": "Compile candidate and validation modules",
+        "startedAt": "2026-10-22T23:21:28Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:22:01Z",
+        "conclusion": "success",
+        "name": "Unit tests and approved font hash/license checks",
+        "startedAt": "2026-10-22T23:21:29Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:22:05Z",
+        "conclusion": "success",
+        "name": "Verify frozen effective-job manifest and fixtures",
+        "startedAt": "2026-10-22T23:22:01Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:29:47Z",
+        "conclusion": "success",
+        "name": "Packages A-E infrastructure and generation tests",
+        "startedAt": "2026-10-22T23:22:05Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:29:49Z",
+        "conclusion": "success",
+        "name": "Focused offline Package D review artifacts",
+        "startedAt": "2026-10-22T23:29:47Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:29:50Z",
+        "conclusion": "success",
+        "name": "Retain local-only review evidence for the team",
+        "startedAt": "2026-10-22T23:29:49Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:30:06Z",
+        "conclusion": "success",
+        "name": "Bounded offline Package E acceptance smoke",
+        "startedAt": "2026-10-22T23:29:50Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:30:08Z",
+        "conclusion": "success",
+        "name": "Retain focused Package E acceptance evidence",
+        "startedAt": "2026-10-22T23:30:06Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:30:13Z",
+        "conclusion": "success",
+        "name": "People GitHub compatibility regressions",
+        "startedAt": "2026-10-22T23:30:08Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:30:13Z",
+        "conclusion": "success",
+        "name": "Whitespace checks",
+        "startedAt": "2026-10-22T23:30:13Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:30:15Z",
+        "conclusion": "success",
+        "name": "Post Run actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+        "startedAt": "2026-10-22T23:30:13Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:30:15Z",
+        "conclusion": "success",
+        "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+        "startedAt": "2026-10-22T23:30:15Z"
+      },
+      {
+        "completedAt": "2026-10-22T23:30:15Z",
+        "conclusion": "success",
+        "name": "Complete job",
+        "startedAt": "2026-10-22T23:30:15Z"
+      }
+    ],
+    "url": "https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39871173437/job/120151522799"
+  }
+]
