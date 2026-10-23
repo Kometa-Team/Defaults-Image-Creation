@@ -1,6 +1,6 @@
 # Phase 3 existing-behaviour audit
 
-2026-10-22. Read-only discovery for the [Phase 3 proposal](PHASE3_DESIGN_PROPOSAL.md), not implementation or approval. Source baseline: `d35b0684a096277dcdbdea70e4683e0c786325bc`, merged PR #22. Its tree is `2a83fe136e43043096c407f508838e7d5f2479c2`, identical to tested PR #22 head `bb8ba48fffea73e98944681eee6d06279eeae743`.
+2026-10-22. Read-only discovery for the [Phase 3 proposal](PHASE3_DESIGN_PROPOSAL.md), not implementation or approval. Refreshed source baseline: main `9022c7c7639f3a2238e5941ec79cc250e4a8ca85`, merged CI repair PR #25. Its tree equals tested PR #25 head `40b95e22dd7e30ee620f90374c510f2196b0ab8f`. The earlier production-behaviour audit was made at merged PR #22 `d35b0684a096277dcdbdea70e4683e0c786325bc` (tree `2a83fe136e43043096c407f508838e7d5f2479c2`, equal to tested head `bb8ba48fffea73e98944681eee6d06279eeae743`). The intervening CI-only diff changes workflow organization, its exact M7 source pin/provenance and related test assertions; it changes no production translation, rendering, destination or publication behaviour. External observations below remain explicitly pinned historical facts, not a newly verified upstream selection.
 
 ## Verified external sources
 
@@ -57,7 +57,17 @@ The immutable M7 dossier is a historical checkpoint; its earlier IN PROGRESS lab
 
 ## Baseline validation and CI evidence
 
-[PR #22 repository CI](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39864198685) passed at `bb8ba48fffea73e98944681eee6d06279eeae743`, whose tree equals current main above:
+### Refreshed main: merged CI reliability repair
+
+[PR #25 exact-head CI](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39878142195) passed all **19 checks**, including mandatory **Validation acceptance**, at `40b95e22dd7e30ee620f90374c510f2196b0ab8f`; main merge `9022c7c7639f3a2238e5941ec79cc250e4a8ca85` has the same tree. The full workflow took 6m42s; its longest job took 6m19s, retaining the 15-minute job cap. Eight explicit groups per OS cover core, historical, contracts, categories, generation, review, People and smoke; separate collection jobs and the aggregate reconcile complete original/refactored pytest IDs, exact unittest execution IDs and non-pytest commands. See the [bounded CI design](../../ci/README.md), [explicit selections](../../ci/validation-plan.json) and [machine-readable full-ID proof](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39878142195/artifacts/12469661581).
+
+Windows passed 1,838 tests; Linux passed 1,835 with the same three platform-specific junction skips. This includes all 1,671 original pytest IDs, 155 original unittests and 12 new CI gate controls per OS, with zero missing or duplicate original IDs. Both platforms retained all 14,079 historical outputs, all 190 protected production files, the 512 MiB worker-parent safeguard, zero unexplained differences and zero READY/ACTIVE contracts; all 22 exact approvals remain missing. The workflow pin/provenance was advanced only for the authorized CI repair; the production protection algorithm and all other protected source identities remain unchanged.
+
+These are exact-head baseline results, not a substitute for the refreshed PR #24 head. The bounded workflow must pass again at that proposal's final commit, including **Validation acceptance**; its run, counts, scope and final head are recorded in PR #24's review evidence. No Phase 3 implementation is claimed by either run.
+
+### Historical PR #22 checkpoint
+
+[PR #22 repository CI](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39864198685) passed at `bb8ba48fffea73e98944681eee6d06279eeae743`, whose tree equals the earlier PR #22 merge above:
 
 | Check | Windows | Linux |
 | --- | --- | --- |
@@ -69,6 +79,6 @@ The immutable M7 dossier is a historical checkpoint; its earlier IN PROGRESS lab
 
 Both final M7 audits accounted for **9,957 posters + 4,122 overlays = 14,079 outputs**, including two private Awards intermediates; 14,077 public outputs; 22 selectors / 278 variants; all 190 protected production files; **zero unexplained differences** and zero actual contract readiness/activation. All 22 approvals remained missing.
 
-Two earlier Windows jobs timed out under the unchanged 15-minute cap, without reported assertion failures. The same historical capture took 188s, 294s and 145s across attempts. One timeout occurred after bulk/smoke success during final People tests. This is measured runtime variability, not evidence that assertions should be weakened or that a particular new sharding scheme already works. New Phase 3 results must name their own exact commit; the baseline above is not a claimed Phase 3 implementation test.
+Two earlier PR #22 Windows jobs timed out under the unchanged 15-minute cap, without reported assertion failures. The same historical capture took 188s, 294s and 145s across attempts. One timeout occurred after bulk/smoke success during final People tests. PR #24's original planning run [39871173437](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/39871173437) subsequently passed Linux but timed out on Windows. These are historical runtime measurements; PR #25's measured bounded-job repair and complete coverage proof supersede that CI limitation. New Phase 3 results must still name their own exact commit; none of these baselines constitutes Phase 3 implementation acceptance.
 
 This audit ran only source/metadata reads and documentation validation. No current implementation milestone, fresh full-library Phase 3 compatibility acceptance, image processing, state transition, approval or publication is claimed.
