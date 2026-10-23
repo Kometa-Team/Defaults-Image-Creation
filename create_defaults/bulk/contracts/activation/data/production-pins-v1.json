@@ -1,7 +1,7 @@
 {
   "baseline_commit": "0058ac6f109054dd0a25e88f4c707b020460f875",
   "files": {
-    ".github/workflows/default-poster-validation.yml": "12c3934d2aa81b7c08c4b02d4b950f631c0ca5609d0468e8f9bd5754bf7779b7",
+    ".github/workflows/default-poster-validation.yml": "3bb163657012678f80c20282cd4d4b5d531d3e65ed4c58a61976c626b11e480f",
     "create_defaults/bulk/__init__.py": "a42d2db4d816008110a72532d38c85ea9cce465b455dd87e138d4091d8d5b617",
     "create_defaults/bulk/__main__.py": "26edf3c78fb6070ca2bfbdae9a39f6bce2089bd23c208c94616ad1a07476fe30",
     "create_defaults/bulk/asset_cases.py": "54dc5ae76d15da10bea60ff26c5418af4d578be1c1dca0cd2297c13424e6cf6e",
@@ -197,7 +197,7 @@
   "schema_version": 1,
   "text_normalization": "LF",
   "maintenance_context": {
-    "purpose": "Authorized People repair, bounded CI repair and required isolated P3/M1 CI integration; no production activation",
+    "purpose": "Authorized People repair, bounded CI repair and required isolated P3/M1 CI integration; no production activation; authorized P4/M1 mandatory focused CI; no activation",
     "previous_manifest_sha256": "8f2352cd8159ff8a68929917a55c05027fb0b7339f07a6169d8bafa94462a40a",
     "overrides": [
       {
@@ -208,11 +208,14 @@
       {
         "path": ".github/workflows/default-poster-validation.yml",
         "previous_sha256": "4d7e31460d9b20d6a4d185d178347ae3e0a053cfb8483f2750ce3a4886d09279",
-        "sha256": "12c3934d2aa81b7c08c4b02d4b950f631c0ca5609d0468e8f9bd5754bf7779b7"
+        "sha256": "3bb163657012678f80c20282cd4d4b5d531d3e65ed4c58a61976c626b11e480f"
       }
     ],
     "ci_previous_manifest_sha256": "da118177d4c0d9bb9d697c1f282bff943e939b6797b262ca344c55703b772ffc",
     "phase3_previous_manifest_sha256": "30cf5ea109e43ddc1b66382eb87ddc48063355fbb83bd243b682b8cc6b61af54",
-    "phase3_baseline_commit": "78464d2d051dc5da5f305bc4fd9f03868999636f"
+    "phase3_baseline_commit": "78464d2d051dc5da5f305bc4fd9f03868999636f",
+    "phase4_previous_manifest_sha256": "13f988c970a6ce3055536a676a775169d9eec23750964846fa602565ae2bc522",
+    "phase4_baseline_commit": "c33f792992ee704150799fe16536a64630fd8964",
+    "phase4_workflow_previous_sha256": "12c3934d2aa81b7c08c4b02d4b950f631c0ca5609d0468e8f9bd5754bf7779b7"
   }
 }

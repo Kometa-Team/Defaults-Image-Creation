@@ -143,7 +143,7 @@ def test_missing_cancelled_stale_substituted_or_incomplete_focused_proof_fails(m
 
 @pytest.mark.parametrize("status",["failure","cancelled","skipped",None])
 def test_existing_mandatory_acceptance_cannot_ignore_focused_job(status):
-    needs={n:{"result":"success"} for n in ["collection","validation","phase3"]}
+    needs={n:{"result":"success"} for n in ["collection","validation","phase3","phase4"]}
     needs["phase3"]["result"]=status
     with pytest.raises(ValueError):validation.require_jobs(needs)
 

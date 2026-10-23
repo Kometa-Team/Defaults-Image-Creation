@@ -56,7 +56,7 @@ class GateTests(unittest.TestCase):
                 self.reports[1][key] = original
 
     def test_cancelled_failed_skipped_missing_matrix_prevents_acceptance(self):
-        expected={name:{"result":"success"} for name in ("validation","collection","phase3")}
+        expected={name:{"result":"success"} for name in ("validation","collection","phase3","phase4")}
         v.require_jobs(expected)
         for name in expected:
             for status in ("cancelled", "failure", "skipped", None):
@@ -113,14 +113,14 @@ class GateTests(unittest.TestCase):
         workflow = yaml.safe_load((v.ROOT/".github/workflows/default-poster-validation.yml").read_text())
         jobs = workflow["jobs"]; plan = v.read(v.PLAN_PATH)
         self.assertEqual(set(jobs["validation"]["strategy"]["matrix"]["group"]), set(plan["pytest_groups"]) | set(plan["commands"]))
-        for name in ("validation", "collection", "phase3"):
+        for name in ("validation", "collection", "phase3", "phase4"):
             job = jobs[name]
             self.assertEqual(job["timeout-minutes"], 15)
             self.assertFalse(job["strategy"]["fail-fast"])
             self.assertEqual(job["steps"][0]["with"]["ref"], "${{ github.event.pull_request.head.sha }}")
             self.assertEqual(job["strategy"]["matrix"]["os"], ["ubuntu-latest", "windows-latest"])
         gate = jobs["acceptance"]
-        self.assertEqual(set(gate["needs"]), {"validation", "collection", "phase3"})
+        self.assertEqual(set(gate["needs"]), {"validation", "collection", "phase3", "phase4"})
         self.assertEqual(gate["if"], "${{ always() }}")
         self.assertEqual(gate["env"]["REQUIRED_JOB_RESULTS"], "${{ toJSON(needs) }}")
         self.assertNotIn("continue-on-error", json.dumps(workflow))
