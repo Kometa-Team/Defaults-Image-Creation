@@ -140,6 +140,7 @@
   "create_defaults/phase4/tests/test_operation_storage.py::test_change_to_read_write_membership_requires_new_draft_content_revision",
   "create_defaults/phase4/tests/test_operation_storage.py::test_closed_state_transitions_content_revisions_and_cancelled_history",
   "create_defaults/phase4/tests/test_operation_storage.py::test_concurrent_identical_requests_are_idempotent_without_double_journal",
+  "create_defaults/phase4/tests/test_operation_storage.py::test_concurrent_rename_requests_cannot_claim_the_same_casefolded_namespace_head",
   "create_defaults/phase4/tests/test_operation_storage.py::test_corrupt_substituted_missing_or_foreign_archive_fails_closed[event]",
   "create_defaults/phase4/tests/test_operation_storage.py::test_corrupt_substituted_missing_or_foreign_archive_fails_closed[head-index]",
   "create_defaults/phase4/tests/test_operation_storage.py::test_corrupt_substituted_missing_or_foreign_archive_fails_closed[journal-index]",
