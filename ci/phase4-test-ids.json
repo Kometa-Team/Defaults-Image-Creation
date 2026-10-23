@@ -1,5 +1,6 @@
 [
   "create_defaults/phase4/tests/test_ci_foundations.py::test_actual_phase4_producer_names_do_not_pollute_any_earlier_artifact_selector",
+  "create_defaults/phase4/tests/test_ci_foundations.py::test_aggregate_maintenance_verifier_works_without_any_runtime_site_packages",
   "create_defaults/phase4/tests/test_ci_foundations.py::test_complete_windows_linux_phase4_evidence_is_required_and_verified",
   "create_defaults/phase4/tests/test_ci_foundations.py::test_exact_authorized_bridge_workflow_and_provenance_maintenance_is_verified",
   "create_defaults/phase4/tests/test_ci_foundations.py::test_maintenance_cannot_waive_additional_source_or_pin_changes[changed-current-source]",

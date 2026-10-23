@@ -2,6 +2,8 @@
 from copy import deepcopy
 import json
 from pathlib import Path
+import subprocess
+import sys
 from unittest.mock import patch
 
 import pytest
@@ -81,6 +83,16 @@ def test_actual_phase4_producer_names_do_not_pollute_any_earlier_artifact_select
 
 def test_exact_authorized_bridge_workflow_and_provenance_maintenance_is_verified():
     assert set(phase4.verify_maintenance()['files'])==phase4.MAINTAINED
+
+
+def test_aggregate_maintenance_verifier_works_without_any_runtime_site_packages():
+    result=subprocess.run([sys.executable,'-S','-c',
+        "from ci.phase4 import verify_maintenance; verify_maintenance(); print('stdlib-only-verified')"],
+        cwd=phase4.ROOT,capture_output=True,text=True,timeout=60)
+    assert result.returncode==0,result.stderr
+    assert result.stdout.strip()=='stdlib-only-verified'
+    value=phase4.read(phase4.ROOT/'ci/phase4-maintenance.json')
+    assert phase4.fingerprint(value)==fingerprint(value)
 
 
 @pytest.mark.parametrize('mutation',['unexpected-maintenance-file','substituted-maintenance-pin','changed-current-source','wrong-baseline'])

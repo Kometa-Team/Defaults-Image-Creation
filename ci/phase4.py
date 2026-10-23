@@ -1,6 +1,7 @@
 """Mandatory P4/M1 exact-head collection/execution and maintenance proof."""
 import argparse
 import hashlib
+import json
 from pathlib import Path
 import subprocess
 import sys
@@ -27,8 +28,15 @@ OUT=ROOT/'config/phase4-ci'
 def checksum(path):return hashlib.sha256(path.read_bytes().replace(b'\r\n',b'\n')).hexdigest()
 
 
+def fingerprint(value):
+    # The acceptance job deliberately has no production dependencies installed.
+    # Match Package E canonical JSON exactly, without importing its YAML/Pillow
+    # dependency graph into this stdlib-only evidence verifier.
+    return hashlib.sha256(json.dumps(value,sort_keys=True,ensure_ascii=True,
+        separators=(',',':'),allow_nan=False).encode('utf-8')).hexdigest()
+
+
 def verify_maintenance(root=ROOT):
-    from create_defaults.bulk.common import fingerprint
     value=read(root/'ci/phase4-maintenance.json')
     require(fingerprint(value)==MAINTENANCE_PIN,'Unapproved P4/M1 maintenance manifest')
     require(value['base']==BASE and set(value['files'])==MAINTAINED,'Unexpected maintenance scope')
@@ -37,7 +45,6 @@ def verify_maintenance(root=ROOT):
         require(hashlib.sha256(before).hexdigest()==pins['before_sha256'],'Wrong maintenance baseline: '+path)
         require(checksum(root/path)==pins['sha256'],'Changed authorized maintenance file: '+path)
     protected='create_defaults/bulk/contracts/activation/data/production-pins-v1.json'
-    import json
     old=json.loads(subprocess.check_output(['git','show',BASE+':'+protected],cwd=root));new=read(root/protected)
     require(len(new['files'])==len(old['files'])==190 and new['files'].keys()==old['files'].keys(),'Protected membership changed')
     require({p for p in old['files'] if old['files'][p]!=new['files'][p]}=={'.github/workflows/default-poster-validation.yml'},'Unexpected protected source change')

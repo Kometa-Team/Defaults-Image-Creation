@@ -58,7 +58,7 @@ Metadata size/count bounds apply independently of the unchanged worker limits.
 
 ## Adversarial validation
 
-The explicitly collected 203 Phase 4 tests use temporary synthetic stores and
+The explicitly collected 204 Phase 4 tests use temporary synthetic stores and
 actual SQLite persistence, including simultaneous thread writers and subprocess
 death inside an uncommitted transaction. They cover all four operation types,
 schema/header/nested/encoding attacks, canonical hashes, invalid transitions,
@@ -100,6 +100,10 @@ Validation acceptance depends on all four job families: collection, legacy
 validation, Phase 3 and Phase 4. Missing, failed, cancelled, stale, skipped,
 substituted or incomplete new evidence cannot produce success. Distinct artifact
 names avoid contamination of earlier legacy and Phase 3 evidence selectors.
+The aggregate verifier uses standard-library-only canonical JSON hashing,
+explicitly checked against the original Package E fingerprint. A subprocess
+regression runs maintenance verification under Python `-S` without site packages
+so the lean acceptance job cannot acquire an implicit YAML/Pillow dependency.
 
 The workflow expands from 21 to 23 checks. Each job still has a 15-minute cap;
 the original 512 MiB parent/worker safeguard, 1,671 original pytest IDs, 155
