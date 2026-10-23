@@ -1,0 +1,132 @@
+{
+  "sha256": "bf626ea610bcaba2904ac99638dece81ab166ce1d18a8c652c891c68fbfc7896",
+  "evidence": {
+    "active": false,
+    "authority_context_sha256": "812083319293b855cea263f268ff9a480c0e9c9821e74f8a6e60915530b391e2",
+    "authority_status": "synthetic-only",
+    "blockers": [
+      "authority:synthetic-only"
+    ],
+    "cohort": [
+      {
+        "contract": {
+          "category": "Playlist",
+          "kind": "poster",
+          "sha256": "395f76a4499989daf36a3395edbcae299c8bd86126adc1d0f007dfbc8ab7fc0b",
+          "version": "2.0.0"
+        },
+        "language": "fr",
+        "membership_sha256": "cb8886ae4bf5c34b6c0cd0d45bafbd548a0eb6993c8be064223505d3d8a71799",
+        "rules_sha256": "d3b36a3b1318ffc00b27215698e69639b5e62feeeb1e5aa1e30d8ff376963530",
+        "subject": {
+          "kind": "validation-subject",
+          "sha256": "6fd7a489f505890c29c93e7902906b3c73b40df7ffc1e3086274b253737c571e",
+          "version": "1.0.0"
+        },
+        "translation": {
+          "kind": "translation-preflight",
+          "sha256": "a693489a9a85d123253252f1df5fb64f57d165ad4659fd93d1b839cbff56c295",
+          "version": "1.0.0"
+        },
+        "translation_blockers": [
+          "source_currentness:synthetic-current"
+        ],
+        "variant": "timeline-order"
+      }
+    ],
+    "cohort_sha256": "13fca5a985e27eeaa06cc37825dc0843235ca0c51837523b1f34ae8794903e1a",
+    "complete": true,
+    "dependency_sha256": "b2a42236416156b2bde83c35cd386d3fff56ccc0065f9f21da7446e9bafee0ac",
+    "destination_checks_passed": true,
+    "destination_evidence": {
+      "kind": "destination-evidence",
+      "sha256": "0a661e1112a3ed0b2f4434a5310a99623c68da9565a707b24c695ebc495e2536",
+      "version": "1.0.0"
+    },
+    "destination_policy": {
+      "kind": "destination-policy",
+      "sha256": "c72e09ce25aed6baea8d332528658a43814eb0c388508f36c9f261f907ee952d",
+      "version": "1.0.0"
+    },
+    "evaluated_outputs": 1,
+    "evaluation_complete": true,
+    "inventory_currentness": "synthetic-only",
+    "inventory_entries": 0,
+    "inventory_sha256": "932af29eca859999554ad9df0a4d0d895df972d894b8ddb872128d81900aaafd",
+    "inventory_status": "integrity_verified",
+    "kind": "destination-attestation",
+    "language": "fr",
+    "language_policy": {
+      "kind": "language-policy",
+      "sha256": "967b3ffc5790ec56b12d8c3df6677e2ad9e553994ca50598e8427d2834985f37",
+      "version": "1.0.0"
+    },
+    "missing_companions": [],
+    "missing_tree_pages": [],
+    "output_membership_sha256": "cb8886ae4bf5c34b6c0cd0d45bafbd548a0eb6993c8be064223505d3d8a71799",
+    "outputs": [
+      {
+        "diagnostics": [],
+        "output": {
+          "id": "fixture.playlist",
+          "identity_sha256": "dcea7a12c28021c84c33e105cb63424f4e98135879c0e375d7c1340af223a854",
+          "local_path": "defaults-fr/playlist/\u00c9lan \u2014 No\u00ebl.jpg",
+          "public_path": "playlist/\u00c9lan \u2014 No\u00ebl.jpg"
+        },
+        "status": "clear",
+        "target_path": "Reviewed/French/playlist/\u00c9lan \u2014 No\u00ebl.jpg"
+      }
+    ],
+    "policy_route": "user_non_english",
+    "production_enforcement": false,
+    "proposed_outputs": 1,
+    "publication_authorized": false,
+    "ready": false,
+    "repository_identity_status": "synthetic-only",
+    "schema_version": 1,
+    "simulation_eligible": true,
+    "stage": "informational",
+    "target": {
+      "baseline_commit": "d7bc40dabd25b77d7eaeae2ef25dba5aca34565d",
+      "baseline_tree": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+      "branch": "Main",
+      "inventory_sha256": "932af29eca859999554ad9df0a4d0d895df972d894b8ddb872128d81900aaafd",
+      "language": "fr",
+      "paths": [
+        "playlist/\u00c9lan \u2014 No\u00ebl.jpg"
+      ],
+      "repository": {
+        "host": "github.com",
+        "name": "Fixture/Artwork",
+        "owner_id": 1103,
+        "repository_id": 103
+      },
+      "root": "Reviewed/French"
+    },
+    "technical_eligible": false,
+    "verified_observation": {
+      "authority_context_sha256": "812083319293b855cea263f268ff9a480c0e9c9821e74f8a6e60915530b391e2",
+      "cohort_sha256": "13fca5a985e27eeaa06cc37825dc0843235ca0c51837523b1f34ae8794903e1a",
+      "inventory_sha256": "932af29eca859999554ad9df0a4d0d895df972d894b8ddb872128d81900aaafd",
+      "official_owner_id": 1102,
+      "official_repository_id": 102,
+      "owner_kind": "user",
+      "permissions": [
+        "contents:read",
+        "contents:write",
+        "pull_requests:write"
+      ],
+      "principal_id": 1103,
+      "repository": {
+        "host": "github.com",
+        "name": "Fixture/Artwork",
+        "owner_id": 1103,
+        "repository_id": 103
+      },
+      "revocation_checked_at": "2030-01-01T00:00:00Z",
+      "revocation_revision_sha256": "c8b843b20c1052481a0fba094407e4a13ec128242ab5fcd3977db179c6cf21cf",
+      "target_sha256": "e9d9f9e320a652ccfa283ee53912e811b94e7c6335984dea416974d7eebed63b"
+    },
+    "version": "1.0.0"
+  }
+}

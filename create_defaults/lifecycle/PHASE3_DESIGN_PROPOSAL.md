@@ -1,6 +1,6 @@
 # Phase 3 proposal: translation and destination safeguards
 
-2026-10-22. **P3/M1 merged in PR #26; P3/M2 is explicitly authorized and implemented pending review. Phase 3 IN PROGRESS.** See the [M2 implementation dossier](PHASE3_M2_IMPLEMENTATION.md), [M1 foundation](PHASE3_M1_IMPLEMENTATION.md), [existing-behaviour audit](PHASE3_EXISTING_BEHAVIOUR_AUDIT.md) and permanent [six-phase roadmap](ROADMAP.md). The approved architecture and P3-D01–D04 below remain authoritative. P3/M3–M5 and Phases 4–6 remain NOT STARTED and require separate authorization. Earlier M1 implementation/review descriptions below are historical checkpoints, superseded only for milestone status.
+2026-10-23. **P3/M1–M2 merged through PR #27; P3/M3 is explicitly authorized and implemented pending review. Phase 3 IN PROGRESS.** See the [M3 dossier](PHASE3_M3_IMPLEMENTATION.md), [M2 preflight](PHASE3_M2_IMPLEMENTATION.md), [M1 foundation](PHASE3_M1_IMPLEMENTATION.md), [behaviour audit](PHASE3_EXISTING_BEHAVIOUR_AUDIT.md) and [six-phase roadmap](ROADMAP.md). The approved architecture and P3-D01–D04 below remain authoritative. P3/M4–M5 and Phases 4–6 remain NOT STARTED and require separate authorization. Earlier milestone implementation/review descriptions below are historical checkpoints, superseded only for status.
 
 The merged D01–D09 architecture, 22 packages, stable identities, exact filenames, original receipts and all historical exceptions remain authoritative. This phase grants none of the 22 missing contract approvals. It does not activate contracts, render artwork, publish, change production entry points, implement lifecycle operations, or process the six deferred Timeline Order requests.
 
@@ -92,7 +92,7 @@ Return technical preflight status and blockers, not an M7 state transition. A fu
 
 ## Small implementation PRs, in order
 
-Each milestone needs explicit authorization and stops for review. P3/M1 is merged; P3/M2 is explicitly authorized and implemented pending review. P3/M3–M5 remain NOT STARTED and require separate authorization.
+Each milestone needs explicit authorization and stops for review. P3/M1–M2 are merged; P3/M3 is explicitly authorized and implemented pending review. P3/M4–M5 remain NOT STARTED and require separate authorization.
 
 | Milestone / proposed PR | Scope | Acceptance and boundary |
 | --- | --- | --- |
@@ -141,4 +141,4 @@ Each implementation PR reports exact head, test selection/counts, skips with rea
 | Real non-English contract coverage | Select and separately review the actual versioned category/variant packages and typography/assets needed by each intended language. Existing English-only packages are never bypassed or widened. | Any real non-English request passing every category gate. |
 | Authenticated Weblate component/review metadata | Preserve verified Git provenance and mark per-key review unknown; use only the verified contribution landing link. | Any feature claiming Weblate-specific review authority; none is required for the initial Git-backed preflight. |
 
-**P3/M2 review checkpoint:** review the isolated read-only preflight and its exact-head evidence in the [M2 dossier](PHASE3_M2_IMPLEMENTATION.md) and draft PR. P3-D01–D04 remain approved policies; real contract approval, operational readiness, destinations, publication, activation and merging remain separate. P3/M3–M5 and Phases 4–6 require explicit future authorization.
+**P3/M3 review checkpoint:** review the isolated destination safeguards and exact-head evidence in the [M3 dossier](PHASE3_M3_IMPLEMENTATION.md) and draft PR. P3-D01–D04 remain approved; real authority, contract approval, combined readiness, production activation, publication and merging remain separate. P3/M4–M5 and Phases 4–6 require explicit future authorization.
