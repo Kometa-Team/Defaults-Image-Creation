@@ -32,16 +32,23 @@ class WorkflowBoundaryTests(unittest.TestCase):
         workflow = yaml.load((ROOT.parent / ".github/workflows/default-poster-validation.yml").read_text(), Loader=yaml.BaseLoader)
         self.assertEqual(workflow["on"], {"pull_request": {"branches": ["main"]}})
         self.assertEqual(workflow["permissions"], {"contents": "read"})
-        job = workflow["jobs"]["python-validation"]
+        self.assertEqual(set(workflow["jobs"]), {"collection", "validation", "acceptance"})
+        job = workflow["jobs"]["validation"]
         self.assertEqual(job["runs-on"], "${{ matrix.os }}")
         self.assertEqual(job["strategy"]["matrix"]["os"], ["ubuntu-latest", "windows-latest"])
         self.assertEqual(job["strategy"]["fail-fast"], "false")
         self.assertEqual(job["defaults"]["run"]["shell"], "bash")
         self.assertNotIn("permissions", job)
         actions = [step for step in job["steps"] if "uses" in step]
-        self.assertEqual(len(actions), 4)
-        for step in actions:
-            self.assertRegex(step["uses"], r"^actions/(checkout|setup-python|upload-artifact)@[0-9a-f]{40}$")
+        self.assertEqual(len(actions), 5)
+        for selected in workflow["jobs"].values():
+            self.assertEqual(selected.get("permissions", workflow["permissions"]), {"contents": "read"})
+            for step in selected["steps"]:
+                if "uses" in step:
+                    self.assertRegex(step["uses"], r"^actions/(checkout|setup-python|upload-artifact|download-artifact)@[0-9a-f]{40}$")
+            self.assertEqual(selected["steps"][0]["with"]["persist-credentials"], "false")
+            self.assertEqual(selected["steps"][0]["with"]["ref"], "${{ github.event.pull_request.head.sha }}")
+            self.assertEqual(selected["steps"][1]["with"]["python-version"], "3.13")
         self.assertEqual(actions[0]["with"]["persist-credentials"], "false")
         self.assertEqual(actions[1]["with"]["python-version"], "3.13")
         self.assertEqual(actions[2]["uses"], "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02")
@@ -60,10 +67,17 @@ class WorkflowBoundaryTests(unittest.TestCase):
         self.assertTrue(e_paths)
         self.assertTrue(all(path.startswith("config/package-e-ci/") for path in e_paths))
         self.assertFalse(any("sqlite" in path or path.endswith("cache/**") for path in e_paths))
-        smoke = [step for step in job["steps"] if step.get("name") == "Bounded offline Package E acceptance smoke"]
+        plan = json.loads((ROOT.parent / "ci/validation-plan.json").read_text())
+        smoke = [command for command in plan["commands"]["smoke"] if command[1:] == ["-m", "create_defaults.bulk.e_smoke"]]
         self.assertEqual(len(smoke), 1)
-        self.assertEqual(smoke[0]["run"], "python -m create_defaults.bulk.e_smoke")
-        commands = "\n".join(step.get("run", "") for step in job["steps"])
+        self.assertEqual(smoke[0], ["{python}", "-m", "create_defaults.bulk.e_smoke"])
+        self.assertEqual(actions[2]["if"], "${{ matrix.group == 'smoke' }}")
+        self.assertEqual(actions[3]["if"], "${{ matrix.group == 'smoke' }}")
+        self.assertEqual(actions[4]["with"]["path"], "config/ci-validation/**")
+        self.assertEqual(actions[4]["with"]["if-no-files-found"], "error")
+        self.assertEqual(actions[4]["with"]["retention-days"], "14")
+        commands = "\n".join(step.get("run", "") for selected in workflow["jobs"].values() for step in selected["steps"])
+        commands += "\n" + "\n".join(" ".join(command) for group in plan["commands"].values() for command in group)
         for required in ("pip install", "compileall", "unittest discover", "validation_manifest.py --check", "git diff --check"):
             self.assertIn(required, commands)
         for forbidden in ("pwsh", "magick", "validation_batch.py", "Default-Images", "git push"):
