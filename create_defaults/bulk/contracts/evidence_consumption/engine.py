@@ -85,7 +85,7 @@ def _references(context, payloads, subjects):
     return refs
 
 
-def _graph_scope(index, subject, package):
+def _graph_scope(index, subject, package, request, current_package_pins):
     s = subject.to_dict()
     contract = package.contract.to_dict()
     variant = next(v for v in contract["variants"] if v["id"] == s["variant"])
@@ -96,8 +96,6 @@ def _graph_scope(index, subject, package):
         row = index.outputs.get(output["id"])
         if row is None or any(row[k] != output[k] for k in ("local_path", "public_path")) or any(row[k] != s["contract"][k] for k in ("category", "kind")):
             fail("graph_output")
-        if row["context_sha256"] != s["review_context_sha256"]:
-            fail("graph_review_context")
         if not set(row["companions"]) <= index.outputs.keys():
             fail("graph_companions")
         closure, pending = {}, [row["node"]]
@@ -109,6 +107,35 @@ def _graph_scope(index, subject, package):
         definition = closure.get("definition:"+s["id"])
         if definition is None or definition["sha256"] != s["expanded_definition_sha256"]:
             fail("graph_definition")
+        historical_overlay = (type(request) is OverlayRequest
+            and (package.contract.sha256, package.rules.sha256) in current_package_pins)
+        if historical_overlay or row["context_sha256"] != s["review_context_sha256"]:
+            # Historical overlays retain M6's {definition,job} review namespace
+            # in M2. The unchanged M5 graph also binds identity, exceptions and
+            # renderer. Verify their relationship from the exact pinned record;
+            # neither context can substitute for the other or be normalized away.
+            if type(request) is not OverlayRequest or member is None:
+                fail("graph_review_context")
+            from ..adoption.models import HistoricalOutput, read_canonical
+            record = HistoricalOutput.from_bytes(request.record.encoded)
+            value = record.to_dict()
+            effective = read_canonical(value["effective_definition_json"])
+            job = read_canonical(value["job_json"])
+            member_context = fingerprint(dict(definition=effective, job=job))
+            graph_context = fingerprint(dict(identity=value["identity"], definition=effective, job=job,
+                exceptions=value["historical_exceptions"], renderer=value["baseline_renderer_sha256"]))
+            if (record.sha256 != request.record_sha256 or record.sha256 != member["record_sha256"]
+                    or value["identity"]["id"] != s["id"]
+                    or member_context != s["review_context_sha256"] or member_context != member["context_sha256"]
+                    or graph_context != row["context_sha256"] or closure[row["node"]]["sha256"] != graph_context):
+                fail("graph_review_context")
+            for source in job["inputs"]:
+                node = closure.get("asset:"+source["path"])
+                if node is None or node["sha256"] != source["sha256"]:
+                    fail("graph_record_source")
+            renderer = closure.get("transform:overlay")
+            if renderer is None or renderer["sha256"] != value["baseline_renderer_sha256"]:
+                fail("graph_record_renderer")
         if member is not None:
             if member["variant"] != s["variant"] or sorted(row["companions"]) != sorted(member["companions"]):
                 fail("graph_member")
@@ -179,6 +206,12 @@ def consume(inputs, language_policy, destination, destination_inputs, request_co
     if type(graph) is not Snapshot:
         fail("graph_type")
     index = Snapshot.load(graph.encoded, expected_sha256=expected_graph_sha256).index()
+    from ..categories.release import Implementation, RELEASE_SHA256
+    from ..categories.models import Release
+    if (type(implementation) is not Implementation or type(implementation.release) is not Release
+            or implementation.release.sha256 != RELEASE_SHA256 or require_hash(expected_release_sha256) != RELEASE_SHA256):
+        fail("m7_release_pin")
+    current_package_pins = {(e["contract_sha256"], e["rules_sha256"]) for e in implementation.release.to_dict()["entries"]}
     blockers = ["m5_graph_unresolved"] if index.unresolved else []
     rows, bounds, packages, subjects = [], [], [], {}
     for item in inputs:
@@ -191,7 +224,7 @@ def consume(inputs, language_policy, destination, destination_inputs, request_co
         if subject.sha256 in subjects or s["id"] in {v["id"] for v in subjects.values()}:
             fail("duplicate_subject")
         subjects[subject.sha256] = s
-        scope = _graph_scope(index, subject, item.request.package)
+        scope = _graph_scope(index, subject, item.request.package, item.request, current_package_pins)
         report = item.report
         if report is None:
             if item.expected_sha256 is not None:
