@@ -1,0 +1,2608 @@
+{
+  "evidence": {
+    "schema_version": 1,
+    "kind": "phase3-final-integration-acceptance",
+    "simulation": true,
+    "cases": {
+      "official_english": {
+        "evidence": {
+          "language_policy": {
+            "coverage": [
+              {
+                "languages": [
+                  "en",
+                  "fr",
+                  "pt-br",
+                  "nb_NO"
+                ],
+                "package": {
+                  "category": "Playlist",
+                  "kind": "poster",
+                  "sha256": "395f76a4499989daf36a3395edbcae299c8bd86126adc1d0f007dfbc8ab7fc0b",
+                  "version": "2.0.0"
+                },
+                "variant": "timeline-order"
+              }
+            ],
+            "external_authority_required": true,
+            "freshness": "verified-commit-and-content-with-explicit-reverification",
+            "id": "fixture.language-policy",
+            "kind": "language-policy",
+            "languages": [
+              {
+                "aliases": [],
+                "code": "en"
+              },
+              {
+                "aliases": [],
+                "code": "fr"
+              },
+              {
+                "aliases": [
+                  "pt_BR"
+                ],
+                "code": "pt-br"
+              },
+              {
+                "aliases": [
+                  "nb-NO"
+                ],
+                "code": "nb_NO"
+              }
+            ],
+            "non_english_requires_versioned_contract": true,
+            "owner": "synthetic-maintainer",
+            "schema_version": 1,
+            "stage": "policy",
+            "version": "1.0.0"
+          },
+          "translations": [
+            {
+              "selection": {
+                "id": "translation.fixture.playlist",
+                "kind": "translation-selection",
+                "language": "en",
+                "language_policy": {
+                  "kind": "language-policy",
+                  "sha256": "967b3ffc5790ec56b12d8c3df6677e2ad9e553994ca50598e8427d2834985f37",
+                  "version": "1.0.0"
+                },
+                "requested_language": "en",
+                "schema_version": 1,
+                "snapshot_sha256": "17dc58b4f892e71c23f31cc5d797db26fda7ed47decbef7b3a71157e259a44df",
+                "source": {
+                  "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "repository": {
+                    "host": "github.com",
+                    "name": "Fixture/Translations",
+                    "owner_id": 1101,
+                    "repository_id": 101
+                  },
+                  "resources": [
+                    {
+                      "blob_sha1": "192338349a977d2889c37d17b47f3844ffb32e6c",
+                      "path": "defaults/en.yml",
+                      "sha256": "bae17b8316b2de218d28266638b0955998fc7b303ae6187a2236a7134d1fa976"
+                    }
+                  ],
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                },
+                "stage": "selection",
+                "subject": {
+                  "kind": "validation-subject",
+                  "sha256": "894d99eb1d87e9d14c7ae01caed8db5d469ab57aa672a44b63b5e48cb9ee0c2a",
+                  "version": "1.0.0"
+                },
+                "values": [
+                  {
+                    "key": "key_names.TIMELINE_ORDER",
+                    "resource_path": "defaults/en.yml",
+                    "source_value_sha256": "b0b3b0c0130a31d2bc202968f503bba3fe29428ac1b5f2c278e3d2eb2bd205cc",
+                    "value_sha256": "b0b3b0c0130a31d2bc202968f503bba3fe29428ac1b5f2c278e3d2eb2bd205cc"
+                  }
+                ],
+                "verification": {
+                  "checked_at": "2030-01-01T00:00:00Z",
+                  "context_sha256": "5df987a633b324bc0ddf0d2993b2c5c26d9cdde833787e77e1cb713f4ebf0d9e",
+                  "issuer": "synthetic-source",
+                  "issuer_version": "1.0.0",
+                  "source_sha256": "e2e556a1376623c077f2239b0c0f891b7298950fde29475a4a8162acfce62b34",
+                  "status": "verified",
+                  "synthetic": true
+                },
+                "version": "1.0.0"
+              },
+              "preflight": {
+                "active": false,
+                "blockers": [
+                  "source_currentness:synthetic-current"
+                ],
+                "complete": true,
+                "currentness": "synthetic-current",
+                "definition_dependencies_json": "{\"definition\":\"41917696e20a6db8ec1a62cf3faab8b07039cb64b56fdf534e288ac613319fc2\",\"family\":[],\"generator\":null,\"origin\":{\"file\":\"fixture.yml\",\"inherited_sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\",\"profile\":null,\"profile_file\":\"profiles.yml\",\"row_sha256\":\"41917696e20a6db8ec1a62cf3faab8b07039cb64b56fdf534e288ac613319fc2\"},\"rules\":\"d3b36a3b1318ffc00b27215698e69639b5e62feeeb1e5aa1e30d8ff376963530\"}",
+                "dependency_sha256": "011563cf587fc44765d740e4784355d0d25063b63c014dbf65b7a180e9b28223",
+                "effective_definition_sha256": "41917696e20a6db8ec1a62cf3faab8b07039cb64b56fdf534e288ac613319fc2",
+                "evaluated_row_count": 1,
+                "fallback_json": "null",
+                "independent_checks": [
+                  "contract-approval",
+                  "destination",
+                  "font-glyphs",
+                  "layout",
+                  "logo",
+                  "visual-review"
+                ],
+                "key_status": "applicable",
+                "kind": "translation-preflight",
+                "language": "en",
+                "language_policy": {
+                  "kind": "language-policy",
+                  "sha256": "967b3ffc5790ec56b12d8c3df6677e2ad9e553994ca50598e8427d2834985f37",
+                  "version": "1.0.0"
+                },
+                "legacy_trace_json": "[{\"key\":\"key_names.TIMELINE_ORDER\",\"language\":\"en\",\"source_sha256\":\"bae17b8316b2de218d28266638b0955998fc7b303ae6187a2236a7134d1fa976\",\"value_sha256\":\"b0b3b0c0130a31d2bc202968f503bba3fe29428ac1b5f2c278e3d2eb2bd205cc\"}]",
+                "production_enforcement": false,
+                "publication_authorized": false,
+                "ready": false,
+                "requested_language": "en",
+                "required_keys": [
+                  {
+                    "key": "key_names.TIMELINE_ORDER",
+                    "roles": [
+                      "caption"
+                    ]
+                  }
+                ],
+                "required_row_count": 1,
+                "resolution_error": null,
+                "resolved_caption": "TIMELINE ORDER",
+                "resource_observations": [
+                  {
+                    "declared_sha256": "bae17b8316b2de218d28266638b0955998fc7b303ae6187a2236a7134d1fa976",
+                    "language": "en",
+                    "observed_sha256": "bae17b8316b2de218d28266638b0955998fc7b303ae6187a2236a7134d1fa976",
+                    "resource_path": "defaults/en.yml",
+                    "status": "available"
+                  }
+                ],
+                "results": [
+                  {
+                    "actual_key": "key_names.TIMELINE_ORDER",
+                    "key": "key_names.TIMELINE_ORDER",
+                    "language": "en",
+                    "provenance_status": "synthetic-current",
+                    "raw_json": "\"Timeline Order\"",
+                    "resource_path": "defaults/en.yml",
+                    "roles": [
+                      "caption"
+                    ],
+                    "source_sha256": "bae17b8316b2de218d28266638b0955998fc7b303ae6187a2236a7134d1fa976",
+                    "status": "available",
+                    "value": "Timeline Order",
+                    "value_sha256": "b0b3b0c0130a31d2bc202968f503bba3fe29428ac1b5f2c278e3d2eb2bd205cc"
+                  }
+                ],
+                "schema_version": 1,
+                "snapshot_sha256": "17dc58b4f892e71c23f31cc5d797db26fda7ed47decbef7b3a71157e259a44df",
+                "source": {
+                  "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "repository": {
+                    "host": "github.com",
+                    "name": "Fixture/Translations",
+                    "owner_id": 1101,
+                    "repository_id": 101
+                  },
+                  "resources": [
+                    {
+                      "blob_sha1": "192338349a977d2889c37d17b47f3844ffb32e6c",
+                      "path": "defaults/en.yml",
+                      "sha256": "bae17b8316b2de218d28266638b0955998fc7b303ae6187a2236a7134d1fa976"
+                    }
+                  ],
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                },
+                "stage": "informational",
+                "subject": {
+                  "contract": {
+                    "category": "Playlist",
+                    "kind": "poster",
+                    "sha256": "395f76a4499989daf36a3395edbcae299c8bd86126adc1d0f007dfbc8ab7fc0b",
+                    "version": "2.0.0"
+                  },
+                  "dependencies_sha256": "cb114d61765d9b0f52c420a8cfe92de8bd43a41469ca7230428d3333f3e29b97",
+                  "expanded_definition_sha256": "41917696e20a6db8ec1a62cf3faab8b07039cb64b56fdf534e288ac613319fc2",
+                  "id": "fixture.playlist",
+                  "kind": "validation-subject",
+                  "language": "en",
+                  "membership_sha256": "b10a7ad7b91891968148bfc6220b837f2cff35d5665d05df45d71d70aa68ca5c",
+                  "outputs": [
+                    {
+                      "id": "fixture.playlist",
+                      "identity_sha256": "dcea7a12c28021c84c33e105cb63424f4e98135879c0e375d7c1340af223a854",
+                      "local_path": "defaults-en/playlist/Arrowverse (Timeline Order).jpg",
+                      "public_path": "playlist/Reviewed.png"
+                    }
+                  ],
+                  "review_context_sha256": "308b2f8e4dc66607b4a85da6f5e8d03f68790f584a7fe509addd5d3ffc081e0d",
+                  "schema_version": 1,
+                  "stage": "subject",
+                  "variant": "timeline-order",
+                  "version": "1.0.0"
+                },
+                "technical_eligible": true,
+                "translation_eligible": false,
+                "translation_selection": {
+                  "kind": "translation-selection",
+                  "sha256": "b3eb4825af81edf9a53b7a8aa2d22e4076b8f84c364fb2c03049f02d21f8225e",
+                  "version": "1.0.0"
+                },
+                "verification_context_sha256": "10d831195f4f643c90f5fd19bbc97c216b900cdafc1f3d8e7e48c471d121087e",
+                "version": "1.0.0"
+              }
+            }
+          ],
+          "destination": {
+            "active": false,
+            "authority_context_sha256": "7fc2ef15f4573bfd0e266bd34e59aa84948a8367582938c2c375a1f90b11cf5f",
+            "authority_status": "synthetic-only",
+            "blockers": [
+              "authority:synthetic-only"
+            ],
+            "cohort": [
+              {
+                "contract": {
+                  "category": "Playlist",
+                  "kind": "poster",
+                  "sha256": "395f76a4499989daf36a3395edbcae299c8bd86126adc1d0f007dfbc8ab7fc0b",
+                  "version": "2.0.0"
+                },
+                "language": "en",
+                "membership_sha256": "b10a7ad7b91891968148bfc6220b837f2cff35d5665d05df45d71d70aa68ca5c",
+                "rules_sha256": "d3b36a3b1318ffc00b27215698e69639b5e62feeeb1e5aa1e30d8ff376963530",
+                "subject": {
+                  "kind": "validation-subject",
+                  "sha256": "894d99eb1d87e9d14c7ae01caed8db5d469ab57aa672a44b63b5e48cb9ee0c2a",
+                  "version": "1.0.0"
+                },
+                "translation": {
+                  "kind": "translation-preflight",
+                  "sha256": "b8620b16d7fbc2a0e98e17ab9a74cf208dc2c9e244aadb83cd2b1434b947d971",
+                  "version": "1.0.0"
+                },
+                "translation_blockers": [
+                  "source_currentness:synthetic-current"
+                ],
+                "variant": "timeline-order"
+              }
+            ],
+            "cohort_sha256": "cfd9d8679eac35c3bd0714ad579b730738eba27a5e74b99c9e49286926b80399",
+            "complete": true,
+            "dependency_sha256": "08277b5d1d14ce0879bd7c4e570741fccba30776495ca55e09545c49927d62cd",
+            "destination_checks_passed": true,
+            "destination_evidence": {
+              "kind": "destination-evidence",
+              "sha256": "1116f24012b37da807015cde0268cb6b421b583dab42c2e97349dedff168dfee",
+              "version": "1.0.0"
+            },
+            "destination_policy": {
+              "kind": "destination-policy",
+              "sha256": "7a3f73a06b6417fae67e54d17f6fd8e59a1fa81a6502f1d5071ef6b18185bcf6",
+              "version": "1.0.0"
+            },
+            "evaluated_outputs": 1,
+            "evaluation_complete": true,
+            "inventory_currentness": "synthetic-only",
+            "inventory_entries": 0,
+            "inventory_sha256": "5eea6e6262b5c26e84c0b85b98e50aefd086523deddce3b42da7e848e74afa35",
+            "inventory_status": "integrity_verified",
+            "kind": "destination-attestation",
+            "language": "en",
+            "language_policy": {
+              "kind": "language-policy",
+              "sha256": "967b3ffc5790ec56b12d8c3df6677e2ad9e553994ca50598e8427d2834985f37",
+              "version": "1.0.0"
+            },
+            "missing_companions": [],
+            "missing_tree_pages": [],
+            "output_membership_sha256": "b10a7ad7b91891968148bfc6220b837f2cff35d5665d05df45d71d70aa68ca5c",
+            "outputs": [
+              {
+                "diagnostics": [],
+                "output": {
+                  "id": "fixture.playlist",
+                  "identity_sha256": "dcea7a12c28021c84c33e105cb63424f4e98135879c0e375d7c1340af223a854",
+                  "local_path": "defaults-en/playlist/Arrowverse (Timeline Order).jpg",
+                  "public_path": "playlist/Reviewed.png"
+                },
+                "status": "clear",
+                "target_path": "playlist/Reviewed.png"
+              }
+            ],
+            "policy_route": "official_english",
+            "production_enforcement": false,
+            "proposed_outputs": 1,
+            "publication_authorized": false,
+            "ready": false,
+            "repository_identity_status": "synthetic-only",
+            "schema_version": 1,
+            "simulation_eligible": true,
+            "stage": "informational",
+            "target": {
+              "baseline_commit": "d7bc40dabd25b77d7eaeae2ef25dba5aca34565d",
+              "baseline_tree": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+              "branch": "master",
+              "inventory_sha256": "5eea6e6262b5c26e84c0b85b98e50aefd086523deddce3b42da7e848e74afa35",
+              "language": "en",
+              "paths": [
+                "playlist/Reviewed.png"
+              ],
+              "repository": {
+                "host": "github.com",
+                "name": "Fixture/Official",
+                "owner_id": 1102,
+                "repository_id": 102
+              },
+              "root": null
+            },
+            "technical_eligible": false,
+            "verified_observation": {
+              "authority_context_sha256": "7fc2ef15f4573bfd0e266bd34e59aa84948a8367582938c2c375a1f90b11cf5f",
+              "cohort_sha256": "cfd9d8679eac35c3bd0714ad579b730738eba27a5e74b99c9e49286926b80399",
+              "inventory_sha256": "5eea6e6262b5c26e84c0b85b98e50aefd086523deddce3b42da7e848e74afa35",
+              "official_owner_id": 1102,
+              "official_repository_id": 102,
+              "owner_kind": "organization",
+              "permissions": [
+                "contents:read",
+                "contents:write",
+                "pull_requests:write"
+              ],
+              "principal_id": 1103,
+              "repository": {
+                "host": "github.com",
+                "name": "Fixture/Official",
+                "owner_id": 1102,
+                "repository_id": 102
+              },
+              "revocation_checked_at": "2030-01-01T00:00:00Z",
+              "revocation_revision_sha256": "c8b843b20c1052481a0fba094407e4a13ec128242ab5fcd3977db179c6cf21cf",
+              "target_sha256": "5a9275f559d407a6bd855c37c1b820a558e61768e6e4b58baeb103913f5d01c2"
+            },
+            "version": "1.0.0"
+          },
+          "request_context": {
+            "id": "fixture.lifecycle-request",
+            "kind": "evidence-request-context",
+            "previous_sha256": null,
+            "references": [],
+            "request_payload_sha256": "0eb752e3769d07130af6738a0dfa1d99c902f163afa7a6157a55f99123bd14b4",
+            "revision": 1,
+            "schema_version": 1,
+            "subjects": [
+              "894d99eb1d87e9d14c7ae01caed8db5d469ab57aa672a44b63b5e48cb9ee0c2a"
+            ],
+            "version": "1.0.0"
+          },
+          "consumption": {
+            "active": false,
+            "binding_sha256": "1a1339e857fafb9ced509f96fe92a8c1b217835c618e02cc40c119dbdefe88e4",
+            "blockers": [
+              "m2:fixture.playlist:source_currentness:synthetic-current",
+              "m3:authority:synthetic-only",
+              "m7:authenticated_decision_intake_not_integrated",
+              "m7:fresh_complete_historical_audit_required",
+              "m7:independent_operator_activation_not_authorized",
+              "m7:missing_approved_operational_registry",
+              "m7:missing_exact_hash_maintainer_approval",
+              "m7:production_integration_not_implemented_or_authorized",
+              "m7:selected_package_not_current_m6_release",
+              "synthetic_evidence_is_not_authority"
+            ],
+            "chain_compatible": true,
+            "destination_dependency_sha256": "08277b5d1d14ce0879bd7c4e570741fccba30776495ca55e09545c49927d62cd",
+            "destination_sha256": "56c2e64987994768658eda1e7d07eca84edb2226af46772a38df8f0f4c1ec0ba",
+            "evaluation_complete": true,
+            "graph_basis": "7e93050a2934ac8708d4b0d5e0317076272f73bbbe2c1e1b82938fc487d2b266",
+            "graph_snapshot_sha256": "1e4aa46f3bdfa44d1e2cac73fc8db516bf3fcfe46beccc3f4332d052737ff049",
+            "kind": "evidence-consumption",
+            "language_policy": {
+              "kind": "language-policy",
+              "sha256": "967b3ffc5790ec56b12d8c3df6677e2ad9e553994ca50598e8427d2834985f37",
+              "version": "1.0.0"
+            },
+            "m7": {
+              "active": 0,
+              "blockers": [
+                "authenticated_decision_intake_not_integrated",
+                "fresh_complete_historical_audit_required",
+                "independent_operator_activation_not_authorized",
+                "missing_approved_operational_registry",
+                "missing_exact_hash_maintainer_approval",
+                "production_integration_not_implemented_or_authorized",
+                "selected_package_not_current_m6_release"
+              ],
+              "exact_approvals_missing": 22,
+              "ready": 0,
+              "release_sha256": "926de31d1df4ee90e911c4e91df81ee3ca914f5179df784ff3d41e9b716ada2a",
+              "review_registry_sha256": "cac2b99657803fdf05994b1d26598ca1e6d4f8a295e1dc6d92c9482178797bb3",
+              "selected": [
+                {
+                  "approved_registry_context": "missing",
+                  "blockers": [
+                    "missing_exact_hash_maintainer_approval",
+                    "missing_approved_operational_registry",
+                    "authenticated_decision_intake_not_integrated",
+                    "independent_operator_activation_not_authorized",
+                    "production_integration_not_implemented_or_authorized",
+                    "fresh_complete_historical_audit_required"
+                  ],
+                  "category": "Playlist",
+                  "contract_sha256": "5047d834ecd3f8e5a0ed76ae24760b6947ae6b83e95198ce602e1715e445016b",
+                  "enforcement_state": "IMPLEMENTED",
+                  "exact_contract_approval": "missing",
+                  "historically_compatible": "not_freshly_checked",
+                  "implemented": true,
+                  "kind": "poster",
+                  "prerequisites": {
+                    "approved_operational_registry": "missing",
+                    "authenticated_intake": "unavailable",
+                    "complete_new_poster_previews": "later_workflow_required_for_new_posters",
+                    "current_authorization": "unavailable",
+                    "effective_coverage": "requires_fresh_audit",
+                    "exact_final_head_ci": "separate_ci_evidence",
+                    "exact_package_approval": "missing",
+                    "historical_compatibility": "requires_fresh_audit",
+                    "m4_new_artifact_reviews": "not_requested_no_new_artwork",
+                    "operator_activation_decision": "missing",
+                    "production_integration": "not_implemented_not_authorized",
+                    "required_historical_outputs": "requires_fresh_audit",
+                    "source_dependency_provenance": "requires_fresh_audit"
+                  },
+                  "production_enforcement": false,
+                  "rules_sha256": "f8dabde54206a85aee1a2eb769dc066d0de47b7792bdd7a34c22bde145590932",
+                  "variant_count": 1,
+                  "version": "1.0.0"
+                }
+              ],
+              "selectors": 22,
+              "variants": 278
+            },
+            "output_membership_sha256": "b10a7ad7b91891968148bfc6220b837f2cff35d5665d05df45d71d70aa68ca5c",
+            "production_enforcement": false,
+            "publication_authorized": false,
+            "ready": false,
+            "references": [],
+            "request_context_sha256": "a0a94d7761deca349ca6485398ec3618a64a96aa4081e09a2e3d19c9a1abbdd2",
+            "request_id": "fixture.lifecycle-request",
+            "request_revision": 1,
+            "schema_version": 1,
+            "simulation": true,
+            "simulation_eligible": true,
+            "stage": "informational",
+            "subjects": [
+              {
+                "dependencies_sha256": "cb114d61765d9b0f52c420a8cfe92de8bd43a41469ca7230428d3333f3e29b97",
+                "expanded_definition_sha256": "41917696e20a6db8ec1a62cf3faab8b07039cb64b56fdf534e288ac613319fc2",
+                "language": "en",
+                "outputs": [
+                  {
+                    "id": "fixture.playlist",
+                    "identity_sha256": "dcea7a12c28021c84c33e105cb63424f4e98135879c0e375d7c1340af223a854",
+                    "local_path": "defaults-en/playlist/Arrowverse (Timeline Order).jpg",
+                    "public_path": "playlist/Reviewed.png"
+                  }
+                ],
+                "requested_language": "en",
+                "review_context_sha256": "308b2f8e4dc66607b4a85da6f5e8d03f68790f584a7fe509addd5d3ffc081e0d",
+                "scope": {
+                  "contract_sha256": "395f76a4499989daf36a3395edbcae299c8bd86126adc1d0f007dfbc8ab7fc0b",
+                  "design_sha256": "4a3f330e73f97bdb2bbae98a235f20a9483f6d352378b788246da6af06e812e6",
+                  "exceptions_sha256": "f7da4bc1efcfbca20750d1842686c151ca94ac4761568a061aa9ffe3c2505bad",
+                  "member_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+                  "outputs": [
+                    {
+                      "companions": [],
+                      "evidence": {
+                        "confirmations": [],
+                        "decisions": [],
+                        "previews": [],
+                        "receipts": []
+                      },
+                      "id": "fixture.playlist",
+                      "material_sha256": "c4d9e786599372ce2c82e94b4073dfd0b49ff84b0408fbb6a168efbc453e618a"
+                    }
+                  ],
+                  "rule_sha256": "ffeff6c3b0f1291e12c0e91a5053f3658edb656fbd8b9da4f8acd1e11f914998",
+                  "rules_sha256": "d3b36a3b1318ffc00b27215698e69639b5e62feeeb1e5aa1e30d8ff376963530",
+                  "variant": "timeline-order"
+                },
+                "selection_sha256": "b3eb4825af81edf9a53b7a8aa2d22e4076b8f84c364fb2c03049f02d21f8225e",
+                "source_context_sha256": "10d831195f4f643c90f5fd19bbc97c216b900cdafc1f3d8e7e48c471d121087e",
+                "subject_id": "fixture.playlist",
+                "subject_sha256": "894d99eb1d87e9d14c7ae01caed8db5d469ab57aa672a44b63b5e48cb9ee0c2a",
+                "translation_dependency_sha256": "011563cf587fc44765d740e4784355d0d25063b63c014dbf65b7a180e9b28223",
+                "translation_sha256": "b8620b16d7fbc2a0e98e17ab9a74cf208dc2c9e244aadb83cd2b1434b947d971"
+              }
+            ],
+            "technical_eligible": false,
+            "version": "1.0.0"
+          },
+          "archived_sha256": "35c752210b3bf80c326f6652da5aa04ab6a5bfb8fb5ec9dd67ac399bb08756e4"
+        },
+        "sha256": "07589f1cc0fcdb097fdb1b7243fac75c60dd4dca390687c7bff87c7f1b9c9b06"
+      },
+      "user_english": {
+        "evidence": {
+          "language_policy": {
+            "coverage": [
+              {
+                "languages": [
+                  "en",
+                  "fr",
+                  "pt-br",
+                  "nb_NO"
+                ],
+                "package": {
+                  "category": "Playlist",
+                  "kind": "poster",
+                  "sha256": "395f76a4499989daf36a3395edbcae299c8bd86126adc1d0f007dfbc8ab7fc0b",
+                  "version": "2.0.0"
+                },
+                "variant": "timeline-order"
+              }
+            ],
+            "external_authority_required": true,
+            "freshness": "verified-commit-and-content-with-explicit-reverification",
+            "id": "fixture.language-policy",
+            "kind": "language-policy",
+            "languages": [
+              {
+                "aliases": [],
+                "code": "en"
+              },
+              {
+                "aliases": [],
+                "code": "fr"
+              },
+              {
+                "aliases": [
+                  "pt_BR"
+                ],
+                "code": "pt-br"
+              },
+              {
+                "aliases": [
+                  "nb-NO"
+                ],
+                "code": "nb_NO"
+              }
+            ],
+            "non_english_requires_versioned_contract": true,
+            "owner": "synthetic-maintainer",
+            "schema_version": 1,
+            "stage": "policy",
+            "version": "1.0.0"
+          },
+          "translations": [
+            {
+              "selection": {
+                "id": "translation.fixture.playlist",
+                "kind": "translation-selection",
+                "language": "en",
+                "language_policy": {
+                  "kind": "language-policy",
+                  "sha256": "967b3ffc5790ec56b12d8c3df6677e2ad9e553994ca50598e8427d2834985f37",
+                  "version": "1.0.0"
+                },
+                "requested_language": "en",
+                "schema_version": 1,
+                "snapshot_sha256": "17dc58b4f892e71c23f31cc5d797db26fda7ed47decbef7b3a71157e259a44df",
+                "source": {
+                  "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "repository": {
+                    "host": "github.com",
+                    "name": "Fixture/Translations",
+                    "owner_id": 1101,
+                    "repository_id": 101
+                  },
+                  "resources": [
+                    {
+                      "blob_sha1": "192338349a977d2889c37d17b47f3844ffb32e6c",
+                      "path": "defaults/en.yml",
+                      "sha256": "bae17b8316b2de218d28266638b0955998fc7b303ae6187a2236a7134d1fa976"
+                    }
+                  ],
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                },
+                "stage": "selection",
+                "subject": {
+                  "kind": "validation-subject",
+                  "sha256": "894d99eb1d87e9d14c7ae01caed8db5d469ab57aa672a44b63b5e48cb9ee0c2a",
+                  "version": "1.0.0"
+                },
+                "values": [
+                  {
+                    "key": "key_names.TIMELINE_ORDER",
+                    "resource_path": "defaults/en.yml",
+                    "source_value_sha256": "b0b3b0c0130a31d2bc202968f503bba3fe29428ac1b5f2c278e3d2eb2bd205cc",
+                    "value_sha256": "b0b3b0c0130a31d2bc202968f503bba3fe29428ac1b5f2c278e3d2eb2bd205cc"
+                  }
+                ],
+                "verification": {
+                  "checked_at": "2030-01-01T00:00:00Z",
+                  "context_sha256": "5df987a633b324bc0ddf0d2993b2c5c26d9cdde833787e77e1cb713f4ebf0d9e",
+                  "issuer": "synthetic-source",
+                  "issuer_version": "1.0.0",
+                  "source_sha256": "e2e556a1376623c077f2239b0c0f891b7298950fde29475a4a8162acfce62b34",
+                  "status": "verified",
+                  "synthetic": true
+                },
+                "version": "1.0.0"
+              },
+              "preflight": {
+                "active": false,
+                "blockers": [
+                  "source_currentness:synthetic-current"
+                ],
+                "complete": true,
+                "currentness": "synthetic-current",
+                "definition_dependencies_json": "{\"definition\":\"41917696e20a6db8ec1a62cf3faab8b07039cb64b56fdf534e288ac613319fc2\",\"family\":[],\"generator\":null,\"origin\":{\"file\":\"fixture.yml\",\"inherited_sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\",\"profile\":null,\"profile_file\":\"profiles.yml\",\"row_sha256\":\"41917696e20a6db8ec1a62cf3faab8b07039cb64b56fdf534e288ac613319fc2\"},\"rules\":\"d3b36a3b1318ffc00b27215698e69639b5e62feeeb1e5aa1e30d8ff376963530\"}",
+                "dependency_sha256": "011563cf587fc44765d740e4784355d0d25063b63c014dbf65b7a180e9b28223",
+                "effective_definition_sha256": "41917696e20a6db8ec1a62cf3faab8b07039cb64b56fdf534e288ac613319fc2",
+                "evaluated_row_count": 1,
+                "fallback_json": "null",
+                "independent_checks": [
+                  "contract-approval",
+                  "destination",
+                  "font-glyphs",
+                  "layout",
+                  "logo",
+                  "visual-review"
+                ],
+                "key_status": "applicable",
+                "kind": "translation-preflight",
+                "language": "en",
+                "language_policy": {
+                  "kind": "language-policy",
+                  "sha256": "967b3ffc5790ec56b12d8c3df6677e2ad9e553994ca50598e8427d2834985f37",
+                  "version": "1.0.0"
+                },
+                "legacy_trace_json": "[{\"key\":\"key_names.TIMELINE_ORDER\",\"language\":\"en\",\"source_sha256\":\"bae17b8316b2de218d28266638b0955998fc7b303ae6187a2236a7134d1fa976\",\"value_sha256\":\"b0b3b0c0130a31d2bc202968f503bba3fe29428ac1b5f2c278e3d2eb2bd205cc\"}]",
+                "production_enforcement": false,
+                "publication_authorized": false,
+                "ready": false,
+                "requested_language": "en",
+                "required_keys": [
+                  {
+                    "key": "key_names.TIMELINE_ORDER",
+                    "roles": [
+                      "caption"
+                    ]
+                  }
+                ],
+                "required_row_count": 1,
+                "resolution_error": null,
+                "resolved_caption": "TIMELINE ORDER",
+                "resource_observations": [
+                  {
+                    "declared_sha256": "bae17b8316b2de218d28266638b0955998fc7b303ae6187a2236a7134d1fa976",
+                    "language": "en",
+                    "observed_sha256": "bae17b8316b2de218d28266638b0955998fc7b303ae6187a2236a7134d1fa976",
+                    "resource_path": "defaults/en.yml",
+                    "status": "available"
+                  }
+                ],
+                "results": [
+                  {
+                    "actual_key": "key_names.TIMELINE_ORDER",
+                    "key": "key_names.TIMELINE_ORDER",
+                    "language": "en",
+                    "provenance_status": "synthetic-current",
+                    "raw_json": "\"Timeline Order\"",
+                    "resource_path": "defaults/en.yml",
+                    "roles": [
+                      "caption"
+                    ],
+                    "source_sha256": "bae17b8316b2de218d28266638b0955998fc7b303ae6187a2236a7134d1fa976",
+                    "status": "available",
+                    "value": "Timeline Order",
+                    "value_sha256": "b0b3b0c0130a31d2bc202968f503bba3fe29428ac1b5f2c278e3d2eb2bd205cc"
+                  }
+                ],
+                "schema_version": 1,
+                "snapshot_sha256": "17dc58b4f892e71c23f31cc5d797db26fda7ed47decbef7b3a71157e259a44df",
+                "source": {
+                  "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "repository": {
+                    "host": "github.com",
+                    "name": "Fixture/Translations",
+                    "owner_id": 1101,
+                    "repository_id": 101
+                  },
+                  "resources": [
+                    {
+                      "blob_sha1": "192338349a977d2889c37d17b47f3844ffb32e6c",
+                      "path": "defaults/en.yml",
+                      "sha256": "bae17b8316b2de218d28266638b0955998fc7b303ae6187a2236a7134d1fa976"
+                    }
+                  ],
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                },
+                "stage": "informational",
+                "subject": {
+                  "contract": {
+                    "category": "Playlist",
+                    "kind": "poster",
+                    "sha256": "395f76a4499989daf36a3395edbcae299c8bd86126adc1d0f007dfbc8ab7fc0b",
+                    "version": "2.0.0"
+                  },
+                  "dependencies_sha256": "cb114d61765d9b0f52c420a8cfe92de8bd43a41469ca7230428d3333f3e29b97",
+                  "expanded_definition_sha256": "41917696e20a6db8ec1a62cf3faab8b07039cb64b56fdf534e288ac613319fc2",
+                  "id": "fixture.playlist",
+                  "kind": "validation-subject",
+                  "language": "en",
+                  "membership_sha256": "b10a7ad7b91891968148bfc6220b837f2cff35d5665d05df45d71d70aa68ca5c",
+                  "outputs": [
+                    {
+                      "id": "fixture.playlist",
+                      "identity_sha256": "dcea7a12c28021c84c33e105cb63424f4e98135879c0e375d7c1340af223a854",
+                      "local_path": "defaults-en/playlist/Arrowverse (Timeline Order).jpg",
+                      "public_path": "playlist/Reviewed.png"
+                    }
+                  ],
+                  "review_context_sha256": "308b2f8e4dc66607b4a85da6f5e8d03f68790f584a7fe509addd5d3ffc081e0d",
+                  "schema_version": 1,
+                  "stage": "subject",
+                  "variant": "timeline-order",
+                  "version": "1.0.0"
+                },
+                "technical_eligible": true,
+                "translation_eligible": false,
+                "translation_selection": {
+                  "kind": "translation-selection",
+                  "sha256": "b3eb4825af81edf9a53b7a8aa2d22e4076b8f84c364fb2c03049f02d21f8225e",
+                  "version": "1.0.0"
+                },
+                "verification_context_sha256": "10d831195f4f643c90f5fd19bbc97c216b900cdafc1f3d8e7e48c471d121087e",
+                "version": "1.0.0"
+              }
+            }
+          ],
+          "destination": {
+            "active": false,
+            "authority_context_sha256": "c14b501644d3b4b9f557cfbd1f22a71096efa6e9532e3e67cc00430e34bc8673",
+            "authority_status": "synthetic-only",
+            "blockers": [
+              "authority:synthetic-only"
+            ],
+            "cohort": [
+              {
+                "contract": {
+                  "category": "Playlist",
+                  "kind": "poster",
+                  "sha256": "395f76a4499989daf36a3395edbcae299c8bd86126adc1d0f007dfbc8ab7fc0b",
+                  "version": "2.0.0"
+                },
+                "language": "en",
+                "membership_sha256": "b10a7ad7b91891968148bfc6220b837f2cff35d5665d05df45d71d70aa68ca5c",
+                "rules_sha256": "d3b36a3b1318ffc00b27215698e69639b5e62feeeb1e5aa1e30d8ff376963530",
+                "subject": {
+                  "kind": "validation-subject",
+                  "sha256": "894d99eb1d87e9d14c7ae01caed8db5d469ab57aa672a44b63b5e48cb9ee0c2a",
+                  "version": "1.0.0"
+                },
+                "translation": {
+                  "kind": "translation-preflight",
+                  "sha256": "b8620b16d7fbc2a0e98e17ab9a74cf208dc2c9e244aadb83cd2b1434b947d971",
+                  "version": "1.0.0"
+                },
+                "translation_blockers": [
+                  "source_currentness:synthetic-current"
+                ],
+                "variant": "timeline-order"
+              }
+            ],
+            "cohort_sha256": "cfd9d8679eac35c3bd0714ad579b730738eba27a5e74b99c9e49286926b80399",
+            "complete": true,
+            "dependency_sha256": "2ebd927a4adfc2b54c43d355c9f9dd7cb315c5f2395b7a86599b914584b142d4",
+            "destination_checks_passed": true,
+            "destination_evidence": {
+              "kind": "destination-evidence",
+              "sha256": "2eb3575d42faab907423560dc9026a22054ebda18a79e4ee4bcaa9065757029b",
+              "version": "1.0.0"
+            },
+            "destination_policy": {
+              "kind": "destination-policy",
+              "sha256": "32de102d6e7ffc44f0580163c76c8544f56e65682e97f88df1e69910246b3e48",
+              "version": "1.0.0"
+            },
+            "evaluated_outputs": 1,
+            "evaluation_complete": true,
+            "inventory_currentness": "synthetic-only",
+            "inventory_entries": 0,
+            "inventory_sha256": "932af29eca859999554ad9df0a4d0d895df972d894b8ddb872128d81900aaafd",
+            "inventory_status": "integrity_verified",
+            "kind": "destination-attestation",
+            "language": "en",
+            "language_policy": {
+              "kind": "language-policy",
+              "sha256": "967b3ffc5790ec56b12d8c3df6677e2ad9e553994ca50598e8427d2834985f37",
+              "version": "1.0.0"
+            },
+            "missing_companions": [],
+            "missing_tree_pages": [],
+            "output_membership_sha256": "b10a7ad7b91891968148bfc6220b837f2cff35d5665d05df45d71d70aa68ca5c",
+            "outputs": [
+              {
+                "diagnostics": [],
+                "output": {
+                  "id": "fixture.playlist",
+                  "identity_sha256": "dcea7a12c28021c84c33e105cb63424f4e98135879c0e375d7c1340af223a854",
+                  "local_path": "defaults-en/playlist/Arrowverse (Timeline Order).jpg",
+                  "public_path": "playlist/Reviewed.png"
+                },
+                "status": "clear",
+                "target_path": "playlist/Reviewed.png"
+              }
+            ],
+            "policy_route": "user_english",
+            "production_enforcement": false,
+            "proposed_outputs": 1,
+            "publication_authorized": false,
+            "ready": false,
+            "repository_identity_status": "synthetic-only",
+            "schema_version": 1,
+            "simulation_eligible": true,
+            "stage": "informational",
+            "target": {
+              "baseline_commit": "d7bc40dabd25b77d7eaeae2ef25dba5aca34565d",
+              "baseline_tree": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+              "branch": "Main",
+              "inventory_sha256": "932af29eca859999554ad9df0a4d0d895df972d894b8ddb872128d81900aaafd",
+              "language": "en",
+              "paths": [
+                "playlist/Reviewed.png"
+              ],
+              "repository": {
+                "host": "github.com",
+                "name": "Fixture/Artwork",
+                "owner_id": 1103,
+                "repository_id": 103
+              },
+              "root": null
+            },
+            "technical_eligible": false,
+            "verified_observation": {
+              "authority_context_sha256": "c14b501644d3b4b9f557cfbd1f22a71096efa6e9532e3e67cc00430e34bc8673",
+              "cohort_sha256": "cfd9d8679eac35c3bd0714ad579b730738eba27a5e74b99c9e49286926b80399",
+              "inventory_sha256": "932af29eca859999554ad9df0a4d0d895df972d894b8ddb872128d81900aaafd",
+              "official_owner_id": 1102,
+              "official_repository_id": 102,
+              "owner_kind": "user",
+              "permissions": [
+                "contents:read",
+                "contents:write",
+                "pull_requests:write"
+              ],
+              "principal_id": 1103,
+              "repository": {
+                "host": "github.com",
+                "name": "Fixture/Artwork",
+                "owner_id": 1103,
+                "repository_id": 103
+              },
+              "revocation_checked_at": "2030-01-01T00:00:00Z",
+              "revocation_revision_sha256": "c8b843b20c1052481a0fba094407e4a13ec128242ab5fcd3977db179c6cf21cf",
+              "target_sha256": "9c077681d1323042a86eaa0712552cc4e33b59e53a8947e4bbac6ac635c4cfcc"
+            },
+            "version": "1.0.0"
+          },
+          "request_context": {
+            "id": "fixture.lifecycle-request",
+            "kind": "evidence-request-context",
+            "previous_sha256": null,
+            "references": [],
+            "request_payload_sha256": "0eb752e3769d07130af6738a0dfa1d99c902f163afa7a6157a55f99123bd14b4",
+            "revision": 1,
+            "schema_version": 1,
+            "subjects": [
+              "894d99eb1d87e9d14c7ae01caed8db5d469ab57aa672a44b63b5e48cb9ee0c2a"
+            ],
+            "version": "1.0.0"
+          },
+          "consumption": {
+            "active": false,
+            "binding_sha256": "b3bca684e97be9a654a987779128a130ecc8cdcb93001894df965902d470f1cf",
+            "blockers": [
+              "m2:fixture.playlist:source_currentness:synthetic-current",
+              "m3:authority:synthetic-only",
+              "m7:authenticated_decision_intake_not_integrated",
+              "m7:fresh_complete_historical_audit_required",
+              "m7:independent_operator_activation_not_authorized",
+              "m7:missing_approved_operational_registry",
+              "m7:missing_exact_hash_maintainer_approval",
+              "m7:production_integration_not_implemented_or_authorized",
+              "m7:selected_package_not_current_m6_release",
+              "synthetic_evidence_is_not_authority"
+            ],
+            "chain_compatible": true,
+            "destination_dependency_sha256": "2ebd927a4adfc2b54c43d355c9f9dd7cb315c5f2395b7a86599b914584b142d4",
+            "destination_sha256": "f86c710fac049df5e74cdf067a03d897d0411ac253a1155d4f3b8d7a7c0966c2",
+            "evaluation_complete": true,
+            "graph_basis": "7e93050a2934ac8708d4b0d5e0317076272f73bbbe2c1e1b82938fc487d2b266",
+            "graph_snapshot_sha256": "1e4aa46f3bdfa44d1e2cac73fc8db516bf3fcfe46beccc3f4332d052737ff049",
+            "kind": "evidence-consumption",
+            "language_policy": {
+              "kind": "language-policy",
+              "sha256": "967b3ffc5790ec56b12d8c3df6677e2ad9e553994ca50598e8427d2834985f37",
+              "version": "1.0.0"
+            },
+            "m7": {
+              "active": 0,
+              "blockers": [
+                "authenticated_decision_intake_not_integrated",
+                "fresh_complete_historical_audit_required",
+                "independent_operator_activation_not_authorized",
+                "missing_approved_operational_registry",
+                "missing_exact_hash_maintainer_approval",
+                "production_integration_not_implemented_or_authorized",
+                "selected_package_not_current_m6_release"
+              ],
+              "exact_approvals_missing": 22,
+              "ready": 0,
+              "release_sha256": "926de31d1df4ee90e911c4e91df81ee3ca914f5179df784ff3d41e9b716ada2a",
+              "review_registry_sha256": "cac2b99657803fdf05994b1d26598ca1e6d4f8a295e1dc6d92c9482178797bb3",
+              "selected": [
+                {
+                  "approved_registry_context": "missing",
+                  "blockers": [
+                    "missing_exact_hash_maintainer_approval",
+                    "missing_approved_operational_registry",
+                    "authenticated_decision_intake_not_integrated",
+                    "independent_operator_activation_not_authorized",
+                    "production_integration_not_implemented_or_authorized",
+                    "fresh_complete_historical_audit_required"
+                  ],
+                  "category": "Playlist",
+                  "contract_sha256": "5047d834ecd3f8e5a0ed76ae24760b6947ae6b83e95198ce602e1715e445016b",
+                  "enforcement_state": "IMPLEMENTED",
+                  "exact_contract_approval": "missing",
+                  "historically_compatible": "not_freshly_checked",
+                  "implemented": true,
+                  "kind": "poster",
+                  "prerequisites": {
+                    "approved_operational_registry": "missing",
+                    "authenticated_intake": "unavailable",
+                    "complete_new_poster_previews": "later_workflow_required_for_new_posters",
+                    "current_authorization": "unavailable",
+                    "effective_coverage": "requires_fresh_audit",
+                    "exact_final_head_ci": "separate_ci_evidence",
+                    "exact_package_approval": "missing",
+                    "historical_compatibility": "requires_fresh_audit",
+                    "m4_new_artifact_reviews": "not_requested_no_new_artwork",
+                    "operator_activation_decision": "missing",
+                    "production_integration": "not_implemented_not_authorized",
+                    "required_historical_outputs": "requires_fresh_audit",
+                    "source_dependency_provenance": "requires_fresh_audit"
+                  },
+                  "production_enforcement": false,
+                  "rules_sha256": "f8dabde54206a85aee1a2eb769dc066d0de47b7792bdd7a34c22bde145590932",
+                  "variant_count": 1,
+                  "version": "1.0.0"
+                }
+              ],
+              "selectors": 22,
+              "variants": 278
+            },
+            "output_membership_sha256": "b10a7ad7b91891968148bfc6220b837f2cff35d5665d05df45d71d70aa68ca5c",
+            "production_enforcement": false,
+            "publication_authorized": false,
+            "ready": false,
+            "references": [],
+            "request_context_sha256": "a0a94d7761deca349ca6485398ec3618a64a96aa4081e09a2e3d19c9a1abbdd2",
+            "request_id": "fixture.lifecycle-request",
+            "request_revision": 1,
+            "schema_version": 1,
+            "simulation": true,
+            "simulation_eligible": true,
+            "stage": "informational",
+            "subjects": [
+              {
+                "dependencies_sha256": "cb114d61765d9b0f52c420a8cfe92de8bd43a41469ca7230428d3333f3e29b97",
+                "expanded_definition_sha256": "41917696e20a6db8ec1a62cf3faab8b07039cb64b56fdf534e288ac613319fc2",
+                "language": "en",
+                "outputs": [
+                  {
+                    "id": "fixture.playlist",
+                    "identity_sha256": "dcea7a12c28021c84c33e105cb63424f4e98135879c0e375d7c1340af223a854",
+                    "local_path": "defaults-en/playlist/Arrowverse (Timeline Order).jpg",
+                    "public_path": "playlist/Reviewed.png"
+                  }
+                ],
+                "requested_language": "en",
+                "review_context_sha256": "308b2f8e4dc66607b4a85da6f5e8d03f68790f584a7fe509addd5d3ffc081e0d",
+                "scope": {
+                  "contract_sha256": "395f76a4499989daf36a3395edbcae299c8bd86126adc1d0f007dfbc8ab7fc0b",
+                  "design_sha256": "4a3f330e73f97bdb2bbae98a235f20a9483f6d352378b788246da6af06e812e6",
+                  "exceptions_sha256": "f7da4bc1efcfbca20750d1842686c151ca94ac4761568a061aa9ffe3c2505bad",
+                  "member_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+                  "outputs": [
+                    {
+                      "companions": [],
+                      "evidence": {
+                        "confirmations": [],
+                        "decisions": [],
+                        "previews": [],
+                        "receipts": []
+                      },
+                      "id": "fixture.playlist",
+                      "material_sha256": "c4d9e786599372ce2c82e94b4073dfd0b49ff84b0408fbb6a168efbc453e618a"
+                    }
+                  ],
+                  "rule_sha256": "ffeff6c3b0f1291e12c0e91a5053f3658edb656fbd8b9da4f8acd1e11f914998",
+                  "rules_sha256": "d3b36a3b1318ffc00b27215698e69639b5e62feeeb1e5aa1e30d8ff376963530",
+                  "variant": "timeline-order"
+                },
+                "selection_sha256": "b3eb4825af81edf9a53b7a8aa2d22e4076b8f84c364fb2c03049f02d21f8225e",
+                "source_context_sha256": "10d831195f4f643c90f5fd19bbc97c216b900cdafc1f3d8e7e48c471d121087e",
+                "subject_id": "fixture.playlist",
+                "subject_sha256": "894d99eb1d87e9d14c7ae01caed8db5d469ab57aa672a44b63b5e48cb9ee0c2a",
+                "translation_dependency_sha256": "011563cf587fc44765d740e4784355d0d25063b63c014dbf65b7a180e9b28223",
+                "translation_sha256": "b8620b16d7fbc2a0e98e17ab9a74cf208dc2c9e244aadb83cd2b1434b947d971"
+              }
+            ],
+            "technical_eligible": false,
+            "version": "1.0.0"
+          },
+          "archived_sha256": "3ddc7f3eae14f031172bc0961ead3d245f1341b96befdfdb3746b4d0b5180a01"
+        },
+        "sha256": "a3b1af3cae582e7993b53501b6450f4f8129c40e8acb37e2e6cd897f40e981eb"
+      },
+      "user_french": {
+        "evidence": {
+          "language_policy": {
+            "coverage": [
+              {
+                "languages": [
+                  "en",
+                  "fr",
+                  "pt-br",
+                  "nb_NO"
+                ],
+                "package": {
+                  "category": "Playlist",
+                  "kind": "poster",
+                  "sha256": "395f76a4499989daf36a3395edbcae299c8bd86126adc1d0f007dfbc8ab7fc0b",
+                  "version": "2.0.0"
+                },
+                "variant": "timeline-order"
+              }
+            ],
+            "external_authority_required": true,
+            "freshness": "verified-commit-and-content-with-explicit-reverification",
+            "id": "fixture.language-policy",
+            "kind": "language-policy",
+            "languages": [
+              {
+                "aliases": [],
+                "code": "en"
+              },
+              {
+                "aliases": [],
+                "code": "fr"
+              },
+              {
+                "aliases": [
+                  "pt_BR"
+                ],
+                "code": "pt-br"
+              },
+              {
+                "aliases": [
+                  "nb-NO"
+                ],
+                "code": "nb_NO"
+              }
+            ],
+            "non_english_requires_versioned_contract": true,
+            "owner": "synthetic-maintainer",
+            "schema_version": 1,
+            "stage": "policy",
+            "version": "1.0.0"
+          },
+          "translations": [
+            {
+              "selection": {
+                "id": "translation.fixture.playlist",
+                "kind": "translation-selection",
+                "language": "fr",
+                "language_policy": {
+                  "kind": "language-policy",
+                  "sha256": "967b3ffc5790ec56b12d8c3df6677e2ad9e553994ca50598e8427d2834985f37",
+                  "version": "1.0.0"
+                },
+                "requested_language": "fr",
+                "schema_version": 1,
+                "snapshot_sha256": "ff690a6d42ed5728e36496ef0adab45f75e0c4f812ce19732b4a67d62de50c38",
+                "source": {
+                  "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "repository": {
+                    "host": "github.com",
+                    "name": "Fixture/Translations",
+                    "owner_id": 1101,
+                    "repository_id": 101
+                  },
+                  "resources": [
+                    {
+                      "blob_sha1": "192338349a977d2889c37d17b47f3844ffb32e6c",
+                      "path": "defaults/en.yml",
+                      "sha256": "bae17b8316b2de218d28266638b0955998fc7b303ae6187a2236a7134d1fa976"
+                    },
+                    {
+                      "blob_sha1": "b3b40964a89b7a3845dcf8e6ac2fb913a97f4a80",
+                      "path": "defaults/fr.yml",
+                      "sha256": "e2b962199e3a7781ef72301a1d3751b6d3787f6f1c1243735b4f9928a4ac9508"
+                    }
+                  ],
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                },
+                "stage": "selection",
+                "subject": {
+                  "kind": "validation-subject",
+                  "sha256": "503cc9808548def97e53624df982084f315010653c6c1b1b0435902e6b657314",
+                  "version": "1.0.0"
+                },
+                "values": [
+                  {
+                    "key": "key_names.TIMELINE_ORDER",
+                    "resource_path": "defaults/fr.yml",
+                    "source_value_sha256": "b0b3b0c0130a31d2bc202968f503bba3fe29428ac1b5f2c278e3d2eb2bd205cc",
+                    "value_sha256": "2b330709e6edcda3d0f9b29928fa78670c3bac1d1b7114cf730c3020a2de5567"
+                  }
+                ],
+                "verification": {
+                  "checked_at": "2030-01-01T00:00:00Z",
+                  "context_sha256": "5df987a633b324bc0ddf0d2993b2c5c26d9cdde833787e77e1cb713f4ebf0d9e",
+                  "issuer": "synthetic-source",
+                  "issuer_version": "1.0.0",
+                  "source_sha256": "ea936690e87c69eac3e1e2fa593df2a976aec86e96e8de8ba712ee013ad1d919",
+                  "status": "verified",
+                  "synthetic": true
+                },
+                "version": "1.0.0"
+              },
+              "preflight": {
+                "active": false,
+                "blockers": [
+                  "source_currentness:synthetic-current"
+                ],
+                "complete": true,
+                "currentness": "synthetic-current",
+                "definition_dependencies_json": "{\"definition\":\"61b4c673b4354a36f715626ce5e0b91847984079b2831173f443d8868cfc3ab9\",\"family\":[],\"generator\":null,\"origin\":{\"file\":\"fixture.yml\",\"inherited_sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\",\"profile\":null,\"profile_file\":\"profiles.yml\",\"row_sha256\":\"61b4c673b4354a36f715626ce5e0b91847984079b2831173f443d8868cfc3ab9\"},\"rules\":\"d3b36a3b1318ffc00b27215698e69639b5e62feeeb1e5aa1e30d8ff376963530\"}",
+                "dependency_sha256": "3bc2be146307f0065a39b7cbe863a45ba0118861675e3bd96a3731e875784abc",
+                "effective_definition_sha256": "61b4c673b4354a36f715626ce5e0b91847984079b2831173f443d8868cfc3ab9",
+                "evaluated_row_count": 2,
+                "fallback_json": "null",
+                "independent_checks": [
+                  "contract-approval",
+                  "destination",
+                  "font-glyphs",
+                  "layout",
+                  "logo",
+                  "visual-review"
+                ],
+                "key_status": "applicable",
+                "kind": "translation-preflight",
+                "language": "fr",
+                "language_policy": {
+                  "kind": "language-policy",
+                  "sha256": "967b3ffc5790ec56b12d8c3df6677e2ad9e553994ca50598e8427d2834985f37",
+                  "version": "1.0.0"
+                },
+                "legacy_trace_json": "[{\"key\":\"key_names.TIMELINE_ORDER\",\"language\":\"fr\",\"source_sha256\":\"e2b962199e3a7781ef72301a1d3751b6d3787f6f1c1243735b4f9928a4ac9508\",\"value_sha256\":\"2b330709e6edcda3d0f9b29928fa78670c3bac1d1b7114cf730c3020a2de5567\"}]",
+                "production_enforcement": false,
+                "publication_authorized": false,
+                "ready": false,
+                "requested_language": "fr",
+                "required_keys": [
+                  {
+                    "key": "key_names.TIMELINE_ORDER",
+                    "roles": [
+                      "caption"
+                    ]
+                  }
+                ],
+                "required_row_count": 2,
+                "resolution_error": null,
+                "resolved_caption": "ORDRE CHRONOLOGIQUE",
+                "resource_observations": [
+                  {
+                    "declared_sha256": "bae17b8316b2de218d28266638b0955998fc7b303ae6187a2236a7134d1fa976",
+                    "language": "en",
+                    "observed_sha256": "bae17b8316b2de218d28266638b0955998fc7b303ae6187a2236a7134d1fa976",
+                    "resource_path": "defaults/en.yml",
+                    "status": "available"
+                  },
+                  {
+                    "declared_sha256": "e2b962199e3a7781ef72301a1d3751b6d3787f6f1c1243735b4f9928a4ac9508",
+                    "language": "fr",
+                    "observed_sha256": "e2b962199e3a7781ef72301a1d3751b6d3787f6f1c1243735b4f9928a4ac9508",
+                    "resource_path": "defaults/fr.yml",
+                    "status": "available"
+                  }
+                ],
+                "results": [
+                  {
+                    "actual_key": "key_names.TIMELINE_ORDER",
+                    "key": "key_names.TIMELINE_ORDER",
+                    "language": "en",
+                    "provenance_status": "synthetic-current",
+                    "raw_json": "\"Timeline Order\"",
+                    "resource_path": "defaults/en.yml",
+                    "roles": [
+                      "caption"
+                    ],
+                    "source_sha256": "bae17b8316b2de218d28266638b0955998fc7b303ae6187a2236a7134d1fa976",
+                    "status": "available",
+                    "value": "Timeline Order",
+                    "value_sha256": "b0b3b0c0130a31d2bc202968f503bba3fe29428ac1b5f2c278e3d2eb2bd205cc"
+                  },
+                  {
+                    "actual_key": "key_names.TIMELINE_ORDER",
+                    "key": "key_names.TIMELINE_ORDER",
+                    "language": "fr",
+                    "provenance_status": "synthetic-current",
+                    "raw_json": "\"Ordre chronologique\"",
+                    "resource_path": "defaults/fr.yml",
+                    "roles": [
+                      "caption"
+                    ],
+                    "source_sha256": "e2b962199e3a7781ef72301a1d3751b6d3787f6f1c1243735b4f9928a4ac9508",
+                    "status": "available",
+                    "value": "Ordre chronologique",
+                    "value_sha256": "2b330709e6edcda3d0f9b29928fa78670c3bac1d1b7114cf730c3020a2de5567"
+                  }
+                ],
+                "schema_version": 1,
+                "snapshot_sha256": "ff690a6d42ed5728e36496ef0adab45f75e0c4f812ce19732b4a67d62de50c38",
+                "source": {
+                  "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "repository": {
+                    "host": "github.com",
+                    "name": "Fixture/Translations",
+                    "owner_id": 1101,
+                    "repository_id": 101
+                  },
+                  "resources": [
+                    {
+                      "blob_sha1": "192338349a977d2889c37d17b47f3844ffb32e6c",
+                      "path": "defaults/en.yml",
+                      "sha256": "bae17b8316b2de218d28266638b0955998fc7b303ae6187a2236a7134d1fa976"
+                    },
+                    {
+                      "blob_sha1": "b3b40964a89b7a3845dcf8e6ac2fb913a97f4a80",
+                      "path": "defaults/fr.yml",
+                      "sha256": "e2b962199e3a7781ef72301a1d3751b6d3787f6f1c1243735b4f9928a4ac9508"
+                    }
+                  ],
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                },
+                "stage": "informational",
+                "subject": {
+                  "contract": {
+                    "category": "Playlist",
+                    "kind": "poster",
+                    "sha256": "395f76a4499989daf36a3395edbcae299c8bd86126adc1d0f007dfbc8ab7fc0b",
+                    "version": "2.0.0"
+                  },
+                  "dependencies_sha256": "7a976193c5acf7273c9c8c7bba8736296383c8732b7f8c2575276bdc52970322",
+                  "expanded_definition_sha256": "61b4c673b4354a36f715626ce5e0b91847984079b2831173f443d8868cfc3ab9",
+                  "id": "fixture.playlist",
+                  "kind": "validation-subject",
+                  "language": "fr",
+                  "membership_sha256": "0063749d54d54347178f33be95174a71d1e774e61bf4b9a5cd829c5f2a673ba7",
+                  "outputs": [
+                    {
+                      "id": "fixture.playlist",
+                      "identity_sha256": "dcea7a12c28021c84c33e105cb63424f4e98135879c0e375d7c1340af223a854",
+                      "local_path": "defaults-fr/playlist/Arrowverse (Timeline Order).jpg",
+                      "public_path": "playlist/Reviewed.png"
+                    }
+                  ],
+                  "review_context_sha256": "308b2f8e4dc66607b4a85da6f5e8d03f68790f584a7fe509addd5d3ffc081e0d",
+                  "schema_version": 1,
+                  "stage": "subject",
+                  "variant": "timeline-order",
+                  "version": "1.0.0"
+                },
+                "technical_eligible": true,
+                "translation_eligible": false,
+                "translation_selection": {
+                  "kind": "translation-selection",
+                  "sha256": "1499f9db5a7fdf318fc64b7b5be631912914c9d9f67369a8b61519eb1e435887",
+                  "version": "1.0.0"
+                },
+                "verification_context_sha256": "c130633a44f3ed086edd7b9e4a461a3bbb9d3559679cb031271145c027a52c77",
+                "version": "1.0.0"
+              }
+            }
+          ],
+          "destination": {
+            "active": false,
+            "authority_context_sha256": "1f27c2bdbe28c4a551661e9941e95cb3b145731b4fa90e665124eefa6fbde54e",
+            "authority_status": "synthetic-only",
+            "blockers": [
+              "authority:synthetic-only"
+            ],
+            "cohort": [
+              {
+                "contract": {
+                  "category": "Playlist",
+                  "kind": "poster",
+                  "sha256": "395f76a4499989daf36a3395edbcae299c8bd86126adc1d0f007dfbc8ab7fc0b",
+                  "version": "2.0.0"
+                },
+                "language": "fr",
+                "membership_sha256": "0063749d54d54347178f33be95174a71d1e774e61bf4b9a5cd829c5f2a673ba7",
+                "rules_sha256": "d3b36a3b1318ffc00b27215698e69639b5e62feeeb1e5aa1e30d8ff376963530",
+                "subject": {
+                  "kind": "validation-subject",
+                  "sha256": "503cc9808548def97e53624df982084f315010653c6c1b1b0435902e6b657314",
+                  "version": "1.0.0"
+                },
+                "translation": {
+                  "kind": "translation-preflight",
+                  "sha256": "6f225c5967995730d6210b8fad7df4f7c6cf32c6b870d560b5d9f10c11206c70",
+                  "version": "1.0.0"
+                },
+                "translation_blockers": [
+                  "source_currentness:synthetic-current"
+                ],
+                "variant": "timeline-order"
+              }
+            ],
+            "cohort_sha256": "89b3b9ae0494f2f821b19fb368421b1132560a810560b445ed1f8e4ae75ff80a",
+            "complete": true,
+            "dependency_sha256": "96265491fb19f1f5282ad89066cb85b48d3091deac7160695c1ac66469a279af",
+            "destination_checks_passed": true,
+            "destination_evidence": {
+              "kind": "destination-evidence",
+              "sha256": "50e7f56f2babc83ae931dc77e4409cb044f85e4ce73de26fe7ba57c349314eb8",
+              "version": "1.0.0"
+            },
+            "destination_policy": {
+              "kind": "destination-policy",
+              "sha256": "4bfcc2d3f57ff030c62a7b2aaf3034817712a42c34f1e50a17e6f92cf3a28522",
+              "version": "1.0.0"
+            },
+            "evaluated_outputs": 1,
+            "evaluation_complete": true,
+            "inventory_currentness": "synthetic-only",
+            "inventory_entries": 0,
+            "inventory_sha256": "932af29eca859999554ad9df0a4d0d895df972d894b8ddb872128d81900aaafd",
+            "inventory_status": "integrity_verified",
+            "kind": "destination-attestation",
+            "language": "fr",
+            "language_policy": {
+              "kind": "language-policy",
+              "sha256": "967b3ffc5790ec56b12d8c3df6677e2ad9e553994ca50598e8427d2834985f37",
+              "version": "1.0.0"
+            },
+            "missing_companions": [],
+            "missing_tree_pages": [],
+            "output_membership_sha256": "0063749d54d54347178f33be95174a71d1e774e61bf4b9a5cd829c5f2a673ba7",
+            "outputs": [
+              {
+                "diagnostics": [],
+                "output": {
+                  "id": "fixture.playlist",
+                  "identity_sha256": "dcea7a12c28021c84c33e105cb63424f4e98135879c0e375d7c1340af223a854",
+                  "local_path": "defaults-fr/playlist/Arrowverse (Timeline Order).jpg",
+                  "public_path": "playlist/Reviewed.png"
+                },
+                "status": "clear",
+                "target_path": "playlist/Reviewed.png"
+              }
+            ],
+            "policy_route": "user_non_english",
+            "production_enforcement": false,
+            "proposed_outputs": 1,
+            "publication_authorized": false,
+            "ready": false,
+            "repository_identity_status": "synthetic-only",
+            "schema_version": 1,
+            "simulation_eligible": true,
+            "stage": "informational",
+            "target": {
+              "baseline_commit": "d7bc40dabd25b77d7eaeae2ef25dba5aca34565d",
+              "baseline_tree": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+              "branch": "Main",
+              "inventory_sha256": "932af29eca859999554ad9df0a4d0d895df972d894b8ddb872128d81900aaafd",
+              "language": "fr",
+              "paths": [
+                "playlist/Reviewed.png"
+              ],
+              "repository": {
+                "host": "github.com",
+                "name": "Fixture/Artwork",
+                "owner_id": 1103,
+                "repository_id": 103
+              },
+              "root": null
+            },
+            "technical_eligible": false,
+            "verified_observation": {
+              "authority_context_sha256": "1f27c2bdbe28c4a551661e9941e95cb3b145731b4fa90e665124eefa6fbde54e",
+              "cohort_sha256": "89b3b9ae0494f2f821b19fb368421b1132560a810560b445ed1f8e4ae75ff80a",
+              "inventory_sha256": "932af29eca859999554ad9df0a4d0d895df972d894b8ddb872128d81900aaafd",
+              "official_owner_id": 1102,
+              "official_repository_id": 102,
+              "owner_kind": "user",
+              "permissions": [
+                "contents:read",
+                "contents:write",
+                "pull_requests:write"
+              ],
+              "principal_id": 1103,
+              "repository": {
+                "host": "github.com",
+                "name": "Fixture/Artwork",
+                "owner_id": 1103,
+                "repository_id": 103
+              },
+              "revocation_checked_at": "2030-01-01T00:00:00Z",
+              "revocation_revision_sha256": "c8b843b20c1052481a0fba094407e4a13ec128242ab5fcd3977db179c6cf21cf",
+              "target_sha256": "042b37cf50fff9069712ef2d9b090073795e73f1c960df56afa6e16b510c3b1e"
+            },
+            "version": "1.0.0"
+          },
+          "request_context": {
+            "id": "fixture.lifecycle-request",
+            "kind": "evidence-request-context",
+            "previous_sha256": null,
+            "references": [],
+            "request_payload_sha256": "0eb752e3769d07130af6738a0dfa1d99c902f163afa7a6157a55f99123bd14b4",
+            "revision": 1,
+            "schema_version": 1,
+            "subjects": [
+              "503cc9808548def97e53624df982084f315010653c6c1b1b0435902e6b657314"
+            ],
+            "version": "1.0.0"
+          },
+          "consumption": {
+            "active": false,
+            "binding_sha256": "42cdbcfa3f2b690c9b9a769c3fe8fe74def6c7cd14252dc9948aa665ce159ba4",
+            "blockers": [
+              "m2:fixture.playlist:source_currentness:synthetic-current",
+              "m3:authority:synthetic-only",
+              "m7:authenticated_decision_intake_not_integrated",
+              "m7:fresh_complete_historical_audit_required",
+              "m7:independent_operator_activation_not_authorized",
+              "m7:missing_approved_operational_registry",
+              "m7:missing_exact_hash_maintainer_approval",
+              "m7:production_integration_not_implemented_or_authorized",
+              "m7:selected_package_not_current_m6_release",
+              "synthetic_evidence_is_not_authority"
+            ],
+            "chain_compatible": true,
+            "destination_dependency_sha256": "96265491fb19f1f5282ad89066cb85b48d3091deac7160695c1ac66469a279af",
+            "destination_sha256": "5314d13d0c4df5649917762ba5f55ed100e66c128c5c7d9f03fee62116089ecb",
+            "evaluation_complete": true,
+            "graph_basis": "7e93050a2934ac8708d4b0d5e0317076272f73bbbe2c1e1b82938fc487d2b266",
+            "graph_snapshot_sha256": "d57f159c90c3c64c8e0a6cf779555af350d9f2ab6e02661848dff006a655336a",
+            "kind": "evidence-consumption",
+            "language_policy": {
+              "kind": "language-policy",
+              "sha256": "967b3ffc5790ec56b12d8c3df6677e2ad9e553994ca50598e8427d2834985f37",
+              "version": "1.0.0"
+            },
+            "m7": {
+              "active": 0,
+              "blockers": [
+                "authenticated_decision_intake_not_integrated",
+                "fresh_complete_historical_audit_required",
+                "independent_operator_activation_not_authorized",
+                "missing_approved_operational_registry",
+                "missing_exact_hash_maintainer_approval",
+                "production_integration_not_implemented_or_authorized",
+                "selected_package_not_current_m6_release"
+              ],
+              "exact_approvals_missing": 22,
+              "ready": 0,
+              "release_sha256": "926de31d1df4ee90e911c4e91df81ee3ca914f5179df784ff3d41e9b716ada2a",
+              "review_registry_sha256": "cac2b99657803fdf05994b1d26598ca1e6d4f8a295e1dc6d92c9482178797bb3",
+              "selected": [
+                {
+                  "approved_registry_context": "missing",
+                  "blockers": [
+                    "missing_exact_hash_maintainer_approval",
+                    "missing_approved_operational_registry",
+                    "authenticated_decision_intake_not_integrated",
+                    "independent_operator_activation_not_authorized",
+                    "production_integration_not_implemented_or_authorized",
+                    "fresh_complete_historical_audit_required"
+                  ],
+                  "category": "Playlist",
+                  "contract_sha256": "5047d834ecd3f8e5a0ed76ae24760b6947ae6b83e95198ce602e1715e445016b",
+                  "enforcement_state": "IMPLEMENTED",
+                  "exact_contract_approval": "missing",
+                  "historically_compatible": "not_freshly_checked",
+                  "implemented": true,
+                  "kind": "poster",
+                  "prerequisites": {
+                    "approved_operational_registry": "missing",
+                    "authenticated_intake": "unavailable",
+                    "complete_new_poster_previews": "later_workflow_required_for_new_posters",
+                    "current_authorization": "unavailable",
+                    "effective_coverage": "requires_fresh_audit",
+                    "exact_final_head_ci": "separate_ci_evidence",
+                    "exact_package_approval": "missing",
+                    "historical_compatibility": "requires_fresh_audit",
+                    "m4_new_artifact_reviews": "not_requested_no_new_artwork",
+                    "operator_activation_decision": "missing",
+                    "production_integration": "not_implemented_not_authorized",
+                    "required_historical_outputs": "requires_fresh_audit",
+                    "source_dependency_provenance": "requires_fresh_audit"
+                  },
+                  "production_enforcement": false,
+                  "rules_sha256": "f8dabde54206a85aee1a2eb769dc066d0de47b7792bdd7a34c22bde145590932",
+                  "variant_count": 1,
+                  "version": "1.0.0"
+                }
+              ],
+              "selectors": 22,
+              "variants": 278
+            },
+            "output_membership_sha256": "0063749d54d54347178f33be95174a71d1e774e61bf4b9a5cd829c5f2a673ba7",
+            "production_enforcement": false,
+            "publication_authorized": false,
+            "ready": false,
+            "references": [],
+            "request_context_sha256": "0142e3d718b82b19bc896b18a56fc55df37d4b03ae0772a224a2ced0d11a0c30",
+            "request_id": "fixture.lifecycle-request",
+            "request_revision": 1,
+            "schema_version": 1,
+            "simulation": true,
+            "simulation_eligible": true,
+            "stage": "informational",
+            "subjects": [
+              {
+                "dependencies_sha256": "7a976193c5acf7273c9c8c7bba8736296383c8732b7f8c2575276bdc52970322",
+                "expanded_definition_sha256": "61b4c673b4354a36f715626ce5e0b91847984079b2831173f443d8868cfc3ab9",
+                "language": "fr",
+                "outputs": [
+                  {
+                    "id": "fixture.playlist",
+                    "identity_sha256": "dcea7a12c28021c84c33e105cb63424f4e98135879c0e375d7c1340af223a854",
+                    "local_path": "defaults-fr/playlist/Arrowverse (Timeline Order).jpg",
+                    "public_path": "playlist/Reviewed.png"
+                  }
+                ],
+                "requested_language": "fr",
+                "review_context_sha256": "308b2f8e4dc66607b4a85da6f5e8d03f68790f584a7fe509addd5d3ffc081e0d",
+                "scope": {
+                  "contract_sha256": "395f76a4499989daf36a3395edbcae299c8bd86126adc1d0f007dfbc8ab7fc0b",
+                  "design_sha256": "4a3f330e73f97bdb2bbae98a235f20a9483f6d352378b788246da6af06e812e6",
+                  "exceptions_sha256": "f7da4bc1efcfbca20750d1842686c151ca94ac4761568a061aa9ffe3c2505bad",
+                  "member_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+                  "outputs": [
+                    {
+                      "companions": [],
+                      "evidence": {
+                        "confirmations": [],
+                        "decisions": [],
+                        "previews": [],
+                        "receipts": []
+                      },
+                      "id": "fixture.playlist",
+                      "material_sha256": "7d8060f21cd20c1f10bd09cadcc9df146460bbcab31421309ffd911a5f6ac259"
+                    }
+                  ],
+                  "rule_sha256": "ffeff6c3b0f1291e12c0e91a5053f3658edb656fbd8b9da4f8acd1e11f914998",
+                  "rules_sha256": "d3b36a3b1318ffc00b27215698e69639b5e62feeeb1e5aa1e30d8ff376963530",
+                  "variant": "timeline-order"
+                },
+                "selection_sha256": "1499f9db5a7fdf318fc64b7b5be631912914c9d9f67369a8b61519eb1e435887",
+                "source_context_sha256": "c130633a44f3ed086edd7b9e4a461a3bbb9d3559679cb031271145c027a52c77",
+                "subject_id": "fixture.playlist",
+                "subject_sha256": "503cc9808548def97e53624df982084f315010653c6c1b1b0435902e6b657314",
+                "translation_dependency_sha256": "3bc2be146307f0065a39b7cbe863a45ba0118861675e3bd96a3731e875784abc",
+                "translation_sha256": "6f225c5967995730d6210b8fad7df4f7c6cf32c6b870d560b5d9f10c11206c70"
+              }
+            ],
+            "technical_eligible": false,
+            "version": "1.0.0"
+          },
+          "archived_sha256": "b2fc04d5908fa392dfed840a7a75579f67cd4fd74f996fb1e40e8a232ae4144c"
+        },
+        "sha256": "1ffcdf26744d7a82f385781b61d394f7f2437c9c9349e5af3397e05a4ec614dd"
+      },
+      "private_captionless": {
+        "evidence": {
+          "language_policy": {
+            "coverage": [
+              {
+                "languages": [
+                  "en",
+                  "fr",
+                  "pt-br",
+                  "nb_NO"
+                ],
+                "package": {
+                  "category": "Playlist",
+                  "kind": "poster",
+                  "sha256": "24a3176af5d91ed81c74f010557b02b17d770420e9b0272b173e5b55e54701a9",
+                  "version": "2.0.0"
+                },
+                "variant": "timeline-order"
+              }
+            ],
+            "external_authority_required": true,
+            "freshness": "verified-commit-and-content-with-explicit-reverification",
+            "id": "fixture.language-policy",
+            "kind": "language-policy",
+            "languages": [
+              {
+                "aliases": [],
+                "code": "en"
+              },
+              {
+                "aliases": [],
+                "code": "fr"
+              },
+              {
+                "aliases": [
+                  "pt_BR"
+                ],
+                "code": "pt-br"
+              },
+              {
+                "aliases": [
+                  "nb-NO"
+                ],
+                "code": "nb_NO"
+              }
+            ],
+            "non_english_requires_versioned_contract": true,
+            "owner": "synthetic-maintainer",
+            "schema_version": 1,
+            "stage": "policy",
+            "version": "1.0.0"
+          },
+          "translations": [
+            {
+              "selection": null,
+              "preflight": {
+                "active": false,
+                "blockers": [],
+                "complete": true,
+                "currentness": "not_applicable",
+                "definition_dependencies_json": "{\"definition\":\"f3a4150fc21f3e4c4c8ff86ae0abae397874216e7465f8bd1aaf827d3e2263d2\",\"family\":[],\"generator\":null,\"origin\":{\"file\":\"fixture.yml\",\"inherited_sha256\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\",\"profile\":null,\"profile_file\":\"profiles.yml\",\"row_sha256\":\"f3a4150fc21f3e4c4c8ff86ae0abae397874216e7465f8bd1aaf827d3e2263d2\"},\"rules\":\"080a5e5c2c960da8aad11844348a7960ea23db60f35d1cd9c489a8f4cc9c5947\"}",
+                "dependency_sha256": "f142a88fa7ff6ab3f773863d3559135e8d2a4c1d3f2cfdb1a9e3061a779e7a63",
+                "effective_definition_sha256": "f3a4150fc21f3e4c4c8ff86ae0abae397874216e7465f8bd1aaf827d3e2263d2",
+                "evaluated_row_count": 0,
+                "fallback_json": "null",
+                "independent_checks": [
+                  "contract-approval",
+                  "destination",
+                  "font-glyphs",
+                  "layout",
+                  "logo",
+                  "visual-review"
+                ],
+                "key_status": "not_applicable",
+                "kind": "translation-preflight",
+                "language": "en",
+                "language_policy": {
+                  "kind": "language-policy",
+                  "sha256": "4c3862752e7fd9d5ee77998fe28f63f23b05c55f781141dc778771f75543aa39",
+                  "version": "1.0.0"
+                },
+                "legacy_trace_json": "[]",
+                "production_enforcement": false,
+                "publication_authorized": false,
+                "ready": false,
+                "requested_language": "en",
+                "required_keys": [],
+                "required_row_count": 0,
+                "resolution_error": null,
+                "resolved_caption": "",
+                "resource_observations": [],
+                "results": [],
+                "schema_version": 1,
+                "snapshot_sha256": "625d2afbee46fcdd82810c9a8349af93525b0725680fa15660a5974616d04a19",
+                "source": {
+                  "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "repository": {
+                    "host": "github.com",
+                    "name": "Fixture/Translations",
+                    "owner_id": 1101,
+                    "repository_id": 101
+                  },
+                  "resources": [],
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                },
+                "stage": "informational",
+                "subject": {
+                  "contract": {
+                    "category": "Playlist",
+                    "kind": "poster",
+                    "sha256": "24a3176af5d91ed81c74f010557b02b17d770420e9b0272b173e5b55e54701a9",
+                    "version": "2.0.0"
+                  },
+                  "dependencies_sha256": "6c62afbfdaad3d38a136c7b6288357a2c6d1efb21ddd7483815473b98258313c",
+                  "expanded_definition_sha256": "f3a4150fc21f3e4c4c8ff86ae0abae397874216e7465f8bd1aaf827d3e2263d2",
+                  "id": "fixture.playlist",
+                  "kind": "validation-subject",
+                  "language": "en",
+                  "membership_sha256": "9397dce52b0c5c0f8bb1cee2515f5f566e28f526389af107054b1ebe2158eef6",
+                  "outputs": [
+                    {
+                      "id": "fixture.playlist",
+                      "identity_sha256": "dcea7a12c28021c84c33e105cb63424f4e98135879c0e375d7c1340af223a854",
+                      "local_path": "defaults-en/playlist/Arrowverse (Timeline Order).jpg",
+                      "public_path": null
+                    }
+                  ],
+                  "review_context_sha256": "308b2f8e4dc66607b4a85da6f5e8d03f68790f584a7fe509addd5d3ffc081e0d",
+                  "schema_version": 1,
+                  "stage": "subject",
+                  "variant": "timeline-order",
+                  "version": "1.0.0"
+                },
+                "technical_eligible": true,
+                "translation_eligible": true,
+                "translation_selection": null,
+                "verification_context_sha256": null,
+                "version": "1.0.0"
+              }
+            }
+          ],
+          "destination": {
+            "active": false,
+            "authority_context_sha256": null,
+            "authority_status": "not_applicable",
+            "blockers": [],
+            "cohort": [
+              {
+                "contract": {
+                  "category": "Playlist",
+                  "kind": "poster",
+                  "sha256": "24a3176af5d91ed81c74f010557b02b17d770420e9b0272b173e5b55e54701a9",
+                  "version": "2.0.0"
+                },
+                "language": "en",
+                "membership_sha256": "9397dce52b0c5c0f8bb1cee2515f5f566e28f526389af107054b1ebe2158eef6",
+                "rules_sha256": "080a5e5c2c960da8aad11844348a7960ea23db60f35d1cd9c489a8f4cc9c5947",
+                "subject": {
+                  "kind": "validation-subject",
+                  "sha256": "0d6cad9ad05e82f32639eb3120072e4c42a387b47785e9263eee947777b8f8d1",
+                  "version": "1.0.0"
+                },
+                "translation": {
+                  "kind": "translation-preflight",
+                  "sha256": "3d5f60f0b888efa457769f75fe66d9d0d80f888b8f911364ebee4ce637489c6d",
+                  "version": "1.0.0"
+                },
+                "translation_blockers": [],
+                "variant": "timeline-order"
+              }
+            ],
+            "cohort_sha256": "f631433f08c596cd0ecb168bd3f46c76a940d75224d581d20c08858c23be3665",
+            "complete": true,
+            "dependency_sha256": "e97922cb084345febdc71409a43e25908ad6e998e9fcf5cfbf8fa1132e8cfe83",
+            "destination_checks_passed": true,
+            "destination_evidence": null,
+            "destination_policy": {
+              "kind": "destination-policy",
+              "sha256": "4e4f9d7cdbcc30310824d63b73c173037748f16eca21af7cdfa4123e04fe05d7",
+              "version": "1.0.0"
+            },
+            "evaluated_outputs": 1,
+            "evaluation_complete": true,
+            "inventory_currentness": "not_applicable",
+            "inventory_entries": 0,
+            "inventory_sha256": null,
+            "inventory_status": "not_applicable",
+            "kind": "destination-attestation",
+            "language": "en",
+            "language_policy": {
+              "kind": "language-policy",
+              "sha256": "4c3862752e7fd9d5ee77998fe28f63f23b05c55f781141dc778771f75543aa39",
+              "version": "1.0.0"
+            },
+            "missing_companions": [],
+            "missing_tree_pages": [],
+            "output_membership_sha256": "9397dce52b0c5c0f8bb1cee2515f5f566e28f526389af107054b1ebe2158eef6",
+            "outputs": [
+              {
+                "diagnostics": [],
+                "output": {
+                  "id": "fixture.playlist",
+                  "identity_sha256": "dcea7a12c28021c84c33e105cb63424f4e98135879c0e375d7c1340af223a854",
+                  "local_path": "defaults-en/playlist/Arrowverse (Timeline Order).jpg",
+                  "public_path": null
+                },
+                "status": "private",
+                "target_path": null
+              }
+            ],
+            "policy_route": "private_only",
+            "production_enforcement": false,
+            "proposed_outputs": 1,
+            "publication_authorized": false,
+            "ready": false,
+            "repository_identity_status": "not_applicable",
+            "schema_version": 1,
+            "simulation_eligible": false,
+            "stage": "informational",
+            "target": null,
+            "technical_eligible": false,
+            "verified_observation": null,
+            "version": "1.0.0"
+          },
+          "request_context": {
+            "id": "fixture.lifecycle-request",
+            "kind": "evidence-request-context",
+            "previous_sha256": null,
+            "references": [],
+            "request_payload_sha256": "0eb752e3769d07130af6738a0dfa1d99c902f163afa7a6157a55f99123bd14b4",
+            "revision": 1,
+            "schema_version": 1,
+            "subjects": [
+              "0d6cad9ad05e82f32639eb3120072e4c42a387b47785e9263eee947777b8f8d1"
+            ],
+            "version": "1.0.0"
+          },
+          "consumption": {
+            "active": false,
+            "binding_sha256": "46a50eea7395d6e5603bdd69e335d8c107d88eeb6e7241ea4fdd5f2263f66ecf",
+            "blockers": [
+              "m7:authenticated_decision_intake_not_integrated",
+              "m7:fresh_complete_historical_audit_required",
+              "m7:independent_operator_activation_not_authorized",
+              "m7:missing_approved_operational_registry",
+              "m7:missing_exact_hash_maintainer_approval",
+              "m7:production_integration_not_implemented_or_authorized",
+              "m7:selected_package_not_current_m6_release"
+            ],
+            "chain_compatible": true,
+            "destination_dependency_sha256": "e97922cb084345febdc71409a43e25908ad6e998e9fcf5cfbf8fa1132e8cfe83",
+            "destination_sha256": "b3c4a25c5d2950aca26e3e1d72cb2010900a479b7e7ff76f250c2d475cadc2fe",
+            "evaluation_complete": true,
+            "graph_basis": "7e93050a2934ac8708d4b0d5e0317076272f73bbbe2c1e1b82938fc487d2b266",
+            "graph_snapshot_sha256": "ebfa65c270e88437bdbb7cb10671a19cbc30e60a9d076b627a3504a8919685be",
+            "kind": "evidence-consumption",
+            "language_policy": {
+              "kind": "language-policy",
+              "sha256": "4c3862752e7fd9d5ee77998fe28f63f23b05c55f781141dc778771f75543aa39",
+              "version": "1.0.0"
+            },
+            "m7": {
+              "active": 0,
+              "blockers": [
+                "authenticated_decision_intake_not_integrated",
+                "fresh_complete_historical_audit_required",
+                "independent_operator_activation_not_authorized",
+                "missing_approved_operational_registry",
+                "missing_exact_hash_maintainer_approval",
+                "production_integration_not_implemented_or_authorized",
+                "selected_package_not_current_m6_release"
+              ],
+              "exact_approvals_missing": 22,
+              "ready": 0,
+              "release_sha256": "926de31d1df4ee90e911c4e91df81ee3ca914f5179df784ff3d41e9b716ada2a",
+              "review_registry_sha256": "cac2b99657803fdf05994b1d26598ca1e6d4f8a295e1dc6d92c9482178797bb3",
+              "selected": [
+                {
+                  "approved_registry_context": "missing",
+                  "blockers": [
+                    "missing_exact_hash_maintainer_approval",
+                    "missing_approved_operational_registry",
+                    "authenticated_decision_intake_not_integrated",
+                    "independent_operator_activation_not_authorized",
+                    "production_integration_not_implemented_or_authorized",
+                    "fresh_complete_historical_audit_required"
+                  ],
+                  "category": "Playlist",
+                  "contract_sha256": "5047d834ecd3f8e5a0ed76ae24760b6947ae6b83e95198ce602e1715e445016b",
+                  "enforcement_state": "IMPLEMENTED",
+                  "exact_contract_approval": "missing",
+                  "historically_compatible": "not_freshly_checked",
+                  "implemented": true,
+                  "kind": "poster",
+                  "prerequisites": {
+                    "approved_operational_registry": "missing",
+                    "authenticated_intake": "unavailable",
+                    "complete_new_poster_previews": "later_workflow_required_for_new_posters",
+                    "current_authorization": "unavailable",
+                    "effective_coverage": "requires_fresh_audit",
+                    "exact_final_head_ci": "separate_ci_evidence",
+                    "exact_package_approval": "missing",
+                    "historical_compatibility": "requires_fresh_audit",
+                    "m4_new_artifact_reviews": "not_requested_no_new_artwork",
+                    "operator_activation_decision": "missing",
+                    "production_integration": "not_implemented_not_authorized",
+                    "required_historical_outputs": "requires_fresh_audit",
+                    "source_dependency_provenance": "requires_fresh_audit"
+                  },
+                  "production_enforcement": false,
+                  "rules_sha256": "f8dabde54206a85aee1a2eb769dc066d0de47b7792bdd7a34c22bde145590932",
+                  "variant_count": 1,
+                  "version": "1.0.0"
+                }
+              ],
+              "selectors": 22,
+              "variants": 278
+            },
+            "output_membership_sha256": "9397dce52b0c5c0f8bb1cee2515f5f566e28f526389af107054b1ebe2158eef6",
+            "production_enforcement": false,
+            "publication_authorized": false,
+            "ready": false,
+            "references": [],
+            "request_context_sha256": "67fc82795110467f776a54fc287c119c66f40d07d9c0f43ba0346f3d99d00f04",
+            "request_id": "fixture.lifecycle-request",
+            "request_revision": 1,
+            "schema_version": 1,
+            "simulation": false,
+            "simulation_eligible": false,
+            "stage": "informational",
+            "subjects": [
+              {
+                "dependencies_sha256": "6c62afbfdaad3d38a136c7b6288357a2c6d1efb21ddd7483815473b98258313c",
+                "expanded_definition_sha256": "f3a4150fc21f3e4c4c8ff86ae0abae397874216e7465f8bd1aaf827d3e2263d2",
+                "language": "en",
+                "outputs": [
+                  {
+                    "id": "fixture.playlist",
+                    "identity_sha256": "dcea7a12c28021c84c33e105cb63424f4e98135879c0e375d7c1340af223a854",
+                    "local_path": "defaults-en/playlist/Arrowverse (Timeline Order).jpg",
+                    "public_path": null
+                  }
+                ],
+                "requested_language": "en",
+                "review_context_sha256": "308b2f8e4dc66607b4a85da6f5e8d03f68790f584a7fe509addd5d3ffc081e0d",
+                "scope": {
+                  "contract_sha256": "24a3176af5d91ed81c74f010557b02b17d770420e9b0272b173e5b55e54701a9",
+                  "design_sha256": "0cbed22c893e8c01a2ec7271dd7336925fbc58de7e5ecb97b943751ac1faa87b",
+                  "exceptions_sha256": "f7da4bc1efcfbca20750d1842686c151ca94ac4761568a061aa9ffe3c2505bad",
+                  "member_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+                  "outputs": [
+                    {
+                      "companions": [],
+                      "evidence": {
+                        "confirmations": [],
+                        "decisions": [],
+                        "previews": [],
+                        "receipts": []
+                      },
+                      "id": "fixture.playlist",
+                      "material_sha256": "e25cf3adf221c7595b668bef9a7c3e35ce3da4b32d86b86418695899af2d9fe9"
+                    }
+                  ],
+                  "rule_sha256": "aba162629545848d2a03135a9d9dc035818d67f475f40b2a11c6be675ffafcb3",
+                  "rules_sha256": "080a5e5c2c960da8aad11844348a7960ea23db60f35d1cd9c489a8f4cc9c5947",
+                  "variant": "timeline-order"
+                },
+                "selection_sha256": null,
+                "source_context_sha256": null,
+                "subject_id": "fixture.playlist",
+                "subject_sha256": "0d6cad9ad05e82f32639eb3120072e4c42a387b47785e9263eee947777b8f8d1",
+                "translation_dependency_sha256": "f142a88fa7ff6ab3f773863d3559135e8d2a4c1d3f2cfdb1a9e3061a779e7a63",
+                "translation_sha256": "3d5f60f0b888efa457769f75fe66d9d0d80f888b8f911364ebee4ce637489c6d"
+              }
+            ],
+            "technical_eligible": false,
+            "version": "1.0.0"
+          },
+          "archived_sha256": "c6304607e0705e847b2e56cacf4fc219de9597709b3b84ed5e1717124adc0971"
+        },
+        "sha256": "831626af07244dabe19b2d5a6457dc7f37d5c23ad70057e741b271effcb9f3d9"
+      },
+      "overlay_pair": {
+        "evidence": {
+          "language_policy": {
+            "coverage": [
+              {
+                "languages": [
+                  "en",
+                  "fr",
+                  "pt-br",
+                  "nb_NO"
+                ],
+                "package": {
+                  "category": "Overlays",
+                  "kind": "overlay",
+                  "sha256": "65ae26fe27bef32155636f793e304e9e85fd9860384b4cf634f41480530cd416",
+                  "version": "2.0.0"
+                },
+                "variant": "synthetic"
+              }
+            ],
+            "external_authority_required": true,
+            "freshness": "verified-commit-and-content-with-explicit-reverification",
+            "id": "fixture.language-policy",
+            "kind": "language-policy",
+            "languages": [
+              {
+                "aliases": [],
+                "code": "en"
+              },
+              {
+                "aliases": [],
+                "code": "fr"
+              },
+              {
+                "aliases": [
+                  "pt_BR"
+                ],
+                "code": "pt-br"
+              },
+              {
+                "aliases": [
+                  "nb-NO"
+                ],
+                "code": "nb_NO"
+              }
+            ],
+            "non_english_requires_versioned_contract": true,
+            "owner": "synthetic-maintainer",
+            "schema_version": 1,
+            "stage": "policy",
+            "version": "1.0.0"
+          },
+          "translations": [
+            {
+              "selection": null,
+              "preflight": {
+                "active": false,
+                "blockers": [],
+                "complete": true,
+                "currentness": "not_applicable",
+                "definition_dependencies_json": "{\"record\":\"93e46c42bd7a8637f21425470919b71cffca867d3282c5a1853561ea273a04ef\",\"rules\":\"be085afa25fe8f29e351db81f6501b687203cffee348ae8d727984c569b526f7\"}",
+                "dependency_sha256": "5010e64d0f12c0519c0c3774793f9cd39db68b45be4fc2f2c4300625d8e73a7f",
+                "effective_definition_sha256": "5dde5c6577400d925da8b2a2ca8c6812f210a8fb89d6171b5cbcd7d2ece2338c",
+                "evaluated_row_count": 0,
+                "fallback_json": "null",
+                "independent_checks": [
+                  "contract-approval",
+                  "destination",
+                  "font-glyphs",
+                  "layout",
+                  "logo",
+                  "visual-review"
+                ],
+                "key_status": "not_applicable",
+                "kind": "translation-preflight",
+                "language": "en",
+                "language_policy": {
+                  "kind": "language-policy",
+                  "sha256": "ac850d0b0dfad0a6462fd3912c52fa91ac6c18670829b000a92fa57da8486368",
+                  "version": "1.0.0"
+                },
+                "legacy_trace_json": "[]",
+                "production_enforcement": false,
+                "publication_authorized": false,
+                "ready": false,
+                "requested_language": "en",
+                "required_keys": [],
+                "required_row_count": 0,
+                "resolution_error": null,
+                "resolved_caption": "",
+                "resource_observations": [],
+                "results": [],
+                "schema_version": 1,
+                "snapshot_sha256": "625d2afbee46fcdd82810c9a8349af93525b0725680fa15660a5974616d04a19",
+                "source": {
+                  "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "repository": {
+                    "host": "github.com",
+                    "name": "Fixture/Translations",
+                    "owner_id": 1101,
+                    "repository_id": 101
+                  },
+                  "resources": [],
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                },
+                "stage": "informational",
+                "subject": {
+                  "contract": {
+                    "category": "Overlays",
+                    "kind": "overlay",
+                    "sha256": "65ae26fe27bef32155636f793e304e9e85fd9860384b4cf634f41480530cd416",
+                    "version": "2.0.0"
+                  },
+                  "dependencies_sha256": "c6a4967d4bc3d4384eebf6fabdd56bf1de64336d0e28540341c11804740d18b6",
+                  "expanded_definition_sha256": "5dde5c6577400d925da8b2a2ca8c6812f210a8fb89d6171b5cbcd7d2ece2338c",
+                  "id": "overlay.synthetic-one",
+                  "kind": "validation-subject",
+                  "language": "en",
+                  "membership_sha256": "ae10d07c2c3cd55819971ebc61063073883cc9227c9d1e10352802d699707d75",
+                  "outputs": [
+                    {
+                      "id": "overlay.synthetic-one",
+                      "identity_sha256": "64f654c621dcf08765fb91935f69aafcd26660b54d64576e3a2b443f50e99cb3",
+                      "local_path": "synthetic/overlays/standard/Example.png",
+                      "public_path": "synthetic/overlays/standard/Example.png"
+                    }
+                  ],
+                  "review_context_sha256": "ac36f52f50c77262fceba2fe709b4b6997669f6d92720327d294cd015034d7bb",
+                  "schema_version": 1,
+                  "stage": "subject",
+                  "variant": "synthetic",
+                  "version": "1.0.0"
+                },
+                "technical_eligible": true,
+                "translation_eligible": true,
+                "translation_selection": null,
+                "verification_context_sha256": null,
+                "version": "1.0.0"
+              }
+            },
+            {
+              "selection": null,
+              "preflight": {
+                "active": false,
+                "blockers": [],
+                "complete": true,
+                "currentness": "not_applicable",
+                "definition_dependencies_json": "{\"record\":\"0287c4f2a45f3f2a8ea1f2b769f7936f45d9e399b85e4eb3444a0c402f99f90b\",\"rules\":\"be085afa25fe8f29e351db81f6501b687203cffee348ae8d727984c569b526f7\"}",
+                "dependency_sha256": "90ec05214341139518c5fbbeb2ba3394cd613695eb26881ea975918c7f888617",
+                "effective_definition_sha256": "8192a26013ba55b6ce293032d933542cda132476903cc2ca70734371fcebb6e3",
+                "evaluated_row_count": 0,
+                "fallback_json": "null",
+                "independent_checks": [
+                  "contract-approval",
+                  "destination",
+                  "font-glyphs",
+                  "layout",
+                  "logo",
+                  "visual-review"
+                ],
+                "key_status": "not_applicable",
+                "kind": "translation-preflight",
+                "language": "en",
+                "language_policy": {
+                  "kind": "language-policy",
+                  "sha256": "ac850d0b0dfad0a6462fd3912c52fa91ac6c18670829b000a92fa57da8486368",
+                  "version": "1.0.0"
+                },
+                "legacy_trace_json": "[]",
+                "production_enforcement": false,
+                "publication_authorized": false,
+                "ready": false,
+                "requested_language": "en",
+                "required_keys": [],
+                "required_row_count": 0,
+                "resolution_error": null,
+                "resolved_caption": "",
+                "resource_observations": [],
+                "results": [],
+                "schema_version": 1,
+                "snapshot_sha256": "625d2afbee46fcdd82810c9a8349af93525b0725680fa15660a5974616d04a19",
+                "source": {
+                  "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "repository": {
+                    "host": "github.com",
+                    "name": "Fixture/Translations",
+                    "owner_id": 1101,
+                    "repository_id": 101
+                  },
+                  "resources": [],
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                },
+                "stage": "informational",
+                "subject": {
+                  "contract": {
+                    "category": "Overlays",
+                    "kind": "overlay",
+                    "sha256": "65ae26fe27bef32155636f793e304e9e85fd9860384b4cf634f41480530cd416",
+                    "version": "2.0.0"
+                  },
+                  "dependencies_sha256": "d81d07e8a2a6daec59d41b9648c7826f0ce3d51286fe51b15a05b1b962748f10",
+                  "expanded_definition_sha256": "8192a26013ba55b6ce293032d933542cda132476903cc2ca70734371fcebb6e3",
+                  "id": "overlay.synthetic-two",
+                  "kind": "validation-subject",
+                  "language": "en",
+                  "membership_sha256": "86f84b04ef7c97b2a2fed641cb612e67b775daaa304d97b976593d03b5a6f46d",
+                  "outputs": [
+                    {
+                      "id": "overlay.synthetic-two",
+                      "identity_sha256": "da88625a61246cbf45c4a10931c5881b536b310114b71043c2600008d065a0d4",
+                      "local_path": "synthetic/overlays/bigger/Example.png",
+                      "public_path": "synthetic/overlays/bigger/Example.png"
+                    }
+                  ],
+                  "review_context_sha256": "0843c18d3c1d6d4ef4c77a28bfdb21af671168e50dc8363e57dfbbcb7fac407f",
+                  "schema_version": 1,
+                  "stage": "subject",
+                  "variant": "synthetic",
+                  "version": "1.0.0"
+                },
+                "technical_eligible": true,
+                "translation_eligible": true,
+                "translation_selection": null,
+                "verification_context_sha256": null,
+                "version": "1.0.0"
+              }
+            }
+          ],
+          "destination": {
+            "active": false,
+            "authority_context_sha256": "491e046bc6b6f31eb441f8956dd35b738a4f185486c2e41ea8b2ff5c21a471cf",
+            "authority_status": "synthetic-only",
+            "blockers": [
+              "authority:synthetic-only"
+            ],
+            "cohort": [
+              {
+                "contract": {
+                  "category": "Overlays",
+                  "kind": "overlay",
+                  "sha256": "65ae26fe27bef32155636f793e304e9e85fd9860384b4cf634f41480530cd416",
+                  "version": "2.0.0"
+                },
+                "language": "en",
+                "membership_sha256": "ae10d07c2c3cd55819971ebc61063073883cc9227c9d1e10352802d699707d75",
+                "rules_sha256": "be085afa25fe8f29e351db81f6501b687203cffee348ae8d727984c569b526f7",
+                "subject": {
+                  "kind": "validation-subject",
+                  "sha256": "25299e2aa1dcea8c1145081245f9eb1641baa64bd12d585f39c31a86547e50fe",
+                  "version": "1.0.0"
+                },
+                "translation": {
+                  "kind": "translation-preflight",
+                  "sha256": "26aeca48a55888db920625040a046611e6ff350ec93787900852a2368481fba1",
+                  "version": "1.0.0"
+                },
+                "translation_blockers": [],
+                "variant": "synthetic"
+              },
+              {
+                "contract": {
+                  "category": "Overlays",
+                  "kind": "overlay",
+                  "sha256": "65ae26fe27bef32155636f793e304e9e85fd9860384b4cf634f41480530cd416",
+                  "version": "2.0.0"
+                },
+                "language": "en",
+                "membership_sha256": "86f84b04ef7c97b2a2fed641cb612e67b775daaa304d97b976593d03b5a6f46d",
+                "rules_sha256": "be085afa25fe8f29e351db81f6501b687203cffee348ae8d727984c569b526f7",
+                "subject": {
+                  "kind": "validation-subject",
+                  "sha256": "b6e4f85a189575519f194d8e84fa45787435c96a9227b3a8a4d5bbc65d688eab",
+                  "version": "1.0.0"
+                },
+                "translation": {
+                  "kind": "translation-preflight",
+                  "sha256": "3392f2d299072f9b6134779175ec3cf106171498371969042335d78c9e5475ef",
+                  "version": "1.0.0"
+                },
+                "translation_blockers": [],
+                "variant": "synthetic"
+              }
+            ],
+            "cohort_sha256": "7fdd1f2278042a235fab863a4714611281d0712ad8dfe8d3a9e01fe7120f2e97",
+            "complete": true,
+            "dependency_sha256": "8360b063b294682adf46749ee5dd60e4aa104430a9e0ca296d614893fc6ce7ae",
+            "destination_checks_passed": true,
+            "destination_evidence": {
+              "kind": "destination-evidence",
+              "sha256": "bf4bdf64b9a96b8d18699960bc71c67f661626c6fe1214b755d3f2053c42db17",
+              "version": "1.0.0"
+            },
+            "destination_policy": {
+              "kind": "destination-policy",
+              "sha256": "f388b3d9d3a7547feaf58ca2809c79f54b22bdbdf012721749240e92b330a2b8",
+              "version": "1.0.0"
+            },
+            "evaluated_outputs": 2,
+            "evaluation_complete": true,
+            "inventory_currentness": "synthetic-only",
+            "inventory_entries": 0,
+            "inventory_sha256": "932af29eca859999554ad9df0a4d0d895df972d894b8ddb872128d81900aaafd",
+            "inventory_status": "integrity_verified",
+            "kind": "destination-attestation",
+            "language": "en",
+            "language_policy": {
+              "kind": "language-policy",
+              "sha256": "ac850d0b0dfad0a6462fd3912c52fa91ac6c18670829b000a92fa57da8486368",
+              "version": "1.0.0"
+            },
+            "missing_companions": [],
+            "missing_tree_pages": [],
+            "output_membership_sha256": "9bb42acb714adf358cdd74113a16563a7c82e1c533b1400cc676ae1469a25e11",
+            "outputs": [
+              {
+                "diagnostics": [],
+                "output": {
+                  "id": "overlay.synthetic-one",
+                  "identity_sha256": "64f654c621dcf08765fb91935f69aafcd26660b54d64576e3a2b443f50e99cb3",
+                  "local_path": "synthetic/overlays/standard/Example.png",
+                  "public_path": "synthetic/overlays/standard/Example.png"
+                },
+                "status": "clear",
+                "target_path": "synthetic/overlays/standard/Example.png"
+              },
+              {
+                "diagnostics": [],
+                "output": {
+                  "id": "overlay.synthetic-two",
+                  "identity_sha256": "da88625a61246cbf45c4a10931c5881b536b310114b71043c2600008d065a0d4",
+                  "local_path": "synthetic/overlays/bigger/Example.png",
+                  "public_path": "synthetic/overlays/bigger/Example.png"
+                },
+                "status": "clear",
+                "target_path": "synthetic/overlays/bigger/Example.png"
+              }
+            ],
+            "policy_route": "user_english",
+            "production_enforcement": false,
+            "proposed_outputs": 2,
+            "publication_authorized": false,
+            "ready": false,
+            "repository_identity_status": "synthetic-only",
+            "schema_version": 1,
+            "simulation_eligible": true,
+            "stage": "informational",
+            "target": {
+              "baseline_commit": "d7bc40dabd25b77d7eaeae2ef25dba5aca34565d",
+              "baseline_tree": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+              "branch": "Main",
+              "inventory_sha256": "932af29eca859999554ad9df0a4d0d895df972d894b8ddb872128d81900aaafd",
+              "language": "en",
+              "paths": [
+                "synthetic/overlays/bigger/Example.png",
+                "synthetic/overlays/standard/Example.png"
+              ],
+              "repository": {
+                "host": "github.com",
+                "name": "Fixture/Artwork",
+                "owner_id": 1103,
+                "repository_id": 103
+              },
+              "root": null
+            },
+            "technical_eligible": false,
+            "verified_observation": {
+              "authority_context_sha256": "491e046bc6b6f31eb441f8956dd35b738a4f185486c2e41ea8b2ff5c21a471cf",
+              "cohort_sha256": "7fdd1f2278042a235fab863a4714611281d0712ad8dfe8d3a9e01fe7120f2e97",
+              "inventory_sha256": "932af29eca859999554ad9df0a4d0d895df972d894b8ddb872128d81900aaafd",
+              "official_owner_id": 1102,
+              "official_repository_id": 102,
+              "owner_kind": "user",
+              "permissions": [
+                "contents:read",
+                "contents:write",
+                "pull_requests:write"
+              ],
+              "principal_id": 1103,
+              "repository": {
+                "host": "github.com",
+                "name": "Fixture/Artwork",
+                "owner_id": 1103,
+                "repository_id": 103
+              },
+              "revocation_checked_at": "2030-01-01T00:00:00Z",
+              "revocation_revision_sha256": "c8b843b20c1052481a0fba094407e4a13ec128242ab5fcd3977db179c6cf21cf",
+              "target_sha256": "e5e530384d806f14b638303d4c85fadd3781b421bf9610305db13a2df7974dc3"
+            },
+            "version": "1.0.0"
+          },
+          "request_context": {
+            "id": "fixture.lifecycle-request",
+            "kind": "evidence-request-context",
+            "previous_sha256": null,
+            "references": [],
+            "request_payload_sha256": "0eb752e3769d07130af6738a0dfa1d99c902f163afa7a6157a55f99123bd14b4",
+            "revision": 1,
+            "schema_version": 1,
+            "subjects": [
+              "25299e2aa1dcea8c1145081245f9eb1641baa64bd12d585f39c31a86547e50fe",
+              "b6e4f85a189575519f194d8e84fa45787435c96a9227b3a8a4d5bbc65d688eab"
+            ],
+            "version": "1.0.0"
+          },
+          "consumption": {
+            "active": false,
+            "binding_sha256": "072a427c4f5634c09a7568650580a5b40d53302690e0e3cb37a9e5fb544a609c",
+            "blockers": [
+              "m3:authority:synthetic-only",
+              "m7:authenticated_decision_intake_not_integrated",
+              "m7:fresh_complete_historical_audit_required",
+              "m7:independent_operator_activation_not_authorized",
+              "m7:missing_approved_operational_registry",
+              "m7:missing_exact_hash_maintainer_approval",
+              "m7:production_integration_not_implemented_or_authorized",
+              "m7:selected_package_not_current_m6_release",
+              "synthetic_evidence_is_not_authority"
+            ],
+            "chain_compatible": true,
+            "destination_dependency_sha256": "8360b063b294682adf46749ee5dd60e4aa104430a9e0ca296d614893fc6ce7ae",
+            "destination_sha256": "c05b2c15bdb341cea4dfd1dafa14fd0d030656bab9fc3a4fc8c93fb595576a71",
+            "evaluation_complete": true,
+            "graph_basis": "7e93050a2934ac8708d4b0d5e0317076272f73bbbe2c1e1b82938fc487d2b266",
+            "graph_snapshot_sha256": "dbf79b71f264948a137b23fffc53207e3042f433b0376fcaed19799fbdfcc9e9",
+            "kind": "evidence-consumption",
+            "language_policy": {
+              "kind": "language-policy",
+              "sha256": "ac850d0b0dfad0a6462fd3912c52fa91ac6c18670829b000a92fa57da8486368",
+              "version": "1.0.0"
+            },
+            "m7": {
+              "active": 0,
+              "blockers": [
+                "authenticated_decision_intake_not_integrated",
+                "fresh_complete_historical_audit_required",
+                "independent_operator_activation_not_authorized",
+                "missing_approved_operational_registry",
+                "missing_exact_hash_maintainer_approval",
+                "production_integration_not_implemented_or_authorized",
+                "selected_package_not_current_m6_release"
+              ],
+              "exact_approvals_missing": 22,
+              "ready": 0,
+              "release_sha256": "926de31d1df4ee90e911c4e91df81ee3ca914f5179df784ff3d41e9b716ada2a",
+              "review_registry_sha256": "cac2b99657803fdf05994b1d26598ca1e6d4f8a295e1dc6d92c9482178797bb3",
+              "selected": [
+                {
+                  "approved_registry_context": "missing",
+                  "blockers": [
+                    "missing_exact_hash_maintainer_approval",
+                    "missing_approved_operational_registry",
+                    "authenticated_decision_intake_not_integrated",
+                    "independent_operator_activation_not_authorized",
+                    "production_integration_not_implemented_or_authorized",
+                    "fresh_complete_historical_audit_required"
+                  ],
+                  "category": "Overlays",
+                  "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+                  "enforcement_state": "IMPLEMENTED",
+                  "exact_contract_approval": "missing",
+                  "historically_compatible": "not_freshly_checked",
+                  "implemented": true,
+                  "kind": "overlay",
+                  "prerequisites": {
+                    "approved_operational_registry": "missing",
+                    "authenticated_intake": "unavailable",
+                    "complete_new_poster_previews": "later_workflow_required_for_new_posters",
+                    "current_authorization": "unavailable",
+                    "effective_coverage": "requires_fresh_audit",
+                    "exact_final_head_ci": "separate_ci_evidence",
+                    "exact_package_approval": "missing",
+                    "historical_compatibility": "requires_fresh_audit",
+                    "m4_new_artifact_reviews": "not_requested_no_new_artwork",
+                    "operator_activation_decision": "missing",
+                    "production_integration": "not_implemented_not_authorized",
+                    "required_historical_outputs": "requires_fresh_audit",
+                    "source_dependency_provenance": "requires_fresh_audit"
+                  },
+                  "production_enforcement": false,
+                  "rules_sha256": "b3d25b2c4286ad7d7a0afa0c6710218afd38952863bdea1a5a26e26a324ec0ae",
+                  "variant_count": 18,
+                  "version": "1.0.0"
+                }
+              ],
+              "selectors": 22,
+              "variants": 278
+            },
+            "output_membership_sha256": "9bb42acb714adf358cdd74113a16563a7c82e1c533b1400cc676ae1469a25e11",
+            "production_enforcement": false,
+            "publication_authorized": false,
+            "ready": false,
+            "references": [],
+            "request_context_sha256": "047c3ea7ea37e88626c8785e669465147bb3ddbc2fe0d9f9cbbbc4aedc03f4df",
+            "request_id": "fixture.lifecycle-request",
+            "request_revision": 1,
+            "schema_version": 1,
+            "simulation": true,
+            "simulation_eligible": true,
+            "stage": "informational",
+            "subjects": [
+              {
+                "dependencies_sha256": "c6a4967d4bc3d4384eebf6fabdd56bf1de64336d0e28540341c11804740d18b6",
+                "expanded_definition_sha256": "5dde5c6577400d925da8b2a2ca8c6812f210a8fb89d6171b5cbcd7d2ece2338c",
+                "language": "en",
+                "outputs": [
+                  {
+                    "id": "overlay.synthetic-one",
+                    "identity_sha256": "64f654c621dcf08765fb91935f69aafcd26660b54d64576e3a2b443f50e99cb3",
+                    "local_path": "synthetic/overlays/standard/Example.png",
+                    "public_path": "synthetic/overlays/standard/Example.png"
+                  }
+                ],
+                "requested_language": "en",
+                "review_context_sha256": "ac36f52f50c77262fceba2fe709b4b6997669f6d92720327d294cd015034d7bb",
+                "scope": {
+                  "contract_sha256": "65ae26fe27bef32155636f793e304e9e85fd9860384b4cf634f41480530cd416",
+                  "design_sha256": "db37cf341c41f9e8cbba5a75a561d04bbad944d02fe5a2dc66477d5d06b02be7",
+                  "exceptions_sha256": "7af842fe69c3a38c2893a4e82a32752464a8eed57f199b2bdfe84ce09316c8b4",
+                  "member_sha256": "930c2707bcdb6bcf55ca966168608ae66e333568b20e7739e287e39530db2cbb",
+                  "outputs": [
+                    {
+                      "companions": [
+                        "overlay.synthetic-two"
+                      ],
+                      "evidence": {
+                        "confirmations": [],
+                        "decisions": [],
+                        "previews": [],
+                        "receipts": []
+                      },
+                      "id": "overlay.synthetic-one",
+                      "material_sha256": "648a2ec7c747a7c72cddbd86a091bc8397ad9af9ac7a9bc5b2260f8300bc5817"
+                    }
+                  ],
+                  "rule_sha256": "45678b30cd67867bd518e83a8337acb1be92ca5aa22260e4f20a26ebe89080e3",
+                  "rules_sha256": "be085afa25fe8f29e351db81f6501b687203cffee348ae8d727984c569b526f7",
+                  "variant": "synthetic"
+                },
+                "selection_sha256": null,
+                "source_context_sha256": null,
+                "subject_id": "overlay.synthetic-one",
+                "subject_sha256": "25299e2aa1dcea8c1145081245f9eb1641baa64bd12d585f39c31a86547e50fe",
+                "translation_dependency_sha256": "5010e64d0f12c0519c0c3774793f9cd39db68b45be4fc2f2c4300625d8e73a7f",
+                "translation_sha256": "26aeca48a55888db920625040a046611e6ff350ec93787900852a2368481fba1"
+              },
+              {
+                "dependencies_sha256": "d81d07e8a2a6daec59d41b9648c7826f0ce3d51286fe51b15a05b1b962748f10",
+                "expanded_definition_sha256": "8192a26013ba55b6ce293032d933542cda132476903cc2ca70734371fcebb6e3",
+                "language": "en",
+                "outputs": [
+                  {
+                    "id": "overlay.synthetic-two",
+                    "identity_sha256": "da88625a61246cbf45c4a10931c5881b536b310114b71043c2600008d065a0d4",
+                    "local_path": "synthetic/overlays/bigger/Example.png",
+                    "public_path": "synthetic/overlays/bigger/Example.png"
+                  }
+                ],
+                "requested_language": "en",
+                "review_context_sha256": "0843c18d3c1d6d4ef4c77a28bfdb21af671168e50dc8363e57dfbbcb7fac407f",
+                "scope": {
+                  "contract_sha256": "65ae26fe27bef32155636f793e304e9e85fd9860384b4cf634f41480530cd416",
+                  "design_sha256": "db37cf341c41f9e8cbba5a75a561d04bbad944d02fe5a2dc66477d5d06b02be7",
+                  "exceptions_sha256": "7af842fe69c3a38c2893a4e82a32752464a8eed57f199b2bdfe84ce09316c8b4",
+                  "member_sha256": "4b2cc38c0632b24b4369409d39a3594bbf0f0b38635c9768cb50dc1a496f3ed4",
+                  "outputs": [
+                    {
+                      "companions": [
+                        "overlay.synthetic-one"
+                      ],
+                      "evidence": {
+                        "confirmations": [],
+                        "decisions": [],
+                        "previews": [],
+                        "receipts": []
+                      },
+                      "id": "overlay.synthetic-two",
+                      "material_sha256": "1b10588004ccd777ed1cd6c7a0ecd180355d1ce9dd2197b2190c991c87bfeec7"
+                    }
+                  ],
+                  "rule_sha256": "45678b30cd67867bd518e83a8337acb1be92ca5aa22260e4f20a26ebe89080e3",
+                  "rules_sha256": "be085afa25fe8f29e351db81f6501b687203cffee348ae8d727984c569b526f7",
+                  "variant": "synthetic"
+                },
+                "selection_sha256": null,
+                "source_context_sha256": null,
+                "subject_id": "overlay.synthetic-two",
+                "subject_sha256": "b6e4f85a189575519f194d8e84fa45787435c96a9227b3a8a4d5bbc65d688eab",
+                "translation_dependency_sha256": "90ec05214341139518c5fbbeb2ba3394cd613695eb26881ea975918c7f888617",
+                "translation_sha256": "3392f2d299072f9b6134779175ec3cf106171498371969042335d78c9e5475ef"
+              }
+            ],
+            "technical_eligible": false,
+            "version": "1.0.0"
+          },
+          "archived_sha256": "0ee09d77ad017423cea7893f46f4de23b4f5c600e8f33bc77ef5fe558c0c1b43"
+        },
+        "sha256": "6fc9d9aea001fbf954dc3e30e9e50fcf58160a1d90f7b1059199103e80620861"
+      }
+    },
+    "operational_readiness": false,
+    "publication_authorized": false,
+    "production_enforcement": false,
+    "ready": false,
+    "active": false
+  },
+  "sha256": "836afeb792e064e78ff91965b1c47a4feca165aab72655aa0cf61581984cc06b"
+}

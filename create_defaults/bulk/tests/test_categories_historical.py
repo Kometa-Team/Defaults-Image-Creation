@@ -68,3 +68,11 @@ def test_complete_library_and_single_category_compatibility(monkeypatch,tmp_path
     from create_defaults.bulk.tests.test_activation_historical import assert_final_phase2_historical_and_approval_inventory
     assert_final_phase2_historical_and_approval_inventory(monkeypatch,verified_historical_context,
         implementation,capsys,report,contract_graph,index)
+    # Additive P3/M5 acceptance over these same fresh immutable facts. Retain
+    # every original M2/M5/M6/M7 assertion and avoid a second full capture.
+    from create_defaults.phase3.tests.final_acceptance import reconcile_historical,export_historical,assert_actual_overlay_chain
+    final = reconcile_historical(implementation,registry,records,index,report)
+    exported = export_historical(final)
+    with capsys.disabled():
+        print("P3 final historical acceptance evidence:",json.dumps(exported),flush=True)
+    assert_actual_overlay_chain(implementation,records,contract_graph,index)

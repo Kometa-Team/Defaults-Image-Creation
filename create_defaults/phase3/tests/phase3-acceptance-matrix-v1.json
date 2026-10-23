@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "kind": "phase3-security-acceptance-matrix",
+  "simulation_only": true,
+  "families": [
+    {
+      "id": "forged_translation",
+      "nodeids": [
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_earlier_stage_substitution_cannot_be_repaired_by_later_success[forged_translation]"
+      ],
+      "required_outcome": "fail_closed"
+    },
+    {
+      "id": "stale_source",
+      "nodeids": [
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_earlier_stage_substitution_cannot_be_repaired_by_later_success[stale_source]"
+      ],
+      "required_outcome": "fail_closed"
+    },
+    {
+      "id": "english_fallback",
+      "nodeids": [
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_reviewed_english_fallback_does_not_hide_missing_target_in_complete_chain"
+      ],
+      "required_outcome": "fail_closed"
+    },
+    {
+      "id": "unsupported_language_contract",
+      "nodeids": [
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_earlier_stage_substitution_cannot_be_repaired_by_later_success[unsupported_language]",
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_m7_and_render_publication_isolation_survives_complete_synthetic_success"
+      ],
+      "required_outcome": "fail_closed"
+    },
+    {
+      "id": "official_non_english",
+      "nodeids": [
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_destination_attacks_remain_blocked_after_fresh_m3_and_m4_consumption[official_non_english]"
+      ],
+      "required_outcome": "fail_closed"
+    },
+    {
+      "id": "forged_ownership",
+      "nodeids": [
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_destination_attacks_remain_blocked_after_fresh_m3_and_m4_consumption[forged_owner]"
+      ],
+      "required_outcome": "fail_closed"
+    },
+    {
+      "id": "missing_expired_revoked",
+      "nodeids": [
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_destination_attacks_remain_blocked_after_fresh_m3_and_m4_consumption[expired_authority]",
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_destination_attacks_remain_blocked_after_fresh_m3_and_m4_consumption[missing_authority]",
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_destination_attacks_remain_blocked_after_fresh_m3_and_m4_consumption[revoked_authority]"
+      ],
+      "required_outcome": "fail_closed"
+    },
+    {
+      "id": "invalid_incomplete_inventory",
+      "nodeids": [
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_destination_attacks_remain_blocked_after_fresh_m3_and_m4_consumption[incomplete_inventory]",
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_destination_attacks_remain_blocked_after_fresh_m3_and_m4_consumption[invalid_inventory]"
+      ],
+      "required_outcome": "fail_closed"
+    },
+    {
+      "id": "language_unicode_collisions",
+      "nodeids": [
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_destination_attacks_remain_blocked_after_fresh_m3_and_m4_consumption[cross_language_collision]",
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_unicode_collision_uses_exact_source_names_without_automatic_rename"
+      ],
+      "required_outcome": "fail_closed"
+    },
+    {
+      "id": "subject_output_membership",
+      "nodeids": [
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_earlier_stage_substitution_cannot_be_repaired_by_later_success[membership_substitution]",
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_earlier_stage_substitution_cannot_be_repaired_by_later_success[subject_substitution]"
+      ],
+      "required_outcome": "fail_closed"
+    },
+    {
+      "id": "relevant_dependency",
+      "nodeids": [
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_archived_chain_replay_requires_current_material_context[relevant_dependency]"
+      ],
+      "required_outcome": "fail_closed"
+    },
+    {
+      "id": "replayed_evidence",
+      "nodeids": [
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_archived_chain_replay_requires_current_material_context[authority_expiry]",
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_archived_chain_replay_requires_current_material_context[request_revision]"
+      ],
+      "required_outcome": "fail_closed"
+    },
+    {
+      "id": "partial_corrupt_archive",
+      "nodeids": [
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_complete_chain_archival_cannot_hide_partial_corruption_or_head_replay[corrupt]",
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_complete_chain_archival_cannot_hide_partial_corruption_or_head_replay[partial]",
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_complete_chain_archival_cannot_hide_partial_corruption_or_head_replay[wrong_head]"
+      ],
+      "required_outcome": "fail_closed"
+    },
+    {
+      "id": "synthetic_as_real",
+      "nodeids": [
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_destination_attacks_remain_blocked_after_fresh_m3_and_m4_consumption[synthetic_as_real]"
+      ],
+      "required_outcome": "fail_closed"
+    },
+    {
+      "id": "m7_bypass",
+      "nodeids": [
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_m7_and_render_publication_isolation_survives_complete_synthetic_success"
+      ],
+      "required_outcome": "fail_closed"
+    },
+    {
+      "id": "render_side_effect",
+      "nodeids": [
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_m7_and_render_publication_isolation_survives_complete_synthetic_success"
+      ],
+      "required_outcome": "fail_closed"
+    },
+    {
+      "id": "publication_side_effect",
+      "nodeids": [
+        "create_defaults/phase3/tests/test_final_phase3_acceptance.py::test_m7_and_render_publication_isolation_survives_complete_synthetic_success"
+      ],
+      "required_outcome": "fail_closed"
+    }
+  ]
+}
