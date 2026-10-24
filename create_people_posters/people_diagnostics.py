@@ -391,9 +391,18 @@ class RedactingFormatter(logging.Formatter):
 
 def secure_handler(handler):
     from logging.handlers import RotatingFileHandler, TimedRotatingFileHandler
+    # PyTorch installs these exact handlers while torch is still importing.
+    # Both emit through self.format(), so retain the final redacting formatter
+    # and safe handleError below. Match module class identity, never just a
+    # handler's name, and keep unrelated/custom handler subclasses rejected.
+    torch_logging = sys.modules.get("torch._logging._internal")
+    torch_handler = torch_logging is not None and any(
+        type(handler) is getattr(torch_logging, name, None)
+        for name in ("_StderrHandler", "LazyTraceHandler"))
     if type(handler) not in {logging.StreamHandler, logging.FileHandler, logging.NullHandler,
                              RotatingFileHandler, TimedRotatingFileHandler} and handler is not logging.lastResort:
-        raise ValueError("Unsupported logging destination; secure adapter required")
+        if not torch_handler:
+            raise ValueError("Unsupported logging destination; secure adapter required")
     if not isinstance(handler.formatter, RedactingFormatter):
         handler.setFormatter(RedactingFormatter(handler.formatter))
     # logging.Handler.handleError normally dumps the original record on stderr.
