@@ -64,7 +64,7 @@ def isolated(monkeypatch, tmp_path):
     monkeypatch.setenv("PEOPLE_WORKSPACE_MODE", "persistent")
     monkeypatch.setenv("POSTER_ENGINE", "powershell")
     monkeypatch.setenv("ORCH_CONTINUE_IF_EMPTY", "true")
-    monkeypatch.setenv("TMDB_KEY", "mock-key")
+    monkeypatch.setenv("TMDB_KEY", "NOT_A_REAL_TMDB_RECOVERY_FIXTURE_20261024")
 
 
 def marker(key, meta=None):
@@ -365,7 +365,7 @@ def test_python_recovery_uses_pillow_without_external_renderers(monkeypatch, rec
     monkeypatch.setenv("REMOVE_BG_ENGINE", "birefnet")
     monkeypatch.setattr(recovery, "ps_exe", lambda: pytest.fail("PowerShell lookup in Python mode"))
     monkeypatch.setattr(recovery, "run_step", lambda *args: pytest.fail("External rendering in Python mode"))
-    result = recovery.recover_one(recovery_args, SimpleNamespace(), "key", "Person", "headchop")
+    result = recovery.recover_one(recovery_args, SimpleNamespace(), "NOT_A_REAL_TMDB_RECOVERY_FIXTURE_20261024", "Person", "headchop")
     assert result.status == "recovered"
     from create_people_poster import STYLES, output_path
     for style in STYLES:
@@ -525,7 +525,7 @@ def test_inline_adobe_preserves_precheck_and_selenium_order(monkeypatch, recover
         return 0
 
     monkeypatch.setattr(recovery, "run_step", run)
-    row = recovery.recover_one(args, SimpleNamespace(), "key", "Person", "headchop")
+    row = recovery.recover_one(args, SimpleNamespace(), "NOT_A_REAL_TMDB_RECOVERY_FIXTURE_20261024", "Person", "headchop")
     assert row.status == "recovered"
     assert calls[0] == [sys.executable, "sel_remove_bg.py"]
     assert calls[1][0] == "mock-pwsh"
@@ -549,7 +549,7 @@ def test_inline_local_reuses_one_model_and_one_inference_per_candidate(monkeypat
     checks = iter([["headchop"], [], []]) if precheck else iter([[], []])
     monkeypatch.setattr(recovery, "candidate_target_issues", lambda *args, **kwargs: next(checks))
     monkeypatch.setattr(recovery, "run_step", run)
-    row = recovery.recover_one(args, SimpleNamespace(), "key", "Person", "headchop")
+    row = recovery.recover_one(args, SimpleNamespace(), "NOT_A_REAL_TMDB_RECOVERY_FIXTURE_20261024", "Person", "headchop")
     assert row.status == "recovered"
     assert len(FakeRemover.instances) == 1
     assert len(FakeRemover.instances[0].calls) == (2 if precheck else 1)
@@ -565,7 +565,7 @@ def test_local_staging_reuses_precheck_and_records_attempt_order(monkeypatch, re
     monkeypatch.setattr(recovery, "candidate_target_issues", lambda *args, **kwargs: next(checks))
     monkeypatch.setattr(recovery, "run_step", lambda *args: pytest.fail("Unexpected subprocess"))
     attempted, records = set(), []
-    row = recovery.stage_one_for_orchestrator(args, SimpleNamespace(), "key", "Person", "headchop", attempted, records)
+    row = recovery.stage_one_for_orchestrator(args, SimpleNamespace(), "NOT_A_REAL_TMDB_RECOVERY_FIXTURE_20261024", "Person", "headchop", attempted, records)
     assert row.status == "staged" and row.chosen_label == "candidate1"
     assert [record.status for record in records] == ["precheck_rejected", "staged"]
     assert len(FakeRemover.instances) == 1 and len(FakeRemover.instances[0].calls) == 2
@@ -580,7 +580,7 @@ def test_local_staging_preserves_old_original_and_publishes_exact_basename(recov
     photo(original, color=(180, 10, 30))
     old_bytes = original.read_bytes()
     old_hash = backend.sha256(original)
-    recovery.stage_one_for_orchestrator(recovery_args, SimpleNamespace(), "key", "Person", "headchop", set(), [])
+    recovery.stage_one_for_orchestrator(recovery_args, SimpleNamespace(), "NOT_A_REAL_TMDB_RECOVERY_FIXTURE_20261024", "Person", "headchop", set(), [])
     assert original.read_bytes() != old_bytes
     assert (original.parent / ".history" / old_hash / original.name).read_bytes() == old_bytes
 
@@ -590,7 +590,7 @@ def test_local_staging_requires_explicit_overwrite_for_existing_output(recovery_
     cutout(destination)
     old_bytes = destination.read_bytes()
     with pytest.raises(RuntimeError, match="REMOVE_BG_OVERWRITE"):
-        recovery.stage_one_for_orchestrator(recovery_args, SimpleNamespace(), "key", "Person", "headchop", set(), [])
+        recovery.stage_one_for_orchestrator(recovery_args, SimpleNamespace(), "NOT_A_REAL_TMDB_RECOVERY_FIXTURE_20261024", "Person", "headchop", set(), [])
     assert destination.read_bytes() == old_bytes
     assert not (Path(os.environ["SEL_ORIG_DIR"]) / "Person.jpg").exists()
 
@@ -633,7 +633,7 @@ def test_local_recovery_cache_override_preserves_primary_model_options(monkeypat
 def test_recovery_failed_local_initialization_is_actionable(monkeypatch, recovery_args):
     monkeypatch.setattr(backend, "LocalRemover", lambda settings: (_ for _ in ()).throw(RuntimeError("missing model weights")))
     with pytest.raises(RuntimeError, match="missing model weights"):
-        recovery.stage_one_for_orchestrator(recovery_args, SimpleNamespace(), "key", "Person", "headchop", set(), [])
+        recovery.stage_one_for_orchestrator(recovery_args, SimpleNamespace(), "NOT_A_REAL_TMDB_RECOVERY_FIXTURE_20261024", "Person", "headchop", set(), [])
     assert not (recovery_args.downloads_dir / "Person.png").exists()
 
 
@@ -742,7 +742,7 @@ def test_inline_local_keeps_originals_until_accepted_source_is_archived(monkeypa
 
     monkeypatch.setattr(recovery, "download_candidate", download)
     monkeypatch.setattr(recovery, "run_step", lambda title, argv, env: cutout(recovery.final_transparent_path(args.people_root, "Person")) or 0)
-    row = recovery.recover_one(args, SimpleNamespace(), "key", "Person", "headchop")
+    row = recovery.recover_one(args, SimpleNamespace(), "NOT_A_REAL_TMDB_RECOVERY_FIXTURE_20261024", "Person", "headchop")
     assert row.status == "recovered"
     for path, content, digest in preserved:
         assert (archive / ".history" / digest / path.name).read_bytes() == content

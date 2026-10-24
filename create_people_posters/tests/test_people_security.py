@@ -312,3 +312,16 @@ def test_api_fixture_isolates_ambient_credentials_without_weakening_checkpoints(
         assert not marker.with_suffix(".json.tmp").exists()
     finally:
         next(fixture, None)
+
+
+def test_short_configured_credentials_still_block_paths_and_hash_metadata(tmp_path):
+    from create_people_posters.people_workspaces import atomic_json
+    # Deliberately tiny dummy value: test isolation must never become a runtime
+    # exemption for short secrets that overlap public paths or content hashes.
+    secure.register_secret("x")
+    for value in ("C:/public/x/image.png", "00" + "x".encode().hex() + "11"):
+        assert secure.sanitize_text(value) != value
+        target = tmp_path / "blocked.json"
+        with pytest.raises(ValueError, match="Sensitive data"):
+            atomic_json(target, {"source": value})
+        assert not target.exists()

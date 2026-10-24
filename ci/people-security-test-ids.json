@@ -70,6 +70,7 @@
     "create_people_posters/tests/test_people_security.py::test_reports_nested_json_csv_html_and_downloadable_bundle_are_safe",
     "create_people_posters/tests/test_people_security.py::test_safe_diagnostic_fields_and_immutable_record_are_preserved",
     "create_people_posters/tests/test_people_security.py::test_sanitizer_and_formatter_failure_never_reveal_original_record",
+    "create_people_posters/tests/test_people_security.py::test_short_configured_credentials_still_block_paths_and_hash_metadata",
     "create_people_posters/tests/test_people_security.py::test_signed_provider_fields_and_encoded_urls_stay_redacted",
     "create_people_posters/tests/test_people_security.py::test_stream_handles_split_text_and_bytes_and_never_flushes_a_partial_secret",
     "create_people_posters/tests/test_people_security.py::test_unknown_secret_field_names_are_redacted_without_a_registered_value[AWS_SECRET_ACCESS_KEY]",
