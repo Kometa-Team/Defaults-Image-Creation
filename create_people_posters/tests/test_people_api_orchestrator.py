@@ -11,9 +11,15 @@ import orchestrator as orch
 
 @pytest.fixture
 def isolated(tmp_path, monkeypatch):
+    from create_people_posters import people_diagnostics as secure
     environment = dict(os.environ)
+    # These command-selection tests own their dummy credentials. A configured
+    # runner credential (or a previous test's registered value) must not turn
+    # public interpreter/temp paths into this test's secret-bearing metadata.
+    monkeypatch.setattr(secure, "_variants", set())
     for key in list(os.environ):
-        if key.startswith(("PEOPLE_", "SEL_", "ORCH_", "REMOVE_BG_", "COLORIZE_", "EDGE_CHOP_")):
+        if (key.startswith(("PEOPLE_", "SEL_", "ORCH_", "REMOVE_BG_", "COLORIZE_", "EDGE_CHOP_"))
+                or secure.sensitive_key(key) or secure._ENV_KEY.search(key)):
             os.environ.pop(key)
     config = tmp_path / "config"
     config.mkdir()

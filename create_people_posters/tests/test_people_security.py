@@ -285,3 +285,30 @@ def test_query_and_fragment_at_signs_never_become_diagnostic_hosts():
             assert secret.casefold() not in result.casefold()
             assert result == "https://example.test"
     assert secure.sanitize_text("https://alice:password@example.test/path?q=private") == "https://example.test/path"
+
+
+def test_api_fixture_isolates_ambient_credentials_without_weakening_checkpoints(tmp_path, monkeypatch):
+    from test_people_api_orchestrator import isolated
+    import orchestrator as orch
+    interpreter = r"C:\hostedtoolcache\windows\Python\3.13.16\x64\python.exe"
+    # Reproduce a false conflict between an unrelated configured/retained value
+    # and a public Windows path. Fixture isolation must remove both sources.
+    monkeypatch.setenv("TMDB_KEY", interpreter)
+    secure.register_secret(interpreter)
+    assert secure.sanitize_text(interpreter) != interpreter
+    fixture = isolated.__wrapped__(tmp_path, monkeypatch)
+    next(fixture)
+    try:
+        assert "TMDB_KEY" not in os.environ
+        marker = tmp_path / "normal.json"
+        value = {"argv": [interpreter, "sync_people_images.py", "--dest_root", r"C:\public\repos"]}
+        orch.write_marker(marker, value)
+        assert json.loads(marker.read_text()) == value
+        secret = canary("checkpoint_rejection")
+        secure.register_secret(secret)
+        with pytest.raises(ValueError, match="Sensitive data"):
+            orch.write_marker(marker, {"argv": [interpreter, secret]})
+        assert json.loads(marker.read_text()) == value
+        assert not marker.with_suffix(".json.tmp").exists()
+    finally:
+        next(fixture, None)

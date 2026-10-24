@@ -33,6 +33,7 @@
     "create_people_posters/tests/test_people_http_security.py::test_untrusted_image_authentication_urls_fail_closed[insecure-scheme]",
     "create_people_posters/tests/test_people_http_security.py::test_untrusted_image_authentication_urls_fail_closed[unescaped-space]",
     "create_people_posters/tests/test_people_http_security.py::test_untrusted_image_authentication_urls_fail_closed[userinfo]",
+    "create_people_posters/tests/test_people_security.py::test_api_fixture_isolates_ambient_credentials_without_weakening_checkpoints",
     "create_people_posters/tests/test_people_security.py::test_cli_subprocess_stderr_traceback_and_debug_output_are_safe",
     "create_people_posters/tests/test_people_security.py::test_configured_credential_urls_are_removed_before_normalization",
     "create_people_posters/tests/test_people_security.py::test_configured_secret_is_removed_under_unrelated_fields[base64]",
