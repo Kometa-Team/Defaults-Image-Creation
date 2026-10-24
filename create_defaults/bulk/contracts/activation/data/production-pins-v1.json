@@ -1,7 +1,7 @@
 {
   "baseline_commit": "0058ac6f109054dd0a25e88f4c707b020460f875",
   "files": {
-    ".github/workflows/default-poster-validation.yml": "3bb163657012678f80c20282cd4d4b5d531d3e65ed4c58a61976c626b11e480f",
+    ".github/workflows/default-poster-validation.yml": "d6668e40662065d176cda89dfe717442109006fe37fd3ac91ef4c87f89fc4339",
     "create_defaults/bulk/__init__.py": "a42d2db4d816008110a72532d38c85ea9cce465b455dd87e138d4091d8d5b617",
     "create_defaults/bulk/__main__.py": "26edf3c78fb6070ca2bfbdae9a39f6bce2089bd23c208c94616ad1a07476fe30",
     "create_defaults/bulk/asset_cases.py": "54dc5ae76d15da10bea60ff26c5418af4d578be1c1dca0cd2297c13424e6cf6e",
@@ -216,6 +216,8 @@
     "phase3_baseline_commit": "78464d2d051dc5da5f305bc4fd9f03868999636f",
     "phase4_previous_manifest_sha256": "13f988c970a6ce3055536a676a775169d9eec23750964846fa602565ae2bc522",
     "phase4_baseline_commit": "c33f792992ee704150799fe16536a64630fd8964",
-    "phase4_workflow_previous_sha256": "12c3934d2aa81b7c08c4b02d4b950f631c0ca5609d0468e8f9bd5754bf7779b7"
+    "phase4_workflow_previous_sha256": "12c3934d2aa81b7c08c4b02d4b950f631c0ca5609d0468e8f9bd5754bf7779b7",
+    "phase4_m5_baseline_commit": "d05dc70167a4b3c4185fc20e81fdf91a88dde020",
+    "phase4_m5_previous_manifest_sha256": "4fdc201ab7d86138c003a38d30ce3bdb9e077819ad1037cb2698297c1d9089cf"
   }
 }

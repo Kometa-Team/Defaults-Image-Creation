@@ -99,7 +99,8 @@ def verify_original_plan(original,*,root=ROOT):
     require(json.loads(subprocess.check_output(['git','show',m3_base+':ci/validation-plan.json'],cwd=root))==expected,'Changed frozen M3 plan')
     for job,group in [('contracts','states'),('generation','evidence')]:
         expected['commands'].setdefault(job,[]).append(['{python}','ci/phase4_review.py','run','--group',group])
-    require(read(root/'ci/validation-plan.json')==expected,'Validation plan changes beyond exact M3/M4 additions')
+    from ci.phase4_transactions import verify_plan
+    verify_plan(expected,root=root,current=read(root/'ci/validation-plan.json'))
 
 
 def verify_maintenance(root=ROOT):
@@ -112,6 +113,13 @@ def verify_maintenance(root=ROOT):
         require(hashlib.sha256(before).hexdigest()==pins['before_sha256'],'Wrong maintenance baseline: '+path)
         if path in m3['files']:
             require(m3['files'][path]['before_sha256']==pins['sha256'],'Broken M1/M3 maintenance chain')
+        elif path in {'.github/workflows/default-poster-validation.yml',
+                'create_defaults/bulk/contracts/activation/protection.py',
+                'create_defaults/bulk/contracts/activation/data/production-pins-v1.json'}:
+            from ci.phase4_transactions import verify_maintenance as verify_m5
+            extension=verify_m5(root)['files'][path]
+            require(extension['before_sha256']==pins['sha256'] and checksum(root/path)==extension['sha256'],
+                'Broken exact M1/M5 protected CI maintenance chain')
         else:require(checksum(root/path)==pins['sha256'],'Changed authorized maintenance file: '+path)
     protected='create_defaults/bulk/contracts/activation/data/production-pins-v1.json'
     old=json.loads(subprocess.check_output(['git','show',BASE+':'+protected],cwd=root));new=read(root/protected)
@@ -137,11 +145,18 @@ def run():
             all_expected|=set(group)
         from ci.phase4_review import selections as review_selections
         reviews=set().union(*map(set,review_selections().values()));require(not all_expected&reviews,'Duplicate M4 bounded IDs');all_expected|=reviews
+        from ci.phase4_transactions import selections as transaction_selections
+        transactions=set().union(*map(set,transaction_selections().values()));require(not all_expected&transactions,'Duplicate M5 bounded IDs');all_expected|=transactions
         all_collection=pytest_run(['create_defaults/phase4/tests'],OUT/'phase4-all-collection.json',collect=True)
         require(all_collection['exitstatus']==0 and unique(all_collection['nodes'],'all P4 collection')==all_expected,'Uncovered P4 test ID')
-        paths=sorted({n.split('::')[0] for n in read(IDS)})
-        collection=pytest_run(paths,OUT/'phase4-collection.json',collect=True)
-        execution=pytest_run(paths,OUT/'phase4-execution.json')
+        # Exact maintained foundation IDs avoid the Windows argument limit.
+        # The separate whole-namespace collection above forbids missing IDs.
+        selected=read(IDS)
+        response=OUT/'phase4-selected-ids.txt'
+        response.parent.mkdir(parents=True,exist_ok=True)
+        response.write_text('\n'.join(selected)+'\n',encoding='utf8',newline='\n')
+        collection=pytest_run(['@'+str(response)],OUT/'phase4-collection.json',collect=True)
+        execution=pytest_run(['@'+str(response)],OUT/'phase4-execution.json')
         expected=unique(read(IDS),'P4 expected IDs')
         require(unique(collection['nodes'],'P4 collection')==expected and collection['exitstatus']==0,'Changed P4 collection')
         require(unique(execution['nodes'],'P4 execution')==expected,'Incomplete P4 execution')
@@ -169,6 +184,8 @@ def verify_reports(reports):
         require(not all_expected&set(ids),'Duplicate P4 test execution');all_expected.update(ids)
     from ci.phase4_review import selections as review_selections
     reviews=set().union(*map(set,review_selections().values()));require(not all_expected&reviews,'Duplicate M4 bounded IDs');all_expected|=reviews
+    from ci.phase4_transactions import selections as transaction_selections
+    transactions=set().union(*map(set,transaction_selections().values()));require(not all_expected&transactions,'Duplicate M5 bounded IDs');all_expected|=transactions
     for r in reports:
         require(all(r[k]==current[k] for k in ('head','plan_sha256')),'Stale P4 head/plan')
         require(r['kind']=='phase4-operation-foundations' and r['success'],'P4 job failed')
@@ -189,6 +206,8 @@ def verify_reports(reports):
         [read(p) for p in (ROOT/'config/ci-downloaded').rglob('phase4-m3-composition.json')])
     from ci.phase4_review import verify_group_reports
     summary['reviews']['bounded_execution']=verify_group_reports([read(p) for p in (ROOT/'config/ci-downloaded').rglob('phase4-m4-execution-report.json')])
+    from ci.phase4_transactions import verify_reports as verify_transactions
+    summary['reviews']['transactions']=verify_transactions([read(p) for p in (ROOT/'config/ci-downloaded').rglob('phase4-m5-execution-report.json')])
     return summary
 
 

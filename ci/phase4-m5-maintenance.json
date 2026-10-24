@@ -1,0 +1,22 @@
+{
+  "base": "47e69a59fd1c306789457250ef6493bdfef7fc17",
+  "scope": "P4/M5 CI-only bounded matrix; actual authorization recorded separately in the PR",
+  "files": {
+    "ci/validation-plan.json": {
+      "before_sha256": "853a1110935a41ee22f17e55fbfc803927deae7a220b55732f261a83d4f67eba",
+      "sha256": "853a1110935a41ee22f17e55fbfc803927deae7a220b55732f261a83d4f67eba"
+    },
+    ".github/workflows/default-poster-validation.yml": {
+      "before_sha256": "3bb163657012678f80c20282cd4d4b5d531d3e65ed4c58a61976c626b11e480f",
+      "sha256": "d6668e40662065d176cda89dfe717442109006fe37fd3ac91ef4c87f89fc4339"
+    },
+    "create_defaults/bulk/contracts/activation/protection.py": {
+      "before_sha256": "48748b056300f8a82ce269efa29aaf496b4525e004397e1122cbd469d3db2a76",
+      "sha256": "7e80d4857c4a327a5d58694a6980c39412956f846ba35c967423d1ad2aeac46d"
+    },
+    "create_defaults/bulk/contracts/activation/data/production-pins-v1.json": {
+      "before_sha256": "22ec01124f211dea03ea55230613fcc96304a3f1810a63a3ae793e8c50188e98",
+      "sha256": "83503fb97fc1b09ea96ac854c1ecc30edfddf4b0b55d0ee8907e98002afeb22c"
+    }
+  }
+}

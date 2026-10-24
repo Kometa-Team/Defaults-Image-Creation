@@ -24,3 +24,11 @@ def composed():
         yield values
     finally:
         for trial in reversed(trials):trial.close()
+
+
+@pytest.fixture(scope='session')
+def transaction_seed():
+    from create_defaults.phase4.tests.transaction_samples import reviewed
+    with CompositionTrial() as trial:
+        ctx=samples.poster(trial,'Genre')
+        yield reviewed(trial,ctx,exceptions=[samples.exception(ctx.candidate)])

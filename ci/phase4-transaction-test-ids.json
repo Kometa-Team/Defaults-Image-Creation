@@ -1,0 +1,82 @@
+{
+  "add_update": [
+    "create_defaults/phase4/tests/test_transactions.py::test_native_add_atomic_reopen_and_exact_retry",
+    "create_defaults/phase4/tests/test_transactions.py::test_native_minimal_update_preserves_identity_and_old_evidence"
+  ],
+  "atomic": [
+    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[before_review]",
+    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[after_review]",
+    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[snapshot_blob]",
+    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[record_blob]",
+    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[event_blob]",
+    "create_defaults/phase4/tests/test_transactions.py::test_crash_after_commit_recovers_without_double_application",
+    "create_defaults/phase4/tests/test_transactions.py::test_cancellation_never_exposes_a_snapshot[before]",
+    "create_defaults/phase4/tests/test_transactions.py::test_cancellation_never_exposes_a_snapshot[after_review]",
+    "create_defaults/phase4/tests/test_transactions.py::test_cancellation_never_exposes_a_snapshot[receipt_index]"
+  ],
+  "recovery": [
+    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[record_index]",
+    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[member_head]",
+    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[journal_index]",
+    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[receipt_index]",
+    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[before_commit]"
+  ],
+  "concurrency": [
+    "create_defaults/phase4/tests/test_transactions_concurrency.py::test_concurrent_identical_complete_add_commits_once",
+    "create_defaults/phase4/tests/test_transactions_concurrency.py::test_concurrent_add_allocation_reserves_one_identity[semantic]",
+    "create_defaults/phase4/tests/test_transactions_concurrency.py::test_concurrent_add_allocation_reserves_one_identity[namespace]",
+    "create_defaults/phase4/tests/test_transactions_concurrency.py::test_disjoint_native_adds_preserve_unrelated_exact_artwork",
+    "create_defaults/phase4/tests/test_transactions_concurrency.py::test_prospective_network_companions_fail_closed_before_staging"
+  ],
+  "competing_updates": [
+    "create_defaults/phase4/tests/test_transactions_concurrency.py::test_two_updates_cannot_both_replace_one_committed_subject"
+  ],
+  "membership": [
+    "create_defaults/phase4/tests/test_transactions_concurrency.py::test_native_multi_member_add_is_committed_all_or_none"
+  ],
+  "shared_source": [
+    "create_defaults/phase4/tests/test_transactions_security.py::test_native_shared_source_update_requires_complete_fanout"
+  ],
+  "security": [
+    "create_defaults/phase4/tests/test_transactions_security.py::test_synthetic_authority_is_exact_current_and_never_operational[missing]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_synthetic_authority_is_exact_current_and_never_operational[claim]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_synthetic_authority_is_exact_current_and_never_operational[revoked]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_synthetic_authority_is_exact_current_and_never_operational[expired]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_synthetic_authority_is_exact_current_and_never_operational[wrong-maintainer]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_synthetic_authority_is_exact_current_and_never_operational[reissued-grant]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_synthetic_authority_is_exact_current_and_never_operational[foreign-root]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_changed_heads_and_material_context_cannot_commit[operation-cancelled]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_changed_heads_and_material_context_cannot_commit[operation-revised]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_changed_heads_and_material_context_cannot_commit[review-withdrawn]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_changed_heads_and_material_context_cannot_commit[review-unconfirmed]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_changed_heads_and_material_context_cannot_commit[wrong-review]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_changed_heads_and_material_context_cannot_commit[destination]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_changed_heads_and_material_context_cannot_commit[phase3]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_changed_heads_and_material_context_cannot_commit[candidate]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_changed_native_artifacts_and_locked_fields_fail_closed[source]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_changed_native_artifacts_and_locked_fields_fail_closed[font]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_changed_native_artifacts_and_locked_fields_fail_closed[style]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_changed_native_artifacts_and_locked_fields_fail_closed[type]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_changed_native_artifacts_and_locked_fields_fail_closed[composition]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_changed_native_artifacts_and_locked_fields_fail_closed[receipt]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_changed_native_artifacts_and_locked_fields_fail_closed[partial-member]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_revocation_during_replay_and_invalid_cancellation_object",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_revision_replay_cannot_replace_content_after_commit",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_restart_retains_orphans_but_rejects_corrupt_authoritative_state[orphan]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_restart_retains_orphans_but_rejects_corrupt_authoritative_state[snapshot]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_restart_retains_orphans_but_rejects_corrupt_authoritative_state[commit-event]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_restart_retains_orphans_but_rejects_corrupt_authoritative_state[head]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_snapshot_canonical_roundtrip_and_unreviewed_member_substitution",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_changed_dependency_head_after_confirmation_cannot_commit",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_unsupported_prospective_adapters_are_named_and_never_committed[playlist]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_unsupported_prospective_adapters_are_named_and_never_committed[overlay]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_unsupported_prospective_adapters_are_named_and_never_committed[family]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_cancelled_native_generation_has_no_commit_or_review",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_inputs_changed_after_full_review_are_rechecked_at_commit[source]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_inputs_changed_after_full_review_are_rechecked_at_commit[definition]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_inputs_changed_after_full_review_are_rechecked_at_commit[phase3]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_unselected_definition_cannot_be_smuggled_into_snapshot",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_logo_adapter_cannot_smuggle_another_composition_source[parent]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_logo_adapter_cannot_smuggle_another_composition_source[background-input]"
+  ]
+}
