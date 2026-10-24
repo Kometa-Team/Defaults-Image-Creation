@@ -23,6 +23,31 @@ IDS=ROOT/'ci/phase4-test-ids.json'
 SCHEMA=ROOT/'create_defaults/bulk/lifecycle/schemas/operations-v1.schema.json'
 GOLDEN=ROOT/'create_defaults/phase4/tests/canonical-v1.json'
 OUT=ROOT/'config/phase4-ci'
+M2_SCHEMA=ROOT/'create_defaults/bulk/lifecycle/schemas/identity-impact-v1.schema.json'
+M2_GOLDEN=ROOT/'create_defaults/phase4/tests/identity-canonical-v1.json'
+M2_HISTORICAL=dict(outputs=14079,public_outputs=14077,packages=22,variants=278,protected_sources=190,
+    adopted_source_pins=299,generator_kinds=4,overlay_branches=18,
+    mapping_sha256='6d1a49062208e8361227942549a4adafb0f2fed63c2f3a9a63c7860845ab876f',
+    graph_sha256='93b01e2261249185bd06982a9cb0823a61628104d327958cedefd97788a39d7d')
+M1_BASE='5deffb587c92d746a4611939c918ae0e6471ee30'
+
+
+def verify_m2_baseline():
+    original=json.loads(subprocess.check_output(['git','show',M1_BASE+':ci/phase4-test-ids.json'],cwd=ROOT))
+    require(len(original)==204 and unique(original,'M1 baseline IDs')<=unique(read(IDS),'M2 IDs'),'Missing original M1 test IDs')
+    for name in ('models.py','storage.py','package_e.py','schemas/operations-v1.schema.json'):
+        path='create_defaults/bulk/lifecycle/'+name
+        original=subprocess.check_output(['git','show',M1_BASE+':'+path],cwd=ROOT).replace(b'\r\n',b'\n')
+        require(hashlib.sha256(original).hexdigest()==checksum(ROOT/path),'Changed frozen M1 infrastructure: '+path)
+
+
+def verify_historical_reports(reports):
+    require(len(reports)==2 and {r['platform'] for r in reports}=={'Windows','Linux'},'Missing M2 historical platforms')
+    current=identity()
+    for r in reports:
+        require(all(r[k]==current[k] for k in ('head','plan_sha256')),'Stale M2 historical proof')
+        require(r['evidence']==M2_HISTORICAL and r['evidence_sha256']==fingerprint(M2_HISTORICAL),'Changed M2 historical invariants')
+    return M2_HISTORICAL
 
 
 def checksum(path):return hashlib.sha256(path.read_bytes().replace(b'\r\n',b'\n')).hexdigest()
@@ -55,9 +80,11 @@ def verify_maintenance(root=ROOT):
 def run():
     result={
         **identity(),'kind':'phase4-operation-foundations','success':False,
-        'ids_sha256':checksum(IDS),'schema_sha256':checksum(SCHEMA),'golden_sha256':checksum(GOLDEN)}
+        'ids_sha256':checksum(IDS),'schema_sha256':checksum(SCHEMA),'golden_sha256':checksum(GOLDEN),
+        'm2_schema_sha256':checksum(M2_SCHEMA),'m2_golden_sha256':checksum(M2_GOLDEN)}
     try:
         verify_maintenance()
+        verify_m2_baseline()
         paths=['create_defaults/phase4/tests']
         collection=pytest_run(paths,OUT/'phase4-collection.json',collect=True)
         execution=pytest_run(paths,OUT/'phase4-execution.json')
@@ -68,13 +95,19 @@ def run():
         canonical=read(OUT/'phase4-canonical.json')
         require(all(canonical[k]==result[k] for k in ('head','platform','plan_sha256')),'Stale P4 canonical evidence')
         require(canonical['evidence']==read(GOLDEN)['archive'] and canonical['evidence_sha256']==read(GOLDEN)['archive_sha256'],'P4 canonical vector mismatch')
-        result.update(collection=collection,execution=execution,canonical_sha256=canonical['evidence_sha256'],success=True)
+        m2=read(OUT/'phase4-m2-canonical.json')
+        require(all(m2[k]==result[k] for k in ('head','platform','plan_sha256')),'Stale M2 canonical proof')
+        require(m2['evidence_sha256']==read(M2_GOLDEN)['archive_sha256'],'M2 canonical replay differs')
+        result.update(collection=collection,execution=execution,canonical_sha256=canonical['evidence_sha256'],
+            m2_canonical_sha256=m2['evidence_sha256'],success=True)
     finally:write(OUT/'phase4-report.json',result)
 
 
 def verify_reports(reports):
+    verify_m2_baseline()
     require(len(reports)==2 and {r['platform'] for r in reports}=={'Windows','Linux'},'Missing/duplicate P4 platform')
     current=identity();expected=unique(read(IDS),'P4 expected IDs');summary={}
+    historical=verify_historical_reports([read(p) for p in (ROOT/'config/ci-downloaded').rglob('phase4-m2-historical.json')])
     for r in reports:
         require(all(r[k]==current[k] for k in ('head','plan_sha256')),'Stale P4 head/plan')
         require(r['kind']=='phase4-operation-foundations' and r['success'],'P4 job failed')
@@ -83,8 +116,11 @@ def verify_reports(reports):
         require(unique(r['execution']['nodes'],'P4 execution')==expected,'Missing P4 execution IDs')
         counts=validate_execution(r['execution']);require(not counts.get('skipped'),'P4 skip is not acceptance')
         require(r['canonical_sha256']==read(GOLDEN)['archive_sha256'],'P4 canonical evidence differs')
+        require(r['m2_schema_sha256']==checksum(M2_SCHEMA) and r['m2_golden_sha256']==checksum(M2_GOLDEN),'M2 schema/vector differs')
+        require(r['m2_canonical_sha256']==read(M2_GOLDEN)['archive_sha256'],'M2 Windows/Linux replay differs')
         summary[r['platform']]=dict(collected_ids=sorted(expected),executed_ids=sorted(r['execution']['nodes']),
-            counts=counts,canonical_sha256=r['canonical_sha256'],schema_sha256=r['schema_sha256'])
+            counts=counts,canonical_sha256=r['canonical_sha256'],schema_sha256=r['schema_sha256'],
+            m2_canonical_sha256=r['m2_canonical_sha256'],m2_schema_sha256=r['m2_schema_sha256'],m2_historical=historical)
     return summary
 
 
