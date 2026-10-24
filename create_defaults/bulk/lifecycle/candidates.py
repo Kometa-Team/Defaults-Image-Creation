@@ -105,7 +105,12 @@ def resolve_stable(paths, profiles_path, view):
 def _assignment(entry, definition, job, package, rule, content, resolution):
     names=entry["names"];variant=entry["variant"]
     package.contract.validate_content(variant,content)
-    for field in ("display_name","source"):
+    # Composition/placeholder sources are contract-derived, never submitter
+    # fields. M3 must be able to consume those M2 candidates without widening
+    # contributor permissions. check_job still binds the registry source to the
+    # real hashed input or verified generated dependency below.
+    fields=("display_name",) if rule['source_kind'] in {'composition','placeholder'} and 'source' not in content else ("display_name","source")
+    for field in fields:
         if field not in content or content[field]!=names[field]:fail("content_identity_substitution")
     if definition["display_name"]!=names["display_name"] or job["parameters"].get("text")!=names["rendered_caption"]:
         fail("caption_or_display_mapping")

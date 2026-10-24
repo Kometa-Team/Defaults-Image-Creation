@@ -63,6 +63,24 @@
         "-m",
         "create_defaults.bulk.e_smoke"
       ]
+    ],
+    "people": [
+      [
+        "{python}",
+        "ci/phase4_composition.py",
+        "run",
+        "--group",
+        "pixels"
+      ]
+    ],
+    "review": [
+      [
+        "{python}",
+        "ci/phase4_composition.py",
+        "run",
+        "--group",
+        "security"
+      ]
     ]
   },
   "original_pytest_commands": [

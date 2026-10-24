@@ -1,0 +1,425 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kometa.wiki/schemas/lifecycle/composition-v1.schema.json",
+  "title": "Isolated complete composition evidence; never approval",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/composition-evidence"
+    },
+    {
+      "$ref": "#/$defs/composition-bytes"
+    }
+  ],
+  "$defs": {
+    "composition-evidence": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1,
+          "type": "integer"
+        },
+        "protocol_version": {
+          "const": "1.0.0",
+          "type": "string"
+        },
+        "scope": {
+          "const": "isolated-composition-fixture",
+          "type": "string"
+        },
+        "simulation": {
+          "const": true,
+          "type": "boolean"
+        },
+        "record_only": {
+          "const": true,
+          "type": "boolean"
+        },
+        "operation_accepted": {
+          "const": false,
+          "type": "boolean"
+        },
+        "applied": {
+          "const": false,
+          "type": "boolean"
+        },
+        "contract_approved": {
+          "const": false,
+          "type": "boolean"
+        },
+        "artwork_approved": {
+          "const": false,
+          "type": "boolean"
+        },
+        "ready": {
+          "const": false,
+          "type": "boolean"
+        },
+        "active": {
+          "const": false,
+          "type": "boolean"
+        },
+        "production_enforcement": {
+          "const": false,
+          "type": "boolean"
+        },
+        "publication_authorized": {
+          "const": false,
+          "type": "boolean"
+        },
+        "kind": {
+          "const": "composition-evidence",
+          "type": "string"
+        },
+        "complete": {
+          "const": true,
+          "type": "boolean"
+        },
+        "operation": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
+            },
+            "event_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
+            }
+          },
+          "required": [
+            "id",
+            "revision",
+            "sha256",
+            "event_sha256"
+          ],
+          "additionalProperties": false
+        },
+        "required_members": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "maxItems": 32,
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "context_json": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 4000000
+        },
+        "runtime_json": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 4000000
+        },
+        "views": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "appearance": {
+                "enum": [
+                  "default",
+                  "requested"
+                ]
+              },
+              "manifest_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "manifest_json": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 4000000
+              },
+              "definitions_json": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 4000000
+              },
+              "sources": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 240
+                    },
+                    "sha256": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    },
+                    "object_sha256": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256",
+                    "object_sha256"
+                  ],
+                  "additionalProperties": false
+                },
+                "maxItems": 256
+              },
+              "members": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "identity": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 240
+                    },
+                    "category": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 240
+                    },
+                    "variant": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 240
+                    },
+                    "presentation": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 240
+                    },
+                    "job_id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 240
+                    },
+                    "render_fingerprint": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    },
+                    "local_path": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 240
+                    },
+                    "public_path": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 240
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "sha256": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    },
+                    "bytes": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 5242880
+                    },
+                    "object_sha256": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    },
+                    "receipt_object_sha256": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    },
+                    "receipt_sha256": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    },
+                    "companions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 240
+                      },
+                      "maxItems": 32
+                    },
+                    "parent_jobs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 240
+                      },
+                      "maxItems": 32
+                    },
+                    "origin_json": {
+                      "type": "string",
+                      "minLength": 2,
+                      "maxLength": 4000000
+                    },
+                    "format": {
+                      "enum": [
+                        "JPEG",
+                        "PNG"
+                      ]
+                    },
+                    "mode": {
+                      "enum": [
+                        "RGB",
+                        "RGBA"
+                      ]
+                    },
+                    "dimensions": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 3000
+                      },
+                      "minItems": 2,
+                      "maxItems": 2
+                    }
+                  },
+                  "required": [
+                    "identity",
+                    "category",
+                    "variant",
+                    "presentation",
+                    "job_id",
+                    "render_fingerprint",
+                    "local_path",
+                    "public_path",
+                    "sha256",
+                    "bytes",
+                    "object_sha256",
+                    "receipt_object_sha256",
+                    "receipt_sha256",
+                    "companions",
+                    "parent_jobs",
+                    "origin_json",
+                    "format",
+                    "mode",
+                    "dimensions"
+                  ],
+                  "additionalProperties": false
+                },
+                "maxItems": 32,
+                "minItems": 1
+              },
+              "layout_json": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 4000000
+              },
+              "impact_json": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 4000000
+              },
+              "execution_json": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 4000000
+              }
+            },
+            "required": [
+              "appearance",
+              "manifest_sha256",
+              "manifest_json",
+              "definitions_json",
+              "sources",
+              "members",
+              "layout_json",
+              "impact_json",
+              "execution_json"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 2,
+          "minItems": 2
+        }
+      },
+      "required": [
+        "schema_version",
+        "protocol_version",
+        "scope",
+        "simulation",
+        "record_only",
+        "operation_accepted",
+        "applied",
+        "contract_approved",
+        "artwork_approved",
+        "ready",
+        "active",
+        "production_enforcement",
+        "publication_authorized",
+        "kind",
+        "complete",
+        "operation",
+        "required_members",
+        "context_json",
+        "runtime_json",
+        "views"
+      ],
+      "additionalProperties": false
+    },
+    "composition-bytes": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "kind": {
+          "const": "composition-bytes"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5242880
+        },
+        "encoding": {
+          "const": "base64"
+        },
+        "data": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 6990508
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "sha256",
+        "size",
+        "encoding",
+        "data"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

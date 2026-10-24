@@ -256,5 +256,20 @@
   "create_defaults/phase4/tests/test_operation_storage.py::test_stale_multisubject_namespace_and_evidence_heads_reject_unchanged_proposals[output-group]",
   "create_defaults/phase4/tests/test_operation_storage.py::test_stale_multisubject_namespace_and_evidence_heads_reject_unchanged_proposals[subject]",
   "create_defaults/phase4/tests/test_operation_storage.py::test_symlink_or_windows_junction_roots_and_blob_namespaces_are_rejected[objects]",
-  "create_defaults/phase4/tests/test_operation_storage.py::test_symlink_or_windows_junction_roots_and_blob_namespaces_are_rejected[root]"
+  "create_defaults/phase4/tests/test_operation_storage.py::test_symlink_or_windows_junction_roots_and_blob_namespaces_are_rejected[root]",
+  "create_defaults/phase4/tests/test_ci_composition.py::test_complete_cross_platform_byte_comparison_is_explicit_not_a_reuse_grant",
+  "create_defaults/phase4/tests/test_ci_composition.py::test_m3_missing_or_forged_execution_cannot_satisfy_acceptance[cancelled]",
+  "create_defaults/phase4/tests/test_ci_composition.py::test_m3_missing_or_forged_execution_cannot_satisfy_acceptance[collection]",
+  "create_defaults/phase4/tests/test_ci_composition.py::test_m3_missing_or_forged_execution_cannot_satisfy_acceptance[duplicate]",
+  "create_defaults/phase4/tests/test_ci_composition.py::test_m3_missing_or_forged_execution_cannot_satisfy_acceptance[execution]",
+  "create_defaults/phase4/tests/test_ci_composition.py::test_m3_missing_or_forged_execution_cannot_satisfy_acceptance[failure]",
+  "create_defaults/phase4/tests/test_ci_composition.py::test_m3_missing_or_forged_execution_cannot_satisfy_acceptance[head]",
+  "create_defaults/phase4/tests/test_ci_composition.py::test_m3_missing_or_forged_execution_cannot_satisfy_acceptance[ids]",
+  "create_defaults/phase4/tests/test_ci_composition.py::test_m3_missing_or_forged_execution_cannot_satisfy_acceptance[implementation]",
+  "create_defaults/phase4/tests/test_ci_composition.py::test_m3_missing_or_forged_execution_cannot_satisfy_acceptance[missing]",
+  "create_defaults/phase4/tests/test_ci_composition.py::test_m3_missing_or_forged_execution_cannot_satisfy_acceptance[plan]",
+  "create_defaults/phase4/tests/test_ci_composition.py::test_m3_missing_or_forged_execution_cannot_satisfy_acceptance[schema]",
+  "create_defaults/phase4/tests/test_ci_composition.py::test_m3_missing_or_forged_execution_cannot_satisfy_acceptance[skip]",
+  "create_defaults/phase4/tests/test_ci_composition.py::test_m3_missing_or_forged_execution_cannot_satisfy_acceptance[xfail]",
+  "create_defaults/phase4/tests/test_ci_composition.py::test_m3_schema_and_group_verifier_have_no_runtime_dependency_or_optional_path"
 ]
