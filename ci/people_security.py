@@ -72,7 +72,7 @@ def run(group):
         response = folder / "selected.txt"
         response.parent.mkdir(parents=True, exist_ok=True)
         response.write_text("\n".join(groups[group]) + "\n", encoding="utf8", newline="\n")
-        collection = pytest_run(["@" + str(response)], folder / "collection.json", collect=True)
+        collection = pytest_run(["@" + str(response)], folder / "people-collection.json", collect=True)
         execution = pytest_run(["@" + str(response)], folder / "execution.json")
         result.update(collection=collection, execution=execution, namespace=complete, success=True)
         validate_report(result, identity(), groups)

@@ -1,5 +1,6 @@
 """Fail-closed controls for the additional mandatory CI namespace."""
 from copy import deepcopy
+import json
 from pathlib import Path
 import sys
 
@@ -8,6 +9,42 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from ci import people_security as gate
 from create_people_posters import people_diagnostics as secure
+
+
+def test_security_producer_keeps_raw_collection_out_of_legacy_acceptance(tmp_path, monkeypatch):
+    from ci import validation as legacy
+    node = "create_people_posters/tests/test_people_security_gate.py::synthetic_case"
+    monkeypatch.setattr(gate, "OUT", tmp_path / "people-security-diagnostics-linux")
+    monkeypatch.setattr(gate, "identity", lambda: {"head": "synthetic-head", "platform": "Linux", "plan_sha256": "synthetic-plan"})
+    monkeypatch.setattr(gate, "selections", lambda: ({"diagnostics": [node]}, set()))
+    destinations = []
+
+    def pytest_adapter(paths, destination, collect=False):
+        destinations.append(destination.name)
+        value = {"nodes": [node], "exitstatus": 0, "seconds": 0.01, "reports": [] if collect else [
+            dict(nodeid=node, when=phase, outcome="passed", wasxfail=False, skip_reason=None)
+            for phase in ("setup", "call", "teardown")]}
+        legacy.write(destination, value)
+        return value
+
+    # Only the pytest transport is synthetic here. The producer, filesystem,
+    # current integrity guard, report validation and legacy selector are real.
+    monkeypatch.setattr(gate, "pytest_run", pytest_adapter)
+    gate.run("diagnostics")
+    assert destinations == ["namespace.json", "people-collection.json", "execution.json"]
+    assert legacy.legacy_reports(tmp_path) == []
+    report = json.loads((gate.OUT / "diagnostics/people-security-report.json").read_text())
+    assert report["success"] and report["collection"]["nodes"] == [node]
+    # Reproduce the old alias: strict legacy reconciliation must still reject
+    # an extra raw report, rather than silently weakening its required set.
+    bad = gate.OUT / "diagnostics/collection.json"
+    legacy.write(bad, report["collection"])
+    with pytest.raises(ValueError, match="Missing or extra required report"):
+        legacy.reconcile(legacy.read(legacy.PLAN_PATH), legacy.legacy_reports(tmp_path), "synthetic-base")
+    bad.unlink()
+    original = tmp_path / "collection-linux/collection.json"
+    legacy.write(original, {"kind": "collection"})
+    assert legacy.legacy_reports(tmp_path) == [{"kind": "collection"}]
 
 
 @pytest.mark.parametrize("job", sorted(gate.REQUIRED_JOBS))

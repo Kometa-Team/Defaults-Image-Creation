@@ -124,7 +124,8 @@
     "create_people_posters/tests/test_people_security_gate.py::test_security_evidence_cannot_be_stale_substituted_skipped_or_incomplete[skip]",
     "create_people_posters/tests/test_people_security_gate.py::test_security_evidence_cannot_be_stale_substituted_skipped_or_incomplete[substitute]",
     "create_people_posters/tests/test_people_security_gate.py::test_security_evidence_cannot_be_stale_substituted_skipped_or_incomplete[unfinished]",
-    "create_people_posters/tests/test_people_security_gate.py::test_security_evidence_cannot_be_stale_substituted_skipped_or_incomplete[xfail]"
+    "create_people_posters/tests/test_people_security_gate.py::test_security_evidence_cannot_be_stale_substituted_skipped_or_incomplete[xfail]",
+    "create_people_posters/tests/test_people_security_gate.py::test_security_producer_keeps_raw_collection_out_of_legacy_acceptance"
   ],
   "recovery": [
     "create_people_posters/tests/test_background_orchestrator.py::test_adobe_ignores_local_interpreter",
