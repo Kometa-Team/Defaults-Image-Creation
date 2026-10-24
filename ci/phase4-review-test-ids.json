@@ -1,0 +1,14 @@
+[
+  "create_defaults/phase4/tests/test_review.py::test_corrupt_review_blob_and_index_updates_fail_closed",
+  "create_defaults/phase4/tests/test_review.py::test_current_operation_revision_change_rejects_prior_review",
+  "create_defaults/phase4/tests/test_review.py::test_explicit_stale_record_retains_prior_decisions_and_cannot_be_revived",
+  "create_defaults/phase4/tests/test_review.py::test_explicit_submitter_rejection_or_withdrawal_blocks_advance[reject-SUBMITTER_REJECTED]",
+  "create_defaults/phase4/tests/test_review.py::test_explicit_submitter_rejection_or_withdrawal_blocks_advance[withdraw-WITHDRAWN]",
+  "create_defaults/phase4/tests/test_review.py::test_interrupted_review_append_leaves_no_visible_head_and_recovers[blob]",
+  "create_defaults/phase4/tests/test_review.py::test_interrupted_review_append_leaves_no_visible_head_and_recovers[transaction]",
+  "create_defaults/phase4/tests/test_review.py::test_maintainer_rejection_and_later_submitter_withdrawal_preserve_history",
+  "create_defaults/phase4/tests/test_review.py::test_missing_confirmation_cannot_advance_even_with_maintainer_grant",
+  "create_defaults/phase4/tests/test_review.py::test_same_actor_cannot_satisfy_separation_of_duties",
+  "create_defaults/phase4/tests/test_review.py::test_unrelated_or_unchanged_input_cannot_mark_a_review_stale",
+  "create_defaults/phase4/tests/test_review.py::test_withdrawal_after_confirmation_invalidates_exact_confirmation"
+]

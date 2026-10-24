@@ -19,26 +19,6 @@ from create_defaults.bulk.lifecycle.previews import CompositionTrial,Composition
 from create_defaults.phase4.tests import composition_samples as samples
 
 
-@pytest.fixture(scope='module')
-def composed():
-    trials=[]
-    class Values(dict):
-        def __missing__(self,kind):
-            trial=CompositionTrial();trials.append(trial)
-            if kind=='overlay':ctx=samples.overlays(trial)
-            elif kind=='family':ctx=samples.family(trial)
-            else:ctx=samples.poster(trial,{'playlist':'Playlist','genre':'Genre','network':'Network'}[kind],paired=kind=='network')
-            requests=[samples.exception(ctx.candidate)] if kind in {'playlist','genre'} else []
-            evidence=composition.compose(ctx,trial,exceptions=requests)
-            self[kind]=(trial,ctx,evidence,requests)
-            return self[kind]
-    values=Values();values.replays={}
-    try:
-        yield values
-    finally:
-        for trial in reversed(trials):trial.close()
-
-
 def archive(row,readonly=True):return CompositionArchive(row[1].registry.operations.root,readonly=readonly)
 
 

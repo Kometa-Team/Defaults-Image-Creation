@@ -81,6 +81,13 @@
         "--group",
         "security"
       ]
+    ],
+    "contracts": [
+      [
+        "{python}",
+        "ci/phase4_review.py",
+        "run"
+      ]
     ]
   },
   "original_pytest_commands": [

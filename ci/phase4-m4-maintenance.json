@@ -1,0 +1,10 @@
+{
+  "base": "e0c715f713a630a59d1e83fa30119ffa3997e1cd",
+  "files": {
+    "ci/validation-plan.json": {
+      "before_sha256": "1b0bf754585ab8500b52de06df4ccb66b085d4afdef09fae32708a6cfc8f2761",
+      "sha256": "81cd5d2f1063ca75fbbe171fe20df57fea399b30808ddd81d3d504bfef45ad47"
+    }
+  },
+  "purpose": "M4 exact additive mandatory bounded complete-review execution; original M3 and all prior checks retained"
+}
