@@ -356,6 +356,7 @@
   "create_defaults/phase4/tests/test_transactions_schema.py::test_m5_atomic_bridge_cannot_skip_original_dependency_cas",
   "create_defaults/phase4/tests/test_transactions_schema.py::test_cold_import_has_no_state_render_network_or_production_hook",
   "create_defaults/phase4/tests/test_transactions_schema.py::test_operational_path_fails_before_any_storage_or_render",
+  "create_defaults/phase4/tests/test_transactions_schema.py::test_recovery_bounds_unindexed_commit_events_before_materialization",
   "create_defaults/phase4/tests/test_ci_transactions.py::test_missing_or_substituted_group_evidence_fails_closed[missing]",
   "create_defaults/phase4/tests/test_ci_transactions.py::test_missing_or_substituted_group_evidence_fails_closed[duplicate]",
   "create_defaults/phase4/tests/test_ci_transactions.py::test_missing_or_substituted_group_evidence_fails_closed[head]",
@@ -386,5 +387,7 @@
   "create_defaults/phase4/tests/test_ci_transactions.py::test_commit_proof_requires_independent_exact_native_bytes[member]",
   "create_defaults/phase4/tests/test_ci_transactions.py::test_commit_proof_requires_independent_exact_native_bytes[pixel]",
   "create_defaults/phase4/tests/test_ci_transactions.py::test_commit_proof_requires_independent_exact_native_bytes[hash]",
-  "create_defaults/phase4/tests/test_ci_transactions.py::test_complete_native_proof_remains_synthetic_only"
+  "create_defaults/phase4/tests/test_ci_transactions.py::test_complete_native_proof_remains_synthetic_only",
+  "create_defaults/phase4/tests/test_transactions_concurrency.py::test_native_multi_member_add_is_committed_all_or_none",
+  "create_defaults/phase4/tests/test_transactions_concurrency.py::test_two_updates_cannot_both_replace_one_committed_subject"
 ]

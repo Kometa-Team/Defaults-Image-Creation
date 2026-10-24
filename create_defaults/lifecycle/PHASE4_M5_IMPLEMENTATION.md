@@ -41,17 +41,19 @@ authority. The operational path fails before storage or rendering.
 | Category / generator | M5 transaction coverage | Evidence / boundary |
 | --- | --- | --- |
 | Genre | Existing M6 logo/single variants, English, actual strict poster definitions | Native single ADD and minimal logo-source UPDATE; full default-white/requested-source-preserving D09 review; exact names and identity retained |
-| Network | Existing M6 logo variants requiring white and colour together, English | Native paired ADD; all members and both presentations share one atomic marker; interrupted member-head writes expose neither |
+| Network | Blocked for prospective M5 acceptance | Measured P3 `unverified_companion_membership` rejects new paired IDs even when native M3 previews are complete. No adoption record or compatibility flag is fabricated; existing white/colour M3 tests remain mandatory |
 | Playlist | Blocked | Approved fixed prospective layout and P3 generic historical captured-fit adapter differ; no contract/style waiver or P3 production-source change |
 | Overlays | Blocked at prospective P3 consumption | M2 relationships and M3 standard/bigger native previews remain supported upstream; P3 OverlayRequest is historical-only, so M5 rejects rather than fabricating historical records |
 | Generated families / registered generators | Blocked for M5 acceptance | P3 re-expands with its original identities; no universal stable-child adapter or invented historical adoption record |
 | Aspect, AudioLanguage, Awards, Based, Chart, ContentRating, Country, Decade, Franchise, Network non-logo/non-paired, Genre non-logo, Resolution, Seasonal, Separators, Streaming, Studio, SubtitleLanguage, Universe, VideoFormat, Year, and any other category/shape | Not added to M5 acceptance | M2/M3 capabilities remain factual upstream capabilities; there is no catch-all category acceptance |
 | Non-English or unknown contracts/variants | Blocked | Existing English-only and separately reviewed versioned language-policy boundaries remain |
 
-The gate is category **and** source kind **and** required presentation shape.
+The multi-member positive population is two independently contracted Genre items
+sharing a real source dependency. It is not relabeled as an approved Network
+pair. The gate is category **and** source kind **and** required presentation shape.
 Every admitted variant must still pass its existing exact closed contract, native
 layout/source checks, complete membership and current P3/M4 replay. Native tests
-exercise the selected existing Genre single and Network paired cohorts; this is
+exercise the selected existing Genre single and two-item shared-source cohorts; this is
 not a claim that every historical variant has been regenerated or operationally
 approved. No new contracts, policies, numeric visual tolerances or exceptions
 are introduced.
@@ -59,7 +61,8 @@ are introduced.
 ## Immutable snapshots and ADD semantics
 
 `schemas/transaction-v1.schema.json` is closed and versioned. Canonical JSON and
-SHA-256 reuse existing Package E conventions and the 8 MiB object bound. It pins:
+SHA-256 reuse existing Package E conventions and the 8 MiB object bound. M5 event indexes and total inspected archive bytes
+retain the original 4,096-event/64 MiB metadata bounds before materialization. It pins:
 
 * Exact reviewed M1 operation/event/revision and original intent bytes.
 * Before/proposed effective definitions, graph, source-file pins and native plan.
@@ -81,6 +84,11 @@ have passed M2's persisted reservation/collision rules. No partial member become
 authoritative, even if all its blobs have already been written.
 
 ## UPDATE, impact and preservation
+
+`stage_source_update` explicitly replaces only a confined owned trial source after
+checking its old hash, valid PNG/transparency and exact archived preimage. This
+is pending input staging, not an authoritative snapshot or a production asset edit.
+M3's immutable `CompositionTrial.stage` interface is unchanged.
 
 UPDATE is selected by existing stable identity, with an exact previous snapshot
 for every revised output. Its old effective definition and selected dependency
@@ -105,7 +113,11 @@ Unaffected outputs retain their existing snapshot, exact encoded bytes and
 immutable receipt references. M2's material dependency comparisons prove their
 scope unchanged; restart verification checks their archived bytes, decode
 properties and durable receipt/spec hashes. They are not regenerated or assigned
-new decisions. Affected review evidence must be rebuilt; old evidence and event
+new decisions. A read-only projection of **all current isolated output closures**
+uses the unchanged M5 Snapshot/Index to discover consumers outside the caller's
+scoped candidate. Conflicting shared-node versions or an omitted committed
+consumer block planning and commit. The tests cover a shared source spread across
+separate ADD snapshots as well as a complete two-member source UPDATE. Affected review evidence must be rebuilt; old evidence and event
 history are retained. Existing M3 global registry pins are not relaxed: an old
 review whose pinned registry changed may require upstream revalidation even if
 its artwork looks unchanged. Integrity preservation does not assert current
@@ -128,7 +140,9 @@ containing the immutable snapshot reference for **every** subject. It adds the
 matching `phase4_isolated_commit` Package E event in the same transaction.
 Original M1 read/write-set checks run immediately before row insertion; all
 original and new restart checks run before SQLite COMMIT. Exact grants and
-cancellation are checked again after expensive replay and before commit.
+cancellation are checked again after expensive replay and before commit. A final
+source/font/physical-case and definition-file hash check plus full P3 replay also
+rejects inputs changed after the image verifier but before commit.
 
 The reviewed intent remains immutable at its exact original revision. The M1
 successor increments its content revision because an evidence reference was
@@ -176,8 +190,17 @@ The first native Genre smoke completed composition, P3 consumption, both exact
 review stages, isolated commit, independent restart and exact retry in 433.63 s
 on the development Windows host. The initial 33 schema/CAS/CI controls passed in
 67.66 s. These are preliminary development measurements, not final-head results.
+The corrected CI/metadata controls later passed 150/150 locally. The initial
+workflow at `67a3524bdc0b421a83e0a0ca6f06f78f02369ebf` exposed the M1 unit
+report-fixture membership/aggregate-shape issue, trial.stage immutable-file
+semantics and Windows fixture connections that were not explicitly closed.
+These are repaired through exact fixture integration, an explicit owned
+source-update staging API and context-managed connection closure. The original
+M1-M4 assertion bodies, P3 boundaries and production sources stay unchanged.
+Its native Network attempt also confirmed the existing P3 companion blocker;
+M5 retains it and tests complete Genre cohorts instead of widening adoption.
 
-New focused tests cover positive ADD/UPDATE/paired membership, disjoint and
+New focused tests cover positive ADD/UPDATE/multi-member membership and actual shared-source fanout, disjoint and
 competing requests, concurrency, every commit boundary, cancellation, stale
 heads, roles/grants, changed source/font/style/type/destination, corrupt/missing
 artwork/receipts, retry substitution, orphan recovery, cold imports and blocked
@@ -186,18 +209,34 @@ Owned fixture SQLite backups isolate test cases; that is fixture setup, **not**
 the application's recovery mechanism or permission to mutate immutable history.
 
 The existing 23-job workflow remains unchanged, with all original 15-minute job
-caps and resource guards. M5 adds three explicit mandatory commands to the exact
-M4 plan: atomic tests to categories, adversarial tests to smoke, concurrency and
-paired native tests to core. Prior measured Windows runtimes were 1m48s, 1m28s
-and 1m50s respectively; previous review/generation jobs were already much fuller.
+caps and resource guards. M5 adds four explicit mandatory commands to the exact
+M4 plan: atomic tests to categories, adversarial tests to smoke,
+concurrency tests to core, with five late-crash tests in historical. The first
+M5 Windows atomic job measured 14m22s (Linux 10m00s) while UPDATE still stopped
+early at an immutable fixture staging error. The added successful UPDATE and
+final-input checks therefore require this measured partition; no test, retry
+assertion or fault point is removed. Original historical capture runs once;
+M5 recovery uses disposable synthetic assets and reads existing metadata only.
+Before M5, Windows categories/smoke/core measured 1m48s/1m28s/1m50s; previous
+review/generation jobs were already much fuller. The first M5 historical jobs
+measured 304s Linux / 350s Windows, leaving room for the five late-crash cases.
+Two heavier native cases instead use the foundation process and its warm M2
+metadata. No resource-intensive original historical fixture is duplicated.
 The one-file plan extension is sealed in `ci/phase4-m5-maintenance.json`, chained
-from the unchanged M4 extension. No Phase 3 assertion, original command/test ID,
+from the unchanged M4 extension. The original M1 CI fixture helpers include the new M5 collected IDs and stub
+only the external M5 report producer in their unit scope; every original test
+assertion body is AST-identical. The aggregate retains its original top-level
+shape and nests M5 evidence under reviews. Fixture SQLite connections are closed
+explicitly before Windows trial teardown. No Phase 3 assertion, original command/test ID,
 workflow, timeout, memory limit or source-protection pin is changed.
 
 The foundation vector preserves its complete ordered M1-M4 prefix and appends
-M5 metadata/CI controls. `ci/phase4-transaction-test-ids.json` explicitly maintains
+M5 metadata/CI controls plus the native multi-member ADD and competing UPDATE
+cases. These reuse the process's already loaded M2 metadata. Foundation collection
+and execution use exact maintained IDs, avoiding whole-module duplication; the
+independent entire-namespace collection still fails on any omitted test. `ci/phase4-transaction-test-ids.json` explicitly maintains
 disjoint native groups. Entire P4 collection must equal the exact union of all
-producers. Acceptance requires six successful exact-head/platform/group reports,
+producers. Acceptance requires eight successful exact-head/platform/group reports,
 two native isolated-commit/restart/retry proofs, all false real-authority flags
 and comparison with the independent original M3 native pixel producer. A failed,
 cancelled, skipped, missing, stale, substituted or partial producer fails closed.

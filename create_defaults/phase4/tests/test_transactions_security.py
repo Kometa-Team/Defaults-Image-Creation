@@ -164,7 +164,7 @@ def test_snapshot_canonical_roundtrip_and_unreviewed_member_substitution(transac
     case=transaction_case;_,snap=transaction(case)
     assert DefinitionSnapshot.from_bytes(snap.encoded)==snap
     with pytest.raises(BulkError):DefinitionSnapshot.from_bytes(snap.encoded+b'\n')
-    for field,value in [('publication_authorized',True),('unexpected','field'),('members',[]),('review_sha256','not-a-hash')]:
+    for field,value in [('publication_authorized',True),('unexpected','field'),('members',[]),('review_sha256','not-a-hash'),('observation_pins_json','{}')]:
         with pytest.raises(BulkError):DefinitionSnapshot.from_dict(snap.to_dict()|{field:value})
     value=snap.to_dict();next(iter(value['artwork'].values()))['sha256']='0'*64
     with pytest.raises(BulkError,match='artwork_binding'):DefinitionSnapshot.from_dict(value)
@@ -201,3 +201,51 @@ def test_cancelled_native_generation_has_no_commit_or_review(transaction_case):
     assert case['archive'].history()==before
     assert OperationStore(trial.config.cache_dir).inspect()==store
     assert not recover(trial.config.cache_dir)['commits']
+
+
+def test_native_shared_source_update_requires_complete_fanout():
+    from create_defaults.bulk.lifecycle.previews import CompositionTrial
+    from create_defaults.phase4.tests.transaction_samples import shared_cohort,shared_update,reviewed
+    with CompositionTrial() as trial:
+        ctx=shared_cohort(trial);case=reviewed(trial,ctx,label='shared-add');tx,snap=transaction(case)
+        first=apply.commit_synthetic(tx,expected_snapshot_sha256=snap.sha256,authority=case['authority'])
+        old=recover(trial.config.cache_dir)
+        candidate,frozen=shared_update(case)
+        next_ctx=propose(ctx.registry,before=frozen,candidate=candidate,identity='synthetic.operation.shared-update',operation='UPDATE')
+        details=json.loads(next_ctx.impact.to_dict()['details_json'])
+        assert set(details['affected_outputs'])==set(candidate.graph.index().outputs) and len(details['affected_outputs'])==2
+        source=next(iter(snap.to_dict()['entries'].values()))['names']['source']['path']
+        assert all(any(reason['cause']=='asset:'+source for reason in details['reasons'][i]) for i in details['affected_outputs'])
+        updated=reviewed(trial,next_ctx,label='shared-update');next_tx,next_snap=transaction(updated,{i:first['snapshot_sha256'] for i in details['affected_outputs']})
+        result=apply.commit_synthetic(next_tx,expected_snapshot_sha256=next_snap.sha256,authority=updated['authority'])
+        final=recover(trial.config.cache_dir)
+        assert len(final['commits'])==2 and len(final['outputs'])==2
+        for i in old['outputs']:
+            assert final['outputs'][i]['artwork']['sha256']!=old['outputs'][i]['artwork']['sha256']
+            assert final['outputs'][i]['snapshot_sha256']==result['snapshot_sha256']
+
+
+@pytest.mark.parametrize('attack',['source','definition','phase3'])
+def test_inputs_changed_after_full_review_are_rechecked_at_commit(transaction_case,monkeypatch,attack):
+    case=transaction_case;tx,snap=transaction(case);trial,ctx,_,_=case['row']
+    path=trial.config.asset_dir/next(iter(snap.to_dict()['entries'].values()))['names']['source']['path'] if attack=='source' else ctx.candidate.paths[0]
+    raw=path.read_bytes();pins=dict(tx.inputs.phase3_inputs)
+    def change(name):
+        if name=='after_review':
+            if attack=='phase3':tx.inputs.phase3_inputs['expected_destination_sha256']='0'*64
+            else:path.write_bytes(raw+b'changed-after-review')
+    monkeypatch.setattr(apply,'_checkpoint',change)
+    try:
+        diagnostic={'source':'source_changed_during_commit','definition':'definition_changed_during_commit','phase3':'phase3_observations_changed_during_commit'}[attack]
+        with pytest.raises(BulkError,match=diagnostic):apply.commit_synthetic(tx,expected_snapshot_sha256=snap.sha256,authority=case['authority'])
+    finally:
+        path.write_bytes(raw);tx.inputs.phase3_inputs.clear();tx.inputs.phase3_inputs.update(pins)
+    assert not recover(trial.config.cache_dir)['commits']
+
+
+def test_unselected_definition_cannot_be_smuggled_into_snapshot(transaction_case):
+    from create_defaults.bulk.lifecycle.operations import require_adapter
+    candidate=transaction_case['row'][1].candidate
+    data=candidate.data();data['effective_definitions']['unselected.ghost']=next(iter(data['effective_definitions'].values()))
+    forged=replace(candidate,encoded=canonical(data))
+    with pytest.raises(BulkError,match='unselected_definition_requires_scoped_proposal'):require_adapter(forged)

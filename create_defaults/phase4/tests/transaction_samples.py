@@ -1,5 +1,6 @@
 """Disposable native M5 fixtures; database resets are test isolation only."""
 from copy import deepcopy
+from contextlib import closing
 from dataclasses import replace
 from pathlib import Path
 import json
@@ -97,7 +98,7 @@ def transaction_case(transaction_seed):
     # state and not a recovery implementation. Orphan blobs intentionally remain.
     case = transaction_seed
     path = case['row'][0].config.cache_dir/'state.sqlite3'
-    with sqlite3.connect(path) as db:
+    with closing(sqlite3.connect(path)) as db:
         checkpoint = sqlite3.connect(':memory:')
         db.backup(checkpoint)
     actor = case['authority']
@@ -111,7 +112,7 @@ def transaction_case(transaction_seed):
     try:
         yield case
     finally:
-        with sqlite3.connect(path) as db:
+        with closing(sqlite3.connect(path)) as db:
             checkpoint.backup(db)
         checkpoint.close()
         actor.grants,actor.revoked,actor.roles,actor.as_of = grants,revoked,roles,as_of
@@ -121,8 +122,6 @@ def transaction_case(transaction_seed):
 def update_candidate(case,*,before=None,label='updated'):
     trial, ctx, _, _ = case['row']
     original = ctx.candidate if before is None else before
-    from create_defaults.bulk.lifecycle.operations import freeze_before
-    frozen=freeze_before(original,trial)
     registry = ctx.registry
     identity = next(iter(original.graph.index().outputs))
     view = registry.view()
@@ -133,7 +132,8 @@ def update_candidate(case,*,before=None,label='updated'):
     from io import BytesIO
     image = Image.open(BytesIO(raw));ImageDraw.Draw(image).rectangle((45,40,175,160),fill=(0,0,0,0))
     out=BytesIO();image.save(out,format='PNG')
-    source=trial.stage(entry['names']['source']['path'],out.getvalue())
+    from create_defaults.bulk.lifecycle.operations import stage_source_update
+    frozen,source=stage_source_update(original,trial,identity,out.getvalue(),expected_source_sha256=entry['names']['source']['sha256'])
     names=deepcopy(entry['names']);names['source']=source
     registry.revise(identity,names=names,entry_revision=entry['revision'],token=label,expected=view.head)
     definitions=deepcopy(original.data()['effective_definitions'])
@@ -146,7 +146,7 @@ def update_candidate(case,*,before=None,label='updated'):
     return candidate,frozen
 
 
-def additional(case,label):
+def additional(case,label,*,shared=False):
     """Allocate a separate Genre identity, using the same closed native design."""
     trial,ctx,_,_=case['row'];r=ctx.registry;old=ctx.candidate
     original=next(iter(old.graph.index().outputs));entry=r.view().entry(original)
@@ -154,7 +154,8 @@ def additional(case,label):
     for f in ('local_path','public_path'):
         names[f]=str(Path(names[f]).parent).replace('\\','/')+'/Fixture '+label+'.jpg'
     names['display_name']='Fixture '+label
-    names['source']=trial.stage(str(Path(names['source']['path']).parent).replace('\\','/')+'/Fixture '+label+'.png',cs.png())
+    if not shared:
+        names['source']=trial.stage(str(Path(names['source']['path']).parent).replace('\\','/')+'/Fixture '+label+'.png',cs.png())
     new=r.allocate(category=entry['category'],semantic=dict(entry['semantic'],key=label),variant=entry['variant'],
         names=names,token=label,expected=r.view().head)
     d=deepcopy(old.data()['effective_definitions'][original]);d.update(id=new['id'],display_name=names['display_name'])
@@ -169,3 +170,36 @@ def additional_candidate(case,value):
     path,content=value;trial,ctx,_,_=case['row']
     return poster_candidate(ctx.registry,expected=ctx.registry.view().head,paths=[path],profiles_path=ctx.candidate.profiles_path,
         posters=sorted(content),content=content,config=trial.config)
+
+
+def shared_cohort(trial):
+    """Two real independently contracted Genre members sharing a source edge."""
+    first=cs.poster(trial,'Genre');case={'row':(trial,first,None,[])}
+    path,added=additional(case,'shared',shared=True)
+    definitions=list(first.candidate.data()['effective_definitions'].values())+yaml.safe_load(path.read_text())['definitions']
+    content=json.loads(first.candidate.content_json)|added
+    source=trial.root/'cohort.yml';source.write_text(yaml.safe_dump(dict(schema_version=1,category='Genre',definitions=definitions)),encoding='utf8')
+    candidate=poster_candidate(first.registry,expected=first.registry.view().head,paths=[source],profiles_path=first.candidate.profiles_path,
+        posters=sorted(content),content=content,config=trial.config)
+    return propose(first.registry,before=None,candidate=candidate,identity='synthetic.operation.multi-member',operation='ADD')
+
+
+def shared_update(case):
+    from create_defaults.bulk.lifecycle.operations import stage_source_update
+    trial,ctx,_,_=case['row'];before=ctx.candidate;r=ctx.registry
+    first=next(iter(before.graph.index().outputs));entry=r.view().entry(first)
+    from PIL import Image,ImageDraw
+    from io import BytesIO
+    image=Image.open(BytesIO(cs.png()));ImageDraw.Draw(image).rectangle((45,40,175,160),fill=(0,0,0,0))
+    output=BytesIO();image.save(output,format='PNG')
+    frozen,source=stage_source_update(before,trial,first,output.getvalue(),expected_source_sha256=entry['names']['source']['sha256'])
+    content=json.loads(before.content_json)
+    for i in before.graph.index().outputs:
+        e=r.view().entry(i);assert e['names']['source']['path']==source['path']
+        names=deepcopy(e['names']);names['source']=source
+        r.revise(i,names=names,entry_revision=e['revision'],token='shared-update-'+i,expected=r.view().head)
+        content[i]['source']=source
+    path=trial.root/'cohort-update.yml';path.write_text(yaml.safe_dump(dict(schema_version=1,category='Genre',definitions=list(before.data()['effective_definitions'].values()))),encoding='utf8')
+    candidate=poster_candidate(r,expected=r.view().head,paths=[path],profiles_path=before.profiles_path,
+        posters=sorted(content),content=content,config=trial.config)
+    return candidate,frozen

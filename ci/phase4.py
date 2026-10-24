@@ -142,9 +142,12 @@ def run():
         transactions=set().union(*map(set,transaction_selections().values()));require(not all_expected&transactions,'Duplicate M5 bounded IDs');all_expected|=transactions
         all_collection=pytest_run(['create_defaults/phase4/tests'],OUT/'phase4-all-collection.json',collect=True)
         require(all_collection['exitstatus']==0 and unique(all_collection['nodes'],'all P4 collection')==all_expected,'Uncovered P4 test ID')
-        paths=sorted({n.split('::')[0] for n in read(IDS)})
-        collection=pytest_run(paths,OUT/'phase4-collection.json',collect=True)
-        execution=pytest_run(paths,OUT/'phase4-execution.json')
+        # Exact maintained IDs let two native M5 cases share this process's
+        # already loaded M2 metadata without executing their entire modules.
+        # The separate whole-namespace collection above forbids missing IDs.
+        selected=read(IDS)
+        collection=pytest_run(selected,OUT/'phase4-collection.json',collect=True)
+        execution=pytest_run(selected,OUT/'phase4-execution.json')
         expected=unique(read(IDS),'P4 expected IDs')
         require(unique(collection['nodes'],'P4 collection')==expected and collection['exitstatus']==0,'Changed P4 collection')
         require(unique(execution['nodes'],'P4 execution')==expected,'Incomplete P4 execution')
@@ -195,7 +198,7 @@ def verify_reports(reports):
     from ci.phase4_review import verify_group_reports
     summary['reviews']['bounded_execution']=verify_group_reports([read(p) for p in (ROOT/'config/ci-downloaded').rglob('phase4-m4-execution-report.json')])
     from ci.phase4_transactions import verify_reports as verify_transactions
-    summary['transactions']=verify_transactions([read(p) for p in (ROOT/'config/ci-downloaded').rglob('phase4-m5-execution-report.json')])
+    summary['reviews']['transactions']=verify_transactions([read(p) for p in (ROOT/'config/ci-downloaded').rglob('phase4-m5-execution-report.json')])
     return summary
 
 

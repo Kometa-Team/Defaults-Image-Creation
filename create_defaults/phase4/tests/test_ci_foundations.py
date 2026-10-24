@@ -13,6 +13,8 @@ from create_defaults.bulk.common import fingerprint
 
 
 def reports():
+    from ci.phase4_transactions import selections
+    transaction_ids=sorted(set().union(*map(set,selections().values())))
     data=dict(nodes=['fixture.py::test_required'],exitstatus=0,reports=[
         dict(nodeid='fixture.py::test_required',when=phase,outcome='passed',seconds=0,wasxfail=False,skip_reason=None)
         for phase in ['setup','call','teardown']])
@@ -20,15 +22,16 @@ def reports():
         ids_sha256='pin',schema_sha256='pin',golden_sha256='pin',canonical_sha256='golden',
         m2_schema_sha256='pin',m2_golden_sha256='pin',m2_canonical_sha256='golden',
         collection=dict(nodes=data['nodes'],exitstatus=0),execution=deepcopy(data),
-        all_collection=dict(nodes=data['nodes']+['composition.py::test_pixels','composition.py::test_security'],exitstatus=0)) for system in ['Linux','Windows']]
+        all_collection=dict(nodes=data['nodes']+['composition.py::test_pixels','composition.py::test_security']+transaction_ids,exitstatus=0)) for system in ['Linux','Windows']]
 
 
 def verify(values):
-    from ci import phase4_composition, phase4_review
+    from ci import phase4_composition, phase4_review, phase4_transactions
     def read(path):return ['fixture.py::test_required'] if path==phase4.IDS else {'archive_sha256':'golden'}
     with patch.object(phase4,'identity',return_value=dict(head='head',plan_sha256='plan')),patch.object(phase4,'read',side_effect=read),patch.object(phase4,'checksum',return_value='pin'),patch.object(phase4,'verify_historical_reports',return_value=phase4.M2_HISTORICAL),patch.object(phase4,'verify_m2_baseline',return_value=None),patch.object(phase4,'verify_m3_baseline',return_value=None),patch.object(phase4_composition,'selections',return_value=dict(pixels=['composition.py::test_pixels'],security=['composition.py::test_security'])),patch.object(phase4_composition,'verify_reports',return_value={'verified':'fixture'}):
         with patch.object(phase4_review,'verify_reports',return_value={'verified':'review-fixture'}),patch.object(phase4_review,'verify_group_reports',return_value={'verified':'bounded-review-fixture'}),patch.object(phase4_review,'selections',return_value={}):
-            return phase4.verify_reports(values)
+            with patch.object(phase4_transactions,'verify_reports',return_value={'verified':'isolated-transaction-fixture'}):
+                return phase4.verify_reports(values)
 
 
 def test_complete_windows_linux_phase4_evidence_is_required_and_verified():

@@ -17,7 +17,7 @@ from .models import key
 from .operations import DefinitionSnapshot, REFERENCE, FLAGS, fail, payload
 from .previews import CompositionArchive
 from .review import ReviewArchive
-from .storage import OperationStore, _replay, MAX_ARCHIVE_BYTES
+from .storage import OperationStore, _replay, MAX_ARCHIVE_BYTES, MAX_EVENTS
 
 
 def _checkpoint(name):
@@ -55,6 +55,41 @@ def verify_before(snapshot, snapshots, outputs):
             fail('before_dependency_substitution')
 
 
+def committed_graph(state):
+    """Project current output closures into the existing M5 Snapshot/Index.
+
+    Never overwrite a conflicting shared node or use an old superseded output
+    row from another member's snapshot. This is a read-only view, not a graph
+    implementation, cache, second registry or independently trusted input.
+    """
+    from .evidence import _scope
+    from ..contracts.expanded.graph import Snapshot
+    if not state['outputs']:return None
+    nodes,outputs,basis={}, {}, None
+    for identity,row in sorted(state['outputs'].items()):
+        value=payload(state['snapshots'][row['snapshot_sha256']].to_dict()['proposed_graph_json'])
+        index=Snapshot.create(value).index()
+        if basis is not None and basis!=value['basis']:fail('committed_graph_basis')
+        basis=value['basis']
+        for key,node in _scope(index,[identity]).items():
+            if key in nodes and nodes[key]!=node:fail('committed_dependency_version_conflict')
+            nodes[key]=node
+        outputs[identity]=index.outputs[identity]
+    return Snapshot.create(dict(schema_version=1,kind='m5-dependency-snapshot',basis=basis,nodes=nodes,outputs=outputs,unresolved=[]))
+
+
+def validate_state_impact(candidate, state):
+    """Catch shared consumers outside the caller's scoped before candidate."""
+    graph=committed_graph(state)
+    if graph is None:return
+    old,new=graph.index(),candidate.graph.index()
+    changed={n for n in old.nodes.keys()&new.nodes.keys() if old.nodes[n]!=new.nodes[n]}
+    impact=old.impact(changed)
+    if not impact['impact_complete']:fail('unresolved_committed_state_impact')
+    if (set(impact['affected_outputs'])|set(impact['required_companions']))-new.outputs.keys():
+        fail('incomplete_committed_consumer_scope')
+
+
 def inspect_db(root, store, db):
     records, events, latest, heads = _replay(store,db)
     found = db.execute("SELECT name FROM sqlite_master WHERE name LIKE 'p4m4_%'").fetchall()
@@ -63,6 +98,9 @@ def inspect_db(root, store, db):
         histories, bundles, decisions = reviews._replay(db)
     else:
         histories, bundles, decisions = {}, {}, {}
+    size=db.execute("SELECT count(*),coalesce(sum(length(CAST(subject AS BLOB))+length(CAST(payload AS BLOB))),0) FROM events WHERE kind='phase4_isolated_commit'").fetchone()
+    if size[0]>MAX_EVENTS or size[1]>MAX_ARCHIVE_BYTES:
+        fail('archive_limit')
     packages = [tuple(r) for r in db.execute("SELECT subject,payload FROM events WHERE kind='phase4_isolated_commit' ORDER BY sequence")]
     expected_events, snapshots, committed, outputs = [], {}, {}, {}
     budget = 0
@@ -114,7 +152,8 @@ def inspect_db(root, store, db):
         if snapshot.sha256 != pin:
             fail('snapshot_pin')
         s = snapshot.to_dict()
-        intent_event = next(e for e in events if e.sha256==s['operation']['event_sha256'])
+        intent_event = next((e for e in events if e.sha256==s['operation']['event_sha256']),None)
+        if intent_event is None:fail('commit_intent_event')
         if (prior.encoded.decode()!=s['intent_json'] or prior.sha256!=s['operation']['sha256']
                 or _successor(snapshot,prior,intent_event)!=record or v['id'] in committed):
             fail('commit_intent_binding')
@@ -191,8 +230,10 @@ def inspect_db(root, store, db):
             review_sha256=s['review_sha256'],members=s['members'],isolated_committed=True,**FLAGS)).decode()))
     if packages != expected_events:
         fail('commit_event_index')
-    return dict(outputs=outputs,commits=committed,snapshots=snapshots,
+    result=dict(outputs=outputs,commits=committed,snapshots=snapshots,
         journal_sha256=events[-1].sha256 if events else None,heads=heads,records=records,events=events)
+    committed_graph(result)
+    return result
 
 
 def recover(root):

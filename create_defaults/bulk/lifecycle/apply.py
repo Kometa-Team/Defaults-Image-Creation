@@ -12,7 +12,7 @@ from ..common import Conflict, canonical
 from .models import Event, key, successor
 from .operations import Transaction, DefinitionSnapshot, FLAGS, observation_pins, fail
 from .package_e import SidecarStore
-from .recovery import inspect_db, verify_before, _successor, _checkpoint
+from .recovery import inspect_db, verify_before, validate_state_impact, _successor, _checkpoint
 from .review import ReviewArchive
 from .review_authority import SyntheticReviewAuthority, require_operational_approval
 from .storage import _replay, _changes, _index_budget, MAX_EVENTS, MAX_HEAD_VERSIONS, MAX_ARCHIVE_BYTES
@@ -23,6 +23,34 @@ def _cancelled(cancel):
         fail('cancellation_object_required')
     if cancel is not None and cancel.is_set():
         fail('cancelled')
+
+
+def _final_inputs(transaction, snapshot):
+    """Cheap mutable-input pins after image replay, while pointers are hidden.
+
+    SQLite excludes cooperating state writers; external files and synthetic
+    verification observations still need their own exact final checks. No live
+    filesystem/authority atomicity guarantee is invented for real operations.
+    """
+    from ..common import sha256
+    from ..asset_cases import exact
+    from ..contracts.evidence_consumption import revalidate
+    from .operations import payload
+    ctx=transaction.inputs.composition;s=snapshot.to_dict();candidate=ctx.candidate
+    pins=candidate.data()['source_pins']
+    paths=(*candidate.paths,candidate.profiles_path)
+    if set(p.name for p in paths)!=set(pins) or any(sha256(p)!=pins[p.name] for p in paths):
+        fail('definition_changed_during_commit')
+    for view in payload(s['composition_json'])['views']:
+        for source in view['sources']:
+            if sha256(exact(candidate.config.asset_dir,source['path']))!=source['sha256']:
+                fail('source_changed_during_commit')
+    if canonical(observation_pins(transaction.inputs)).decode()!=s['observation_pins_json']:
+        fail('phase3_observations_changed_during_commit')
+    observed=revalidate(transaction.inputs.phase3,expected_sha256=transaction.inputs.expected_phase3_sha256,
+        **transaction.inputs.phase3_inputs)
+    if observed.to_dict()['binding_sha256']!=payload(s['phase3_json'])['binding_sha256']:
+        fail('phase3_changed_during_commit')
 
 
 def _append_m1(writer, db, record, records, events, latest, heads):
@@ -57,6 +85,7 @@ def _append_m1(writer, db, record, records, events, latest, heads):
     for c in changes:
         db.execute('INSERT INTO p4m1_heads VALUES (?,?,?,?,?,?)',(*key(c['key']),c['after']['revision'],record.sha256,canonical(c['subjects']).decode(),event.sha256))
         _checkpoint('member_head')
+        if c['key']['kind']=='subject':_checkpoint('subject_head')
     pe = writer.event(db,'phase4_operation_recorded',v['id'],dict(sequence=event.to_dict()['sequence'],
         sha256=event.sha256,record_sha256=record.sha256,revision=v['revision']))
     db.execute('INSERT INTO p4m1_journal VALUES (?,?,?)',(event.to_dict()['sequence'],event.sha256,pe))
@@ -80,10 +109,19 @@ def _commit_synthetic(transaction, *, expected_snapshot_sha256, authority=None, 
     """
     if type(transaction) is not Transaction:
         fail('typed_transaction')
+    from .evidence import ReviewInputs
+    from .composition import CompositionContext
+    from .candidates import PosterCandidate
+    from .identities import IdentityRegistry
+    if type(transaction.inputs) is not ReviewInputs or type(transaction.inputs.composition) is not CompositionContext:
+        fail('typed_inputs')
     if type(authority) is not SyntheticReviewAuthority:
         require_operational_approval()
     _cancelled(cancel)
     ctx = transaction.inputs.composition
+    if (type(ctx.registry) is not IdentityRegistry or type(ctx.candidate) is not PosterCandidate
+            or type(ctx.candidate.registry) is not IdentityRegistry):
+        fail('typed_inputs')
     authority.trial.require(ctx.candidate)
     root = ctx.registry.operations.root
     if authority.trial.config.cache_dir!=root:
@@ -114,6 +152,7 @@ def _commit_synthetic(transaction, *, expected_snapshot_sha256, authority=None, 
         if snapshot.sha256 != expected_snapshot_sha256:
             fail('snapshot_pin')
         s = snapshot.to_dict()
+        validate_state_impact(ctx.candidate,state)
         verify_before(snapshot,state['snapshots'],state['outputs'])
         for identity, expected in s['expected_snapshots'].items():
             if state['outputs'].get(identity,{}).get('snapshot_sha256') != expected:
@@ -145,6 +184,7 @@ def _commit_synthetic(transaction, *, expected_snapshot_sha256, authority=None, 
         # proposed rows before the single existing Package E COMMIT.
         inspect_db(root,writer,db)
         _checkpoint('before_commit')
+        _final_inputs(transaction,snapshot)
         reviews._attribution(approved,review_records,authority)
         _cancelled(cancel)
         result = dict(**FLAGS,isolated_committed=True,retry=False,currentness='verified-at-isolated-commit',snapshot_sha256=snapshot.sha256,

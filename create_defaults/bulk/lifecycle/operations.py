@@ -30,6 +30,8 @@ FLAGS = dict(simulation=True, record_only=True, authenticated=False,
 HEADER = dict(schema_version=1, protocol_version='1.0.0',
     kind='isolated-definition-snapshot', scope='isolated-synthetic-transactions', **FLAGS)
 REFERENCE = 'synthetic.lifecycle.snapshot'
+OBSERVATION_KEYS=('expected_language_policy_sha256','expected_destination_sha256',
+    'expected_request_context_sha256','expected_graph_sha256','expected_release_sha256')
 
 
 def fail(code):
@@ -46,24 +48,24 @@ def payload(text):
 def require_adapter(candidate):
     if type(candidate) is not PosterCandidate:
         fail('unsupported_prospective_phase3_adapter')
-    if any(candidate.registry.view().entry(i)['category'] not in {'Genre','Network'} for i in candidate.graph.index().outputs):
+    if any(candidate.registry.view().entry(i)['category']!='Genre' for i in candidate.graph.index().outputs):
         fail('unsupported_transaction_category')
     if candidate.data()['families']:
         fail('prospective_generator_phase3_identity_adapter_required')
+    if set(candidate.data()['effective_definitions'])!=set(candidate.graph.index().outputs):
+        fail('unselected_definition_requires_scoped_proposal')
     from .basis import historical_basis
     for identity in candidate.graph.index().outputs:
         entry=candidate.registry.view().entry(identity)
         rule=historical_basis().rule(entry['category'],entry['variant'])
-        required=['single'] if entry['category']=='Genre' else ['white','color']
+        required=['single']
         if rule['source_kind']!='logo' or rule['required_presentations']!=required:
             fail('unsupported_transaction_variant')
 
 
 def observation_pins(inputs):
     """Retry identity only; stored observations never establish current trust."""
-    names=('expected_language_policy_sha256','expected_destination_sha256',
-        'expected_request_context_sha256','expected_graph_sha256','expected_release_sha256')
-    return {n:inputs.phase3_inputs[n] for n in names}
+    return {n:inputs.phase3_inputs[n] for n in OBSERVATION_KEYS}
 
 
 @lru_cache(maxsize=1)
@@ -88,6 +90,11 @@ class DefinitionSnapshot(Document):
         from ..contracts.expanded.graph import Snapshot
         impact = ImpactEvidence.from_dict(payload(value['impact_json']))
         phase3 = ConsumptionAttestation.from_dict(payload(value['phase3_json']))
+        observations=payload(value['observation_pins_json'])
+        from ..contracts.registry import require_hash
+        if type(observations) is not dict or set(observations)!=set(OBSERVATION_KEYS):
+            fail('observation_pin_shape')
+        for pin in observations.values():require_hash(pin)
         members = value['members']
         if (members != sorted(set(members)) or sorted(value['expected_snapshots']) != members
                 or sorted(value['entries']) != members or sorted(value['artwork']) != members
@@ -159,8 +166,8 @@ class Transaction:
             fail('operation_not_applicable')
         details = json.loads(ctx.impact.to_dict()['details_json'])
         ids = sorted(candidate.graph.index().outputs)
-        if not set(details['affected_outputs']) <= set(ids):
-            fail('incomplete_impact_members')
+        if set(details['affected_outputs']) != set(ids):
+            fail('candidate_must_equal_complete_affected_members')
         if v['operation']=='UPDATE':
             if ctx.before is None:
                 fail('before_required')
@@ -221,6 +228,10 @@ def propose(registry, *, before, candidate, identity, operation):
     if operation not in {'ADD','UPDATE'} or type(candidate) is not PosterCandidate:
         fail('unsupported_operation_adapter')
     require_adapter(candidate)
+    from .recovery import inspect_db, validate_state_impact
+    with registry.operations.contracts.read_connection() as db:
+        state=inspect_db(registry.operations.root,registry.operations.contracts,db)
+    validate_state_impact(candidate,state)
     if operation=='UPDATE':
         details = preview_impact(before,candidate)['details']
         if details['before_mappings'] != details['after_mappings']:
@@ -285,3 +296,36 @@ def freeze_before(candidate, trial):
     # and graph using these original bytes, never a historical compatibility flag.
     result.verify()
     return result
+
+
+def stage_source_update(candidate, trial, identity, raw, *, expected_source_sha256):
+    """Explicit same-name synthetic input staging, never authoritative apply.
+
+    Keep the original immutable archive/preimage, require the exact current
+    source hash, and replace only this trial's existing confined file. A crash
+    here cannot expose a proposed-definition snapshot or an approval.
+    """
+    from hashlib import sha256 as digest
+    from ..common import atomic_bytes,sha256
+    from ..asset_cases import exact
+    from ..contracts.logos.assets import inspect_png
+    from .composition_models import MAX_BINARY
+    if type(raw) is not bytes or not 0<len(raw)<=MAX_BINARY:
+        fail('source_resource_bound')
+    require_adapter(candidate)
+    trial.require(candidate)
+    if identity not in candidate.graph.index().outputs:
+        fail('source_identity')
+    entry=next(v for v in candidate.registry.history() if v.head==candidate.registry_head).entry(identity)
+    source=entry['names']['source']
+    if source is None or source['sha256']!=expected_source_sha256:
+        fail('source_precondition')
+    target=exact(trial.config.asset_dir,source['path'])
+    if sha256(target)!=expected_source_sha256:
+        fail('source_precondition')
+    inspected=inspect_png(raw)
+    if inspected.report()['default_transparency_blockers']:
+        fail('source_transparency_requires_separate_exception_adapter')
+    frozen=freeze_before(candidate,trial)
+    atomic_bytes(target,raw,replace=True)
+    return frozen,dict(path=source['path'],sha256=digest(raw).hexdigest())

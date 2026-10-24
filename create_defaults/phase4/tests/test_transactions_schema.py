@@ -87,3 +87,12 @@ def test_operational_path_fails_before_any_storage_or_render():
     with patch.object(SidecarStore,'__init__',side_effect=AssertionError('write')):
         with pytest.raises(BulkError,match='real_authority_unavailable'):
             apply.commit_operational({'actor':'maintainer','authenticated':True})
+
+
+def test_recovery_bounds_unindexed_commit_events_before_materialization(tmp_path):
+    from create_defaults.bulk.lifecycle.recovery import recover,MAX_EVENTS
+    store=OperationStore.create(tmp_path/'state');writer=SidecarStore(store.root)
+    with writer.transaction() as db:
+        for n in range(MAX_EVENTS+1):
+            writer.event(db,'phase4_isolated_commit','synthetic.operation.orphan-'+str(n),{'untrusted':'event'})
+    with pytest.raises(BulkError,match='archive_limit'):recover(store.root)

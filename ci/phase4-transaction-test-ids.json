@@ -6,11 +6,6 @@
     "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[snapshot_blob]",
     "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[record_blob]",
     "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[event_blob]",
-    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[record_index]",
-    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[member_head]",
-    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[journal_index]",
-    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[receipt_index]",
-    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[before_commit]",
     "create_defaults/phase4/tests/test_transactions.py::test_crash_after_commit_recovers_without_double_application",
     "create_defaults/phase4/tests/test_transactions.py::test_cancellation_never_exposes_a_snapshot[before]",
     "create_defaults/phase4/tests/test_transactions.py::test_cancellation_never_exposes_a_snapshot[after_review]",
@@ -51,14 +46,25 @@
     "create_defaults/phase4/tests/test_transactions_security.py::test_unsupported_prospective_adapters_are_named_and_never_committed[playlist]",
     "create_defaults/phase4/tests/test_transactions_security.py::test_unsupported_prospective_adapters_are_named_and_never_committed[overlay]",
     "create_defaults/phase4/tests/test_transactions_security.py::test_unsupported_prospective_adapters_are_named_and_never_committed[family]",
-    "create_defaults/phase4/tests/test_transactions_security.py::test_cancelled_native_generation_has_no_commit_or_review"
+    "create_defaults/phase4/tests/test_transactions_security.py::test_cancelled_native_generation_has_no_commit_or_review",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_native_shared_source_update_requires_complete_fanout",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_inputs_changed_after_full_review_are_rechecked_at_commit[source]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_inputs_changed_after_full_review_are_rechecked_at_commit[definition]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_inputs_changed_after_full_review_are_rechecked_at_commit[phase3]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_unselected_definition_cannot_be_smuggled_into_snapshot"
   ],
   "concurrency": [
     "create_defaults/phase4/tests/test_transactions_concurrency.py::test_concurrent_identical_complete_add_commits_once",
     "create_defaults/phase4/tests/test_transactions_concurrency.py::test_concurrent_add_allocation_reserves_one_identity[semantic]",
     "create_defaults/phase4/tests/test_transactions_concurrency.py::test_concurrent_add_allocation_reserves_one_identity[namespace]",
     "create_defaults/phase4/tests/test_transactions_concurrency.py::test_disjoint_native_adds_preserve_unrelated_exact_artwork",
-    "create_defaults/phase4/tests/test_transactions_concurrency.py::test_native_paired_network_is_committed_all_or_none",
-    "create_defaults/phase4/tests/test_transactions_concurrency.py::test_two_updates_cannot_both_replace_one_committed_subject"
+    "create_defaults/phase4/tests/test_transactions_concurrency.py::test_prospective_network_companions_fail_closed_before_staging"
+  ],
+  "recovery": [
+    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[record_index]",
+    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[member_head]",
+    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[journal_index]",
+    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[receipt_index]",
+    "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[before_commit]"
   ]
 }

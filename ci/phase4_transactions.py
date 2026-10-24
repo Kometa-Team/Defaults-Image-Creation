@@ -16,8 +16,8 @@ IDS=ROOT/'ci/phase4-transaction-test-ids.json'
 SCHEMA=ROOT/'create_defaults/bulk/lifecycle/schemas/transaction-v1.schema.json'
 OUT=ROOT/'config/ci-validation/phase4-m5'
 FILES=('operations.py','apply.py','recovery.py','schemas/transaction-v1.schema.json')
-JOBS={'atomic':'categories','security':'smoke','concurrency':'core'}
-MAINTENANCE_PIN='ec0ebd52448af1780f6b1734ea4b68ec6e95275fa4b250552415c9ca609694d7'
+JOBS={'atomic':'categories','security':'smoke','concurrency':'core','recovery':'historical'}
+MAINTENANCE_PIN='30f2b407bc4f08b890fce653283d7d0cc451bd68d086f94bfe303f0bfbce88a1'
 
 
 def implementation_checksum():
@@ -96,7 +96,7 @@ def run(group):
 def verify_reports(reports):
     baseline();verify_maintenance()
     expected=identity();groups=selections()
-    require(len(reports)==6 and {(r['platform'],r['group']) for r in reports}=={(p,g) for p in ('Windows','Linux') for g in groups},'Missing/duplicate M5 execution')
+    require(len(reports)==2*len(groups) and {(r['platform'],r['group']) for r in reports}=={(p,g) for p in ('Windows','Linux') for g in groups},'Missing/duplicate M5 execution')
     result={}
     for r in reports:
         require(all(r[k]==expected[k] for k in ('head','plan_sha256')) and r['success'] and r['kind']=='phase4-m5-execution','Failed/stale M5 execution')

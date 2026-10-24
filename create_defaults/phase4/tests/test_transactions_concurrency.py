@@ -11,16 +11,23 @@ from create_defaults.bulk.lifecycle.operations import propose
 from create_defaults.bulk.lifecycle.recovery import recover
 from create_defaults.bulk.lifecycle.previews import CompositionTrial
 from create_defaults.phase4.tests import composition_samples as cs
-from create_defaults.phase4.tests.transaction_samples import transaction_case,transaction,reviewed,additional,additional_candidate,update_candidate
+from create_defaults.phase4.tests.transaction_samples import transaction_case,transaction,reviewed,additional,additional_candidate,update_candidate,shared_cohort
 
 
 def test_concurrent_identical_complete_add_commits_once(transaction_case):
     case=transaction_case;tx,snap=transaction(case);barrier=Barrier(2)
     def run(_):
         barrier.wait()
-        return apply.commit_synthetic(tx,expected_snapshot_sha256=snap.sha256,authority=case['authority'])
+        try:return apply.commit_synthetic(tx,expected_snapshot_sha256=snap.sha256,authority=case['authority'])
+        except Conflict as error:
+            if 'Isolated writer busy' not in str(error):raise
+            return error
     with ThreadPoolExecutor(max_workers=2) as pool:
         results=list(pool.map(run,range(2)))
+    for n,result in enumerate(results):
+        if isinstance(result,Conflict):
+            recover(case['row'][0].config.cache_dir)
+            results[n]=apply.commit_synthetic(tx,expected_snapshot_sha256=snap.sha256,authority=case['authority'])
     assert sorted(r['retry'] for r in results)==[False,True]
     assert len(recover(case['row'][0].config.cache_dir)['commits'])==1
 
@@ -49,7 +56,7 @@ def test_disjoint_native_adds_preserve_unrelated_exact_artwork(transaction_case)
     # Allocate both before sealing either current registry pin. The complete
     # committed baseline proves common immutable font/translation dependencies
     # unchanged, so M2 does not falsely write them as new ADD dependencies.
-    rows=[additional(case,label) for label in ('disjoint-one','disjoint-two')]
+    rows=[additional(case,label,shared=n==0) for n,label in enumerate(('disjoint-one','disjoint-two'))]
     candidates=[additional_candidate(case,row) for row in rows]
     reviews=[]
     for n,candidate in enumerate(candidates):
@@ -60,23 +67,46 @@ def test_disjoint_native_adds_preserve_unrelated_exact_artwork(transaction_case)
     barrier=Barrier(2)
     def run(n):
         barrier.wait();t,s=prepared[n]
-        return apply.commit_synthetic(t,expected_snapshot_sha256=s.sha256,authority=reviews[n]['authority'])
+        try:return apply.commit_synthetic(t,expected_snapshot_sha256=s.sha256,authority=reviews[n]['authority'])
+        except Conflict as error:
+            if 'Isolated writer busy' not in str(error):raise
+            return error
     with ThreadPoolExecutor(max_workers=2) as pool:results=list(pool.map(run,range(2)))
+    for n,result in enumerate(results):
+        if isinstance(result,Conflict):
+            recover(trial.config.cache_dir)
+            t,s=prepared[n]
+            results[n]=apply.commit_synthetic(t,expected_snapshot_sha256=s.sha256,authority=reviews[n]['authority'])
     assert all(r['isolated_committed'] for r in results)
     final=recover(trial.config.cache_dir)
     assert len(final['commits'])==3 and len(final['outputs'])==3
     for i,row in original['outputs'].items():assert final['outputs'][i]==row
+    # A later scoped UPDATE must discover the other committed consumer even
+    # though it came from a separate ADD snapshot, not trust the caller's subset.
+    partial,frozen=update_candidate(case,label='partial-shared')
+    with pytest.raises(BulkError,match='incomplete_committed_consumer_scope'):
+        propose(ctx.registry,before=frozen,candidate=partial,identity='synthetic.operation.partial-shared',operation='UPDATE')
+    assert recover(trial.config.cache_dir)['outputs']==final['outputs']
 
 
-def test_native_paired_network_is_committed_all_or_none(monkeypatch):
+def test_prospective_network_companions_fail_closed_before_staging():
+    from create_defaults.bulk.lifecycle.operations import require_adapter
     with CompositionTrial() as trial:
         ctx=cs.poster(trial,'Network',paired=True)
-        case=reviewed(trial,ctx,label='network')
+        with pytest.raises(BulkError,match='unsupported_transaction_category'):
+            require_adapter(ctx.candidate)
+        assert not recover(trial.config.cache_dir)['outputs']
+
+
+def test_native_multi_member_add_is_committed_all_or_none(monkeypatch):
+    with CompositionTrial() as trial:
+        ctx=shared_cohort(trial)
+        case=reviewed(trial,ctx,label='multi-member')
         tx,snapshot=transaction(case)
         assert len(snapshot.to_dict()['members'])==2
-        assert {e['semantic']['role'] for e in snapshot.to_dict()['entries'].values()}=={'white','color'}
+        assert {e['semantic']['role'] for e in snapshot.to_dict()['entries'].values()}=={'single'}
         def crash(name):
-            if name=='member_head':raise OSError('second-member interrupted')
+            if name=='subject_head':raise OSError('second-member interrupted')
         monkeypatch.setattr(apply,'_checkpoint',crash)
         with pytest.raises(OSError,match='interrupted'):
             apply.commit_synthetic(tx,expected_snapshot_sha256=snapshot.sha256,authority=case['authority'])
