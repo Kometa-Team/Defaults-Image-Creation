@@ -16,6 +16,7 @@ from ..contracts.expanded.graph import Snapshot,node_id
 from .basis import historical_basis
 from .coverage import matrix,require_variant
 from .identity_models import HEADER,fail
+from .identities import IdentityRegistry
 
 
 @dataclass(frozen=True)
@@ -41,6 +42,7 @@ class OverlayCandidate:
 
 
 def overlay_candidate(registry,*,expected,identities,config=None):
+    if type(registry) is not IdentityRegistry:fail('identity_registry_type')
     config=config or Config();view=next((v for v in registry.history() if v.head==expected),None)
     if view is None:fail("unknown_registry_revision")
     identities=tuple(sorted(identities))

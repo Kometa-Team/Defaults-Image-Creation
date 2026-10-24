@@ -13,7 +13,7 @@ from ..contracts.expanded.graph import Snapshot,compare
 from .basis import historical_basis,HISTORICAL_GRAPH_SHA256
 from .candidates import PosterCandidate
 from .overlay_candidates import OverlayCandidate
-from .identities import RegistryHead
+from .identities import IdentityRegistry, RegistryHead
 from .identity_models import HEADER,ImpactEvidence,fail
 from .models import Operation,namespace_key,key
 
@@ -197,6 +197,7 @@ def preview_impact(before,after):
 
 def request_record(registry,before,after,*,identity,operation="UPDATE"):
     """Represent a request with measured M1 read/write closure; never apply it."""
+    if type(registry) is not IdentityRegistry:fail('identity_registry_type')
     if operation not in {"ADD","UPDATE","RENAME"}:fail("unsupported_operation_semantics")
     if operation!='ADD' and before is None:fail('prior_epoch_required')
     registry.require_head(after.registry_head)
@@ -220,6 +221,7 @@ def request_record(registry,before,after,*,identity,operation="UPDATE"):
 
 
 def analyze(registry,before,after,*,operation,expected_operation_sha256):
+    if type(registry) is not IdentityRegistry:fail('identity_registry_type')
     if type(operation) is not OperationHead or operation.sha256!=expected_operation_sha256:fail("operation_binding")
     if operation_head(registry.operations,operation.id)!=operation:raise Conflict("M1 operation revision/event changed")
     registry.require_head(after.registry_head)

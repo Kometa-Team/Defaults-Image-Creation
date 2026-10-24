@@ -25,7 +25,7 @@ from ..contracts.categories.validation import Assignment, check_job, check_membe
 from ..contracts.categories.dependencies import material_design
 from .basis import historical_basis, semantic_tokens
 from .coverage import matrix, require_variant
-from .identities import RegistryHead
+from .identities import IdentityRegistry, RegistryHead
 from .identity_models import HEADER, fail
 
 
@@ -218,6 +218,7 @@ class PosterCandidate:
 
 
 def poster_candidate(registry,*,expected,paths,profiles_path,posters,content,config=None,dependency_artifacts=None):
+    if type(registry) is not IdentityRegistry:fail('identity_registry_type')
     matrix()  # Closed source registries and all 278 variants must still match.
     view=next((v for v in registry.history() if v.head==expected),None)
     if view is None:fail("unknown_registry_revision")

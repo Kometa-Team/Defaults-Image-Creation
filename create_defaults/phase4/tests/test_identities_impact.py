@@ -173,6 +173,10 @@ def test_fake_historical_graph_and_unsupported_candidate_block():
     fake=Snapshot.create(dict(schema_version=1,kind='m5-dependency-snapshot',basis='a'*64,nodes={},outputs={},unresolved=[]))
     with pytest.raises(BulkError):HistoricalGraph.select(fake)
     with pytest.raises(BulkError):preview_impact(None,object())
+    with pytest.raises(BulkError):poster_candidate(object(),expected=None,paths=[],profiles_path=None,posters=[],content={})
+    with pytest.raises(BulkError):overlay_candidate(object(),expected=None,identities=[])
+    with pytest.raises(BulkError):request_record(object(),None,None,identity='synthetic.operation.forged')
+    with pytest.raises(BulkError):analyze(object(),None,None,operation=None,expected_operation_sha256='0'*64)
 
 
 @pytest.fixture

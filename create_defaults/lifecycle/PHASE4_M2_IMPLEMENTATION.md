@@ -116,6 +116,18 @@ execution evidence; pending or partial runs are not a pass. Local early timing
 found repeated frozen namespace scans; the implementation now caches only the
 verified immutable base, while every live snapshot and CAS transition is still
 checked. No assertion or historical protection was removed for runtime.
+The development local suite executed all 258 tests successfully in 708.79s.
+Its wrapper rejected mixed-head evidence because later corrections were pushed
+during that run; it is not final-head acceptance evidence. Final execution must
+be produced in an unchanged checkout and pass the wrapper as well as pytest.
+
+A development hosted Windows contracts run hit the unchanged legacy concurrent
+first-write path resolution in `ContractStore._write_blob`/`common.confined`
+(436 passed, one failed). That same original group passed in the earlier run.
+No frozen production/test source or path guard was modified to suppress it.
+Final-head acceptance still requires that entire group and all other mandatory
+checks to pass. Any recurrence remains an explicit CI reliability finding,
+not an M2 approval waiver or permission to widen historical source pins.
 
 ## Changed-file inventory
 
