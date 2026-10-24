@@ -105,13 +105,20 @@ def test_response_file_collects_every_id_beyond_windows_command_limit(tmp_path):
 def maintenance_copy(tmp_path, monkeypatch):
     """Copy only approved CI files; baseline reads still use the real Git tree."""
     manifest=m5.read(m5.ROOT/'ci/phase4-m5-maintenance.json')
-    for name in (*manifest['files'], 'ci/phase4-m5-maintenance.json'):
+    security=m5.read(m5.ROOT/'ci/people-security-maintenance.json')
+    pins=m5.read(m5.ROOT/'create_defaults/bulk/contracts/activation/data/production-pins-v1.json')
+    extra={'ci/people-security-maintenance.json','ci/people_security_maintenance.py',
+        'ci/validation-plan.json','ci/original-test-ids.json','ci/phase3-test-ids.json','ci/phase4-test-ids.json',
+        'ci/phase4-composition-test-ids.json','ci/phase4-review-test-ids.json','ci/phase4-transaction-test-ids.json',
+        'ci/phase4-maintenance.json','ci/phase4-m3-maintenance.json','ci/phase4-m4-maintenance.json','ci/phase4-m5-maintenance.json'}
+    copied=set(manifest['files'])|set(security['files'])|set(security['additions'])|set(pins['files'])|extra
+    for name in sorted(copied):
         target=tmp_path/name
         target.parent.mkdir(parents=True,exist_ok=True)
         target.write_bytes((m5.ROOT/name).read_bytes())
     original=subprocess.check_output
     def baseline_output(args,**kwargs):
-        assert args[:2]==['git','show'] and args[2].startswith(m5.BASE+':')
+        assert args[:2]==['git','show'] and args[2].split(':',1)[0] in {m5.BASE,'46e1334504fcdd598e0c34fcd45612ff58e91074'}
         return original(args,cwd=m5.ROOT)
     monkeypatch.setattr(m5.subprocess,'check_output',baseline_output)
     m5.verify_maintenance(tmp_path)

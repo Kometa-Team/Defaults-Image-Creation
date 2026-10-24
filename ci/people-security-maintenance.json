@@ -1,0 +1,188 @@
+{
+  "additions": {
+    "ci/people-security-test-ids.json": "a222f7039b6201ec2154dacab921e48abdcfae850ebe77edb98eb51a073b555e",
+    "ci/people_security.py": "a8b1153e34f50db89a142f769e213d9c5dab6207f3f6a660075cb166b94fc73b",
+    "create_people_posters/SECURITY_AND_RECOVERY.md": "71a6fe6f362827bf106bb9eb7b88fa235a865f587cbfcbd52caea827deb6cda4",
+    "create_people_posters/people_diagnostics.py": "af760469589560e53067c5f9daefa066082f7ac705ec25b1c749d01a535413bd",
+    "create_people_posters/people_http.py": "acf3bf55c8ff14166db5693c718b1c3a84464e4578cd59fcda5e757a3fee895f",
+    "create_people_posters/people_process.py": "513e539a85ac31387672a53fbcfe4f8ef1e6c293fbff8a38e3f1a6db8e2e2a65",
+    "create_people_posters/people_recovery_records.py": "cde0c7869f11c6b1352485d5f6c6bb1b7fd67bb39484f96f6570ba9024430457",
+    "create_people_posters/people_recovery_transaction.py": "d925e8043d8bf54d6b1777a751b7b8c1da902218412115d416646454b6db1deb",
+    "create_people_posters/people_secure_cli.py": "d2b05d577bd3e75dc4e683082b7c509fce5c3aaf486d826f6d31b50acd37c331",
+    "create_people_posters/tests/test_people_http_security.py": "99c2e3103a39c74a90f50617af9f2aca41a27e019b3c6db0dc90b0a3d28db823",
+    "create_people_posters/tests/test_people_recovery_security.py": "8413f93166ac6cf700c0f8909f3d4d70161b7301de80bb65572fc4fea616ccb6",
+    "create_people_posters/tests/test_people_security.py": "087ce743ba97c317901d208fd2296a9e19f7ab526c1e8b6e48a9cb61fe2f0053",
+    "create_people_posters/tests/test_people_security_gate.py": "9ad6b8369f706496a54a06628e4c6d474f2c8f0c0eae0e3d06e2ad74a0946398"
+  },
+  "base": "46e1334504fcdd598e0c34fcd45612ff58e91074",
+  "code_head": "07783ccb7b0d055dce50aabc497fc7040116c75a",
+  "files": {
+    ".github/workflows/default-poster-validation.yml": {
+      "before_sha256": "d6668e40662065d176cda89dfe717442109006fe37fd3ac91ef4c87f89fc4339",
+      "sha256": "f43245e7cca046d4a8fc88e6e9394e3e5657b3e5e95e339db44d4975991bfe11"
+    },
+    "ci/phase4.py": {
+      "before_sha256": "b77bf12c557de16f2b7420cdbc3fa6364430250b908868d0c5a6af78bd493241",
+      "sha256": "74e3f327314b0df15387d8979b493a802811292a5dccec5ad758601e51330cc1"
+    },
+    "ci/phase4_transactions.py": {
+      "before_sha256": "96ac8c2a92a959cacd940d49cb84bf3c1d3d9663756c69d46a2bb7c73a2f1e28",
+      "sha256": "ac90546a4d5b1ee177f73e94bee464ce2970ccdeaa05c74e1eb364cf993ce0f9"
+    },
+    "ci/validation.py": {
+      "before_sha256": "89106eb0687f0040f8aba5ef63c5484efa15960ac4f9791c205060cf54a0e8c2",
+      "sha256": "10f1c45e661e5f2446d9b7bc23c980b6bd0118782d5e5284e363c107618a2732"
+    },
+    "create_defaults/bulk/contracts/activation/data/production-pins-v1.json": {
+      "before_sha256": "83503fb97fc1b09ea96ac854c1ecc30edfddf4b0b55d0ee8907e98002afeb22c",
+      "sha256": "74806a2677c4262bab71afd2d69119d596753c803f013939ff12fa149304b6b9"
+    },
+    "create_defaults/bulk/contracts/activation/protection.py": {
+      "before_sha256": "7e80d4857c4a327a5d58694a6980c39412956f846ba35c967423d1ad2aeac46d",
+      "sha256": "70899059d611f09f3716814c25a2846f05fb04d10d83d54a8defad493f89ee9f"
+    },
+    "create_defaults/bulk/tests/test_activation.py": {
+      "before_sha256": "2eb455b7e12d06812643d7bdaeb49258fba35c0a9b09e4584831a90a04ceac0f",
+      "sha256": "fdd39bd5dbbb5968a3ec1b55c554addebd463cbf75eb0ad7dc132a5cd2ca3419"
+    },
+    "create_defaults/phase3/tests/test_isolation_ci.py": {
+      "before_sha256": "97c3bdd6d13b29ff1859e3b14e566a9d30a6a80b42bb9b0a3ffefa612f69cb57",
+      "sha256": "84ee7fa3ec822979d81552824bace38858879a9c49e99fa79d6a0d174b584a0d"
+    },
+    "create_defaults/phase4/tests/test_ci_transactions.py": {
+      "before_sha256": "659e7888387217fc99b5de0dc41c44e9a40534cf320eccc7ba9d427a502ae1bf",
+      "sha256": "24e956e31cb0cf0d8a734eb26d4f5d5350a51ef3a938f2516788d37db0a506fb"
+    },
+    "create_people_posters/audit_people_images.py": {
+      "before_sha256": "f8cbf5100ea91fd8f61e19ab010e569831afd0098758b19baf82fae47edf8c1c",
+      "sha256": "bae4e7006c91dce52c0a477e7d5f7af7a45deb97be3baf2ed7ee6bd8bb949b47"
+    },
+    "create_people_posters/auto_readme.py": {
+      "before_sha256": "0ecfebf1048ff8b7ae0fea10b2df67c3823dad0b0119ea04dac7303d47d3408c",
+      "sha256": "3278530e286e2a60939a4402c084980c0c4b88aa4c7821c377ba8c3c962e1f57"
+    },
+    "create_people_posters/colorize_noncolor_ddcolor.py": {
+      "before_sha256": "264948a6772b66873aea4519e4896853e9193febcbba6930b147dd51d317f02f",
+      "sha256": "b9fc2e89062c56ab13319d4711f4af077d7bdc1e948f6650d275cf7647b5e886"
+    },
+    "create_people_posters/ensure_people_repo.py": {
+      "before_sha256": "dd4cbad0eb7df7fc546810cb6f41f3a81b8fec2f5c035d139c6575845c62b246",
+      "sha256": "ddaa0bc066b0d26577695b45f0a3f9854c9fe8b69bf6990b17aa4e668bf7ed9d"
+    },
+    "create_people_posters/find_and_download_missing_people.py": {
+      "before_sha256": "19dff022a19948d21e4d0ebbb49f985d47b19170bc94262a290ae4c9ae0da3cd",
+      "sha256": "5f6a5f0130600c912617c44d636f27ae8ff75fc1b477205ae04a9ed3387f4f41"
+    },
+    "create_people_posters/orchestrator.py": {
+      "before_sha256": "4226e9dfb69e2affb5dad158bbb308db47eb586b934028bebdc5f7b2fcc25930",
+      "sha256": "5e07faa9aa919e61c5885ee68b42dab05ffd11829ccb4ecee754eb6a27cca487"
+    },
+    "create_people_posters/people_github.py": {
+      "before_sha256": "fbc8a78b12935c598ded25897d9079b9a23031d9c1a45d5f6afeba0b462bff53",
+      "sha256": "829da894ff9bdd6b5bc68f8d71d3c7c70dbcafb9b0b467812ac78520df11a07f"
+    },
+    "create_people_posters/people_publication_state.py": {
+      "before_sha256": "b4332557945e8005658f9496feb976ea9653f3fcaa0cda356871f7e2d83addec",
+      "sha256": "2438c4cc4e48ab5f50659b35904d4793b598cc246cdbd567c4155c8fdf7bed7a"
+    },
+    "create_people_posters/people_workspaces.py": {
+      "before_sha256": "a40d426bfb8d2a2c6708acaece3ce11a7ce62032ac5c8a67a7aed1642c057f04",
+      "sha256": "de2d5b6411ad042c1e923c7dee7a0cab7955194c69a039c73f9bb84ca73dc3e6"
+    },
+    "create_people_posters/publish_people_github.py": {
+      "before_sha256": "812bb40f07a84e445225fe542dd329f9e58effaadf2eaf2615e5fe80cf23cf61",
+      "sha256": "8de42c4055da1a4609bd382dbfdb2da8c9be0a6cc1505f42d7f84d057d632dec"
+    },
+    "create_people_posters/recover_edge_chops.py": {
+      "before_sha256": "db6d2709b2da54f2cb7042b849296fcb68f2885625d9da98361d58caadb5a3ed",
+      "sha256": "28685c12ea68fb2e928220669976e795abeae665ecc71e9567d97e96d79dea3a"
+    },
+    "create_people_posters/remove_bg_birefnet.py": {
+      "before_sha256": "96856e8512367cbc3a538760c3d72ef58b689d6cbd647c1f390f587cc205a5d3",
+      "sha256": "5eb460b4a52e880324011610ef93fb383709637161aba21e3528314a16ac065d"
+    },
+    "create_people_posters/resolve_original_images.py": {
+      "before_sha256": "623b63e0aab68d4e618c3976884e805c20ef42d97e0d1256581cc7d1703edd1a",
+      "sha256": "5b73f3e5dac04793d773b2b672c7443edeb7c96a7f79362c6d0c3eea13a49551"
+    },
+    "create_people_posters/review_tmdb_profile_alternates.py": {
+      "before_sha256": "38799f3e704c26a84067373123b69c1124327569dcda4560093ae7efbbc13b82",
+      "sha256": "ffcbc5d90177aba447da029baaa02fbeeee609552c7e9eedd9bc450b0e258c90"
+    },
+    "create_people_posters/sandbox_people_github.py": {
+      "before_sha256": "65c473defa801ef4d927f5083d6bed7a4d0611d78806ca891b4c40a6d01dcedf",
+      "sha256": "29e58c620feee987086a5f47026a7b00ca8d3fd266bf333b341193de726aebcd"
+    },
+    "create_people_posters/scan_kometa_logs.py": {
+      "before_sha256": "9ab4257581f9954fc42911fc823085f0427bdf8a0ebab980c1fe0291e71f249c",
+      "sha256": "65412840ebfd60ac30c9a2ccd359ec0cd0cf02ae8f0911e46796876e65550cb6"
+    },
+    "create_people_posters/sel_remove_bg.py": {
+      "before_sha256": "9d31fe5609c782139373164be1ddc37c3a85be69097e952792c87d3f48cb2500",
+      "sha256": "95984bb646b3d69d3a44f9fede9b1c5c829a4a7a2637d5899acae51c23316369"
+    },
+    "create_people_posters/smoke_people_models.py": {
+      "before_sha256": "0115d3f7b98138f89cbd8e526c2e4e3627bad3207139484237b7fbdb2c1f8939",
+      "sha256": "983f81b2028a29659def84a241d6a7ef1ca790cba34bc0ea3054e561fa4ebdfd"
+    },
+    "create_people_posters/stage_original_candidates.py": {
+      "before_sha256": "4572153ebe9e1ea48af5c1741d335e327e36f562e59ed71ff2440abb1cfcbdcb",
+      "sha256": "b96fbd9d43f736b40040606c57eab9e24a2478ddea846aca6fdd029827bed44d"
+    },
+    "create_people_posters/tests/test_background_orchestrator.py": {
+      "before_sha256": "78dd74a90a33697d87b70843837a37c90b95ef84e645540e3e373b95ae31bc03",
+      "sha256": "946f4c65db90446e25c9ad713e3d56f498bbab7ed5cc240b8d16db717b2f6649"
+    },
+    "create_people_posters/tests/test_people_api_orchestrator.py": {
+      "before_sha256": "11e3b40d45be95bab3855744d8acff6cbd02d4c61458c7a424139848f38cd478",
+      "sha256": "3248f5ac71813ae913369a1a5eaa1f33b8ff8e84864d695501ef9ad2bbb23ac0"
+    },
+    "create_people_posters/tests/test_people_github.py": {
+      "before_sha256": "6ac9422bf913aa9edd274fcff717f02a88d050314f86aefbba851edae0ec73fc",
+      "sha256": "6a7b109bb50e35f91418c4806c59d03007ec5ba974445d13b3274e46da922738"
+    },
+    "create_people_posters/tests/test_remove_bg_birefnet.py": {
+      "before_sha256": "1449997f816f7d75cb609b91e2f4f976fed5279509bd617dda45a37240110ee0",
+      "sha256": "98119c0881048018a33c04df84318f1e5398eb78753fef784497b897c69cd808"
+    },
+    "create_people_posters/tmdb_people.py": {
+      "before_sha256": "1e513c9190296b46771bc3ca7077a651e1bdd7cf4572a7cb2193f099edf12ebd",
+      "sha256": "e48e5e62ae6d2a7ee924116273b51c9c6cb717ab37933ed795cf6a06cfdc52ce"
+    },
+    "create_people_posters/tmdb_top_people_list.py": {
+      "before_sha256": "341339248a4640fa8acde26d42eae15bdb7463acec2404a50b569807017b53e1",
+      "sha256": "e19cb569e9a749f917bca8195dfd890338f6a536374f45b3addde53d2618f074"
+    },
+    "create_people_posters/update_people_repos.py": {
+      "before_sha256": "d7bef63c23b7a41ee57749ed57c78de2dab5e5e3230f4473b637036c3d0174fa",
+      "sha256": "cce766d9b893b31a3fa2c01456ccb3bb5e6d5dff45c54dad7540d1ed1f99df0d"
+    }
+  },
+  "protected_changes": [
+    ".github/workflows/default-poster-validation.yml",
+    "create_people_posters/audit_people_images.py",
+    "create_people_posters/auto_readme.py",
+    "create_people_posters/colorize_noncolor_ddcolor.py",
+    "create_people_posters/ensure_people_repo.py",
+    "create_people_posters/find_and_download_missing_people.py",
+    "create_people_posters/orchestrator.py",
+    "create_people_posters/people_github.py",
+    "create_people_posters/people_publication_state.py",
+    "create_people_posters/people_workspaces.py",
+    "create_people_posters/publish_people_github.py",
+    "create_people_posters/recover_edge_chops.py",
+    "create_people_posters/remove_bg_birefnet.py",
+    "create_people_posters/resolve_original_images.py",
+    "create_people_posters/review_tmdb_profile_alternates.py",
+    "create_people_posters/sandbox_people_github.py",
+    "create_people_posters/scan_kometa_logs.py",
+    "create_people_posters/sel_remove_bg.py",
+    "create_people_posters/smoke_people_models.py",
+    "create_people_posters/stage_original_candidates.py",
+    "create_people_posters/tmdb_people.py",
+    "create_people_posters/tmdb_top_people_list.py",
+    "create_people_posters/update_people_repos.py"
+  ],
+  "schema_version": 1,
+  "scope": "People credential containment and edge recovery; mandatory bounded CI only"
+}

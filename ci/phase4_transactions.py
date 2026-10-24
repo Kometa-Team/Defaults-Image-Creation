@@ -31,12 +31,16 @@ def verify_maintenance(root=ROOT):
         'create_defaults/bulk/contracts/activation/data/production-pins-v1.json'}
     require(fingerprint(value)==MAINTENANCE_PIN and value['base']==BASE and set(value['files'])==expected,
         'Unexpected M5 CI-only protected extension')
+    from ci.people_security_maintenance import verify as verify_security, historical_bytes, baseline_pins
+    try:security=verify_security(root)
+    except ValueError:
+        raise ValueError('Changed exact M5 CI-only maintenance: People security extension') from None
     for path,pins in value['files'].items():
         old=subprocess.check_output(['git','show',BASE+':'+path],cwd=root).replace(b'\r\n',b'\n')
-        require(hashlib.sha256(old).hexdigest()==pins['before_sha256'] and checksum(root/path)==pins['sha256'],
+        require(hashlib.sha256(old).hexdigest()==pins['before_sha256'] and hashlib.sha256(historical_bytes(root,path)).hexdigest()==pins['sha256'],
             'Changed exact M5 CI-only maintenance: '+path)
     path='create_defaults/bulk/contracts/activation/data/production-pins-v1.json'
-    old=json.loads(subprocess.check_output(['git','show',BASE+':'+path],cwd=root));new=read(root/path)
+    old=json.loads(subprocess.check_output(['git','show',BASE+':'+path],cwd=root));new=baseline_pins(root)
     require(len(old['files'])==len(new['files'])==190 and old['files'].keys()==new['files'].keys(),
         'Changed protected membership')
     require({p for p in old['files'] if old['files'][p]!=new['files'][p]}=={'.github/workflows/default-poster-validation.yml'},
@@ -48,9 +52,9 @@ def verify_maintenance(root=ROOT):
     path='create_defaults/bulk/contracts/activation/protection.py'
     original=subprocess.check_output(['git','show',BASE+':'+path],cwd=root).replace(b'\r\n',b'\n')
     expected_source=original.replace(fingerprint(old).encode(),fingerprint(new).encode())
-    require((root/path).read_bytes().replace(b'\r\n',b'\n')==expected_source,
+    require(historical_bytes(root,path)==expected_source,
         'Protection changed beyond the exact manifest hash literal')
-    return value
+    return {**value,'files':{name:{**pins,'sha256':security['files'][name]['sha256'] if name in security['files'] else pins['sha256']} for name,pins in value['files'].items()}}
 
 
 def verify_plan(original,*,root=ROOT,current=None):

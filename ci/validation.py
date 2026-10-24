@@ -267,7 +267,8 @@ def main():
         run_group(plan, args.group, args.base)
     else:
         needs = json.loads(os.environ["REQUIRED_JOB_RESULTS"])
-        require_jobs(needs)
+        from ci.people_security import require_jobs as require_security_jobs
+        require_security_jobs(needs)
         reports = legacy_reports(args.directory)
         summary = reconcile(plan, reports, args.base)
         from ci.phase3 import verify_reports
@@ -275,6 +276,8 @@ def main():
         from ci.phase4 import verify_reports as verify_phase4, verify_maintenance
         verify_maintenance()
         summary["phase4"] = verify_phase4([read(p) for p in args.directory.rglob("phase4-report.json")])
+        from ci.people_security import verify_reports as verify_people_security
+        summary["people_security"] = verify_people_security([read(p) for p in args.directory.rglob("people-security-report.json")])
         write(OUTPUT/"coverage-equivalence.json", summary)
         print("All Windows/Linux groups passed; exact original/refactored node-ID sets are equal.")
     return 0
