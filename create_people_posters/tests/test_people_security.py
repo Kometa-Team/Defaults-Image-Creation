@@ -232,3 +232,34 @@ def test_known_password_is_removed_whole_before_generic_field_tokenization():
                  "password=" + quote(secret, safe="")):
         result = secure.sanitize_text(text)
         assert first not in result and last not in result
+
+
+def test_public_signature_style_maps_survive_actual_metadata_writers(tmp_path):
+    from create_people_posters.people_workspaces import atomic_json
+    from create_people_posters.remove_bg_birefnet import atomic_json as model_json
+    repositories = {style: "test-owner/kometa-people-sandbox-" + style for style in
+                    ("original", "transparent", "bw", "diiivoy", "diiivoycolor", "rainier", "signature")}
+    target = tmp_path / "targets.json"
+    value = {"version": 1, "owner": "test-owner", "branch": "master", "repositories": repositories}
+    atomic_json(target, value)
+    assert json.loads(target.read_text()) == value
+    output = {"outputs": {"signature": {"path": "signature/P/Images/Person.jpg", "sha256": "a" * 64}}}
+    model_json(tmp_path / "render.json", output)
+    assert json.loads((tmp_path / "render.json").read_text()) == output
+    # Public style labels are not credentials. A configured credential value
+    # remains prohibited even under the same ordinary public label.
+    secret = canary("public_style_value")
+    secure.register_secret(secret)
+    with pytest.raises(ValueError):atomic_json(target, {"repositories": {"signature": secret}})
+    assert json.loads(target.read_text()) == value
+
+
+def test_signed_provider_fields_and_encoded_urls_stay_redacted():
+    secret = canary("signed_provider")  # Deliberately unregistered.
+    for field in ("X-Amz-Signature", "SharedAccessSignature", "SAS_TOKEN", "API_SIGNATURE"):
+        contains_no_secret(secure.diagnostic_json({field: secret}), secret)
+    url = "https://example.test/image.jpg?sig=" + secret
+    for value in (url, quote(url, safe="")):
+        result = secure.sanitize_text(value)
+        contains_no_secret(result, secret)
+        assert "example.test/image.jpg" in result

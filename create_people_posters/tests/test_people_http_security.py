@@ -197,3 +197,15 @@ def test_direct_orchestrator_cli_uses_guarded_worker_without_recursive_launch(tm
                             env=dict(os.environ, TMDB_KEY=KEY, PEOPLE_CONFIG_DIR=str(tmp_path)))
     assert result.returncode == 0 and "--stop-after" in result.stdout
     assert KEY not in result.stdout + result.stderr
+
+
+def test_guarded_unicode_output_is_utf8_even_with_an_ascii_parent_environment():
+    import subprocess
+    import sys
+    label = "Person F\u00e9lix \u9ad8\u9ea5"
+    code = "from create_people_posters.people_diagnostics import protect_cli; protect_cli(); print(" + repr(label) + ")"
+    root = Path(__file__).resolve().parents[2]
+    result = subprocess.run([sys.executable, "-c", code], cwd=root, capture_output=True, timeout=30,
+                            env=dict(os.environ, PYTHONIOENCODING="ascii", PYTHONPATH=str(root)))
+    assert result.returncode == 0
+    assert result.stdout.decode("utf8").strip() == label

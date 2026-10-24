@@ -108,6 +108,12 @@ CSV/JSON/HTML and selected-report ZIP exports sanitize nested diagnostic fields.
 The ZIP interface does not accept a filesystem tree, environment dump, binary
 configuration snapshot or arbitrary Python objects. Job/model metadata rejects
 sensitive content instead of silently changing identities or fingerprints.
+The public style label `signature` remains valid in sandbox repository and
+renderer-output maps. Known credential values under that label are still
+prohibited. Provider signing fields (such as `X-Amz-Signature` and
+`SharedAccessSignature`) remain sensitive, and all diagnostic URL queries are
+removed, including percent-encoded signed URLs. Guarded console/process streams
+use UTF-8 so this boundary preserves ordinary Unicode diagnostics on both OSes.
 
 ## Recovery contract
 

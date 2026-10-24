@@ -33,7 +33,8 @@ _KEYS = frozenset({
     "token", "accesstoken", "refreshtoken", "idtoken", "jwt", "clientsecret", "secret", "secrets", "password", "pass",
     "passwd", "pwd", "authorization", "proxyauthorization", "cookie", "cookies", "setcookie",
     "session", "sessionid", "sessioncookie", "xapikey", "xauthtoken", "xplextoken",
-    "signature", "sig", "credential", "credentials", "sas", "webhookurl", "authentication", "privatekey", "connectionstring",
+    "xamzsignature", "sharedaccesssignature", "apisignature", "credential", "credentials", "sas", "sastoken",
+    "webhookurl", "authentication", "privatekey", "connectionstring",
 })
 _URL = re.compile(r"(?i)\b[a-z][a-z0-9+.-]{1,15}://[^\s<>\"']+")
 _PAIR = re.compile(
@@ -133,7 +134,7 @@ def _sanitize_text(text: str) -> str:
         decoded = unquote(text)
         if decoded == text:
             break
-        if any(sensitive_key(m[2]) for m in _PAIR.finditer(decoded)) or _AUTH.search(decoded):
+        if any(sensitive_key(m[2]) for m in _PAIR.finditer(decoded)) or _AUTH.search(decoded) or _URL.search(decoded):
             text = decoded
         else:
             break
@@ -434,7 +435,8 @@ class RedactingStream(io.TextIOBase):
 
     def reconfigure(self, **kwargs):
         # Encoding changes never unwrap the redacting boundary.
-        return None
+        if type(self.target) is io.TextIOWrapper:
+            self.target.reconfigure(**kwargs)
 
 
 def protect_cli():
@@ -443,6 +445,8 @@ def protect_cli():
     for name in ("stdout", "stderr"):
         stream = getattr(sys, name)
         if not isinstance(stream, RedactingStream):
+            if type(stream) is io.TextIOWrapper:
+                stream.reconfigure(encoding="utf-8", errors="backslashreplace")
             setattr(sys, name, RedactingStream(stream))
     protect_logging()
     original_add = logging.Logger.addHandler
