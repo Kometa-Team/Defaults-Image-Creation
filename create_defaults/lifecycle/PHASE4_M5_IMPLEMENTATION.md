@@ -215,41 +215,68 @@ operational/unsupported paths. Native rendering and M3 validators remain real.
 Owned fixture SQLite backups isolate test cases; that is fixture setup, **not**
 the application's recovery mechanism or permission to mutate immutable history.
 
-The existing 23-job workflow remains unchanged, with all original 15-minute job
-caps and resource guards. M5 adds four explicit mandatory commands to the exact
-M4 plan: atomic tests to categories, adversarial tests to smoke,
-concurrency tests to core, with five late-crash tests in historical. The first
-M5 Windows atomic job measured 14m22s (Linux 10m00s) while UPDATE still stopped
-early at an immutable fixture staging error. The added successful UPDATE and
-final-input checks therefore require this measured partition; no test, retry
-assertion or fault point is removed. Original historical capture runs once;
-M5 recovery uses disposable synthetic assets and reads existing metadata only.
-Before M5, Windows categories/smoke/core measured 1m48s/1m28s/1m50s; previous
-review/generation jobs were already much fuller. The first M5 historical jobs
-measured 304s Linux / 350s Windows, leaving room for the five late-crash cases.
-Two heavier native cases instead use the foundation process and its warm M2
-metadata. No resource-intensive original historical fixture is duplicated.
-The one-file plan extension is sealed in `ci/phase4-m5-maintenance.json`, chained
-from the unchanged M4 extension. The original M1 CI fixture helpers include the new M5 collected IDs and stub
-only the external M5 report producer in their unit scope; every original test
-assertion body is AST-identical. The aggregate retains its original top-level
-shape and nests M5 evidence under reviews. Fixture SQLite connections are closed
-explicitly before Windows trial teardown. No Phase 3 assertion, original command/test ID,
-workflow, timeout, memory limit or source-protection pin is changed.
+### Approved CI-only maintenance and final validation
 
-The foundation vector preserves its complete ordered M1-M4 prefix and appends
-M5 metadata/CI controls plus the native multi-member ADD and competing UPDATE
-cases. These reuse the process's already loaded M2 metadata. Foundation collection
-and execution use exact maintained IDs through a UTF-8 pytest response file,
-avoiding Windows CreateProcess's command-line length limit and whole-module
-duplication. A real collect-only subprocess reconciles every response-file ID; the
-independent entire-namespace collection still fails on any omitted test. `ci/phase4-transaction-test-ids.json` explicitly maintains
-disjoint native groups. Entire P4 collection must equal the exact union of all
-producers. Acceptance requires eight successful exact-head/platform/group reports,
-two native isolated-commit/restart/retry proofs, all false real-authority flags
-and comparison with the independent original M3 native pixel producer. A failed,
-cancelled, skipped, missing, stale, substituted or partial producer fails closed.
-The original 1,671 pytest IDs, 155 unittest IDs and 12 CI controls remain required.
+The first M5 packing of native cases into original bounded jobs exhausted the
+unchanged 15-minute Windows limit. Exact-head run
+[`40067791226`](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/40067791226)
+at `d05dc70167a4b3c4185fc20e81fdf91a88dde020` passed all eleven Linux producer
+jobs and eight Windows producer jobs; Windows foundations, smoke and historical
+timed out without an assertion failure. Mandatory acceptance correctly failed.
+Historical completed its 31 original cases in 429.06 s and five M5 recovery
+cases in 418.77 s before timing out during finalization. These measurements
+support separating native M5 work, rather than increasing limits or reducing
+assertions.
+
+On 2026-10-24 the maintainer explicitly approved the exact CI-only protected
+exception: sealed package SHA-256
+`9065a4148e29f99cdada70b9140c3f28ad06dc2d88b4376009bcc86a963c6396`,
+patch SHA-256
+`5d525f744487bfce9665359c16e4d7a43db0e77be97dbd70f285910d80cbaf71`.
+The approval permits this maintenance and validation, never merge, M6,
+activation, publication or real lifecycle authorization. It is a development
+scope decision, not a runtime approval receipt.
+
+The exact approved workflow expands the existing mandatory `phase4` matrix into
+foundations and eight disjoint M5 groups on each OS: add_update (2), atomic (9),
+recovery (5), concurrency (5), competing_updates (1), membership (1),
+shared_source (1) and security (40). All 64 native cases remain real rendering
+tests. The workflow has 39 checks, including 18 Phase 4 rows. All jobs retain
+15-minute caps, exact-head checkout, pinned actions, read-only permissions and
+independent failure reporting. `Validation acceptance` requires the entire
+matrix aggregate and all sixteen exact-head M5 reports. Missing, cancelled,
+skipped, failed, stale or substituted evidence fails closed. No branch
+protection settings changed.
+
+The original M4 validation plan is restored byte-for-byte: original capture
+runs once, without duplicate expensive historical fixtures. All original
+commands, test IDs and assertions remain required. All 190 protected members
+remain; the workflow is the only changed protected source hash. The protection
+algorithm is unchanged: only its exact manifest-hash literal is updated. The
+new pin manifest records previous-manifest/base provenance, and the M1-M5
+maintenance chain checks every approved before/after hash. No other protected
+runtime source changes. New negative controls reject unexpected file bytes,
+expanded maintenance scope, forged provenance, altered runtime pins and
+protection/activation-import changes even under test-only resealed metadata.
+
+The foundation vector retains its complete ordered M1-M4 prefix and adds M5
+metadata/CI controls. UTF-8 pytest response files avoid Windows command length
+limits. Independent whole-namespace collection must equal the disjoint union
+of every producer; no additive test may be omitted. Original M1 CI helper
+updates retain every original assertion body byte-equivalent as an AST.
+The original 1,671 pytest IDs, 155 unittest IDs and 12 CI controls remain required,
+alongside 662 Phase 3 cases and the complete Phase 4 suite per platform.
+The two native isolated-commit/cold-restart/retry proofs must also agree with
+independent original M3 encoded JPEG bytes and retain false real-authority flags.
+
+Post-approval development validation passed 105 focused tests and 32 subtests
+in 120.76 s (schema, M5 CI rejection controls, original M1 CI controls and original
+acceptance-gate tests). Static collection reconciles all 594 Phase 4 IDs exactly
+once: 403 foundation controls, 127 original M3/M4 bounded cases and 64 native M5
+cases. The 13 new maintenance controls are additional coverage. All protected
+patch bytes match the sealed proposal and all 190 source checks pass. Complete
+Windows/Linux exact-head evidence remains mandatory and is recorded in PR #36
+and its coverage-equivalence artifact after the workflow completes.
 
 All native generation remains in disposable synthetic trials under original
 512 MiB worker, 1 GiB total, one-worker, 120-second attempt/zero-retry limits.

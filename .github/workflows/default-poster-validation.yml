@@ -175,7 +175,7 @@ jobs:
     - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
       with:
         path: config/ci-downloaded
-        pattern: phase4-foundations-*
+        pattern: phase4-*
     - name: Require all groups and reconcile exact test IDs and non-pytest gates
       # Phase 4 artifacts have their own namespace and mandatory exact-ID proof.
       run: python ci/validation.py verify --directory config/ci-downloaded --base "$BASE_SHA"
@@ -226,7 +226,7 @@ jobs:
         retention-days: 14
         if-no-files-found: error
   phase4:
-    name: Phase 4 operation foundations (${{ matrix.os }})
+    name: ${{ matrix.group == 'foundations' && format('Phase 4 operation foundations ({0})', matrix.os) || format('Phase 4 M5 transactions ({0}, {1})', matrix.os, matrix.group) }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     env:
@@ -241,6 +241,16 @@ jobs:
         os:
         - ubuntu-latest
         - windows-latest
+        group:
+        - foundations
+        - add_update
+        - atomic
+        - recovery
+        - concurrency
+        - competing_updates
+        - membership
+        - shared_source
+        - security
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       with:
@@ -257,11 +267,17 @@ jobs:
     - name: Install Python dependencies
       run: python -m pip install -r create_defaults/requirements-bulk.txt
     - name: Focused schema, authority, isolation and full test-ID proof
+      if: ${{ matrix.group == 'foundations' }}
       run: python ci/phase4.py run
+    - name: Required isolated M5 transaction tests
+      if: ${{ matrix.group != 'foundations' }}
+      run: python ci/phase4_transactions.py run --group "${{ matrix.group }}"
     - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
       if: ${{ always() }}
       with:
-        name: phase4-foundations-${{ matrix.os }}
-        path: config/phase4-ci/**
+        name: phase4-${{ matrix.group }}-${{ matrix.os }}
+        path: |
+          config/phase4-ci/**
+          config/ci-validation/phase4-m5/**
         retention-days: 14
         if-no-files-found: error

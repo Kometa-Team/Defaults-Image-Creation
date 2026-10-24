@@ -99,3 +99,70 @@ def test_response_file_collects_every_id_beyond_windows_command_limit(tmp_path):
     result=pytest_run(['@'+str(path)],tmp_path/'response-collection.json',collect=True)
     assert result['exitstatus']==0 and len(result['nodes'])==len(ids)
     assert set(result['nodes'])==set(ids)
+
+
+@pytest.fixture
+def maintenance_copy(tmp_path, monkeypatch):
+    """Copy only approved CI files; baseline reads still use the real Git tree."""
+    manifest=m5.read(m5.ROOT/'ci/phase4-m5-maintenance.json')
+    for name in (*manifest['files'], 'ci/phase4-m5-maintenance.json'):
+        target=tmp_path/name
+        target.parent.mkdir(parents=True,exist_ok=True)
+        target.write_bytes((m5.ROOT/name).read_bytes())
+    original=subprocess.check_output
+    def baseline_output(args,**kwargs):
+        assert args[:2]==['git','show'] and args[2].startswith(m5.BASE+':')
+        return original(args,cwd=m5.ROOT)
+    monkeypatch.setattr(m5.subprocess,'check_output',baseline_output)
+    m5.verify_maintenance(tmp_path)
+    return tmp_path,manifest
+
+
+@pytest.mark.parametrize('name',[
+    'ci/validation-plan.json',
+    '.github/workflows/default-poster-validation.yml',
+    'create_defaults/bulk/contracts/activation/protection.py',
+    'create_defaults/bulk/contracts/activation/data/production-pins-v1.json',
+])
+def test_ci_exception_rejects_any_unapproved_file_bytes(maintenance_copy,name):
+    root,_=maintenance_copy
+    with (root/name).open('ab') as stream:stream.write(b'\n# unexpected modification\n')
+    with pytest.raises(ValueError,match='Changed exact M5 CI-only maintenance'):
+        m5.verify_maintenance(root)
+
+
+@pytest.mark.parametrize('attack',['extra-file','missing-file','baseline','hash'])
+def test_ci_exception_manifest_cannot_expand_its_own_authority(maintenance_copy,attack):
+    root,value=maintenance_copy
+    if attack=='extra-file':value['files']['create_defaults/grayscale_sweeper.py']={}
+    elif attack=='missing-file':value['files'].pop('ci/validation-plan.json')
+    elif attack=='baseline':value['base']='0'*40
+    else:value['files']['ci/validation-plan.json']['sha256']='0'*64
+    (root/'ci/phase4-m5-maintenance.json').write_text(json.dumps(value),encoding='utf8')
+    with pytest.raises(ValueError,match='Unexpected M5 CI-only protected extension'):
+        m5.verify_maintenance(root)
+
+
+@pytest.mark.parametrize('attack',['runtime-pin','membership','provenance','protection-algorithm','activation-import'])
+def test_even_resealed_ci_metadata_cannot_change_protection(maintenance_copy,monkeypatch,attack):
+    root,value=maintenance_copy
+    name='create_defaults/bulk/contracts/activation/data/production-pins-v1.json'
+    pins=m5.read(root/name)
+    if attack in {'protection-algorithm','activation-import'}:
+        name='create_defaults/bulk/contracts/activation/protection.py'
+        with (root/name).open('ab') as stream:
+            stream.write(b'\nimport create_defaults.bulk.contracts.activation.controller\n'
+                if attack=='activation-import' else b'\nUNAPPROVED_PROTECTION_CHANGE = True\n')
+    else:
+        if attack=='runtime-pin':
+            target=next(p for p in pins['files'] if not p.startswith('.github/'))
+            pins['files'][target]='0'*64
+        elif attack=='membership':pins['files'].pop(next(iter(pins['files'])))
+        else:pins['maintenance_context']['phase4_m5_previous_manifest_sha256']='0'*64
+        (root/name).write_text(json.dumps(pins),encoding='utf8')
+    value['files'][name]['sha256']=m5.checksum(root/name)
+    (root/'ci/phase4-m5-maintenance.json').write_text(json.dumps(value),encoding='utf8')
+    # Exercise structural defenses independently of the exact, immutable outer
+    # pin. Production never accepts a caller-provided pin or compatibility flag.
+    monkeypatch.setattr(m5,'MAINTENANCE_PIN',m5.fingerprint(value))
+    with pytest.raises(ValueError):m5.verify_maintenance(root)

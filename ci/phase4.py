@@ -113,6 +113,13 @@ def verify_maintenance(root=ROOT):
         require(hashlib.sha256(before).hexdigest()==pins['before_sha256'],'Wrong maintenance baseline: '+path)
         if path in m3['files']:
             require(m3['files'][path]['before_sha256']==pins['sha256'],'Broken M1/M3 maintenance chain')
+        elif path in {'.github/workflows/default-poster-validation.yml',
+                'create_defaults/bulk/contracts/activation/protection.py',
+                'create_defaults/bulk/contracts/activation/data/production-pins-v1.json'}:
+            from ci.phase4_transactions import verify_maintenance as verify_m5
+            extension=verify_m5(root)['files'][path]
+            require(extension['before_sha256']==pins['sha256'] and checksum(root/path)==extension['sha256'],
+                'Broken exact M1/M5 protected CI maintenance chain')
         else:require(checksum(root/path)==pins['sha256'],'Changed authorized maintenance file: '+path)
     protected='create_defaults/bulk/contracts/activation/data/production-pins-v1.json'
     old=json.loads(subprocess.check_output(['git','show',BASE+':'+protected],cwd=root));new=read(root/protected)
@@ -142,8 +149,7 @@ def run():
         transactions=set().union(*map(set,transaction_selections().values()));require(not all_expected&transactions,'Duplicate M5 bounded IDs');all_expected|=transactions
         all_collection=pytest_run(['create_defaults/phase4/tests'],OUT/'phase4-all-collection.json',collect=True)
         require(all_collection['exitstatus']==0 and unique(all_collection['nodes'],'all P4 collection')==all_expected,'Uncovered P4 test ID')
-        # Exact maintained IDs let two native M5 cases share this process's
-        # already loaded M2 metadata without executing their entire modules.
+        # Exact maintained foundation IDs avoid the Windows argument limit.
         # The separate whole-namespace collection above forbids missing IDs.
         selected=read(IDS)
         response=OUT/'phase4-selected-ids.txt'

@@ -16,8 +16,8 @@ IDS=ROOT/'ci/phase4-transaction-test-ids.json'
 SCHEMA=ROOT/'create_defaults/bulk/lifecycle/schemas/transaction-v1.schema.json'
 OUT=ROOT/'config/ci-validation/phase4-m5'
 FILES=('operations.py','apply.py','recovery.py','schemas/transaction-v1.schema.json')
-JOBS={'atomic':'categories','security':'smoke','concurrency':'core','recovery':'historical'}
-MAINTENANCE_PIN='30f2b407bc4f08b890fce653283d7d0cc451bd68d086f94bfe303f0bfbce88a1'
+JOBS={'add_update': 'phase4', 'atomic': 'phase4', 'recovery': 'phase4', 'concurrency': 'phase4', 'competing_updates': 'phase4', 'membership': 'phase4', 'shared_source': 'phase4', 'security': 'phase4'}
+MAINTENANCE_PIN='665cfd10c44d3083a11054a7994f189c4d0454df26f3bbe6629e84293478a3a0'
 
 
 def implementation_checksum():
@@ -26,22 +26,38 @@ def implementation_checksum():
 
 def verify_maintenance(root=ROOT):
     value=read(root/'ci/phase4-m5-maintenance.json')
-    require(fingerprint(value)==MAINTENANCE_PIN and value['base']==BASE
-        and set(value['files'])=={'ci/validation-plan.json'},'Unexpected M5 CI extension')
-    pins=value['files']['ci/validation-plan.json']
-    original=subprocess.check_output(['git','show',BASE+':ci/validation-plan.json'],cwd=root).replace(b'\r\n',b'\n')
-    require(hashlib.sha256(original).hexdigest()==pins['before_sha256']
-        and checksum(root/'ci/validation-plan.json')==pins['sha256'],'Changed M5 CI maintenance')
+    expected={'ci/validation-plan.json','.github/workflows/default-poster-validation.yml',
+        'create_defaults/bulk/contracts/activation/protection.py',
+        'create_defaults/bulk/contracts/activation/data/production-pins-v1.json'}
+    require(fingerprint(value)==MAINTENANCE_PIN and value['base']==BASE and set(value['files'])==expected,
+        'Unexpected M5 CI-only protected extension')
+    for path,pins in value['files'].items():
+        old=subprocess.check_output(['git','show',BASE+':'+path],cwd=root).replace(b'\r\n',b'\n')
+        require(hashlib.sha256(old).hexdigest()==pins['before_sha256'] and checksum(root/path)==pins['sha256'],
+            'Changed exact M5 CI-only maintenance: '+path)
+    path='create_defaults/bulk/contracts/activation/data/production-pins-v1.json'
+    old=json.loads(subprocess.check_output(['git','show',BASE+':'+path],cwd=root));new=read(root/path)
+    require(len(old['files'])==len(new['files'])==190 and old['files'].keys()==new['files'].keys(),
+        'Changed protected membership')
+    require({p for p in old['files'] if old['files'][p]!=new['files'][p]}=={'.github/workflows/default-poster-validation.yml'},
+        'Changed a protected runtime source')
+    context=new['maintenance_context']
+    require(context['phase4_m5_previous_manifest_sha256']==fingerprint(old)
+        and context['phase4_m5_baseline_commit']=='d05dc70167a4b3c4185fc20e81fdf91a88dde020',
+        'Missing exact M5 pin provenance')
+    path='create_defaults/bulk/contracts/activation/protection.py'
+    original=subprocess.check_output(['git','show',BASE+':'+path],cwd=root).replace(b'\r\n',b'\n')
+    expected_source=original.replace(fingerprint(old).encode(),fingerprint(new).encode())
+    require((root/path).read_bytes().replace(b'\r\n',b'\n')==expected_source,
+        'Protection changed beyond the exact manifest hash literal')
     return value
 
 
 def verify_plan(original,*,root=ROOT,current=None):
     baseline=json.loads(subprocess.check_output(['git','show',BASE+':ci/validation-plan.json'],cwd=root))
     require(original==baseline,'Changed M4 validation plan')
-    expected=json.loads(json.dumps(baseline))
-    for group,job in JOBS.items():
-        expected['commands'].setdefault(job,[]).append(['{python}','ci/phase4_transactions.py','run','--group',group])
-    require((read(root/'ci/validation-plan.json') if current is None else current)==expected,'Changes beyond exact mandatory M5 commands')
+    require((read(root/'ci/validation-plan.json') if current is None else current)==baseline,
+        'Changed original commands or test selections')
 
 
 def baseline():
@@ -73,8 +89,9 @@ def selections():
         require(selected and not all_ids&selected,'Duplicate/missing M5 IDs')
         require(all(i.startswith('create_defaults/phase4/tests/test_transactions') for i in selected),'Unexpected M5 native selection')
         all_ids|=selected
-        command=['{python}','ci/phase4_transactions.py','run','--group',group]
-        require(read(ROOT/'ci/validation-plan.json')['commands'][JOBS[group]].count(command)==1,'Missing mandatory M5 producer')
+    # The complete approved workflow bytes and all 16 execution reports are
+    # required independently; the phase4 matrix aggregate gates acceptance.
+    verify_maintenance()
     return groups
 
 

@@ -389,6 +389,17 @@
   "create_defaults/phase4/tests/test_ci_transactions.py::test_commit_proof_requires_independent_exact_native_bytes[hash]",
   "create_defaults/phase4/tests/test_ci_transactions.py::test_complete_native_proof_remains_synthetic_only",
   "create_defaults/phase4/tests/test_ci_transactions.py::test_response_file_collects_every_id_beyond_windows_command_limit",
-  "create_defaults/phase4/tests/test_transactions_concurrency.py::test_native_multi_member_add_is_committed_all_or_none",
-  "create_defaults/phase4/tests/test_transactions_concurrency.py::test_two_updates_cannot_both_replace_one_committed_subject"
+  "create_defaults/phase4/tests/test_ci_transactions.py::test_ci_exception_rejects_any_unapproved_file_bytes[ci/validation-plan.json]",
+  "create_defaults/phase4/tests/test_ci_transactions.py::test_ci_exception_rejects_any_unapproved_file_bytes[.github/workflows/default-poster-validation.yml]",
+  "create_defaults/phase4/tests/test_ci_transactions.py::test_ci_exception_rejects_any_unapproved_file_bytes[create_defaults/bulk/contracts/activation/protection.py]",
+  "create_defaults/phase4/tests/test_ci_transactions.py::test_ci_exception_rejects_any_unapproved_file_bytes[create_defaults/bulk/contracts/activation/data/production-pins-v1.json]",
+  "create_defaults/phase4/tests/test_ci_transactions.py::test_ci_exception_manifest_cannot_expand_its_own_authority[extra-file]",
+  "create_defaults/phase4/tests/test_ci_transactions.py::test_ci_exception_manifest_cannot_expand_its_own_authority[missing-file]",
+  "create_defaults/phase4/tests/test_ci_transactions.py::test_ci_exception_manifest_cannot_expand_its_own_authority[baseline]",
+  "create_defaults/phase4/tests/test_ci_transactions.py::test_ci_exception_manifest_cannot_expand_its_own_authority[hash]",
+  "create_defaults/phase4/tests/test_ci_transactions.py::test_even_resealed_ci_metadata_cannot_change_protection[runtime-pin]",
+  "create_defaults/phase4/tests/test_ci_transactions.py::test_even_resealed_ci_metadata_cannot_change_protection[membership]",
+  "create_defaults/phase4/tests/test_ci_transactions.py::test_even_resealed_ci_metadata_cannot_change_protection[provenance]",
+  "create_defaults/phase4/tests/test_ci_transactions.py::test_even_resealed_ci_metadata_cannot_change_protection[protection-algorithm]",
+  "create_defaults/phase4/tests/test_ci_transactions.py::test_even_resealed_ci_metadata_cannot_change_protection[activation-import]"
 ]
