@@ -278,6 +278,18 @@ patch bytes match the sealed proposal and all 190 source checks pass. Complete
 Windows/Linux exact-head evidence remains mandatory and is recorded in PR #36
 and its coverage-equivalence artifact after the workflow completes.
 
+The first run of the approved matrix at `10321ae35943eed8b77d9b23256aeaa1ea13f04b`
+found one historical activation-test assertion on each OS: it treated the
+immutable earlier CI override record as the current workflow hash. The repair
+is confined to the unprotected `bulk/tests/test_activation.py`: preserve and
+compare that override record against exact pre-M5 commit `d05dc70167a4b3c4185fc20e81fdf91a88dde020`,
+then independently verify the complete approved M5 before/after chain and all
+current pins. The original 190-member, exact changed-file set, People source,
+syntax, provenance, pin-manifest hash and full production checks remain. No
+approved protected byte is altered by this test-only correction.
+The complete local activation suite passed 86/86 in 243.11 s after this repair,
+including unexpected production-source and activation-import rejection tests.
+
 All native generation remains in disposable synthetic trials under original
 512 MiB worker, 1 GiB total, one-worker, 120-second attempt/zero-retry limits.
 The original 512 MiB worker-parent safeguard remains required. No historical

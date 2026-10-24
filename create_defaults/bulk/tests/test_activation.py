@@ -467,9 +467,17 @@ def test_authorized_people_maintenance_preserves_other_m7_pins():
     assert selected["files"][sweeper]==hashlib.sha256((root/sweeper).read_bytes().replace(b"\r\n",b"\n")).hexdigest()
     assert selected["historical_syntax_exceptions"]==[]
     assert selected["maintenance_context"]["previous_manifest_sha256"]==fingerprint(accepted)
+    # Overrides record the historical People/CI transition, not the later
+    # separately approved M5 workflow transition. Verify both exact steps;
+    # never rewrite old provenance or treat the two hashes as interchangeable.
+    from ci.phase4_transactions import verify_maintenance as verify_m5_maintenance
+    verify_m5_maintenance(root)
+    prior=json.loads(subprocess.check_output(["git","show",
+        "d05dc70167a4b3c4185fc20e81fdf91a88dde020:"+path],cwd=root))
+    assert selected["maintenance_context"]["overrides"]==prior["maintenance_context"]["overrides"]
     assert selected["maintenance_context"]["overrides"]==[{
         "path":sweeper,"previous_sha256":accepted["files"][sweeper],"sha256":selected["files"][sweeper]},
-        {"path":workflow,"previous_sha256":accepted["files"][workflow],"sha256":selected["files"][workflow]}]
+        {"path":workflow,"previous_sha256":accepted["files"][workflow],"sha256":prior["files"][workflow]}]
     people_baseline=json.loads(subprocess.check_output(["git","show",
         "d35b0684a096277dcdbdea70e4683e0c786325bc:"+path],cwd=root))
     assert selected["maintenance_context"]["ci_previous_manifest_sha256"]==fingerprint(people_baseline)
