@@ -53,3 +53,26 @@ def test_m3_schema_and_group_verifier_have_no_runtime_dependency_or_optional_pat
     assert result.returncode==0,result.stderr
     assert result.stdout.strip()==m3.implementation_checksum()
     groups=m3.selections();assert not set(groups['pixels'])&set(groups['security'])
+
+
+@pytest.mark.parametrize('attack',['extra-command','missing-M3','missing-original','changed-selection','changed-original','extra-maintenance','changed-maintenance-source'])
+def test_narrow_ci_maintenance_cannot_relax_original_plan_or_expand_scope(attack):
+    from ci import phase4
+    original=subprocess.check_output(['git','show',phase4.M2_BASE+':ci/validation-plan.json'],cwd=m3.ROOT)
+    current=deepcopy(phase4.read(m3.ROOT/'ci/validation-plan.json'))
+    if attack=='extra-command':current['commands']['people'].append(['unapproved'])
+    elif attack=='missing-M3':current['commands']['people']=[]
+    elif attack=='missing-original':current['commands']['core'].pop()
+    elif attack=='changed-selection':current['pytest_groups']['people'].pop()
+    elif attack=='changed-original':original+=b'\n'
+    elif attack=='extra-maintenance':
+        value=deepcopy(phase4.read(m3.ROOT/'ci/phase4-m3-maintenance.json'));value['files']['create_defaults/create_poster.py']={}
+        with patch.object(phase4,'read',return_value=value),patch.object(phase4,'M3_MAINTENANCE_PIN',phase4.fingerprint(value)):
+            with pytest.raises(ValueError):phase4.verify_m3_maintenance()
+        return
+    else:
+        with patch.object(phase4,'checksum',return_value='0'*64):
+            with pytest.raises(ValueError):phase4.verify_m3_maintenance()
+        return
+    with patch.object(phase4,'read',return_value=current):
+        with pytest.raises(ValueError):phase4.verify_original_plan(original)

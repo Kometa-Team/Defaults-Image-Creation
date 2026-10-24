@@ -31,6 +31,12 @@ M2_HISTORICAL=dict(outputs=14079,public_outputs=14077,packages=22,variants=278,p
     graph_sha256='93b01e2261249185bd06982a9cb0823a61628104d327958cedefd97788a39d7d')
 M1_BASE='5deffb587c92d746a4611939c918ae0e6471ee30'
 M2_BASE='33a20c1f5b7a73d672793f1700d48b566789ad32'
+M3_MAINTENANCE_PIN='2dc46f2e90737b5a128c788eeec4f17276973a50123e8ee7ffd82c367fef0b14'
+M3_MAINTAINED={'ci/validation-plan.json',
+ 'create_defaults/phase3/tests/test_consumption_boundaries.py',
+ 'create_defaults/phase3/tests/test_destination_isolation.py',
+ 'create_defaults/phase3/tests/test_final_phase3_acceptance.py',
+ 'create_defaults/phase3/tests/test_isolation_ci.py'}
 
 
 def verify_m2_baseline():
@@ -67,14 +73,38 @@ def fingerprint(value):
         separators=(',',':'),allow_nan=False).encode('utf-8')).hexdigest()
 
 
+def verify_m3_maintenance(root=ROOT):
+    value=read(root/'ci/phase4-m3-maintenance.json')
+    require(fingerprint(value)==M3_MAINTENANCE_PIN and value['base']==M2_BASE and set(value['files'])==M3_MAINTAINED,'Unexpected M3 CI maintenance')
+    for path,pins in value['files'].items():
+        original=subprocess.check_output(['git','show',M2_BASE+':'+path],cwd=root).replace(b'\r\n',b'\n')
+        require(hashlib.sha256(original).hexdigest()==pins['before_sha256'] and checksum(root/path)==pins['sha256'],'Changed M3 maintenance: '+path)
+    original=subprocess.check_output(['git','show',M2_BASE+':ci/validation-plan.json'],cwd=root)
+    verify_original_plan(original,root=root)
+    return value
+
+
+def verify_original_plan(original,*,root=ROOT):
+    """Retain the exact original plan and permit only two mandatory commands."""
+    baseline=subprocess.check_output(['git','show',M2_BASE+':ci/validation-plan.json'],cwd=root).replace(b'\r\n',b'\n')
+    require(original.replace(b'\r\n',b'\n')==baseline,'Changed original validation plan')
+    expected=json.loads(baseline)
+    for group,part in [('people','pixels'),('review','security')]:
+        expected['commands'].setdefault(group,[]).append(['{python}','ci/phase4_composition.py','run','--group',part])
+    require(read(root/'ci/validation-plan.json')==expected,'Validation plan changes beyond exact M3 additions')
+
+
 def verify_maintenance(root=ROOT):
     value=read(root/'ci/phase4-maintenance.json')
     require(fingerprint(value)==MAINTENANCE_PIN,'Unapproved P4/M1 maintenance manifest')
     require(value['base']==BASE and set(value['files'])==MAINTAINED,'Unexpected maintenance scope')
+    m3=verify_m3_maintenance(root)
     for path,pins in value['files'].items():
         before=subprocess.check_output(['git','show',BASE+':'+path],cwd=root).replace(b'\r\n',b'\n')
         require(hashlib.sha256(before).hexdigest()==pins['before_sha256'],'Wrong maintenance baseline: '+path)
-        require(checksum(root/path)==pins['sha256'],'Changed authorized maintenance file: '+path)
+        if path in m3['files']:
+            require(m3['files'][path]['before_sha256']==pins['sha256'],'Broken M1/M3 maintenance chain')
+        else:require(checksum(root/path)==pins['sha256'],'Changed authorized maintenance file: '+path)
     protected='create_defaults/bulk/contracts/activation/data/production-pins-v1.json'
     old=json.loads(subprocess.check_output(['git','show',BASE+':'+protected],cwd=root));new=read(root/protected)
     require(len(new['files'])==len(old['files'])==190 and new['files'].keys()==old['files'].keys(),'Protected membership changed')

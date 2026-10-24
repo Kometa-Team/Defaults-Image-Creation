@@ -58,7 +58,7 @@ def test_complete_native_composition_and_reopen(composed,kind):
     row=composed[kind];trial,ctx,evidence,_=row;v=evidence.to_dict()
     assert archive(row).load(evidence.sha256,context=ctx).encoded==evidence.encoded
     assert {k:v[k] for k in FLAGS}==FLAGS
-    assert len(v['views'])==2 and len(v['required_members'])==(2 if kind in {'network','overlay'} else 1)
+    assert len(v['views'])==2 and len(v['required_members'])==(2 if kind in {'network','overlay','family'} else 1)
     assert len(ctx.registry.operations.history(v['operation']['id']))==1
     for view in v['views']:
         for m in view['members']:
@@ -98,6 +98,9 @@ def test_default_white_wash_and_requested_source_preserving_are_distinct(compose
     # the centre of an opaque synthetic logo region is white vs coloured.
     ia=Image.open(BytesIO(archive(row).read_bytes(ma['object_sha256'])));ib=Image.open(BytesIO(archive(row).read_bytes(mb['object_sha256'])))
     assert ia.tobytes()!=ib.tobytes()
+    point=(450,1200) if kind=='playlist' else (400,900)
+    assert ia.getpixel(point)==(255,255,255)
+    r,g,b=ib.getpixel(point);assert r>g and r>b
     assert json.loads(row[2].to_dict()['context_json'])['request_json'].find('not-granted')>=0
 
 
@@ -165,7 +168,7 @@ def test_changed_live_context_cannot_reuse_archive(composed,monkeypatch,field):
         # Actual immutable contract bytes differ from the selected package pin.
         from create_defaults.bulk.contracts.categories.release import ROOT
         original=composition.read_json_bytes
-        contract_path=ROOT/'categories/data/contracts/playlist-v1.json'
+        contract_path=ROOT/'playlist/contract-v1.json'
         monkeypatch.setattr(composition,'read_json_bytes',lambda p:b'{}' if p==contract_path else original(p))
     elif field=='operation':
         from create_defaults.bulk.lifecycle import impact
@@ -220,13 +223,15 @@ def test_corrupt_content_addressed_object_rejected_after_reopen(composed):
 
 @pytest.mark.parametrize('attack',['interrupt','partial-persist'])
 def test_interruption_never_publishes_complete_archive_or_advances_operation(attack,monkeypatch):
+    from threading import Event
     with CompositionTrial() as trial:
         ctx=samples.poster(trial);before=ctx.registry.operations.inspect()
         if attack=='partial-persist':
             def interrupted(*a,**k):raise OSError('synthetic interruption before receipt persistence')
             monkeypatch.setattr(CompositionArchive,'put_json',interrupted)
+        cancelled=Event();cancelled.set()
         with pytest.raises((BulkError,OSError)):
-            composition.compose(ctx,trial,cancel=(lambda:True) if attack=='interrupt' else None)
+            composition.compose(ctx,trial,cancel=cancelled if attack=='interrupt' else None)
         assert ctx.registry.operations.inspect()==before
         assert not any(json.loads(p.read_bytes()).get('kind')=='composition-evidence' for p in (ctx.registry.operations.root/'objects').glob('*.json'))
 
@@ -281,7 +286,7 @@ def test_real_private_parent_before_child_and_receipt_substitution_controls(comp
     planner=Planner(config);store=SidecarStore(ctx.registry.operations.root).backend
     with pytest.raises(BulkError):planner.plan([parent,child],approved_english(),posters=[child.id],languages=['en'])
     with PersistentWorkers(store,config,WorkerLimits(workers=1,retries=0)) as pool:
-        first=planner.plan([parent],approved_english(),languages=['en']);parent_job=first['jobs'][0]
+        first=planner.plan([parent],approved_english(),posters=[parent.id],languages=['en']);parent_job=first['jobs'][0]
         pool.run(tasks_from_manifest(first));receipt,raw=composition.owned_receipt(store,config,parent_job)
         forged=deepcopy(parent_job);forged['render_fingerprint']='0'*64
         with pytest.raises(BulkError):composition.owned_receipt(store,config,forged)
@@ -300,7 +305,7 @@ def test_real_private_parent_before_child_and_receipt_substitution_controls(comp
         assert Image.open(BytesIO(encoded)).size==(2000,3000)
         parent_path=config.output_dir/parent_job['local_relative'];parent_path.unlink()
         with pytest.raises((BulkError,FileNotFoundError)):composition.owned_receipt(store,config,parent_job)
-        with pytest.raises(BulkError):planner.plan([parent,child],approved_english(),languages=['en'],dependency_artifacts=artifact)
+        with pytest.raises(BulkError):planner.plan([parent,child],approved_english(),posters=[child.id],languages=['en'],dependency_artifacts=artifact)
     pool.workspaces.cleanup(**pool.workspace,retain_seconds=0)
 
 
@@ -326,6 +331,12 @@ def test_missing_required_companion_resealed_subset_is_still_rejected(composed):
         view['manifest_json']=canonical(manifest).decode();view['manifest_sha256']=manifest['sha256']
     subset=CompositionEvidence.from_dict(v)
     with pytest.raises(BulkError,match='stale_composition_context'):archive(row).verify(subset,context=row[1])
+
+
+def test_missing_required_generated_family_child_is_blocked_before_render():
+    with CompositionTrial() as trial:
+        ctx=samples.family(trial,partial=True)
+        with pytest.raises(BulkError,match='incomplete_generated_family'):composition.compose(ctx,trial)
 
 
 def test_m3_exact_head_full_resolution_evidence_and_resource_report(composed):

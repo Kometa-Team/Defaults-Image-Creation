@@ -51,7 +51,7 @@ M1 request revisions and M2 graph/impact replay:
 | Genre | 1 JPEG, RGB, 2000×3000 | Existing captured font/layout/gradient; default and requested treatments |
 | Network | 2 JPEGs, RGB, 2000×3000 | Required white/colour counterparts; distinct closed design variants |
 | Overlays | 2 RGBA PNGs | Original source colours/alpha, standard/bigger boxes, exact source basename/case |
-| Separators | 1 generated JPEG, RGB, 2000×3000 | Original registered generator, stable semantic family/child and locked composition source |
+| Separators | 2 generated JPEGs, RGB, 2000×3000 | Original registered generator, stable semantic family/child and locked composition source |
 
 All other M2-covered English closed designs are conditional adapters, not a
 claim that every category was rendered or every future request is eligible.
@@ -71,7 +71,7 @@ Final M3 composition includes and checks every dependency member/receipt.
 Arbitrary new private-parent filenames remain blocked where an existing M2/M6
 composition contract has only exact historical source routes. No fake historical
 record, unapproved route expansion or reserved-name bypass resolves that limit.
-The native DAG fixture proves the underlying parent interface and is **not**
+Complete generated-family closure is enforced independently of a caller selecting only one child; the two-child separator fixture and a real partial-family negative control exercise this boundary. The native DAG fixture proves the underlying parent interface and is **not**
 presented as an accepted new category composition. Further source-route design
 requires explicit review, not automatic M4 implementation.
 
@@ -135,14 +135,14 @@ candidate replay; M3 removed only the replay already performed by M2 `revalidate
 It does not remove a validation boundary. These are preliminary measurements,
 not final-head acceptance evidence.
 
-M3's 64 exact IDs are explicitly partitioned in
-`ci/phase4-composition-test-ids.json`: 17 pixel/reproducibility IDs and 47 security
+M3's 65 exact IDs are explicitly partitioned in
+`ci/phase4-composition-test-ids.json`: 18 pixel/reproducibility IDs and 47 security
 IDs. Existing mandatory People and review jobs execute the respective commands
 after their original tests. No workflow, timeout, branch-protection setting,
-original pytest/unittest ID, historical fixture, assertion or source pin changes.
+original pytest/unittest ID, historical fixture or source pin changes. Four old Phase 3 plan-freeze assertions now retain the exact original plan and independently permit only the two mandatory M3 commands. `ci/phase4-m3-maintenance.json` binds their exact before/after hashes and the plan addition against the M2 merge. All other original assertions remain unchanged, and new negative controls reject extra commands, missing original commands/tests, missing M3 commands, changed historical snapshots, extra maintenance files and changed maintenance bytes.
 The foundation producer still executes every original 204 M1 and 54 M2 ID, plus
-15 new mandatory CI rejection controls. A complete P4 namespace collection must
-equal the disjoint union of all maintained selections: 337 IDs per platform.
+22 new mandatory CI rejection controls. A complete P4 namespace collection must
+equal the disjoint union of all maintained selections: 345 IDs per platform.
 
 `Validation acceptance` requires all four exact-head/platform M3 group reports,
 every collected/executed ID, zero focused skips/xfails, native byte/replay/resource
@@ -156,6 +156,8 @@ rendering, continues to prove all 14,079 outputs/14,077 public references,
 22 packages/278 variants, exact mappings/exceptions/receipts, 190 protected files,
 299 adoption-source pins and unchanged Phase 3 safeguards. Original historical
 evidence remains `61ca06372033f1a6f8d566251fee4bd807ec66e4048de2505dae3c47512d0cc2`.
+
+The initial PR-head pixel partition (`168c33d2a4d540772410c743db7899ff890cc60f`) passed on Windows in 313.20 s and Linux in 477.98 s. It covered seven members per view; the final fixture extends the separator family to two children, for eight members per view. The initial five poster members had identical cross-platform JPEG bytes. Standard/bigger overlay PNG bytes differed, while decoded dimensions and RGBA hashes matched exactly. Windows used native zlib `1.3.1.zlib-ng` and Linux `1.3`; this is recorded as an encoding-environment limitation, never normalized or approved for cross-platform reuse. Final-head evidence must independently confirm the expanded scope.
 
 Final commit, complete changed-file inventory, local results and all exact-head
 Windows/Linux job links/runtimes/counts will be recorded in the draft PR after

@@ -164,5 +164,8 @@ def test_all_prior_test_ids_and_frozen_interfaces_are_preserved():
             # maintenance bytes. Other schema/vector/selection pins stay frozen.
             maintenance=verify_maintenance()
             assert sha256(original.replace(b'\r\n',b'\n')).hexdigest()==maintenance['files'][name]['before_sha256']
+        elif name=='ci/validation-plan.json':
+            from ci.phase4 import verify_original_plan
+            verify_original_plan(original)
         else:
             assert original.replace(b'\r\n',b'\n')==(ROOT/name).read_bytes().replace(b'\r\n',b'\n')

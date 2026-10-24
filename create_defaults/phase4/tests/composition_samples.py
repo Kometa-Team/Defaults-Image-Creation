@@ -119,7 +119,7 @@ def exception(candidate):
         justification='Compare source-preserving brand colours with the category white default.'))
 
 
-def family(trial):
+def family(trial,*,partial=False):
     """Real registered separator generator, new stable semantic child identity."""
     from create_defaults.bulk.lifecycle.candidates import StablePlanner
     from create_defaults.bulk.definitions import Definition
@@ -128,20 +128,22 @@ def family(trial):
     d=deepcopy(resolution['declared'][parent]);old=resolution['families'][parent][0];variant=members[old]['variant']
     family_entry=allocate(r,category='Separators',variant=None,names=dict(display_name='Fixture Family',rendered_caption='',source=None,local_path=None,public_path=None),key='fixture-family',role='family')
     d['id']=family_entry['id'];d['generator']['parameters']['filename']='Fixture Collections.jpg'
-    d['generator']['parameters']['variants']=d['generator']['parameters']['variants'][:1]
-    item=d['generator']['parameters']['variants'][0]
+    d['generator']['parameters']['variants']=d['generator']['parameters']['variants'][:2]
     # M2's assigned background is the captured cohort template, not an editable
     # submitter field. Use that actual template's first colour.
     exemplar=next(i for i,m in members.items() if m['variant']==variant)
-    d['generator']['parameters']['variants'][0]['base_color']=b.resolution.definition(exemplar)['composer']['base_color']
-    source=trial.stage('@base/'+item['name']+'.png',png())
-    n=dict(display_name='Fixture Collections',rendered_caption=b.entry(old)['names']['rendered_caption'],source=source,
-        local_path='defaults-en/separators/'+item['name']+'/Fixture Collections.jpg',public_path='separators/'+item['name']+'/Fixture Collections.jpg')
-    e=allocate(r,category='Separators',variant=variant,names=n,key='separator:'+item['name'],role='single',parent=family_entry['id'])
+    content={}
     rule=rules[variant];captions=json.loads(rule['caption_types_json'])
-    c=dict(display_name=n['display_name'],content_type=next(k for k,t in captions.items() if json.loads(t['definition_json'])==d['caption']))
+    for item in d['generator']['parameters']['variants']:
+        item['base_color']=b.resolution.definition(exemplar)['composer']['base_color']
+        source=trial.stage('@base/'+item['name']+'.png',png())
+        n=dict(display_name='Fixture Collections',rendered_caption=b.entry(old)['names']['rendered_caption'],source=source,
+            local_path='defaults-en/separators/'+item['name']+'/Fixture Collections.jpg',public_path='separators/'+item['name']+'/Fixture Collections.jpg')
+        e=allocate(r,category='Separators',variant=variant,names=n,key='separator:'+item['name'],role='single',parent=family_entry['id'])
+        content[e['id']]=dict(display_name=n['display_name'],content_type=next(k for k,t in captions.items() if json.loads(t['definition_json'])==d['caption']))
     path=trial.root/'candidate.yml';profiles=trial.root/'profiles.yml'
     path.write_text(yaml.safe_dump(dict(schema_version=1,category='Separators',definitions=[d])),encoding='utf8')
     profiles.write_text(yaml.safe_dump(dict(schema_version=1,profiles={})),encoding='utf8')
-    candidate=poster_candidate(r,expected=r.view().head,paths=[path],profiles_path=profiles,posters=[e['id']],content={e['id']:c},config=trial.config)
+    if partial:content={i:content[i] for i in sorted(content)[:1]}
+    candidate=poster_candidate(r,expected=r.view().head,paths=[path],profiles_path=profiles,posters=sorted(content),content=content,config=trial.config)
     return context(candidate)

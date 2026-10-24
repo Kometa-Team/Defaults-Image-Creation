@@ -152,4 +152,5 @@ def test_frozen_schema_and_existing_test_id_snapshots_are_unchanged():
     changed=subprocess.check_output(["git","diff","--name-only","78464d2d051dc5da5f305bc4fd9f03868999636f"],cwd=ROOT,text=True).splitlines()
     assert not any(p.startswith("create_defaults/bulk/contracts/schemas/") for p in changed)
     assert "ci/original-test-ids.json" not in changed
-    assert "ci/validation-plan.json" not in changed
+    from ci.phase4 import verify_original_plan
+    verify_original_plan(subprocess.check_output(['git','show','78464d2d051dc5da5f305bc4fd9f03868999636f:ci/validation-plan.json'],cwd=ROOT))

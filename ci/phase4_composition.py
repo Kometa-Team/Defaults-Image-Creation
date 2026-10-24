@@ -11,7 +11,7 @@ from ci.phase4 import checksum,fingerprint
 IDS=ROOT/'ci/phase4-composition-test-ids.json'
 SCHEMA=ROOT/'create_defaults/bulk/lifecycle/schemas/composition-v1.schema.json'
 OUT=ROOT/'config/ci-validation/phase4-m3'
-KINDS={'playlist':1,'genre':1,'network':2,'overlay':2,'family':1}
+KINDS={'playlist':1,'genre':1,'network':2,'overlay':2,'family':2}
 
 
 def selections():

@@ -75,6 +75,9 @@ class CompositionContext:
         candidate=self.candidate;view=self.registry.view();details=json.loads(evidence.to_dict()['details_json'])
         required=sorted(candidate.graph.index().outputs)
         if not 0<len(required)<=MAX_MEMBERS:fail('member_resource_bound')
+        for children in candidate.data().get('families',{}).values():
+            selected=set(children)&set(required)
+            if selected and selected!=set(children):fail('incomplete_generated_family')
         if not set(details['affected_outputs'])<=set(required) or set(details['required_companions'])-set(required):fail('impact_member_closure')
         blockers=set(details['blockers'])
         if type(candidate) is OverlayCandidate:

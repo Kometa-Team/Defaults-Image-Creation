@@ -16,6 +16,7 @@
     "create_defaults/phase4/tests/test_composition.py::test_missing_required_companion_cannot_be_composition_complete[overlay]",
     "create_defaults/phase4/tests/test_composition.py::test_required_family_and_derived_source_cannot_smuggle_submitter_style",
     "create_defaults/phase4/tests/test_composition.py::test_missing_required_companion_resealed_subset_is_still_rejected",
+    "create_defaults/phase4/tests/test_composition.py::test_missing_required_generated_family_child_is_blocked_before_render",
     "create_defaults/phase4/tests/test_composition.py::test_m3_exact_head_full_resolution_evidence_and_resource_report"
   ],
   "security": [
