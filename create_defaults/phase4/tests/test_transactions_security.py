@@ -249,3 +249,14 @@ def test_unselected_definition_cannot_be_smuggled_into_snapshot(transaction_case
     data=candidate.data();data['effective_definitions']['unselected.ghost']=next(iter(data['effective_definitions'].values()))
     forged=replace(candidate,encoded=canonical(data))
     with pytest.raises(BulkError,match='unselected_definition_requires_scoped_proposal'):require_adapter(forged)
+
+
+@pytest.mark.parametrize('attack',['parent','background-input'])
+def test_logo_adapter_cannot_smuggle_another_composition_source(transaction_case,attack):
+    from create_defaults.bulk.lifecycle.operations import require_adapter
+    candidate=transaction_case['row'][1].candidate;data=candidate.data()
+    definition=next(iter(data['effective_definitions'].values()))
+    if attack=='parent':definition['dependencies']=[{'poster_id':'foreign.parent'}]
+    else:definition['composer']['input']='Fixture unapproved background.png'
+    with pytest.raises(BulkError,match='unsupported_transaction_parent_or_background_input'):
+        require_adapter(replace(candidate,encoded=canonical(data)))

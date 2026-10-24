@@ -388,6 +388,7 @@
   "create_defaults/phase4/tests/test_ci_transactions.py::test_commit_proof_requires_independent_exact_native_bytes[pixel]",
   "create_defaults/phase4/tests/test_ci_transactions.py::test_commit_proof_requires_independent_exact_native_bytes[hash]",
   "create_defaults/phase4/tests/test_ci_transactions.py::test_complete_native_proof_remains_synthetic_only",
+  "create_defaults/phase4/tests/test_ci_transactions.py::test_response_file_collects_every_id_beyond_windows_command_limit",
   "create_defaults/phase4/tests/test_transactions_concurrency.py::test_native_multi_member_add_is_committed_all_or_none",
   "create_defaults/phase4/tests/test_transactions_concurrency.py::test_two_updates_cannot_both_replace_one_committed_subject"
 ]

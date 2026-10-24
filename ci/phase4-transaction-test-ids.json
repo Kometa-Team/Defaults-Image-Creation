@@ -51,7 +51,9 @@
     "create_defaults/phase4/tests/test_transactions_security.py::test_inputs_changed_after_full_review_are_rechecked_at_commit[source]",
     "create_defaults/phase4/tests/test_transactions_security.py::test_inputs_changed_after_full_review_are_rechecked_at_commit[definition]",
     "create_defaults/phase4/tests/test_transactions_security.py::test_inputs_changed_after_full_review_are_rechecked_at_commit[phase3]",
-    "create_defaults/phase4/tests/test_transactions_security.py::test_unselected_definition_cannot_be_smuggled_into_snapshot"
+    "create_defaults/phase4/tests/test_transactions_security.py::test_unselected_definition_cannot_be_smuggled_into_snapshot",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_logo_adapter_cannot_smuggle_another_composition_source[parent]",
+    "create_defaults/phase4/tests/test_transactions_security.py::test_logo_adapter_cannot_smuggle_another_composition_source[background-input]"
   ],
   "concurrency": [
     "create_defaults/phase4/tests/test_transactions_concurrency.py::test_concurrent_identical_complete_add_commits_once",

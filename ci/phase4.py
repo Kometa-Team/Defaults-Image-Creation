@@ -146,8 +146,11 @@ def run():
         # already loaded M2 metadata without executing their entire modules.
         # The separate whole-namespace collection above forbids missing IDs.
         selected=read(IDS)
-        collection=pytest_run(selected,OUT/'phase4-collection.json',collect=True)
-        execution=pytest_run(selected,OUT/'phase4-execution.json')
+        response=OUT/'phase4-selected-ids.txt'
+        response.parent.mkdir(parents=True,exist_ok=True)
+        response.write_text('\n'.join(selected)+'\n',encoding='utf8',newline='\n')
+        collection=pytest_run(['@'+str(response)],OUT/'phase4-collection.json',collect=True)
+        execution=pytest_run(['@'+str(response)],OUT/'phase4-execution.json')
         expected=unique(read(IDS),'P4 expected IDs')
         require(unique(collection['nodes'],'P4 collection')==expected and collection['exitstatus']==0,'Changed P4 collection')
         require(unique(execution['nodes'],'P4 execution')==expected,'Incomplete P4 execution')

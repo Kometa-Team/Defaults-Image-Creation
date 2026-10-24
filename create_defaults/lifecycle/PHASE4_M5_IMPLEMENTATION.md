@@ -51,6 +51,8 @@ authority. The operational path fails before storage or rendering.
 The multi-member positive population is two independently contracted Genre items
 sharing a real source dependency. It is not relabeled as an approved Network
 pair. The gate is category **and** source kind **and** required presentation shape.
+M5's logo adapter also rejects generated-parent dependencies, additional background
+input and unselected definitions; those cannot be smuggled through a content file.
 Every admitted variant must still pass its existing exact closed contract, native
 layout/source checks, complete membership and current P3/M4 replay. Native tests
 exercise the selected existing Genre single and two-item shared-source cohorts; this is
@@ -172,7 +174,10 @@ journal/commit-receipt indexes, immediately before commit and lost success
 acknowledgement immediately after commit. Pre-commit exceptions roll back all
 indexes and authoritative heads; immutable orphan blobs are harmless and kept.
 Post-commit interruption is recovered as the same immutable result, without
-applying twice. Old public artwork and production definitions are never touched.
+applying twice. The original M1 abrupt-process-exit/WAL recovery test remains
+mandatory. M5 additionally reopens a native committed archive in a fresh Python
+interpreter with writable archive construction prohibited, comparing the entire
+recovery result. Old public artwork and production definitions are never touched.
 
 `recovery.recover` opens read-only and independently replays the complete original
 M1 chain plus exact M5 marker/event pairing, snapshot lineage, original M4
@@ -190,7 +195,9 @@ The first native Genre smoke completed composition, P3 consumption, both exact
 review stages, isolated commit, independent restart and exact retry in 433.63 s
 on the development Windows host. The initial 33 schema/CAS/CI controls passed in
 67.66 s. These are preliminary development measurements, not final-head results.
-The corrected CI/metadata controls later passed 150/150 locally. The initial
+The corrected CI/metadata controls later passed 150/150 locally. The native
+minimal UPDATE, complete shared-source UPDATE and three late-input race controls
+then passed 5/5 on the development Windows host (1,504.36 s combined). The initial
 workflow at `67a3524bdc0b421a83e0a0ca6f06f78f02369ebf` exposed the M1 unit
 report-fixture membership/aggregate-shape issue, trial.stage immutable-file
 semantics and Windows fixture connections that were not explicitly closed.
@@ -233,7 +240,9 @@ workflow, timeout, memory limit or source-protection pin is changed.
 The foundation vector preserves its complete ordered M1-M4 prefix and appends
 M5 metadata/CI controls plus the native multi-member ADD and competing UPDATE
 cases. These reuse the process's already loaded M2 metadata. Foundation collection
-and execution use exact maintained IDs, avoiding whole-module duplication; the
+and execution use exact maintained IDs through a UTF-8 pytest response file,
+avoiding Windows CreateProcess's command-line length limit and whole-module
+duplication. A real collect-only subprocess reconciles every response-file ID; the
 independent entire-namespace collection still fails on any omitted test. `ci/phase4-transaction-test-ids.json` explicitly maintains
 disjoint native groups. Entire P4 collection must equal the exact union of all
 producers. Acceptance requires eight successful exact-head/platform/group reports,

@@ -24,6 +24,18 @@ def test_native_add_atomic_reopen_and_exact_retry(transaction_case):
     assert not recover(root)['outputs']
     result=commit(case,tx,snapshot)
     recovered=recover(root)
+    import subprocess,sys
+    code="""
+import json,sys
+from unittest.mock import patch
+from create_defaults.bulk.lifecycle.package_e import SidecarStore
+from create_defaults.bulk.lifecycle.recovery import recover
+with patch.object(SidecarStore,'__init__',side_effect=AssertionError('recovery attempted a write')):
+ print(json.dumps(recover(sys.argv[1]),sort_keys=True))
+"""
+    restart=subprocess.run([sys.executable,'-c',code,str(root)],capture_output=True,text=True,timeout=60)
+    assert restart.returncode==0,restart.stderr
+    assert json.loads(restart.stdout)==recovered
     assert result['isolated_committed'] and not result['retry']
     assert sorted(recovered['outputs'])==snapshot.to_dict()['members']
     for i,m in snapshot.to_dict()['artwork'].items():

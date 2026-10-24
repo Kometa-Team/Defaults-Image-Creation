@@ -87,3 +87,15 @@ def test_complete_native_proof_remains_synthetic_only():
     proofs,pixels=native_rows()
     with patch.object(m5,'identity',return_value=dict(head='head',plan_sha256='plan')),patch.object(m5,'checksum',return_value='pin'),patch.object(m5,'implementation_checksum',return_value='code'):
         assert set(m5.verify_native_proofs(proofs,pixels))=={'Windows','Linux'}
+
+
+def test_response_file_collects_every_id_beyond_windows_command_limit(tmp_path):
+    from ci import phase4
+    from ci.validation import pytest_run
+    ids=phase4.read(phase4.IDS)
+    assert len(' '.join(ids))>32768
+    path=tmp_path/'exact ids.txt'
+    path.write_text('\n'.join(ids)+'\n',encoding='utf8',newline='\n')
+    result=pytest_run(['@'+str(path)],tmp_path/'response-collection.json',collect=True)
+    assert result['exitstatus']==0 and len(result['nodes'])==len(ids)
+    assert set(result['nodes'])==set(ids)

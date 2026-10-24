@@ -54,6 +54,8 @@ def require_adapter(candidate):
         fail('prospective_generator_phase3_identity_adapter_required')
     if set(candidate.data()['effective_definitions'])!=set(candidate.graph.index().outputs):
         fail('unselected_definition_requires_scoped_proposal')
+    if any(d['dependencies'] or d['composer'].get('input') is not None for d in candidate.data()['effective_definitions'].values()):
+        fail('unsupported_transaction_parent_or_background_input')
     from .basis import historical_basis
     for identity in candidate.graph.index().outputs:
         entry=candidate.registry.view().entry(identity)
