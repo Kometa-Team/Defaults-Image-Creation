@@ -1,5 +1,12 @@
 {
   "diagnostics": [
+    "create_people_posters/tests/test_guarded_ddcolor_import.py::test_actual_guarded_ddcolor_cli_imports_vendor_with_torch_handlers_without_inference",
+    "create_people_posters/tests/test_guarded_ddcolor_import.py::test_known_torch_handlers_retain_final_redaction[LazyTraceHandler]",
+    "create_people_posters/tests/test_guarded_ddcolor_import.py::test_known_torch_handlers_retain_final_redaction[_StderrHandler]",
+    "create_people_posters/tests/test_guarded_ddcolor_import.py::test_torch_handler_destination_failure_cannot_dump_raw_record[LazyTraceHandler]",
+    "create_people_posters/tests/test_guarded_ddcolor_import.py::test_torch_handler_destination_failure_cannot_dump_raw_record[_StderrHandler]",
+    "create_people_posters/tests/test_guarded_ddcolor_import.py::test_torch_handler_identity_cannot_be_forged_by_name_or_subclass[LazyTraceHandler]",
+    "create_people_posters/tests/test_guarded_ddcolor_import.py::test_torch_handler_identity_cannot_be_forged_by_name_or_subclass[_StderrHandler]",
     "create_people_posters/tests/test_people_http_security.py::test_bounded_transient_failures_never_retain_raw_exception_or_request[ConnectTimeout-timeout]",
     "create_people_posters/tests/test_people_http_security.py::test_bounded_transient_failures_never_retain_raw_exception_or_request[ConnectionError-connection]",
     "create_people_posters/tests/test_people_http_security.py::test_bounded_transient_failures_never_retain_raw_exception_or_request[ConnectionResetError-connection]",
