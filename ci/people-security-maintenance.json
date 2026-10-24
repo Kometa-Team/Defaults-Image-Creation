@@ -1,15 +1,16 @@
 {
   "additions": {
-    "ci/people-security-test-ids.json": "4ee7aa6d0a6bb469a4deae825ed852a2e8fae55035a94177c66ce91172b01912",
+    "ci/people-security-test-ids.json": "2e2c046529a91221ee933ee494fe9da76e1ed69725751e53bf3bf3734e092e45",
     "ci/people_security.py": "3d5af247b6c0f2e11852bdf8cd90f22d8eb3b47c0617c4c12774d8d0b86fe2d2",
     "create_people_posters/SECURITY_AND_RECOVERY.md": "71a6fe6f362827bf106bb9eb7b88fa235a865f587cbfcbd52caea827deb6cda4",
-    "create_people_posters/people_diagnostics.py": "45bf0dd11a872a90fb648cbeff0377fa93141238f400a9ea2adf63c4f9b00f97",
+    "create_people_posters/people_diagnostics.py": "c547b24c6559e4d0952918bc13c6d6b3712fa2405658e80bd6ae6676a28229da",
     "create_people_posters/people_http.py": "ce65dfa095be11f2b0698516f70c72fa411435c72a116b73ee33afb6a45dc764",
     "create_people_posters/people_process.py": "513e539a85ac31387672a53fbcfe4f8ef1e6c293fbff8a38e3f1a6db8e2e2a65",
     "create_people_posters/people_recovery_records.py": "cde0c7869f11c6b1352485d5f6c6bb1b7fd67bb39484f96f6570ba9024430457",
     "create_people_posters/people_recovery_transaction.py": "d925e8043d8bf54d6b1777a751b7b8c1da902218412115d416646454b6db1deb",
     "create_people_posters/people_secure_cli.py": "d2b05d577bd3e75dc4e683082b7c509fce5c3aaf486d826f6d31b50acd37c331",
     "create_people_posters/tests/conftest.py": "7cccded80b0ece8aa4b28a846ff36b5917a5da95ffe0cb66ac83fb013bdd1a79",
+    "create_people_posters/tests/test_guarded_ddcolor_import.py": "f2c81fb586035d86d4a7d2083fbab2ac7340fa9653bf8497b194740d554e8468",
     "create_people_posters/tests/test_people_http_security.py": "d6f77adc96bc6cbe6aaeadcb4fd2fc98aa9f92c5a3395e32f94b71f4987c0319",
     "create_people_posters/tests/test_people_recovery_security.py": "8413f93166ac6cf700c0f8909f3d4d70161b7301de80bb65572fc4fea616ccb6",
     "create_people_posters/tests/test_people_security.py": "261e4fe06b1e7d6134e75d5fc2747761e48229769e852f576dfd0dbdc7931e62",
@@ -17,7 +18,7 @@
     "create_people_posters/tests/test_tmdb_sdk_configuration.py": "e8b2cff1bd8c314295e02534330b28361f1ac8c1096dd16885d65c0f49b7d5a4"
   },
   "base": "46e1334504fcdd598e0c34fcd45612ff58e91074",
-  "code_head": "9d6368c5301392a1d7235c862e511b409ec09c65",
+  "code_head": "f79a5a53e1aada9bbebc547348f362313ce63db1",
   "files": {
     ".github/workflows/default-poster-validation.yml": {
       "before_sha256": "d6668e40662065d176cda89dfe717442109006fe37fd3ac91ef4c87f89fc4339",
