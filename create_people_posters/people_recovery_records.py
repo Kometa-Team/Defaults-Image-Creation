@@ -129,6 +129,12 @@ class Checkpoints:
                 raise ValueError("Recovered checkpoint output changed; operator review required")
         return record["outcome"]
 
+    def validate_retained(self):
+        # A missing artifact must not disappear from validation merely because
+        # target discovery can no longer find the corresponding image.
+        for name in self.value["records"]:
+            self.completed(name)
+
     def save(self, row, paths):
         value = row_data(row)
         if value["name"] != row.name:

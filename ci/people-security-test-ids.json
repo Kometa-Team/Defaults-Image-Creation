@@ -234,6 +234,8 @@
     "create_people_posters/tests/test_people_recovery_security.py::test_durable_transaction_reconciles_interrupted_attempt_and_blocks_corrupt_backup",
     "create_people_posters/tests/test_people_recovery_security.py::test_durable_transaction_restores_original_and_absence_on_failure[False]",
     "create_people_posters/tests/test_people_recovery_security.py::test_durable_transaction_restores_original_and_absence_on_failure[True]",
+    "create_people_posters/tests/test_people_recovery_security.py::test_empty_discovery_cannot_hide_lost_or_corrupt_recovery_state[corrupt-metadata]",
+    "create_people_posters/tests/test_people_recovery_security.py::test_empty_discovery_cannot_hide_lost_or_corrupt_recovery_state[missing-output]",
     "create_people_posters/tests/test_people_recovery_security.py::test_lookup_failure_keeps_every_byte_and_never_marks_attempt_or_exhaustion[ConnectTimeout]",
     "create_people_posters/tests/test_people_recovery_security.py::test_lookup_failure_keeps_every_byte_and_never_marks_attempt_or_exhaustion[SSLError]",
     "create_people_posters/tests/test_people_recovery_security.py::test_mixed_seven_targets_checkpoint_exhaustion_and_resume_only_transient",

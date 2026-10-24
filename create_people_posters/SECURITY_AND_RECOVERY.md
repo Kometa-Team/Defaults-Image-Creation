@@ -140,6 +140,8 @@ Recovered checkpoints bind exact output hashes, settings, roots and renderer
 fingerprints; unchanged successful people are reused. Changed/missing retained
 outputs or malformed checkpoints fail closed. Per-person reports/checkpoints are
 written during progress, retaining earlier successful work on a later failure.
+Retained current-context artifacts are verified before target discovery, so an
+empty scan cannot hide a lost accepted output or a corrupt checkpoint.
 
 Inline recovery keeps current artwork through download/screening. A durable
 per-person transaction captures exact original bytes/absence, including native

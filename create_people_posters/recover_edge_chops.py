@@ -1762,6 +1762,21 @@ def _main(args: argparse.Namespace) -> int:
         log("[info] Whole-tree recovery skipped without scanning to avoid large Adobe retry runs.")
         return 0
 
+    # Validate retained state before discovery: an empty scan cannot conceal a
+    # corrupt checkpoint or a lost previously accepted output. Keep discovery
+    # on its reference tree and bind output evidence to the actual work tree.
+    import copy
+    args.scan_people_root = args.people_root
+    checkpoint_args = copy.copy(args)
+    if args.bg_engine == "birefnet" and not args.stage_for_orchestrator:
+        checkpoint_args.people_root = CONFIG_DIR / "people_dirs"
+    try:
+        checkpoints = Checkpoints(args.out_root / "recovery-checkpoints.json", checkpoint_args)
+        checkpoints.validate_retained()
+    except (OSError, ValueError):
+        log("[error] Recovery checkpoint validation failed; local artwork retained")
+        return 2
+
     exhausted_names = load_exhausted_names(args.exhausted_file)
     if exhausted_names:
         log(f"[info] skipping {len(exhausted_names)} exhausted name(s) from {args.exhausted_file}")
@@ -1875,14 +1890,8 @@ def _main(args: argparse.Namespace) -> int:
         log("[info] non-color recovery candidates allowed")
 
     rows: list[RecoveryRow] = []
-    args.scan_people_root = args.people_root
     if args.bg_engine == "birefnet" and not args.stage_for_orchestrator:
         args.people_root = CONFIG_DIR / "people_dirs"
-    try:
-        checkpoints = Checkpoints(args.out_root / "recovery-checkpoints.json", args)
-    except (OSError, ValueError):
-        log("[error] Recovery checkpoint validation failed; local artwork retained")
-        return 2
     attempted_candidates = load_attempted_candidates(args.attempted_file)
     attempted_records: list[AttemptedCandidate] = []
     if args.stage_for_orchestrator and attempted_candidates:

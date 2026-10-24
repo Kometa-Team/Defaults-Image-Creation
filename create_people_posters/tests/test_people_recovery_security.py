@@ -124,6 +124,32 @@ def test_recovered_checkpoint_requires_output_and_detects_tampering(recovery_arg
     with pytest.raises(ValueError):records.Checkpoints(path, recovery_args)
 
 
+@pytest.mark.parametrize("loss", ["missing-output", "corrupt-metadata"])
+def test_empty_discovery_cannot_hide_lost_or_corrupt_recovery_state(monkeypatch, recovery_args, loss):
+    args = recovery_args
+    args.inline, args.all = True, True
+    args.people_root = recovery.CONFIG_DIR / "people_dirs"
+    args.transparent_root = args.people_root / "transparent"
+    args.scan_people_root = args.people_root
+    args.recover_warnings = recovery.parse_recover_warnings(args.recover_warnings)
+    args.report_edges = recovery.parse_edges(args.report_edges, ("top",))
+    args.retry_edges = recovery.parse_edges(args.retry_edges, ("top",))
+    monkeypatch.setenv("REMOVE_BG_ENGINE", "birefnet")
+    monkeypatch.setattr(recovery, "background_python", lambda default: default)
+    path = args.out_root / "recovery-checkpoints.json"
+    target = recovery.final_transparent_path(args.people_root, "Person")
+    cutout(target)
+    checkpoints = records.Checkpoints(path, args)
+    checkpoints.save(recovery.RecoveryRow("Person", "recovered"), [target])
+    if loss == "missing-output":target.unlink()
+    else:path.write_text("{}")
+    monkeypatch.setattr(recovery, "parser", lambda: SimpleNamespace(parse_args=lambda: args))
+    monkeypatch.setattr(recovery, "find_recovery_targets", lambda *a, **k: ([], 0))
+    monkeypatch.setattr(recovery, "recover_one", lambda *a: pytest.fail("Unsafe state must not render"))
+    assert recovery.main() == 2
+    assert not recovery.load_exhausted_names(args.exhausted_file)
+
+
 @pytest.mark.parametrize("cancel", [False, True])
 def test_durable_transaction_restores_original_and_absence_on_failure(tmp_path, cancel):
     old, new = tmp_path / "old.jpg", tmp_path / "new.png"
