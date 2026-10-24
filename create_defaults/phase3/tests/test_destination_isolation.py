@@ -115,6 +115,9 @@ def test_all_previous_additive_ids_schemas_vectors_and_workflow_are_preserved():
             # maintenance bytes. Other schema/vector/selection pins stay frozen.
             maintenance=verify_maintenance()
             assert sha256(old.replace(b'\r\n',b'\n')).hexdigest()==maintenance['files'][name]['before_sha256']
+        elif name=='ci/validation-plan.json':
+            from ci.phase4 import verify_original_plan
+            verify_original_plan(old)
         else:
             assert old.replace(b'\r\n',b'\n')==(ROOT/name).read_bytes().replace(b'\r\n',b'\n')
 

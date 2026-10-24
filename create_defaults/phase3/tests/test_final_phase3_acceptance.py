@@ -197,7 +197,11 @@ def test_all_existing_phase3_ids_and_production_interfaces_are_unchanged():
     # The exact authorized bridge/CI/pin maintenance is independently hash-bound.
     # All other original runtime/selection interfaces retain their frozen bytes.
     for path in ['ci/validation-plan.json','ci/phase3.py','ci/original-test-ids.json']:
-        assert subprocess.check_output(['git','show',base+':'+path],cwd=ROOT).replace(b'\r\n',b'\n')==(ROOT/path).read_bytes().replace(b'\r\n',b'\n')
+        original=subprocess.check_output(['git','show',base+':'+path],cwd=ROOT)
+        if path=='ci/validation-plan.json':
+            from ci.phase4 import verify_original_plan
+            verify_original_plan(original)
+        else:assert original.replace(b'\r\n',b'\n')==(ROOT/path).read_bytes().replace(b'\r\n',b'\n')
 
 
 def test_negative_matrix_is_covered_by_exact_mandatory_test_ids():

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "kind": "phase4-m3-ci-maintenance",
+  "base": "33a20c1f5b7a73d672793f1700d48b566789ad32",
+  "reason": "Retain the original plan and all original assertions; authorize only exact mandatory M3 commands and narrow compatibility assertion maintenance.",
+  "files": {
+    "ci/validation-plan.json": {
+      "before_sha256": "7e51b95f5155719b7f32fe698a45052adbf960d7764ba65c87baf14b459de54e",
+      "sha256": "1b0bf754585ab8500b52de06df4ccb66b085d4afdef09fae32708a6cfc8f2761"
+    },
+    "create_defaults/phase3/tests/test_consumption_boundaries.py": {
+      "before_sha256": "8be9077bc405717031ee4cf1c7e619103e96f65aa3d0418df3579884080dd9d3",
+      "sha256": "d7f263978c9e043d2e4935c27c2eccbce82534ace6d55772c3d78b1c6a9c3aaf"
+    },
+    "create_defaults/phase3/tests/test_destination_isolation.py": {
+      "before_sha256": "428459f74d0a76da3aee0b8ac6af659664d704dce69062528e6df5a7324c555d",
+      "sha256": "00ade97f494c75690ab19590acc6183db2526448f4d223dbc5b069dadabeed46"
+    },
+    "create_defaults/phase3/tests/test_final_phase3_acceptance.py": {
+      "before_sha256": "5fdfcb268c9d1f5c99da699066489a58f00771c54177e8c51bc1fed264d31331",
+      "sha256": "9d7b8f29966b7b7017c5da16ef0aaaa056459b012b8869eba316e8463530f104"
+    },
+    "create_defaults/phase3/tests/test_isolation_ci.py": {
+      "before_sha256": "a70ca919bae2839413fbce85f6f40b24f28683dfb783ecd64b5a7366e2d069ca",
+      "sha256": "97c3bdd6d13b29ff1859e3b14e566a9d30a6a80b42bb9b0a3ffefa612f69cb57"
+    }
+  }
+}
