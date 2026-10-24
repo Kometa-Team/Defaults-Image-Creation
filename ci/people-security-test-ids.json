@@ -65,6 +65,7 @@
     "create_people_posters/tests/test_people_security.py::test_free_form_exception_and_credential_representations_are_contained[userinfo]",
     "create_people_posters/tests/test_people_security.py::test_known_password_is_removed_whole_before_generic_field_tokenization",
     "create_people_posters/tests/test_people_security.py::test_public_signature_style_maps_survive_actual_metadata_writers",
+    "create_people_posters/tests/test_people_security.py::test_query_and_fragment_at_signs_never_become_diagnostic_hosts",
     "create_people_posters/tests/test_people_security.py::test_reports_nested_json_csv_html_and_downloadable_bundle_are_safe",
     "create_people_posters/tests/test_people_security.py::test_safe_diagnostic_fields_and_immutable_record_are_preserved",
     "create_people_posters/tests/test_people_security.py::test_sanitizer_and_formatter_failure_never_reveal_original_record",

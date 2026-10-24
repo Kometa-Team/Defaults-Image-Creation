@@ -274,3 +274,14 @@ def test_configured_credential_urls_are_removed_before_normalization():
         result = secure.sanitize_text("upstream=" + value)
         assert "NOT_A_REAL_PATH_CREDENTIAL" not in result
         assert secure.REDACTED in result
+
+
+def test_query_and_fragment_at_signs_never_become_diagnostic_hosts():
+    secret = "not_a_real_hostlike_query_credential"  # Deliberately unregistered.
+    for suffix in ("?token=alice@", "#alice@", "?other=alice@"):
+        url = "https://example.test" + suffix + secret
+        for value in (url, quote(url, safe="")):
+            result = secure.sanitize_text(value)
+            assert secret.casefold() not in result.casefold()
+            assert result == "https://example.test"
+    assert secure.sanitize_text("https://alice:password@example.test/path?q=private") == "https://example.test/path"

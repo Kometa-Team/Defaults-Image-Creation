@@ -122,9 +122,11 @@ def _url(match) -> str:
     # Remove userinfo before parsing: known-value replacement may have inserted
     # brackets there, which urlsplit would otherwise mistake for an IPv6 host.
     scheme, rest = value.split("://", 1)
-    authority, slash, tail = rest.partition("/")
+    boundary = re.search(r"[/?#]", rest)
+    end = boundary.start() if boundary else len(rest)
+    authority, tail = rest[:end], rest[end:]
     authority = authority.rsplit("@", 1)[-1]
-    value = scheme + "://" + authority + slash + tail
+    value = scheme + "://" + authority + tail
     parsed = urlsplit(value)
     if parsed.scheme.lower() not in {"https", "http"} or not parsed.hostname:
         return "[URL withheld]"
