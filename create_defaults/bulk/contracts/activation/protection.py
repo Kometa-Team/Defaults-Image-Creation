@@ -9,7 +9,7 @@ from ..models import decode_json, read_json_bytes
 
 
 HERE = Path(__file__).parent
-PRODUCTION_PINS_SHA256 = "324acbab4b161b8bc4194105dd50db9bc8705f2e5c2ee9542c850856f91c36ba"
+PRODUCTION_PINS_SHA256 = "5728d7ad313cb9e581f0a69c1f6b638c6999fb6a8d53cb1acaa0249d807cc3cd"
 
 
 def verify(root=Path(__file__).parents[4]):

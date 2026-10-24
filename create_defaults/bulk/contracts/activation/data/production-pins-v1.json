@@ -1,7 +1,7 @@
 {
   "baseline_commit": "0058ac6f109054dd0a25e88f4c707b020460f875",
   "files": {
-    ".github/workflows/default-poster-validation.yml": "f43245e7cca046d4a8fc88e6e9394e3e5657b3e5e95e339db44d4975991bfe11",
+    ".github/workflows/default-poster-validation.yml": "a910d48f65dcdad6fa71beaf795790e142ae749edc4a834bfeaa19d52701c923",
     "create_defaults/bulk/__init__.py": "a42d2db4d816008110a72532d38c85ea9cce465b455dd87e138d4091d8d5b617",
     "create_defaults/bulk/__main__.py": "26edf3c78fb6070ca2bfbdae9a39f6bce2089bd23c208c94616ad1a07476fe30",
     "create_defaults/bulk/asset_cases.py": "54dc5ae76d15da10bea60ff26c5418af4d578be1c1dca0cd2297c13424e6cf6e",
