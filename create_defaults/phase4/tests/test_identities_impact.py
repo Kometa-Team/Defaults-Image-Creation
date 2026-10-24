@@ -125,7 +125,7 @@ def test_stale_registry_head_and_semantic_parent_rejected(registry):
     with pytest.raises(BulkError):allocate(registry,key='child',semantic=dict(parent='playlist.'+'a'*32,key='child',role='single',language='en'),names=names('Child'))
 
 
-def test_all_frozen_semantic_members_and_coverage_are_exact():
+def test_all_frozen_semantic_members_and_coverage_are_exact(monkeypatch):
     b=historical_basis();index=b.semantic_index();assert len(index)==len(b.ids)==14079
     assert set(index.values())==b.ids
     assert sum(b.row(i)['identity']['public_path'] is not None for i in b.ids)==14077
@@ -138,6 +138,11 @@ def test_all_frozen_semantic_members_and_coverage_are_exact():
     assert kinds=={'award-years','best-of-years','separator-variants','content-rating-series'}
     m=matrix();assert len(m['categories'])==22 and len(m['variants'])==278 and len(m['overlays'])==18
     assert len(m['generators'])==4 and not m['active']
+    from create_defaults.bulk.lifecycle import coverage
+    original=Path.read_bytes
+    with monkeypatch.context() as guard:
+        guard.setattr(Path,'read_bytes',lambda p:b'forged catalog' if p==coverage.CATALOG else original(p))
+        with pytest.raises(BulkError):matrix()
 
 
 @pytest.mark.parametrize('category,variant',[('Playlist','unknown'),('Overlays','fake'),('Unknown','fake')])
@@ -180,6 +185,7 @@ def test_actual_playlist_plan_operation_bound_impact_and_replay(playlist):
     registry,entry,build,*_=playlist;candidate=build()
     assert candidate.data()['manifest']['jobs'][0]['poster_id']==entry['id']
     assert candidate.verify().sha256==candidate.sha256
+    with pytest.raises(BulkError):request_record(registry,None,candidate,identity='synthetic.operation.invalid',operation='RENAME')
     record=request_record(registry,None,candidate,identity='synthetic.operation.proposal',operation='ADD')
     registry.operations.append(record,expected_revision=0,expected_sha256=None,expected_event_sha256=None)
     head=operation_head(registry.operations,'synthetic.operation.proposal')
@@ -284,6 +290,10 @@ def test_all_actual_overlay_branches_pairs_and_blocked_jobs(registry,tmp_path):
         assert not candidate.data()['job_planning_complete']
         with pytest.raises(BulkError):candidate.jobs()
         with pytest.raises(BulkError):overlay_candidate(registry,expected=registry.view().head,identities=[identity])
+    identity=next(iter(pairs.values()));e=registry.reference(identity,token='overlay-reference',expected=registry.view().head)
+    changed=deepcopy(e['names']);changed['public_path']='unapproved/Synthetic.png'
+    registry.revise(identity,changed,entry_revision=1,token='overlay-route',expected=registry.view().head)
+    with pytest.raises(BulkError):overlay_candidate(registry,expected=registry.view().head,identities=[identity,*basis.assignment(identity)['companions']])
 
 
 def test_fixed_windows_linux_registry_replay_vector(tmp_path):
@@ -319,4 +329,3 @@ def test_actual_non_playlist_closed_category_adapter(registry,tmp_path,category)
     candidate=poster_candidate(registry,expected=registry.view().head,paths=[path],profiles_path=profiles,posters=[e['id']],content={e['id']:content},config=Config())
     assert candidate.data()['validation'][0]['identity']==e['id']
     assert candidate.graph.index().outputs[e['id']]['category']==category
-

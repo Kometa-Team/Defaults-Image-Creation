@@ -197,6 +197,7 @@ def preview_impact(before,after):
 def request_record(registry,before,after,*,identity,operation="UPDATE"):
     """Represent a request with measured M1 read/write closure; never apply it."""
     if operation not in {"ADD","UPDATE","RENAME"}:fail("unsupported_operation_semantics")
+    if operation!='ADD' and before is None:fail('prior_epoch_required')
     registry.require_head(after.registry_head)
     old,new,details=_details(before,after)
     ids=details["affected_outputs"]
@@ -222,9 +223,12 @@ def analyze(registry,before,after,*,operation,expected_operation_sha256):
     if operation_head(registry.operations,operation.id)!=operation:raise Conflict("M1 operation revision/event changed")
     registry.require_head(after.registry_head)
     history=registry.operations.history(operation.id);record=history[-1];value=record.to_dict()
+    if record.sha256!=operation.sha256:raise Conflict('M1 operation changed during consumption')
     if value["state"] not in {"draft","structurally_validated"}:fail("inactive_operation")
+    if value['operation'] not in {'ADD','UPDATE','RENAME'} or (value['operation']!='ADD' and before is None):fail('operation_semantics')
     old,new,details=_details(before,after)
     subjects,keys,writes,namespaces=_coordination(registry,details)
+    if value['operation']=='ADD' and any(i in old.index().outputs for i in details['affected_outputs']):fail('mixed_add_update_scope')
     if [s["id"] for s in value["subjects"]]!=subjects:fail("operation_membership_substitution")
     if [key(r) for r in value["reads"]]!=sorted(keys) or [key(r) for r in value["writes"]]!=sorted(writes) or value["namespaces"]!=[namespaces[k] for k in sorted(namespaces)]:fail("operation_closure_substitution")
     expected_request=fingerprint(dict(before=before.sha256 if before else None,after=after.sha256,registry=after.registry_head.snapshot_sha256,details=details))

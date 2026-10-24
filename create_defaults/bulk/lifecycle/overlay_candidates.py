@@ -7,6 +7,7 @@ job construction remains blocked pending a reviewed pre-seal identity hook.
 
 from dataclasses import dataclass
 import json
+from pathlib import PurePosixPath
 
 from ..common import canonical,confined,fingerprint,sha256
 from ..config import Config
@@ -61,6 +62,11 @@ def overlay_candidate(registry,*,expected,identities,config=None):
         path=confined(config.asset_dir,source["path"],must_exist=True)
         if sha256(path)!=source["sha256"]:fail("overlay_source_hash")
         if path.suffix.lower()!=".png":fail("overlay_png_source")
+        design=next(v['design'] for v in package.contract.to_dict()['variants'] if v['id']==branch)
+        native={size:[box['width'],box['height']] for size,box in design['sizes'].items()}
+        if native!=g['sizes'] or design['trim']!=g['trim'] or design['treatment']!='SOURCE_PRESERVING':fail('overlay_contract_geometry')
+        expected_path=g['branch']+'/overlays/'+role+'/'+PurePosixPath(source['path']).name
+        if e['names']['local_path']!=expected_path or e['names']['public_path']!=expected_path or e['names']['rendered_caption']!='':fail('overlay_output_mapping')
         parameters=dict(input=source["path"],box=g["sizes"][role],trim=g["trim"],colorspace="sRGB",
             strip_metadata=True,format="PNG",resampling="Pillow-LANCZOS")
         definition=dict(group=g["branch"],parameters=parameters,transform=TRANSFORM)

@@ -1,6 +1,7 @@
 """Explicit capability inventory, not a generic category/operation fallback."""
 
 import inspect
+import hashlib
 import json
 
 from ..common import fingerprint
@@ -8,9 +9,17 @@ from ..generators import GENERATORS
 from ..overlays import CATALOG, TRANSFORM
 from .basis import historical_basis, GENERATORS as EXPECTED_GENERATORS
 from .identity_models import HEADER, fail
+from ..contracts.adoption.sources import load_pins
 
 
 def matrix():
+    # A self-resealed catalog is not a newly approved category contract.
+    pins=load_pins()
+    selected={r['path']:r for r in pins['files']}
+    for name in ('create_defaults/bulk/catalog/overlays-v1.json','create_defaults/bulk/generators.py'):
+        row=selected[name];raw=(CATALOG.parents[3]/name).read_bytes()
+        if row['text_lf']:raw=raw.replace(b'\r\n',b'\n')
+        if hashlib.sha256(raw).hexdigest()!=row['sha256']:fail('adapter_source_pin')
     actual = {(name,version):fingerprint(inspect.getsource(fn)) for (name,version),fn in GENERATORS.items()}
     if set(actual) != {(name,1) for name in EXPECTED_GENERATORS}:fail("generator_registry_changed")
     basis = historical_basis();categories=[];variants=[]

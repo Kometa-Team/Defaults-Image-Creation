@@ -29,3 +29,7 @@ def test_complete_m2_historical_proofs_accepted_without_runtime_dependencies():
     rows=[dict(head='head',plan_sha256='plan',platform=p,evidence=deepcopy(phase4.M2_HISTORICAL),evidence_sha256=phase4.fingerprint(phase4.M2_HISTORICAL)) for p in ['Windows','Linux']]
     with patch.object(phase4,'identity',return_value=dict(head='head',plan_sha256='plan')):
         assert phase4.verify_historical_reports(rows)==phase4.M2_HISTORICAL
+    phase4.verify_m2_baseline()
+    selected=phase4.read(phase4.IDS)
+    with patch.object(phase4,'read',return_value=selected[1:]):
+        with pytest.raises(ValueError):phase4.verify_m2_baseline()

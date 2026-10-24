@@ -29,6 +29,16 @@ M2_HISTORICAL=dict(outputs=14079,public_outputs=14077,packages=22,variants=278,p
     adopted_source_pins=299,generator_kinds=4,overlay_branches=18,
     mapping_sha256='6d1a49062208e8361227942549a4adafb0f2fed63c2f3a9a63c7860845ab876f',
     graph_sha256='93b01e2261249185bd06982a9cb0823a61628104d327958cedefd97788a39d7d')
+M1_BASE='5deffb587c92d746a4611939c918ae0e6471ee30'
+
+
+def verify_m2_baseline():
+    original=json.loads(subprocess.check_output(['git','show',M1_BASE+':ci/phase4-test-ids.json'],cwd=ROOT))
+    require(len(original)==204 and unique(original,'M1 baseline IDs')<=unique(read(IDS),'M2 IDs'),'Missing original M1 test IDs')
+    for name in ('models.py','storage.py','package_e.py','schemas/operations-v1.schema.json'):
+        path='create_defaults/bulk/lifecycle/'+name
+        original=subprocess.check_output(['git','show',M1_BASE+':'+path],cwd=ROOT).replace(b'\r\n',b'\n')
+        require(hashlib.sha256(original).hexdigest()==checksum(ROOT/path),'Changed frozen M1 infrastructure: '+path)
 
 
 def verify_historical_reports(reports):
@@ -74,6 +84,7 @@ def run():
         'm2_schema_sha256':checksum(M2_SCHEMA),'m2_golden_sha256':checksum(M2_GOLDEN)}
     try:
         verify_maintenance()
+        verify_m2_baseline()
         paths=['create_defaults/phase4/tests']
         collection=pytest_run(paths,OUT/'phase4-collection.json',collect=True)
         execution=pytest_run(paths,OUT/'phase4-execution.json')
@@ -93,6 +104,7 @@ def run():
 
 
 def verify_reports(reports):
+    verify_m2_baseline()
     require(len(reports)==2 and {r['platform'] for r in reports}=={'Windows','Linux'},'Missing/duplicate P4 platform')
     current=identity();expected=unique(read(IDS),'P4 expected IDs');summary={}
     historical=verify_historical_reports([read(p) for p in (ROOT/'config/ci-downloaded').rglob('phase4-m2-historical.json')])
