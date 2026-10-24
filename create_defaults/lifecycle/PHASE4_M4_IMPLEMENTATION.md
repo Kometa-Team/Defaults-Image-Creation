@@ -138,21 +138,44 @@ are unchanged and are not a rerender corpus.
 
 The existing 23-job Windows/Linux workflow and 15-minute caps remain unchanged.
 The original and M3 validation plans are preserved in an exact hash chain; M4
-adds only `python ci/phase4_review.py run` to the mandatory contracts group.
+adds only `python ci/phase4_review.py run --group states` to mandatory contracts
+and `python ci/phase4_review.py run --group evidence` to mandatory generation.
 `ci/phase4-m4-maintenance.json` pins that one-file extension against the M3 merge
 and the independent verifier pin is
-`a72d6b46c87bc3e2b3a3ef4293e66706553cedf71e014b644165f1f880369a3d`.
+`e9f26ef8d54fc9762bdb426f05b8156b9d6af1ef0dca0d234fabf37179e151af`.
 All original commands and the two M3 commands must remain exactly present; no
 other change is accepted. The four old Phase 3 assertion files and their M3
 maintenance hashes remain unchanged. M4 extends explicit foundation/security
-selections and adds a disjoint bounded review selection for the more expensive
-state/recovery cases. Exact IDs across all producers must equal the entire P4
+selections and adds disjoint bounded state/recovery and evidence selections.
+Exact IDs across all producers must equal the entire P4
 namespace. No optional job, skip/xfail, deleted test
 or `continue-on-error` is introduced. A shared session fixture avoids duplicate
 native composition setup. M3's original test bodies are independently compared
 to the merged AST, all original M3 IDs remain, and its native implementation and
 schema files must match the merge byte hashes. Existing M1/M2 IDs and schema
 protections remain mandatory.
+
+The first hosted run `40055462366` at `f15fb333453597205a5fa5472b3c96c0c841f0bf`
+measured 97 combined security/review cases passing on Linux in 415.39 s, but the
+Windows review job exhausted its unchanged 15-minute cap after 81 passed cases,
+with no failed assertion. The separate 12 state/recovery cases passed in
+484.00 s on Linux and 610.90 s on Windows; the latter complete contracts group
+took 749.13 s. Therefore M4 evidence work is moved to the existing generation
+group, while review retains original M3 security plus small attribution controls.
+No native test becomes a mock. All old non-pytest commands remain required.
+
+That run also exposed one existing negative-control fixture assumption: globally
+sorting the expanded foundation IDs made `selected[1:]` drop a new M3 control
+instead of a required original M1 case. Both foundation jobs correctly failed
+that unchanged assertion. The correction preserves the original ordered
+280-ID prefix and appends M4 IDs, with an independent prefix regression guard;
+`test_ci_identities.py` and the M1 baseline assertion are unchanged.
+
+Current explicit selections total **469 IDs**: 342 foundations (all original
+280 plus 62 M4 schema/CI cases), 18 original M3 pixels, 63 review/security
+(48 original M3 plus 15 M4 attribution cases), 12 M4 states and 34 M4 evidence.
+No group overlaps another. Both platform reports for each M4 partition and
+the separate native two-stage proof are mandatory acceptance inputs.
 
 The stdlib-only M4 acceptance verifier requires an exact-head proof from each OS,
 complete two-stage history, distinct synthetic actors, immutable reopen and all

@@ -97,7 +97,8 @@ def verify_original_plan(original,*,root=ROOT):
         expected['commands'].setdefault(group,[]).append(['{python}','ci/phase4_composition.py','run','--group',part])
     from ci.phase4_review import BASE as m3_base
     require(json.loads(subprocess.check_output(['git','show',m3_base+':ci/validation-plan.json'],cwd=root))==expected,'Changed frozen M3 plan')
-    expected['commands'].setdefault('contracts',[]).append(['{python}','ci/phase4_review.py','run'])
+    for job,group in [('contracts','states'),('generation','evidence')]:
+        expected['commands'].setdefault(job,[]).append(['{python}','ci/phase4_review.py','run','--group',group])
     require(read(root/'ci/validation-plan.json')==expected,'Validation plan changes beyond exact M3/M4 additions')
 
 
@@ -135,7 +136,7 @@ def run():
             require(not all_expected&unique(group,'M3 group'),'Duplicate P4 execution')
             all_expected|=set(group)
         from ci.phase4_review import selections as review_selections
-        reviews=set(review_selections());require(not all_expected&reviews,'Duplicate M4 bounded IDs');all_expected|=reviews
+        reviews=set().union(*map(set,review_selections().values()));require(not all_expected&reviews,'Duplicate M4 bounded IDs');all_expected|=reviews
         all_collection=pytest_run(['create_defaults/phase4/tests'],OUT/'phase4-all-collection.json',collect=True)
         require(all_collection['exitstatus']==0 and unique(all_collection['nodes'],'all P4 collection')==all_expected,'Uncovered P4 test ID')
         paths=sorted({n.split('::')[0] for n in read(IDS)})
@@ -167,7 +168,7 @@ def verify_reports(reports):
     for ids in m3.values():
         require(not all_expected&set(ids),'Duplicate P4 test execution');all_expected.update(ids)
     from ci.phase4_review import selections as review_selections
-    reviews=set(review_selections());require(not all_expected&reviews,'Duplicate M4 bounded IDs');all_expected|=reviews
+    reviews=set().union(*map(set,review_selections().values()));require(not all_expected&reviews,'Duplicate M4 bounded IDs');all_expected|=reviews
     for r in reports:
         require(all(r[k]==current[k] for k in ('head','plan_sha256')),'Stale P4 head/plan')
         require(r['kind']=='phase4-operation-foundations' and r['success'],'P4 job failed')

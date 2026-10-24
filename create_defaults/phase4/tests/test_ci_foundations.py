@@ -27,7 +27,7 @@ def verify(values):
     from ci import phase4_composition, phase4_review
     def read(path):return ['fixture.py::test_required'] if path==phase4.IDS else {'archive_sha256':'golden'}
     with patch.object(phase4,'identity',return_value=dict(head='head',plan_sha256='plan')),patch.object(phase4,'read',side_effect=read),patch.object(phase4,'checksum',return_value='pin'),patch.object(phase4,'verify_historical_reports',return_value=phase4.M2_HISTORICAL),patch.object(phase4,'verify_m2_baseline',return_value=None),patch.object(phase4,'verify_m3_baseline',return_value=None),patch.object(phase4_composition,'selections',return_value=dict(pixels=['composition.py::test_pixels'],security=['composition.py::test_security'])),patch.object(phase4_composition,'verify_reports',return_value={'verified':'fixture'}):
-        with patch.object(phase4_review,'verify_reports',return_value={'verified':'review-fixture'}),patch.object(phase4_review,'verify_group_reports',return_value={'verified':'bounded-review-fixture'}),patch.object(phase4_review,'selections',return_value=[]):
+        with patch.object(phase4_review,'verify_reports',return_value={'verified':'review-fixture'}),patch.object(phase4_review,'verify_group_reports',return_value={'verified':'bounded-review-fixture'}),patch.object(phase4_review,'selections',return_value={}):
             return phase4.verify_reports(values)
 
 
@@ -81,7 +81,7 @@ def test_actual_phase4_producer_names_do_not_pollute_any_earlier_artifact_select
     monkeypatch.setattr(phase4,'verify_m2_baseline',lambda:None)
     monkeypatch.setattr(phase4,'verify_m3_baseline',lambda:None)
     monkeypatch.setattr(phase4_composition,'selections',lambda:dict(pixels=['composition.py::test_pixels'],security=['composition.py::test_security']))
-    monkeypatch.setattr(phase4_review,'selections',lambda:[])
+    monkeypatch.setattr(phase4_review,'selections',lambda:{})
     monkeypatch.setattr(phase4,'pytest_run',execute)
     validation.write(out/'phase4-canonical.json',dict(head='head',platform='Linux',plan_sha256='plan',evidence=archive,evidence_sha256=canonical))
     validation.write(out/'phase4-m2-canonical.json',dict(head='head',platform='Linux',plan_sha256='plan',evidence_sha256=canonical))

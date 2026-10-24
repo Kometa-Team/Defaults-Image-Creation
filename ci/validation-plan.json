@@ -86,7 +86,18 @@
       [
         "{python}",
         "ci/phase4_review.py",
-        "run"
+        "run",
+        "--group",
+        "states"
+      ]
+    ],
+    "generation": [
+      [
+        "{python}",
+        "ci/phase4_review.py",
+        "run",
+        "--group",
+        "evidence"
       ]
     ]
   },

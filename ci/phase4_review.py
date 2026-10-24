@@ -16,7 +16,7 @@ SCHEMA = ROOT/'create_defaults/bulk/lifecycle/schemas/review-v1.schema.json'
 FILES = ('evidence.py','review.py','review_authority.py','schemas/review-v1.schema.json')
 IDS = ROOT/'ci/phase4-review-test-ids.json'
 OUT = ROOT/'config/ci-validation/phase4-m4'
-MAINTENANCE_PIN = 'a72d6b46c87bc3e2b3a3ef4293e66706553cedf71e014b644165f1f880369a3d'
+MAINTENANCE_PIN = 'e9f26ef8d54fc9762bdb426f05b8156b9d6af1ef0dca0d234fabf37179e151af'
 
 
 def verify_maintenance(root=ROOT):
@@ -31,31 +31,35 @@ def verify_maintenance(root=ROOT):
 
 
 def selections():
-    ids=read(IDS)
-    require(ids and len(ids)==len(unique(ids,'M4 bounded review')) and all(n.startswith('create_defaults/phase4/tests/test_review.py::') for n in ids),'Invalid M4 bounded IDs')
-    command=['{python}','ci/phase4_review.py','run']
-    require(read(ROOT/'ci/validation-plan.json')['commands']['contracts'].count(command)==1,'Missing mandatory M4 bounded command')
-    return ids
+    groups=read(IDS);require(set(groups)=={'states','evidence'},'Changed M4 bounded partitions')
+    a,b=(unique(groups[g],g) for g in ('states','evidence'))
+    require(a and b and not a&b and all(n.startswith('create_defaults/phase4/tests/test_review.py::') for n in a|b),'Invalid/duplicate M4 bounded IDs')
+    plan=read(ROOT/'ci/validation-plan.json')
+    for job,group in [('contracts','states'),('generation','evidence')]:
+        command=['{python}','ci/phase4_review.py','run','--group',group]
+        require(plan['commands'][job].count(command)==1,'Missing mandatory M4 bounded command')
+    return groups
 
 
-def run():
-    ids=selections();result=dict(**identity(),kind='phase4-m4-review-execution',success=False,
+def run(group):
+    ids=selections()[group];out=OUT/group;result=dict(**identity(),kind='phase4-m4-review-execution',group=group,success=False,
         ids_sha256=checksum(IDS),schema_sha256=checksum(SCHEMA),implementation_sha256=implementation_checksum())
     try:
-        collection=pytest_run(ids,OUT/'review-collection.json',collect=True)
-        execution=pytest_run(ids,OUT/'review-execution.json')
+        collection=pytest_run(ids,out/'review-collection.json',collect=True)
+        execution=pytest_run(ids,out/'review-execution.json')
         require(collection['exitstatus']==0 and unique(collection['nodes'],'M4 collection')==set(ids),'Changed M4 collection')
         require(unique(execution['nodes'],'M4 execution')==set(ids),'Incomplete M4 execution')
         require(not validate_execution(execution).get('skipped'),'M4 skips are not acceptance')
         result.update(collection=collection,execution=execution,success=True)
-    finally:write(OUT/'phase4-m4-execution-report.json',result)
+    finally:write(out/'phase4-m4-execution-report.json',result)
 
 
 def verify_group_reports(reports):
-    expected=identity();ids=set(selections())
-    require(len(reports)==2 and {r['platform'] for r in reports}=={'Windows','Linux'},'Missing M4 bounded execution')
+    expected=identity();groups=selections()
+    require(len(reports)==4 and {(r['platform'],r['group']) for r in reports}=={(p,g) for p in ('Windows','Linux') for g in groups},'Missing/duplicate M4 bounded execution')
     result={}
     for r in reports:
+        ids=set(groups[r['group']])
         require(all(r[k]==expected[k] for k in ('head','plan_sha256')) and r['success']
             and r['kind']=='phase4-m4-review-execution','Failed/stale M4 execution')
         require(r['ids_sha256']==checksum(IDS) and r['schema_sha256']==checksum(SCHEMA)
@@ -63,7 +67,7 @@ def verify_group_reports(reports):
         require(r['collection']['exitstatus']==0 and unique(r['collection']['nodes'],'M4 collection')==ids
             and unique(r['execution']['nodes'],'M4 execution')==ids,'Missing M4 bounded IDs')
         counts=validate_execution(r['execution']);require(not counts.get('skipped'),'Skipped M4 bounded ID')
-        result[r['platform']]=dict(counts=counts,seconds=r['execution']['seconds'],collected_ids=sorted(ids),executed_ids=sorted(r['execution']['nodes']))
+        result.setdefault(r['platform'],{})[r['group']]=dict(counts=counts,seconds=r['execution']['seconds'],collected_ids=sorted(ids),executed_ids=sorted(r['execution']['nodes']))
     return result
 
 
@@ -72,6 +76,9 @@ def implementation_checksum():
 
 
 def baseline():
+    original_foundations=json.loads(subprocess.check_output(['git','show',BASE+':ci/phase4-test-ids.json'],cwd=ROOT))
+    require(read(ROOT/'ci/phase4-test-ids.json')[:len(original_foundations)]==original_foundations,
+        'Changed original ordered P4 foundation IDs')
     path='ci/phase4-composition-test-ids.json'
     old=json.loads(subprocess.check_output(['git','show',BASE+':'+path],cwd=ROOT))
     current=read(ROOT/path)
@@ -79,7 +86,7 @@ def baseline():
     require(set(old['security'])<=unique(current['security'],'extended security'),'Missing original M3 security ID')
     added=set(current['security'])-set(old['security'])
     require(added and all(i.startswith('create_defaults/phase4/tests/test_review.py::') for i in added),'Unexpected M4 review selection')
-    require(not added&set(selections()),'Duplicate M4 bounded execution')
+    require(not added&set().union(*map(set,selections().values())),'Duplicate M4 bounded execution')
     for name in ('composition.py','composition_models.py','previews.py','schemas/composition-v1.schema.json'):
         path='create_defaults/bulk/lifecycle/'+name
         raw=subprocess.check_output(['git','show',BASE+':'+path],cwd=ROOT).replace(b'\r\n',b'\n')
@@ -119,4 +126,4 @@ def verify_reports(reports, pixels):
 
 if __name__=='__main__':
     import argparse
-    parser=argparse.ArgumentParser(__doc__);parser.add_argument('action',choices=['run']);parser.parse_args();run()
+    parser=argparse.ArgumentParser(__doc__);parser.add_argument('action',choices=['run']);parser.add_argument('--group',required=True,choices=['states','evidence']);args=parser.parse_args();run(args.group)
