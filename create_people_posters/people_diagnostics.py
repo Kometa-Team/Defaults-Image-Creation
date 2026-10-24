@@ -24,7 +24,8 @@ import uuid
 import zipfile
 
 REDACTED = "[REDACTED]"
-WITHHELD = "[diagnostic unavailable; sensitive content withheld]"
+_FALLBACK_CORRELATION = uuid.uuid4().hex
+WITHHELD = "[diagnostic unavailable; sensitive content withheld; correlation_id=" + _FALLBACK_CORRELATION + "]"
 MAX_TEXT = 262144
 _KEYS = frozenset({
     "apikey", "key", "tmdbkey", "tmdbapikey", "accesskey", "secretaccesskey",
@@ -207,14 +208,14 @@ def safe_exception(error: BaseException) -> str:
         for cls in type(error).__mro__:
             category = categories.get((cls.__module__, cls.__name__))
             if category:
-                return "error_category=" + category
+                return "error_category=" + category + " correlation_id=" + _FALLBACK_CORRELATION
         for cls, label in ((TimeoutError, "timeout"), (ConnectionError, "connection"),
                            (FileNotFoundError, "file_not_found"), (PermissionError, "permission"),
                            (OSError, "io_error"), (ValueError, "invalid_data"),
                            (KeyboardInterrupt, "cancelled")):
             if isinstance(error, cls):
-                return "error_category=" + label
-        return "error_category=internal_error"
+                return "error_category=" + label + " correlation_id=" + _FALLBACK_CORRELATION
+        return "error_category=internal_error correlation_id=" + _FALLBACK_CORRELATION
     except BaseException:
         return WITHHELD
 
@@ -356,7 +357,7 @@ def secure_handler(handler):
     # logging.Handler.handleError normally dumps the original record on stderr.
     def handle_error(record):
         try:
-            sys.stderr.write("[logging destination failed; diagnostic content withheld]\n")
+            sys.stderr.write("[logging destination failed; diagnostic content withheld; correlation_id=" + _FALLBACK_CORRELATION + "]\n")
         except BaseException:
             pass
     handler.handleError = handle_error
@@ -454,6 +455,6 @@ def protect_cli():
         sys.stderr.write(safe_exception(error) + "\n")
     sys.excepthook = exception_hook
     threading.excepthook = lambda args: exception_hook(args.exc_type, args.exc_value, args.exc_traceback)
-    sys.unraisablehook = lambda args: sys.stderr.write("error_category=unraisable_error\n")
+    sys.unraisablehook = lambda args: sys.stderr.write("error_category=unraisable_error correlation_id=" + _FALLBACK_CORRELATION + "\n")
     import atexit
     atexit.register(lambda: [getattr(sys, name).finish() for name in ("stdout", "stderr") if isinstance(getattr(sys, name), RedactingStream)])

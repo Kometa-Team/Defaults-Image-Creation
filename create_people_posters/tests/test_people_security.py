@@ -7,6 +7,7 @@ import io
 import json
 import logging
 import os
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -180,6 +181,7 @@ def test_sanitizer_and_formatter_failure_never_reveal_original_record(monkeypatc
     def broken(*args, **kwargs):raise RuntimeError(secret)
     monkeypatch.setattr(secure, "_sanitize_text", broken)
     assert secure.sanitize_text(secret) == secure.WITHHELD
+    assert re.search(r"correlation_id=[0-9a-f]{32}", secure.WITHHELD)
     record = logging.LogRecord("unit", logging.ERROR, "source.py", 1, secret, (), None)
     assert secure.RedactingFormatter().format(record) == secure.WITHHELD
     class Dangerous:
