@@ -18,12 +18,13 @@ def reports():
         for phase in ['setup','call','teardown']])
     return [dict(head='head',plan_sha256='plan',platform=system,kind='phase4-operation-foundations',success=True,
         ids_sha256='pin',schema_sha256='pin',golden_sha256='pin',canonical_sha256='golden',
+        m2_schema_sha256='pin',m2_golden_sha256='pin',m2_canonical_sha256='golden',
         collection=dict(nodes=data['nodes'],exitstatus=0),execution=deepcopy(data)) for system in ['Linux','Windows']]
 
 
 def verify(values):
     def read(path):return ['fixture.py::test_required'] if path==phase4.IDS else {'archive_sha256':'golden'}
-    with patch.object(phase4,'identity',return_value=dict(head='head',plan_sha256='plan')),patch.object(phase4,'read',side_effect=read),patch.object(phase4,'checksum',return_value='pin'):
+    with patch.object(phase4,'identity',return_value=dict(head='head',plan_sha256='plan')),patch.object(phase4,'read',side_effect=read),patch.object(phase4,'checksum',return_value='pin'),patch.object(phase4,'verify_historical_reports',return_value=phase4.M2_HISTORICAL):
         return phase4.verify_reports(values)
 
 
@@ -66,7 +67,7 @@ def test_actual_phase4_producer_names_do_not_pollute_any_earlier_artifact_select
     validation.write(tmp_path/'collection-ubuntu-latest/collection.json',{'kind':'collection'})
     def selected(path):
         if path==phase4.IDS:return fixture['execution']['nodes']
-        if path==phase4.GOLDEN:return dict(archive=archive,archive_sha256=canonical)
+        if path in {phase4.GOLDEN,phase4.M2_GOLDEN}:return dict(archive=archive,archive_sha256=canonical)
         return validation.read(path)
     def execute(paths,destination,collect=False):
         data=fixture['collection'] if collect else fixture['execution'];validation.write(destination,data);return data
@@ -75,6 +76,7 @@ def test_actual_phase4_producer_names_do_not_pollute_any_earlier_artifact_select
     monkeypatch.setattr(phase4,'checksum',lambda path:'pin');monkeypatch.setattr(phase4,'verify_maintenance',lambda:None)
     monkeypatch.setattr(phase4,'pytest_run',execute)
     validation.write(out/'phase4-canonical.json',dict(head='head',platform='Linux',plan_sha256='plan',evidence=archive,evidence_sha256=canonical))
+    validation.write(out/'phase4-m2-canonical.json',dict(head='head',platform='Linux',plan_sha256='plan',evidence_sha256=canonical))
     phase4.run()
     assert validation.legacy_reports(tmp_path)==[{'kind':'collection'}]
     assert len(list(tmp_path.rglob('phase4-report.json')))==1 and validation.read(out/'phase4-report.json')['success']
