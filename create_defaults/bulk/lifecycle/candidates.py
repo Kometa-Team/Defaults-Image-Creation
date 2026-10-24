@@ -170,7 +170,7 @@ def _graph(resolution,manifest,view,results,baseline):
         context=fingerprint(dict(identity=entry,definition=definition,job=job,validation=checked[identity],renderer=manifest["renderer"]))
         output=put("output",identity,context,deps)
         prior=outputs.get(identity)
-        outputs[identity]=dict(node=output,category=entry["category"],kind="poster",variant=entry["variant"],
+        outputs[identity]=dict(node=output,category=entry["category"],kind="poster",variant=job["variant"],
             local_path=job["local_relative"],public_path=job["remote_relative"],
             companions=sorted(i for i in groups[(checked[identity]["contract_sha256"],checked[identity]["group"])] if i!=identity),
             context_sha256=context,evidence=prior["evidence"] if prior else {f:[] for f in ("previews","confirmations","decisions","receipts")})

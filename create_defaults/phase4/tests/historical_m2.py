@@ -37,8 +37,10 @@ def reconcile(registry,records,resolution,graph,implementation):
         assert len(semantic_tokens(d))==len(children) and len(set(children))==len(children)
         assert all(child in mapped for child in children);members+=len(children)
     assert kinds=={'award-years','best-of-years','separator-variants','content-rating-series'}
-    branches={o['variant'] for o in index.outputs.values() if o['category']=='Overlays'}
+    branches={assignments[i]['variant'] for i,o in index.outputs.items() if o['category']=='Overlays'}
     assert len(branches)==18
+    assert {o['variant'] for o in index.outputs.values() if o['category']=='Overlays'}=={'standard','bigger'}
+    assert all(index.outputs[i]['variant']==mapped[i]['observed_variant'] for i in mapped)
     assert members>0
     result=dict(M2_HISTORICAL)
     envelope={**identity(), 'evidence':result,'evidence_sha256':fingerprint(result)}

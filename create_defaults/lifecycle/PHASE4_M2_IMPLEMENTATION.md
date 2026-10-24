@@ -43,6 +43,10 @@ Historical IDs are not recomputed. The mapping remains
 the M6-bound historical graph remains
 `93b01e2261249185bd06982a9cb0823a61628104d327958cedefd97788a39d7d`.
 New candidates are never constructed as historical adoption records.
+M5 job variants (`base`, `standard`, `bigger`) and M6 category-design variants/
+overlay branches are distinct namespaces. Reconciliation independently checks
+both against the actual frozen mappings and assignments; candidate graph output
+rows preserve M5's job-variant convention.
 
 The original four generator implementations remain unchanged. Semantic lookup
 runs in an isolated subclass at the public expansion boundary before the

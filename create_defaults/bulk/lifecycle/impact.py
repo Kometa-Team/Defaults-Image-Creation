@@ -32,6 +32,7 @@ class HistoricalGraph:
         for i,row in index.outputs.items():
             item=basis.row(i)["identity"];assigned=basis.assignment(i)
             if (row["category"],row["local_path"],row["public_path"],row["companions"])!=(item["category"],item["local_path"],item["public_path"],assigned["companions"]):fail("historical_graph_substitution")
+            if row['variant']!=basis.row(i)['observed_variant']:fail('historical_job_variant_substitution')
         return cls(snapshot)
 
     @property

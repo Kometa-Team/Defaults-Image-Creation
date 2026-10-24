@@ -80,7 +80,7 @@ def overlay_candidate(registry,*,expected,identities,config=None):
         transform_key=node_id("transform","overlay")
         nodes[transform_key]=dict(kind="transform",identity="overlay",sha256=fingerprint(transform),dependencies=[])
         nodes[output]=dict(kind="output",identity=i,sha256=fingerprint(material),dependencies=sorted([asset,rules_key,transform_key]))
-        outputs[i]=dict(node=output,category="Overlays",kind="overlay",variant=branch,
+        outputs[i]=dict(node=output,category="Overlays",kind="overlay",variant=role,
             local_path=e["names"]["local_path"],public_path=e["names"]["public_path"],companions=[],
             context_sha256=fingerprint(material),evidence={f:[] for f in ("previews","confirmations","decisions","receipts")})
     for roles in groups.values():

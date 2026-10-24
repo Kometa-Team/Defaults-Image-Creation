@@ -76,6 +76,9 @@ blocker. M2 does not modify either legacy planner or invent historical overlays.
 The complete machine-readable inventory is
 [`PHASE4_M2_COVERAGE.json`](../../lifecycle/PHASE4_M2_COVERAGE.json). It distinguishes
 conditional effective-job coverage from overlay relationship-only coverage.
+M5 output `variant` retains the job namespace (`base`, `standard`, `bigger`).
+M6 contract variants/overlay branches remain separately bound by registry entries,
+assignments and rule nodes. These values are never treated as interchangeable.
 
 ## Impact
 
