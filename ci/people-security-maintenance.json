@@ -58,6 +58,10 @@
       "before_sha256": "659e7888387217fc99b5de0dc41c44e9a40534cf320eccc7ba9d427a502ae1bf",
       "sha256": "24e956e31cb0cf0d8a734eb26d4f5d5350a51ef3a938f2516788d37db0a506fb"
     },
+    "create_defaults/tests/test_validation.py": {
+      "before_sha256": "e7d0fee3f2783751d9e7122d137bb461d7b26e2ce427fbb94815be22b96f0c4d",
+      "sha256": "0736dcafa1c295c0e9601bfc72c2d78981c28d97423e944877a97259989e8f5d"
+    },
     "create_people_posters/audit_people_images.py": {
       "before_sha256": "f8cbf5100ea91fd8f61e19ab010e569831afd0098758b19baf82fae47edf8c1c",
       "sha256": "bae4e7006c91dce52c0a477e7d5f7af7a45deb97be3baf2ed7ee6bd8bb949b47"
