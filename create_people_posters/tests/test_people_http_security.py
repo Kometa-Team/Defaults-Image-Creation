@@ -121,6 +121,19 @@ def test_invalid_json_cannot_retain_credential_bearing_decoder_error():
     assert captured.value.__context__ is None and KEY not in str(captured.value)
 
 
+@pytest.mark.parametrize("stage", ["decode", "close"])
+def test_unexpected_decode_and_cleanup_errors_cannot_escape_raw(stage):
+    response = Response(payload=RuntimeError(KEY)) if stage == "decode" else Response()
+    if stage == "close":
+        def failed_close():raise RuntimeError(KEY)
+        response.close = failed_close
+    with pytest.raises(secure.DiagnosticError) as captured:
+        http.tmdb_json(Transport(response), KEY, "/3/search/person", operation="search_person")
+    assert captured.value.diagnostic.category == "invalid_response"
+    assert captured.value.__context__ is None and captured.value.__cause__ is None
+    assert KEY not in repr(captured.value)
+
+
 @pytest.mark.parametrize("field", ["auth", "cookies", "headers"])
 def test_session_authentication_cannot_be_forwarded_to_image_hosts(field):
     transport = Transport()

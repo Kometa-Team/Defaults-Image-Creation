@@ -22,6 +22,14 @@ _ENDPOINTS = {"search_person": "/3/search/person", "person_images": "/3/person/{
               "person_details": "/3/person/{person_id}", "popular_people": "/3/person/popular"}
 
 
+def _close(response):
+    try:
+        response.close()
+        return True
+    except Exception:
+        return False  # Cleanup exceptions never escape with request context.
+
+
 def failure_diagnostic(provider, operation, endpoint, error=None, status=None):
     if status is None and error is not None:
         candidate = getattr(getattr(error, "response", None), "status_code", None)
@@ -111,7 +119,8 @@ def request(session, method, url, *, provider, operation, endpoint, params=None,
             failure = Diagnostic(provider, operation, "internal_error", endpoint=endpoint)
         finally:
             if response is not None and failure is not None:
-                response.close()
+                if not _close(response):
+                    failure = Diagnostic(provider, operation, "internal_error", endpoint=endpoint)
         if not failure.retryable or attempt + 1 == attempts or retry_after > 30:
             break
         sleep(max(float(2 ** attempt), retry_after))
@@ -153,10 +162,10 @@ def response_json(response, *, provider, operation, endpoint):
         value = response.json()
         if type(value) is not dict:
             failed = True
-    except (ValueError, requests.RequestException):
+    except Exception:
         failed = True
     finally:
-        response.close()
+        if not _close(response):failed = True
     if failed:
         raise DiagnosticError(Diagnostic(provider, operation, "invalid_response", endpoint=endpoint))
     return value
@@ -223,10 +232,10 @@ class SecureTMDBSession(requests.Session):
         try:
             payload = response.json()
             failed = type(payload) is not dict or "errors" in payload or payload.get("success") is False
-        except ValueError:
+        except Exception:
             failed = True
         if failed:
-            response.close()
+            _close(response)
             raise DiagnosticError(Diagnostic("TMDB", operation, "invalid_response", endpoint=endpoint))
         return response
 

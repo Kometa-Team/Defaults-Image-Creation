@@ -25,6 +25,8 @@
     "create_people_posters/tests/test_people_http_security.py::test_session_authentication_cannot_be_forwarded_to_image_hosts[cookies]",
     "create_people_posters/tests/test_people_http_security.py::test_session_authentication_cannot_be_forwarded_to_image_hosts[headers]",
     "create_people_posters/tests/test_people_http_security.py::test_success_after_retry_and_preferred_read_token_has_no_query_credential",
+    "create_people_posters/tests/test_people_http_security.py::test_unexpected_decode_and_cleanup_errors_cannot_escape_raw[close]",
+    "create_people_posters/tests/test_people_http_security.py::test_unexpected_decode_and_cleanup_errors_cannot_escape_raw[decode]",
     "create_people_posters/tests/test_people_http_security.py::test_untrusted_image_authentication_urls_fail_closed[http://image.tmdb.org/test.jpg]",
     "create_people_posters/tests/test_people_http_security.py::test_untrusted_image_authentication_urls_fail_closed[https://host/a.jpg#token]",
     "create_people_posters/tests/test_people_http_security.py::test_untrusted_image_authentication_urls_fail_closed[https://image.tmdb.org/test.jpg?Api%5FKey=fake]",
