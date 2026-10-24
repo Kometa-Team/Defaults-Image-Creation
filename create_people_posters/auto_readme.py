@@ -18,6 +18,19 @@ Typical usage (run from your local style directory or pass --directory):
   python auto_readme.py --directory ./bw --verbose
   python auto_readme.py --directory ./original --owner Kometa-Team --repo People-Images --branch master
 """
+
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
 import argparse
 import logging
 import math
@@ -53,9 +66,9 @@ for d in (CONFIG_DIR, LOGS_DIR):
 
 def setup_logging(level=logging.INFO, console=True):
     log_file = LOGS_DIR / f"{SCRIPT_PATH.stem}.log"
-    handlers = [logging.FileHandler(log_file, encoding="utf-8", mode="w")]
+    handlers = [secure_handler(logging.FileHandler(log_file, encoding="utf-8", mode="w"))]
     if console:
-        handlers.append(logging.StreamHandler(sys.stdout))
+        handlers.append(secure_handler(logging.StreamHandler(sys.stdout)))
     logging.basicConfig(
         level=level,
         format="%(asctime)s [%(levelname)s] %(message)s",
@@ -72,6 +85,7 @@ def load_env_if_present(override: bool = False):
     env_path = CONFIG_DIR / ".env"
     if env_path.exists():
         load_dotenv(env_path, override=override)
+        register_environment()
 
 
 FRIENDLY_NAMES = {
@@ -151,7 +165,7 @@ def make_grid_image(files: list[str], images_folder: Path, out_path: Path,
             image = Image.open(image_path)
             image.thumbnail(thumb_size, Image.LANCZOS)
         except Exception as e:
-            logging.warning("Failed to open %s: %s", image_path, e)
+            logging.warning("Failed to open %s: %s", image_path, safe_exception(e))
             continue
 
         col = i % cols
@@ -190,7 +204,7 @@ def make_grid_image(files: list[str], images_folder: Path, out_path: Path,
         grid_image.save(out_path)
         logging.info("Saved grid image: %s", out_path)
     except Exception as e:
-        logging.error("Failed to save grid image %s: %s", out_path, e)
+        logging.error("Failed to save grid image %s: %s", out_path, safe_exception(e))
 
 
 def main():

@@ -3,6 +3,19 @@
 
 from __future__ import annotations
 
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
+
 import argparse
 import csv
 import os
@@ -19,6 +32,7 @@ from PIL import Image, ImageDraw, ImageFont
 SCRIPT_DIR = Path(__file__).resolve().parent
 CONFIG_DIR = SCRIPT_DIR / "config"
 load_dotenv(CONFIG_DIR / ".env")
+register_environment()
 DEFAULT_IMPORT_ROOT = Path(os.getenv("PEOPLE_IMPORT_DIR") or (CONFIG_DIR / "people_dirs"))
 DEFAULT_OUT_ROOT = CONFIG_DIR / "review_original_candidates" / "tmdb_alternates"
 TMDB_SEARCH_URL = "https://api.themoviedb.org/3/search/person"
@@ -80,13 +94,9 @@ def draw_text(draw: ImageDraw.ImageDraw, text: str, xy: tuple[int, int], font: I
 
 
 def search_person(session: requests.Session, api_key: str, name: str) -> dict:
-    response = session.get(
-        TMDB_SEARCH_URL,
-        params={"api_key": api_key, "query": name, "include_adult": "false", "language": "en-US", "page": "1"},
-        timeout=30,
-    )
-    response.raise_for_status()
-    results = response.json().get("results", [])
+    from create_people_posters.people_http import tmdb_json
+    results = tmdb_json(session, api_key, "/3/search/person", operation="search_person",
+                        params={"query": name, "include_adult": "false", "language": "en-US", "page": "1"}).get("results", [])
     if not results:
         raise RuntimeError(f"No TMDB search results for {name}")
     exact = [item for item in results if str(item.get("name", "")).casefold() == name.casefold()]
@@ -94,13 +104,8 @@ def search_person(session: requests.Session, api_key: str, name: str) -> dict:
 
 
 def get_profiles(session: requests.Session, api_key: str, person_id: int) -> list[dict]:
-    response = session.get(
-        f"https://api.themoviedb.org/3/person/{person_id}/images",
-        params={"api_key": api_key},
-        timeout=30,
-    )
-    response.raise_for_status()
-    profiles = response.json().get("profiles", [])
+    from create_people_posters.people_http import tmdb_json
+    profiles = tmdb_json(session, api_key, f"/3/person/{person_id}/images", operation="person_images").get("profiles", [])
     return sorted(
         profiles,
         key=lambda item: (
@@ -113,9 +118,10 @@ def get_profiles(session: requests.Session, api_key: str, person_id: int) -> lis
 
 
 def download_image(session: requests.Session, file_path: str, out_path: Path) -> None:
-    response = session.get(f"{TMDB_IMAGE_BASE}{file_path}", timeout=60)
-    response.raise_for_status()
+    from create_people_posters.people_http import image_response, tmdb_image_path
+    response = image_response(session, f"{TMDB_IMAGE_BASE}{tmdb_image_path(file_path)}")
     out_path.write_bytes(response.content)
+    response.close()
 
 
 def make_person_sheet(
@@ -181,7 +187,7 @@ def main() -> int:
         args.names = ["Daniel Radcliffe"]
 
     api_key = os.getenv("TMDB_KEY", "").strip()
-    if not api_key:
+    if not api_key and not os.getenv("TMDB_READ_ACCESS_TOKEN"):
         print("[ERROR] TMDB_KEY missing from environment or create_people_posters/config/.env", file=sys.stderr)
         return 2
 

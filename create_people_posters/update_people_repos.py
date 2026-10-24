@@ -46,6 +46,19 @@ Environment:
   UPDATE_README_SKIP_MARKER="[skip readme]"
 """
 
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
+
 import os
 import sys
 import subprocess
@@ -69,7 +82,7 @@ def format_bytes(size: int) -> str:
 
 
 def safe_console(text: str) -> str:
-    return text.encode("ascii", "backslashreplace").decode("ascii")
+    return sanitize_text(text).encode("ascii", "backslashreplace").decode("ascii")
 
 
 def append_skip_marker(message: str, marker: str) -> str:
@@ -99,14 +112,8 @@ def run(cmd, cwd: Path, dry: bool, capture=False) -> Tuple[int, str, str]:
     print("->", safe_console(" ".join(cmd)), safe_console(f"(cwd={cwd})"))
     if dry:
         return 0, "", ""
-    cp = subprocess.run(
-        cmd,
-        cwd=str(cwd),
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-        capture_output=capture,
-    )
+    from create_people_posters.people_process import run_process
+    cp = run_process(cmd, cwd=cwd, tee=not capture)
     return cp.returncode, (cp.stdout or ""), (cp.stderr or "")
 
 

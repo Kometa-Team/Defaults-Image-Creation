@@ -63,7 +63,7 @@ def test_api_rejects_local_readme_generation(isolated, monkeypatch):
 
 def test_batch_paths_and_checkpoints_are_isolated(isolated, monkeypatch):
     (isolated / "people_list.txt").write_text("42|Ada\n", encoding="utf-8")
-    monkeypatch.setenv("TMDB_KEY", "test")
+    monkeypatch.setenv("TMDB_KEY", "NOT_A_REAL_TMDB_FIXTURE_SECRET_20261024")
     monkeypatch.setattr(orch, "build_colorize_command", lambda py: [py, "colorize_noncolor_ddcolor.py"])
     calls = []
     def run(title, argv, **kwargs):
@@ -272,7 +272,8 @@ def test_launch_cleanup_error_is_visible_without_failing_resumed_job(launch_jobs
     monkeypatch.setattr(people_workspaces.shutil,'rmtree',fail)
     invoke(monkeypatch,'--batch-id',resume,'--stop-after','ensure_repo')
     output=capsys.readouterr()
-    assert 'Launch cleanup incomplete' in output.err and 'cleanup denied' in output.err
+    assert 'Launch cleanup incomplete' in output.err and 'error_category=io_error' in output.err
+    assert 'cleanup denied' not in output.err  # Raw exception text is no longer an output contract.
     assert 'eligible=1 deleted=0 retained=2' in output.out
     assert manager.record(resume)[0]['status']=='processing'
     assert manager.record(old)[0]['status']=='cleanup_eligible'

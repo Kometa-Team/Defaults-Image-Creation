@@ -90,6 +90,9 @@ def mock_runner(monkeypatch, failure=0, outcome="success", processed=1):
 
     def run(title, argv, **kwargs):
         calls.append(argv)
+        if "recover_edge_chops.py" in argv:
+            recovery.write_report(orch.CONFIG_DIR / "edge_chop_recovery", [],
+                                  run_id=argv[argv.index("--run-id") + 1])
         if "remove_bg_birefnet.py" in argv:
             path = orch.CONFIG_DIR / "logs" / "remove_bg_birefnet.json"
             path.parent.mkdir(parents=True, exist_ok=True)

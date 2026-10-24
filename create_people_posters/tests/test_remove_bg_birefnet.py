@@ -349,7 +349,8 @@ def test_partial_failure_continues_and_preserves_failed_source(folders, fake_bac
 
     assert (summary["exit_code"], summary["outcome"]) == (1, "partial_failure")
     assert (summary["processed"], summary["failed"]) == (1, 1)
-    assert "inference failed for red image" in summary["files"][0]["reason"]
+    assert "error_category=internal_error" in summary["files"][0]["reason"]
+    assert "inference failed for red image" not in summary["files"][0]["reason"]
     assert (folders.source / "a-bad.jpg").read_bytes() == bad
     assert not (folders.archive / "a-bad.jpg").exists()
     assert not (folders.output / "a-bad.png").exists()
@@ -867,7 +868,8 @@ def test_png_original_remains_archived_when_staging_metadata_copy_fails(monkeypa
     summary = batch(folders, fake_backend)
 
     assert (summary["exit_code"], summary["processed"], summary["failed"]) == (1, 0, 1)
-    assert "staging metadata locked" in summary["files"][0]["reason"]
+    assert "error_category=permission" in summary["files"][0]["reason"]
+    assert "staging metadata locked" not in summary["files"][0]["reason"]
     assert (folders.archive / source.name).read_bytes() == original
     # PNG handoff replaces the queue photograph only after archiving its bytes.
     bg.validate_output(source, (31, 47))
@@ -916,7 +918,8 @@ def test_png_archive_copy_failure_keeps_queue_photograph(monkeypatch, folders, f
     summary = batch(folders, fake_backend)
 
     assert (summary["exit_code"], summary["processed"], summary["failed"]) == (1, 0, 1)
-    assert "archive locked" in summary["files"][0]["reason"]
+    assert "error_category=permission" in summary["files"][0]["reason"]
+    assert "archive locked" not in summary["files"][0]["reason"]
     assert source.read_bytes() == original
     assert not (folders.archive / source.name).exists()
     bg.validate_output(folders.output / source.name, (31, 47))
@@ -1133,7 +1136,8 @@ def test_batch_strict_matting_solver_failure_keeps_queue_and_blocks_handoff(fold
 
     assert (summary["exit_code"], summary["outcome"]) == (1, "partial_failure")
     assert (summary["processed"], summary["failed"]) == (0, 1)
-    assert "matting solver failed" in summary["files"][0]["reason"]
+    assert "error_category=invalid_data" in summary["files"][0]["reason"]
+    assert "matting solver failed" not in summary["files"][0]["reason"]
     assert source.read_bytes() == original
     assert not folders.archive.exists()
     assert not (folders.output / "person.png").exists()

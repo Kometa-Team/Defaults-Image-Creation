@@ -81,6 +81,19 @@ Environment (./config/.env or process environment)
   ORCH_REQUIRE_BG_OUTPUT=true         — fail if SEL_DOWNLOAD_DIR isn't set/visible
   ORCH_RECOVER_EDGE_CHOPS=true        — after poster generation, retry top-edge transparent chops from TMDB alternates
 """
+
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
 import os
 import sys
 import shlex
@@ -151,6 +164,7 @@ def load_env_or_bootstrap() -> None:
                   file=sys.stderr)
             sys.exit(1)
         load_dotenv(env_file)
+        register_environment()
 
 
 def ps_exe() -> Optional[str]:
@@ -343,20 +357,20 @@ def _python_probe(argv_prefix: List[str], require_colorize_deps: bool) -> Tuple[
             timeout=30,
         )
     except FileNotFoundError as e:
-        return False, str(e)
+        return False, safe_exception(e)
     except Exception as e:
-        return False, str(e)
+        return False, safe_exception(e)
     if cp.returncode == 0:
-        return True, (cp.stdout or "").strip()
+        return True, sanitize_text((cp.stdout or "").strip())
     combined = ((cp.stdout or "") + ("\n" if cp.stdout and cp.stderr else "") + (cp.stderr or "")).strip()
-    return False, combined or f"exit code {cp.returncode}"
+    return False, sanitize_text(combined) if combined else f"exit code {cp.returncode}"
 
 
 def build_colorize_command(default_python: str) -> List[str]:
     try:
         engine = _colorize_engine()
     except ValueError as exc:
-        print(f"[ERROR] {exc}", file=sys.stderr)
+        print(f"[ERROR] {safe_exception(exc)}", file=sys.stderr)
         sys.exit(2)
 
     require_deps = _colorize_candidates_exist()
@@ -387,6 +401,8 @@ def build_colorize_command(default_python: str) -> List[str]:
 
 # ---------- helpers: run, markers, fs/log counting, lock ----------
 def write_marker(marker: Path, meta: dict) -> None:
+    if json.dumps(sanitize_data(meta), sort_keys=True) != json.dumps(meta, sort_keys=True):
+        raise ValueError("Sensitive data cannot be persisted in an orchestrator checkpoint")
     marker.parent.mkdir(parents=True, exist_ok=True)
     tmp = marker.with_suffix(marker.suffix + ".tmp")
     tmp.write_text(json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -419,54 +435,17 @@ def run_cmd(
     log_path: Optional[Path] = None,
 ) -> Tuple[int, Optional[str], Optional[str]]:
     """Run a subprocess; optionally tee combined output to a log file."""
-    print(f"\n=== {title} ===")
-    print("->", " ".join(shlex.quote(a) for a in argv))
+    print(sanitize_text(f"\n=== {title} ==="))
+    print("->", " ".join(shlex.quote(sanitize_text(a)) for a in argv))
     try:
-        if capture:
-            cp = subprocess.run(
-                argv,
-                cwd=str(SCRIPT_DIR),
-                text=True,
-                encoding="utf-8",
-                errors="replace",
-                capture_output=True,
-            )
-            if log_path:
-                log_path.parent.mkdir(parents=True, exist_ok=True)
-                combined = (cp.stdout or "")
-                if cp.stderr:
-                    if combined and not combined.endswith("\n"):
-                        combined += "\n"
-                    combined += cp.stderr
-                log_path.write_text(combined, encoding="utf-8")
-            return cp.returncode, (cp.stdout or ""), (cp.stderr or "")
-        if log_path:
-            log_path.parent.mkdir(parents=True, exist_ok=True)
-            with log_path.open("w", encoding="utf-8", errors="replace") as handle:
-                cp = subprocess.Popen(
-                    argv,
-                    cwd=str(SCRIPT_DIR),
-                    text=True,
-                    encoding="utf-8",
-                    errors="replace",
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.STDOUT,
-                )
-                assert cp.stdout is not None
-                for line in cp.stdout:
-                    print(line, end="")
-                    handle.write(line)
-                cp.stdout.close()
-                rc = cp.wait()
-            return rc, None, None
-        else:
-            cp = subprocess.run(argv, cwd=str(SCRIPT_DIR))
-            return cp.returncode, None, None
+        from create_people_posters.people_process import run_process
+        cp = run_process(argv, cwd=SCRIPT_DIR, tee=not capture, log_path=log_path)
+        return cp.returncode, cp.stdout if capture else None, cp.stderr if capture else None
     except FileNotFoundError as e:
-        print(f"[ERROR] {title}: {e}", file=sys.stderr)
+        print(f"[ERROR] {title}: {safe_exception(e)}", file=sys.stderr)
         return 127, None, None
     except Exception as e:
-        print(f"[ERROR] {title}: {e}", file=sys.stderr)
+        print(f"[ERROR] {title}: {safe_exception(e)}", file=sys.stderr)
         return 1, None, None
 
 
@@ -527,7 +506,7 @@ def cleanup_on_launch(manager):
         for batch, outcome in manager.cleanup(dry_run=False):
             print(f"[CLEANUP] {batch}: {outcome}")
     except (OSError, ValueError, sqlite3.Error) as error:
-        print(f"[WARN] Launch cleanup incomplete; retained jobs can be retried: {error}", file=sys.stderr)
+        print(f"[WARN] Launch cleanup incomplete; retained jobs can be retried: {safe_exception(error)}", file=sys.stderr)
     finally:
         counts = getattr(manager, "last_cleanup_counts", None)
         if counts is not None:
@@ -668,6 +647,7 @@ def _main(resources):
     if "--list" in sys.argv[1:]:
         if load_dotenv:
             load_dotenv(CONFIG_DIR / ".env")
+            register_environment()
     else:
         load_env_or_bootstrap()
     people_override_file = Path(os.getenv("PEOPLE_OVERRIDE_LIST") or (CONFIG_DIR / "people_overrides.txt"))
@@ -710,7 +690,7 @@ def _main(resources):
     try:
         selected_poster_engine = poster_engine()
     except ValueError as error:
-        parser.error(str(error))
+        parser.error(safe_exception(error))
     from people_github import sandbox_settings
     if sandbox_settings() and (args.publish_mode != "github_api" or args.workspace_mode != "batch"):
         parser.error("Sandbox requires github_api + batch; local_git/persistent are blocked")
@@ -753,7 +733,7 @@ def _main(resources):
             args.people_list = (CONFIG_DIR / "people_list.txt") if batch_manifest.get("explicit_people_list") else None
             print(f"[INFO] Batch: {batch}; workspace: {CONFIG_DIR}")
         except (OSError, ValueError) as error:
-            parser.error(str(error))
+            parser.error(safe_exception(error))
     elif args.batch_id or args.new_batch:
         parser.error("--batch-id and --new-batch require --workspace-mode batch")
     if args.people_list:
@@ -763,7 +743,7 @@ def _main(resources):
         bg_fingerprint = background_fingerprint()
         poster_fp = poster_fingerprint(SCRIPT_DIR)
     except ValueError as exc:
-        parser.error(str(exc))
+        parser.error(safe_exception(exc))
     bg_changed = background_checkpoint_changed(bg_fingerprint)
     poster_changed = checkpoint_changed(STATE_DIR, poster_fp)
 
@@ -834,8 +814,8 @@ def _main(resources):
         return [py, "find_and_download_missing_people.py", "--input_directory", str(logs_dir)]
 
     def _tmdb():
-        if not os.getenv("TMDB_KEY"):
-            print("[ERROR] TMDB_KEY not set in ./config/.env; cannot run tmdb step.", file=sys.stderr)
+        if not os.getenv("TMDB_KEY") and not os.getenv("TMDB_READ_ACCESS_TOKEN"):
+            print("[ERROR] Configure TMDB_READ_ACCESS_TOKEN or TMDB_KEY before the tmdb step.", file=sys.stderr)
             sys.exit(2)
         return [py, "tmdb_people.py"]
 
@@ -860,7 +840,7 @@ def _main(resources):
             prepare_inputs(CONFIG_DIR, require_retained=poster_changed)
             return renderer_command(py, SCRIPT_DIR, ps_exe)
         except (OSError, ValueError) as error:
-            print(f"[ERROR] {error}", file=sys.stderr)
+            print(f"[ERROR] {safe_exception(error)}", file=sys.stderr)
             sys.exit(2)
 
     def _recover_edge_chops():
@@ -874,13 +854,33 @@ def _main(resources):
             str(local_people_root.resolve()),
             "--transparent-root",
             str((local_people_root / "transparent").resolve()),
+            "--run-id", recovery_run_id,
         ]
+        pending = STATE_DIR / "recover_edge_chops.pending.json"
+        if pending.exists():
+            from create_people_posters.people_recovery_records import read_summary
+            value = json.loads(pending.read_text(encoding="utf8"))
+            if set(value) != {"run_id", "retry_names", "summary_sha256"} or not value["retry_names"]:
+                raise ValueError("Recovery pending checkpoint is invalid; local files retained")
+            prior = read_summary(CONFIG_DIR / "edge_chop_recovery" / "recovery-summary.json", run_id=value["run_id"])
+            if prior["sha256"] != value["summary_sha256"] or prior["retry_names"] != value["retry_names"]:
+                raise ValueError("Recovery pending checkpoint does not match its receipt")
+            args2 += ["--names", *value["retry_names"]]
+            return args2
         try:
             poster_started = step_started_at.get("poster_ps1")
         except NameError:
             poster_started = None
         if poster_started:
             args2 += ["--modified-since", str(poster_started - 1.0)]
+        else:
+            retained = STATE_DIR / "poster-inputs.json"
+            if retained.is_file():
+                from create_people_poster import label_name
+                names = json.loads(retained.read_text(encoding="utf8"))["names"]
+                if not names or any(type(name) is not str or Path(name).name != name for name in names):
+                    raise ValueError("Retained recovery membership is invalid")
+                args2 += ["--names", *[label_name(Path(name).stem) for name in names]]
         return args2
 
     def _update_repos():
@@ -1004,6 +1004,9 @@ def _main(resources):
         return
 
     # Run
+    import uuid
+    recovery_run_id = uuid.uuid4().hex
+    recovery_pending = False
     if not manager:
         acquire_lock()
     STATE_DIR.mkdir(parents=True, exist_ok=True)
@@ -1118,6 +1121,26 @@ def _main(resources):
 
             # ensure_repo must exist AND return success; also sanity-check the repo root afterward
             rc, _, _ = run_cmd(s.title, argv, log_path=step_log_path(s.key))
+            if s.key == "recover_edge_chops" and rc in {0, 3}:
+                from create_people_posters.people_recovery_records import read_summary
+                try:
+                    receipt = read_summary(CONFIG_DIR / "edge_chop_recovery" / "recovery-summary.json", run_id=recovery_run_id)
+                    if receipt["exit_code"] != rc or any(r["status"] in {"staged", "error"} for r in receipt["rows"]):
+                        raise ValueError("Recovery receipt is incomplete")
+                    if receipt["changed_names"]:
+                        clear_from(["sync_images", "readme", "sync_md"], "sync_images")
+                    pending_path = STATE_DIR / "recover_edge_chops.pending.json"
+                    if rc == 3:
+                        write_marker(pending_path, {"run_id": recovery_run_id, "retry_names": receipt["retry_names"],
+                                                    "summary_sha256": receipt["sha256"]})
+                        recovery_pending = True
+                        print("[WARN] Recovery has transient unresolved targets; artwork retained for retry; continuing completed work.")
+                        if s.key == args.stop_after:return
+                        continue  # Never create a success checkpoint for a partial recovery.
+                    pending_path.unlink(missing_ok=True)
+                except (OSError, ValueError, KeyError, TypeError):
+                    print("[ERROR] Recovery receipt validation failed; no success checkpoint written.", file=sys.stderr)
+                    sys.exit(2)
             if rc != 0:
                 print(f"[FAIL] {s.key} exited with code {rc}. Stopping.", file=sys.stderr)
                 print_abort_recovery(s.key, rc)
@@ -1263,6 +1286,8 @@ def _main(resources):
                     prepare(CONFIG_DIR, batch, ledger, branch or "master")
                     verify_local_publication(batch, ledger, repo_root, branch or "master")
                 manager.confirm_published(batch, ledger)
+                if recovery_pending:
+                    manager.set_status(batch, "recovery_pending", "Publication verified; recovery retry still pending")
             finally:
                 ledger.close()
         elif args.publish_mode == "github_api" and not args.dry_run:
@@ -1276,7 +1301,7 @@ def _main(resources):
             try:
                 partial = any(row["status"] == "published" for row in ledger.rows(batch))
                 manager.set_status(batch, "partially_published" if partial else "failed",
-                                   "Interrupted" if isinstance(error, KeyboardInterrupt) else str(error))
+                                   "Interrupted" if isinstance(error, KeyboardInterrupt) else safe_exception(error))
             finally:
                 ledger.close()
         raise

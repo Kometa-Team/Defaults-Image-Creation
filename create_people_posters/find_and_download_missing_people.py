@@ -32,6 +32,19 @@ GETMISSING_STYLES   = "bw,transparent"  (default: "bw")
 GETMISSING_BRANCH   = "master"               (default: "master")
 """
 
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
+
 import os
 import re
 import sys
@@ -152,8 +165,8 @@ _RAR_BACKEND_PATH: str | None = None
 
 def setup_logging():
     root_handlers = [
-        FileHandler(MAIN_LOG_FILE, encoding="utf-8", mode="w"),
-        StreamHandler(sys.stdout),
+        secure_handler(FileHandler(MAIN_LOG_FILE, encoding="utf-8", mode="w")),
+        secure_handler(StreamHandler(sys.stdout)),
     ]
     logging.basicConfig(
         level=logging.INFO,
@@ -163,7 +176,7 @@ def setup_logging():
     )
     dl_logger = logging.getLogger("downloads")
     dl_logger.setLevel(logging.INFO)
-    dl_logger.addHandler(FileHandler(DL_LOG_FILE, encoding="utf-8", mode="w"))
+    dl_logger.addHandler(secure_handler(FileHandler(DL_LOG_FILE, encoding="utf-8", mode="w")))
 
 
 setup_logging()
@@ -588,7 +601,7 @@ def download_file(url: str, destination: Path) -> bool:
         r = requests.get(url)  # timeout + retries injected above
         r.raise_for_status()
     except requests.RequestException as e:
-        write_to_log_file(f"Failed to download {url} → {e}")
+        write_to_log_file(f"Failed to download {url} → {safe_exception(e)}")
         return False
     destination.parent.mkdir(parents=True, exist_ok=True)
     with destination.open("wb") as f:
@@ -990,11 +1003,11 @@ def main():
                         write_to_log_file("0 items found...")
                 except Exception as exc:
                     log.exception("Failed while processing %s", item_name)
-                    print(f"!! Failed while processing {item_name} ({exc})", file=sys.stderr, flush=True)
+                    print(f"!! Failed while processing {item_name} ({safe_exception(exc)})", file=sys.stderr, flush=True)
                     continue
     except OSError as exc:
-        write_to_log_file(f"Failed to enumerate logs in {input_directory}: {exc}")
-        print(f'Failed to enumerate logs in "{input_directory}": {exc}')
+        write_to_log_file(f"Failed to enumerate logs in {input_directory}: {safe_exception(exc)}")
+        print(f'Failed to enumerate logs in "{input_directory}": {safe_exception(exc)}')
         sys.exit(1)
 
     # Union of candidates seen in logs
@@ -1037,9 +1050,9 @@ def main():
         if missing_with_urls:
             with MISSING_WITH_URLS_CSV.open("w", encoding="utf-8", newline="") as f:
                 w = csv.writer(f)
-                w.writerow(["name", "url"])
+                w.writerow(sanitize_data(["name", "url"]))
                 for n, u in missing_with_urls:
-                    w.writerow([n, u])
+                    w.writerow(sanitize_data([n, u]))
             write_to_log_file(f"Wrote missing_with_urls CSV → {MISSING_WITH_URLS_CSV}")
     else:
         write_to_log_file("No missing names detected (everything appears present online).")

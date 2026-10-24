@@ -1,5 +1,18 @@
 """Isolated, resumable jobs. Only verified publications become deletion candidates."""
 
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
+
 import json
 import os
 import re
@@ -16,6 +29,8 @@ ID_PATTERN = re.compile(r"[0-9]{8}T[0-9]{6}-[0-9a-f]{12}\Z")
 
 
 def atomic_json(path, data):
+    if json.dumps(sanitize_data(data), sort_keys=True) != json.dumps(data, sort_keys=True):
+        raise ValueError("Sensitive data cannot be persisted in job metadata")
     path = Path(path)
     reject_links(path)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -159,6 +174,7 @@ class Workspaces:
         return self.create(people_list, cleanup=cleanup)
 
     def set_status(self, batch, status, error=""):
+        error = sanitize_text(error) if type(error) is str else safe_exception(error)
         _, manifest = self.record(batch)
         manifest.update(status=status, updated=time.time(), error=error)
         with self.db:
@@ -326,6 +342,7 @@ def main():
     import argparse
     from dotenv import load_dotenv
     load_dotenv(ROOT / ".env")
+    register_environment()
     parser = argparse.ArgumentParser(description="Clean only verified, retained batch workspaces")
     parser.add_argument("--apply", action="store_true", help="Default is cleanup dry-run")
     args = parser.parse_args()

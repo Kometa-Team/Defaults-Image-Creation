@@ -12,6 +12,19 @@ colorize_noncolor_ddcolor.py - Colorize non-color images with DDColor.
 
 from __future__ import annotations
 
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
+
 import gc
 import importlib
 import io
@@ -58,7 +71,7 @@ LOG_FILE = LOGS_DIR / "colorize_noncolor_ddcolor.log"
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[FileHandler(LOG_FILE, encoding="utf-8", mode="w"), StreamHandler(sys.stdout)],
+    handlers=[secure_handler(FileHandler(LOG_FILE, encoding="utf-8", mode="w")), secure_handler(StreamHandler(sys.stdout))],
     force=True,
 )
 log = logging.getLogger("colorize")
@@ -90,11 +103,11 @@ def ensure_ddcolor_on_path() -> None:
         return
     except ModuleNotFoundError as exc:
         if exc.name != "ddcolor":
-            log.error("DDColor dependency import failed: %s", exc)
+            log.error("DDColor dependency import failed: %s", safe_exception(exc))
             log.error("Install deps with: pip install -r requirements-ddcolor.txt")
             sys.exit(2)
     except Exception as exc:
-        log.error("DDColor import failed: %s", exc)
+        log.error("DDColor import failed: %s", safe_exception(exc))
         sys.exit(2)
 
     urls = [
@@ -141,12 +154,12 @@ def ensure_ddcolor_on_path() -> None:
                 break
         except Exception as exc:
             last_err = exc
-            log.warning("DDColor vendor attempt failed: %s", exc)
+            log.warning("DDColor vendor attempt failed: %s", safe_exception(exc))
 
     try:
         import ddcolor  # noqa: F401
     except Exception as exc:
-        log.error("DDColor import failed: %s", exc)
+        log.error("DDColor import failed: %s", safe_exception(exc))
         if last_err:
             log.error("Last vendor download error: %s", last_err)
         log.error("Install deps with: pip install -r requirements-ddcolor.txt")
@@ -188,7 +201,7 @@ def download_model_snapshot(model_name: str, force: bool = False) -> Path:
     try:
         from huggingface_hub import snapshot_download
     except Exception as exc:
-        log.error("huggingface_hub import failed: %s", exc)
+        log.error("huggingface_hub import failed: %s", safe_exception(exc))
         log.error("Install deps with: pip install -r requirements-ddcolor.txt")
         sys.exit(2)
 
@@ -254,7 +267,7 @@ class DDColorBatchColorizer:
         except ModuleNotFoundError:
             raise
         except Exception as exc:
-            log.warning("Cached DDColor model failed to load, redownloading once: %s", exc)
+            log.warning("Cached DDColor model failed to load, redownloading once: %s", safe_exception(exc))
             model_dir = download_model_snapshot(model_name, force=True)
             model = load_cached_model(DDColor, model_dir)
 
@@ -333,11 +346,11 @@ def colorize_one(src: Path, dst: Path, colorizer, quality: int) -> bool:
             src.unlink()
             log.info("Removed original B/W: %s", src.name)
         except Exception as exc:
-            log.error("Colorized but could not remove original '%s': %s", src.name, exc)
+            log.error("Colorized but could not remove original '%s': %s", src.name, safe_exception(exc))
             return False
         return True
     except Exception as exc:
-        log.error("Colorize failed for %s: %s", src.name, exc)
+        log.error("Colorize failed for %s: %s", src.name, safe_exception(exc))
         return False
     finally:
         gc.collect()
@@ -361,7 +374,7 @@ def main() -> None:
             try:
                 expected_size = image_size(src)
             except Exception as exc:
-                log.error("Input validation failed for %s: %s", src.name, exc)
+                log.error("Input validation failed for %s: %s", src.name, safe_exception(exc))
                 failed += 1
                 continue
             if valid_output(dst, expected_size=expected_size):
@@ -373,7 +386,7 @@ def main() -> None:
                     removed += 1
                     log.info("Removed original B/W after validating existing output: %s", src.name)
                 except Exception as exc:
-                    log.error("Could not remove original '%s' for existing output: %s", src.name, exc)
+                    log.error("Could not remove original '%s' for existing output: %s", src.name, safe_exception(exc))
                     failed += 1
                 continue
             log.warning("Existing output is invalid and will be regenerated: %s", dst.name)

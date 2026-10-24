@@ -9,6 +9,19 @@ compared against supplied styled outputs before syncing.
 
 from __future__ import annotations
 
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
+
 import argparse
 import csv
 import os
@@ -25,6 +38,7 @@ from PIL import Image, ImageDraw, ImageFont
 SCRIPT_DIR = Path(__file__).resolve().parent
 CONFIG_DIR = SCRIPT_DIR / "config"
 load_dotenv(CONFIG_DIR / ".env")
+register_environment()
 DEFAULT_IMPORT_ROOT = Path(os.getenv("PEOPLE_IMPORT_DIR") or (CONFIG_DIR / "people_dirs"))
 DEFAULT_OUT_ROOT = CONFIG_DIR / "review_original_candidates"
 TMDB_SEARCH_URL = "https://api.themoviedb.org/3/search/person"
@@ -92,18 +106,19 @@ def draw_wrapped(draw: ImageDraw.ImageDraw, text: str, xy: tuple[int, int], font
 
 
 def download_candidate(session: requests.Session, api_key: str, name: str, out_path: Path) -> dict[str, str]:
-    params = {"api_key": api_key, "query": name, "include_adult": "false", "language": "en-US", "page": "1"}
-    response = session.get(TMDB_SEARCH_URL, params=params, timeout=30)
-    response.raise_for_status()
-    results = response.json().get("results", [])
+    from create_people_posters.people_http import tmdb_json, image_response, tmdb_image_path
+    results = tmdb_json(session, api_key, "/3/search/person", operation="search_person",
+                        params={"query": name, "include_adult": "false", "language": "en-US", "page": "1"}).get("results", [])
     picked = next((item for item in results if item.get("profile_path")), None)
     if not picked:
         return {"status": "no_profile", "tmdb_id": "", "tmdb_name": "", "profile_path": ""}
 
-    image_url = f"{TMDB_IMAGE_BASE}{picked['profile_path']}"
-    image_response = session.get(image_url, timeout=60)
-    image_response.raise_for_status()
-    out_path.write_bytes(image_response.content)
+    image_url = f"{TMDB_IMAGE_BASE}{tmdb_image_path(picked['profile_path'])}"
+    response = image_response(session, image_url)
+    try:
+        out_path.write_bytes(response.content)
+    finally:
+        response.close()
     return {
         "status": "downloaded",
         "tmdb_id": str(picked.get("id", "")),
@@ -178,7 +193,7 @@ def main() -> int:
     args = parser.parse_args()
 
     api_key = os.getenv("TMDB_KEY", "").strip()
-    if not api_key:
+    if not api_key and not os.getenv("TMDB_READ_ACCESS_TOKEN"):
         print("[ERROR] TMDB_KEY missing from environment or create_people_posters/config/.env", file=sys.stderr)
         return 2
 
@@ -216,7 +231,7 @@ def main() -> int:
         try:
             info = download_candidate(session, api_key, name, out_path)
         except Exception as exc:
-            info = {"status": f"error: {exc}", "tmdb_id": "", "tmdb_name": "", "profile_path": ""}
+            info = {"status": f"error: {safe_exception(exc)}", "tmdb_id": "", "tmdb_name": "", "profile_path": ""}
         rows.append({"name": name, **info})
 
     with manifest_path.open("w", newline="", encoding="utf-8") as fh:
