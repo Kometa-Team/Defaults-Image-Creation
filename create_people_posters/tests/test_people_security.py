@@ -259,7 +259,18 @@ def test_signed_provider_fields_and_encoded_urls_stay_redacted():
     for field in ("X-Amz-Signature", "SharedAccessSignature", "SAS_TOKEN", "API_SIGNATURE"):
         contains_no_secret(secure.diagnostic_json({field: secret}), secret)
     url = "https://example.test/image.jpg?sig=" + secret
-    for value in (url, quote(url, safe="")):
+    spaced_url = "https://example.test/a%20b.jpg?sig=" + secret
+    for value in (url, quote(url, safe=""), spaced_url, quote(spaced_url, safe="")):
         result = secure.sanitize_text(value)
         contains_no_secret(result, secret)
-        assert "example.test/image.jpg" in result
+        assert "example.test/" in result
+    assert secure.sanitize_text(spaced_url) == "https://example.test/a%20b.jpg"
+
+
+def test_configured_credential_urls_are_removed_before_normalization():
+    secret = "https://example.test/webhook/NOT_A_REAL_PATH_CREDENTIAL?mode=private"
+    secure.register_secret(secret)
+    for value in (secret, secret.split("?", 1)[0], quote(secret, safe="")):
+        result = secure.sanitize_text("upstream=" + value)
+        assert "NOT_A_REAL_PATH_CREDENTIAL" not in result
+        assert secure.REDACTED in result

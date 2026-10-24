@@ -66,6 +66,14 @@ def _secret_forms(value):
     forms = {value, quote(value, safe=""), quote_plus(value, safe=""), raw.hex(), raw.hex().upper(),
              base64.b64encode(raw).decode(), base64.urlsafe_b64encode(raw).decode(),
              json.dumps(value, ensure_ascii=True)[1:-1], repr(value)[1:-1]}
+    if "://" in value:
+        try:
+            parsed = urlsplit(value)
+            # A configured credential URL stays sensitive if a client removes
+            # its query/fragment before reporting it (e.g. a webhook endpoint).
+            forms.add(urlunsplit((parsed.scheme, parsed.netloc, parsed.path, "", "")))
+        except ValueError:
+            pass
     forms |= {x.rstrip("=") for x in tuple(forms)}
     forms |= {quote(x, safe="") for x in tuple(forms)}
     forms |= {re.sub(r"%[0-9A-F]{2}", lambda m: m[0].lower(), x) for x in tuple(forms)}
@@ -111,6 +119,12 @@ def _known(text: str) -> str:
 
 def _url(match) -> str:
     value = match[0]
+    # Remove userinfo before parsing: known-value replacement may have inserted
+    # brackets there, which urlsplit would otherwise mistake for an IPv6 host.
+    scheme, rest = value.split("://", 1)
+    authority, slash, tail = rest.partition("/")
+    authority = authority.rsplit("@", 1)[-1]
+    value = scheme + "://" + authority + slash + tail
     parsed = urlsplit(value)
     if parsed.scheme.lower() not in {"https", "http"} or not parsed.hostname:
         return "[URL withheld]"
@@ -128,14 +142,19 @@ def _sanitize_text(text: str) -> str:
     if type(text) is not str or len(text) > MAX_TEXT:
         return WITHHELD
     register_environment()
+    text = _known(text)
+    # Strip authentication from a valid encoded URI BEFORE unquoting can turn
+    # an encoded path space into a delimiter and strand its signed query tail.
+    text = _URL.sub(_url, text)
     # Decode credential-bearing escaped diagnostics, not ordinary filenames or
     # safe percent characters. Work is explicitly bounded.
     for _ in range(4):
         decoded = unquote(text)
         if decoded == text:
             break
-        if any(sensitive_key(m[2]) for m in _PAIR.finditer(decoded)) or _AUTH.search(decoded) or _URL.search(decoded):
-            text = decoded
+        if (any(sensitive_key(m[2]) for m in _PAIR.finditer(decoded)) or _AUTH.search(decoded)
+                or (_URL.search(decoded) and not _URL.search(text))):
+            text = _URL.sub(_url, decoded)
         else:
             break
     text = _URL.sub(_url, text)

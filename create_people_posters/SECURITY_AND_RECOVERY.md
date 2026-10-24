@@ -114,6 +114,10 @@ prohibited. Provider signing fields (such as `X-Amz-Signature` and
 `SharedAccessSignature`) remain sensitive, and all diagnostic URL queries are
 removed, including percent-encoded signed URLs. Guarded console/process streams
 use UTF-8 so this boundary preserves ordinary Unicode diagnostics on both OSes.
+Configured credential URLs are replaced before normalization. Queries/userinfo
+are stripped before decoding URL escapes, so an encoded path space cannot strand
+a signed query in the diagnostic tail. Unescaped whitespace in image source URLs
+is rejected. Secret-bearing test inputs use neutral collection IDs.
 
 ## Recovery contract
 

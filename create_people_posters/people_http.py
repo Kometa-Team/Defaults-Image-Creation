@@ -173,7 +173,8 @@ def response_json(response, *, provider, operation, endpoint):
 
 def image_response(session, url, *, attempts=3, sleep=time.sleep):
     parsed = urlsplit(url)
-    if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password or parsed.fragment:
+    if (parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password or parsed.fragment
+            or any(c.isspace() or ord(c) < 32 for c in url)):
         raise ValueError("Unsafe image source URL")
     # Caller-managed authentication is not embedded in image URLs or persisted
     # candidates. Public TMDB images use a fixed origin and a validated path.

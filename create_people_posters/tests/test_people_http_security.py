@@ -143,7 +143,9 @@ def test_session_authentication_cannot_be_forwarded_to_image_hosts(field):
 
 
 @pytest.mark.parametrize("url", ["http://image.tmdb.org/test.jpg", "https://user:password@host/image.jpg",
-                                   "https://image.tmdb.org/test.jpg?Api%5FKey=fake", "https://host/a.jpg#token"])
+                                   "https://image.tmdb.org/test.jpg?Api%5FKey=fake", "https://host/a.jpg#token",
+                                   "https://example.test/a b.jpg?sig=NOT_A_REAL_SIGNED_SOURCE"],
+                         ids=["insecure-scheme", "userinfo", "credential-query", "fragment", "unescaped-space"])
 def test_untrusted_image_authentication_urls_fail_closed(url):
     transport = Transport()
     with pytest.raises(ValueError):http.image_response(transport, url)
