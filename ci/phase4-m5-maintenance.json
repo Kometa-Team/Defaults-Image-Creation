@@ -1,0 +1,9 @@
+{
+  "base": "47e69a59fd1c306789457250ef6493bdfef7fc17",
+  "files": {
+    "ci/validation-plan.json": {
+      "before_sha256": "853a1110935a41ee22f17e55fbfc803927deae7a220b55732f261a83d4f67eba",
+      "sha256": "3f619be8651252a9436468ecaafa3f5abb78b960782f48347a38204724debd4c"
+    }
+  }
+}

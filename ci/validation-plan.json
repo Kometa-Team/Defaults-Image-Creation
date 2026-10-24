@@ -37,6 +37,13 @@
         "--check",
         "{base}",
         "HEAD"
+      ],
+      [
+        "{python}",
+        "ci/phase4_transactions.py",
+        "run",
+        "--group",
+        "concurrency"
       ]
     ],
     "smoke": [
@@ -62,6 +69,13 @@
         "{python}",
         "-m",
         "create_defaults.bulk.e_smoke"
+      ],
+      [
+        "{python}",
+        "ci/phase4_transactions.py",
+        "run",
+        "--group",
+        "security"
       ]
     ],
     "people": [
@@ -98,6 +112,15 @@
         "run",
         "--group",
         "evidence"
+      ]
+    ],
+    "categories": [
+      [
+        "{python}",
+        "ci/phase4_transactions.py",
+        "run",
+        "--group",
+        "atomic"
       ]
     ]
   },

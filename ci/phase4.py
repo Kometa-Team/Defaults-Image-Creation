@@ -99,7 +99,8 @@ def verify_original_plan(original,*,root=ROOT):
     require(json.loads(subprocess.check_output(['git','show',m3_base+':ci/validation-plan.json'],cwd=root))==expected,'Changed frozen M3 plan')
     for job,group in [('contracts','states'),('generation','evidence')]:
         expected['commands'].setdefault(job,[]).append(['{python}','ci/phase4_review.py','run','--group',group])
-    require(read(root/'ci/validation-plan.json')==expected,'Validation plan changes beyond exact M3/M4 additions')
+    from ci.phase4_transactions import verify_plan
+    verify_plan(expected,root=root,current=read(root/'ci/validation-plan.json'))
 
 
 def verify_maintenance(root=ROOT):
@@ -137,6 +138,8 @@ def run():
             all_expected|=set(group)
         from ci.phase4_review import selections as review_selections
         reviews=set().union(*map(set,review_selections().values()));require(not all_expected&reviews,'Duplicate M4 bounded IDs');all_expected|=reviews
+        from ci.phase4_transactions import selections as transaction_selections
+        transactions=set().union(*map(set,transaction_selections().values()));require(not all_expected&transactions,'Duplicate M5 bounded IDs');all_expected|=transactions
         all_collection=pytest_run(['create_defaults/phase4/tests'],OUT/'phase4-all-collection.json',collect=True)
         require(all_collection['exitstatus']==0 and unique(all_collection['nodes'],'all P4 collection')==all_expected,'Uncovered P4 test ID')
         paths=sorted({n.split('::')[0] for n in read(IDS)})
@@ -169,6 +172,8 @@ def verify_reports(reports):
         require(not all_expected&set(ids),'Duplicate P4 test execution');all_expected.update(ids)
     from ci.phase4_review import selections as review_selections
     reviews=set().union(*map(set,review_selections().values()));require(not all_expected&reviews,'Duplicate M4 bounded IDs');all_expected|=reviews
+    from ci.phase4_transactions import selections as transaction_selections
+    transactions=set().union(*map(set,transaction_selections().values()));require(not all_expected&transactions,'Duplicate M5 bounded IDs');all_expected|=transactions
     for r in reports:
         require(all(r[k]==current[k] for k in ('head','plan_sha256')),'Stale P4 head/plan')
         require(r['kind']=='phase4-operation-foundations' and r['success'],'P4 job failed')
@@ -189,6 +194,8 @@ def verify_reports(reports):
         [read(p) for p in (ROOT/'config/ci-downloaded').rglob('phase4-m3-composition.json')])
     from ci.phase4_review import verify_group_reports
     summary['reviews']['bounded_execution']=verify_group_reports([read(p) for p in (ROOT/'config/ci-downloaded').rglob('phase4-m4-execution-report.json')])
+    from ci.phase4_transactions import verify_reports as verify_transactions
+    summary['transactions']=verify_transactions([read(p) for p in (ROOT/'config/ci-downloaded').rglob('phase4-m5-execution-report.json')])
     return summary
 
 

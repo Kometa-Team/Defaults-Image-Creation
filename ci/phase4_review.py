@@ -26,7 +26,9 @@ def verify_maintenance(root=ROOT):
         and set(value['files'])=={'ci/validation-plan.json'},'Unexpected M4 CI extension')
     path='ci/validation-plan.json';pins=value['files'][path]
     raw=subprocess.check_output(['git','show',BASE+':'+path],cwd=root).replace(b'\r\n',b'\n')
-    require(hashlib.sha256(raw).hexdigest()==pins['before_sha256'] and checksum(root/path)==pins['sha256'],'Changed M4 CI maintenance')
+    require(hashlib.sha256(raw).hexdigest()==pins['before_sha256'],'Changed M4 CI baseline')
+    from ci.phase4_transactions import verify_maintenance as verify_m5
+    require(verify_m5(root)['files'][path]['before_sha256']==pins['sha256'],'Broken M4/M5 plan maintenance chain')
     return value
 
 
