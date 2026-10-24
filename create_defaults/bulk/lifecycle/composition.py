@@ -24,6 +24,7 @@ from ..contracts.logos.assets import inspect_png
 from ..contracts.expanded.validation import approved_english
 from ..contracts.expanded.graph import Snapshot,compare
 from ..typography import evaluate
+from ..asset_cases import exact
 from .basis import historical_basis
 from .candidates import PosterCandidate
 from .overlay_candidates import OverlayCandidate
@@ -163,6 +164,7 @@ def validate_native(manifest,config,view,spec):
             if fit['state']!='fits_current':fail('layout_or_clipping')
             reports[job['poster_id']]=fit
         for item in job['inputs']:
+            exact(config.asset_dir,item['path'])
             path=confined(config.asset_dir,item['path'],must_exist=True)
             if sha256(path)!=item['sha256']:fail('input_drift')
             if item['role'] in {'logo','overlay_source'} and rule['source_kind'] not in {'placeholder','composition'}:

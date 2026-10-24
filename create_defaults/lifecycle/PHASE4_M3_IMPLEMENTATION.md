@@ -95,7 +95,7 @@ last; interruptions leave only orphan objects and never a complete group.
 
 Archive reopening independently checks current contracts, M1 heads and read set,
 M2 semantics, all actual archived inputs/output hashes, native full geometry,
-expected definitions and exact native planner output. It verifies receipt/spec
+expected definitions and exact native planner output. The existing `asset_cases.exact` guard checks actual filesystem spelling, including case-only source renames that Windows hash reads alone would miss. It verifies receipt/spec
 hashes against the existing durable worker records, not caller-provided hashes.
 Dependency verification rehydrates archived bytes in owned temporary storage and
 uses the real planner's parent checks. Missing, extra or asymmetric membership,
@@ -135,14 +135,14 @@ candidate replay; M3 removed only the replay already performed by M2 `revalidate
 It does not remove a validation boundary. These are preliminary measurements,
 not final-head acceptance evidence.
 
-M3's 65 exact IDs are explicitly partitioned in
-`ci/phase4-composition-test-ids.json`: 18 pixel/reproducibility IDs and 47 security
+M3's 66 exact IDs are explicitly partitioned in
+`ci/phase4-composition-test-ids.json`: 18 pixel/reproducibility IDs and 48 security
 IDs. Existing mandatory People and review jobs execute the respective commands
 after their original tests. No workflow, timeout, branch-protection setting,
 original pytest/unittest ID, historical fixture or source pin changes. Four old Phase 3 plan-freeze assertions now retain the exact original plan and independently permit only the two mandatory M3 commands. `ci/phase4-m3-maintenance.json` binds their exact before/after hashes and the plan addition against the M2 merge. All other original assertions remain unchanged, and new negative controls reject extra commands, missing original commands/tests, missing M3 commands, changed historical snapshots, extra maintenance files and changed maintenance bytes.
 The foundation producer still executes every original 204 M1 and 54 M2 ID, plus
 22 new mandatory CI rejection controls. A complete P4 namespace collection must
-equal the disjoint union of all maintained selections: 345 IDs per platform.
+equal the disjoint union of all maintained selections: 346 IDs per platform.
 
 `Validation acceptance` requires all four exact-head/platform M3 group reports,
 every collected/executed ID, zero focused skips/xfails, native byte/replay/resource

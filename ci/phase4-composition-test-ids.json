@@ -47,6 +47,7 @@
     "create_defaults/phase4/tests/test_composition.py::test_changed_current_bytes_invalidate_previous_evidence_even_with_old_timestamp[source]",
     "create_defaults/phase4/tests/test_composition.py::test_changed_current_bytes_invalidate_previous_evidence_even_with_old_timestamp[font]",
     "create_defaults/phase4/tests/test_composition.py::test_changed_current_bytes_invalidate_previous_evidence_even_with_old_timestamp[definition]",
+    "create_defaults/phase4/tests/test_composition.py::test_changed_current_bytes_invalidate_previous_evidence_even_with_old_timestamp[case-only-source-rename]",
     "create_defaults/phase4/tests/test_composition.py::test_changed_live_context_cannot_reuse_archive[renderer]",
     "create_defaults/phase4/tests/test_composition.py::test_changed_live_context_cannot_reuse_archive[contract]",
     "create_defaults/phase4/tests/test_composition.py::test_changed_live_context_cannot_reuse_archive[operation]",

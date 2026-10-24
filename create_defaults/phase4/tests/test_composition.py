@@ -145,7 +145,7 @@ def test_actual_encoded_pixels_cannot_be_substituted(composed,attack):
     reject(row,v)
 
 
-@pytest.mark.parametrize('kind',['source','font','definition'])
+@pytest.mark.parametrize('kind',['source','font','definition','case-only-source-rename'])
 def test_changed_current_bytes_invalidate_previous_evidence_even_with_old_timestamp(composed,kind):
     row=composed['playlist'];trial,ctx,evidence,_=row
     manifest=json.loads(evidence.to_dict()['views'][0]['manifest_json'])
@@ -153,6 +153,12 @@ def test_changed_current_bytes_invalidate_previous_evidence_even_with_old_timest
     else:
         item=next(i for i in manifest['jobs'][0]['inputs'] if i['role']==('font' if kind=='font' else 'logo'));path=trial.config.asset_dir/item['path']
     original=path.read_bytes();stat=path.stat()
+    if kind=='case-only-source-rename':
+        renamed=path.with_name(path.name.lower());path.rename(renamed)
+        try:
+            with pytest.raises(BulkError):archive(row).load(evidence.sha256,context=ctx)
+        finally:renamed.rename(path)
+        return
     try:
         path.write_bytes(original[:-1]+bytes([original[-1]^1]));os.utime(path,ns=(stat.st_atime_ns,stat.st_mtime_ns))
         with pytest.raises(BulkError):archive(row).load(evidence.sha256,context=ctx)
