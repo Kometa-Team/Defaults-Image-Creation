@@ -193,6 +193,49 @@ def tmdb_image_path(value):
     return value
 
 
+def _tmdb_payload_valid(path, payload):
+    """Validate the supported endpoint's JSON shape before the SDK consumes it.
+
+    Configuration details is an object; the five configuration resources are
+    arrays (primary translations contains strings, the other four objects).
+    Do not accept arbitrary arrays on person/search endpoints or error objects
+    disguised as successful configuration responses. Extra provider fields are
+    allowed; mandatory field types follow the TMDB configuration API.
+    """
+    if type(payload) is dict and ("errors" in payload or "status_code" in payload
+                                 or payload.get("success") is False):
+        return False
+    if path == "/3/configuration":
+        if type(payload) is not dict or type(payload.get("images")) is not dict:
+            return False
+        images = payload["images"]
+        return (all(type(images.get(k)) is str for k in ("base_url", "secure_base_url"))
+                and all(_string_list(images.get(k + "_sizes")) for k in
+                        ("backdrop", "logo", "poster", "profile", "still"))
+                and _string_list(payload.get("change_keys")))
+    if path.startswith("/3/configuration/"):
+        if type(payload) is not list:
+            return False
+        resource = path.rsplit("/", 1)[1]
+        if resource == "primary_translations":
+            return _string_list(payload)
+        fields = {
+            "countries": {"iso_3166_1": str, "english_name": str},
+            "languages": {"iso_639_1": str, "english_name": str, "name": str},
+            "jobs": {"department": str, "jobs": list},
+            "timezones": {"iso_3166_1": str, "zones": list},
+        }.get(resource)
+        return fields is not None and all(
+            type(row) is dict and not {"errors", "status_code", "success"}.intersection(row)
+            and all(_string_list(row.get(key)) if expected is list else type(row.get(key)) is expected
+                    for key, expected in fields.items()) for row in payload)
+    return type(payload) is dict
+
+
+def _string_list(value):
+    return type(value) is list and all(type(member) is str for member in value)
+
+
 class SecureTMDBSession(requests.Session):
     """Keep the existing SDK's pagination/person/image semantics, safe transport.
 
@@ -232,7 +275,7 @@ class SecureTMDBSession(requests.Session):
         failed = False
         try:
             payload = response.json()
-            failed = type(payload) is not dict or "errors" in payload or payload.get("success") is False
+            failed = not _tmdb_payload_valid(parsed.path, payload)
         except Exception:
             failed = True
         if failed:

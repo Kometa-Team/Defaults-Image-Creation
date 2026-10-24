@@ -153,7 +153,10 @@ def test_untrusted_image_authentication_urls_fail_closed(url):
 
 
 def test_existing_sdk_uses_secured_session_for_configuration_and_person_images():
-    transport = Transport(Response(), Response())
+    config = {"images": {"base_url": "http://image.tmdb.org/t/p/", "secure_base_url": "https://image.tmdb.org/t/p/",
+        **{kind + "_sizes": ["original"] for kind in ("backdrop", "logo", "poster", "profile", "still")}},
+        "change_keys": []}
+    transport = Transport(Response(payload=config), Response())
     with http.SecureTMDBSession(KEY, read_token=TOKEN, transport=transport) as session:
         session.get("https://api.themoviedb.org/3/configuration", params={"api_key": KEY})
         session.get("https://api.themoviedb.org/3/person/123/images", params={"api_key": KEY})
