@@ -1,6 +1,6 @@
 {
   "additions": {
-    "ci/people-security-test-ids.json": "a222f7039b6201ec2154dacab921e48abdcfae850ebe77edb98eb51a073b555e",
+    "ci/people-security-test-ids.json": "f9458259641132b860bc18e743f3f3e1e8fc256986dcbef130033ee3c99d6e83",
     "ci/people_security.py": "a8b1153e34f50db89a142f769e213d9c5dab6207f3f6a660075cb166b94fc73b",
     "create_people_posters/SECURITY_AND_RECOVERY.md": "71a6fe6f362827bf106bb9eb7b88fa235a865f587cbfcbd52caea827deb6cda4",
     "create_people_posters/people_diagnostics.py": "af760469589560e53067c5f9daefa066082f7ac705ec25b1c749d01a535413bd",
@@ -9,13 +9,14 @@
     "create_people_posters/people_recovery_records.py": "cde0c7869f11c6b1352485d5f6c6bb1b7fd67bb39484f96f6570ba9024430457",
     "create_people_posters/people_recovery_transaction.py": "d925e8043d8bf54d6b1777a751b7b8c1da902218412115d416646454b6db1deb",
     "create_people_posters/people_secure_cli.py": "d2b05d577bd3e75dc4e683082b7c509fce5c3aaf486d826f6d31b50acd37c331",
+    "create_people_posters/tests/conftest.py": "2307ebfe4e9e3ef232a9ebc2ac3c56ba59babc7f33873878fabfb0c3ce10d2df",
     "create_people_posters/tests/test_people_http_security.py": "99c2e3103a39c74a90f50617af9f2aca41a27e019b3c6db0dc90b0a3d28db823",
     "create_people_posters/tests/test_people_recovery_security.py": "8413f93166ac6cf700c0f8909f3d4d70161b7301de80bb65572fc4fea616ccb6",
-    "create_people_posters/tests/test_people_security.py": "087ce743ba97c317901d208fd2296a9e19f7ab526c1e8b6e48a9cb61fe2f0053",
+    "create_people_posters/tests/test_people_security.py": "83af8c85418a64ee7291718a0c89cf483eb38637ea131e950a2df47d257c62a9",
     "create_people_posters/tests/test_people_security_gate.py": "9ad6b8369f706496a54a06628e4c6d474f2c8f0c0eae0e3d06e2ad74a0946398"
   },
   "base": "46e1334504fcdd598e0c34fcd45612ff58e91074",
-  "code_head": "07783ccb7b0d055dce50aabc497fc7040116c75a",
+  "code_head": "8a4a9ac9494669ea5dfb8898ef081b8b6e53c25d",
   "files": {
     ".github/workflows/default-poster-validation.yml": {
       "before_sha256": "d6668e40662065d176cda89dfe717442109006fe37fd3ac91ef4c87f89fc4339",
@@ -28,6 +29,10 @@
     "ci/phase4_transactions.py": {
       "before_sha256": "96ac8c2a92a959cacd940d49cb84bf3c1d3d9663756c69d46a2bb7c73a2f1e28",
       "sha256": "ac90546a4d5b1ee177f73e94bee464ce2970ccdeaa05c74e1eb364cf993ce0f9"
+    },
+    "ci/tests/test_validation.py": {
+      "before_sha256": "cc1622b64476b60d51ca45d0bccbb3e501eae962ba32118bbac3dd959649c180",
+      "sha256": "15f1b5cbcb2d9cdf08cbe23560052745cf40fdda5b7c13cf359af7b4bedd3fda"
     },
     "ci/validation.py": {
       "before_sha256": "89106eb0687f0040f8aba5ef63c5484efa15960ac4f9791c205060cf54a0e8c2",
@@ -131,7 +136,7 @@
     },
     "create_people_posters/tests/test_background_orchestrator.py": {
       "before_sha256": "78dd74a90a33697d87b70843837a37c90b95ef84e645540e3e373b95ae31bc03",
-      "sha256": "946f4c65db90446e25c9ad713e3d56f498bbab7ed5cc240b8d16db717b2f6649"
+      "sha256": "220725efdf8b92e007c791987bc287ef0c9c0c9280ee3d33ea571f6a4faba3c4"
     },
     "create_people_posters/tests/test_people_api_orchestrator.py": {
       "before_sha256": "11e3b40d45be95bab3855744d8acff6cbd02d4c61458c7a424139848f38cd478",
