@@ -166,3 +166,21 @@ def test_even_resealed_ci_metadata_cannot_change_protection(maintenance_copy,mon
     # pin. Production never accepts a caller-provided pin or compatibility flag.
     monkeypatch.setattr(m5,'MAINTENANCE_PIN',m5.fingerprint(value))
     with pytest.raises(ValueError):m5.verify_maintenance(root)
+
+
+def test_native_m5_collection_cannot_pollute_original_report_selection(tmp_path):
+    from ci import validation
+    def execute(ids,destination,collect=False):
+        value=dict(nodes=ids,exitstatus=0,seconds=1,reports=[] if collect else [
+            dict(nodeid=i,when=p,outcome='passed',seconds=0,wasxfail=False,skip_reason=None)
+            for i in ids for p in ('setup','call','teardown')])
+        validation.write(destination,value)
+        return value
+    with patch.object(m5,'OUT',tmp_path/'phase4-m5'),patch.object(m5,'pytest_run',side_effect=execute):
+        m5.run('security')
+    report=validation.read(tmp_path/'phase4-m5/security/phase4-m5-execution-report.json')
+    assert report['success'] and len(report['collection']['nodes'])==40
+    assert validation.legacy_reports(tmp_path)==[]
+    original={'kind':'collection','head':'original'}
+    validation.write(tmp_path/'original/collection.json',original)
+    assert validation.legacy_reports(tmp_path)==[original]

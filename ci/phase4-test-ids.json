@@ -401,5 +401,6 @@
   "create_defaults/phase4/tests/test_ci_transactions.py::test_even_resealed_ci_metadata_cannot_change_protection[membership]",
   "create_defaults/phase4/tests/test_ci_transactions.py::test_even_resealed_ci_metadata_cannot_change_protection[provenance]",
   "create_defaults/phase4/tests/test_ci_transactions.py::test_even_resealed_ci_metadata_cannot_change_protection[protection-algorithm]",
-  "create_defaults/phase4/tests/test_ci_transactions.py::test_even_resealed_ci_metadata_cannot_change_protection[activation-import]"
+  "create_defaults/phase4/tests/test_ci_transactions.py::test_even_resealed_ci_metadata_cannot_change_protection[activation-import]",
+  "create_defaults/phase4/tests/test_ci_transactions.py::test_native_m5_collection_cannot_pollute_original_report_selection"
 ]

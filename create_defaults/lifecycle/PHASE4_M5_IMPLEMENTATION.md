@@ -271,8 +271,8 @@ independent original M3 encoded JPEG bytes and retain false real-authority flags
 
 Post-approval development validation passed 105 focused tests and 32 subtests
 in 120.76 s (schema, M5 CI rejection controls, original M1 CI controls and original
-acceptance-gate tests). Static collection reconciles all 594 Phase 4 IDs exactly
-once: 403 foundation controls, 127 original M3/M4 bounded cases and 64 native M5
+acceptance-gate tests). Static collection reconciles all 595 Phase 4 IDs exactly
+once: 404 foundation controls, 127 original M3/M4 bounded cases and 64 native M5
 cases. The 13 new maintenance controls are additional coverage. All protected
 patch bytes match the sealed proposal and all 190 source checks pass. Complete
 Windows/Linux exact-head evidence remains mandatory and is recorded in PR #36
@@ -289,6 +289,19 @@ syntax, provenance, pin-manifest hash and full production checks remain. No
 approved protected byte is altered by this test-only correction.
 The complete local activation suite passed 86/86 in 243.11 s after this repair,
 including unexpected production-source and activation-import rejection tests.
+
+At `cf13c60a4af712962d9fb710dad10149a34c5c97`, all 38 Windows/Linux producer
+jobs passed. Mandatory acceptance then rejected 16 extra original-suite report
+matches: M5's generically named `collection.json` artifacts collided with the
+unchanged original report selector. The unprotected M5 producer now writes
+`m5-collection.json`; the original selector, protected workflow and all approved
+pins remain unchanged. A new unit control exercises the producer and original
+selector together, proving that original collection remains selected and M5
+collection cannot enter that namespace. All 46 M5 CI controls passed in 21.08 s.
+A diagnostic local replay reconciled all downloaded producer reports, exact test
+IDs, historical invariants and native M3/M4/M5 proofs, isolating this filename
+collision as the only aggregate defect. That replay is preparation evidence;
+it does not replace the mandatory final-head GitHub acceptance result.
 
 All native generation remains in disposable synthetic trials under original
 512 MiB worker, 1 GiB total, one-worker, 120-second attempt/zero-retry limits.

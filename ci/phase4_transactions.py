@@ -101,7 +101,7 @@ def run(group):
         ids_sha256=checksum(IDS),schema_sha256=checksum(SCHEMA),implementation_sha256=implementation_checksum())
     try:
         baseline();verify_maintenance();verify_plan(json.loads(subprocess.check_output(['git','show',BASE+':ci/validation-plan.json'],cwd=ROOT)))
-        collection=pytest_run(ids,out/'collection.json',collect=True)
+        collection=pytest_run(ids,out/'m5-collection.json',collect=True)
         execution=pytest_run(ids,out/'execution.json')
         require(collection['exitstatus']==0 and unique(collection['nodes'],'M5 collection')==set(ids),'Changed M5 collection')
         require(unique(execution['nodes'],'M5 execution')==set(ids),'Incomplete M5 execution')
