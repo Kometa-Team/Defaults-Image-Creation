@@ -325,3 +325,25 @@ def test_short_configured_credentials_still_block_paths_and_hash_metadata(tmp_pa
         with pytest.raises(ValueError, match="Sensitive data"):
             atomic_json(target, {"source": value})
         assert not target.exists()
+
+
+def test_cached_names_never_cache_environment_values_or_skip_new_credentials(monkeypatch):
+    first, second = canary("first_environment_value"), canary("changed_environment_value")
+    monkeypatch.setenv("TMDB_KEY", first)
+    contains_no_secret(secure.sanitize_text("message=" + first), first)
+    monkeypatch.setenv("TMDB_KEY", second)
+    contains_no_secret(secure.sanitize_text("message=" + second + " " + first), first, second)
+    # A previously public URL-valued variable must still be inspected after
+    # its value acquires userinfo. A cached false name classification is safe
+    # only while this fresh-value inspection remains active.
+    monkeypatch.setenv("PUBLIC_TRANSPORT_URL", "https://example.test/public")
+    assert secure.sanitize_text("ordinary public context") == "ordinary public context"
+    third = canary("new_url_userinfo")
+    monkeypatch.setenv("PUBLIC_TRANSPORT_URL", "https://user:" + third + "@example.test/private")
+    contains_no_secret(secure.sanitize_text("message=" + third), third)
+    fourth = canary("new_provider_variable")
+    monkeypatch.setenv("NEW_PROVIDER_ACCESS_TOKEN", fourth)
+    contains_no_secret(secure.diagnostic_json({"unrelated_field": fourth}), fourth)
+    # Long/encoded field names take the uncached path with identical policy.
+    name = "provider_" * 80 + "API%5FKEY"
+    contains_no_secret(secure.diagnostic_json({name: fourth}), fourth)

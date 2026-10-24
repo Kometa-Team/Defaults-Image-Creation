@@ -51,6 +51,19 @@ _lock = threading.RLock()
 def sensitive_key(value: str) -> bool:
     if not isinstance(value, str):
         return True
+    if type(value) is str and len(value) <= 512:
+        return _cached_sensitive_key(value)
+    return _classify_sensitive_key(value)
+
+
+@lru_cache(maxsize=1024)
+def _cached_sensitive_key(value: str) -> bool:
+    # Only immutable field-name classification is cached. Secret values and
+    # sanitized messages must always be checked against the current registry.
+    return _classify_sensitive_key(value)
+
+
+def _classify_sensitive_key(value: str) -> bool:
     for _ in range(4):
         decoded = unquote(value)
         if decoded == value:
@@ -58,6 +71,11 @@ def sensitive_key(value: str) -> bool:
         value = decoded
     normalized = re.sub(r"[^a-z0-9]", "", value.casefold())
     return normalized in _KEYS or normalized.endswith(("apikey", "token", "secret", "password", "passwd", "privatekey", "secretkey", "credential"))
+
+
+@lru_cache(maxsize=1024)
+def _cached_environment_key(value: str) -> bool:
+    return sensitive_key(value) or bool(_ENV_KEY.search(value))
 
 
 @lru_cache(maxsize=1024)
@@ -95,7 +113,9 @@ def register_secret(value: str | None) -> None:
 
 def register_environment(environment=None) -> None:
     for key, value in (os.environ if environment is None else environment).items():
-        if sensitive_key(key) or _ENV_KEY.search(key):
+        credential_name = (_cached_environment_key(key) if type(key) is str and len(key) <= 512
+                           else sensitive_key(key) or bool(_ENV_KEY.search(key)))
+        if credential_name:
             register_secret(value)
         elif type(value) is str and "://" in value:
             try:
