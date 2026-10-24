@@ -136,6 +136,20 @@ def _assignment(entry, definition, job, package, rule, content, resolution):
         group=(entry["semantic"]["parent"] or entry["id"])+"/"+entry["semantic"]["key"])
 
 
+def playlist_mapping(entry,definition,job,content):
+    """Bind current registry names even on M3's historical validation branch.
+
+    The older validator checks historical definitions/jobs against adoption;
+    it does not consume a changed assigned_identity for an existing item.
+    Metadata revisions must not substitute that item's current source/mapping.
+    """
+    names=entry['names'];source=names['source']
+    if content.get('display_name')!=names['display_name'] or content.get('source')!=source:fail('content_identity_substitution')
+    if definition['id']!=entry['id'] or job['poster_id']!=entry['id']:fail('playlist_identity_substitution')
+    if (definition['display_name'],job['parameters']['text'],job['local_relative'],job['remote_relative'])!=(names['display_name'],names['rendered_caption'],names['local_path'],names['public_path']):fail('playlist_current_mapping')
+    if source is None or job['parameters']['logo']!=source['path'] or source not in [{k:i[k] for k in ('path','sha256')} for i in job['inputs']]:fail('playlist_current_source')
+
+
 def _graph(resolution,manifest,view,results,baseline):
     value=baseline.data() if baseline else dict(schema_version=1,kind="m5-dependency-snapshot",
         basis=historical_basis().registry_sha256,nodes={},outputs={},unresolved=[])
@@ -219,6 +233,7 @@ def poster_candidate(registry,*,expected,paths,profiles_path,posters,content,con
         package,rule=require_variant(entry["category"],entry["variant"])
         definition=resolution.definition(identity);check_renderer(package.contract)
         if entry["category"]=="Playlist":
+            playlist_mapping(entry,definition,job,content[identity])
             # The accepted M3 prospective Playlist contract has fixed layout;
             # the M6 historical fitting cohort must not replace that interface.
             names=entry["names"]

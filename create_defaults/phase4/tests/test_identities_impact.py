@@ -109,6 +109,17 @@ def test_forged_historical_reference_and_substitution_fail(registry):
     historic=next(i for i in sorted(historical_basis().ids) if historical_basis().row(i)['identity']['category']=='Playlist')
     a=registry.reference(historic,token='reference',expected=registry.view().head)
     assert a['id']==historic and a['origin']=='historical-reference'
+    from create_defaults.bulk.contracts.playlist import PlaylistBoundary
+    from create_defaults.bulk.contracts.playlist.validation import CONTRACT_SHA256,REGISTRY_SHA256,M2_SHA256
+    from create_defaults.bulk.lifecycle.candidates import playlist_mapping
+    boundary=PlaylistBoundary.load(contract_sha256=CONTRACT_SHA256,registry_sha256=REGISTRY_SHA256,adoption_sha256=M2_SHA256)
+    actual=boundary.record(historic).to_dict();definition=json.loads(actual['effective_definition_json']);job=json.loads(actual['job_json'])
+    content={k:a['names'][k] for k in ('display_name','source')}
+    playlist_mapping(a,definition,job,content)
+    for field,value in [('source',dict(path=a['names']['source']['path'],sha256='0'*64)),('public_path','playlist/Substituted.jpg'),('display_name','Substituted'),('rendered_caption','FORGED')]:
+        substituted=deepcopy(a);substituted['names'][field]=value
+        c={k:substituted['names'][k] for k in ('display_name','source')}
+        with pytest.raises(BulkError):playlist_mapping(substituted,definition,job,c)
     before=registry.view().snapshot;v=before.to_dict();v['revision']+=1;v['previous_sha256']=before.sha256
     v['entries'][0]['historical_sha256']='0'*64
     v['requests'].append(dict(token='z-forge',request_sha256='a'*64,result_id=historic))
