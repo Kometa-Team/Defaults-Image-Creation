@@ -1,0 +1,10 @@
+{
+  "base": "e0c715f713a630a59d1e83fa30119ffa3997e1cd",
+  "files": {
+    "ci/validation-plan.json": {
+      "before_sha256": "1b0bf754585ab8500b52de06df4ccb66b085d4afdef09fae32708a6cfc8f2761",
+      "sha256": "853a1110935a41ee22f17e55fbfc803927deae7a220b55732f261a83d4f67eba"
+    }
+  },
+  "purpose": "M4 two measured mandatory bounded review partitions after Windows timeout; original M3 and all prior checks retained"
+}

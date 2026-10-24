@@ -18,7 +18,10 @@ def selections():
     groups=read(IDS);require(set(groups)=={'pixels','security'},'Changed M3 partition')
     a,b=(unique(groups[g],g) for g in ('pixels','security'))
     require(a and b and not a&b,'Missing/duplicate M3 partition IDs')
-    require(all(n.startswith('create_defaults/phase4/tests/test_composition.py::') for n in a|b),'Unexpected M3 file')
+    require(all(n.startswith('create_defaults/phase4/tests/test_composition.py::') for n in a),'Unexpected M3 pixel file')
+    require(all(n.startswith(('create_defaults/phase4/tests/test_composition.py::','create_defaults/phase4/tests/test_review.py::')) for n in b),'Unexpected M3/M4 security file')
+    from ci.phase4_review import baseline
+    baseline()
     plan=read(ROOT/'ci/validation-plan.json')
     for group,part in [('people','pixels'),('review','security')]:
         require(plan['commands'][group].count(['{python}','ci/phase4_composition.py','run','--group',part])==1,'Missing mandatory M3 command')

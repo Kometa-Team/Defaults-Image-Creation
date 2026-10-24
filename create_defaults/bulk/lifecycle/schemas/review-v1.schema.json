@@ -1,0 +1,511 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kometa.invalid/lifecycle/review-v1.schema.json",
+  "$defs": {
+    "composition-review-bundle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "protocol_version",
+        "scope",
+        "simulation",
+        "record_only",
+        "authenticated",
+        "operation_accepted",
+        "applied",
+        "artwork_approved",
+        "contract_approved",
+        "ready",
+        "active",
+        "production_enforcement",
+        "publication_authorized",
+        "kind",
+        "id",
+        "submitter",
+        "composition_sha256",
+        "members",
+        "selected_appearance",
+        "context_sha256",
+        "material_json",
+        "phase3_json"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "protocol_version": {
+          "const": "1.0.0"
+        },
+        "scope": {
+          "const": "isolated-synthetic-complete-review"
+        },
+        "simulation": {
+          "const": true
+        },
+        "record_only": {
+          "const": true
+        },
+        "authenticated": {
+          "const": false
+        },
+        "operation_accepted": {
+          "const": false
+        },
+        "applied": {
+          "const": false
+        },
+        "artwork_approved": {
+          "const": false
+        },
+        "contract_approved": {
+          "const": false
+        },
+        "ready": {
+          "const": false
+        },
+        "active": {
+          "const": false
+        },
+        "production_enforcement": {
+          "const": false
+        },
+        "publication_authorized": {
+          "const": false
+        },
+        "kind": {
+          "const": "composition-review-bundle"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^synthetic\\.review\\.[a-z0-9][a-z0-9._-]{0,120}$(?![\\s\\S])"
+        },
+        "submitter": {
+          "type": "string",
+          "pattern": "^synthetic\\.actor\\.[a-z0-9][a-z0-9._-]{0,120}$(?![\\s\\S])"
+        },
+        "composition_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+        },
+        "members": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          }
+        },
+        "selected_appearance": {
+          "enum": [
+            "default",
+            "requested"
+          ]
+        },
+        "context_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+        },
+        "material_json": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 8000000
+        },
+        "phase3_json": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 8000000
+        }
+      }
+    },
+    "composition-review-decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "protocol_version",
+        "scope",
+        "simulation",
+        "record_only",
+        "authenticated",
+        "operation_accepted",
+        "applied",
+        "artwork_approved",
+        "contract_approved",
+        "ready",
+        "active",
+        "production_enforcement",
+        "publication_authorized",
+        "kind",
+        "review_id",
+        "bundle_sha256",
+        "context_sha256",
+        "previous_sha256",
+        "actor",
+        "role",
+        "action",
+        "confirmation_sha256"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "protocol_version": {
+          "const": "1.0.0"
+        },
+        "scope": {
+          "const": "isolated-synthetic-complete-review"
+        },
+        "simulation": {
+          "const": true
+        },
+        "record_only": {
+          "const": true
+        },
+        "authenticated": {
+          "const": false
+        },
+        "operation_accepted": {
+          "const": false
+        },
+        "applied": {
+          "const": false
+        },
+        "artwork_approved": {
+          "const": false
+        },
+        "contract_approved": {
+          "const": false
+        },
+        "ready": {
+          "const": false
+        },
+        "active": {
+          "const": false
+        },
+        "production_enforcement": {
+          "const": false
+        },
+        "publication_authorized": {
+          "const": false
+        },
+        "kind": {
+          "const": "composition-review-decision"
+        },
+        "review_id": {
+          "type": "string",
+          "pattern": "^synthetic\\.review\\.[a-z0-9][a-z0-9._-]{0,120}$(?![\\s\\S])"
+        },
+        "bundle_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+        },
+        "context_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+        },
+        "previous_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+        },
+        "actor": {
+          "type": "string",
+          "pattern": "^synthetic\\.actor\\.[a-z0-9][a-z0-9._-]{0,120}$(?![\\s\\S])"
+        },
+        "role": {
+          "enum": [
+            "submitter",
+            "maintainer"
+          ]
+        },
+        "action": {
+          "enum": [
+            "confirm",
+            "reject",
+            "withdraw",
+            "approve",
+            "reject-maintainer"
+          ]
+        },
+        "confirmation_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "composition-review-invalidation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "protocol_version",
+        "scope",
+        "simulation",
+        "record_only",
+        "authenticated",
+        "operation_accepted",
+        "applied",
+        "artwork_approved",
+        "contract_approved",
+        "ready",
+        "active",
+        "production_enforcement",
+        "publication_authorized",
+        "kind",
+        "review_id",
+        "bundle_sha256",
+        "context_sha256",
+        "previous_sha256",
+        "reason"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "protocol_version": {
+          "const": "1.0.0"
+        },
+        "scope": {
+          "const": "isolated-synthetic-complete-review"
+        },
+        "simulation": {
+          "const": true
+        },
+        "record_only": {
+          "const": true
+        },
+        "authenticated": {
+          "const": false
+        },
+        "operation_accepted": {
+          "const": false
+        },
+        "applied": {
+          "const": false
+        },
+        "artwork_approved": {
+          "const": false
+        },
+        "contract_approved": {
+          "const": false
+        },
+        "ready": {
+          "const": false
+        },
+        "active": {
+          "const": false
+        },
+        "production_enforcement": {
+          "const": false
+        },
+        "publication_authorized": {
+          "const": false
+        },
+        "kind": {
+          "const": "composition-review-invalidation"
+        },
+        "review_id": {
+          "type": "string",
+          "pattern": "^synthetic\\.review\\.[a-z0-9][a-z0-9._-]{0,120}$(?![\\s\\S])"
+        },
+        "bundle_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+        },
+        "context_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+        },
+        "previous_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        }
+      }
+    },
+    "composition-review-state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "protocol_version",
+        "scope",
+        "simulation",
+        "record_only",
+        "authenticated",
+        "operation_accepted",
+        "applied",
+        "artwork_approved",
+        "contract_approved",
+        "ready",
+        "active",
+        "production_enforcement",
+        "publication_authorized",
+        "kind",
+        "id",
+        "revision",
+        "previous_sha256",
+        "bundle_sha256",
+        "state",
+        "record_sha256",
+        "grant_sha256",
+        "confirmation_sha256",
+        "decision_sha256",
+        "reason"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "protocol_version": {
+          "const": "1.0.0"
+        },
+        "scope": {
+          "const": "isolated-synthetic-complete-review"
+        },
+        "simulation": {
+          "const": true
+        },
+        "record_only": {
+          "const": true
+        },
+        "authenticated": {
+          "const": false
+        },
+        "operation_accepted": {
+          "const": false
+        },
+        "applied": {
+          "const": false
+        },
+        "artwork_approved": {
+          "const": false
+        },
+        "contract_approved": {
+          "const": false
+        },
+        "ready": {
+          "const": false
+        },
+        "active": {
+          "const": false
+        },
+        "production_enforcement": {
+          "const": false
+        },
+        "publication_authorized": {
+          "const": false
+        },
+        "kind": {
+          "const": "composition-review-state"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^synthetic\\.review\\.[a-z0-9][a-z0-9._-]{0,120}$(?![\\s\\S])"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        },
+        "previous_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bundle_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+        },
+        "state": {
+          "enum": [
+            "PREVIEWS_COMPLETE",
+            "SUBMITTER_CONFIRMED",
+            "SUBMITTER_REJECTED",
+            "WITHDRAWN",
+            "MAINTAINER_APPROVED",
+            "MAINTAINER_REJECTED",
+            "STALE",
+            "CONFLICTED"
+          ]
+        },
+        "record_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "grant_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "confirmation_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "decision_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            }
+          ]
+        }
+      }
+    }
+  }
+}

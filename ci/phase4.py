@@ -78,7 +78,11 @@ def verify_m3_maintenance(root=ROOT):
     require(fingerprint(value)==M3_MAINTENANCE_PIN and value['base']==M2_BASE and set(value['files'])==M3_MAINTAINED,'Unexpected M3 CI maintenance')
     for path,pins in value['files'].items():
         original=subprocess.check_output(['git','show',M2_BASE+':'+path],cwd=root).replace(b'\r\n',b'\n')
-        require(hashlib.sha256(original).hexdigest()==pins['before_sha256'] and checksum(root/path)==pins['sha256'],'Changed M3 maintenance: '+path)
+        require(hashlib.sha256(original).hexdigest()==pins['before_sha256'],'Changed M3 baseline: '+path)
+        if path=='ci/validation-plan.json':
+            from ci.phase4_review import verify_maintenance as verify_m4
+            require(verify_m4(root)['files'][path]['before_sha256']==pins['sha256'],'Broken M3/M4 plan maintenance chain')
+        else:require(checksum(root/path)==pins['sha256'],'Changed M3 maintenance: '+path)
     original=subprocess.check_output(['git','show',M2_BASE+':ci/validation-plan.json'],cwd=root)
     verify_original_plan(original,root=root)
     return value
@@ -91,7 +95,11 @@ def verify_original_plan(original,*,root=ROOT):
     expected=json.loads(baseline)
     for group,part in [('people','pixels'),('review','security')]:
         expected['commands'].setdefault(group,[]).append(['{python}','ci/phase4_composition.py','run','--group',part])
-    require(read(root/'ci/validation-plan.json')==expected,'Validation plan changes beyond exact M3 additions')
+    from ci.phase4_review import BASE as m3_base
+    require(json.loads(subprocess.check_output(['git','show',m3_base+':ci/validation-plan.json'],cwd=root))==expected,'Changed frozen M3 plan')
+    for job,group in [('contracts','states'),('generation','evidence')]:
+        expected['commands'].setdefault(job,[]).append(['{python}','ci/phase4_review.py','run','--group',group])
+    require(read(root/'ci/validation-plan.json')==expected,'Validation plan changes beyond exact M3/M4 additions')
 
 
 def verify_maintenance(root=ROOT):
@@ -127,6 +135,8 @@ def run():
         for group in m3.values():
             require(not all_expected&unique(group,'M3 group'),'Duplicate P4 execution')
             all_expected|=set(group)
+        from ci.phase4_review import selections as review_selections
+        reviews=set().union(*map(set,review_selections().values()));require(not all_expected&reviews,'Duplicate M4 bounded IDs');all_expected|=reviews
         all_collection=pytest_run(['create_defaults/phase4/tests'],OUT/'phase4-all-collection.json',collect=True)
         require(all_collection['exitstatus']==0 and unique(all_collection['nodes'],'all P4 collection')==all_expected,'Uncovered P4 test ID')
         paths=sorted({n.split('::')[0] for n in read(IDS)})
@@ -157,6 +167,8 @@ def verify_reports(reports):
     m3=selections();all_expected=set(expected)
     for ids in m3.values():
         require(not all_expected&set(ids),'Duplicate P4 test execution');all_expected.update(ids)
+    from ci.phase4_review import selections as review_selections
+    reviews=set().union(*map(set,review_selections().values()));require(not all_expected&reviews,'Duplicate M4 bounded IDs');all_expected|=reviews
     for r in reports:
         require(all(r[k]==current[k] for k in ('head','plan_sha256')),'Stale P4 head/plan')
         require(r['kind']=='phase4-operation-foundations' and r['success'],'P4 job failed')
@@ -172,6 +184,11 @@ def verify_reports(reports):
             counts=counts,canonical_sha256=r['canonical_sha256'],schema_sha256=r['schema_sha256'],
             m2_canonical_sha256=r['m2_canonical_sha256'],m2_schema_sha256=r['m2_schema_sha256'],m2_historical=historical)
     summary['composition']=verify_composition([read(p) for p in (ROOT/'config/ci-downloaded').rglob('phase4-m3-*-report.json')])
+    from ci.phase4_review import verify_reports as verify_reviews
+    summary['reviews']=verify_reviews([read(p) for p in (ROOT/'config/ci-downloaded').rglob('phase4-m4-review-proof.json')],
+        [read(p) for p in (ROOT/'config/ci-downloaded').rglob('phase4-m3-composition.json')])
+    from ci.phase4_review import verify_group_reports
+    summary['reviews']['bounded_execution']=verify_group_reports([read(p) for p in (ROOT/'config/ci-downloaded').rglob('phase4-m4-execution-report.json')])
     return summary
 
 

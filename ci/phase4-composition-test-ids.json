@@ -67,6 +67,21 @@
     "create_defaults/phase4/tests/test_composition.py::test_interruption_never_publishes_complete_archive_or_advances_operation[partial-persist]",
     "create_defaults/phase4/tests/test_composition.py::test_unsupported_adapter_and_foreign_trial_are_blocked",
     "create_defaults/phase4/tests/test_composition.py::test_cold_composition_import_and_runtime_no_authority_or_network",
-    "create_defaults/phase4/tests/test_composition.py::test_real_private_parent_before_child_and_receipt_substitution_controls"
+    "create_defaults/phase4/tests/test_composition.py::test_real_private_parent_before_child_and_receipt_substitution_controls",
+    "create_defaults/phase4/tests/test_review.py::test_independent_authority_is_required_for_the_exact_decision[claim]",
+    "create_defaults/phase4/tests/test_review.py::test_independent_authority_is_required_for_the_exact_decision[expired]",
+    "create_defaults/phase4/tests/test_review.py::test_independent_authority_is_required_for_the_exact_decision[forged-provider]",
+    "create_defaults/phase4/tests/test_review.py::test_independent_authority_is_required_for_the_exact_decision[missing-record]",
+    "create_defaults/phase4/tests/test_review.py::test_independent_authority_is_required_for_the_exact_decision[none]",
+    "create_defaults/phase4/tests/test_review.py::test_independent_authority_is_required_for_the_exact_decision[revoked]",
+    "create_defaults/phase4/tests/test_review.py::test_independent_authority_is_required_for_the_exact_decision[wrong-actor]",
+    "create_defaults/phase4/tests/test_review.py::test_rehashed_substituted_decisions_are_not_authenticated[actor-synthetic.actor.other]",
+    "create_defaults/phase4/tests/test_review.py::test_rehashed_substituted_decisions_are_not_authenticated[bundle_sha256-3333333333333333333333333333333333333333333333333333333333333333]",
+    "create_defaults/phase4/tests/test_review.py::test_rehashed_substituted_decisions_are_not_authenticated[confirmation_sha256-2222222222222222222222222222222222222222222222222222222222222222]",
+    "create_defaults/phase4/tests/test_review.py::test_rehashed_substituted_decisions_are_not_authenticated[context_sha256-0000000000000000000000000000000000000000000000000000000000000000]",
+    "create_defaults/phase4/tests/test_review.py::test_rehashed_substituted_decisions_are_not_authenticated[previous_sha256-1111111111111111111111111111111111111111111111111111111111111111]",
+    "create_defaults/phase4/tests/test_review.py::test_reissued_grant_cannot_silently_extend_a_recorded_approval",
+    "create_defaults/phase4/tests/test_review.py::test_replay_and_concurrent_checkpoint_conflict_do_not_append",
+    "create_defaults/phase4/tests/test_review.py::test_synthetic_review_and_legacy_logo_decisions_never_become_real_approval"
   ]
 }
