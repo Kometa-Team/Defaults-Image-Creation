@@ -1,5 +1,18 @@
 """Publish canonical people images with Git Data API commits, without clones."""
 
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
+
 import argparse
 import base64
 import hashlib
@@ -288,8 +301,8 @@ class Publisher:
             except (GitHubError, OSError, ValueError) as error:
                 outstanding = [r["path"] for r in self.ledger.rows(batch, repo) if r["status"] not in {"published", "conflict"}]
                 if not dry_run:
-                    self.ledger.mark(batch, repo, outstanding, "failed", error=str(error))
-                errors.append(f"{style}: {error}")
+                    self.ledger.mark(batch, repo, outstanding, "failed", error=safe_exception(error))
+                errors.append(f"{style}: {safe_exception(error)}")
         if errors:
             raise GitHubError("Partial publication; retry the same batch. " + "; ".join(errors))
         if dry_run:
@@ -307,10 +320,10 @@ class Publisher:
                 self.client.request("POST", f"/repos/{repo}/actions/workflows/readme.yml/dispatches", {"ref": self.branch})
                 self.ledger.readme(batch, repo, "dispatched")
             except GitHubError as error:
-                self.ledger.readme(batch, repo, "failed" if required else "warning", str(error))
-                print(f"[WARN] README dispatch: {repo}: {error}")
+                self.ledger.readme(batch, repo, "failed" if required else "warning", safe_exception(error))
+                print(f"[WARN] README dispatch: {repo}: {safe_exception(error)}")
                 if required:
-                    errors.append(str(error))
+                    errors.append(safe_exception(error))
         if errors or not self.ledger.verified(batch):
             raise GitHubError("Required publication/README verification incomplete; files retained")
 
@@ -350,6 +363,7 @@ def main():
     from dotenv import load_dotenv
     root = Path(__file__).resolve().parent / "config"
     load_dotenv(root / ".env")
+    register_environment()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--op", choices=["validate", "refresh", "prepare", "push"], default="push")
     parser.add_argument("--config", type=Path, default=Path(os.getenv("PEOPLE_CONFIG_DIR") or root))
@@ -388,7 +402,7 @@ def main():
                 print(f"[OK] All seven destinations verified for {batch}")
         return 0
     except (GitHubError, ValueError, OSError) as error:
-        print(f"[ERROR] {error}", file=sys.stderr)
+        print(f"[ERROR] {safe_exception(error)}", file=sys.stderr)
         return 1
     finally:
         if inventory:

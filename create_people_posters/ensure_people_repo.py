@@ -13,6 +13,19 @@ Exit codes:
   0 = repo found and passes checks
   1 = repo missing or invalid
 """
+
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
 import os
 import sys
 import logging
@@ -42,9 +55,9 @@ for d in (CONFIG_DIR, LOGS_DIR):
 
 def setup_logging(level=logging.INFO, console=True):
     log_file = LOGS_DIR / f"{SCRIPT_PATH.stem}.log"
-    handlers = [logging.FileHandler(log_file, encoding="utf-8", mode="w")]
+    handlers = [secure_handler(logging.FileHandler(log_file, encoding="utf-8", mode="w"))]
     if console:
-        handlers.append(logging.StreamHandler(sys.stdout))
+        handlers.append(secure_handler(logging.StreamHandler(sys.stdout)))
     logging.basicConfig(
         level=level,
         format="%(asctime)s [%(levelname)s] %(message)s",
@@ -61,6 +74,7 @@ def load_env_if_present(override: bool = False):
     env_path = CONFIG_DIR / ".env"
     if env_path.exists():
         load_dotenv(env_path, override=override)
+        register_environment()
 
 
 DEFAULT_FOLDERS = (

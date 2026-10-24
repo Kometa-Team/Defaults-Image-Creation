@@ -1,5 +1,18 @@
 """Opt-in, offline DDColor -> BiRefNet Portrait -> Pillow integration smoke test."""
 
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
+
 import argparse
 import hashlib
 from importlib.metadata import version
@@ -152,6 +165,7 @@ def main(argv=None):
     bootstrap.add_argument("--stage")
     if not bootstrap.parse_known_args(argv)[0].stage:
         load_dotenv(BASE / "config/.env")
+        register_environment()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run",action="store_true",help="Explicitly opt into real CPU/model inference")
     parser.add_argument("--input",type=Path,help="Unmodified genuine grayscale photograph; preserved in place")
@@ -215,7 +229,7 @@ def main(argv=None):
             summary["stages"][stage] = json.loads((workspace / (stage + ".json")).read_text(encoding="utf-8"))
         summary["status"] = "passed"
     except Exception as error:
-        summary.update(status="failed",error=str(error))
+        summary.update(status="failed",error=safe_exception(error))
     finally:
         summary["source_unchanged"] = source.is_file() and before == (digest(source),source.stat().st_mtime_ns)
         if not summary["source_unchanged"]:

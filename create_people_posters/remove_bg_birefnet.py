@@ -2,6 +2,19 @@
 """Local, validated background removal with the existing People poster handoff."""
 from __future__ import annotations
 
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
+
 import argparse
 from dataclasses import dataclass
 import gc
@@ -87,6 +100,8 @@ def sidecar(path: Path) -> Path:
 
 
 def atomic_json(path: Path, data: dict) -> None:
+    if json.dumps(sanitize_data(data), sort_keys=True) != json.dumps(data, sort_keys=True):
+        raise ValueError("Sensitive data cannot be persisted in model metadata")
     path.parent.mkdir(parents=True, exist_ok=True)
     fd, name = tempfile.mkstemp(prefix=".bg-", suffix=".tmp", dir=path.parent)
     tmp = Path(name)
@@ -198,7 +213,7 @@ class LocalRemover:
                 self._matting = alpha_matting_cutout
         except Exception as exc:
             self.close()
-            raise RuntimeError(f"Cannot initialize {settings.model} in {settings.home}: {exc}. "
+            raise RuntimeError(f"Cannot initialize {settings.model} in {settings.home}: {safe_exception(exc)}. "
                                "Check model download access, cache integrity and available memory.") from exc
         LOG.info("Engine=birefnet model=%s rembg=%s device=%s providers=%s", self.model_identifier,
                  self.rembg_version, settings.device, active)
@@ -378,8 +393,8 @@ def run_batch(source_dir: Path, original_dir: Path, output_dir: Path, settings: 
                         remover = remover_factory(settings)
                     except Exception as exc:
                         summary["exit_code"] = 2
-                        summary["initialization_error"] = str(exc)
-                        LOG.error("Fatal model initialization: %s", exc)
+                        summary["initialization_error"] = safe_exception(exc)
+                        LOG.error("Fatal model initialization: %s", safe_exception(exc))
                         break
                 record = remover.process(source, target)
                 validate_output(target, size)
@@ -399,9 +414,9 @@ def run_batch(source_dir: Path, original_dir: Path, output_dir: Path, settings: 
                 summary["failed"] += 1
                 summary["files"].append({"source": str(source), "output": str(target),
                                           "status": "failed", "duration": time.perf_counter() - began,
-                                          "reason": str(exc)})
+                                          "reason": safe_exception(exc)})
                 LOG.error("failed input=%s output=%s seconds=%.3f reason=%s", source.name,
-                          target.name, time.perf_counter() - began, exc)
+                          target.name, time.perf_counter() - began, safe_exception(exc))
     finally:
         if remover is not None:
             remover.close()
@@ -423,6 +438,7 @@ def main(argv=None) -> int:
     try:
         from dotenv import load_dotenv
         load_dotenv(CONFIG_DIR / ".env")
+        register_environment()
     except ImportError:
         pass
     parser = argparse.ArgumentParser(description=__doc__)
@@ -440,8 +456,8 @@ def main(argv=None) -> int:
     log_dir = CONFIG_DIR / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s",
-                        handlers=[logging.FileHandler(log_dir / "remove_bg_birefnet.log", mode="w", encoding="utf-8"),
-                                  logging.StreamHandler()], force=True)
+                        handlers=[secure_handler(logging.FileHandler(log_dir / "remove_bg_birefnet.log", mode="w", encoding="utf-8")),
+                                  secure_handler(logging.StreamHandler())], force=True)
     try:
         settings = Settings.from_env()
         from dataclasses import replace
@@ -464,8 +480,8 @@ def main(argv=None) -> int:
         atomic_json(args.summary, summary)
         return summary["exit_code"]
     except Exception as exc:
-        LOG.error("Fatal background-removal error: %s", exc)
-        atomic_json(args.summary, {"exit_code": 2, "outcome": "fatal", "reason": str(exc)})
+        LOG.error("Fatal background-removal error: %s", safe_exception(exc))
+        atomic_json(args.summary, {"exit_code": 2, "outcome": "fatal", "reason": safe_exception(exc)})
         return 2
 
 

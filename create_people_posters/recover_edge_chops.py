@@ -15,6 +15,24 @@ removed from the exhausted-name file.
 
 from __future__ import annotations
 
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
+
+from create_people_posters.people_diagnostics import (Diagnostic, DiagnosticError,
+                                register_secret, safe_exception, sanitize_data, sanitize_text)
+from create_people_posters.people_http import tmdb_json, image_response, tmdb_image_path, failure_diagnostic
+from create_people_posters.people_process import run_process
+
 import argparse
 import csv
 import os
@@ -142,6 +160,11 @@ class RecoveryRow:
     precheck_metrics: str = ""
     final_metrics: str = ""
     note: str = ""
+    diagnostic: Diagnostic | None = None
+
+    @property
+    def retryable(self):
+        return self.status == "unresolved" and type(self.diagnostic) is Diagnostic and self.diagnostic.retryable
 
 
 @dataclass(frozen=True)
@@ -156,7 +179,7 @@ class AttemptedCandidate:
 
 def log(message: str) -> None:
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
-    line = message.rstrip()
+    line = sanitize_text(message.rstrip())
     print(line)
     with (LOGS_DIR / "recover_edge_chops.log").open("a", encoding="utf-8") as fh:
         fh.write(line + "\n")
@@ -225,7 +248,7 @@ def iter_transparents(root: Path) -> Iterable[Path]:
     try:
         walker = os.walk(root)
     except OSError as exc:
-        log(f"[warn] transparent scan root is not readable: {root}; {exc}")
+        log(f"[warn] transparent scan root is not readable: {root}; {safe_exception(exc)}")
         return
     for dirpath, dirnames, filenames in walker:
         dirnames.sort(key=str.casefold)
@@ -485,7 +508,7 @@ def append_attempted_candidates(path: Path, records: Iterable[AttemptedCandidate
             writer.writeheader()
         at = str(int(time.time()))
         for record in to_add:
-            writer.writerow(
+            writer.writerow(sanitize_data(
                 {
                     "at": at,
                     "name": record.name,
@@ -495,18 +518,13 @@ def append_attempted_candidates(path: Path, records: Iterable[AttemptedCandidate
                     "status": record.status,
                     "note": record.note,
                 }
-            )
+            ))
     return len(to_add)
 
 
 def tmdb_person(session: requests.Session, api_key: str, name: str) -> dict | None:
-    response = session.get(
-        TMDB_SEARCH_URL,
-        params={"api_key": api_key, "query": name, "include_adult": "false", "language": "en-US", "page": "1"},
-        timeout=30,
-    )
-    response.raise_for_status()
-    results = response.json().get("results", [])
+    results = tmdb_json(session, api_key, "/3/search/person", operation="search_person",
+                        params={"query": name, "include_adult": "false", "language": "en-US", "page": "1"}).get("results", [])
     exact = [item for item in results if str(item.get("name", "")).casefold() == name.casefold()]
     return next((item for item in (exact or results) if item.get("id")), None)
 
@@ -516,9 +534,7 @@ def tmdb_candidates(session: requests.Session, api_key: str, name: str, limit: i
     if not person:
         return []
     person_id = int(person["id"])
-    response = session.get(f"https://api.themoviedb.org/3/person/{person_id}/images", params={"api_key": api_key}, timeout=30)
-    response.raise_for_status()
-    profiles = response.json().get("profiles", [])
+    profiles = tmdb_json(session, api_key, f"/3/person/{person_id}/images", operation="person_images").get("profiles", [])
     profiles = sorted(
         profiles,
         key=lambda item: (
@@ -533,6 +549,7 @@ def tmdb_candidates(session: requests.Session, api_key: str, name: str, limit: i
         file_path = str(item.get("file_path") or "")
         if not file_path:
             continue
+        file_path = tmdb_image_path(file_path)
         out.append(
             ProfileCandidate(
                 label=f"{idx:03d}",
@@ -548,10 +565,12 @@ def tmdb_candidates(session: requests.Session, api_key: str, name: str, limit: i
 
 
 def download_candidate(session: requests.Session, candidate: ProfileCandidate, target: Path) -> None:
-    response = session.get(candidate.url, timeout=60, headers={"User-Agent": "Mozilla/5.0"})
-    response.raise_for_status()
-    target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_bytes(response.content)
+    response = image_response(session, candidate.url)
+    try:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(response.content)
+    finally:
+        response.close()
     with Image.open(target) as img:
         img.verify()
 
@@ -593,7 +612,7 @@ def same_image_summary(candidate_path: Path, existing_path: Path) -> str:
         candidate_bits, candidate_detail = image_compare_arrays(candidate_path)
         existing_bits, existing_detail = image_compare_arrays(existing_path)
     except Exception as exc:
-        return f"same-image comparison failed for {existing_path}: {exc}"
+        return f"same-image comparison failed for {existing_path}: {safe_exception(exc)}"
 
     hash_distance = int(np.count_nonzero(candidate_bits != existing_bits))
     mean_delta = float(np.mean(np.abs(candidate_detail - existing_detail)))
@@ -735,10 +754,10 @@ def colorize_candidate(staged_jpg: Path, work_root: Path) -> tuple[bool, str]:
                 timeout=900,
             )
         except FileNotFoundError as exc:
-            failures.append(f"{' '.join(argv_prefix)}: {exc}")
+            failures.append(f"{' '.join(argv_prefix)}: {safe_exception(exc)}")
             continue
         except Exception as exc:
-            failures.append(f"{' '.join(argv_prefix)}: {exc}")
+            failures.append(f"{' '.join(argv_prefix)}: {safe_exception(exc)}")
             continue
 
         output = (cp.stdout or "").strip()
@@ -774,7 +793,7 @@ def local_candidate(args: argparse.Namespace, source: Path, destination: Path) -
             args.local_remover = LocalRemover(settings)
         result = args.local_remover.process(source, destination)
     except Exception as exc:
-        raise RuntimeError(f"Local background removal failed for {source}: {exc}") from exc
+        raise RuntimeError(f"Local background removal failed for {source}: {safe_exception(exc)}") from exc
     if not isinstance(result, dict) or result.get("status") not in {"processed", "skipped"} or not destination.is_file():
         raise RuntimeError(f"Local background removal failed for {source}: {result}")
 
@@ -836,7 +855,7 @@ def rembg_precheck_candidate(args: argparse.Namespace, staged_jpg: Path, prechec
                 output = output.convert("RGBA")
             output.save(precheck_png)
     except Exception as exc:
-        raise RuntimeError(f"rembg precheck failed for {staged_jpg}: {exc}") from exc
+        raise RuntimeError(f"rembg precheck failed for {staged_jpg}: {safe_exception(exc)}") from exc
 
     try:
         issues = candidate_target_issues(
@@ -846,7 +865,7 @@ def rembg_precheck_candidate(args: argparse.Namespace, staged_jpg: Path, prechec
             coverage_threshold=args.precheck_coverage_threshold,
         )
     except Exception as exc:
-        raise RuntimeError(f"rembg precheck could not audit {precheck_png}: {exc}") from exc
+        raise RuntimeError(f"rembg precheck could not audit {precheck_png}: {safe_exception(exc)}") from exc
     metrics = edge_metric_summary(
         precheck_png,
         args,
@@ -944,7 +963,7 @@ def ps_exe() -> str | None:
 def run_step(title: str, argv: list[str], env: dict[str, str]) -> int:
     log(f"=== {title} ===")
     log("-> " + " ".join(argv))
-    cp = subprocess.run(argv, cwd=SCRIPT_DIR, env=env)
+    cp = run_process(argv, cwd=SCRIPT_DIR, env=env, tee=True)
     log(f"{title} exit code: {cp.returncode}")
     return cp.returncode
 
@@ -985,7 +1004,7 @@ def postcheck_staged_outputs(rows: list[RecoveryRow], args: argparse.Namespace) 
             issues = candidate_target_issues(transparent, args)
         except Exception as exc:
             row.status = "unresolved"
-            row.final_issues = f"final selected-warning check failed: {exc}"
+            row.final_issues = f"final selected-warning check failed: {safe_exception(exc)}"
             row.note += "; post-orchestrator check failed; rerun recovery after fixing the QA error"
             log(f"[postcheck] {row.name}: {row.final_issues}")
             continue
@@ -1038,7 +1057,29 @@ def downloads_pngs_are_clear(name: str, downloads_dir: Path) -> bool:
     return True
 
 
+def recovery_transaction(args: argparse.Namespace, name: str):
+    from create_people_posters.people_recovery_transaction import RecoveryTransaction
+    paths = style_file_paths(args.people_root, name)
+    original = env_path("SEL_ORIG_DIR") or (CONFIG_DIR / "people_dirs" / "original")
+    mirror = env_path("SEL_DOWNLOAD_DIR") or (CONFIG_DIR / "sel_downloads")
+    paths += [original / f"{name}.jpg", original / name[:1].upper() / "Images" / f"{name}.jpg",
+              args.downloads_dir / f"{name}.png", mirror / f"{name}.png"]
+    from remove_bg_birefnet import sidecar
+    paths += [sidecar(path) for path in list(paths) if path.suffix == ".png"]
+    return RecoveryTransaction(args.out_root / "transactions", name, paths)
+
+
 def recover_one(args: argparse.Namespace, session: requests.Session, api_key: str, name: str, initial_issues: str) -> RecoveryRow:
+    register_secret(api_key)
+    with recovery_transaction(args, name) as transaction:
+        row = _recover_one(args, session, api_key, name, initial_issues)
+        if row.status == "recovered":
+            transaction.commit()
+        return row
+
+
+def _recover_one(args: argparse.Namespace, session: requests.Session, api_key: str, name: str, initial_issues: str) -> RecoveryRow:
+    register_secret(api_key)
     row = RecoveryRow(name=name, status="unresolved", initial_issues=initial_issues)
     paths = generated_work_paths(args.people_root, name) if getattr(args, "bg_engine", "adobe") == "birefnet" else style_file_paths(args.people_root, name)
     with tempfile.TemporaryDirectory(prefix=f"edge_chop_{safe_name(name)}_") as tmp:
@@ -1048,8 +1089,19 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
 
         try:
             candidates = tmdb_candidates(session, api_key, name, args.tmdb_limit)
+        except DiagnosticError as exc:
+            row.diagnostic = exc.diagnostic
+            row.status = "unresolved" if exc.diagnostic.retryable else "error"
+            row.note = "TMDB lookup failed: " + safe_exception(exc)
+            return row
+        except requests.RequestException as exc:
+            row.diagnostic = failure_diagnostic("TMDB", "search_person", "/3/search/person", exc)
+            row.status = "unresolved" if row.diagnostic.retryable else "error"
+            row.note = "TMDB lookup failed: " + row.diagnostic.text()
+            return row
         except Exception as exc:
-            row.note = f"TMDB lookup failed: {exc}"
+            row.status = "error"
+            row.note = "TMDB lookup failed: " + safe_exception(exc)
             return row
 
         if not candidates:
@@ -1081,6 +1133,7 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
             return row
 
         candidate_dir = args.out_root / "candidates" / safe_name(name)
+        transient_failure = None
         for candidate in candidates:
             row.attempts += 1
             raw_path = candidate_dir / f"{candidate.label}{Path(candidate.file_path).suffix or '.jpg'}"
@@ -1088,14 +1141,23 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
             generated_png = sel_src_dir / f"{name}.png"
             staged_png = args.downloads_dir / f"{name}.png"
             try:
-                remove_style_outputs(paths)
                 for old_file in sel_src_dir.glob("*"):
                     if old_file.is_file():
                         old_file.unlink()
                 download_candidate(session, candidate, raw_path)
                 normalize_to_download(raw_path, staged_jpg)
-            except Exception as exc:
-                log(f"[warn] {name} {candidate.label}: candidate download/normalize failed: {exc}")
+            except (DiagnosticError, requests.RequestException) as exc:
+                diagnostic = exc.diagnostic if isinstance(exc, DiagnosticError) else failure_diagnostic("image", "download_image", "image", exc)
+                if diagnostic.retryable:
+                    transient_failure = diagnostic
+                    continue
+                restore_backups(backups, paths)
+                row.status, row.diagnostic, row.note = "error", diagnostic, diagnostic.text()
+                return row
+            except (OSError, ValueError) as exc:
+                if isinstance(exc, OSError) and exc.errno is not None:
+                    raise RuntimeError("Recovery candidate filesystem operation failed; artwork retained") from None
+                log(f"[warn] {name} {candidate.label}: candidate download/normalize failed: {safe_exception(exc)}")
                 continue
 
             if args.reject_grayscale:
@@ -1108,7 +1170,7 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                     )
                 except Exception as exc:
                     restore_backups(backups, paths)
-                    raise RuntimeError(f"{name} {candidate.label}: grayscale candidate check failed: {exc}") from exc
+                    raise RuntimeError(f"{name} {candidate.label}: grayscale candidate check failed: {safe_exception(exc)}") from exc
                 if noncolor:
                     if args.colorize_grayscale:
                         log(f"[candidate] {name} {candidate.label}: non-color candidate; trying {colorize_engine_label()}: {noncolor}")
@@ -1123,7 +1185,7 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                                 )
                             except Exception as exc:
                                 restore_backups(backups, paths)
-                                raise RuntimeError(f"{name} {candidate.label}: grayscale candidate recheck failed: {exc}") from exc
+                                raise RuntimeError(f"{name} {candidate.label}: grayscale candidate recheck failed: {safe_exception(exc)}") from exc
                             if not noncolor:
                                 row.grayscale_colorized += 1
                                 log(f"[candidate] {name} {candidate.label}: {note}")
@@ -1147,7 +1209,7 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                     should_try, precheck_summary, precheck_metrics = rembg_precheck_candidate(args, staged_jpg, precheck_png)
                 except RuntimeError as exc:
                     restore_backups(backups, paths)
-                    raise RuntimeError(f"{name} {candidate.label}: {exc}") from exc
+                    raise RuntimeError(f"{name} {candidate.label}: {safe_exception(exc)}") from exc
                 if not should_try:
                     row.precheck_rejected += 1
                     log(f"[precheck] {name} {candidate.label}: rembg still has selected warning(s): {precheck_summary}; {precheck_metrics}")
@@ -1167,7 +1229,7 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                     rc = 0
                 except Exception as exc:
                     restore_backups(backups, paths)
-                    raise RuntimeError(f"{name} {candidate.label}: local remove-bg failed: {exc}") from exc
+                    raise RuntimeError(f"{name} {candidate.label}: local remove-bg failed: {safe_exception(exc)}") from exc
             else:
                 rc = run_step(f"remove-bg retry {name} {candidate.label}", [sys.executable, "sel_remove_bg.py"], env)
             if rc != 0:
@@ -1180,6 +1242,10 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                 log(f"[warn] {name} {candidate.label}: remove-bg did not produce {generated_png}")
                 continue
 
+            # Keep current artwork throughout network and local screening. Only
+            # the render attempt needs a cleared destination; the outer durable
+            # transaction restores every original byte on failure/cancellation.
+            remove_style_outputs(paths)
             shutil.copy2(generated_png, staged_png)
 
             if selected_renderer == "python":
@@ -1188,7 +1254,7 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                     render_recovery_candidate(Path(tmp) / "render", args.people_root, name, staged_png, staged_jpg)
                     rc = 0
                 except (OSError, ValueError) as error:
-                    log(f"[warn] {name} {candidate.label}: Pillow rendering failed: {error}")
+                    log(f"[warn] {name} {candidate.label}: Pillow rendering failed: {safe_exception(error)}")
                     rc = 1
             else:
                 rc = run_step(
@@ -1214,7 +1280,7 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                     )
                 except Exception as exc:
                     restore_backups(backups, paths)
-                    raise RuntimeError(f"{name} {candidate.label}: grayscale final check failed: {exc}") from exc
+                    raise RuntimeError(f"{name} {candidate.label}: grayscale final check failed: {safe_exception(exc)}") from exc
                 if final_noncolor:
                     row.grayscale_rejected += 1
                     log(f"[retry] {name} {candidate.label}: final transparent is non-color; trying next candidate: {final_noncolor}")
@@ -1224,7 +1290,7 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                 final_issues = candidate_target_issues(transparent, args)
             except Exception as exc:
                 restore_backups(backups, paths)
-                raise RuntimeError(f"{name} {candidate.label}: final selected-warning check failed: {exc}") from exc
+                raise RuntimeError(f"{name} {candidate.label}: final selected-warning check failed: {safe_exception(exc)}") from exc
             row.final_metrics = edge_metric_summary(transparent, args)
 
             if not final_issues:
@@ -1240,7 +1306,7 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
                                 archived.unlink()
                     except Exception as exc:
                         restore_backups(backups, paths)
-                        raise RuntimeError(f"{name}: accepted source could not be preserved: {exc}") from exc
+                        raise RuntimeError(f"{name}: accepted source could not be preserved: {safe_exception(exc)}") from exc
                 row.status = "recovered"
                 if selected_renderer == "python":
                     staged_png.unlink(missing_ok=True)
@@ -1262,6 +1328,11 @@ def recover_one(args: argparse.Namespace, session: requests.Session, api_key: st
         current = final_transparent_path(args.people_root, name)
         row.final_issues = "; ".join(candidate_target_issues(current, args)) if current.exists() else ""
         row.final_metrics = edge_metric_summary(current, args) if current.exists() else ""
+        if transient_failure is not None:
+            row.status = "unresolved"
+            row.diagnostic = transient_failure
+            row.note = "Alternate search incomplete; transient download failure; existing outputs restored"
+            return row
         row.status = "exhausted"
         row.note = "no TMDB alternate cleared selected recovery warnings; restored previous local outputs"
         if row.grayscale_colorized:
@@ -1283,11 +1354,40 @@ def stage_one_for_orchestrator(
     attempted_candidates: set[tuple[str, str]],
     attempted_records: list[AttemptedCandidate],
 ) -> RecoveryRow:
+    register_secret(api_key)
+    with recovery_transaction(args, name) as transaction:
+        row = _stage_one_for_orchestrator(args, session, api_key, name, initial_issues,
+                                          attempted_candidates, attempted_records)
+        if row.status == "staged":transaction.commit()
+        return row
+
+
+def _stage_one_for_orchestrator(
+    args: argparse.Namespace,
+    session: requests.Session,
+    api_key: str,
+    name: str,
+    initial_issues: str,
+    attempted_candidates: set[tuple[str, str]],
+    attempted_records: list[AttemptedCandidate],
+) -> RecoveryRow:
+    register_secret(api_key)
     row = RecoveryRow(name=name, status="unresolved", initial_issues=initial_issues)
     try:
         candidates = tmdb_candidates(session, api_key, name, args.tmdb_limit)
+    except DiagnosticError as exc:
+        row.diagnostic = exc.diagnostic
+        row.status = "unresolved" if exc.diagnostic.retryable else "error"
+        row.note = "TMDB lookup failed: " + safe_exception(exc)
+        return row
+    except requests.RequestException as exc:
+        row.diagnostic = failure_diagnostic("TMDB", "search_person", "/3/search/person", exc)
+        row.status = "unresolved" if row.diagnostic.retryable else "error"
+        row.note = "TMDB lookup failed: " + row.diagnostic.text()
+        return row
     except Exception as exc:
-        row.note = f"TMDB lookup failed: {exc}"
+        row.status = "error"
+        row.note = "TMDB lookup failed: " + safe_exception(exc)
         return row
 
     if not candidates:
@@ -1295,6 +1395,7 @@ def stage_one_for_orchestrator(
         row.note = "no TMDB profile candidates"
         return row
 
+    transient_failure = None
     candidate_dir = args.out_root / "candidates" / safe_name(name)
     with tempfile.TemporaryDirectory(prefix=f"edge_chop_stage_{safe_name(name)}_") as tmp:
         args.local_work_root = Path(tmp)
@@ -1323,8 +1424,17 @@ def stage_one_for_orchestrator(
             try:
                 download_candidate(session, candidate, raw_path)
                 normalize_to_download(raw_path, staged_jpg)
-            except Exception as exc:
-                note = f"candidate download/normalize failed: {exc}"
+            except (DiagnosticError, requests.RequestException) as exc:
+                diagnostic = exc.diagnostic if isinstance(exc, DiagnosticError) else failure_diagnostic("image", "download_image", "image", exc)
+                if diagnostic.retryable:
+                    transient_failure = diagnostic
+                    continue  # Never persist transient failures as attempted/exhausted.
+                row.status, row.diagnostic, row.note = "error", diagnostic, diagnostic.text()
+                return row
+            except (OSError, ValueError) as exc:
+                if isinstance(exc, OSError) and exc.errno is not None:
+                    raise RuntimeError("Recovery candidate filesystem operation failed; artwork retained") from None
+                note = f"candidate download/normalize failed: {safe_exception(exc)}"
                 log(f"[warn] {name} {candidate.label}: {note}")
                 record_attempt("download_failed", note)
                 continue
@@ -1345,7 +1455,7 @@ def stage_one_for_orchestrator(
                         colorfulness_cutoff=args.grayscale_colorfulness_cutoff,
                     )
                 except Exception as exc:
-                    raise RuntimeError(f"{name} {candidate.label}: grayscale candidate check failed: {exc}") from exc
+                    raise RuntimeError(f"{name} {candidate.label}: grayscale candidate check failed: {safe_exception(exc)}") from exc
                 if noncolor:
                     if args.colorize_grayscale:
                         log(f"[candidate] {name} {candidate.label}: non-color candidate; trying {colorize_engine_label()}: {noncolor}")
@@ -1359,7 +1469,7 @@ def stage_one_for_orchestrator(
                                     colorfulness_cutoff=args.grayscale_colorfulness_cutoff,
                                 )
                             except Exception as exc:
-                                raise RuntimeError(f"{name} {candidate.label}: grayscale candidate recheck failed: {exc}") from exc
+                                raise RuntimeError(f"{name} {candidate.label}: grayscale candidate recheck failed: {safe_exception(exc)}") from exc
                             if not noncolor:
                                 row.grayscale_colorized += 1
                                 log(f"[candidate] {name} {candidate.label}: {note}")
@@ -1386,7 +1496,7 @@ def stage_one_for_orchestrator(
                 try:
                     should_try, precheck_summary, precheck_metrics = rembg_precheck_candidate(args, staged_jpg, precheck_png)
                 except RuntimeError as exc:
-                    raise RuntimeError(f"{name} {candidate.label}: {exc}") from exc
+                    raise RuntimeError(f"{name} {candidate.label}: {safe_exception(exc)}") from exc
                 if not should_try:
                     row.precheck_rejected += 1
                     note = f"{precheck_summary}; {precheck_metrics}"
@@ -1404,7 +1514,7 @@ def stage_one_for_orchestrator(
                 try:
                     target = stage_local_output(args, staged_jpg, precheck_png, name)
                 except Exception as exc:
-                    raise RuntimeError(f"{name}: local candidate could not be staged: {exc}") from exc
+                    raise RuntimeError(f"{name}: local candidate could not be staged: {safe_exception(exc)}") from exc
             else:
                 target = args.downloads_dir / f"{name}.jpg"
                 args.downloads_dir.mkdir(parents=True, exist_ok=True)
@@ -1416,6 +1526,11 @@ def stage_one_for_orchestrator(
             record_attempt("staged", row.note)
             return row
 
+    if transient_failure is not None:
+        row.status = "unresolved"
+        row.diagnostic = transient_failure
+        row.note = "Alternate search incomplete; transient download failure; retry this person later"
+        return row
     row.status = "exhausted"
     row.note = "no untried TMDB alternate cleared selected local recovery prechecks"
     if row.grayscale_colorized:
@@ -1428,52 +1543,49 @@ def stage_one_for_orchestrator(
     return row
 
 
-def write_report(out_root: Path, rows: list[RecoveryRow]) -> None:
+def write_report(out_root: Path, rows: list[RecoveryRow], *, run_id=None, context_sha256=None, changed_names=()) -> None:
+    from io import StringIO
+    import uuid
+    from create_people_posters.people_recovery_records import row_data, summary, digest
+    from create_people_posters.people_workspaces import atomic_json, reject_links
+    from create_people_posters.people_diagnostics import diagnostic_html
+    if len(rows) > 4096:
+        raise ValueError("Recovery report membership exceeds its metadata budget")
     out_root.mkdir(parents=True, exist_ok=True)
-    path = out_root / "edge_chop_recovery.csv"
-    with path.open("w", newline="", encoding="utf-8") as fh:
-        writer = csv.DictWriter(
-            fh,
-            fieldnames=[
-                "name",
-                "status",
-                "attempts",
-                "grayscale_colorized",
-                "grayscale_rejected",
-                "precheck_rejected",
-                "chosen_label",
-                "chosen_url",
-                "initial_issues",
-                "final_issues",
-                "precheck_metrics",
-                "final_metrics",
-                "note",
-            ],
-        )
-        writer.writeheader()
-        for row in rows:
-            writer.writerow(
-                {
-                    "name": row.name,
-                    "status": row.status,
-                    "attempts": row.attempts,
-                    "grayscale_colorized": row.grayscale_colorized,
-                    "grayscale_rejected": row.grayscale_rejected,
-                    "precheck_rejected": row.precheck_rejected,
-                    "chosen_label": row.chosen_label,
-                    "chosen_url": row.chosen_url,
-                    "initial_issues": row.initial_issues,
-                    "final_issues": row.final_issues,
-                    "precheck_metrics": row.precheck_metrics,
-                    "final_metrics": row.final_metrics,
-                    "note": row.note,
-                }
-            )
-    log(f"Report: {path}")
+    fields = ["name", "status", "attempts", "grayscale_colorized", "grayscale_rejected", "precheck_rejected",
+              "chosen_label", "chosen_url", "initial_issues", "final_issues", "precheck_metrics", "final_metrics", "note",
+              "provider", "operation", "error_category", "http_status", "retryable", "correlation_id"]
+    buffer = StringIO()
+    writer = csv.DictWriter(buffer, fieldnames=fields)
+    writer.writeheader()
+    for row in rows:
+        value = row_data(row)
+        diagnostic = value.pop("diagnostic") or {}
+        value.update(provider=diagnostic.get("provider", ""), operation=diagnostic.get("operation", ""),
+                     error_category=diagnostic.get("category", ""), http_status=diagnostic.get("status") or "",
+                     retryable=row.retryable, correlation_id=diagnostic.get("correlation_id", ""))
+        writer.writerow(value)
+    payload = summary(rows, run_id=run_id or uuid.uuid4().hex,
+                      context_sha256=context_sha256 or digest({"scope": "standalone diagnostic export"}),
+                      changed_names=changed_names)
+    def save_text(target, value):
+        reject_links(target)
+        temporary = target.with_suffix(target.suffix + ".tmp")
+        reject_links(temporary)
+        with temporary.open("w", encoding="utf8", newline="") as handle:
+            handle.write(value)
+            handle.flush()
+            os.fsync(handle.fileno())
+        temporary.replace(target)
+    save_text(out_root / "edge_chop_recovery.csv", buffer.getvalue())
+    save_text(out_root / "edge_chop_recovery.html", diagnostic_html(payload))
+    atomic_json(out_root / "recovery-summary.json", payload)
+    log(f"Report: {out_root / 'edge_chop_recovery.csv'}")
 
 
 def parser() -> argparse.ArgumentParser:
     load_dotenv(CONFIG_DIR / ".env")
+    register_environment()
     people_root = default_people_root()
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument(
@@ -1565,18 +1677,31 @@ def parser() -> argparse.ArgumentParser:
     )
     ap.add_argument("--stage-for-orchestrator", action="store_true", default=False, help=argparse.SUPPRESS)
     ap.add_argument("--run-orchestrator", action="store_true", default=False, help=argparse.SUPPRESS)
+    ap.add_argument("--run-id", default="", help=argparse.SUPPRESS)
     return ap
 
 
 def local_recovery_status_code(rows: list[RecoveryRow]) -> int:
     if any(row.status == "error" for row in rows):
         return 2
-    if any(row.status == "unresolved" for row in rows):
+    if any(row.status == "unresolved" and not row.retryable for row in rows):
         return 1
+    if any(row.retryable for row in rows):
+        return 3
     return 0
 
 
 def _main(args: argparse.Namespace) -> int:
+    import uuid
+    from create_people_posters.people_recovery_records import Checkpoints, context as recovery_context
+    args.run_id = getattr(args, "run_id", "") or uuid.uuid4().hex
+    args.changed_names = []
+    if not __import__("re").fullmatch(r"[0-9a-f]{32}", args.run_id):
+        log("[error] Invalid recovery run identity")
+        return 2
+    def emit_report(rows):
+        write_report(args.out_root, rows, run_id=args.run_id,
+                     context_sha256=recovery_context(args), changed_names=args.changed_names)
     args.people_root = args.people_root.resolve()
     args.transparent_root = args.transparent_root.resolve()
     args.downloads_dir = args.downloads_dir.resolve()
@@ -1587,7 +1712,7 @@ def _main(args: argparse.Namespace) -> int:
     try:
         args.recover_warnings = parse_recover_warnings(args.recover_warnings)
     except ValueError as exc:
-        print(f"[ERROR] {exc}", file=sys.stderr)
+        print(f"[ERROR] {safe_exception(exc)}", file=sys.stderr)
         return 2
     args.report_edges = parse_edges(args.report_edges, ("top",))
     args.retry_edges = parse_edges(args.retry_edges, ("top",))
@@ -1605,7 +1730,7 @@ def _main(args: argparse.Namespace) -> int:
                 note="--inline cannot be combined with orchestrator staging flags",
             )
         ]
-        write_report(args.out_root, rows)
+        emit_report(rows)
         log("[error] --inline cannot be combined with orchestrator staging flags")
         return 2
     if args.inline:
@@ -1618,12 +1743,6 @@ def _main(args: argparse.Namespace) -> int:
             args.stage_only = False
 
     api_key = os.getenv("TMDB_KEY", "").strip()
-    if not api_key:
-        rows = [RecoveryRow(name="", status="skipped", note="TMDB_KEY missing")]
-        write_report(args.out_root, rows)
-        log("[warn] TMDB_KEY missing; edge-chop recovery skipped.")
-        return 0
-
     modified_since = args.modified_since
     if args.modified_within_hours > 0:
         modified_since = max(modified_since or 0.0, time.time() - (args.modified_within_hours * 3600.0))
@@ -1639,9 +1758,24 @@ def _main(args: argparse.Namespace) -> int:
                 ),
             )
         ]
-        write_report(args.out_root, rows)
+        emit_report(rows)
         log("[info] Whole-tree recovery skipped without scanning to avoid large Adobe retry runs.")
         return 0
+
+    # Validate retained state before discovery: an empty scan cannot conceal a
+    # corrupt checkpoint or a lost previously accepted output. Keep discovery
+    # on its reference tree and bind output evidence to the actual work tree.
+    import copy
+    args.scan_people_root = args.people_root
+    checkpoint_args = copy.copy(args)
+    if args.bg_engine == "birefnet" and not args.stage_for_orchestrator:
+        checkpoint_args.people_root = CONFIG_DIR / "people_dirs"
+    try:
+        checkpoints = Checkpoints(args.out_root / "recovery-checkpoints.json", checkpoint_args)
+        checkpoints.validate_retained()
+    except (OSError, ValueError):
+        log("[error] Recovery checkpoint validation failed; local artwork retained")
+        return 2
 
     exhausted_names = load_exhausted_names(args.exhausted_file)
     if exhausted_names:
@@ -1678,12 +1812,20 @@ def _main(args: argparse.Namespace) -> int:
             RecoveryRow(name=name, status="audit", initial_issues=issues, note=str(path))
             for name, path, issues in chopped
         ]
-        write_report(args.out_root, rows)
+        emit_report(rows)
         return 0
 
     if not chopped:
-        write_report(args.out_root, [])
+        emit_report([])
         return 0
+
+    if not api_key and not os.getenv("TMDB_READ_ACCESS_TOKEN", "").strip():
+        rows = [RecoveryRow(name=name, status="error", initial_issues=issues,
+            note="TMDB authentication configuration required; local artwork retained",
+            diagnostic=Diagnostic("TMDB", "search_person", "configuration", endpoint="/3/search/person"))
+            for name, path, issues in chopped]
+        emit_report(rows)
+        return 2
 
     if args.stage_for_orchestrator:
         input_exts = {".jpg", ".jpeg", ".png"}
@@ -1705,7 +1847,7 @@ def _main(args: argparse.Namespace) -> int:
                     ),
                 )
             ]
-            write_report(args.out_root, rows)
+            emit_report(rows)
             log(f"[error] downloads folder is not empty: {args.downloads_dir}")
             for path in existing_inputs[:20]:
                 log(f"[error] existing input: {path}")
@@ -1725,10 +1867,10 @@ def _main(args: argparse.Namespace) -> int:
         try:
             args.rembg_session = build_rembg_session(args.rembg_model)
         except RuntimeError as exc:
-            log(f"[error] {exc}")
+            log(f"[error] {safe_exception(exc)}")
             return 2
         except Exception as exc:
-            log(f"[error] rembg precheck could not initialize model {args.rembg_model}: {exc}")
+            log(f"[error] rembg precheck could not initialize model {args.rembg_model}: {safe_exception(exc)}")
             return 2
         log(
             f"[info] rembg precheck enabled with model: {args.rembg_model}; home: {args.rembg_home}; "
@@ -1759,7 +1901,12 @@ def _main(args: argparse.Namespace) -> int:
     for idx, (name, path, issues) in enumerate(chopped, start=1):
         log(f"[{idx}/{len(chopped)}] {name}: {issues}")
         try:
-            if args.stage_for_orchestrator:
+            previous = checkpoints.completed(name)
+            if previous is not None:
+                value = dict(previous)
+                diagnostic = value.pop("diagnostic")
+                row = RecoveryRow(**value, diagnostic=Diagnostic.from_dict(diagnostic) if diagnostic else None)
+            elif args.stage_for_orchestrator:
                 row = stage_one_for_orchestrator(
                     args,
                     session,
@@ -1771,16 +1918,20 @@ def _main(args: argparse.Namespace) -> int:
                 )
             else:
                 row = recover_one(args, session, api_key, name, issues)
-        except RuntimeError as exc:
-            row = RecoveryRow(name=name, status="error", initial_issues=issues, note=str(exc))
+            checkpoints.save(row, style_file_paths(args.people_root, name))
+            if previous is None and row.status == "recovered":
+                args.changed_names.append(name)
+        except (RuntimeError, ValueError, OSError) as exc:
+            row = RecoveryRow(name=name, status="error", initial_issues=issues, note=safe_exception(exc))
             exit_code = 2
             rows.append(row)
             log(f"{name}: error; {row.note}")
             break
         rows.append(row)
+        emit_report(rows)
         log(f"{name}: {row.status}; attempts={row.attempts}; {row.note}")
 
-    write_report(args.out_root, rows)
+    emit_report(rows)
     added_attempted = append_attempted_candidates(args.attempted_file, attempted_records)
     added_exhausted = append_exhausted_names(
         args.exhausted_file,
@@ -1797,7 +1948,7 @@ def _main(args: argparse.Namespace) -> int:
         if any(row.status == "exhausted" for row in rows):
             log("[warn] No acceptable TMDB alternate for exhausted names; retained existing local outputs. "
                 "Quality warnings remain in the report; exhaustion does not block the pipeline.")
-    if args.bg_engine == "birefnet" and exit_code:
+    if args.bg_engine == "birefnet" and exit_code not in {0, 3}:
         log_status_counts(rows, prefix="Final")
         log(f"[error] Local recovery failed with exit code {exit_code}; staged cutouts and source archives preserved. No orchestrator launch or success checkpoint written.")
         return exit_code
@@ -1834,12 +1985,12 @@ def _main(args: argparse.Namespace) -> int:
                     check_args.people_root = CONFIG_DIR / "people_dirs"
                 checked = postcheck_staged_outputs(rows, check_args)
                 if checked:
-                    write_report(args.out_root, rows)
+                    emit_report(rows)
                     log_status_counts(rows, prefix="Postcheck")
                     unresolved_after = sum(1 for row in rows if row.status == "unresolved")
                     if unresolved_after:
                         remove_unresolved_work_outputs(rows, check_args.people_root)
-                        write_report(args.out_root, rows)
+                        emit_report(rows)
                         log("[next] Some staged candidates still failed selected warning QA after Adobe.")
                         log("[next] Removed unresolved generated work outputs before repo sync.")
                         log("[next] Rerun this recovery command later to skip those attempted TMDB images and try the next candidates.")
@@ -1861,8 +2012,9 @@ def _main(args: argparse.Namespace) -> int:
         log("Next command: no staged candidates; remove names from the exhausted/attempted files only if you want to retry them.")
     else:
         log("Next command: python orchestrator.py --redo update")
+    exit_code = exit_code or local_recovery_status_code(rows)
+    emit_report(rows)
     if args.bg_engine == "birefnet":
-        exit_code = exit_code or local_recovery_status_code(rows)
         log_status_counts(rows, prefix="Final")
         log(f"[info] Local recovery exit code: {exit_code}")
     log("#### END recover_edge_chops ####")
@@ -1880,7 +2032,7 @@ def main() -> int:
             if Path(python).resolve() != Path(sys.executable).resolve():
                 return run_step("local recovery interpreter", [python, str(Path(__file__).resolve()), *sys.argv[1:]], os.environ.copy())
     except ValueError as exc:
-        print(f"[ERROR] {exc}", file=sys.stderr)
+        print(f"[ERROR] {safe_exception(exc)}", file=sys.stderr)
         return 2
     args.local_remover = None
     args.http_session = None

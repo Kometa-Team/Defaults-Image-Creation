@@ -1,5 +1,18 @@
 """Durable per-image receipts, separate from disposable processing jobs."""
 
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
+
 import sqlite3
 import time
 from pathlib import Path
@@ -66,12 +79,14 @@ class PublicationState:
         return self.db.execute("SELECT sha FROM baselines WHERE batch=? AND repo=? AND path=?", (batch, repo, path)).fetchone()[0] or None
 
     def mark(self, batch, repo, paths, status, commit="", error=""):
+        error = sanitize_text(error) if type(error) is str else safe_exception(error)
         with self.db:
             self.db.executemany("UPDATE publications SET status=?,commit_sha=?,last_attempt=?,error=? WHERE batch=? AND repo=? AND path=?",
                                 [(status, commit, time.time(), error, batch, repo, path) for path in paths])
         self.export(batch)
 
     def readme(self, batch, repo, status, error=""):
+        error = sanitize_text(error) if type(error) is str else safe_exception(error)
         with self.db:
             self.db.execute("UPDATE readmes SET status=?,error=? WHERE batch=? AND repo=?", (status, error, batch, repo))
         self.export(batch)

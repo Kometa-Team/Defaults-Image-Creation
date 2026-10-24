@@ -21,6 +21,19 @@ Dependencies:
     - python-dotenv (optional; for .env support)
 """
 
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
+
 import os
 import re
 import shutil
@@ -52,6 +65,7 @@ if load_dotenv:
     env_file = CONFIG_DIR / ".env"
     if env_file.exists():
         load_dotenv(env_file)
+        register_environment()
 
 script_log = LOGS_DIR / f"{SCRIPT_PATH.stem}.log"
 download_log = LOGS_DIR / f"{SCRIPT_PATH.stem}_downloads.log"

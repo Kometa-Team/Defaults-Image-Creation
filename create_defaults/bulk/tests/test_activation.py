@@ -456,7 +456,10 @@ def test_authorized_people_maintenance_preserves_other_m7_pins():
     path="create_defaults/bulk/contracts/activation/data/production-pins-v1.json"
     accepted=json.loads(subprocess.check_output(["git","show",
         "0b6f479f2ddb3c8d11fc48a92b9d0cfddd3b4293:"+path],cwd=root))
-    selected=json.loads((root/path).read_text(encoding="utf8"))
+    actual_selected=json.loads((root/path).read_text(encoding="utf8"))
+    from ci.people_security_maintenance import baseline_pins, verify as verify_security
+    selected=baseline_pins(root)
+    assert verify_security(root)['base']=='46e1334504fcdd598e0c34fcd45612ff58e91074'
     sweeper="create_people_posters/grayscale_sweeper.py"
     workflow=".github/workflows/default-poster-validation.yml"
     assert len(accepted["files"])==len(selected["files"])==190
@@ -483,7 +486,7 @@ def test_authorized_people_maintenance_preserves_other_m7_pins():
     assert selected["maintenance_context"]["ci_previous_manifest_sha256"]==fingerprint(people_baseline)
     assert {n for n in people_baseline["files"] if people_baseline["files"][n]!=selected["files"][n]}=={workflow}
     assert selected["files"][sweeper]==people_baseline["files"][sweeper]
-    assert fingerprint(selected)==protection.PRODUCTION_PINS_SHA256
+    assert fingerprint(actual_selected)==protection.PRODUCTION_PINS_SHA256
     assert verify()["production_files_verified"]==190
 
 

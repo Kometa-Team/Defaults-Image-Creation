@@ -8,6 +8,19 @@ Search image results when GOOGLE_API_KEY and GOOGLE_CSE_ID are configured.
 
 from __future__ import annotations
 
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
+
 import argparse
 import csv
 import os
@@ -213,7 +226,7 @@ def reference_features(paths: dict[str, Path]) -> dict[str, tuple[tuple[int, ...
         try:
             refs[style] = features(path, crop_alpha=(path.suffix.lower() == ".png"))
         except (OSError, UnidentifiedImageError) as exc:
-            logging_note = f"Skipping unreadable reference {style}: {path} ({exc})"
+            logging_note = f"Skipping unreadable reference {style}: {path} ({safe_exception(exc)})"
             print(logging_note, file=sys.stderr)
     return refs
 
@@ -236,11 +249,13 @@ def extension_from_response(url: str, content_type: str) -> str:
 
 
 def download_url(session: requests.Session, url: str, out_path: Path) -> bool:
-    response = session.get(url, timeout=60, headers={"User-Agent": "Mozilla/5.0"})
-    if response.status_code >= 400:
-        return False
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_bytes(response.content)
+    from create_people_posters.people_http import image_response
+    response = image_response(session, url)
+    try:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_bytes(response.content)
+    finally:
+        response.close()
     try:
         with Image.open(out_path) as img:
             img.verify()
@@ -251,13 +266,9 @@ def download_url(session: requests.Session, url: str, out_path: Path) -> bool:
 
 
 def tmdb_person(session: requests.Session, api_key: str, name: str) -> dict | None:
-    response = session.get(
-        TMDB_SEARCH_URL,
-        params={"api_key": api_key, "query": name, "include_adult": "false", "language": "en-US", "page": "1"},
-        timeout=30,
-    )
-    response.raise_for_status()
-    results = response.json().get("results", [])
+    from create_people_posters.people_http import tmdb_json
+    results = tmdb_json(session, api_key, "/3/search/person", operation="search_person",
+                        params={"query": name, "include_adult": "false", "language": "en-US", "page": "1"}).get("results", [])
     exact = [item for item in results if str(item.get("name", "")).casefold() == name.casefold()]
     picked = next((item for item in (exact or results) if item.get("id")), None)
     return picked
@@ -269,9 +280,8 @@ def tmdb_candidates(session: requests.Session, api_key: str, name: str, out_dir:
         return []
 
     person_id = int(person["id"])
-    response = session.get(f"https://api.themoviedb.org/3/person/{person_id}/images", params={"api_key": api_key}, timeout=30)
-    response.raise_for_status()
-    profiles = response.json().get("profiles", [])
+    from create_people_posters.people_http import tmdb_json, tmdb_image_path
+    profiles = tmdb_json(session, api_key, f"/3/person/{person_id}/images", operation="person_images").get("profiles", [])
     profiles = sorted(
         profiles,
         key=lambda item: (
@@ -287,6 +297,7 @@ def tmdb_candidates(session: requests.Session, api_key: str, name: str, out_dir:
         file_path = str(profile.get("file_path") or "")
         if not file_path:
             continue
+        file_path = tmdb_image_path(file_path)
         url = f"{TMDB_IMAGE_BASE}{file_path}"
         suffix = Path(file_path).suffix or ".jpg"
         out_path = out_dir / "tmdb" / f"{index:03d}{suffix}"
@@ -311,18 +322,20 @@ def tmdb_candidates(session: requests.Session, api_key: str, name: str, out_dir:
 
 
 def google_image_urls(session: requests.Session, api_key: str, cse_id: str, query: str, limit: int) -> list[str]:
+    from create_people_posters.people_http import request, response_json
+    from create_people_posters.people_diagnostics import register_secret
+    register_secret(api_key)
     urls: list[str] = []
     seen: set[str] = set()
     start = 1
     while len(urls) < limit and start <= 91:
         num = min(10, limit - len(urls))
-        response = session.get(
+        response = request(session, "GET",
             GOOGLE_SEARCH_URL,
             params={"key": api_key, "cx": cse_id, "q": query, "searchType": "image", "num": num, "start": start, "safe": "active"},
-            timeout=30,
+            timeout=30, provider="Google", operation="image_search", endpoint="/customsearch/v1",
         )
-        response.raise_for_status()
-        items = response.json().get("items", [])
+        items = response_json(response, provider="Google", operation="image_search", endpoint="/customsearch/v1").get("items", [])
         if not items:
             break
         for item in items:
@@ -413,7 +426,7 @@ def best_match(candidates: list[Candidate], refs: dict[str, tuple[tuple[int, ...
         try:
             scored.append((candidate, candidate_score(candidate.path, refs)))
         except Exception as exc:
-            print(f"Skipping unreadable candidate {candidate.path}: {exc}", file=sys.stderr)
+            print(f"Skipping unreadable candidate {candidate.path}: {safe_exception(exc)}", file=sys.stderr)
     scored.sort(key=lambda item: item[1], reverse=True)
     if not scored:
         return None, 0.0, []
@@ -516,7 +529,7 @@ def write_results(out_root: Path, rows: list[MatchResult]) -> None:
         writer.writeheader()
         for row in rows:
             writer.writerow(
-                {
+                sanitize_data({
                     "name": row.name,
                     "status": row.status,
                     "provider": row.provider,
@@ -526,17 +539,18 @@ def write_results(out_root: Path, rows: list[MatchResult]) -> None:
                     "candidate_path": row.candidate_path,
                     "copied_to": row.copied_to,
                     "note": row.note,
-                }
+                })
             )
 
     unresolved = [row for row in rows if row.status.startswith("unresolved")]
     with (out_root / "unresolved.txt").open("w", encoding="utf-8") as fh:
         for row in unresolved:
-            fh.write(f"{row.name}\t{row.note}\tbest={row.score:.4f}\n")
+            fh.write(sanitize_text(f"{row.name}\t{row.note}\tbest={row.score:.4f}") + "\n")
 
 
 def parser() -> argparse.ArgumentParser:
     load_dotenv(CONFIG_DIR / ".env")
+    register_environment()
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--source-root", type=Path, default=Path(os.getenv("PEOPLE_IMPORT_DIR") or DEFAULT_SOURCE_ROOT))
     ap.add_argument("--styles", default=os.getenv("ORIGINAL_RESOLVER_STYLES", "transparent,rainier"))
@@ -575,7 +589,7 @@ def main() -> int:
         try:
             result = resolve_name(args, session, name, refs[name])
         except Exception as exc:
-            result = MatchResult(name=name, status="unresolved", note=f"error: {exc}")
+            result = MatchResult(name=name, status="unresolved", note=f"error: {safe_exception(exc)}")
         print(f"  {result.status} {result.provider} {result.label} score={result.score:.4f} {result.note}".rstrip())
         results.append(result)
 

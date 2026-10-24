@@ -1,5 +1,18 @@
 """Small authenticated GitHub transport; no credentials in errors or receipts."""
 
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
+
 import os
 import json
 import re
@@ -105,6 +118,8 @@ class GitHubClient:
         self.sandbox = sandbox_settings()
         self.repositories = repository_mapping()
         self.token = token or auth_token()
+        from create_people_posters.people_diagnostics import register_secret
+        register_secret(self.token)
         self.session = session or requests.Session()
         self.sleep = sleep
         self.attempts = attempts

@@ -333,7 +333,7 @@ def test_transient_retries_bounded(code):
     delays, calls = [], []
     response = SimpleNamespace(status_code=code, text="temporary", headers={})
     session = SimpleNamespace(headers={}, request=lambda *a, **k: calls.append(1) or response)
-    client = GitHubClient("test", session, sleep=delays.append)
+    client = GitHubClient("NOT_A_REAL_GITHUB_RETRY_TEST_CREDENTIAL", session, sleep=delays.append)
     with pytest.raises(GitHubError):
         client.request("GET", "/repos/owner/repo")
     assert len(calls) == 4

@@ -1,3 +1,16 @@
+
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
 import os
 import re
 import sys
@@ -93,9 +106,9 @@ def setup_logging(level=logging.INFO, console=True):
     log_dir.mkdir(parents=True, exist_ok=True)
     log_file = log_dir / f"{Path(__file__).stem}.log"
 
-    handlers = [logging.FileHandler(log_file, encoding="utf-8", mode="w")]
+    handlers = [secure_handler(logging.FileHandler(log_file, encoding="utf-8", mode="w"))]
     if console:
-        handlers.append(logging.StreamHandler(sys.stdout))
+        handlers.append(secure_handler(logging.StreamHandler(sys.stdout)))
 
     logging.basicConfig(
         level=level,
@@ -116,9 +129,9 @@ def fetch_online_readme() -> tuple[str | None, str | None]:
         logging.info("Fetched online README → %s", ONLINE_README_URL)
         return text, "live"
     except requests.RequestException as exc:
-        logging.warning("Failed to fetch online README: %s", exc)
+        logging.warning("Failed to fetch online README: %s", safe_exception(exc))
     except OSError as exc:
-        logging.warning("Fetched online README but could not update cache: %s", exc)
+        logging.warning("Fetched online README but could not update cache: %s", safe_exception(exc))
         return response.text, "live"
 
     if ONLINE_README_CACHE.exists():
@@ -127,7 +140,7 @@ def fetch_online_readme() -> tuple[str | None, str | None]:
             logging.warning("Using cached online README → %s", ONLINE_README_CACHE)
             return cached_text, "cache"
         except OSError as exc:
-            logging.warning("Failed to read cached online README: %s", exc)
+            logging.warning("Failed to read cached online README: %s", safe_exception(exc))
 
     return None, None
 
@@ -349,7 +362,7 @@ def _iter_archive_texts(archive_source, display_name: str, archive_name: str, ac
                             print(f"Processed {nested_display_name}, found {count} hits.")
                     except Exception as exc:
                         logging.exception("Failed to read zip entry: %s", nested_display_name)
-                        print(f"!! Failed to read zip entry: {nested_display_name} ({exc})", file=sys.stderr)
+                        print(f"!! Failed to read zip entry: {nested_display_name} ({safe_exception(exc)})", file=sys.stderr)
             return
 
         if archive_type == "tar":
@@ -388,7 +401,7 @@ def _iter_archive_texts(archive_source, display_name: str, archive_name: str, ac
                                 print(f"Processed {nested_display_name}, found {count} hits.")
                     except Exception as exc:
                         logging.exception("Failed to read tar entry: %s", nested_display_name)
-                        print(f"!! Failed to read tar entry: {nested_display_name} ({exc})", file=sys.stderr)
+                        print(f"!! Failed to read tar entry: {nested_display_name} ({safe_exception(exc)})", file=sys.stderr)
             return
 
         if archive_type == "rar":
@@ -436,7 +449,7 @@ def _iter_archive_texts(archive_source, display_name: str, archive_name: str, ac
                                     print(f"Processed {nested_display_name}, found {count} hits.")
                         except Exception as exc:
                             logging.exception("Failed to read rar entry: %s", nested_display_name)
-                            print(f"!! Failed to read rar entry: {nested_display_name} ({exc})", file=sys.stderr)
+                            print(f"!! Failed to read rar entry: {nested_display_name} ({safe_exception(exc)})", file=sys.stderr)
             finally:
                 if temp_path:
                     try:
@@ -484,11 +497,11 @@ def _iter_archive_texts(archive_source, display_name: str, archive_name: str, ac
                                 print(f"Processed {nested_display_name}, found {count} hits.")
                         except Exception as exc:
                             logging.exception("Failed to read 7z entry: %s", nested_display_name)
-                            print(f"!! Failed to read 7z entry: {nested_display_name} ({exc})", file=sys.stderr)
+                            print(f"!! Failed to read 7z entry: {nested_display_name} ({safe_exception(exc)})", file=sys.stderr)
             return
     except Exception as exc:
         logging.exception("Failed to open archive: %s", display_name)
-        print(f"!! Failed to open archive: {display_name} ({exc})", file=sys.stderr)
+        print(f"!! Failed to open archive: {display_name} ({safe_exception(exc)})", file=sys.stderr)
 
 
 def _is_acceptable_file(name: str, file_name_regex: re.Pattern, acceptable_extensions: list[str]) -> bool:
@@ -636,7 +649,7 @@ def scan_text_files(folder_path):
             print(f"Processed {file_path}, found {count} hits.")
         except Exception as e:
             logging.exception("Failed to read file: %s", file_path)
-            print(f"!! Failed to read file: {file_path} ({e})", file=sys.stderr)
+            print(f"!! Failed to read file: {file_path} ({safe_exception(e)})", file=sys.stderr)
 
     sorted_hits = sorted(hits.items(), key=lambda x: x[0])
 

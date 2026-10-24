@@ -139,6 +139,7 @@ jobs:
     - validation
     - phase3
     - phase4
+    - people_security
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -176,6 +177,10 @@ jobs:
       with:
         path: config/ci-downloaded
         pattern: phase4-*
+    - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+      with:
+        path: config/ci-downloaded
+        pattern: people-security-*
     - name: Require all groups and reconcile exact test IDs and non-pytest gates
       # Phase 4 artifacts have their own namespace and mandatory exact-ID proof.
       run: python ci/validation.py verify --directory config/ci-downloaded --base "$BASE_SHA"
@@ -279,5 +284,44 @@ jobs:
         path: |
           config/phase4-ci/**
           config/ci-validation/phase4-m5/**
+        retention-days: 14
+        if-no-files-found: error
+  people_security:
+    name: People security (${{ matrix.os }}, ${{ matrix.group }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    env:
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+      PYTHONUNBUFFERED: '1'
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        group: [diagnostics, recovery, compatibility]
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        fetch-depth: 0
+        persist-credentials: false
+        ref: ${{ github.event.pull_request.head.sha }}
+    - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+      with:
+        python-version: '3.13'
+        cache: pip
+        cache-dependency-path: |
+          create_defaults/requirements.txt
+          create_defaults/requirements-bulk.txt
+    - name: Install existing offline validation dependencies
+      run: python -m pip install -r create_defaults/requirements-bulk.txt tmdbapis==1.3.1
+    - name: Mandatory credential containment and recovery regression
+      run: python ci/people_security.py run --group "${{ matrix.group }}"
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: people-security-${{ matrix.group }}-${{ matrix.os }}
+        path: config/ci-validation/people-security/**
         retention-days: 14
         if-no-files-found: error

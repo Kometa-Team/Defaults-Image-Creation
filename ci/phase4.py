@@ -65,6 +65,14 @@ def verify_historical_reports(reports):
 def checksum(path):return hashlib.sha256(path.read_bytes().replace(b'\r\n',b'\n')).hexdigest()
 
 
+def historical_checksum(root,path):
+    from ci.people_security_maintenance import historical_bytes, verify as verify_security
+    security=verify_security(root)
+    if path not in security['files']:return checksum(root/path)
+    require(checksum(root/path)==security['files'][path]['sha256'],'Changed authorized maintenance file: '+path)
+    return hashlib.sha256(historical_bytes(root,path)).hexdigest()
+
+
 def fingerprint(value):
     # The acceptance job deliberately has no production dependencies installed.
     # Match Package E canonical JSON exactly, without importing its YAML/Pillow
@@ -82,7 +90,7 @@ def verify_m3_maintenance(root=ROOT):
         if path=='ci/validation-plan.json':
             from ci.phase4_review import verify_maintenance as verify_m4
             require(verify_m4(root)['files'][path]['before_sha256']==pins['sha256'],'Broken M3/M4 plan maintenance chain')
-        else:require(checksum(root/path)==pins['sha256'],'Changed M3 maintenance: '+path)
+        else:require(historical_checksum(root,path)==pins['sha256'],'Changed M3 maintenance: '+path)
     original=subprocess.check_output(['git','show',M2_BASE+':ci/validation-plan.json'],cwd=root)
     verify_original_plan(original,root=root)
     return value
@@ -120,9 +128,11 @@ def verify_maintenance(root=ROOT):
             extension=verify_m5(root)['files'][path]
             require(extension['before_sha256']==pins['sha256'] and checksum(root/path)==extension['sha256'],
                 'Broken exact M1/M5 protected CI maintenance chain')
-        else:require(checksum(root/path)==pins['sha256'],'Changed authorized maintenance file: '+path)
+        else:require(historical_checksum(root,path)==pins['sha256'],'Changed authorized maintenance file: '+path)
     protected='create_defaults/bulk/contracts/activation/data/production-pins-v1.json'
-    old=json.loads(subprocess.check_output(['git','show',BASE+':'+protected],cwd=root));new=read(root/protected)
+    old=json.loads(subprocess.check_output(['git','show',BASE+':'+protected],cwd=root))
+    from ci.people_security_maintenance import baseline_pins
+    new=baseline_pins(root)
     require(len(new['files'])==len(old['files'])==190 and new['files'].keys()==old['files'].keys(),'Protected membership changed')
     require({p for p in old['files'] if old['files'][p]!=new['files'][p]}=={'.github/workflows/default-poster-validation.yml'},'Unexpected protected source change')
     require(new['maintenance_context']['phase4_previous_manifest_sha256']==fingerprint(old) and new['maintenance_context']['phase4_baseline_commit']==BASE,'Missing P4 maintenance provenance')

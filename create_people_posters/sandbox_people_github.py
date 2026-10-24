@@ -1,5 +1,18 @@
 """Explicit live validation in seven private personal repos, never production."""
 
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
+
 import argparse
 import base64
 import hashlib
@@ -184,7 +197,7 @@ def live_validation(client, source, root, timeout):
         try:
             PartialFailure(client, inventory, ledger).publish(batch)
         except GitHubError as error:
-            if "Intentional sandbox-only failure" not in str(error):
+            if "Intentional sandbox-only failure" not in safe_exception(error):
                 raise
         else:
             raise AssertionError("Expected partial publication did not fail")
@@ -264,7 +277,7 @@ def live_validation(client, source, root, timeout):
         print(f"[PASSED] Live sandbox validation: {report_path}", flush=True)
         return report
     except BaseException as error:
-        report.update(status="failed", error=str(error))
+        report.update(status="failed", error=safe_exception(error))
         atomic_json(report_path, report)
         raise
     finally:

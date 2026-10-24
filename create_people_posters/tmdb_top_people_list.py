@@ -13,6 +13,19 @@ person's display name as the poster filename label.
 """
 from __future__ import annotations
 
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
+
 import argparse
 import logging
 import os
@@ -52,8 +65,8 @@ def setup_logging(verbose: bool = False) -> Path:
         level=logging.DEBUG if verbose else logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
         handlers=[
-            logging.FileHandler(log_file, encoding="utf-8", mode="w"),
-            logging.StreamHandler(sys.stdout),
+            secure_handler(logging.FileHandler(log_file, encoding="utf-8", mode="w")),
+            secure_handler(logging.StreamHandler(sys.stdout)),
         ],
         force=True,
     )
@@ -108,7 +121,7 @@ def iter_image_names(root: Path) -> set[str]:
             if normalized:
                 names.add(normalized)
     except OSError as exc:
-        logging.warning("Could not scan existing images under %s: %s", root, exc)
+        logging.warning("Could not scan existing images under %s: %s", root, safe_exception(exc))
 
     return names
 
@@ -155,21 +168,9 @@ def collect_existing_names(roots: list[Path]) -> set[str]:
 
 
 def tmdb_get(session: requests.Session, api_key: str, page: int, language: str) -> dict[str, Any]:
-    params = {"api_key": api_key, "language": language, "page": page}
-
-    for attempt in range(1, 6):
-        response = session.get(TMDB_POPULAR_PEOPLE_URL, params=params, timeout=(10, 30))
-        if response.status_code != 429:
-            response.raise_for_status()
-            return response.json()
-
-        retry_after = response.headers.get("Retry-After")
-        wait_seconds = int(retry_after) if retry_after and retry_after.isdigit() else min(2 * attempt, 10)
-        logging.warning("TMDB rate limited page %d; waiting %ds", page, wait_seconds)
-        time.sleep(wait_seconds)
-
-    response.raise_for_status()
-    return response.json()
+    from create_people_posters.people_http import tmdb_json
+    return tmdb_json(session, api_key, "/3/person/popular", operation="popular_people",
+                     params={"language": language, "page": page})
 
 
 def fetch_popular_people(
@@ -364,9 +365,10 @@ def main() -> int:
 
     log_file = setup_logging(args.verbose)
     load_dotenv(CONFIG_DIR / ".env")
+    register_environment()
 
     api_key = os.getenv("TMDB_KEY", "").strip()
-    if not api_key:
+    if not api_key and not os.getenv("TMDB_READ_ACCESS_TOKEN"):
         logging.error("TMDB_KEY is required. Set it in ./config/.env or the process environment.")
         return 2
 

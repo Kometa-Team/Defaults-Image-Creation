@@ -67,7 +67,11 @@ def test_all_190_pins_and_only_authorized_workflow_maintenance_are_preserved():
     from create_defaults.bulk.contracts.activation import protection
     path="create_defaults/bulk/contracts/activation/data/production-pins-v1.json"
     baseline=json.loads(subprocess.check_output(["git","show","78464d2d051dc5da5f305bc4fd9f03868999636f:"+path],cwd=ROOT))
-    selected=json.loads((ROOT/path).read_text(encoding="utf8"))
+    actual_selected=json.loads((ROOT/path).read_text(encoding="utf8"))
+    from ci.people_security_maintenance import baseline_pins, verify as verify_security
+    selected=baseline_pins(ROOT)
+    assert verify_security(ROOT)['base']=='46e1334504fcdd598e0c34fcd45612ff58e91074'
+    assert fingerprint(actual_selected)==protection.PRODUCTION_PINS_SHA256
     assert len(selected["files"])==len(baseline["files"])==190
     assert selected["files"].keys()==baseline["files"].keys()
     changed={p for p in selected["files"] if selected["files"][p]!=baseline["files"][p]}

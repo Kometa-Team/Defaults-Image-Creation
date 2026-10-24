@@ -1,3 +1,16 @@
+
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
 import os
 import re
 import sys
@@ -22,9 +35,9 @@ for d in (CONFIG_DIR, LOGS_DIR, POSTERS_DIR):
 
 def setup_logging(level=logging.INFO, console=True):
     log_file = LOGS_DIR / f"{SCRIPT_PATH.stem}.log"
-    handlers = [logging.FileHandler(log_file, encoding="utf-8", mode="w")]
+    handlers = [secure_handler(logging.FileHandler(log_file, encoding="utf-8", mode="w"))]
     if console:
-        handlers.append(logging.StreamHandler(sys.stdout))
+        handlers.append(secure_handler(logging.StreamHandler(sys.stdout)))
     logging.basicConfig(
         level=level,
         format="%(asctime)s [%(levelname)s] %(message)s",
@@ -39,8 +52,9 @@ setup_logging()
 
 # ---------- env + config ----------
 load_dotenv(CONFIG_DIR / ".env")
+register_environment()
 TMDB_KEY = os.getenv("TMDB_KEY")
-if not TMDB_KEY:
+if not TMDB_KEY and not os.getenv("TMDB_READ_ACCESS_TOKEN"):
     logging.error("TMDB_KEY is required (set it in environment or .env).")
     sys.exit(1)
 
@@ -53,7 +67,8 @@ try:
 except ValueError:
     PERSON_DEPTH = 0
 
-TMDb = TMDbAPIs(TMDB_KEY, language="en")
+from create_people_posters.people_http import SecureTMDBSession
+TMDb = TMDbAPIs(TMDB_KEY or "", language="en", session=SecureTMDBSession(TMDB_KEY or ""))
 
 
 # ---------- helpers ----------
@@ -101,17 +116,20 @@ def save_image(person, file_label: str | None = None) -> bool:
             logging.info("All seven styles already exist: %s", base_name)
             return False
     try:
-        r = requests.get(person.profile_url, timeout=30)
-        r.raise_for_status()
+        from create_people_posters.people_http import image_response
+        r = image_response(requests.Session(), person.profile_url)
     except requests.RequestException as e:
-        logging.warning("Download failed for %s (%s): %s", person.name, person.id, e)
+        logging.warning("Download failed for %s (%s): %s", person.name, person.id, safe_exception(e))
         return False
 
     file_root = f"{base_name}-{person.id}"
     filepath = POSTERS_DIR / f"{safe_filename(file_root)}.jpg"
     filepath.parent.mkdir(parents=True, exist_ok=True)
-    with filepath.open("wb") as f:
-        f.write(r.content)
+    try:
+        with filepath.open("wb") as f:
+            f.write(r.content)
+    finally:
+        r.close()
     if (os.getenv("PEOPLE_PUBLISH_MODE", "local_git") == "github_api"
             or os.getenv("PEOPLE_WORKSPACE_MODE", "persistent") == "batch"):
         import json
@@ -161,7 +179,7 @@ def main():
             try:
                 lookup_value, file_label = parse_people_item(item)
             except ValueError as ex:
-                logging.warning(str(ex))
+                logging.warning(safe_exception(ex))
                 bar()
                 continue
 
@@ -175,7 +193,7 @@ def main():
             except ValueError:
                 pass  # not an int, fall through to search
             except Exception as ex:
-                logging.warning("Lookup by id failed for %s: %s", lookup_value, ex)
+                logging.warning("Lookup by id failed for %s: %s", lookup_value, safe_exception(ex))
 
             # search by name
             try:
@@ -201,7 +219,7 @@ def main():
                         if save_image(person, file_label=file_label):
                             pulled += 1
                     except Exception as ex:
-                        logging.warning("Exception on %s[%d]: %s", lookup_value, i, ex)
+                        logging.warning("Exception on %s[%d]: %s", lookup_value, i, safe_exception(ex))
 
                 if upper == 0:
                     # If you prefer to always get at least the best match:
@@ -209,7 +227,7 @@ def main():
                     pass
 
             except Exception as ex:
-                logging.warning("Search failed for %s: %s", lookup_value, ex)
+                logging.warning("Search failed for %s: %s", lookup_value, safe_exception(ex))
 
             bar()
 

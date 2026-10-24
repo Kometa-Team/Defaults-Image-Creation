@@ -1,3 +1,16 @@
+
+# A single canonical diagnostic registry is shared by CLI and imported callers.
+import sys as _security_sys
+from pathlib import Path as _SecurityPath
+_security_root = _SecurityPath(__file__).resolve().parents[1]
+if (_security_root / "create_people_posters").is_dir() and str(_security_root) not in _security_sys.path:
+    _security_sys.path.insert(0, str(_security_root))
+from create_people_posters.people_diagnostics import (protect_cli, safe_exception, sanitize_text,
+                                                     sanitize_data, secure_handler, register_environment)
+from create_people_posters.people_process import guard_cli
+if __name__ == "__main__":
+    guard_cli()
+
 # sel_remove_bg.py
 import argparse
 import json
@@ -64,6 +77,7 @@ if not ENV_FILE.exists():
 
 # --- Only load from ./config/.env (no fallback to CWD) ---
 load_dotenv(ENV_FILE)
+register_environment()
 
 
 def env_bool(name: str, default: str = "false") -> bool:
@@ -290,7 +304,7 @@ def mark_profile_clean_exit(user_data_dir: Path, profile_dir: Optional[str]) -> 
         try:
             data = json.loads(pref_path.read_text(encoding="utf-8"))
         except Exception as exc:
-            log(f"[chrome] could not read clean-exit prefs from {pref_path}: {exc}")
+            log(f"[chrome] could not read clean-exit prefs from {pref_path}: {safe_exception(exc)}")
             continue
 
         changed = False
@@ -312,7 +326,7 @@ def mark_profile_clean_exit(user_data_dir: Path, profile_dir: Optional[str]) -> 
             )
             updated.append(str(pref_path))
         except Exception as exc:
-            log(f"[chrome] could not write clean-exit prefs to {pref_path}: {exc}")
+            log(f"[chrome] could not write clean-exit prefs to {pref_path}: {safe_exception(exc)}")
 
     if updated:
         log(f"[chrome] marked profile clean to suppress restore bubble: {', '.join(updated)}")
@@ -510,7 +524,7 @@ def build_driver(
                 log("[chrome] reusing this fallback mode for future browser restarts in this run")
             break
         except Exception as exc:
-            detail = str(exc).splitlines()[0] if str(exc) else exc.__class__.__name__
+            detail = safe_exception(exc).splitlines()[0] if safe_exception(exc) else exc.__class__.__name__
             pipe_detail = "pipe" if use_pipe else "port"
             errors.append(f"{label}/{pipe_detail} [{attempt_user_data_dir}]: {detail}")
             if (label, attempt_user_data_dir, attempt_profile_dir, headless_mode, use_pipe) != attempts[-1]:
@@ -1085,7 +1099,7 @@ def prepare_fresh_tool(driver):
                 raise
             log(
                 f"[browser] stale Adobe project chooser detected; restarting Chrome "
-                f"({restart_idx + 1}/{MAX_TOOL_READY_RESTARTS}): {exc}"
+                f"({restart_idx + 1}/{MAX_TOOL_READY_RESTARTS}): {safe_exception(exc)}"
             )
             driver = restart_driver(driver, "stale Adobe project chooser")
     return driver
@@ -1386,7 +1400,7 @@ def click_js_then_native(driver, wait_new):
             js(driver, "arguments[0].scrollIntoView({block:'center'}); arguments[0].click();", host)
             log(f"[dl] JS click attempt {attempt}")
         except Exception as e:
-            log(f"[dl] JS click failed on attempt {attempt}: {e}")
+            log(f"[dl] JS click failed on attempt {attempt}: {safe_exception(e)}")
             time.sleep(0.5)
             continue
 
@@ -1901,7 +1915,7 @@ def accept_downloaded_image(path: Path) -> bool:
                 raise ValueError(f"format={im.format!r}")
             im.verify()
     except Exception as exc:
-        log(f"[dl] rejected invalid PNG download: {path.name} ({exc})")
+        log(f"[dl] rejected invalid PNG download: {path.name} ({safe_exception(exc)})")
         try:
             path.unlink(missing_ok=True)
         except Exception:
@@ -2103,7 +2117,7 @@ def main(argv=None):
                                 t_rs.done("resized" if changed else "already 2000x3000")
                             except Exception as e:
                                 fr.status = "SKIPPED"
-                                fr.detail = f"size check/resize failed: {e}"
+                                fr.detail = f"size check/resize failed: {safe_exception(e)}"
                                 break
 
                         # Upload
@@ -2202,12 +2216,12 @@ def main(argv=None):
                             if attempt < MAX_FILE_ATTEMPTS:
                                 log(f"[warn] browser crash while processing {jpg.name}; retrying (attempt {attempt + 1}/{MAX_FILE_ATTEMPTS})")
                                 attempt += 1
-                                driver = restart_driver(driver, str(e))
+                                driver = restart_driver(driver, safe_exception(e))
                                 force_prepare = True
                                 continue
-                            driver = restart_driver(driver, str(e))
+                            driver = restart_driver(driver, safe_exception(e))
                         fr.status = "ERROR"
-                        fr.detail = f"Selenium failure: {str(e).splitlines()[0]}"
+                        fr.detail = f"Selenium failure: {safe_exception(e).splitlines()[0]}"
                         break
                     except StaleAdobeProjectStateError as e:
                         if stale_project_restarts < MAX_TOOL_READY_RESTARTS:
@@ -2217,11 +2231,11 @@ def main(argv=None):
                                 f"and retrying same file (stale restart {stale_project_restarts}/{MAX_TOOL_READY_RESTARTS}; "
                                 f"file attempt {attempt}/{MAX_FILE_ATTEMPTS})"
                             )
-                            driver = restart_driver(driver, str(e))
+                            driver = restart_driver(driver, safe_exception(e))
                             force_prepare = True
                             continue
                         fr.status = "ERROR"
-                        fr.detail = str(e).splitlines()[0] if str(e) else "Stale Adobe project state"
+                        fr.detail = safe_exception(e).splitlines()[0] if safe_exception(e) else "Stale Adobe project state"
                         break
                     except AdobeLoginRequiredError as e:
                         if attempt < MAX_FILE_ATTEMPTS:
@@ -2234,20 +2248,20 @@ def main(argv=None):
                             force_prepare = True
                             continue
                         fr.status = "ERROR"
-                        fr.detail = str(e).splitlines()[0] if str(e) else "Adobe login required before download"
+                        fr.detail = safe_exception(e).splitlines()[0] if safe_exception(e) else "Adobe login required before download"
                         abort_run = True
                         exit_code = 4
                         break
                     except AdobeStorageFullError as e:
                         fr.status = "ERROR"
-                        fr.detail = str(e).splitlines()[0] if str(e) else "Adobe Express storage is full"
+                        fr.detail = safe_exception(e).splitlines()[0] if safe_exception(e) else "Adobe Express storage is full"
                         abort_run = True
                         exit_code = 6
                         log_adobe_storage_cleanup_next_steps()
                         break
                     except Exception as e:
                         fr.status = "ERROR"
-                        fr.detail = str(e).splitlines()[0] if str(e) else e.__class__.__name__
+                        fr.detail = safe_exception(e).splitlines()[0] if safe_exception(e) else e.__class__.__name__
                         break
 
                 fr.sec_total = time.perf_counter() - per_t0
