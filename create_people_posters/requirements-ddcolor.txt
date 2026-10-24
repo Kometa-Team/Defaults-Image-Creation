@@ -2,7 +2,7 @@
 torch>=2.14.1
 torchvision>=0.29.1
 
-Pillow>=12.3.0
+Pillow>=13.0.0
 numpy>=2.5.4
 opencv-python-headless>=5.0.0.93
 huggingface-hub>=2.2.0
