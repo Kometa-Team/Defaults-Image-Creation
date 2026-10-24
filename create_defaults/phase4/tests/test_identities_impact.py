@@ -40,6 +40,8 @@ def allocate(registry,key='synthetic',**kwargs):
 def test_uuid_stable_names_paths_casing_unicode_aliases_restart(registry):
     a=allocate(registry); initial=deepcopy(a['names']);head=registry.view().head
     changed=names('Synthetíc!');changed['public_path']='playlist/synthetíc!.jpg'
+    changed['source']=dict(path='logos_playlist/Synthetic Renamed.png',sha256='b'*64)
+    changed['rendered_caption']='A RENAMED CAPTION'
     b=registry.revise(a['id'],changed,entry_revision=1,token='rename',expected=head)
     assert a['id']==b['id'] and b['original_names']==initial and b['revision']==2
     assert {('public',initial['public_path']),('local',initial['local_path'])} <= {(r['namespace'],r['value']) for r in b['aliases']}
@@ -89,6 +91,11 @@ def test_punctuation_distinct_categories_shared_source_and_names(registry):
     a=allocate(registry,names=names('A-B'))
     b=allocate(registry,key='different',names=names('A B'))
     assert a['id']!=b['id'] and a['names']['source']==b['names']['source']
+    package=historical_basis().package('Studio');rules,_=package.data()
+    variant=next(k for k,r in rules.items() if r['required_presentations']==['single'])
+    n=names('A-B');n.update(local_path='defaults-en/studio/A-B.jpg',public_path='studio/A-B.jpg')
+    c=allocate(registry,key='studio',category='Studio',variant=variant,names=n)
+    assert c['category']!=a['category'] and c['names']['display_name']==a['names']['display_name'] and c['id']!=a['id']
 
 
 @pytest.mark.parametrize('field,value',[('active',True),('publication_authorized',True),('schema_version',2),('forged',True)])
