@@ -261,6 +261,23 @@ def test_update_and_rename_share_the_original_m1_cas_keys(case):
     assert not m6.recover(r)['commits']
 
 
+def test_concurrent_case_only_retry_has_one_commit_and_owned_copy(case):
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Barrier
+    r=case['row'][1].registry;plan=prepare(case,name='fixture');m6.propose(r,plan)
+    pair=decisions(case,plan);barrier=Barrier(2)
+    def execute(_):
+        barrier.wait(timeout=30)
+        try:return m6.commit_synthetic(r,plan,authority=case['authority'],decisions=pair)['retry']
+        except Conflict:return 'conflict'
+    with ThreadPoolExecutor(max_workers=2) as pool:result=list(pool.map(execute,range(2)))
+    assert sum(v is False for v in result)==1 and all(v in (False,True,'conflict') for v in result)
+    assert m6.commit_synthetic(r,plan,authority=case['authority'],decisions=pair)['retry']
+    report=m6.recover(r);assert len(report['commits'])==1
+    assert len(r.operations.history(plan.to_dict()['operation_id']))==2
+    assert all(m['positions']==['new'] for m in report['local_moves'][plan.to_dict()['operation_id']]['members'].values())
+
+
 def test_withdrawal_releases_only_its_owned_pending_move(case,monkeypatch):
     class Killed(BaseException):pass
     r=case['row'][1].registry;plan=prepare(case,name='fixture');record=m6.propose(r,plan);pair=decisions(case,plan)

@@ -106,6 +106,8 @@ class MappingPlan(Document):
 
 def _ledger(store, db):
     """Replay immutable M1 references AND their Package E commit cross-index."""
+    from .mapping_moves import event_budget
+    event_budget(db)
     records, events, latest, heads = _replay(store, db)
     plans, commits, touched, expected = [], {}, set(), []
     budget = 0
@@ -553,7 +555,11 @@ def recover_local(registry, *, operation_id=None):
         _,commits,_=_ledger(writer,db)
         result=mapping_moves.recover(writer,db,commits,operation_id=operation_id)
         for operation,state in result.items():
-            writer.event(db,'phase4_mapping_move_recovered',operation,dict(state=state))
+            data=canonical(dict(state=state)).decode()
+            prior=db.execute("SELECT payload FROM events WHERE kind='phase4_mapping_move_recovered' AND subject=? ORDER BY sequence DESC LIMIT 1",(operation,)).fetchone()
+            if prior is None or prior[0]!=data:
+                writer.event(db,'phase4_mapping_move_recovered',operation,dict(state=state))
+        mapping_moves.event_budget(db)
     return result
 
 
@@ -611,5 +617,7 @@ def recover(registry):
     return dict(**FLAGS,kind='isolated-mapping-recovery',commits=commits,
         currentness='integrity-only-currentness-unknown',
         active_members=sorted(graph.index().outputs) if graph else [],definition_keys=keys,
+        definitions=definitions,graph_sha256=graph.sha256 if graph else None,
+        mappings={i:entries[i]['names'] for i in definitions},
         tombstones={i:e['tombstone_sha256'] for i,e in entries.items() if e['tombstone_sha256'] is not None},
         retained=retained,plans=[p.sha256 for p in plans],local_moves=local_moves)

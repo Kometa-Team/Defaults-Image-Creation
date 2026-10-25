@@ -86,7 +86,10 @@ and retry or explicit exact-record withdrawal. Implicit error recovery touches
 only the failing operation. Withdrawal retains its evidence and records a new
 M1 cancellation with existing CAS; it cannot cancel an already committed change.
 A committed reversal is a separately reviewed RENAME that names the compensated
-plan and restores its exact old names. Original commits/aliases remain retained.
+plan and restores its exact old names. Original commits/aliases remain retained. Concurrent retries of the same move
+serialize staging under the existing write lock; they cannot race an unfinished
+preimage copy. M6 event counts/bytes retain the existing M1 archive bounds, and
+unchanged recovery observations are idempotent.
 
 ## DELETE and retention
 

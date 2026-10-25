@@ -97,7 +97,8 @@
     "create_defaults/phase4/m6_tests/test_mappings.py::test_competing_rename_and_delete_stale_registry_are_rejected",
     "create_defaults/phase4/m6_tests/test_mappings.py::test_m5_cannot_resurrect_a_retired_or_renamed_mapping",
     "create_defaults/phase4/m6_tests/test_mappings.py::test_concurrent_commits_have_one_winner_and_no_partial_identity",
-    "create_defaults/phase4/m6_tests/test_mappings.py::test_update_and_rename_share_the_original_m1_cas_keys"
+    "create_defaults/phase4/m6_tests/test_mappings.py::test_update_and_rename_share_the_original_m1_cas_keys",
+    "create_defaults/phase4/m6_tests/test_mappings.py::test_concurrent_case_only_retry_has_one_commit_and_owned_copy"
   ],
   "restart": [
     "create_defaults/phase4/m6_tests/test_mappings.py::test_fresh_process_replays_case_rename_and_retained_receipts"

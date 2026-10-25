@@ -11,7 +11,7 @@ from ..common import atomic_bytes, canonical, confined, fingerprint, reject_link
 from .package_e import SidecarStore
 from .previews import CompositionArchive
 from .retirement import fail
-from .storage import MAX_EVENTS
+from .storage import MAX_EVENTS, MAX_ARCHIVE_BYTES
 
 PREPARE='phase4_mapping_move_prepared'
 
@@ -20,7 +20,13 @@ def _checkpoint(name):
     """Internal interruption seam; not a caller callback."""
 
 
+def event_budget(db):
+    count,size=db.execute("SELECT count(*),coalesce(sum(length(CAST(payload AS BLOB))),0) FROM events WHERE kind GLOB 'phase4_mapping_*'").fetchone()
+    if count>MAX_EVENTS or size>MAX_ARCHIVE_BYTES: fail('move_archive_bound')
+
+
 def _rows(store, db):
+    event_budget(db)
     size=db.execute('SELECT coalesce(sum(length(CAST(payload AS BLOB))),0) FROM events WHERE kind=?',(PREPARE,)).fetchone()[0]
     if size>64*1024*1024: fail('move_archive_bound')
     rows=db.execute('SELECT subject,payload FROM events WHERE kind=? ORDER BY sequence LIMIT ?', (PREPARE,MAX_EVENTS+1)).fetchall()
@@ -69,32 +75,42 @@ def stage(store, plan):
     writer=SidecarStore(store.root)
     with writer.transaction() as db:
         rows=_rows(writer,db)
+        committed={r[0] for r in db.execute("SELECT subject FROM events WHERE kind='phase4_mapping_committed'")}
         if p['operation_id'] in rows:
             if rows[p['operation_id']]!=desired: fail('move_journal_substitution')
-            return
-        # Block another pending move, including an interrupted writer. Do not
-        # silently clean another operation or assume an abandoned reservation.
-        committed={r[0] for r in db.execute("SELECT subject FROM events WHERE kind='phase4_mapping_committed'")}
-        from .storage import _replay
-        latest=_replay(writer,db)[2]
-        cancelled={i for i,(r,e) in latest.items() if r.to_dict()['state']=='cancelled'}
-        if set(rows)-committed-cancelled: fail('pending_move_recovery_required')
-        for i in members:
-            if (_root(writer,p['operation_id'])/fingerprint(i)).exists(): fail('unowned_move_directory')
-        writer.event(db,PREPARE,p['operation_id'],desired)
-    # The committed prepare event owns the directory before the first byte is
-    # staged. A crash at any later instruction can rehydrate the exact archived
-    # preimage without guessing filesystem ownership.
+            if p['operation_id'] in committed:
+                return  # The coordinator independently checks the exact commit.
+        else:
+            # Other pending operations require explicit recovery/withdrawal.
+            from .storage import _replay
+            latest=_replay(writer,db)[2]
+            cancelled={i for i,(r,e) in latest.items() if r.to_dict()['state']=='cancelled'}
+            if set(rows)-committed-cancelled: fail('pending_move_recovery_required')
+            for i in members:
+                if (_root(writer,p['operation_id'])/fingerprint(i)).exists(): fail('unowned_move_directory')
+            writer.event(db,PREPARE,p['operation_id'],desired)
+            event_budget(db)
+    # The prepare event is durable before any filesystem creation. A second
+    # immediate transaction serializes idempotent population for concurrent
+    # retries of this exact operation, including the prepare/stage crash gap.
     _checkpoint('journal_prepared')
     archive=CompositionArchive(writer.root,readonly=True)
-    for i,m in members.items():
-        root=_root(writer,p['operation_id'])/fingerprint(i)
-        old=_path(root,m['old'])
-        raw=archive.read_bytes(m['object_sha256'])
-        from hashlib import sha256 as digest
-        if digest(raw).hexdigest()!=m['sha256']: fail('move_bytes')
-        old.parent.mkdir(parents=True,exist_ok=True)
-        atomic_bytes(old,raw)
+    with writer.transaction() as db:
+        if _rows(writer,db).get(p['operation_id'])!=desired: fail('move_journal_substitution')
+        if db.execute("SELECT 1 FROM events WHERE kind='phase4_mapping_committed' AND subject=?",(p['operation_id'],)).fetchone():
+            return
+        for i,m in members.items():
+            root=_root(writer,p['operation_id'])/fingerprint(i)
+            old=_path(root,m['old']);new=_path(root,m['new']);temp=_path(root,m['temporary'])
+            if _literal(new) or _literal(temp): fail('pending_move_recovery_required')
+            if _literal(old):
+                if old.stat().st_nlink!=1 or sha256(old)!=m['sha256']: fail('move_bytes')
+                continue
+            raw=archive.read_bytes(m['object_sha256'])
+            from hashlib import sha256 as digest
+            if digest(raw).hexdigest()!=m['sha256']: fail('move_bytes')
+            old.parent.mkdir(parents=True,exist_ok=True)
+            atomic_bytes(old,raw)
     _checkpoint('prepared')
 
 
