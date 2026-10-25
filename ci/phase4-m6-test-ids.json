@@ -46,6 +46,8 @@
     "create_defaults/phase4/m6_tests/test_mappings.py::test_exact_two_stage_authority_is_required[expired]",
     "create_defaults/phase4/m6_tests/test_mappings.py::test_exact_two_stage_authority_is_required[context]",
     "create_defaults/phase4/m6_tests/test_mappings.py::test_exact_two_stage_authority_is_required[chain]",
+    "create_defaults/phase4/m6_tests/test_mappings.py::test_trial_ownership_cannot_be_rebound_through_mutable_config[root]",
+    "create_defaults/phase4/m6_tests/test_mappings.py::test_trial_ownership_cannot_be_rebound_through_mutable_config[offline]",
     "create_defaults/phase4/m6_tests/test_mappings.py::test_real_entry_points_fail_closed_without_any_write",
     "create_defaults/phase4/m6_tests/test_mappings.py::test_namespace_occupancy_includes_retained_aliases[occupied]",
     "create_defaults/phase4/m6_tests/test_mappings.py::test_namespace_occupancy_includes_retained_aliases[case-collision]",

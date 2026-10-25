@@ -53,7 +53,10 @@ the reviewed bundle/context; this is not a fabricated complete-artwork review
 bundle. Roles, grant identity, expiry and revocation are checked again before
 commit. Mapping-only review cannot approve a caption/style change. All flags
 remain synthetic, unauthenticated, not applied, not READY/ACTIVE and not
-publication-authorized. `commit_operational` uses the existing unavailable
+publication-authorized. Before opening a writer, the M6 adapter projects the
+verified M5 graph into the original M3 trial capability checks, preserving its
+lifetime, root, offline and source constraints. Matching a mutable cache path
+alone cannot establish ownership. `commit_operational` uses the existing unavailable
 authority boundary and always rejects without writes.
 
 Recovery replays M5 and M6 commits in their shared M1 journal order. It checks

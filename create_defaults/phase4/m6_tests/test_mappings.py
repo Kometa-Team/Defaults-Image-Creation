@@ -144,6 +144,18 @@ def test_exact_two_stage_authority_is_required(case,attack):
     assert before==r.operations.inspect()
 
 
+@pytest.mark.parametrize('attack',['root','offline'])
+def test_trial_ownership_cannot_be_rebound_through_mutable_config(case,monkeypatch,attack):
+    from dataclasses import replace
+    trial=case['row'][0];r=case['row'][1].registry
+    plan=prepare(case,display='Changed');m6.propose(r,plan);pair=decisions(case,plan)
+    before=r.operations.inspect()
+    if attack=='root':monkeypatch.setattr(trial,'root',trial.root/'not-the-owned-trial')
+    else:monkeypatch.setattr(trial,'config',replace(trial.config,offline=False))
+    with pytest.raises(BulkError):m6.commit_synthetic(r,plan,authority=case['authority'],decisions=pair)
+    assert r.operations.inspect()==before
+
+
 @pytest.mark.parametrize('point',['mapping_marker','registry_marker','commit_event'])
 def test_atomic_cas_leaves_no_half_registry_or_mapping(case,monkeypatch,point):
     r=case['row'][1].registry;plan=prepare(case,display='Changed');m6.propose(r,plan)

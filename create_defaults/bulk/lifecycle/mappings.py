@@ -450,6 +450,19 @@ def require_m5_compatible(root, store, db, candidate):
                     fail('m6_dependency_requires_current_adapter')
 
 
+def _require_trial(registry, authority):
+    # Reuse the original M3 lifetime/path/offline/source capability checks, not
+    # only equality with a caller-mutable config.cache_dir. The adapter projects
+    # verified M5 graph state into the public require() structural interface.
+    from types import SimpleNamespace
+    if type(authority) is not SyntheticReviewAuthority: require_operational_approval()
+    with registry.operations.contracts.read_connection() as db:
+        state=inspect_db(registry.operations.root,registry.operations.contracts,db)
+    graph=committed_graph(state)
+    if graph is None: fail('before_not_committed')
+    authority.trial.require(SimpleNamespace(config=authority.trial.config,registry=registry,graph=graph))
+
+
 def commit_operational(*args, **kwargs):
     require_operational_approval(*args, **kwargs)
 
@@ -479,6 +492,7 @@ def commit_synthetic(registry, plan, *, authority, decisions, cancel=None):
     root=registry.operations.root
     if authority.trial._closed or root != authority.trial.config.cache_dir: fail('foreign_authority')
     _cancelled(cancel); _decisions(plan,decisions,authority=authority,root=root)
+    _require_trial(registry,authority)
     writer=SidecarStore(root); p=plan.to_dict()
     try:
         from . import mapping_moves
@@ -572,6 +586,7 @@ def cancel_synthetic(registry, plan, *, expected_record_sha256, authority, withd
             'submitter','withdraw',plan.sha256,plan.sha256,'synthetic.review.m6-'+fingerprint(p['operation_id'])):
         fail('withdrawal_context')
     verify_authority(authority,withdrawal,root=root)
+    _require_trial(registry,authority)
     with registry.operations.contracts.read_connection() as db:
         _,commits,_=_ledger(registry.operations.contracts,db)
         prior=_replay(registry.operations.contracts,db)[2].get(p['operation_id'])
