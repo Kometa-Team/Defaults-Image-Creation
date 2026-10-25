@@ -44,3 +44,15 @@ def test_unselected_dependent_identity_and_edge_remain_literal():
     g=graph(dependent=True);before=deepcopy(g.data())
     validate_delete(g.index(),entries(),['child'])
     assert g.data()==before and g.index().nodes['output:child']['dependencies']==['output:parent']
+
+
+def test_confinement_does_not_canonicalize_case_only_journal_paths(tmp_path):
+    from create_defaults.bulk.lifecycle.mapping_moves import _path,_literal,_move
+    from create_defaults.bulk.common import sha256
+    old=tmp_path/'Fixture.jpg';old.write_bytes(b'fixture')
+    pin=sha256(old);temporary=tmp_path/'intermediate.m6'
+    _move(_path(tmp_path,'Fixture.jpg'),temporary,pin)
+    _move(temporary,_path(tmp_path,'fixture.jpg'),pin)
+    assert _path(tmp_path,'Fixture.jpg').name=='Fixture.jpg'
+    assert not _literal(_path(tmp_path,'Fixture.jpg'))
+    assert _literal(_path(tmp_path,'fixture.jpg'))

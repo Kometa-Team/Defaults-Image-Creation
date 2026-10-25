@@ -44,6 +44,13 @@ def _root(store, op):
     return confined(store.root, 'm6-owned/'+fingerprint(op))
 
 
+def _path(root, relative):
+    # Validate confinement/reparse points without returning Path.resolve()'s
+    # case-canonicalized spelling on Windows. Journal paths remain literal.
+    confined(root,relative)
+    return reject_links(Path(root)/relative)
+
+
 def _members(plan):
     p=plan.to_dict(); members={}
     for i in p['members']:
@@ -82,7 +89,7 @@ def stage(store, plan):
     archive=CompositionArchive(writer.root,readonly=True)
     for i,m in members.items():
         root=_root(writer,p['operation_id'])/fingerprint(i)
-        old=confined(root,m['old'])
+        old=_path(root,m['old'])
         raw=archive.read_bytes(m['object_sha256'])
         from hashlib import sha256 as digest
         if digest(raw).hexdigest()!=m['sha256']: fail('move_bytes')
@@ -115,7 +122,7 @@ def execute(store, db, plan):
     if v['plan_sha256']!=plan.sha256: fail('move_plan')
     for i,m in v['members'].items():
         root=_root(store,p['operation_id'])/fingerprint(i)
-        old,new,temp=[confined(root,m[k]) for k in ('old','new','temporary')]
+        old,new,temp=[_path(root,m[k]) for k in ('old','new','temporary')]
         # Retry after explicit recovery starts from the exact old spelling.
         _move(old,temp,m['sha256']);_checkpoint('intermediate')
         _move(temp,new,m['sha256']);_checkpoint('destination')
@@ -131,7 +138,7 @@ def inspect(store, db, commits):
         rows={}
         for i,m in v['members'].items():
             root=_root(store,op)/fingerprint(i)
-            paths={k:confined(root,m[k]) for k in ('old','new','temporary')}
+            paths={k:_path(root,m[k]) for k in ('old','new','temporary')}
             found={k:p for k,p in paths.items() if _literal(p)}
             if any(sha256(p)!=m['sha256'] for p in found.values()): fail('move_inspection_bytes')
             if found:
@@ -158,7 +165,7 @@ def recover(store, db, commits, operation_id=None):
         if committed and commits[op]['plan_sha256']!=v['plan_sha256']: fail('move_commit')
         for i,m in v['members'].items():
             root=_root(store,op)/fingerprint(i)
-            paths={k:confined(root,m[k]) for k in ('old','new','temporary')}
+            paths={k:_path(root,m[k]) for k in ('old','new','temporary')}
             found=[p for p in paths.values() if _literal(p)]
             if not found:
                 if committed: fail('move_recovery_bytes')

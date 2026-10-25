@@ -29,6 +29,7 @@
     "create_defaults/phase4/m6_tests/test_ci_and_history.py::test_failed_or_missing_required_job_cannot_reach_acceptance[None]",
     "create_defaults/phase4/m6_tests/test_ci_and_history.py::test_additive_workflow_retains_exact_head_readonly_and_timeout",
     "create_defaults/phase4/m6_tests/test_ci_and_history.py::test_all_historical_mappings_and_actual_overlay_companions_are_retained",
+    "create_defaults/phase4/m6_tests/test_ci_and_history.py::test_actual_generated_and_overlay_ids_survive_mapping_reservations",
     "create_defaults/phase4/m6_tests/test_mappings.py::test_rename_cannot_smuggle_material_changes_or_unsafe_names[style]",
     "create_defaults/phase4/m6_tests/test_mappings.py::test_rename_cannot_smuggle_material_changes_or_unsafe_names[caption]",
     "create_defaults/phase4/m6_tests/test_mappings.py::test_rename_cannot_smuggle_material_changes_or_unsafe_names[id]",
@@ -74,7 +75,8 @@
     "create_defaults/phase4/m6_tests/test_retirement.py::test_complete_retirement_has_no_orphaned_retained_consumer[False-True]",
     "create_defaults/phase4/m6_tests/test_retirement.py::test_complete_retirement_has_no_orphaned_retained_consumer[True-True]",
     "create_defaults/phase4/m6_tests/test_retirement.py::test_complete_retirement_has_no_orphaned_retained_consumer[False-False]",
-    "create_defaults/phase4/m6_tests/test_retirement.py::test_unselected_dependent_identity_and_edge_remain_literal"
+    "create_defaults/phase4/m6_tests/test_retirement.py::test_unselected_dependent_identity_and_edge_remain_literal",
+    "create_defaults/phase4/m6_tests/test_retirement.py::test_confinement_does_not_canonicalize_case_only_journal_paths"
   ],
   "recovery": [
     "create_defaults/phase4/m6_tests/test_mappings.py::test_atomic_cas_leaves_no_half_registry_or_mapping[mapping_marker]",

@@ -98,3 +98,28 @@ def test_all_historical_mappings_and_actual_overlay_companions_are_retained():
     validate_delete(graph.index(),entries,ids)
     assert {i:outputs[i]['variant'] for i in ids}=={r['identity']['id']:r['observed_variant'] for r in selected}
     assert fingerprint(rows)==MAPPING_SHA256
+
+
+def test_actual_generated_and_overlay_ids_survive_mapping_reservations(tmp_path):
+    """Exercise the real M2 identity bridge, without claiming an applied cohort."""
+    from create_defaults.bulk.lifecycle.basis import historical_basis
+    from create_defaults.bulk.lifecycle.identities import IdentityRegistry
+    from create_defaults.phase3.tests.destination_samples import inventory,USER
+    basis=historical_basis();rows=basis.rows()
+    generated=next(r for r in rows if r['family'])
+    overlay=next(r for r in rows if r['identity']['category']=='Overlays')
+    pair=[r for r in rows if r['identity']['category']=='Overlays'
+          and r['identity']['source']['path']==overlay['identity']['source']['path']]
+    inv=inventory(USER,'Main',{})
+    registry=IdentityRegistry.create(tmp_path/'state','m6-historical-reservation',inventory=inv,expected_inventory_sha256=inv.sha256)
+    for row in [generated,*pair]:
+        i=row['identity']['id'];before=registry.reference(i,token='reference-'+fingerprint(i),expected=registry.view().head)
+        names=deepcopy(before['names']);names['display_name']+=' M6 reservation'
+        for field in ('local_path','public_path'):
+            if names[field] is not None:
+                path=Path(names[field]);names[field]=path.parent.as_posix()+'/M6 Reference '+path.name
+        after=registry.revise(i,names,entry_revision=before['revision'],token='revise-'+fingerprint(i),expected=registry.view().head)
+        assert after['id']==i and after['semantic']==before['semantic'] and after['original_names']==before['original_names']
+        assert after['names']['source']==before['names']['source'] and after['variant']==before['variant']
+        assert any(a['value']==before['names']['local_path'] for a in after['aliases'])
+    assert {registry.view().entry(r['identity']['id'])['semantic']['role'] for r in pair}=={'standard','bigger'}

@@ -407,7 +407,7 @@ def propose(registry, plan):
     p=plan.to_dict()
     current=prepare(registry,operation_id=p['operation_id'],operation=p['operation'],definitions=p['definitions'] if p['operation']=='RENAME' else None,
         members=p['members'],definition_keys=p['definition_keys'],compensates=p['compensates'])
-    if current.encoded != plan.encoded: fail('stale_plan')
+    if current.encoded != plan.encoded: raise Conflict('Mapping plan changed before commit')
     prior=registry.operations.history(p['operation_id'])
     if prior:
         if prior[0].to_dict()['request_sha256'] != plan.sha256: raise Conflict('Operation identity occupied')
@@ -442,9 +442,10 @@ def require_m5_compatible(root, store, db, candidate):
     for plan in plans:
         p=plan.to_dict()
         if affected & set(p['members']): fail('m6_mapping_requires_current_adapter')
-        for e in p['before'].values():
-            if e['names']['source'] and 'asset:'+e['names']['source']['path'] in dependencies:
-                fail('m6_dependency_requires_current_adapter')
+        for field in ('before','after'):
+            for e in p[field].values():
+                if e['names']['source'] and 'asset:'+e['names']['source']['path'] in dependencies:
+                    fail('m6_dependency_requires_current_adapter')
 
 
 def commit_operational(*args, **kwargs):
@@ -495,7 +496,7 @@ def commit_synthetic(registry, plan, *, authority, decisions, cancel=None):
                 return dict(**FLAGS,isolated_committed=True,retry=True,**commits[p['operation_id']])
             current=prepare(registry,operation_id=p['operation_id'],operation=p['operation'],definitions=p['definitions'] if p['operation']=='RENAME' else None,
                 members=p['members'],definition_keys=p['definition_keys'],compensates=p['compensates'])
-            if current.encoded != plan.encoded: fail('stale_plan')
+            if current.encoded != plan.encoded: raise Conflict('Mapping plan changed before commit')
             # Same source bytes, verified against archived provenance. Moving a
             # source is explicit staging in the owned trial, never production IO.
             _sources(plan,authority)
@@ -565,6 +566,12 @@ def cancel_synthetic(registry, plan, *, expected_record_sha256, authority, withd
             'submitter','withdraw',plan.sha256,plan.sha256,'synthetic.review.m6-'+fingerprint(p['operation_id'])):
         fail('withdrawal_context')
     verify_authority(authority,withdrawal,root=root)
+    with registry.operations.contracts.read_connection() as db:
+        _,commits,_=_ledger(registry.operations.contracts,db)
+        prior=_replay(registry.operations.contracts,db)[2].get(p['operation_id'])
+        if p['operation_id'] in commits: fail('committed_operation_requires_compensation')
+        if prior is None or prior[0].sha256!=expected_record_sha256 or prior[0].to_dict()['request_sha256']!=plan.sha256:
+            raise Conflict('Exact pending proposal required')
     recover_local(registry,operation_id=p['operation_id'])
     writer=SidecarStore(root)
     with writer.transaction() as db:
