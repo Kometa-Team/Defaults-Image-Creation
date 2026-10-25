@@ -115,7 +115,7 @@ def verify_original_plan(original,*,root=ROOT):
 
 
 def verify_maintenance(root=ROOT):
-    verify_infrastructure(root)
+    dependency=verify_infrastructure(root)
     value=read(root/'ci/phase4-maintenance.json')
     require(fingerprint(value)==MAINTENANCE_PIN,'Unapproved P4/M1 maintenance manifest')
     require(value['base']==BASE and set(value['files'])==MAINTAINED-{ADOPTION_SOURCE},'Unexpected maintenance scope')
@@ -140,7 +140,11 @@ def verify_maintenance(root=ROOT):
     require(len(new['files'])==len(old['files'])==190 and new['files'].keys()==old['files'].keys(),'Protected membership changed')
     require({p for p in old['files'] if old['files'][p]!=new['files'][p]}=={'.github/workflows/default-poster-validation.yml'},'Unexpected protected source change')
     require(new['maintenance_context']['phase4_previous_manifest_sha256']==fingerprint(old) and new['maintenance_context']['phase4_baseline_commit']==BASE,'Missing P4 maintenance provenance')
-    return value
+    # Return the complete verified scope. Preserve the original manifest and
+    # explicitly distinguish the dependency extension's own baseline/context.
+    return {**value,'files':{**value['files'],ADOPTION_SOURCE:dependency['infrastructure'][ADOPTION_SOURCE]},
+        'dependency_extension':{'baseline_commit':dependency['baseline_commit'],
+            'transition_sha256':fingerprint(dependency),'files':[ADOPTION_SOURCE]}}
 
 
 def run():

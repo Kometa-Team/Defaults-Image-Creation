@@ -57,6 +57,15 @@ class DependencyMaintenanceTests(unittest.TestCase):
         people.verify(ROOT)
         selected = people.baseline_pins(ROOT)
         self.assertEqual(len(selected['files']), 190)
+        from ci import phase4
+        receipt=phase4.verify_maintenance(ROOT)
+        frozen=json.loads((ROOT/'ci/phase4-maintenance.json').read_text(encoding='utf8'))
+        self.assertEqual(set(receipt['files']),phase4.MAINTAINED)
+        self.assertEqual({k:v for k,v in receipt['files'].items() if k!=transition.ADOPTION_SOURCE},frozen['files'])
+        self.assertEqual(receipt['base'],frozen['base'])
+        self.assertEqual(receipt['dependency_extension'],{
+            'baseline_commit':'d6b039788315f2198304cf05f7efea5addc271c9',
+            'transition_sha256':transition.PIN,'files':[transition.ADOPTION_SOURCE]})
         # Frozen manifests, historical records, existing CI selection and gates
         # retain exact bytes; this test cannot legitimize changes to them.
         for name in (people.PINS, 'ci/people-security-maintenance.json',

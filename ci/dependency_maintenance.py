@@ -11,7 +11,7 @@ import subprocess
 from pathlib import Path
 
 MANIFEST = Path(__file__).with_name("dependency-maintenance-v1.json")
-PIN = "208dee15fed8e232e169a5f0fbca7c6d5c2e85e64265b6feb04a680864a7f0c7"
+PIN = "8deb50e4f2b2e18b9688fd3bbcc427e2d67cdf6051f6794f206f07acb69dd590"
 DEPENDENCIES = frozenset((
     "create_defaults/canary/requirements-staging.txt",
     "create_defaults/requirements.txt",

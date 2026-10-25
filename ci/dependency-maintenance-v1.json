@@ -25,7 +25,7 @@
   "infrastructure": {
     "ci/phase4.py": {
       "before_sha256": "74e3f327314b0df15387d8979b493a802811292a5dccec5ad758601e51330cc1",
-      "sha256": "748f1fe583b4674e01de80018e4cc855018b5d91360240f474574939af527580"
+      "sha256": "16e7c89d628f42d719a726b805b578483a76bc5f6183a6dbeed06e0609f24677"
     },
     "create_defaults/bulk/contracts/activation/protection.py": {
       "before_sha256": "70f57783594cac851fe352413d95ab121de1314a02e4c8d41567c0914e89c0e4",

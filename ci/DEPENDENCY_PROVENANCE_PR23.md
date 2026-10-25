@@ -43,7 +43,7 @@ SHA-256 values normalize CRLF to LF, matching the existing source verifiers.
 `ci/dependency-maintenance-v1.json` is a separate immutable, canonical-hash-pinned
 transition. It names the dependency commit, merge baseline, author, prior
 production manifest and adoption snapshot, and exact before/after source hashes.
-Its canonical SHA-256 is `208dee15fed8e232e169a5f0fbca7c6d5c2e85e64265b6feb04a680864a7f0c7`.
+Its canonical SHA-256 is `8deb50e4f2b2e18b9688fd3bbcc427e2d67cdf6051f6794f206f07acb69dd590`.
 
 The original 190-file production manifest, 299-file adoption snapshot, historical
 registries, source commit/tree identities, output hashes, receipt mappings and
@@ -62,7 +62,9 @@ AST activation checks, confinement and historical checks remain in place.
 The source-selection changes to `activation/protection.py`, `adoption/sources.py`
 and the necessary `ci/phase4.py` scope extension are also bound to exact
 before/after infrastructure hashes in this transition. Every infrastructure
-check validates both the predecessor Git bytes and the current bytes. The
+check validates both the predecessor Git bytes and the current bytes. Its returned verified file map includes the reader with a separately named
+dependency-extension baseline and transition hash, preserving the caller
+contract without relabeling the frozen M1 manifest. The
 Phase 3 assertion is unchanged: its accepted maintenance scope gains only the
 exact verified adoption reader; the original M1 manifest membership is unchanged. The existing People
 maintenance verifier checks those exact bytes, retains its immutable earlier
