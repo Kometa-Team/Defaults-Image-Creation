@@ -1,10 +1,10 @@
-# Phase 4 / M6 â€” identity-preserving mappings and retained definition retirement
+# Phase 4 / M6 — identity-preserving mappings and retained definition retirement
 
 Implementation branch: `feat/lifecycle-m6-rename-retirement`. Baseline:
 `d6b039788315f2198304cf05f7efea5addc271c9`, including merged M5 PR #36 at
 `46e1334504fcdd598e0c34fcd45612ff58e91074`. Earlier milestone documents' future
-tense describes their planning baseline. M1â€“M5 are merged; M6 is under validation,
-M7 has not started, and Phases 5â€“6 remain NOT STARTED.
+tense describes their planning baseline. M1–M5 are merged; M6 is under validation,
+M7 has not started, and Phases 5–6 remain NOT STARTED.
 
 ## APIs and supported scope
 
@@ -140,6 +140,25 @@ style changes without complete composition review; UPDATE of a renamed mapping
 through M5's old adapter; and all physical source cleanup/remote operations.
 These fail closed and retain identities/evidence rather than synthesizing missing
 contracts, approvals, mappings or receipts.
+
+## Inherited main integrity blocker
+
+The first full workflow at `eddee0a80ef72548ff63de32878ac6766f709026`
+(run `40164857538`) exposed four protected-source mismatches already present in
+base `d6b039788315f2198304cf05f7efea5addc271c9`: the Defaults normal/canary
+requirements and People DDColor/rembg requirements. All four last changed in
+merged dependency PR #23, commit `06e3bc5959600d1bf5c5cec86f49b9ef5f5b198c`.
+M6 changes none of those files, the protected manifest or its verifier. The
+original workflow correctly fails closed. Full Validation acceptance cannot be
+claimed until that inherited dependency/provenance issue is separately resolved.
+No replacement pins or relaxed checks are introduced by M6.
+
+Windows testing also exposed `Path.resolve()` canonicalizing old/new case-only
+journal paths to the same spelling. M6 now validates confinement separately and
+retains literal paths; a small Windows/Linux negative regression covers this
+without weakening link ownership or byte checks. A completed competing commit
+returns the same existing `Conflict` type as a changed CAS head; stale plans are
+still rejected and no read set is silently refreshed.
 
 ## M7 handoff
 
