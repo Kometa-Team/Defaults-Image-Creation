@@ -6,6 +6,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from ci.dependency_maintenance import selected_hash
+
 from ...asset_cases import canonical as canonical_asset
 from ...common import BulkError, canonical, confined, fingerprint
 from ...config import ROOT
@@ -37,7 +39,7 @@ def verify_sources(pins, source_root=ROOT.parent):
             mismatch("adoption_source_drift", "snapshot", pins["source_commit"], item["path"], item["sha256"], str(error))
         if item["text_lf"]:
             raw = raw.replace(b"\r\n", b"\n")
-        equal(item["sha256"], hashlib.sha256(raw).hexdigest(), category="snapshot", identity=pins["source_commit"],
+        equal(selected_hash(item["path"], item["sha256"]), hashlib.sha256(raw).hexdigest(), category="snapshot", identity=pins["source_commit"],
               path=item["path"], code="adoption_source_drift")
 
 

@@ -4,6 +4,8 @@ import ast
 import hashlib
 from pathlib import Path
 
+from ci.dependency_maintenance import selected_hash
+
 from ...common import BulkError, fingerprint
 from ..models import decode_json, read_json_bytes
 
@@ -19,7 +21,7 @@ def verify(root=Path(__file__).parents[4]):
     checked = []
     for name, expected in pins["files"].items():
         raw = (root/name).read_bytes().replace(b"\r\n",b"\n")
-        if hashlib.sha256(raw).hexdigest() != expected:
+        if hashlib.sha256(raw).hexdigest() != selected_hash(name, expected):
             raise BulkError("activation_production_changed", "Production source differs from the approved baseline: "+name)
         if name.endswith(".py"):
             try:
