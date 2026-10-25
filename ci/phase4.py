@@ -7,6 +7,7 @@ import subprocess
 import sys
 
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
+from ci.dependency_maintenance import ADOPTION_SOURCE, verify_infrastructure
 from ci.validation import identity,read,write,require,unique,pytest_run,validate_execution
 
 BASE='c33f792992ee704150799fe16536a64630fd8964'
@@ -19,6 +20,8 @@ MAINTAINED={'.github/workflows/default-poster-validation.yml','ci/validation.py'
  'create_defaults/bulk/contracts/activation/protection.py',
  'create_defaults/bulk/contracts/activation/data/production-pins-v1.json',
  'create_defaults/phase3/tests/test_final_phase3_acceptance.py','create_defaults/phase3/tests/test_isolation_ci.py'}
+# Separately pinned current dependency reader; the frozen M1 scope is unchanged.
+MAINTAINED=MAINTAINED|{ADOPTION_SOURCE}
 IDS=ROOT/'ci/phase4-test-ids.json'
 SCHEMA=ROOT/'create_defaults/bulk/lifecycle/schemas/operations-v1.schema.json'
 GOLDEN=ROOT/'create_defaults/phase4/tests/canonical-v1.json'
@@ -112,9 +115,10 @@ def verify_original_plan(original,*,root=ROOT):
 
 
 def verify_maintenance(root=ROOT):
+    verify_infrastructure(root)
     value=read(root/'ci/phase4-maintenance.json')
     require(fingerprint(value)==MAINTENANCE_PIN,'Unapproved P4/M1 maintenance manifest')
-    require(value['base']==BASE and set(value['files'])==MAINTAINED,'Unexpected maintenance scope')
+    require(value['base']==BASE and set(value['files'])==MAINTAINED-{ADOPTION_SOURCE},'Unexpected maintenance scope')
     m3=verify_m3_maintenance(root)
     for path,pins in value['files'].items():
         before=subprocess.check_output(['git','show',BASE+':'+path],cwd=root).replace(b'\r\n',b'\n')

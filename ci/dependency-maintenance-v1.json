@@ -1,0 +1,162 @@
+{
+  "adoption_snapshot_sha256": "b2006d1b1327bad2db15054871b3155d704a9c8a14a6efa651a3f90231d147e3",
+  "baseline_commit": "d6b039788315f2198304cf05f7efea5addc271c9",
+  "dependency_commit": "06e3bc5959600d1bf5c5cec86f49b9ef5f5b198c",
+  "dependency_merge_author": "bullmoose20",
+  "dependency_pr": 23,
+  "files": {
+    "create_defaults/canary/requirements-staging.txt": {
+      "before_sha256": "cf3f3461847241b012c0d5033035a12e6604f5917464fe18ea4a0a8dad2463db",
+      "sha256": "f3e9cf9a0846f0e08498c654249bd9a3269829abb1510fc03e26c4e550c9b829"
+    },
+    "create_defaults/requirements.txt": {
+      "before_sha256": "867680e4833b29336eceb8f51c7f61cb4d067a26da4d4a09558a17dd8a01617d",
+      "sha256": "fbf51f216bac9931370235520b8ad8207a6c2d82dd26d75bd5b7629c9801be42"
+    },
+    "create_people_posters/requirements-ddcolor.txt": {
+      "before_sha256": "6ea6faae8abe36ffce10ba1688b12f45176e4599f9a3aefc401a0d77dd2deebf",
+      "sha256": "4bbfd33fd44706754d387e08861dc51268d670540627635b00e45f22170692fa"
+    },
+    "create_people_posters/requirements-rembg.txt": {
+      "before_sha256": "08b9485c9d2a64f556db53f5e8d75d49ada5fa33ea7a0e7753ef8c0f509ae104",
+      "sha256": "e83d325e4bca2ae2c9aff93f3bea70c73e87769e76d295c4c3612ce5188f7a1e"
+    }
+  },
+  "infrastructure": {
+    "ci/phase4.py": {
+      "before_sha256": "74e3f327314b0df15387d8979b493a802811292a5dccec5ad758601e51330cc1",
+      "sha256": "748f1fe583b4674e01de80018e4cc855018b5d91360240f474574939af527580"
+    },
+    "create_defaults/bulk/contracts/activation/protection.py": {
+      "before_sha256": "70f57783594cac851fe352413d95ab121de1314a02e4c8d41567c0914e89c0e4",
+      "sha256": "5a02a0b79dedb2191d9eb8e60676f779e9a529819dca9a17e6cc0d7fd114e5b3"
+    },
+    "create_defaults/bulk/contracts/adoption/sources.py": {
+      "before_sha256": "2278df1b0f7ded2df1a5364a41ad69b91e1eca44f2062b7fca23192501a254bd",
+      "sha256": "90aeda339af52d0980bba8a03fbbe02a3024bc274d454a752a4ff58f652d05fc"
+    }
+  },
+  "kind": "exact-dependency-provenance-transition",
+  "production_manifest_sha256": "5728d7ad313cb9e581f0a69c1f6b638c6999fb6a8d53cb1acaa0249d807cc3cd",
+  "schema_version": 1,
+  "scope": "Current source verification only; historical manifests, evidence, receipts, mappings and approvals remain unchanged. No output equivalence or publication authority is inferred.",
+  "upstream": {
+    "certifi==2026.10.19": {
+      "files": [
+        {
+          "filename": "certifi-2026.10.19-py3-none-any.whl",
+          "requires_python": ">=3.7",
+          "sha256": "42d35340cc5b9ba78e818ddbff0c5b1c2b779de448a340fd1b989f5fa8670e1b",
+          "yanked": false
+        }
+      ],
+      "requires_dist": null,
+      "requires_python": ">=3.7",
+      "url": "https://pypi.org/pypi/certifi/2026.10.19/json"
+    },
+    "certifi==2026.7.22": {
+      "files": [
+        {
+          "filename": "certifi-2026.7.22-py3-none-any.whl",
+          "requires_python": ">=3.7",
+          "sha256": "62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775",
+          "yanked": false
+        }
+      ],
+      "requires_dist": null,
+      "requires_python": ">=3.7",
+      "url": "https://pypi.org/pypi/certifi/2026.7.22/json"
+    },
+    "pillow==12.3.0": {
+      "files": [
+        {
+          "filename": "pillow-12.3.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+          "requires_python": ">=3.10",
+          "sha256": "0847a763afefb695bc912d7c131e7e0632d4edc1d8698f58ddabec8e46b8b6d3",
+          "yanked": false
+        },
+        {
+          "filename": "pillow-12.3.0-cp313-cp313-win_amd64.whl",
+          "requires_python": ">=3.10",
+          "sha256": "1cca606cd25738df4ed873d5ad46bbdb3d83b5cbca291f6b4ff13a4df6b0bbe8",
+          "yanked": false
+        }
+      ],
+      "requires_dist": [
+        "furo; extra == \"docs\"",
+        "olefile; extra == \"docs\"",
+        "sphinx>=8.2; extra == \"docs\"",
+        "sphinx-autobuild; extra == \"docs\"",
+        "sphinx-copybutton; extra == \"docs\"",
+        "sphinx-inline-tabs; extra == \"docs\"",
+        "sphinxext-opengraph; extra == \"docs\"",
+        "olefile; extra == \"fpx\"",
+        "olefile; extra == \"mic\"",
+        "arro3-compute; extra == \"test-arrow\"",
+        "arro3-core; extra == \"test-arrow\"",
+        "nanoarrow; extra == \"test-arrow\"",
+        "pyarrow; extra == \"test-arrow\"",
+        "coverage>=7.4.2; extra == \"tests\"",
+        "defusedxml; extra == \"tests\"",
+        "markdown2; extra == \"tests\"",
+        "olefile; extra == \"tests\"",
+        "packaging; extra == \"tests\"",
+        "pytest; extra == \"tests\"",
+        "pytest-cov; extra == \"tests\"",
+        "pytest-timeout; extra == \"tests\"",
+        "pytest-xdist; extra == \"tests\"",
+        "setuptools; extra == \"tests\"",
+        "trove-classifiers>=2024.10.12; extra == \"tests\"",
+        "defusedxml; extra == \"xmp\""
+      ],
+      "requires_python": ">=3.10",
+      "url": "https://pypi.org/pypi/pillow/12.3.0/json"
+    },
+    "pillow==13.0.0": {
+      "files": [
+        {
+          "filename": "pillow-13.0.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+          "requires_python": ">=3.11",
+          "sha256": "5f56499c1a74d2b862beb0c33b8016f99d095858455df9d21583bbbc1c15b582",
+          "yanked": false
+        },
+        {
+          "filename": "pillow-13.0.0-cp313-cp313-win_amd64.whl",
+          "requires_python": ">=3.11",
+          "sha256": "9dda0788a9932776a75d8bcc020076edc308ce2508b51f6739a45e3158b3fc42",
+          "yanked": false
+        }
+      ],
+      "requires_dist": [
+        "furo; extra == \"docs\"",
+        "olefile; extra == \"docs\"",
+        "sphinx>=8.2; extra == \"docs\"",
+        "sphinx-autobuild; extra == \"docs\"",
+        "sphinx-copybutton; extra == \"docs\"",
+        "sphinx-inline-tabs; extra == \"docs\"",
+        "sphinxext-opengraph; extra == \"docs\"",
+        "olefile; extra == \"fpx\"",
+        "olefile; extra == \"mic\"",
+        "arro3-compute; extra == \"test-arrow\"",
+        "arro3-core; extra == \"test-arrow\"",
+        "nanoarrow; extra == \"test-arrow\"",
+        "pyarrow; extra == \"test-arrow\"",
+        "coverage>=7.4.2; extra == \"tests\"",
+        "defusedxml; extra == \"tests\"",
+        "markdown2; extra == \"tests\"",
+        "olefile; extra == \"tests\"",
+        "packaging; extra == \"tests\"",
+        "psutil; (sys_platform == \"linux\" or sys_platform == \"darwin\") and extra == \"tests\"",
+        "pytest; extra == \"tests\"",
+        "pytest-cov; extra == \"tests\"",
+        "pytest-timeout; extra == \"tests\"",
+        "pytest-xdist; extra == \"tests\"",
+        "setuptools; extra == \"tests\"",
+        "trove-classifiers>=2024.10.12; extra == \"tests\"",
+        "defusedxml; extra == \"xmp\""
+      ],
+      "requires_python": ">=3.11",
+      "url": "https://pypi.org/pypi/pillow/13.0.0/json"
+    }
+  }
+}
