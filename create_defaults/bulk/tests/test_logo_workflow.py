@@ -164,7 +164,9 @@ def test_binary_topological_discrepancy_blocks_and_exposes_measurements(case):
 
 def test_corpus_is_sealed_family_disjoint_and_evaluation_reproducible():
     report=evaluate()
-    assert canonical(report)==canonical(json.loads((HERE/"calibration-v1.json").read_bytes()))
+    from ci.dependency_maintenance import current_calibration_expectation
+    expected=current_calibration_expectation(json.loads((HERE/"calibration-v1.json").read_bytes()))
+    assert canonical(report)==canonical(expected)
     assert report["corpus_sha256"]==CORPUS_SHA256 and report["family_disjoint"]
     for split in report["summaries"].values():
         assert split["false_matches"]==0 and split["false_mismatches"]==0

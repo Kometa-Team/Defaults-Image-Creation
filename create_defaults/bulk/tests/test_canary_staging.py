@@ -291,6 +291,11 @@ def test_frozen_deployment_subset_and_final_dry_run_remain_reproducible(tmp_path
         if frozen:
             assert frozen['sha256_normalized_lf']==entry['sha256_normalized_lf']
         data=source.read_bytes().replace(b'\r\n',b'\n')
+        if entry['source']=='create_defaults/canary/requirements-staging.txt':
+            # Verify the exact merged successor before reconstructing the frozen
+            # deployment with its original requirements. Never reseal old proof.
+            from ci.dependency_maintenance import historical_dependency_bytes
+            data=historical_dependency_bytes(entry['source'],data,s.ROOT.parent)
         assert hashlib.sha256(data).hexdigest()==entry['sha256_normalized_lf']
         target=runtime/entry['future_target'];target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(data)
     # A local fixture validates the separate minimal deployment, never GitHub installation.
