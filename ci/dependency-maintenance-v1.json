@@ -34,9 +34,32 @@
     "create_defaults/bulk/contracts/adoption/sources.py": {
       "before_sha256": "2278df1b0f7ded2df1a5364a41ad69b91e1eca44f2062b7fca23192501a254bd",
       "sha256": "90aeda339af52d0980bba8a03fbbe02a3024bc274d454a752a4ff58f652d05fc"
+    },
+    "create_defaults/bulk/tests/test_canary_staging.py": {
+      "before_sha256": "947ad4517f84e3c5e463038ad21fc2d1b9df3feef5cf94f85bf7c0872c431847",
+      "sha256": "60e9d59c1afe3b4358478bd796e0ce1d04f67961907ca85712e36efdc3357fbc"
+    },
+    "create_defaults/bulk/tests/test_logo_workflow.py": {
+      "before_sha256": "c8df6969e9d922913f42a98dc422e0b011353e53a2fb687c5ad415b3eb1614ee",
+      "sha256": "e6b9fb94d9d52695ce3ef2edd0cd973bf8e9883d5bfd5776aadd0aff78eac5a7"
+    },
+    "create_defaults/phase4/tests/test_ci_transactions.py": {
+      "before_sha256": "24e956e31cb0cf0d8a734eb26d4f5d5350a51ef3a938f2516788d37db0a506fb",
+      "sha256": "b855af8c6e7a7e9739970725fe0f8c43e2ad90789e006c2d002fde53695de481"
     }
   },
   "kind": "exact-dependency-provenance-transition",
+  "logo_calibration": {
+    "before_policy_sha256": "a5cbeee8eb35de60675204d415c0c53c9f2b9f047863d628a031cb18f12b8598",
+    "before_sha256": "33b0ef0e6f9f65f28bb3c32e0fbaf987926688c26a4ded8e60d01e0a90082706",
+    "before_version": "12.3.0",
+    "changed_metadata_fields": 120,
+    "measurements": 60,
+    "policy_sha256": "b0d53981d071ec445c7e7585fa46b2c82b0fbc2821cf855ca61bf5567567d4aa",
+    "sha256": "6e25ad818dc2bc12dffe31710434702542955b285cb5c70e3f3421217751a793",
+    "unchanged": "All other diagnostic fields, encoded fixture hashes, geometry, topology, numerical measurements, outcomes, summaries and approval/automatic-match flags are identical. This is test compatibility evidence only, not an approved policy.",
+    "version": "13.0.0"
+  },
   "production_manifest_sha256": "5728d7ad313cb9e581f0a69c1f6b638c6999fb6a8d53cb1acaa0249d807cc3cd",
   "schema_version": 1,
   "scope": "Current source verification only; historical manifests, evidence, receipts, mappings and approvals remain unchanged. No output equivalence or publication authority is inferred.",

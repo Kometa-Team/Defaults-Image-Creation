@@ -11,7 +11,7 @@ import subprocess
 from pathlib import Path
 
 MANIFEST = Path(__file__).with_name("dependency-maintenance-v1.json")
-PIN = "bf2ac49432f5e4c2a4403c3f49c3c04a4bb7b998c5716b1e552bac2bc8653246"
+PIN = "208dee15fed8e232e169a5f0fbca7c6d5c2e85e64265b6feb04a680864a7f0c7"
 DEPENDENCIES = frozenset((
     "create_defaults/canary/requirements-staging.txt",
     "create_defaults/requirements.txt",
@@ -20,7 +20,10 @@ DEPENDENCIES = frozenset((
 ))
 PROTECTION = "create_defaults/bulk/contracts/activation/protection.py"
 ADOPTION_SOURCE = "create_defaults/bulk/contracts/adoption/sources.py"
-INFRASTRUCTURE = frozenset((PROTECTION, ADOPTION_SOURCE, "ci/phase4.py"))
+INFRASTRUCTURE = frozenset((PROTECTION, ADOPTION_SOURCE, "ci/phase4.py",
+    "create_defaults/phase4/tests/test_ci_transactions.py",
+    "create_defaults/bulk/tests/test_canary_staging.py",
+    "create_defaults/bulk/tests/test_logo_workflow.py"))
 
 
 def fingerprint(value):
@@ -67,3 +70,45 @@ def verify_infrastructure(root):
                 or hashlib.sha256(current).hexdigest() != binding["sha256"]):
             raise ValueError("Changed exact dependency infrastructure: "+name)
     return value
+
+
+def historical_dependency_bytes(name, current, root):
+    """Verify current bytes, then recover exact prior bytes for frozen fixtures.
+
+    This is a historical test view, never a current dependency or renderer pin.
+    Neither a changed successor nor an unlisted source can use this path.
+    """
+    value = _decode(MANIFEST.read_bytes())
+    binding = value["files"].get(name)
+    normalized = current.replace(b"\r\n", b"\n")
+    if binding is None or hashlib.sha256(normalized).hexdigest() != binding["sha256"]:
+        raise ValueError("Changed current dependency for historical view: "+name)
+    before = _historical(str(root), value["dependency_commit"]+"^", name)
+    if hashlib.sha256(before).hexdigest() != binding["before_sha256"]:
+        raise ValueError("Changed historical dependency predecessor: "+name)
+    return before
+
+
+def current_calibration_expectation(historical):
+    """Exact dependency-specific test expectation, never policy approval.
+
+    Preserve the sealed historical report. Change only the measured runtime
+    version and its derived policy fingerprint in a separate current expectation;
+    both complete canonical report hashes are pinned. No field is ignored.
+    """
+    binding = _decode(MANIFEST.read_bytes())["logo_calibration"]
+    if fingerprint(historical) != binding["before_sha256"]:
+        raise ValueError("Changed historical calibration evidence")
+    result = json.loads(json.dumps(historical))
+    if len(result["measurements"]) != binding["measurements"]:
+        raise ValueError("Changed calibration membership")
+    for row in result["measurements"]:
+        diagnostics = row["diagnostics"]
+        if (diagnostics["settings"]["Pillow"] != binding["before_version"]
+                or diagnostics["policy_sha256"] != binding["before_policy_sha256"]):
+            raise ValueError("Changed historical calibration provenance")
+        diagnostics["settings"]["Pillow"] = binding["version"]
+        diagnostics["policy_sha256"] = binding["policy_sha256"]
+    if fingerprint(result) != binding["sha256"]:
+        raise ValueError("Changed current calibration expectation")
+    return result

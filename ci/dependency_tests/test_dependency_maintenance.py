@@ -37,6 +37,10 @@ class DependencyMaintenanceTests(unittest.TestCase):
             self.assertEqual(sha(after), binding['sha256'])
             self.assertEqual(sha((ROOT/name).read_bytes()), binding['sha256'])
             self.assertEqual(transition.selected_hash(name, binding['before_sha256']), binding['sha256'])
+        for name,binding in value['infrastructure'].items():
+            old=subprocess.check_output(['git','show',value['baseline_commit']+':'+name],cwd=ROOT)
+            self.assertEqual(sha(old),binding['before_sha256'])
+            self.assertEqual(sha((ROOT/name).read_bytes()),binding['sha256'])
         pins = json.loads((ROOT/people.PINS).read_text(encoding='utf8'))
         self.assertEqual(fingerprint(pins), value['production_manifest_sha256'])
         self.assertEqual(fingerprint(load_pins()), value['adoption_snapshot_sha256'])
@@ -105,6 +109,36 @@ class DependencyMaintenanceTests(unittest.TestCase):
                     with self.assertRaises(ValueError):transition.verify_infrastructure(ROOT)
                     with self.assertRaises(ValueError):verify_maintenance(ROOT)
                     with self.assertRaises(ValueError):people.verify(ROOT)
+
+    def test_historical_dependency_view_verifies_current_and_original_bytes(self):
+        value=json.loads(MANIFEST.read_text(encoding='utf8'))
+        for name in transition.DEPENDENCIES:
+            current=(ROOT/name).read_bytes()
+            old=transition.historical_dependency_bytes(name,current,ROOT)
+            self.assertEqual(sha(old),value['files'][name]['before_sha256'])
+            with self.assertRaises(ValueError):transition.historical_dependency_bytes(name,current+b'\nedit',ROOT)
+            with self.assertRaises(ValueError):transition.historical_dependency_bytes(name,old,ROOT)
+        with self.assertRaises(ValueError):transition.historical_dependency_bytes('unexpected',b'x',ROOT)
+
+    def test_current_calibration_preserves_measurements_and_separates_provenance(self):
+        path=ROOT/'create_defaults/bulk/contracts/logos/calibration-v1.json'
+        historical=json.loads(path.read_bytes());before=deepcopy(historical)
+        current=transition.current_calibration_expectation(historical)
+        value=json.loads(MANIFEST.read_text(encoding='utf8'))['logo_calibration']
+        self.assertEqual(historical,before)
+        self.assertEqual(fingerprint(current),value['sha256'])
+        self.assertNotEqual(fingerprint(current),fingerprint(historical))
+        for a,b in zip(historical['measurements'],current['measurements'],strict=True):
+            a=deepcopy(a);b=deepcopy(b)
+            for row in (a,b):
+                row['diagnostics']['settings'].pop('Pillow')
+                row['diagnostics'].pop('policy_sha256')
+            self.assertEqual(a,b)
+        self.assertFalse(current['approved_policy'])
+        self.assertFalse(current['automatic_match_enabled'])
+        for field in ('grid','approved_policy','family_disjoint'):
+            altered=deepcopy(historical);altered[field]='tampered'
+            with self.assertRaises(ValueError):transition.current_calibration_expectation(altered)
 
     def test_unlisted_paths_or_different_predecessors_do_not_acquire_transition(self):
         for name in transition.DEPENDENCIES|{'create_defaults/create_poster.py', '../requirements.txt'}:

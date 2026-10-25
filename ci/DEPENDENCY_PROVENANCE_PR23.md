@@ -43,7 +43,7 @@ SHA-256 values normalize CRLF to LF, matching the existing source verifiers.
 `ci/dependency-maintenance-v1.json` is a separate immutable, canonical-hash-pinned
 transition. It names the dependency commit, merge baseline, author, prior
 production manifest and adoption snapshot, and exact before/after source hashes.
-Its canonical SHA-256 is `bf2ac49432f5e4c2a4403c3f49c3c04a4bb7b998c5716b1e552bac2bc8653246`.
+Its canonical SHA-256 is `208dee15fed8e232e169a5f0fbca7c6d5c2e85e64265b6feb04a680864a7f0c7`.
 
 The original 190-file production manifest, 299-file adoption snapshot, historical
 registries, source commit/tree identities, output hashes, receipt mappings and
@@ -67,8 +67,40 @@ Phase 3 assertion is unchanged: its accepted maintenance scope gains only the
 exact verified adoption reader; the original M1 manifest membership is unchanged. The existing People
 maintenance verifier checks those exact bytes, retains its immutable earlier
 manifest and exposes the separately verified current hash to older CI consumers.
-Its historical view and all prior transition checks remain intact. No blanket
+Its historical view and all prior transition checks remain intact. The M5
+disposable-copy fixture includes these exact dependencies and the one additional
+Git baseline; its original negative tests and assertions are unchanged. No blanket
 exception, resealing command or runtime flag is introduced.
+
+## Frozen dependency fixtures and measured calibration compatibility
+
+The first complete CI run revealed two further inherited dependency assumptions.
+The frozen canary deployment expected the old staging requirements but read the
+updated file. Its test now first verifies the exact merged successor and then
+reads and verifies the exact predecessor from Git for the historical fixture.
+All original frozen-manifest, helper, disabled-staging and deployment assertions
+remain. The helper/runtime, deployment manifest and historical evidence are not
+modified. Unknown or changed current dependencies cannot use the historical view.
+
+The logo-corpus check compares a sealed Pillow 12.3 evaluation to the current
+runtime. A full recursive comparison of all 60 synthetic evaluations found only
+120 differences: 60 explicit Pillow version strings and 60 corresponding policy
+fingerprints (which include that version). Every pixel/hash fixture, geometry,
+topology, numerical measurement, outcome and summary is unchanged. There are no
+new tolerances. The transition records both complete canonical report hashes:
+`33b0ef0e6f9f65f28bb3c32e0fbaf987926688c26a4ded8e60d01e0a90082706`
+(historical) and
+`6e25ad818dc2bc12dffe31710434702542955b285cb5c70e3f3421217751a793`
+(current dependency expectation). The test compares the complete current report
+to that separate pinned expectation. No field is ignored. The old corpus and
+calibration file remain unchanged. Automatic MATCH and policy approval remain
+false. Current and historical policy fingerprints are distinct and are never
+treated as interchangeable approvals.
+
+These two test adjustments and the M5 fixture are also independently bound to
+exact infrastructure hashes. Original test IDs, assertions and negative controls
+remain; the corpus assertion now uses the measured dependency-specific expected
+report rather than claiming its metadata equals the old runtime's report.
 
 ## Exact changed-file inventory
 
@@ -82,6 +114,13 @@ Modified:
 - `create_defaults/bulk/contracts/adoption/sources.py`: same selection for the
   one approved dependency delta; preserve the frozen snapshot and history.
 
+- `create_defaults/phase4/tests/test_ci_transactions.py`: fixture-only additions
+  for the exact infrastructure dependencies and historical Git baseline.
+- `create_defaults/bulk/tests/test_canary_staging.py`: verify current dependencies
+  before reconstructing the exact frozen deployment requirements; preserve checks.
+- `create_defaults/bulk/tests/test_logo_workflow.py`: compare the entire report
+  against the separate dependency-specific expectation; preserve other assertions.
+
 Added:
 - `ci/dependency-maintenance-v1.json`: dependency/provenance and upstream evidence.
 - `ci/dependency_maintenance.py`: stdlib-only, pinned exact transition selection.
@@ -94,7 +133,7 @@ Added:
 
 ## Validation and boundaries
 
-Local validation: nine maintenance tests, focused inherited-boundary/CI/security
+Local validation: eleven maintenance tests, focused inherited-boundary/CI/security
 regressions, `pip check`, and the original historical baseline check. Final local
 counts and exact-head Windows/Linux job evidence are recorded in the draft PR
 body so documentation does not require an endless change of the tested head.

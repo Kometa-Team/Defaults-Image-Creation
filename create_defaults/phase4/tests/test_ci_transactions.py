@@ -108,6 +108,8 @@ def maintenance_copy(tmp_path, monkeypatch):
     security=m5.read(m5.ROOT/'ci/people-security-maintenance.json')
     pins=m5.read(m5.ROOT/'create_defaults/bulk/contracts/activation/data/production-pins-v1.json')
     extra={'ci/people-security-maintenance.json','ci/people_security_maintenance.py',
+        'create_defaults/bulk/contracts/adoption/sources.py','create_defaults/bulk/tests/test_canary_staging.py',
+        'create_defaults/bulk/tests/test_logo_workflow.py',
         'ci/validation-plan.json','ci/original-test-ids.json','ci/phase3-test-ids.json','ci/phase4-test-ids.json',
         'ci/phase4-composition-test-ids.json','ci/phase4-review-test-ids.json','ci/phase4-transaction-test-ids.json',
         'ci/phase4-maintenance.json','ci/phase4-m3-maintenance.json','ci/phase4-m4-maintenance.json','ci/phase4-m5-maintenance.json'}
@@ -118,7 +120,8 @@ def maintenance_copy(tmp_path, monkeypatch):
         target.write_bytes((m5.ROOT/name).read_bytes())
     original=subprocess.check_output
     def baseline_output(args,**kwargs):
-        assert args[:2]==['git','show'] and args[2].split(':',1)[0] in {m5.BASE,'46e1334504fcdd598e0c34fcd45612ff58e91074'}
+        assert args[:2]==['git','show'] and args[2].split(':',1)[0] in {m5.BASE,'46e1334504fcdd598e0c34fcd45612ff58e91074',
+            'd6b039788315f2198304cf05f7efea5addc271c9'}
         return original(args,cwd=m5.ROOT)
     monkeypatch.setattr(m5.subprocess,'check_output',baseline_output)
     m5.verify_maintenance(tmp_path)
