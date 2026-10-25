@@ -1,7 +1,8 @@
 # Phase 4 / M6 — identity-preserving mappings and retained definition retirement
 
 Implementation branch: `feat/lifecycle-m6-rename-retirement`. Baseline:
-`d6b039788315f2198304cf05f7efea5addc271c9`, including merged M5 PR #36 at
+`7ba2268a9d57c75c894c2a99dbf2c80c758fef9e`, including dependency/provenance
+maintenance PR #40 and merged M5 PR #36 at
 `46e1334504fcdd598e0c34fcd45612ff58e91074`. Earlier milestone documents' future
 tense describes their planning baseline. M1–M5 are merged; M6 is under validation,
 M7 has not started, and Phases 5–6 remain NOT STARTED.
@@ -147,7 +148,7 @@ through M5's old adapter; and all physical source cleanup/remote operations.
 These fail closed and retain identities/evidence rather than synthesizing missing
 contracts, approvals, mappings or receipts.
 
-## Inherited main integrity blocker
+## Historical inherited blocker and current-main refresh
 
 The first full workflow at `eddee0a80ef72548ff63de32878ac6766f709026`
 (run `40164857538`) exposed four protected-source mismatches already present in
@@ -155,9 +156,15 @@ base `d6b039788315f2198304cf05f7efea5addc271c9`: the Defaults normal/canary
 requirements and People DDColor/rembg requirements. All four last changed in
 merged dependency PR #23, commit `06e3bc5959600d1bf5c5cec86f49b9ef5f5b198c`.
 M6 changes none of those files, the protected manifest or its verifier. The
-original workflow correctly fails closed. Full Validation acceptance cannot be
-claimed until that inherited dependency/provenance issue is separately resolved.
-No replacement pins or relaxed checks are introduced by M6.
+original workflow correctly fails closed. That failure is historical. PR #40 separately resolved the dependency/provenance
+chain and merged at `7ba2268a9d57c75c894c2a99dbf2c80c758fef9e`. The existing M6
+branch now merges that exact current-main baseline without conflicts or changes
+to its previously validated implementation, schema, test IDs, tests or workflow.
+The merged provenance transition and all source protections remain intact.
+No replacement pins or relaxed checks are introduced by M6. Both original and
+dedicated M6 Windows/Linux workflows must pass at the updated exact head; final
+commit, per-group results and immutable artifact links are recorded in PR #39
+after execution. Pending checks are never represented as passing.
 
 Windows testing also exposed `Path.resolve()` canonicalizing old/new case-only
 journal paths to the same spelling. M6 now validates confinement separately and
