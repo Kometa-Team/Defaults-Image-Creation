@@ -39,7 +39,7 @@ import os
 import shutil
 import subprocess
 import sys
-import tempfile
+from contextlib import nullcontext
 import time
 from dataclasses import dataclass, replace
 from pathlib import Path
@@ -1069,20 +1069,79 @@ def recovery_transaction(args: argparse.Namespace, name: str):
     return RecoveryTransaction(args.out_root / "transactions", name, paths)
 
 
+def preserve_selected_candidate(args):
+    """Keep the exact downloaded photograph as well as the normalized original.
+
+    Content-addressed archival copy, never a renderer input or publication
+    destination. A conflicting archive blocks cleanup instead of overwriting it.
+    """
+    from remove_bg_birefnet import atomic_copy, sha256
+    from create_people_posters.people_workspaces import reject_links
+    source = args.recovery_selected_raw
+    checksum = sha256(source)
+    original = env_path("SEL_ORIG_DIR") or (CONFIG_DIR / "people_dirs" / "original")
+    target = original / ".recovery_sources" / checksum / ("source" + source.suffix.lower())
+    reject_links(target)
+    if target.exists():
+        if sha256(target) != checksum:
+            raise ValueError("Selected source archive changed; retained for review")
+    else:
+        atomic_copy(source, target)
+    if sha256(source) != checksum or sha256(target) != checksum:
+        raise ValueError("Selected source archive verification failed; scratch retained")
+    return target
+
+
+def remember_scratch(args, name, scratch):
+    if not hasattr(args, "recovery_operations"):
+        args.recovery_operations = {}
+    args.recovery_operations[name] = scratch
+
+
+def finish_scratch(args, row):
+    """Only new owned scratch, after final QA and durable output checkpoint.
+
+    Cleanup failure cannot invalidate successful artwork. Retain its operation
+    manifest for a later explicit dry-run/apply; never prune legacy candidates.
+    """
+    scratch = getattr(args, "recovery_operations", {}).get(row.name)
+    if scratch is None or row.status != "recovered":
+        return
+    from create_people_posters.people_recovery_storage import cleanup
+    try:
+        from create_people_posters.people_recovery_records import _read
+        checkpoint = args.out_root / "recovery-checkpoints.json"
+        outputs = _read(checkpoint)["records"][row.name]["outputs"]
+        # The selected photograph and final outputs must both survive cleanup.
+        if not any(Path(p).suffix.lower() in {".jpg", ".jpeg"} and "original" in Path(p).parts for p in outputs):
+            raise ValueError("Selected original source evidence missing; scratch retained")
+        root = args.people_root
+        scratch.accept([root / p for p in outputs] + [scratch.source_evidence])
+        counts = cleanup(scratch.folder, dry_run=False)
+        log(f"[cleanup] operation={scratch.identity} removed_files={counts['removed_files']} recovered_bytes={counts['recovered_bytes']}")
+    except (OSError, ValueError, KeyError) as exc:
+        log(f"[warn] Recovery scratch retained: {safe_exception(exc)}")
+
+
 def recover_one(args: argparse.Namespace, session: requests.Session, api_key: str, name: str, initial_issues: str) -> RecoveryRow:
     register_secret(api_key)
-    with recovery_transaction(args, name) as transaction:
-        row = _recover_one(args, session, api_key, name, initial_issues)
-        if row.status == "recovered":
-            transaction.commit()
-        return row
+    from create_people_posters.people_recovery_storage import Scratch
+    with Scratch(args.out_root, name) as scratch:
+        args.recovery_scratch = scratch.work
+        with recovery_transaction(args, name) as transaction:
+            row = _recover_one(args, session, api_key, name, initial_issues)
+            if row.status == "recovered":
+                scratch.source_evidence = preserve_selected_candidate(args)
+                transaction.commit()
+    remember_scratch(args, name, scratch)
+    return row
 
 
 def _recover_one(args: argparse.Namespace, session: requests.Session, api_key: str, name: str, initial_issues: str) -> RecoveryRow:
     register_secret(api_key)
     row = RecoveryRow(name=name, status="unresolved", initial_issues=initial_issues)
     paths = generated_work_paths(args.people_root, name) if getattr(args, "bg_engine", "adobe") == "birefnet" else style_file_paths(args.people_root, name)
-    with tempfile.TemporaryDirectory(prefix=f"edge_chop_{safe_name(name)}_") as tmp:
+    with nullcontext(str(args.recovery_scratch)) as tmp:
         args.local_work_root = Path(tmp)
         backup_root = Path(tmp) / "backup"
         backups = backup_existing(paths, backup_root, args.people_root)
@@ -1132,7 +1191,7 @@ def _recover_one(args: argparse.Namespace, session: requests.Session, api_key: s
             row.note = "PowerShell is unavailable"
             return row
 
-        candidate_dir = args.out_root / "candidates" / safe_name(name)
+        candidate_dir = args.recovery_scratch / "candidates"
         transient_failure = None
         for candidate in candidates:
             row.attempts += 1
@@ -1307,6 +1366,7 @@ def _recover_one(args: argparse.Namespace, session: requests.Session, api_key: s
                     except Exception as exc:
                         restore_backups(backups, paths)
                         raise RuntimeError(f"{name}: accepted source could not be preserved: {safe_exception(exc)}") from exc
+                args.recovery_selected_raw = raw_path
                 row.status = "recovered"
                 if selected_renderer == "python":
                     staged_png.unlink(missing_ok=True)
@@ -1355,11 +1415,17 @@ def stage_one_for_orchestrator(
     attempted_records: list[AttemptedCandidate],
 ) -> RecoveryRow:
     register_secret(api_key)
-    with recovery_transaction(args, name) as transaction:
-        row = _stage_one_for_orchestrator(args, session, api_key, name, initial_issues,
-                                          attempted_candidates, attempted_records)
-        if row.status == "staged":transaction.commit()
-        return row
+    from create_people_posters.people_recovery_storage import Scratch
+    with Scratch(args.out_root, name) as scratch:
+        args.recovery_scratch = scratch.work
+        with recovery_transaction(args, name) as transaction:
+            row = _stage_one_for_orchestrator(args, session, api_key, name, initial_issues,
+                                              attempted_candidates, attempted_records)
+            if row.status == "staged":
+                scratch.source_evidence = preserve_selected_candidate(args)
+                transaction.commit()
+    remember_scratch(args, name, scratch)
+    return row
 
 
 def _stage_one_for_orchestrator(
@@ -1396,8 +1462,8 @@ def _stage_one_for_orchestrator(
         return row
 
     transient_failure = None
-    candidate_dir = args.out_root / "candidates" / safe_name(name)
-    with tempfile.TemporaryDirectory(prefix=f"edge_chop_stage_{safe_name(name)}_") as tmp:
+    candidate_dir = args.recovery_scratch / "candidates"
+    with nullcontext(str(args.recovery_scratch)) as tmp:
         args.local_work_root = Path(tmp)
         staged_jpg = Path(tmp) / f"{name}.jpg"
         for candidate in candidates:
@@ -1520,6 +1586,7 @@ def _stage_one_for_orchestrator(
                 args.downloads_dir.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(staged_jpg, target)
             row.status = "staged"
+            args.recovery_selected_raw = raw_path
             row.chosen_label = candidate.label
             row.chosen_url = candidate.url
             row.note = f"staged for orchestrator remove_bg: {target}"
@@ -1768,7 +1835,7 @@ def _main(args: argparse.Namespace) -> int:
     import copy
     args.scan_people_root = args.people_root
     checkpoint_args = copy.copy(args)
-    if args.bg_engine == "birefnet" and not args.stage_for_orchestrator:
+    if args.bg_engine == "birefnet":
         checkpoint_args.people_root = CONFIG_DIR / "people_dirs"
     try:
         checkpoints = Checkpoints(args.out_root / "recovery-checkpoints.json", checkpoint_args)
@@ -1919,6 +1986,7 @@ def _main(args: argparse.Namespace) -> int:
             else:
                 row = recover_one(args, session, api_key, name, issues)
             checkpoints.save(row, style_file_paths(args.people_root, name))
+            finish_scratch(args, row)
             if previous is None and row.status == "recovered":
                 args.changed_names.append(name)
         except (RuntimeError, ValueError, OSError) as exc:
@@ -1985,6 +2053,10 @@ def _main(args: argparse.Namespace) -> int:
                     check_args.people_root = CONFIG_DIR / "people_dirs"
                 checked = postcheck_staged_outputs(rows, check_args)
                 if checked:
+                    for row in rows:
+                        if row.status == "recovered":
+                            checkpoints.save(row, style_file_paths(check_args.people_root, row.name))
+                            finish_scratch(check_args, row)
                     emit_report(rows)
                     log_status_counts(rows, prefix="Postcheck")
                     unresolved_after = sum(1 for row in rows if row.status == "unresolved")

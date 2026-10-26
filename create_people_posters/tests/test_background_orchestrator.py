@@ -766,9 +766,18 @@ def test_inline_local_keeps_originals_until_accepted_source_is_archived(monkeypa
     assert row.status == "recovered"
     for path, content, digest in preserved:
         assert (archive / ".history" / digest / path.name).read_bytes() == content
-    assert (archive / "Person.jpg").read_bytes() == (args.out_root / "candidates" / "Person" / "candidate0.jpg").read_bytes()
+    scratch = args.recovery_operations["Person"]
+    assert (archive / "Person.jpg").read_bytes() == scratch.source_evidence.read_bytes()
     assert source_jpg.read_bytes() == source_bytes
-    assert not args.local_work_root.exists()
+    # Direct processing keeps its work until the recovered checkpoint is durable.
+    assert args.local_work_root.exists()
+    from create_people_posters.people_recovery_records import Checkpoints
+    from create_people_posters.people_recovery_storage import files
+    checkpoints = Checkpoints(args.out_root / "recovery-checkpoints.json", args)
+    checkpoints.save(row, recovery.style_file_paths(args.people_root, "Person"))
+    recovery.finish_scratch(args, row)
+    assert not files(scratch.work)
+    assert scratch.source_evidence.read_bytes() == (archive / "Person.jpg").read_bytes()
 
 
 @pytest.mark.parametrize("engine", ["adobe", "birefnet"])
