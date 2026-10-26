@@ -1,9 +1,10 @@
 # Failed People batch investigation and local repair
 
-Batch: `20261025T112600-14b8bdba9a34`. This is a local proposal; no publication,
-push, production batch creation, original checkpoint deletion or original-batch
-mutation was performed. Test/simulation fixtures are separate. The unrelated
-existing worktree changes were left alone.
+Batch: `20261025T112600-14b8bdba9a34`. Investigation and local validation were
+completed before the source commit. Recovery, image publication, production batch
+creation, original checkpoint deletion and original-batch mutation remain
+unexecuted. Test/simulation fixtures are separate. The unrelated existing
+worktree changes were left alone.
 
 ## Findings and evidence
 
@@ -290,3 +291,28 @@ TMDB data and remote branch heads can change before approved recovery. Different
 artifact provenance or filesystem/resource failures must be reviewed rather
 than bypassing overwrite/completeness safeguards. The original batch remains
 failed and intact until explicit recovery approval.
+
+## Integration with current main
+
+Source commit/push/merge was subsequently authorized separately from recovery.
+Main `403d9f1` already includes PR23 dependency updates, their provenance guard,
+and lifecycle M6. Their dependency files, workflows and lifecycle implementation
+are retained. The repair itself changes no dependency pins.
+
+The original repair scope was 17 tracked modifications plus four new files.
+Integration adds two intended CI files: `ci/dependency_maintenance.py` and
+`ci/dependency_tests/test_dependency_maintenance.py` (23 files total against
+main). The immutable `ci/dependency-maintenance-v1.json` remains byte-identical.
+The new exact protection successor binds the existing dependency import/check
+implementation with only the People production-manifest literal updated. It
+accepts only known predecessor hashes and one exact successor hash. Tests
+verify that literal-only transformation and reject both rollback and extra
+edits; historical dependency evidence is checked separately from current People
+maintenance. All 12 dependency provenance tests passed locally in 27.951 seconds
+with the existing isolated CI dependencies. The integrated People maintenance
+verifier passes with all 190 protected members retained.
+
+The complete People/local CI totals above describe validation before this main
+integration. Hosted checks must validate the final integrated head before merge.
+Neither code integration nor its tests authorize or execute batch recovery or
+publication to any People-Images repository.

@@ -1,0 +1,484 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kometa.wiki/schemas/lifecycle/mappings-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "active",
+    "after",
+    "applied",
+    "artwork_approved",
+    "authenticated",
+    "base_sha256",
+    "before",
+    "compensates",
+    "contract_approved",
+    "definition_keys",
+    "definitions",
+    "kind",
+    "members",
+    "operation",
+    "operation_accepted",
+    "operation_id",
+    "previous_sha256",
+    "production_enforcement",
+    "publication_authorized",
+    "ready",
+    "record_only",
+    "registry_id",
+    "registry_sha256",
+    "retained",
+    "schema_version",
+    "simulation",
+    "tombstones"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "isolated-mapping-plan"
+    },
+    "simulation": {
+      "const": true
+    },
+    "record_only": {
+      "const": true
+    },
+    "authenticated": {
+      "const": false
+    },
+    "operation_accepted": {
+      "const": false
+    },
+    "applied": {
+      "const": false
+    },
+    "artwork_approved": {
+      "const": false
+    },
+    "contract_approved": {
+      "const": false
+    },
+    "ready": {
+      "const": false
+    },
+    "active": {
+      "const": false
+    },
+    "production_enforcement": {
+      "const": false
+    },
+    "publication_authorized": {
+      "const": false
+    },
+    "operation_id": {
+      "type": "string",
+      "pattern": "^synthetic\\.operation\\.[a-z0-9][a-z0-9._-]{0,140}$(?![\\s\\S])"
+    },
+    "operation": {
+      "enum": [
+        "RENAME",
+        "DELETE"
+      ]
+    },
+    "registry_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "registry_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+    },
+    "base_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+    },
+    "previous_sha256": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "compensates": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "members": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "before": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 64,
+      "additionalProperties": {
+        "$ref": "#/$defs/entry"
+      }
+    },
+    "after": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 64,
+      "additionalProperties": {
+        "$ref": "#/$defs/entry"
+      }
+    },
+    "definitions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object"
+      }
+    },
+    "definition_keys": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048
+      }
+    },
+    "retained": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "snapshot_sha256",
+          "artwork"
+        ],
+        "properties": {
+          "snapshot_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$(?![\\s\\S])"
+          },
+          "artwork": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "tombstones": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object"
+      }
+    }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "category": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "origin": {
+          "enum": [
+            "assigned",
+            "historical-reference"
+          ]
+        },
+        "historical_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "semantic": {
+          "type": "object",
+          "properties": {
+            "parent": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "key": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            "role": {
+              "enum": [
+                "family",
+                "group",
+                "single",
+                "color",
+                "white",
+                "standard",
+                "bigger"
+              ]
+            },
+            "language": {
+              "const": "en"
+            }
+          },
+          "required": [
+            "parent",
+            "key",
+            "role",
+            "language"
+          ],
+          "additionalProperties": false
+        },
+        "variant": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "names": {
+          "type": "object",
+          "properties": {
+            "display_name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "rendered_caption": {
+              "type": "string",
+              "maxLength": 4096
+            },
+            "source": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    },
+                    "sha256": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$",
+                      "minLength": 64,
+                      "maxLength": 64
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "local_path": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "public_path": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "display_name",
+            "rendered_caption",
+            "source",
+            "local_path",
+            "public_path"
+          ],
+          "additionalProperties": false
+        },
+        "original_names": {
+          "type": "object",
+          "properties": {
+            "display_name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "rendered_caption": {
+              "type": "string",
+              "maxLength": 4096
+            },
+            "source": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2048
+                    },
+                    "sha256": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$",
+                      "minLength": 64,
+                      "maxLength": 64
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "local_path": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "public_path": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "display_name",
+            "rendered_caption",
+            "source",
+            "local_path",
+            "public_path"
+          ],
+          "additionalProperties": false
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "namespace": {
+                "enum": [
+                  "local",
+                  "public",
+                  "source",
+                  "display"
+                ]
+              },
+              "value": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 4096
+              }
+            },
+            "required": [
+              "namespace",
+              "value"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 4096
+        },
+        "tombstone_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "minLength": 64,
+              "maxLength": 64
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "category",
+        "origin",
+        "historical_sha256",
+        "revision",
+        "semantic",
+        "variant",
+        "names",
+        "original_names",
+        "aliases",
+        "tombstone_sha256"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

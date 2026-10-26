@@ -131,6 +131,8 @@ def _commit_synthetic(transaction, *, expected_snapshot_sha256, authority=None, 
     writer = SidecarStore(root)
     with writer.transaction() as db:
         state = inspect_db(root,writer,db)
+        from .mappings import require_m5_compatible
+        require_m5_compatible(root,writer,db,ctx.candidate)
         op_id = ctx.impact.to_dict()['operation']['id']
         existing = state['commits'].get(op_id)
         if existing is not None:
