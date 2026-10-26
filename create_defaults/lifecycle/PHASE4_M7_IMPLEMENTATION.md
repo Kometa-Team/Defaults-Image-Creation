@@ -70,7 +70,7 @@ reports/artifacts fail closed. This is additive CI evidence, not a new approval
 framework, database or publication mechanism.
 
 The original `Validation acceptance`, M6 acceptance and dependency-provenance
-jobs remain independently required. The final PR indexes all final-head workflow
+jobs remain independently required. [Draft PR #43](https://github.com/Kometa-Team/Defaults-Image-Creation/pull/43) indexes all final-head workflow
 results and reconciles actual IDs and historical artifacts, rather than treating
 the additive M7 acceptance result alone as complete Phase 4 evidence.
 
@@ -87,7 +87,20 @@ No existing historical capture or source-selection mechanism is modified. Final
 historical counts/hashes and actual source/definition/receipt facts must come
 from the existing guarded shared fixture on both platforms. Pending results are
 not a compatibility claim. Local development logs remain separate from final
-exact-head artifacts. The final draft PR supplies actual counts and durations.
+exact-head artifacts. The final draft PR supplies actual counts and durations,
+complete raw-ID reconciliation, fresh historical projections and an independent
+replay of the unchanged original acceptance verifier from an exact-head
+disposable checkout.
+
+At initial implementation head `ef2aa5f`, all 55 M7 IDs on each OS passed with
+zero skips/failures and M7 acceptance passed. The full native sequence/compensation
+group took 273.58 seconds on Linux and 651.89 seconds on Windows; both 2000×3000
+ADD/UPDATE JPEGs were exactly equal across platforms. Local boundary execution
+passed 7/7 in 843.49 seconds. Final evidence controls passed 37/37 locally in
+13.82 seconds, including the newly added pre-read 5 MiB native-artifact resource
+rejection. This adds one explicit ID for 56 per OS without removing earlier IDs.
+These measurements are indexed separately from the required final-head runs;
+see the [acceptance report](PHASE4_ACCEPTANCE_REPORT.md).
 
 All 15-minute CI caps and the original parent/worker memory and process limits
 remain unchanged. A preliminary third native ADD duplicated the existing M5

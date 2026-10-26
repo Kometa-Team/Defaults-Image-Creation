@@ -194,6 +194,9 @@ def verify_native(proofs, expected, artifacts):
         for name in ('add', 'update'):
             path = Path(artifacts[proof['platform']])/'artwork'/(name+'.jpg')
             require(path.is_file() and not path.is_symlink(), 'Missing exported native artwork')
+            # Same 5 MiB binary bound as the original M3 BytesObject; reject
+            # oversize exports before allocating/reading them in acceptance.
+            require(0 < path.stat().st_size <= 5*1024*1024, 'Native artwork resource bound')
             raw = path.read_bytes()
             member = proof[name+'_artwork']
             require(hashlib.sha256(raw).hexdigest() == member['sha256'] and len(raw) == member['bytes'],

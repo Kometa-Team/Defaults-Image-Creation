@@ -124,7 +124,7 @@ def native_rows(tmp_path):
 
 
 @pytest.mark.parametrize('attack', ['missing', 'head', 'sequence', 'real', 'retry', 'material',
-    'retention', 'tombstone', 'artifact', 'missing-artifact', 'hash'])
+    'retention', 'tombstone', 'artifact', 'missing-artifact', 'oversize-artifact', 'hash'])
 def test_native_acceptance_rejects_incomplete_or_substituted_sequence(tmp_path, attack):
     proofs, artifacts = native_rows(tmp_path)
     proof = proofs[0]
@@ -148,11 +148,14 @@ def test_native_acceptance_rejects_incomplete_or_substituted_sequence(tmp_path, 
         (artifacts['Windows']/'artwork/add.jpg').write_bytes(b'substituted')
     elif attack == 'missing-artifact':
         (artifacts['Windows']/'artwork/add.jpg').unlink()
+    elif attack == 'oversize-artifact':
+        with (artifacts['Windows']/'artwork/add.jpg').open('wb') as output:
+            output.truncate(5*1024*1024+1)
     if attack == 'hash':
         proof['sha256'] = '0'*64
     else:
         proof['sha256'] = ci.fingerprint({key: value for key, value in proof.items() if key != 'sha256'})
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match='Native artwork resource bound' if attack == 'oversize-artifact' else None):
         ci.verify_native(proofs, dict(head='head', plan_sha256='plan'), artifacts)
 
 

@@ -7,8 +7,8 @@ provenance PR #40 and People repairs #41–#42. This is an additive acceptance
 change: no lifecycle engine, renderer, production definition or existing
 security boundary is modified.
 
-**Status: implementation and validation in progress; maintainer acceptance is
-pending. Operational readiness remains BLOCKED.** The draft PR is the index of
+**Status: acceptance implementation complete; maintainer acceptance is
+pending. Operational readiness remains BLOCKED.** [Draft PR #43](https://github.com/Kometa-Team/Defaults-Image-Creation/pull/43) is the index of
 the final exact commit, workflow runs, downloaded artifact reconciliation and
 per-platform execution totals. A development pass or earlier merged PR is not
 final-head acceptance. No merge is authorized.
@@ -90,11 +90,32 @@ exactly; UTF-8 text permits only Git checkout CRLF normalization.
 
 ## Validation evidence and performance
 
-Development evidence so far: the read-only baseline/provenance check passes
+The read-only baseline/provenance check passes
 2,927 files, 190 protected members and 299 adoption sources with zero unexplained
-differences. The 36 additive evidence/CI controls passed locally in 16.82 seconds.
-Native execution and final-head hosted evidence remain pending until the PR
-records their actual results.
+differences. Local additive evidence/CI controls: **37 passed, zero failed/skipped,
+13.82 seconds**. The exact-head boundary producer at `ef2aa5f` passed all seven
+native integrity/adapter cases in **843.49 seconds**.
+
+The initial complete M7 workflow at `ef2aa5fccf3083176fc661d4ab050c0265f8d406`
+([run 40274714204](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/40274714204))
+passed all **55 tests per OS**, zero failures/skips, and M7 acceptance. Actual
+pytest execution times, excluding checkout/install/upload, were:
+
+| M7 group | Tests per OS | Linux seconds | Windows seconds |
+| --- | ---: | ---: | ---: |
+| Controls | 36 | 5.91 | 6.32 |
+| Full sequence and compensation | 2 | 273.58 | 651.89 |
+| Atomic faults and cancellation | 5 | 359.11 | 457.94 |
+| Case-move faults | 5 | 577.44 | 376.02 |
+| Integrity and adapter boundaries | 7 | 482.45 | 463.43 |
+
+That is measured preparation evidence, not a substitute for final-head CI.
+The delivery inventory adds one evidence-resource negative control (**56 IDs
+per OS**), retaining every preceding ID. It enforces the original M3 5 MiB
+binary-object bound before reading a native export. The final draft PR records
+all four final-head workflow runs, actual per-job counts/durations, full raw-ID
+reconciliation and independent replay of the unchanged original acceptance
+verifier. Any stale head or unexplained historical difference blocks delivery.
 
 The existing mandatory Windows/Linux workflow, `Validation acceptance`, M6
 acceptance and dependency-provenance checks remain unchanged and required.
@@ -103,7 +124,7 @@ atomic-fault, move-fault and boundary groups, plus its own acceptance job.
 Every job retains the 15-minute cap. The original 512 MiB worker-parent test,
 native worker limits, process cleanup and metadata bounds are unchanged.
 
-The first exploratory sequence included a redundant additional disjoint native
+The first exploratory two-test run passed in 1,270.57 seconds. It included a redundant additional disjoint native
 ADD/review already covered by mandatory M5 tests. Its measured cost motivated
 reusing that existing unaffected-artwork proof and testing independent M1
 record preservation across the new full chain. Database and move faults are
@@ -113,7 +134,7 @@ threshold is weakened or removed.
 The M7 native artifact exports contain only synthetic unapproved JPEGs for the
 ADD and UPDATE epochs, complete byte/receipt metadata and same-ID mapping/
 tombstone evidence. Acceptance checks exported hashes and exact cross-platform
-JPEG equality. The existing M3 reports separately retain native PNG encoding
+JPEG equality. Both actual compositions are 2000×3000. The existing M3 reports separately retain native PNG encoding
 differences; no new visual equivalence threshold is introduced.
 
 ## Remaining blockers and stopping point

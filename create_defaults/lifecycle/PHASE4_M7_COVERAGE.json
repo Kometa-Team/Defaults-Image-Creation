@@ -394,6 +394,7 @@
         "create_defaults/bulk/tests/test_workers.py::test_worker_recovery_and_timeout[crash_first]",
         "create_defaults/bulk/tests/test_workers.py::test_worker_recovery_and_timeout[error_first]",
         "create_defaults/bulk/tests/test_workers.py::test_worker_recovery_and_timeout[slow_first]",
+        "create_defaults/phase4/m7_tests/test_ci.py::test_native_acceptance_rejects_incomplete_or_substituted_sequence[oversize-artifact]",
         "create_defaults/phase4/tests/test_composition.py::test_interruption_never_publishes_complete_archive_or_advances_operation[interrupt]",
         "create_defaults/phase4/tests/test_composition.py::test_interruption_never_publishes_complete_archive_or_advances_operation[partial-persist]"
       ]

@@ -30,6 +30,7 @@
     "create_defaults/phase4/m7_tests/test_ci.py::test_native_acceptance_rejects_incomplete_or_substituted_sequence[material]",
     "create_defaults/phase4/m7_tests/test_ci.py::test_native_acceptance_rejects_incomplete_or_substituted_sequence[missing-artifact]",
     "create_defaults/phase4/m7_tests/test_ci.py::test_native_acceptance_rejects_incomplete_or_substituted_sequence[missing]",
+    "create_defaults/phase4/m7_tests/test_ci.py::test_native_acceptance_rejects_incomplete_or_substituted_sequence[oversize-artifact]",
     "create_defaults/phase4/m7_tests/test_ci.py::test_native_acceptance_rejects_incomplete_or_substituted_sequence[real]",
     "create_defaults/phase4/m7_tests/test_ci.py::test_native_acceptance_rejects_incomplete_or_substituted_sequence[retention]",
     "create_defaults/phase4/m7_tests/test_ci.py::test_native_acceptance_rejects_incomplete_or_substituted_sequence[retry]",
