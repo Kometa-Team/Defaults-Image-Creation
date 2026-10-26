@@ -205,6 +205,26 @@ def test_redo_remove_bg_preserves_upstream_and_reruns_downstream(monkeypatch):
     assert not (orch.STATE_DIR / "sync_images.done.json").exists()
 
 
+def test_redo_tmdb_clears_actual_colorize_marker_and_retains_discovery(monkeypatch):
+    resume_ready()
+    marker("remove_bg")
+    for key in DOWNSTREAM:
+        marker(key)
+    run = mock_runner(monkeypatch)
+    original_run = orch.run_cmd
+    def with_download(title, argv, **kwargs):
+        if "tmdb_people.py" in argv:
+            photo(orch.CONFIG_DIR / "posters/New Person-15370.jpg")
+        return original_run(title, argv, **kwargs)
+    monkeypatch.setattr(orch, "run_cmd", with_download)
+    assert call_main(monkeypatch, "--redo", "tmdb", "--stop-after", "tmdb") == 0
+    assert (orch.STATE_DIR / "scan_kometa_logs.done.json").exists()
+    assert (orch.STATE_DIR / "find_and_download_missing.done.json").exists()
+    assert (orch.STATE_DIR / "tmdb.done.json").exists()
+    for key in ["truncate", "audit_people_images", "colorize_noncolor", "prep_dirs", "remove_bg", *DOWNSTREAM]:
+        assert not (orch.STATE_DIR / f"{key}.done.json").exists()
+
+
 @pytest.mark.parametrize("old,new", [("adobe", "birefnet"), ("birefnet", "adobe")])
 def test_engine_change_invalidates_downstream_without_replaying_library(monkeypatch, old, new):
     monkeypatch.setenv("REMOVE_BG_ENGINE", old)

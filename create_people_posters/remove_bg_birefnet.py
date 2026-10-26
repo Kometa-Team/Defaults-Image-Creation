@@ -33,6 +33,7 @@ import unicodedata
 import warnings
 
 from PIL import Image
+from create_people_posters.people_failures import failure_boundary, failure_record, failure_text, preserve_summary
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 CONFIG_DIR = Path(os.getenv("PEOPLE_CONFIG_DIR") or SCRIPT_DIR / "config")
@@ -45,6 +46,22 @@ MODEL_CHECKSUMS = {
 }
 INPUT_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tif", ".tiff"}
 LOG = logging.getLogger("remove_bg_birefnet")
+
+
+def operation(name, source, function, *args, **kwargs):
+    with failure_boundary(name, Path(source).name):
+        return function(*args, **kwargs)
+
+
+def load_rgb(source):
+    with failure_boundary("image_decode", Path(source).name):
+        with Image.open(source) as image:
+            image.load()
+            if getattr(image, "n_frames", 1) != 1:
+                raise ValueError("Animated/multipage input is unsupported")
+            # Staging owns orientation. Preserve the established stored dimensions.
+            with failure_boundary("preprocess", Path(source).name):
+                return image.convert("RGB"), image.size
 
 
 def env_bool(key: str, default: bool) -> bool:
@@ -227,13 +244,7 @@ class LocalRemover:
         if source.resolve() == destination.resolve():
             raise ValueError("Inference output must differ from the source photograph")
         start = time.perf_counter()
-        with Image.open(source) as image:
-            image.load()
-            size = image.size
-            if getattr(image, "n_frames", 1) != 1:
-                raise ValueError("Animated/multipage input is unsupported")
-            # Preserve stored pixel dimensions; input is already oriented by staging.
-            rgb = image.convert("RGB")
+        rgb, size = load_rgb(source)
         digest = sha256(source)
         try:
             if destination.exists() and not self.settings.overwrite:
@@ -261,15 +272,15 @@ class LocalRemover:
                     try:
                         if self.settings.alpha_matting:
                             # Use rembg's solver directly; its remove() silently falls back on ValueError.
-                            mask = self._remove(rgb, session=self.session, only_mask=True,
+                            mask = operation("model_inference", source, self._remove, rgb, session=self.session, only_mask=True,
                                                 alpha_matting=False, decontaminate=False, post_process_mask=False)
                             try:
-                                result = self._matting(rgb, mask, 240, 10, 10)
+                                result = operation("model_inference", source, self._matting, rgb, mask, 240, 10, 10)
                             finally:
                                 if isinstance(mask, Image.Image):
                                     mask.close()
                         else:
-                            result = self._remove(rgb, session=self.session, alpha_matting=False,
+                            result = operation("model_inference", source, self._remove, rgb, session=self.session, alpha_matting=False,
                                                   decontaminate=self.settings.decontaminate, post_process_mask=False)
                     finally:
                         for warning in observed:
@@ -281,13 +292,13 @@ class LocalRemover:
                         raise ValueError("Inference returned an unexpected output type")
                     if result.mode != "RGBA":
                         raise ValueError("Inference did not return RGBA")
-                    result.save(tmp, format="PNG")
+                    operation("output_write", source, result.save, tmp, format="PNG")
                 finally:
                     if isinstance(result, Image.Image):
                         result.close()
-                metadata = validate_output(tmp, size)
+                metadata = operation("output_validation", source, validate_output, tmp, size)
                 metadata["warnings"].extend(inference_warnings)
-                tmp.replace(destination)
+                operation("output_write", source, tmp.replace, destination)
             finally:
                 tmp.unlink(missing_ok=True)
             record = {**metadata, "engine": "birefnet", "model": self.settings.model,
@@ -296,7 +307,7 @@ class LocalRemover:
                       "source": str(source), "output": str(destination), "source_sha256": digest,
                       "output_sha256": sha256(destination), "status": "processed",
                       "duration": time.perf_counter() - start}
-            atomic_json(sidecar(destination), record)
+            operation("output_write", source, atomic_json, sidecar(destination), record)
             return record
         finally:
             rgb.close()
@@ -358,10 +369,13 @@ def run_batch(source_dir: Path, original_dir: Path, output_dir: Path, settings: 
                 if (prior.get("settings") == settings.fingerprint()
                         and prior.get("output_sha256") == sha256(path)):
                     summary["skipped"] += 1
+                    summary["files"].append({**prior, "status": "skipped"})
                     continue
                 summary["failed"] += 1
+                failure = failure_record(FileExistsError("Unknown staged provenance"), "checkpoint_reuse", path.name)
                 summary["files"].append({"source": str(path), "status": "failed",
-                                          "reason": "Staged cutout has unknown/different engine provenance; restage exact source"})
+                                          "reason": "Staged cutout has unknown/different engine provenance; restage exact source",
+                                          "failure": failure})
                 LOG.error("%s: staged cutout has unknown/different provenance; restage its original", path.name)
                 continue
         files.append(path)
@@ -372,6 +386,7 @@ def run_batch(source_dir: Path, original_dir: Path, output_dir: Path, settings: 
     try:
         for source in files:
             began = time.perf_counter()
+            current_operation = "input_validation"
             target = output_dir / (source.stem + ".png")
             staged = source_dir / target.name
             try:
@@ -379,10 +394,12 @@ def run_batch(source_dir: Path, original_dir: Path, output_dir: Path, settings: 
                     raise ValueError(f"Unsupported input format {source.suffix}")
                 if len(targets[unicodedata.normalize("NFC", source.stem).casefold()]) != 1:
                     raise ValueError("Ambiguous input basenames would overwrite the same PNG")
-                with Image.open(source) as image:
-                    image.load()
-                    size = image.size
+                with failure_boundary("image_decode", source.name):
+                    with Image.open(source) as image:
+                        image.load()
+                        size = image.size
                 # Check archive collisions before inference or publishing any output.
+                current_operation = "checkpoint_reuse"
                 check_archive(source, original_dir)
                 if staged != source and staged.exists() and not settings.overwrite:
                     validate_output(staged, size)
@@ -393,11 +410,16 @@ def run_batch(source_dir: Path, original_dir: Path, output_dir: Path, settings: 
                         remover = remover_factory(settings)
                     except Exception as exc:
                         summary["exit_code"] = 2
-                        summary["initialization_error"] = safe_exception(exc)
-                        LOG.error("Fatal model initialization: %s", safe_exception(exc))
+                        failure = failure_record(exc, "model_initialization", source.name)
+                        summary["initialization_failure"] = failure
+                        summary["initialization_error"] = safe_exception(exc) + " " + failure_text(failure)
+                        LOG.error("Fatal model initialization: %s", failure_text(failure))
                         break
+                current_operation = "model_inference"
                 record = remover.process(source, target)
+                current_operation = "output_validation"
                 validate_output(target, size)
+                current_operation = "archive_and_stage"
                 archive_source(source, original_dir)
                 atomic_copy(target, staged)
                 atomic_copy(sidecar(target), sidecar(staged))
@@ -411,12 +433,13 @@ def run_batch(source_dir: Path, original_dir: Path, output_dir: Path, settings: 
                          record["status"], source.name, target.name, record["dimensions"],
                          record["duration"], record["warnings"])
             except Exception as exc:
+                failure = failure_record(exc, current_operation, source.name)
                 summary["failed"] += 1
                 summary["files"].append({"source": str(source), "output": str(target),
                                           "status": "failed", "duration": time.perf_counter() - began,
-                                          "reason": safe_exception(exc)})
+                                          "reason": safe_exception(exc) + " " + failure_text(failure), "failure": failure})
                 LOG.error("failed input=%s output=%s seconds=%.3f reason=%s", source.name,
-                          target.name, time.perf_counter() - began, safe_exception(exc))
+                          target.name, time.perf_counter() - began, failure_text(failure))
     finally:
         if remover is not None:
             remover.close()
@@ -455,8 +478,9 @@ def main(argv=None) -> int:
         parser.error("--input and --output must be used together")
     log_dir = CONFIG_DIR / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
+    preserve_summary(args.summary)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s",
-                        handlers=[secure_handler(logging.FileHandler(log_dir / "remove_bg_birefnet.log", mode="w", encoding="utf-8")),
+                        handlers=[secure_handler(logging.FileHandler(log_dir / "remove_bg_birefnet.log", mode="a", encoding="utf-8")),
                                   secure_handler(logging.StreamHandler())], force=True)
     try:
         settings = Settings.from_env()
@@ -480,8 +504,9 @@ def main(argv=None) -> int:
         atomic_json(args.summary, summary)
         return summary["exit_code"]
     except Exception as exc:
-        LOG.error("Fatal background-removal error: %s", safe_exception(exc))
-        atomic_json(args.summary, {"exit_code": 2, "outcome": "fatal", "reason": safe_exception(exc)})
+        failure = failure_record(exc, "background_removal", args.input.name if args.input else "batch")
+        LOG.error("Fatal background-removal error: %s", failure_text(failure))
+        atomic_json(args.summary, {"exit_code": 2, "outcome": "fatal", "reason": safe_exception(exc), "failure": failure})
         return 2
 
 

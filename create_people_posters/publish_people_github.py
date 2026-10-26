@@ -56,6 +56,8 @@ def current_batch(config):
 
 
 def prepare(config, batch, ledger, branch):
+    from people_batch_safety import assert_batch_ready
+    assert_batch_ready(config)
     # Reuse the exact normalizer and quality checks used by local_git sync.
     from sync_people_images import (IMAGE_EXTENSIONS, enforce_transparent_canvas,
                                     image_quality_findings, iter_files,
@@ -375,6 +377,9 @@ def main():
     inventory = None
     try:
         branch = branch_name(args.branch)
+        if args.op in {"prepare", "push"}:
+            from people_batch_safety import assert_batch_ready
+            assert_batch_ready(args.config)
         manifest_file = args.config / "manifest.json"
         if args.op == "push" and not args.dry_run and manifest_file.exists():
             if json.loads(manifest_file.read_text(encoding="utf-8")).get("status") == "validation_only":

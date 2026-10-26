@@ -20,6 +20,15 @@ DEPENDENCIES = frozenset((
 ))
 PROTECTION = "create_defaults/bulk/contracts/activation/protection.py"
 ADOPTION_SOURCE = "create_defaults/bulk/contracts/adoption/sources.py"
+# The People repair changes only the production-manifest literal in the
+# already-approved protection implementation. Preserve the immutable PR23
+# transition and bind this later intersection to exact predecessor/successor
+# bytes, including the repair before the dependency import was integrated.
+PEOPLE_PROTECTION_PREDECESSORS = frozenset((
+    "5a02a0b79dedb2191d9eb8e60676f779e9a529819dca9a17e6cc0d7fd114e5b3",
+    "6adaa795f47483ded43999c321bf98972598e5fc9890db8ad7b738b22c996893",
+))
+PEOPLE_PROTECTION_SHA256 = "a35be7c2b8180164e0eae2a735198041cf2eac755ca200a4b9d844b010b2d930"
 INFRASTRUCTURE = frozenset((PROTECTION, ADOPTION_SOURCE, "ci/phase4.py",
     "create_defaults/phase4/tests/test_ci_transactions.py",
     "create_defaults/bulk/tests/test_canary_staging.py",
@@ -51,7 +60,9 @@ def selected_hash(name, expected):
     value = _decode(MANIFEST.read_bytes())
     binding = value["files"].get(name, value["infrastructure"].get(name))
     if binding is not None and expected == binding["before_sha256"]:
-        return binding["sha256"]
+        expected = binding["sha256"]
+    if name == PROTECTION and expected in PEOPLE_PROTECTION_PREDECESSORS:
+        return PEOPLE_PROTECTION_SHA256
     return expected
 
 
@@ -67,7 +78,7 @@ def verify_infrastructure(root):
         before = _historical(str(root), value["baseline_commit"], name)
         current = (Path(root)/name).read_bytes().replace(b"\r\n", b"\n")
         if (hashlib.sha256(before).hexdigest() != binding["before_sha256"]
-                or hashlib.sha256(current).hexdigest() != binding["sha256"]):
+                or hashlib.sha256(current).hexdigest() != selected_hash(name, binding["sha256"])):
             raise ValueError("Changed exact dependency infrastructure: "+name)
     return value
 

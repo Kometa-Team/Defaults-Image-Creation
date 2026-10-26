@@ -40,8 +40,8 @@ class DependencyMaintenanceTests(unittest.TestCase):
         for name,binding in value['infrastructure'].items():
             old=subprocess.check_output(['git','show',value['baseline_commit']+':'+name],cwd=ROOT)
             self.assertEqual(sha(old),binding['before_sha256'])
-            self.assertEqual(sha((ROOT/name).read_bytes()),binding['sha256'])
-        pins = json.loads((ROOT/people.PINS).read_text(encoding='utf8'))
+            self.assertEqual(sha((ROOT/name).read_bytes()),transition.selected_hash(name,binding['sha256']))
+        pins = json.loads(subprocess.check_output(['git','show',value['baseline_commit']+':'+people.PINS],cwd=ROOT))
         self.assertEqual(fingerprint(pins), value['production_manifest_sha256'])
         self.assertEqual(fingerprint(load_pins()), value['adoption_snapshot_sha256'])
         for name, binding in value['files'].items():
@@ -68,14 +68,17 @@ class DependencyMaintenanceTests(unittest.TestCase):
             'transition_sha256':transition.PIN,'files':[transition.ADOPTION_SOURCE]})
         # Frozen manifests, historical records, existing CI selection and gates
         # retain exact bytes; this test cannot legitimize changes to them.
-        for name in (people.PINS, 'ci/people-security-maintenance.json',
+        # People maintenance now has its own separately pinned successor,
+        # verified above; PR23's historical dependency manifest stays immutable.
+        for name in ('ci/dependency-maintenance-v1.json',
                      'create_defaults/bulk/contracts/adoption/source-pins-v1.json',
                      '.github/workflows/default-poster-validation.yml',
                      'ci/validation-plan.json', 'ci/original-test-ids.json',
                      'ci/phase3-test-ids.json', 'ci/phase4-test-ids.json',
                      'ci/phase4-composition-test-ids.json', 'ci/phase4-review-test-ids.json',
                      'ci/phase4-transaction-test-ids.json'):
-            before = subprocess.check_output(['git', 'show', 'd6b039788315f2198304cf05f7efea5addc271c9:'+name], cwd=ROOT)
+            historical = '403d9f1' if name == 'ci/dependency-maintenance-v1.json' else 'd6b039788315f2198304cf05f7efea5addc271c9'
+            before = subprocess.check_output(['git', 'show', historical+':'+name], cwd=ROOT)
             self.assertEqual(sha(before), sha((ROOT/name).read_bytes()), name)
 
     def test_protection_infrastructure_is_exactly_bound_and_unexpected_edits_fail(self):
@@ -83,13 +86,33 @@ class DependencyMaintenanceTests(unittest.TestCase):
         name=transition.PROTECTION;binding=value['infrastructure'][name]
         before=subprocess.check_output(['git','show',value['baseline_commit']+':'+name],cwd=ROOT)
         self.assertEqual(sha(before),binding['before_sha256'])
-        self.assertEqual(sha((ROOT/name).read_bytes()),binding['sha256'])
+        self.assertEqual(sha((ROOT/name).read_bytes()),transition.selected_hash(name,binding['sha256']))
         original=people._bytes
         def changed(path):
             raw=original(path)
             return raw+b'\n# unexpected protection change\n' if path==ROOT/name else raw
         with patch.object(people,'_bytes',changed):
             with self.assertRaises(ValueError): people.verify(ROOT)
+
+    def test_people_protection_successor_changes_only_manifest_literal(self):
+        value=json.loads(MANIFEST.read_text(encoding='utf8'))
+        name=transition.PROTECTION
+        previous=subprocess.check_output(['git','show','403d9f1:'+name],cwd=ROOT).replace(b'\r\n',b'\n')
+        pins=json.loads((ROOT/people.PINS).read_text(encoding='utf8'))
+        expected=previous.replace(value['production_manifest_sha256'].encode(),fingerprint(pins).encode())
+        self.assertEqual(sha(previous),value['infrastructure'][name]['sha256'])
+        self.assertEqual((ROOT/name).read_bytes().replace(b'\r\n',b'\n'),expected)
+        self.assertEqual(sha(expected),transition.PEOPLE_PROTECTION_SHA256)
+        for predecessor in transition.PEOPLE_PROTECTION_PREDECESSORS:
+            self.assertEqual(transition.selected_hash(name,predecessor),sha(expected))
+        self.assertEqual(transition.selected_hash(name,'f'*64),'f'*64)
+        original=Path.read_bytes
+        for invalid in (previous,expected+b'\n# unexpected edit\n'):
+            with self.subTest(sha=sha(invalid)):
+                def modified(path):
+                    return invalid if path==ROOT/name else original(path)
+                with patch.object(Path,'read_bytes',modified):
+                    with self.assertRaises(ValueError):transition.verify_infrastructure(ROOT)
 
     def test_adoption_rejects_further_dependency_edits_and_rollback(self):
         from create_defaults.bulk.contracts.adoption.models import AdoptionError

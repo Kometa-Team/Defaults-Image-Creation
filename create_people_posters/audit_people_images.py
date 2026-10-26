@@ -119,6 +119,12 @@ def copy_file(source: Path, destination: Path) -> None:
     write_to_log_file(f"Copied file from {source} => Saved as: {destination}")
 
 
+def flattened_pixels(image):
+    """Pillow 12.1+ API, with compatibility for older supported installations."""
+    flattened = getattr(image, "get_flattened_data", None)
+    return flattened() if flattened is not None else image.getdata()
+
+
 def determine_image_mode(image_path: Path) -> str:
     """
     Determine the mode of an image file ('RGB' or 'Grayscale').
@@ -129,7 +135,7 @@ def determine_image_mode(image_path: Path) -> str:
         r, g, b = image.split()
 
         color_variation_threshold = 30
-        for rv, gv, bv in zip(r.getdata(), g.getdata(), b.getdata()):
+        for rv, gv, bv in zip(flattened_pixels(r), flattened_pixels(g), flattened_pixels(b)):
             if (
                 abs(rv - gv) > color_variation_threshold
                 or abs(rv - bv) > color_variation_threshold

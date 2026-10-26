@@ -190,3 +190,30 @@ def test_orchestrator_tmdb_module_initializes_real_sdk_in_temporary_workspace(mo
     assert namespace["TMDb"].configuration().primary_translations == ["en-US"]
     assert [path for path, _ in transport.calls] == list(PATHS)
     assert not (tmp_path / "posters").exists() or not list((tmp_path / "posters").iterdir())
+
+
+def test_real_sdk_person_details_avoid_unrelated_tagged_media_genre_lookup(sdk_class):
+    class PersonTransport(Transport):
+        def get(self, url, **kwargs):
+            if urlsplit(url).path == "/3/person/15370":
+                self.calls.append(("/3/person/15370", kwargs))
+                payload = {"id": 15370, "name": "Gretchen Mol", "profile_path": "/profile.jpg"}
+                if kwargs["params"].get("append_to_response"):
+                    payload["tagged_images"] = {"page": 1, "total_pages": 1, "total_results": 1,
+                        "results": [{"file_path": "/tagged.jpg", "media_type": "movie",
+                                     "media": {"id": 123, "title": "Tagged movie", "genre_ids": [18]}}]}
+                response = requests.Response()
+                response.status_code = 200
+                response._content = json.dumps(payload).encode()
+                response._content_consumed = True
+                return response
+            return super().get(url, **kwargs)
+    with http.SecureTMDBSession(KEY, transport=PersonTransport()) as session:
+        sdk = sdk_class(KEY, language="en", session=session)
+        # Reproduce the old failure against the real installed SDK: tagged
+        # movie parsing requests a genre endpoint outside the transport allowlist.
+        with pytest.raises(ValueError):
+            sdk.person(15370)
+        person = sdk.person(15370, partial=None)
+        assert person.id == 15370 and person.name == "Gretchen Mol"
+        assert person.profile_url == CONFIG["images"]["secure_base_url"] + "original/profile.jpg"

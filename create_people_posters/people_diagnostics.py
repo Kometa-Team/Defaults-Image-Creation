@@ -200,6 +200,12 @@ def sanitize_text(text) -> str:
 def safe_exception(error: BaseException) -> str:
     """No __str__, repr, args, request, response text, chain or local variables."""
     try:
+        from create_people_posters.people_failures import PipelineFailure, failure_text
+        if type(error) is PipelineFailure:
+            return failure_text(error.record)
+        if (type(error).__module__ in {"people_batch_safety", "create_people_posters.people_batch_safety"}
+                and type(error).__name__ == "IncompleteBatchError"):
+            return "Publication blocked: unresolved batch inputs; inspect retained TMDB/background summaries and retry the existing batch"
         if type(error) is DiagnosticError:
             return error.diagnostic.text()
         if (type(error).__name__ == "GitHubError" and type(error).__module__ in
@@ -250,14 +256,20 @@ def safe_exception(error: BaseException) -> str:
         for cls in type(error).__mro__:
             category = categories.get((cls.__module__, cls.__name__))
             if category:
-                return "error_category=" + category + " correlation_id=" + _FALLBACK_CORRELATION
+                from create_people_posters.people_failures import failure_record
+                correlation = failure_record(error, "unexpected_exception", "unknown")["correlation_id"]
+                return "error_category=" + category + " correlation_id=" + correlation
         for cls, label in ((TimeoutError, "timeout"), (ConnectionError, "connection"),
                            (FileNotFoundError, "file_not_found"), (PermissionError, "permission"),
                            (OSError, "io_error"), (ValueError, "invalid_data"),
                            (KeyboardInterrupt, "cancelled")):
             if isinstance(error, cls):
-                return "error_category=" + label + " correlation_id=" + _FALLBACK_CORRELATION
-        return "error_category=internal_error correlation_id=" + _FALLBACK_CORRELATION
+                from create_people_posters.people_failures import failure_record
+                correlation = failure_record(error, "unexpected_exception", "unknown")["correlation_id"]
+                return "error_category=" + label + " correlation_id=" + correlation
+        from create_people_posters.people_failures import failure_record
+        record = failure_record(error, "unexpected_exception", "unknown")
+        return "error_category=internal_error " + failure_text(record)
     except BaseException:
         return WITHHELD
 
