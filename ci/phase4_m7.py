@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import stat
 import subprocess
 import sys
 
@@ -36,6 +37,47 @@ NEW = frozenset((
     'create_defaults/lifecycle/PHASE5_PREREQUISITES.md',
 ))
 ALLOWED = NEW | {'create_defaults/lifecycle/ROADMAP.md'}
+# A separately reviewed documentation successor, not a production allowance.
+# Keep the original M7 baseline/delivery scope and every preservation check.
+PLANNING_DOCUMENTS = frozenset((
+    'create_defaults/lifecycle/PHASE5_EXISTING_BEHAVIOUR_AUDIT.md',
+    'create_defaults/lifecycle/PHASE5_DESIGN_PROPOSAL.md',
+    'create_defaults/lifecycle/PHASE5_OPERATION_AND_PUBLICATION_RULES.md',
+    'create_defaults/lifecycle/PHASE5_MILESTONE_PLAN.md',
+    'create_defaults/lifecycle/PHASE5_ACCEPTANCE_PLAN.md',
+))
+
+
+def changed_scope():
+    """Retain M7 scope; permit only exact regular-file planning additions."""
+    changed = set(filter(None, subprocess.check_output([
+        'git', 'diff', '--no-renames', '--name-only', '-z', BASE, 'HEAD'],
+        cwd=ROOT).decode('utf8').split('\0')))
+    planning = changed - ALLOWED
+    require(planning <= PLANNING_DOCUMENTS,
+            'M7 changed an existing runtime, policy, workflow or evidence boundary')
+    if planning:
+        rows = subprocess.check_output(['git', 'diff', '--raw', '--no-abbrev',
+            '--no-renames', '-z', BASE, 'HEAD', '--', *sorted(planning)], cwd=ROOT).split(b'\0')
+        require(rows[-1] == b'' and len(rows) == 2*len(planning)+1, 'Incomplete planning file diff')
+        seen = set()
+        for offset in range(0, len(rows)-1, 2):
+            fields = rows[offset].split()
+            name = rows[offset+1].decode('utf8')
+            require(name in planning and name not in seen and len(fields) == 5
+                    and fields[0:2] == [b':000000', b'100644'] and fields[4] == b'A',
+                    'Planning documentation must be a regular-file addition')
+            seen.add(name)
+            path = ROOT/name
+            for part in (path, *path.parents):
+                info = part.lstat()
+                require(not stat.S_ISLNK(info.st_mode) and not getattr(info, 'st_file_attributes', 0) & 0x400,
+                        'Planning documentation cannot contain links or reparse points')
+                if part == path:
+                    require(stat.S_ISREG(info.st_mode), 'Planning documentation must be a regular file')
+                if part == ROOT:
+                    break
+    return changed
 
 
 def implementation():
@@ -100,8 +142,7 @@ def preservation():
             raw = raw.replace(b'\r\n', b'\n')
         require(hashlib.sha256(raw).hexdigest() == selected_hash(item['path'], item['sha256']),
                 'Changed adopted source: '+item['path'])
-    changed = set(subprocess.check_output(['git', 'diff', '--name-only', BASE, 'HEAD'], cwd=ROOT, text=True).splitlines())
-    require(changed <= ALLOWED, 'M7 changed an existing runtime, policy, workflow or evidence boundary')
+    changed = changed_scope()
     # Existing runtime, test IDs, historical receipts and original CI source
     # must also remain physically unchanged in a local uncommitted checkout.
     entries = subprocess.check_output(['git', 'ls-tree', '-r', '-z', BASE,
