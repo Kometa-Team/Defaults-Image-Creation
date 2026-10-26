@@ -1,0 +1,74 @@
+name: Lifecycle M7 Validation
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: lifecycle-m7-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  m7:
+    name: Lifecycle M7 (${{ matrix.os }}, ${{ matrix.group }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    env:
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+      PYTHONUNBUFFERED: '1'
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        group: [controls, sequence, atomic, moves, boundaries]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: create_defaults/requirements-bulk.txt
+      - run: python -m pip install -r create_defaults/requirements-bulk.txt
+      - run: python ci/phase4_m7.py run --group "${{ matrix.group }}"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ always() }}
+        with:
+          name: lifecycle-m7-${{ matrix.os }}-${{ matrix.group }}
+          path: config/ci-validation/m7/**
+          if-no-files-found: error
+          retention-days: 14
+  acceptance:
+    name: Lifecycle M7 acceptance
+    if: ${{ always() }}
+    needs: [m7]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+      M7_JOB_RESULTS: ${{ toJSON(needs) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.13'
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          pattern: lifecycle-m7-*
+          path: config/m7-downloaded
+      - run: python ci/phase4_m7.py accept
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: lifecycle-m7-acceptance
+          path: config/ci-validation/m7/m7-acceptance.json
+          if-no-files-found: error
+          retention-days: 14
