@@ -47,6 +47,9 @@ ACTIVE/publication flag is false.
   restore the exact original immutable trigger and verify schema integrity
   before requiring `p4m1_archive_indexes`; a missing trigger cannot mask the
   actual cross-index check. Recovery leaves the damaged row unchanged.
+  The fixture explicitly closes its SQLite connections: transaction contexts
+  alone leave handles open and caused a reproduced Windows teardown error after
+  both stronger assertions passed. No cleanup error is ignored or weakened.
 * Actual current graph/registry projections retain child and generated-exclusion
   blockers. This does not invent a supported child/family executor.
 

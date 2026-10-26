@@ -125,6 +125,14 @@ cross-index row. Recovery must leave that damaged row and both archived M5
 snapshots unchanged. No runtime guard is modified; the earlier namespace
 rejection is not substituted for this stronger final-head proof.
 
+The first isolated run of those two strengthened cases passed both assertions
+but exposed one Windows session-teardown error (653.79 seconds): the new fixture
+used a SQLite transaction context without closing its connections. The fixture
+now owns both connections with `contextlib.closing`, retaining the write
+transaction and exact corruption checks. Original cleanup, runtime storage,
+schema protections and resource limits are unchanged. Final validation must
+include successful fixture/session teardown, not only passed call phases.
+
 The existing mandatory Windows/Linux workflow, `Validation acceptance`, M6
 acceptance and dependency-provenance checks remain unchanged and required.
 M7 uses a separate read-only additive workflow with explicit controls, sequence,

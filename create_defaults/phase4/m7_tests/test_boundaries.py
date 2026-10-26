@@ -1,5 +1,6 @@
 """Cross-milestone stale inputs, archive corruption and unavailable authority."""
 from copy import deepcopy
+from contextlib import closing
 import sqlite3
 
 import pytest
@@ -54,7 +55,10 @@ def test_post_update_rename_archive_corruption_fails_at_integrity_boundary(m7_ca
         # original trigger. A broken schema must not mask the index corruption.
         from create_defaults.bulk.lifecycle.storage import _namespace
         table = 'p4m1_journal' if target == 'journal' else 'p4m1_heads'
-        with sqlite3.connect(store.root/'state.sqlite3') as db:
+        # The transaction context commits/rolls back but does not close SQLite.
+        # Own the connection explicitly so retained tracebacks cannot lock the
+        # disposable database during Windows session cleanup.
+        with closing(sqlite3.connect(store.root/'state.sqlite3')) as db, db:
             db.row_factory = sqlite3.Row
             trigger = table+'_no_update'
             statement = db.execute('SELECT sql FROM sqlite_master WHERE name=?', (trigger,)).fetchone()[0]
@@ -69,7 +73,7 @@ def test_post_update_rename_archive_corruption_fails_at_integrity_boundary(m7_ca
         with pytest.raises(BulkError) as error:
             mappings.recover(registry)
         assert error.value.code == 'p4m1_archive_indexes'
-        with sqlite3.connect(store.root/'state.sqlite3') as db:
+        with closing(sqlite3.connect(store.root/'state.sqlite3')) as db:
             assert [tuple(row) for row in db.execute('SELECT * FROM '+table+' ORDER BY rowid')] == damaged
         preserved_snapshots(case)
         # Fixture teardown restores the backup; application recovery never does.
