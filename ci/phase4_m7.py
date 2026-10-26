@@ -53,7 +53,11 @@ def changed_scope():
     changed = set(filter(None, subprocess.check_output([
         'git', 'diff', '--no-renames', '--name-only', '-z', BASE, 'HEAD'],
         cwd=ROOT).decode('utf8').split('\0')))
-    planning = changed - ALLOWED
+    from ci.people_storage_maintenance import scope_members, verify_scope
+    storage = changed & scope_members()
+    if storage:
+        verify_scope(ROOT, BASE, storage)
+    planning = changed - ALLOWED - storage
     require(planning <= PLANNING_DOCUMENTS,
             'M7 changed an existing runtime, policy, workflow or evidence boundary')
     if planning:
@@ -167,6 +171,8 @@ def preservation():
             old = reader.stdout.read(int(header[2]))
             require(reader.stdout.read(1) == b'\n', 'Incomplete Git baseline object')
             current = (ROOT/name).read_bytes()
+            from ci.people_storage_maintenance import historical_bytes as storage_history
+            current = storage_history(ROOT, name, current)
             try:
                 old.decode('utf8')
                 is_text = b'\0' not in old

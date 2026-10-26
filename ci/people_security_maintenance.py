@@ -39,6 +39,8 @@ def _no_activation(raw):
 
 def verify(root=ROOT):
     root=Path(root)
+    from ci.people_storage_maintenance import verify as verify_storage
+    verify_storage(root)
     verify_infrastructure(root)
     value=json.loads((root/'ci/people-security-maintenance.json').read_text(encoding='utf8'))
     _require(_fp(value)==PIN and value['schema_version']==1 and value['base']==BASE
@@ -47,7 +49,7 @@ def verify(root=ROOT):
         _require(set(pins)=={'before_sha256','sha256'} and hashlib.sha256(_old(root,name)).hexdigest()==pins['before_sha256']
                  and _sha(root/name)==selected_hash(name,pins['sha256']),'Changed exact People security maintenance: '+name)
     for name,expected in value['additions'].items():
-        _require(_sha(root/name)==expected,'Changed new People security source: '+name)
+        _require(_sha(root/name)==selected_hash(name,expected),'Changed new People security source: '+name)
     for name in ('ci/validation-plan.json','ci/original-test-ids.json','ci/phase3-test-ids.json',
                  'ci/phase4-test-ids.json','ci/phase4-composition-test-ids.json','ci/phase4-review-test-ids.json',
                  'ci/phase4-transaction-test-ids.json','ci/phase4-maintenance.json','ci/phase4-m3-maintenance.json',
