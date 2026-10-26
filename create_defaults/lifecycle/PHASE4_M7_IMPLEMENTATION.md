@@ -42,8 +42,11 @@ ACTIVE/publication flag is false.
   and exact retry, with no double append.
 * Cancellation and separately reviewed compensation retain material and history.
 * Stale mapping plans and old M5 retries after M6 fail at their original guards.
-* Corrupt snapshot/receipt objects and damaged immutable journal/head namespaces
-  fail at the intended integrity check, without production repair.
+* Corrupt snapshot/receipt objects and damaged journal/head index rows fail at
+  the intended integrity check, without production repair. Corruption fixtures
+  restore the exact original immutable trigger and verify schema integrity
+  before requiring `p4m1_archive_indexes`; a missing trigger cannot mask the
+  actual cross-index check. Recovery leaves the damaged row unchanged.
 * Actual current graph/registry projections retain child and generated-exclusion
   blockers. This does not invent a supported child/family executor.
 

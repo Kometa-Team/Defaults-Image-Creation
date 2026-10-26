@@ -117,6 +117,14 @@ all four final-head workflow runs, actual per-job counts/durations, full raw-ID
 reconciliation and independent replay of the unchanged original acceptance
 verifier. Any stale head or unexplained historical difference blocks delivery.
 
+Final fixture review also tightened the journal/head corruption cases. The
+initial fixtures removed an immutable trigger and therefore stopped at the
+namespace guard. They now restore the exact original trigger, explicitly verify
+the schema remains valid, and require `p4m1_archive_indexes` for the damaged
+cross-index row. Recovery must leave that damaged row and both archived M5
+snapshots unchanged. No runtime guard is modified; the earlier namespace
+rejection is not substituted for this stronger final-head proof.
+
 The existing mandatory Windows/Linux workflow, `Validation acceptance`, M6
 acceptance and dependency-provenance checks remain unchanged and required.
 M7 uses a separate read-only additive workflow with explicit controls, sequence,

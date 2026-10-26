@@ -50,15 +50,28 @@ def test_post_update_rename_archive_corruption_fails_at_integrity_boundary(m7_ca
         finally:
             path.write_bytes(original)
     else:
-        # Disposable fixture only: deliberately damage a real immutable index
-        # after dropping its trigger. Opening/recovery must never repair it.
+        # Disposable fixture only: damage an index, then restore its exact
+        # original trigger. A broken schema must not mask the index corruption.
+        from create_defaults.bulk.lifecycle.storage import _namespace
         table = 'p4m1_journal' if target == 'journal' else 'p4m1_heads'
         with sqlite3.connect(store.root/'state.sqlite3') as db:
-            db.execute('DROP TRIGGER '+table+'_no_update')
-            db.execute('UPDATE '+table+' SET sha256=? WHERE rowid=(SELECT max(rowid) FROM '+table+')', ('0'*64,))
+            db.row_factory = sqlite3.Row
+            trigger = table+'_no_update'
+            statement = db.execute('SELECT sql FROM sqlite_master WHERE name=?', (trigger,)).fetchone()[0]
+            db.execute('DROP TRIGGER '+trigger)
+            if target == 'journal':
+                db.execute('UPDATE '+table+' SET package_event=package_event+100000 WHERE rowid=(SELECT max(rowid) FROM '+table+')')
+            else:
+                db.execute('UPDATE '+table+' SET sha256=? WHERE rowid=(SELECT max(rowid) FROM '+table+')', ('0'*64,))
+            db.execute(statement)
+            _namespace(db)  # The intended index guard, not namespace failure.
+            damaged = [tuple(row) for row in db.execute('SELECT * FROM '+table+' ORDER BY rowid')]
         with pytest.raises(BulkError) as error:
             mappings.recover(registry)
-        assert error.value.code == 'p4m1_archive_namespace'
+        assert error.value.code == 'p4m1_archive_indexes'
+        with sqlite3.connect(store.root/'state.sqlite3') as db:
+            assert [tuple(row) for row in db.execute('SELECT * FROM '+table+' ORDER BY rowid')] == damaged
+        preserved_snapshots(case)
         # Fixture teardown restores the backup; application recovery never does.
         return
     assert mappings.recover(registry) == baseline
