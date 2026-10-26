@@ -1,0 +1,454 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "68179d1c568449375ca72b23239b57770dfc229e",
+  "operational_authority": false,
+  "requirements": [
+    {
+      "id": "T01",
+      "requirement": "Closed records and immutable canonical values",
+      "boundary": "M1 schema, canonical JSON and revision replay",
+      "expected_result": "All canonical controls pass; unknown fields, grants, versions and malformed JSON are rejected before persistence.",
+      "tests": [
+        "create_defaults/phase4/tests/test_operation_models.py::test_each_operation_is_immutable_canonical_record_data_only[ADD]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_each_operation_is_immutable_canonical_record_data_only[DELETE]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_each_operation_is_immutable_canonical_record_data_only[RENAME]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_each_operation_is_immutable_canonical_record_data_only[UPDATE]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_malformed_duplicate_nonfinite_and_invalid_json_is_rejected[\"\\ud800\"]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_malformed_duplicate_nonfinite_and_invalid_json_is_rejected[Infinity]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_malformed_duplicate_nonfinite_and_invalid_json_is_rejected[NaN]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_malformed_duplicate_nonfinite_and_invalid_json_is_rejected[\\xff]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_malformed_duplicate_nonfinite_and_invalid_json_is_rejected[{\"id\":\"one\",\"id\":\"two\"}]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_malformed_duplicate_nonfinite_and_invalid_json_is_rejected[{]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_malformed_duplicate_nonfinite_and_invalid_json_is_rejected[{}]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[active-True]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[actor-maintainer]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[applied-True]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[approved-True]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[artwork_approved-True]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[compatibility-True]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[content_revision-2]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[contract_approved-True]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[id-../../escape]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[id-playlist.real]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[id-synthetic.operation.bad\\n]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[kind-maintainer-approval]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[operation-PUBLISH]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[operation_accepted-True]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[previous_event_sha256-ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[previous_sha256-ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[production_enforcement-True]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[protocol_version-2.0.0]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[publication_authorized-True]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[reads-value39]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[ready-True]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[reason-not valid in draft]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[record_only-False]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[renderer-injected]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[request_sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[request_sha256-fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[revision-0]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[revision-True]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[schema_version-2]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[schema_version-True]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[scope-production]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[simulation-False]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[state-ACTIVE]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[state-READY]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[state-approved]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[state-locally_committed]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[state-previews_complete]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[state-unknown]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[subjects-value37]",
+        "create_defaults/phase4/tests/test_operation_models.py::test_unknown_fields_versions_states_grants_and_malformed_headers_fail[writes-value38]"
+      ]
+    },
+    {
+      "id": "T02",
+      "requirement": "Multi-head CAS across M5 and M6",
+      "boundary": "Original M1 read/write and namespace heads; M6 marker transaction",
+      "expected_result": "Stale/conflicting requests cannot expose any mapping or registry successor; earlier commits and unrelated records remain readable.",
+      "tests": [
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_update_and_rename_share_the_original_m1_cas_keys",
+        "create_defaults/phase4/m7_tests/test_boundaries.py::test_post_update_mapping_stale_plan_never_rebases_committed_history",
+        "create_defaults/phase4/m7_tests/test_recovery.py::test_mapping_transaction_failure_preserves_committed_update_and_unrelated_record[commit_event]",
+        "create_defaults/phase4/m7_tests/test_recovery.py::test_mapping_transaction_failure_preserves_committed_update_and_unrelated_record[mapping_marker]",
+        "create_defaults/phase4/m7_tests/test_recovery.py::test_mapping_transaction_failure_preserves_committed_update_and_unrelated_record[registry_marker]",
+        "create_defaults/phase4/tests/test_transactions_concurrency.py::test_two_updates_cannot_both_replace_one_committed_subject"
+      ]
+    },
+    {
+      "id": "T03",
+      "requirement": "Isolation and cold reopen",
+      "boundary": "Original root/link/namespace checks and immutable object/index replay",
+      "expected_result": "Cold read-only replay equals the complete committed projection; corrupt evidence or foreign roots are rejected without repair.",
+      "tests": [
+        "create_defaults/phase4/m7_tests/test_boundaries.py::test_post_update_rename_archive_corruption_fails_at_integrity_boundary[heads]",
+        "create_defaults/phase4/m7_tests/test_boundaries.py::test_post_update_rename_archive_corruption_fails_at_integrity_boundary[journal]",
+        "create_defaults/phase4/m7_tests/test_boundaries.py::test_post_update_rename_archive_corruption_fails_at_integrity_boundary[receipt]",
+        "create_defaults/phase4/m7_tests/test_boundaries.py::test_post_update_rename_archive_corruption_fails_at_integrity_boundary[snapshot]",
+        "create_defaults/phase4/m7_tests/test_sequence.py::test_complete_lifecycle_preserves_identity_encoded_epochs_and_unrelated_record",
+        "create_defaults/phase4/tests/test_operation_storage.py::test_external_checkpoint_detects_coherent_rollback_and_no_checkpoint_claims_currentness",
+        "create_defaults/phase4/tests/test_operation_storage.py::test_root_and_namespace_attacks_never_initialize_foreign_or_production_state[base-only]",
+        "create_defaults/phase4/tests/test_operation_storage.py::test_root_and_namespace_attacks_never_initialize_foreign_or_production_state[foreign]",
+        "create_defaults/phase4/tests/test_operation_storage.py::test_root_and_namespace_attacks_never_initialize_foreign_or_production_state[missing-database]",
+        "create_defaults/phase4/tests/test_operation_storage.py::test_root_and_namespace_attacks_never_initialize_foreign_or_production_state[production]",
+        "create_defaults/phase4/tests/test_operation_storage.py::test_root_and_namespace_attacks_never_initialize_foreign_or_production_state[root-file]",
+        "create_defaults/phase4/tests/test_operation_storage.py::test_root_and_namespace_attacks_never_initialize_foreign_or_production_state[traversal]",
+        "create_defaults/phase4/tests/test_operation_storage.py::test_root_and_namespace_attacks_never_initialize_foreign_or_production_state[unknown-base]"
+      ]
+    },
+    {
+      "id": "T04",
+      "requirement": "Stable permanent identity",
+      "boundary": "Persisted M2 UUID/semantic registry and M6 names/tombstones",
+      "expected_result": "ADD/UPDATE/RENAME/DELETE retain the same permanent ID, semantic identity and original names; duplicate allocation and tombstone reuse fail.",
+      "tests": [
+        "create_defaults/phase4/m7_tests/test_sequence.py::test_complete_lifecycle_preserves_identity_encoded_epochs_and_unrelated_record",
+        "create_defaults/phase4/tests/test_identities_impact.py::test_duplicate_semantic_and_changed_idempotency_token_fail",
+        "create_defaults/phase4/tests/test_identities_impact.py::test_uuid_stable_names_paths_casing_unicode_aliases_restart"
+      ]
+    },
+    {
+      "id": "T05",
+      "requirement": "Intent/effective-definition bypass protection",
+      "boundary": "Real M2 loader/profile/native plan and M5 closed adapter",
+      "expected_result": "Material overrides cannot be normalized away or smuggled into a supported transaction.",
+      "tests": [
+        "create_defaults/phase4/tests/test_identities_impact.py::test_actual_expanded_candidate_bypass_rejected[<lambda>0]",
+        "create_defaults/phase4/tests/test_identities_impact.py::test_actual_expanded_candidate_bypass_rejected[<lambda>1]",
+        "create_defaults/phase4/tests/test_identities_impact.py::test_actual_expanded_candidate_bypass_rejected[<lambda>2]",
+        "create_defaults/phase4/tests/test_identities_impact.py::test_actual_expanded_candidate_bypass_rejected[<lambda>3]",
+        "create_defaults/phase4/tests/test_identities_impact.py::test_actual_expanded_candidate_bypass_rejected[<lambda>4]",
+        "create_defaults/phase4/tests/test_identities_impact.py::test_actual_expanded_candidate_bypass_rejected[<lambda>5]",
+        "create_defaults/phase4/tests/test_identities_impact.py::test_actual_expanded_candidate_bypass_rejected[<lambda>6]",
+        "create_defaults/phase4/tests/test_identities_impact.py::test_actual_expanded_candidate_bypass_rejected[<lambda>7]",
+        "create_defaults/phase4/tests/test_identities_impact.py::test_actual_expanded_candidate_bypass_rejected[<lambda>8]",
+        "create_defaults/phase4/tests/test_identities_impact.py::test_profile_override_cannot_hide_style_changes",
+        "create_defaults/phase4/tests/test_transactions_security.py::test_unselected_definition_cannot_be_smuggled_into_snapshot"
+      ]
+    },
+    {
+      "id": "T06",
+      "requirement": "PNG source integrity and exact D09 scope",
+      "boundary": "Existing bounded PNG inspector, wash and source-preserving exception checks",
+      "expected_result": "Valid sources preserve their bytes; disguised/corrupt/empty inputs fail and historical alpha uses receive no new treatment.",
+      "tests": [
+        "create_defaults/bulk/tests/test_logo_workflow.py::test_all_17_historical_alpha_assets_have_no_new_diagnostics_or_regeneration",
+        "create_defaults/bulk/tests/test_logo_workflow.py::test_disguised_corrupt_and_empty_sources_fail[animated]",
+        "create_defaults/bulk/tests/test_logo_workflow.py::test_disguised_corrupt_and_empty_sources_fail[bad_crc]",
+        "create_defaults/bulk/tests/test_logo_workflow.py::test_disguised_corrupt_and_empty_sources_fail[bad_signature]",
+        "create_defaults/bulk/tests/test_logo_workflow.py::test_disguised_corrupt_and_empty_sources_fail[gif]",
+        "create_defaults/bulk/tests/test_logo_workflow.py::test_disguised_corrupt_and_empty_sources_fail[jpeg]",
+        "create_defaults/bulk/tests/test_logo_workflow.py::test_disguised_corrupt_and_empty_sources_fail[trailing]",
+        "create_defaults/bulk/tests/test_logo_workflow.py::test_disguised_corrupt_and_empty_sources_fail[transparent]",
+        "create_defaults/bulk/tests/test_logo_workflow.py::test_disguised_corrupt_and_empty_sources_fail[truncated]",
+        "create_defaults/bulk/tests/test_logo_workflow.py::test_exact_existing_wash_and_immutable_original",
+        "create_defaults/bulk/tests/test_logo_workflow.py::test_png_modes_and_original_bytes[LA]",
+        "create_defaults/bulk/tests/test_logo_workflow.py::test_png_modes_and_original_bytes[P]",
+        "create_defaults/bulk/tests/test_logo_workflow.py::test_png_modes_and_original_bytes[RGBA]"
+      ]
+    },
+    {
+      "id": "T07",
+      "requirement": "White/colour correspondence without automatic MATCH",
+      "boundary": "Existing comparison measurements and complete presentation membership",
+      "expected_result": "Resolution/AA differences remain descriptive; topological differences block and incomplete presentations cannot pass.",
+      "tests": [
+        "create_defaults/bulk/tests/test_logo_workflow.py::test_binary_topological_discrepancy_blocks_and_exposes_measurements[cutout_removed]",
+        "create_defaults/bulk/tests/test_logo_workflow.py::test_binary_topological_discrepancy_blocks_and_exposes_measurements[missing_letter]",
+        "create_defaults/bulk/tests/test_logo_workflow.py::test_both_required_cannot_accept_half_pair_or_mutated_receipt[False]",
+        "create_defaults/bulk/tests/test_logo_workflow.py::test_both_required_cannot_accept_half_pair_or_mutated_receipt[True]",
+        "create_defaults/bulk/tests/test_logo_workflow.py::test_comparison_resolution_padding_and_antialias_never_auto_match"
+      ]
+    },
+    {
+      "id": "T08",
+      "requirement": "Complete actual compositions and owned receipts",
+      "boundary": "M3 native bytes/plan/receipt replay and M4 full-composition review",
+      "expected_result": "Every required member is decoded and checked; substituted bytes, receipts and resealed partial sets fail.",
+      "tests": [
+        "create_defaults/phase4/tests/test_composition.py::test_actual_encoded_pixels_cannot_be_substituted[corrupted]",
+        "create_defaults/phase4/tests/test_composition.py::test_actual_encoded_pixels_cannot_be_substituted[forged-full-canvas]",
+        "create_defaults/phase4/tests/test_composition.py::test_actual_encoded_pixels_cannot_be_substituted[logo-only]",
+        "create_defaults/phase4/tests/test_composition.py::test_actual_encoded_pixels_cannot_be_substituted[thumbnail]",
+        "create_defaults/phase4/tests/test_composition.py::test_complete_native_composition_and_reopen[family]",
+        "create_defaults/phase4/tests/test_composition.py::test_complete_native_composition_and_reopen[genre]",
+        "create_defaults/phase4/tests/test_composition.py::test_complete_native_composition_and_reopen[network]",
+        "create_defaults/phase4/tests/test_composition.py::test_complete_native_composition_and_reopen[overlay]",
+        "create_defaults/phase4/tests/test_composition.py::test_complete_native_composition_and_reopen[playlist]",
+        "create_defaults/phase4/tests/test_composition.py::test_missing_required_companion_resealed_subset_is_still_rejected",
+        "create_defaults/phase4/tests/test_review.py::test_durable_worker_receipt_substitution_is_rejected_during_review"
+      ]
+    },
+    {
+      "id": "T09",
+      "requirement": "Translation selection, fit and provenance",
+      "boundary": "Phase 3 selected-language/resource/context replay, original native layout",
+      "expected_result": "Missing/invalid required text and hidden fallback remain blocked; captionless control needs no invented selection.",
+      "tests": [
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[en-!!python/object/apply:os.system [evil]-invalid_source]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[en-[]-invalid_source]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[en-\\xff\\xfe-invalid_source]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[en-key_names: &anchor {TIMELINE_ORDER: Good}\\nother: *anchor-invalid_source]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[en-key_names: [-invalid_source]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[en-key_names: {TIMELINE_ORDER: !!binary SGVsbG8=}-invalid_source]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[en-key_names: {TIMELINE_ORDER: \"   \"}-invalid_translation]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[en-key_names: {TIMELINE_ORDER: \"\"}-invalid_translation]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[en-key_names: {TIMELINE_ORDER: \"<<unresolved>>\"}-unresolved_placeholder]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[en-key_names: {TIMELINE_ORDER: \"TRANSLATION NOT FOUND\"}-unresolved_placeholder]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[en-key_names: {TIMELINE_ORDER: \"prefix TRANSLATION NOT FOUND suffix\"}-unresolved_placeholder]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[en-key_names: {TIMELINE_ORDER: 123}-invalid_translation]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[en-key_names: {TIMELINE_ORDER: Good, TIMELINE_ORDER: Evil}-invalid_source]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[en-key_names: {TIMELINE_ORDER: Good, timeline_order: Evil}-invalid_source]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[en-key_names: {TIMELINE_ORDER: []}-invalid_translation]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[en-key_names: {TIMELINE_ORDER: null}-invalid_translation]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[en-key_names: {TIMELINE_ORDER: {nested: value}}-invalid_translation]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[en-key_names: {}-missing]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[fr-!!python/object/apply:os.system [evil]-invalid_source]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[fr-[]-invalid_source]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[fr-\\xff\\xfe-invalid_source]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[fr-key_names: &anchor {TIMELINE_ORDER: Good}\\nother: *anchor-invalid_source]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[fr-key_names: [-invalid_source]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[fr-key_names: {TIMELINE_ORDER: !!binary SGVsbG8=}-invalid_source]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[fr-key_names: {TIMELINE_ORDER: \"   \"}-invalid_translation]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[fr-key_names: {TIMELINE_ORDER: \"\"}-invalid_translation]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[fr-key_names: {TIMELINE_ORDER: \"<<unresolved>>\"}-unresolved_placeholder]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[fr-key_names: {TIMELINE_ORDER: \"TRANSLATION NOT FOUND\"}-unresolved_placeholder]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[fr-key_names: {TIMELINE_ORDER: \"prefix TRANSLATION NOT FOUND suffix\"}-unresolved_placeholder]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[fr-key_names: {TIMELINE_ORDER: 123}-invalid_translation]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[fr-key_names: {TIMELINE_ORDER: Good, TIMELINE_ORDER: Evil}-invalid_source]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[fr-key_names: {TIMELINE_ORDER: Good, timeline_order: Evil}-invalid_source]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[fr-key_names: {TIMELINE_ORDER: []}-invalid_translation]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[fr-key_names: {TIMELINE_ORDER: null}-invalid_translation]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[fr-key_names: {TIMELINE_ORDER: {nested: value}}-invalid_translation]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_invalid_required_value_is_scoped_and_blocks[fr-key_names: {}-missing]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_missing_template_cannot_hide_behind_available_caption[en]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_missing_template_cannot_hide_behind_available_caption[fr]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_no_caption_has_empty_key_set_without_dummy_m1_selection",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_relevant_resource_or_value_changes_invalidate_even_identical_visible_text[# Only provenance changed\\nkey_names: {TIMELINE_ORDER: Timeline Order}]",
+        "create_defaults/phase3/tests/test_translation_preflight.py::test_relevant_resource_or_value_changes_invalidate_even_identical_visible_text[key_names: {TIMELINE_ORDER: Changed}]",
+        "create_defaults/phase4/tests/test_composition.py::test_native_layout_and_source_blockers_are_not_waived[invalid-png]",
+        "create_defaults/phase4/tests/test_composition.py::test_native_layout_and_source_blockers_are_not_waived[long-text]",
+        "create_defaults/phase4/tests/test_composition.py::test_native_layout_and_source_blockers_are_not_waived[missing-glyph]",
+        "create_defaults/phase4/tests/test_composition.py::test_native_layout_and_source_blockers_are_not_waived[opaque]",
+        "create_defaults/phase4/tests/test_composition.py::test_native_layout_and_source_blockers_are_not_waived[random-colour]"
+      ]
+    },
+    {
+      "id": "T10",
+      "requirement": "Selective impact, shared sources and retained children",
+      "boundary": "Existing M5 graph/Index and M6 conservative deletion closure",
+      "expected_result": "Actual shared consumers and required children block a partial operation; a separately rendered unrelated output retains exact bytes and receipts.",
+      "tests": [
+        "create_defaults/phase4/m7_tests/test_boundaries.py::test_retirement_dependency_checks_after_update_use_real_current_graph",
+        "create_defaults/phase4/m7_tests/test_sequence.py::test_complete_lifecycle_preserves_identity_encoded_epochs_and_unrelated_record",
+        "create_defaults/phase4/tests/test_identities_impact.py::test_original_m5_transitive_fanout_cycles_and_unaffected_proof",
+        "create_defaults/phase4/tests/test_transactions_concurrency.py::test_disjoint_native_adds_preserve_unrelated_exact_artwork"
+      ]
+    },
+    {
+      "id": "T11",
+      "requirement": "Approval freshness and unchanged-scope preservation",
+      "boundary": "M3/M4/P3 exact source, renderer, translation and observation checks",
+      "expected_result": "Affected material requires a fresh review; unchanged independent history remains byte-identical and old pre-rename M5 adapter reuse fails.",
+      "tests": [
+        "create_defaults/phase4/m7_tests/test_boundaries.py::test_post_update_mapping_stale_plan_never_rebases_committed_history",
+        "create_defaults/phase4/m7_tests/test_sequence.py::test_complete_lifecycle_preserves_identity_encoded_epochs_and_unrelated_record",
+        "create_defaults/phase4/tests/test_review.py::test_changed_source_or_font_bytes_stale_only_the_bound_artwork[font]",
+        "create_defaults/phase4/tests/test_review.py::test_changed_source_or_font_bytes_stale_only_the_bound_artwork[source]",
+        "create_defaults/phase4/tests/test_review.py::test_unrelated_phase3_graph_observation_preserves_current_review"
+      ]
+    },
+    {
+      "id": "T12",
+      "requirement": "Independent two-stage review",
+      "boundary": "M4 exact confirmed bundle, distinct principals and live synthetic capability",
+      "expected_result": "Missing confirmation, self-review, forged decision and stored reviewer strings cannot authorize an operation.",
+      "tests": [
+        "create_defaults/phase4/m7_tests/test_boundaries.py::test_real_authority_cannot_be_reconstructed_from_committed_synthetic_history",
+        "create_defaults/phase4/tests/test_review.py::test_missing_confirmation_cannot_advance_even_with_maintainer_grant",
+        "create_defaults/phase4/tests/test_review.py::test_rehashed_substituted_decisions_are_not_authenticated[actor-synthetic.actor.other]",
+        "create_defaults/phase4/tests/test_review.py::test_rehashed_substituted_decisions_are_not_authenticated[bundle_sha256-3333333333333333333333333333333333333333333333333333333333333333]",
+        "create_defaults/phase4/tests/test_review.py::test_rehashed_substituted_decisions_are_not_authenticated[confirmation_sha256-2222222222222222222222222222222222222222222222222222222222222222]",
+        "create_defaults/phase4/tests/test_review.py::test_rehashed_substituted_decisions_are_not_authenticated[context_sha256-0000000000000000000000000000000000000000000000000000000000000000]",
+        "create_defaults/phase4/tests/test_review.py::test_rehashed_substituted_decisions_are_not_authenticated[previous_sha256-1111111111111111111111111111111111111111111111111111111111111111]",
+        "create_defaults/phase4/tests/test_review.py::test_same_actor_cannot_satisfy_separation_of_duties"
+      ]
+    },
+    {
+      "id": "T13",
+      "requirement": "Destination and ownership safeguards",
+      "boundary": "Existing Phase 3 destination and unavailable-authority consumption",
+      "expected_result": "Official non-English and unavailable/revoked/forged ownership remain blocked; local history never supplies real authority.",
+      "tests": [
+        "create_defaults/phase3/tests/test_consumption_boundaries.py::test_destination_real_authority_unavailable_is_explicit_not_hash_based",
+        "create_defaults/phase4/m7_tests/test_boundaries.py::test_real_authority_cannot_be_reconstructed_from_committed_synthetic_history",
+        "create_defaults/phase4/tests/test_review.py::test_changed_phase3_material_or_missing_currentness_is_rejected[authority]",
+        "create_defaults/phase4/tests/test_review.py::test_changed_phase3_material_or_missing_currentness_is_rejected[contract]",
+        "create_defaults/phase4/tests/test_review.py::test_changed_phase3_material_or_missing_currentness_is_rejected[destination]",
+        "create_defaults/phase4/tests/test_review.py::test_changed_phase3_material_or_missing_currentness_is_rejected[missing-source-verifier]",
+        "create_defaults/phase4/tests/test_review.py::test_changed_phase3_material_or_missing_currentness_is_rejected[request-revision]",
+        "create_defaults/phase4/tests/test_review.py::test_changed_phase3_material_or_missing_currentness_is_rejected[source-context]",
+        "create_defaults/phase4/tests/test_review.py::test_changed_phase3_material_or_missing_currentness_is_rejected[translation]",
+        "create_defaults/phase4/tests/test_review.py::test_changed_phase3_material_or_missing_currentness_is_rejected[variant]"
+      ]
+    },
+    {
+      "id": "T14",
+      "requirement": "Supported adapter scope remains closed",
+      "boundary": "M5 Genre-only execution and original prospective Phase 3 adapter limits",
+      "expected_result": "Unsupported Network, Playlist, generated-parent/background and prospective overlay combinations fail at the established adapter boundary.",
+      "tests": [
+        "create_defaults/phase4/tests/test_identities_impact.py::test_all_actual_overlay_branches_pairs_and_blocked_jobs",
+        "create_defaults/phase4/tests/test_review.py::test_prospective_playlist_layout_gap_is_explicit_never_waived",
+        "create_defaults/phase4/tests/test_transactions_concurrency.py::test_prospective_network_companions_fail_closed_before_staging",
+        "create_defaults/phase4/tests/test_transactions_security.py::test_logo_adapter_cannot_smuggle_another_composition_source[background-input]",
+        "create_defaults/phase4/tests/test_transactions_security.py::test_logo_adapter_cannot_smuggle_another_composition_source[parent]"
+      ]
+    },
+    {
+      "id": "T15",
+      "requirement": "Independent literal names and rename namespace",
+      "boundary": "M6 native filename calculation, M2 NFC/casefold namespace and aliases",
+      "expected_result": "Same-ID literal names survive Unicode/punctuation/case changes; material or unsafe target changes remain rejected.",
+      "tests": [
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_names_are_independent_and_identity_and_bytes_survive[case]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_names_are_independent_and_identity_and_bytes_survive[definition-key]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_names_are_independent_and_identity_and_bytes_survive[display]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_names_are_independent_and_identity_and_bytes_survive[filename]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_names_are_independent_and_identity_and_bytes_survive[punctuation]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_names_are_independent_and_identity_and_bytes_survive[source]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_names_are_independent_and_identity_and_bytes_survive[unicode]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_namespace_occupancy_includes_retained_aliases[case-collision]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_namespace_occupancy_includes_retained_aliases[historical-alias]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_namespace_occupancy_includes_retained_aliases[occupied]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_namespace_occupancy_includes_retained_aliases[source-owner]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_namespace_occupancy_includes_retained_aliases[unicode-collision]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_rename_cannot_smuggle_material_changes_or_unsafe_names[caption]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_rename_cannot_smuggle_material_changes_or_unsafe_names[directory]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_rename_cannot_smuggle_material_changes_or_unsafe_names[id]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_rename_cannot_smuggle_material_changes_or_unsafe_names[nfd]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_rename_cannot_smuggle_material_changes_or_unsafe_names[non-png-source]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_rename_cannot_smuggle_material_changes_or_unsafe_names[reserved]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_rename_cannot_smuggle_material_changes_or_unsafe_names[style]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_rename_cannot_smuggle_material_changes_or_unsafe_names[wrong-filename]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_rename_cannot_smuggle_material_changes_or_unsafe_names[wrong-public]",
+        "create_defaults/phase4/m7_tests/test_sequence.py::test_complete_lifecycle_preserves_identity_encoded_epochs_and_unrelated_record"
+      ]
+    },
+    {
+      "id": "T16",
+      "requirement": "Case-only move interruption and ownership",
+      "boundary": "M6 original prepare/link/intermediate/destination journal",
+      "expected_result": "Every precommit interruption preserves the committed UPDATE, restores old spelling and retries exactly once without overwriting unowned files.",
+      "tests": [
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_case_only_interruption_recovery_and_retry[destination]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_case_only_interruption_recovery_and_retry[intermediate]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_case_only_interruption_recovery_and_retry[journal_prepared]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_case_only_interruption_recovery_and_retry[linked]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_case_only_interruption_recovery_and_retry[prepared]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_local_move_never_overwrites_unowned_or_substituted_files[bytes]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_local_move_never_overwrites_unowned_or_substituted_files[link]",
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_local_move_never_overwrites_unowned_or_substituted_files[target]",
+        "create_defaults/phase4/m7_tests/test_recovery.py::test_interrupted_case_move_after_update_restores_then_retries_exactly[destination]",
+        "create_defaults/phase4/m7_tests/test_recovery.py::test_interrupted_case_move_after_update_restores_then_retries_exactly[intermediate]",
+        "create_defaults/phase4/m7_tests/test_recovery.py::test_interrupted_case_move_after_update_restores_then_retries_exactly[journal_prepared]",
+        "create_defaults/phase4/m7_tests/test_recovery.py::test_interrupted_case_move_after_update_restores_then_retries_exactly[linked]",
+        "create_defaults/phase4/m7_tests/test_recovery.py::test_interrupted_case_move_after_update_restores_then_retries_exactly[prepared]"
+      ]
+    },
+    {
+      "id": "T17",
+      "requirement": "Definition retirement and retained graph",
+      "boundary": "M6 original dependency and retained-artwork tombstone checks",
+      "expected_result": "Definition DELETE retains image/receipt/history; required children/companions and unsupported generated exclusions block retirement.",
+      "tests": [
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_delete_retains_artwork_receipts_aliases_and_tombstone",
+        "create_defaults/phase4/m6_tests/test_retirement.py::test_complete_retirement_has_no_orphaned_retained_consumer[False-False]",
+        "create_defaults/phase4/m6_tests/test_retirement.py::test_complete_retirement_has_no_orphaned_retained_consumer[False-True]",
+        "create_defaults/phase4/m6_tests/test_retirement.py::test_complete_retirement_has_no_orphaned_retained_consumer[True-False]",
+        "create_defaults/phase4/m6_tests/test_retirement.py::test_complete_retirement_has_no_orphaned_retained_consumer[True-True]",
+        "create_defaults/phase4/m7_tests/test_boundaries.py::test_retirement_dependency_checks_after_update_use_real_current_graph",
+        "create_defaults/phase4/m7_tests/test_sequence.py::test_complete_lifecycle_preserves_identity_encoded_epochs_and_unrelated_record"
+      ]
+    },
+    {
+      "id": "T18",
+      "requirement": "Tombstone and filename reuse",
+      "boundary": "M2 permanent reservations and M6 immutable tombstone",
+      "expected_result": "Retained public names, aliases and old IDs remain occupied; a new brand cannot inherit historical approval.",
+      "tests": [
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_delete_retains_artwork_receipts_aliases_and_tombstone",
+        "create_defaults/phase4/m7_tests/test_sequence.py::test_complete_lifecycle_preserves_identity_encoded_epochs_and_unrelated_record",
+        "create_defaults/phase4/tests/test_identities_impact.py::test_alias_and_tombstone_never_release_names[Synthetic]",
+        "create_defaults/phase4/tests/test_identities_impact.py::test_alias_and_tombstone_never_release_names[synthetic]"
+      ]
+    },
+    {
+      "id": "T19",
+      "requirement": "Generation interruption and worker bounds",
+      "boundary": "Original M3 candidate archive and Package E worker/receipt boundaries",
+      "expected_result": "Interrupted generation cannot expose a complete group; original time/memory/cancellation and owned-output constraints remain mandatory.",
+      "tests": [
+        "create_defaults/bulk/tests/test_workers.py::test_memory_and_metadata_limits_are_enforced",
+        "create_defaults/bulk/tests/test_workers.py::test_worker_recovery_and_timeout[crash_first]",
+        "create_defaults/bulk/tests/test_workers.py::test_worker_recovery_and_timeout[error_first]",
+        "create_defaults/bulk/tests/test_workers.py::test_worker_recovery_and_timeout[slow_first]",
+        "create_defaults/phase4/m7_tests/test_ci.py::test_native_acceptance_rejects_incomplete_or_substituted_sequence[oversize-artifact]",
+        "create_defaults/phase4/tests/test_composition.py::test_interruption_never_publishes_complete_archive_or_advances_operation[interrupt]",
+        "create_defaults/phase4/tests/test_composition.py::test_interruption_never_publishes_complete_archive_or_advances_operation[partial-persist]"
+      ]
+    },
+    {
+      "id": "T20",
+      "requirement": "Atomic commit, restart and corrupt state",
+      "boundary": "Original M1/M5/M6 SQLite transactions and immutable object/index cross-checks",
+      "expected_result": "No partial pointers survive precommit faults; a lost success acknowledgement recovers one commit; corrupt indexes/receipts fail closed.",
+      "tests": [
+        "create_defaults/phase4/m7_tests/test_boundaries.py::test_post_update_rename_archive_corruption_fails_at_integrity_boundary[heads]",
+        "create_defaults/phase4/m7_tests/test_boundaries.py::test_post_update_rename_archive_corruption_fails_at_integrity_boundary[journal]",
+        "create_defaults/phase4/m7_tests/test_boundaries.py::test_post_update_rename_archive_corruption_fails_at_integrity_boundary[receipt]",
+        "create_defaults/phase4/m7_tests/test_boundaries.py::test_post_update_rename_archive_corruption_fails_at_integrity_boundary[snapshot]",
+        "create_defaults/phase4/m7_tests/test_recovery.py::test_lost_mapping_acknowledgement_recovers_one_commit_after_update",
+        "create_defaults/phase4/m7_tests/test_recovery.py::test_mapping_transaction_failure_preserves_committed_update_and_unrelated_record[commit_event]",
+        "create_defaults/phase4/m7_tests/test_recovery.py::test_mapping_transaction_failure_preserves_committed_update_and_unrelated_record[mapping_marker]",
+        "create_defaults/phase4/m7_tests/test_recovery.py::test_mapping_transaction_failure_preserves_committed_update_and_unrelated_record[registry_marker]",
+        "create_defaults/phase4/m7_tests/test_sequence.py::test_complete_lifecycle_preserves_identity_encoded_epochs_and_unrelated_record",
+        "create_defaults/phase4/tests/test_operation_storage.py::test_actual_process_death_inside_transaction_recovers_without_partial_authority",
+        "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[after_review]",
+        "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[before_commit]",
+        "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[before_review]",
+        "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[event_blob]",
+        "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[journal_index]",
+        "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[member_head]",
+        "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[receipt_index]",
+        "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[record_blob]",
+        "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[record_index]",
+        "create_defaults/phase4/tests/test_transactions.py::test_fault_before_commit_preserves_all_prior_heads[snapshot_blob]"
+      ]
+    },
+    {
+      "id": "T21",
+      "requirement": "Cancel, withdraw and compensating history",
+      "boundary": "Existing cancellation checks and separately reviewed M6 inverse plan",
+      "expected_result": "Precommit cancellation leaves original material authoritative; a committed inverse appends evidence and cannot rewrite the original commit or imply remote rollback.",
+      "tests": [
+        "create_defaults/phase4/m6_tests/test_mappings.py::test_withdrawal_releases_only_its_owned_pending_move",
+        "create_defaults/phase4/m7_tests/test_recovery.py::test_cancel_after_update_preserves_material_and_requires_new_compensation",
+        "create_defaults/phase4/m7_tests/test_sequence.py::test_compensation_after_update_and_rename_appends_history"
+      ]
+    },
+    {
+      "id": "T22",
+      "requirement": "Phase 5 and real authority remain unavailable",
+      "boundary": "Original operational entry points, pure import guards and nonactivation checks",
+      "expected_result": "All real authority/approval/READY/ACTIVE/publication flags stay false; planning, review and local compensation cannot invoke a writer or controller.",
+      "tests": [
+        "create_defaults/phase4/m7_tests/test_boundaries.py::test_real_authority_cannot_be_reconstructed_from_committed_synthetic_history",
+        "create_defaults/phase4/tests/test_operation_isolation.py::test_cold_import_does_not_read_schema_write_open_state_render_network_or_activate",
+        "create_defaults/phase4/tests/test_operation_isolation.py::test_real_append_cancel_restart_and_inspection_cannot_call_operational_interfaces",
+        "create_defaults/phase4/tests/test_review.py::test_native_review_cannot_import_activation_or_publish"
+      ]
+    }
+  ]
+}
