@@ -234,15 +234,19 @@ def main():
         if not ID.fullmatch(args.operation):
             parser.error("Invalid operation UUID")
         root = args.recovery_root or args.config_dir / "edge_chop_recovery"
-        result = cleanup(root / "operations" / args.operation, dry_run=not args.apply)
+        try:
+            result = cleanup(root / "operations" / args.operation, dry_run=not args.apply)
+        except (OSError, ValueError, TypeError, KeyError) as exc:
+            result = dict(id=args.operation, blocked=_reason(exc), removed_files=0, recovered_bytes=0)
     else:
         result = report(args.config_dir, jobs=args.jobs_dir, state=args.state_dir, recovery=args.recovery_root,
                         retention_days=args.retention_days)
     print(json.dumps(sanitize_data(result), indent=2))
+    return 1 if args.operation and result.get("blocked") else 0
 
 
 if __name__ == "__main__":
     from create_people_posters.people_diagnostics import protect_cli, register_environment
     register_environment()
     protect_cli()
-    main()
+    raise SystemExit(main())

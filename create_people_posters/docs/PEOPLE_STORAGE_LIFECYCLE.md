@@ -28,7 +28,7 @@ on PID or age. A crashed processing lease requires explicit operator review.
 
 After transaction commit, final selected-warning QA and a durable recovered
 checkpoint, cleanup preserves and verifies the exact downloaded source in
-`original/.recovery_sources/<sha256>/source.<extension>`, the normalized original
+`original/.history/recovery_sources/<sha256>/source.<extension>`, the normalized original
 and the final output files. It then removes only unchanged inventoried scratch.
 The source archive is outside scratch and never a renderer input. Candidate,
 precheck, normalization, colorization, temporary render and redundant temporary
@@ -46,7 +46,7 @@ turn accepted artwork into a failed render or authorize publication.
 | `posters/`, batch `posters/`, `input/` | TMDB/download/list selection | Retry inputs; retain until verified batch cleanup. Persistent inputs have no automatic age policy. |
 | `Downloads/other`, `Downloads/color` | audit + DDColor + prep_dirs | Colorization staging; validated colorization can remove its grayscale staging copy; no new behavior here. Model/vendor caches are durable and separate. |
 | `people_dirs/Downloads/*.jpg` | prep_dirs/recovery | Background-removal queue. BiRefNet preserves the original before removing a processed queue entry. |
-| `original/`, `.history/`, `.recovery_sources/` | background removal/recovery/renderer | Original artwork and selected source evidence. Scratch cleanup cannot delete them. Batch copies remain subject to the existing verified-publication retention policy. |
+| `original/`, `.history/`, `.history/recovery_sources/` | background removal/recovery/renderer | Original artwork and selected source evidence. Scratch cleanup cannot delete them. Batch copies remain subject to the existing verified-publication retention policy. |
 | Cutout PNGs and BiRefNet provenance sidecars | background removal; fingerprint/overwrite checks | Reusable successful checkpoints; preserve on retry. Existing overwrite requirements remain unchanged. |
 | `sel_downloads/` and intermediate cutout mirrors | background removal | Persistent mirror or isolated batch artifact; no new global pruning. |
 | Seven style outputs | renderer + QA | Publishable artwork; preserve bytes and rendering settings. Renderer code is unchanged. |

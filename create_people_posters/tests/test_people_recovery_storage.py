@@ -233,6 +233,12 @@ def test_stage_only_retains_raw_colorization_and_cutouts(monkeypatch, recovery_a
     scratch = recovery_args.recovery_operations["Person"]
     assert storage.read_operation(scratch.folder)["state"] == "retained"
     assert (scratch.work / "candidates/candidate0.jpg").is_file()
+    # Both publication modes share iter_files: raw sources must be excluded.
+    from sync_people_images import iter_files
+    original = Path(os.environ["SEL_ORIG_DIR"])
+    assert ".history" in scratch.source_evidence.parts
+    assert scratch.source_evidence not in iter_files(original)
+    assert original / "Person.jpg" in iter_files(original)
 
 
 def test_staged_success_requires_final_qa_checkpoint_and_preserved_source(recovery_args):

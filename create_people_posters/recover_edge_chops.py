@@ -1080,7 +1080,8 @@ def preserve_selected_candidate(args):
     source = args.recovery_selected_raw
     checksum = sha256(source)
     original = env_path("SEL_ORIG_DIR") or (CONFIG_DIR / "people_dirs" / "original")
-    target = original / ".recovery_sources" / checksum / ("source" + source.suffix.lower())
+    # Both Git and API publishers already exclude reserved .history trees.
+    target = original / ".history" / "recovery_sources" / checksum / ("source" + source.suffix.lower())
     reject_links(target)
     if target.exists():
         if sha256(target) != checksum:
@@ -1118,7 +1119,7 @@ def finish_scratch(args, row):
         root = args.people_root
         scratch.accept([root / p for p in outputs] + [scratch.source_evidence])
         counts = cleanup(scratch.folder, dry_run=False)
-        log(f"[cleanup] operation={scratch.identity} removed_files={counts['removed_files']} recovered_bytes={counts['recovered_bytes']}")
+        log(f"[cleanup] operation={scratch.identity} removed_files={counts['removed_files']} recovered_bytes={counts['recovered_bytes']} blocked={counts.get('blocked', 'none')}")
     except (OSError, ValueError, KeyError) as exc:
         log(f"[warn] Recovery scratch retained: {safe_exception(exc)}")
 

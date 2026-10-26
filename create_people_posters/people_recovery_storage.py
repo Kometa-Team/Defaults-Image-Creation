@@ -39,8 +39,10 @@ def files(root):
     reject_links(root)
     if not root.exists():
         return {}
+    if not root.is_dir():
+        raise StorageBlocked("Unexpected scratch root type; retained")
     result = {}
-    for folder, dirs, names in os.walk(root, followlinks=False):
+    for folder, dirs, names in os.walk(root, followlinks=False, onerror=_walk_error):
         for name in dirs + names:
             path = Path(folder) / name
             reject_links(path)
@@ -50,6 +52,10 @@ def files(root):
                     raise StorageBlocked("Special or multiply linked scratch file; retained")
                 result[path.relative_to(root).as_posix()] = dict(bytes=info.st_size, sha256=sha(path))
     return result
+
+
+def _walk_error(error):
+    raise error
 
 
 def _relative(name):
@@ -63,7 +69,7 @@ def directories(root):
     root = Path(root)
     reject_links(root)
     result = set()
-    for folder, dirs, names in os.walk(root, followlinks=False):
+    for folder, dirs, names in os.walk(root, followlinks=False, onerror=_walk_error):
         for name in dirs:
             path = Path(folder) / name
             reject_links(path)
@@ -243,8 +249,10 @@ def _cleanup(folder, *, dry_run):
     result = dict(id=folder.name, eligible_files=0, eligible_bytes=0, removed_files=0, recovered_bytes=0)
     try:
         allowed = {"scratch.json", "work", "cleanup.lock"}
-        if any(p.name not in allowed for p in folder.iterdir()):
-            raise StorageBlocked("Unowned operation entry; retained")
+        for entry in folder.iterdir():
+            reject_links(entry)
+            if entry.name not in allowed:
+                raise StorageBlocked("Unowned operation entry; retained")
         # Validate complete membership and ALL preserved output bytes first.
         current = files(folder / "work")
         current_directories = directories(folder / "work")
