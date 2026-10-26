@@ -1,6 +1,6 @@
 {
   "additions": {
-    "ci/people-security-test-ids.json": "50275e4216a74e549c78315834daeeac0d8b54d4d0faf7dc86c59dea15c55273",
+    "ci/people-security-test-ids.json": "1060c0986217b8be1fbbf3f918cfc01ad6fc9198461ce27e27bdbae4f61e722a",
     "ci/people_security.py": "3d5af247b6c0f2e11852bdf8cd90f22d8eb3b47c0617c4c12774d8d0b86fe2d2",
     "create_people_posters/SECURITY_AND_RECOVERY.md": "71a6fe6f362827bf106bb9eb7b88fa235a865f587cbfcbd52caea827deb6cda4",
     "create_people_posters/people_diagnostics.py": "94a21fbe180e7e04f374e17cb528a083432cc6da0101cbd4a832c701e0d6f21b",
@@ -18,7 +18,7 @@
     "create_people_posters/tests/test_tmdb_sdk_configuration.py": "5fcfc641e332fe0bfb95ec2a390848987f935dadfa254bd23e80e9dd3f67144b",
     "create_people_posters/people_failures.py": "146a07c0a1c388def7e34e83fe28bfacf30d9d56d2c91f3e912630be5802c5da",
     "create_people_posters/people_batch_safety.py": "8ac62a88862a9fe9192b1551c27ed68ce5c00c5bda349b26a6675bf88d6ca084",
-    "create_people_posters/tests/test_people_pipeline_failures.py": "22c9ba8259bebbea666950126c9ca6d59ad1668a8d905e71b8548cc97441c1a6"
+    "create_people_posters/tests/test_people_pipeline_failures.py": "fdc30f6283552bb9576263ca1948a7642e2e6519b1bbf584bf3847369131ce29"
   },
   "base": "46e1334504fcdd598e0c34fcd45612ff58e91074",
   "code_head": "f79a5a53e1aada9bbebc547348f362313ce63db1",
@@ -149,7 +149,7 @@
     },
     "create_people_posters/tests/test_people_api_orchestrator.py": {
       "before_sha256": "11e3b40d45be95bab3855744d8acff6cbd02d4c61458c7a424139848f38cd478",
-      "sha256": "bd3cf3e6deed506404925012d3d16dc9735a3185a650199973e5d5d02c6f0384"
+      "sha256": "5b182674bb3f21010c20c0cfb5fcecdcc4ec0ed0c184f585ca93681d0ccbd38c"
     },
     "create_people_posters/tests/test_people_github.py": {
       "before_sha256": "6ac9422bf913aa9edd274fcff717f02a88d050314f86aefbba851edae0ec73fc",

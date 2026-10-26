@@ -312,6 +312,16 @@ maintenance. All 12 dependency provenance tests passed locally in 27.951 seconds
 with the existing isolated CI dependencies. The integrated People maintenance
 verifier passes with all 190 protected members retained.
 
+The integrated relevant CI suite passed again: 137 tests plus 35 subtests,
+zero failures/skips, in 154.10 seconds. The first hosted run caught two new
+direct-resume tests in a frozen original collection file. They were moved into
+the additive pipeline regression module with their mandatory IDs updated; no
+original baseline or workflow was changed. The real collection command now
+preserves all 1,671 original pytest IDs and 155 unittest IDs; all 959 People IDs
+are assigned. The affected pipeline/orchestrator tests pass: 49 passed, zero
+failures/skips, in 112.69 seconds. Exact maintenance seals verify after the move;
+production and dependency pin manifests were unchanged by that test relocation.
+
 The complete People/local CI totals above describe validation before this main
 integration. Hosted checks must validate the final integrated head before merge.
 Neither code integration nor its tests authorize or execute batch recovery or

@@ -15,6 +15,19 @@ sys.path.insert(0, str(ROOT))
 from create_people_posters.people_diagnostics import Diagnostic, DiagnosticError, diagnostic_json, register_secret, safe_exception
 from create_people_posters.people_failures import failure_boundary, failure_record
 from people_batch_safety import IncompleteBatchError, assert_batch_ready
+from create_people_posters.tests.test_people_api_orchestrator import isolated as orchestrator_isolated, invoke, orch
+
+
+@pytest.mark.parametrize("step", ["sync_images", "push"])
+def test_partial_person_summary_blocks_publication_on_direct_resume(orchestrator_isolated, monkeypatch, step):
+    (orchestrator_isolated / "logs").mkdir()
+    (orchestrator_isolated / "logs/tmdb_people.json").write_text(json.dumps({"failed": 1, "exit_code": 1, "complete": False}))
+    calls = []
+    monkeypatch.setattr(orch, "run_cmd", lambda title, argv, **kw: (calls.append(argv) or (0, None, None)))
+    with pytest.raises(IncompleteBatchError):
+        invoke(monkeypatch, "--publish-mode", "github_api", "--workspace-mode", "persistent", "--redo", step)
+    assert not any("--op" in argv and argv[argv.index("--op") + 1] in {"prepare", "push"} for argv in calls)
+    assert not (orchestrator_isolated / (".orch/" + step + ".done.json")).exists()
 
 
 @pytest.mark.parametrize("exception,operation,category,retryable", [
