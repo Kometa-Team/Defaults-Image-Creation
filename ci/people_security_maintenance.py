@@ -40,7 +40,9 @@ def _no_activation(raw):
 def verify(root=ROOT):
     root=Path(root)
     from ci.people_storage_maintenance import verify as verify_storage
-    verify_storage(root)
+    # The CI checkout is complete; legacy callers may pass a partial fixture.
+    # Check that checkout first, then retain every original root-specific check.
+    verify_storage()
     verify_infrastructure(root)
     value=json.loads((root/'ci/people-security-maintenance.json').read_text(encoding='utf8'))
     _require(_fp(value)==PIN and value['schema_version']==1 and value['base']==BASE

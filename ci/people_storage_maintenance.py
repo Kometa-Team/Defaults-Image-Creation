@@ -12,7 +12,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT/'ci/people-storage-maintenance-v1.json'
-PIN = '91ec7888abb69ab3a4adf0ad6a5c412013d0ec6eb54cf17ed32842624b156bf6'
+PIN = '4ac355d664ddd022e8c7658d9e4a1ffbe6d38ec73fdfbb921068f4a101c59b5f'
 SOURCE = 'create_people_posters/recover_edge_chops.py'
 COHORT = frozenset((
     '.github/workflows/people-storage-validation.yml',
@@ -69,7 +69,8 @@ def regular(root, name):
 
 @lru_cache(maxsize=256)
 def git_bytes(root, commit, name):
-    return subprocess.check_output(['git', 'show', commit+':'+name], cwd=root).replace(b'\r\n', b'\n')
+    return subprocess.run(['git', 'show', commit+':'+name], cwd=root, check=True,
+                          stdout=subprocess.PIPE).stdout.replace(b'\r\n', b'\n')
 
 
 @lru_cache(maxsize=64)
@@ -84,7 +85,8 @@ def _integrated(root, source_commit, head):
 
 
 def integrated(root, value):
-    head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip()
+    head = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=root, check=True,
+                          stdout=subprocess.PIPE, text=True).stdout.strip()
     return _integrated(str(root), value['source_commit'], head)
 
 

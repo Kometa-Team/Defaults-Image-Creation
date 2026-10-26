@@ -62,7 +62,13 @@ content-bound by the manifest. No wildcard or directory allowance is introduced.
 
 The dependency selector maps only exact known predecessors. The People guard
 verifies the entire atomic cohort and exact CI successors before its existing
-checks. The existing People ID manifest is unchanged; the 40 IDs extend only
+checks. The transition's CI checkout is always verified, including when the
+original guards independently verify a partial historical fixture with only
+their original files. Fixture roots cannot switch off checkout verification;
+their existing source, manifest and AST checks remain unchanged. Transition
+Git reads use their own checked subprocess calls, preserving the historical
+fixtures' strict original Git-read assertions. The existing People ID manifest
+is unchanged; the 40 IDs extend only
 the compatibility executor after ancestry activation. Original namespace,
 exact-head, phase, duplicate, skip, result and acceptance checks remain intact.
 The separate storage workflow runs the complete focused storage suite as well.

@@ -177,6 +177,15 @@ class PeopleStorageMaintenanceTests(unittest.TestCase):
                 from ci.phase4_m7 import preservation
                 with self.assertRaises(ValueError): preservation()
 
+    def test_partial_historical_fixture_cannot_bypass_actual_checkout_cohort_checks(self):
+        original = Path.read_bytes
+        def changed(path):
+            raw = original(path)
+            return raw+b'\nunreviewed source' if path == ROOT/storage.SOURCE else raw
+        with tempfile.TemporaryDirectory() as folder, patch.object(Path, 'read_bytes', changed):
+            with self.assertRaisesRegex(ValueError, 'mixed People storage cohort'):
+                people.verify(Path(folder))
+
     def test_all_forty_storage_ids_have_one_executor_and_historical_ids_remain_unchanged(self):
         from ci.people_security import selections
         groups, original = selections()
