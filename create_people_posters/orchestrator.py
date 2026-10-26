@@ -416,12 +416,15 @@ def clear_from(step_keys: List[str], from_key: str) -> None:
         if k == from_key:
             do_clear = True
         if do_clear:
-            mp = STATE_DIR / f"{k}.done.json"
-            if mp.exists():
-                try:
-                    mp.unlink()
-                except Exception:
-                    pass
+            # Clear the registered checkpoint and retain legacy key compatibility.
+            marker_keys = (k, "colorize_noncolor") if k == "colorize" else (k,)
+            for marker_key in marker_keys:
+                mp = STATE_DIR / f"{marker_key}.done.json"
+                if mp.exists():
+                    try:
+                        mp.unlink()
+                    except Exception:
+                        pass
 
 
 def marker_exists(marker: Optional[Path]) -> bool:
@@ -1011,6 +1014,7 @@ def _main(resources):
         acquire_lock()
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     activated = False
+    active_step = "initialization"
     try:
         if manager:
             activated = True
@@ -1032,6 +1036,7 @@ def _main(resources):
             clear_from(list(step_index.keys()), args.redo)
         step_started_at: dict[str, float] = {}
         for s in steps[start_i:]:
+            active_step = s.key
             if manager:
                 manager.check_budget()
             if args.people_list and s.key in {"scan_kometa_logs", "find_and_download_missing"}:
@@ -1101,6 +1106,9 @@ def _main(resources):
                 return None
 
             # Normal steps
+            if s.key in {"update", "sync_images", "push"}:
+                from people_batch_safety import assert_batch_ready
+                assert_batch_ready(CONFIG_DIR)
             builder = s.builder
             if builder is None:
                 print(f"[ERROR] Step {s.key} has no builder.", file=sys.stderr)
@@ -1192,7 +1200,9 @@ def _main(resources):
             # tmdb: if no new posters created, stop
             elif s.key == "tmdb":
                 created = count_recent_files([CONFIG_DIR], started, {"jpg", "jpeg", "png"})
-                if created == 0:
+                receipt_path = CONFIG_DIR / "logs/tmdb_people.json"
+                receipt = json.loads(receipt_path.read_text(encoding="utf8")) if receipt_path.exists() else {}
+                if created == 0 and not receipt.get("reused", 0):
                     if manager:
                         manager.set_status(batch, "no_work")
                     print("[INFO] tmdb downloaded 0 posters - stopping.")
@@ -1300,8 +1310,11 @@ def _main(resources):
             ledger = PublicationState(manager.state)
             try:
                 partial = any(row["status"] == "published" for row in ledger.rows(batch))
+                message = ("Interrupted" if isinstance(error, KeyboardInterrupt) else
+                           f"step={active_step} exit_code={error.code}; batch incomplete; inspect retained per-person stage summaries"
+                           if isinstance(error, SystemExit) and type(error.code) is int else safe_exception(error))
                 manager.set_status(batch, "partially_published" if partial else "failed",
-                                   "Interrupted" if isinstance(error, KeyboardInterrupt) else safe_exception(error))
+                                   message)
             finally:
                 ledger.close()
         raise

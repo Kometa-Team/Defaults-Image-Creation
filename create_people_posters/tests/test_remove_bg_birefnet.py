@@ -351,6 +351,12 @@ def test_partial_failure_continues_and_preserves_failed_source(folders, fake_bac
     assert (summary["processed"], summary["failed"]) == (1, 1)
     assert "error_category=internal_error" in summary["files"][0]["reason"]
     assert "inference failed for red image" not in summary["files"][0]["reason"]
+    failure = summary["files"][0]["failure"]
+    assert failure["category"] == "unexpected_exception" and failure["retryable"]
+    assert failure["operation"] == "model_inference"
+    assert failure["exception_type"] == "builtins.RuntimeError"
+    assert failure["input_identifier"] == "a-bad.jpg"
+    assert failure["correlation_id"] in summary["files"][0]["reason"]
     assert (folders.source / "a-bad.jpg").read_bytes() == bad
     assert not (folders.archive / "a-bad.jpg").exists()
     assert not (folders.output / "a-bad.png").exists()

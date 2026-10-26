@@ -10,6 +10,16 @@ from urllib.parse import urlsplit
 import requests
 
 from create_people_posters.people_diagnostics import Diagnostic, DiagnosticError, register_environment, register_secret
+from create_people_posters.people_failures import FailureEvidence, failure_record
+
+
+def with_evidence(diagnostic, evidence):
+    error = DiagnosticError(diagnostic)
+    if evidence is not None:
+        # Only closed records survive the transport boundary, never the raw
+        # provider exception, request, response, message or traceback locals.
+        error._transport_failure = FailureEvidence(evidence)
+    return error
 
 TMDB_ORIGIN = "https://api.themoviedb.org"
 _TMDB_ROUTES = {
@@ -87,6 +97,7 @@ def request(session, method, url, *, provider, operation, endpoint, params=None,
         # explicit header/params boundary. Never forward ambient credentials.
         session.trust_env = False
     failure = None
+    evidence = None
     for attempt in range(attempts):
         response = None
         retry_after = 0.0
@@ -110,12 +121,14 @@ def request(session, method, url, *, provider, operation, endpoint, params=None,
                 except (TypeError, ValueError, OverflowError):
                     retry_after = 31.0
         except (requests.RequestException, TimeoutError, ConnectionResetError) as error:
+            evidence = failure_record(error, operation, provider)
             candidate_response = getattr(error, "response", None)
             candidate_status = getattr(candidate_response, "status_code", None)
             status = candidate_status if type(candidate_status) is int and 100 <= candidate_status <= 599 else None
             failure = failure_diagnostic(provider, operation, endpoint, error=error, status=status)
             response = candidate_response
-        except Exception:
+        except Exception as error:
+            evidence = failure_record(error, operation, provider)
             failure = Diagnostic(provider, operation, "internal_error", endpoint=endpoint)
         finally:
             if response is not None and failure is not None:
@@ -125,9 +138,10 @@ def request(session, method, url, *, provider, operation, endpoint, params=None,
             break
         sleep(max(float(2 ** attempt), retry_after))
         failure = None
+        evidence = None
     # Raise outside the except suite: neither __context__ nor __cause__ retains
     # a third-party request/exception object containing credentials.
-    raise DiagnosticError(failure)
+    raise with_evidence(failure, evidence)
 
 
 def tmdb_json(session, api_key, path, *, operation, params=None, read_token=None, attempts=3, sleep=time.sleep):
@@ -158,16 +172,18 @@ def tmdb_json(session, api_key, path, *, operation, params=None, read_token=None
 def response_json(response, *, provider, operation, endpoint):
     """Decode API input without retaining provider-supplied decoder errors."""
     failed = False
+    evidence = None
     try:
         value = response.json()
         if type(value) is not dict:
             failed = True
-    except Exception:
+    except Exception as error:
+        evidence = failure_record(error, operation, provider)
         failed = True
     finally:
         if not _close(response):failed = True
     if failed:
-        raise DiagnosticError(Diagnostic(provider, operation, "invalid_response", endpoint=endpoint))
+        raise with_evidence(Diagnostic(provider, operation, "invalid_response", endpoint=endpoint), evidence)
     return value
 
 

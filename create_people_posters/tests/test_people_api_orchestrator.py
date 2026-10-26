@@ -42,6 +42,19 @@ def invoke(monkeypatch, *args):
     return orch.main()
 
 
+@pytest.mark.parametrize("step", ["sync_images", "push"])
+def test_partial_person_summary_blocks_publication_on_direct_resume(isolated, monkeypatch, step):
+    from people_batch_safety import IncompleteBatchError
+    (isolated / "logs").mkdir()
+    (isolated / "logs/tmdb_people.json").write_text(json.dumps({"failed": 1, "exit_code": 1, "complete": False}))
+    calls = []
+    monkeypatch.setattr(orch, "run_cmd", lambda title, argv, **kw: (calls.append(argv) or (0, None, None)))
+    with pytest.raises(IncompleteBatchError):
+        invoke(monkeypatch, "--publish-mode", "github_api", "--workspace-mode", "persistent", "--redo", step)
+    assert not any("--op" in argv and argv[argv.index("--op") + 1] in {"prepare", "push"} for argv in calls)
+    assert not (isolated / (".orch/" + step + ".done.json")).exists()
+
+
 def test_api_mode_without_clones_preserves_step_names(isolated, monkeypatch):
     calls = []
     monkeypatch.setattr(orch, "run_cmd", lambda title, argv, **kw: (calls.append(argv) or (0, None, None)))
@@ -106,6 +119,7 @@ def test_batch_model_failure_preserves_sources(isolated, monkeypatch):
     workspace = orch.CONFIG_DIR
     manifest = json.loads((workspace / "manifest.json").read_text(encoding="utf-8"))
     assert manifest["status"] == "failed"
+    assert "step=remove_bg exit_code=7" in manifest["error"]
     assert (workspace / "input/people_list.txt").exists()
 
 

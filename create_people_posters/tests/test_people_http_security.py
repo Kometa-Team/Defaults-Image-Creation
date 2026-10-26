@@ -68,7 +68,15 @@ def test_bounded_transient_failures_never_retain_raw_exception_or_request(failur
     assert error.diagnostic.category == category and error.diagnostic.retryable
     assert error.diagnostic.endpoint == "/3/search/person"
     assert KEY not in str(error) and KEY not in repr(error)
-    assert set(vars(error)) == {"diagnostic"}
+    assert set(vars(error)) == {"diagnostic", "_transport_failure"}
+    from create_people_posters.people_failures import FailureEvidence, failure_record
+    assert type(error._transport_failure) is FailureEvidence
+    evidence = error._transport_failure.record
+    assert evidence["cause_chain"][0].endswith(failure.__name__)
+    assert KEY not in secure.diagnostic_json(evidence)
+    record = failure_record(error, "search_person", "Person")
+    assert record["correlation_id"] == error.diagnostic.correlation_id
+    assert record["input_identifier"] == "Person" and record["retryable"]
 
 
 @pytest.mark.parametrize("status,category,retries", [(429, "rate_limit", 3), (500, "server_error", 3),
