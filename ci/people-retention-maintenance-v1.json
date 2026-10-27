@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "baseline_commit": "ded9f33759f9fe3ed4ddf5f315dff01b163594ad",
+  "audit_ancestor": "d4cbb20ff1dbaa77e30c017de9671b85f3355362",
+  "production_successors": [
+    "create_people_posters/people_workspaces.py"
+  ],
+  "publication_authorized": false,
+  "members": {
+    "ci/dependency_tests/test_people_retention.py": {
+      "before_sha256": null,
+      "sha256": "3781d5cc0d65805a4a9f6efeba003dcea2936a0f2d363a6821cf34760ad7976b"
+    },
+    "ci/dependency_tests/test_people_retention_maintenance.py": {
+      "before_sha256": null,
+      "sha256": "aa617db94fb530617fe157ae28e248548801e973b901baf7018c6daeb13ef19d"
+    },
+    "ci/people_storage_maintenance.py": {
+      "before_sha256": "434ea6eef22d71db136479969b57f335f1c66b91f2ab4f60e0de6fdd8c4277fc",
+      "sha256": "31d92de574bd26f03fe752bf21298125e8a4899995a2038b465a99186d85a4ed"
+    },
+    "create_people_posters/people_retention_remote.py": {
+      "before_sha256": null,
+      "sha256": "5e88a24d63fbfc39029bff2db54e110a38c5699c028476d818c2fcd966bc927e"
+    },
+    "create_people_posters/people_retention_state.py": {
+      "before_sha256": null,
+      "sha256": "6bba8c2a63ddaf10726be6e55a30a7c664844578164f3cae35ed0030701d1b14"
+    },
+    "create_people_posters/people_verified_cleanup.py": {
+      "before_sha256": null,
+      "sha256": "26985c4e3a0af503fb2a5ef8b8dcf700cfcb0a0fbd04502fe261d13e22de99f0"
+    },
+    "create_people_posters/people_workspaces.py": {
+      "before_sha256": "de2d5b6411ad042c1e923c7dee7a0cab7955194c69a039c73f9bb84ca73dc3e6",
+      "sha256": "74121a9ec65f8c8e341de60804d7a3c558cbe73a05331ae7349ee36cee730fa7"
+    },
+    "docs/PEOPLE_POSTERS_RETENTION_AUDIT.md": {
+      "before_sha256": null,
+      "sha256": "77d70f2e54594614e02f92e6e76d32290b315f7676a53a6021edc946480f05d8"
+    },
+    "docs/PEOPLE_POSTERS_RETENTION_PROPOSAL.md": {
+      "before_sha256": null,
+      "sha256": "813bbdce2dfd7c8982c038d53d2dc4830ea7fef8682de2e49098a3d832db09eb"
+    },
+    "docs/PEOPLE_PRACTICAL_STORAGE_FINDINGS.md": {
+      "before_sha256": null,
+      "sha256": "3dc9ace9b2ac381c01486481513054aaebef356ab0f2cb46f796673bee8a1c55"
+    },
+    "docs/PEOPLE_VERIFIED_CLEANUP.md": {
+      "before_sha256": null,
+      "sha256": "b2b3258bd6b9a685481645ef8da11909ad37730f51deda03a57d1e09b8840336"
+    }
+  },
+  "mandatory_unittest_ids": [
+    "test_people_retention.PeopleRetentionRemoteTests.test_ci_requires_exact_checkout_all_five_runs_and_no_skipped_job",
+    "test_people_retention.PeopleRetentionRemoteTests.test_get_only_transport_rejects_unapproved_repository_and_path",
+    "test_people_retention.PeopleRetentionTests.test_active_and_pending_markers_block_cleanup",
+    "test_people_retention.PeopleRetentionTests.test_apply_deletes_only_approved_images_and_keeps_model_and_metadata",
+    "test_people_retention.PeopleRetentionTests.test_approval_inventory_tamper_and_unknown_scope_fail",
+    "test_people_retention.PeopleRetentionTests.test_catalog_and_publication_source_hashes_are_checked",
+    "test_people_retention.PeopleRetentionTests.test_changed_dry_run_digest_and_wrong_ci_refuse_any_unlink",
+    "test_people_retention.PeopleRetentionTests.test_changed_identity_between_plan_and_unlink_is_blocked",
+    "test_people_retention.PeopleRetentionTests.test_current_remote_missing_blob_wrong_mode_or_size_blocks",
+    "test_people_retention.PeopleRetentionTests.test_database_reference_changes_during_cleanup_stop_remaining_files",
+    "test_people_retention.PeopleRetentionTests.test_dry_run_has_no_state_or_payload_side_effects",
+    "test_people_retention.PeopleRetentionTests.test_enrolled_workspace_cannot_run_legacy_recursive_cleanup",
+    "test_people_retention.PeopleRetentionTests.test_exact_publication_and_all_seven_success_receipts_are_required",
+    "test_people_retention.PeopleRetentionTests.test_exact_retention_boundary_and_longer_configured_retention",
+    "test_people_retention.PeopleRetentionTests.test_failed_incomplete_validation_and_no_work_are_never_age_expired",
+    "test_people_retention.PeopleRetentionTests.test_failed_operation_reference_protects_legacy_file",
+    "test_people_retention.PeopleRetentionTests.test_hardlinks_and_symlinks_are_not_adopted",
+    "test_people_retention.PeopleRetentionTests.test_incomplete_readme_publication_or_style_grant_blocks",
+    "test_people_retention.PeopleRetentionTests.test_interrupted_unlink_is_reconciled_without_deleting_twice",
+    "test_people_retention.PeopleRetentionTests.test_jost_requires_exact_authoritative_receipt_for_approved_successor",
+    "test_people_retention.PeopleRetentionTests.test_large_batch_proofs_are_linear_and_unpublished_catalog_members_stay",
+    "test_people_retention.PeopleRetentionTests.test_missing_authoritative_state_blocks_without_recreating_database",
+    "test_people_retention.PeopleRetentionTests.test_mixed_local_bytes_unexpected_members_and_missing_files_stop",
+    "test_people_retention.PeopleRetentionTests.test_ordinary_log_dry_report_is_read_only_and_failed_job_logs_untouched",
+    "test_people_retention.PeopleRetentionTests.test_ordinary_logs_rotation_excludes_decision_logs_and_histories",
+    "test_people_retention.PeopleRetentionTests.test_path_escape_and_source_ownership_are_rejected",
+    "test_people_retention.PeopleRetentionTests.test_processing_lock_and_cleaner_lock_exclude_concurrent_workers",
+    "test_people_retention.PeopleRetentionTests.test_real_jost_manifest_font_review_and_database_integrity",
+    "test_people_retention.PeopleRetentionTests.test_reappearing_receipted_file_is_unexpected_and_stops",
+    "test_people_retention.PeopleRetentionTests.test_recovered_outputs_rollback_and_raw_sources_are_preserved",
+    "test_people_retention.PeopleRetentionTests.test_remote_changes_during_cleanup_stop_remaining_files",
+    "test_people_retention.PeopleRetentionTests.test_remote_failure_never_turns_into_offline_deletion",
+    "test_people_retention.PeopleRetentionTests.test_routine_apply_reuses_locked_exact_deletion_receipts",
+    "test_people_retention.PeopleRetentionTests.test_routine_failed_job_does_not_block_other_eligible_jobs",
+    "test_people_retention.PeopleRetentionTests.test_routine_interrupted_unlink_reconciles_intent_without_double_counting",
+    "test_people_retention.PeopleRetentionTests.test_routine_jobs_plan_uses_producer_catalog_without_audit_inventory",
+    "test_people_retention.PeopleRetentionTests.test_routine_missing_receipts_retains_job_without_recreating_state",
+    "test_people_retention.PeopleRetentionTests.test_routine_reappearing_deleted_file_requires_review",
+    "test_people_retention.PeopleRetentionTests.test_routine_source_checkpoint_and_unknown_paths_are_preserved",
+    "test_people_retention.PeopleRetentionTests.test_three_day_window_uses_publication_not_folder_age",
+    "test_people_retention_maintenance.PeopleRetentionMaintenanceTests.test_every_new_member_tamper_rollback_and_deletion_fails_closed",
+    "test_people_retention_maintenance.PeopleRetentionMaintenanceTests.test_exact_checkout_manifest_and_reviewed_ancestry",
+    "test_people_retention_maintenance.PeopleRetentionMaintenanceTests.test_mandatory_ids_are_exact_discovered_controls_on_both_os_jobs",
+    "test_people_retention_maintenance.PeopleRetentionMaintenanceTests.test_modified_manifest_cannot_refresh_approval_or_membership",
+    "test_people_retention_maintenance.PeopleRetentionMaintenanceTests.test_original_eight_cleanup_blobs_and_historical_manifests_stay_exact",
+    "test_people_retention_maintenance.PeopleRetentionMaintenanceTests.test_scope_has_no_renderer_publisher_inventory_or_workflow_changes",
+    "test_people_retention_maintenance.PeopleRetentionMaintenanceTests.test_unknown_paths_and_unknown_predecessors_keep_original_pins"
+  ]
+}

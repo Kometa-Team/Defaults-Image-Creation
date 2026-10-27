@@ -128,13 +128,17 @@ def verify(root=ROOT):
             raise ValueError('Changed exact storage maintenance addition: '+name)
     for name in TRUST_ANCHORS:
         regular(root, name)
-    return verify_cohort(root, value)
+    active = verify_cohort(root, value)
+    from ci.people_retention_maintenance import verify_checkout
+    verify_checkout()
+    return active
 
 
 def selected_hash(name, expected):
     # Preserve synthetic/unknown predecessors and every unlisted source pin.
     if name not in COHORT | INFRASTRUCTURE:
-        return expected
+        from ci.people_retention_maintenance import selected_hash as retention_hash
+        return retention_hash(name, expected)
     value = manifest()
     if name in INFRASTRUCTURE:
         binding = value['infrastructure'][name]
@@ -167,13 +171,21 @@ def historical_bytes(root, name, current):
 
 
 def scope_members():
-    return COHORT | INFRASTRUCTURE | ADDITIONS | TRUST_ANCHORS
+    from ci.people_retention_maintenance import scope_members as retention_scope
+    return COHORT | INFRASTRUCTURE | ADDITIONS | TRUST_ANCHORS | retention_scope()
 
 
 def verify_scope(root, baseline, names):
     verify(root)
     if not names <= scope_members():
         raise ValueError('Unapproved storage maintenance path')
+    from ci.people_retention_maintenance import scope_members as retention_scope, verify_scope as retention_verify
+    extra = names & retention_scope()
+    if extra:
+        retention_verify(root, baseline, extra)
+    names = names - extra
+    if not names:
+        return
     rows = subprocess.check_output(['git', 'diff', '--raw', '--no-abbrev', '--no-renames',
         '-z', baseline, 'HEAD', '--', *sorted(names)], cwd=root).split(b'\0')
     if rows[-1] != b'' or len(rows) != 2*len(names)+1:
