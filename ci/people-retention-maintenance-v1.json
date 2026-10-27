@@ -9,7 +9,7 @@
   "members": {
     "ci/dependency_tests/test_people_retention.py": {
       "before_sha256": null,
-      "sha256": "da92b01556314d2d07980ff5d85038cc4a4dc4732fa0a6e261efaac94f0fceed"
+      "sha256": "ed6adf36d2ea83176ad5e9e0ce3bcde73a2941db0764c8e5a08bdf5aa3e5dbca"
     },
     "ci/dependency_tests/test_people_retention_maintenance.py": {
       "before_sha256": null,
@@ -25,11 +25,11 @@
     },
     "create_people_posters/people_retention_state.py": {
       "before_sha256": null,
-      "sha256": "0ac0fe7754b5557794e4a24095822af7b284b56f1f77e3072a8da59658865bcb"
+      "sha256": "6bba8c2a63ddaf10726be6e55a30a7c664844578164f3cae35ed0030701d1b14"
     },
     "create_people_posters/people_verified_cleanup.py": {
       "before_sha256": null,
-      "sha256": "4e56603d6f5a69f10520091efe1ce063aca8b032611f0e5686a4770286c92e7c"
+      "sha256": "ae3269e263f5a7dd465f88cff3d85276b51750c170ced2a9d114427ebe64731b"
     },
     "create_people_posters/people_workspaces.py": {
       "before_sha256": "de2d5b6411ad042c1e923c7dee7a0cab7955194c69a039c73f9bb84ca73dc3e6",
@@ -73,6 +73,7 @@
     "test_people_retention.PeopleRetentionTests.test_incomplete_readme_publication_or_style_grant_blocks",
     "test_people_retention.PeopleRetentionTests.test_interrupted_unlink_is_reconciled_without_deleting_twice",
     "test_people_retention.PeopleRetentionTests.test_jost_requires_exact_authoritative_receipt_for_approved_successor",
+    "test_people_retention.PeopleRetentionTests.test_large_batch_proofs_are_linear_and_unpublished_catalog_members_stay",
     "test_people_retention.PeopleRetentionTests.test_missing_authoritative_state_blocks_without_recreating_database",
     "test_people_retention.PeopleRetentionTests.test_mixed_local_bytes_unexpected_members_and_missing_files_stop",
     "test_people_retention.PeopleRetentionTests.test_ordinary_log_dry_report_is_read_only_and_failed_job_logs_untouched",

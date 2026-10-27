@@ -2,6 +2,7 @@
 from copy import deepcopy
 from contextlib import closing
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
@@ -86,6 +87,15 @@ class PeopleRetentionTests(unittest.TestCase):
         self.plan()
         self.assertEqual(before,{str(p):p.read_bytes() for p in self.config.rglob('*') if p.is_file()})
         self.assertFalse((self.config/'state/verified-retention').exists())
+        alias=self.config/'..'/self.config.name/'forbidden-report.json'
+        with patch.object(worker.sys,'stderr',io.StringIO()),self.assertRaises(SystemExit):
+            worker.main(['--config',str(self.config),'--report',str(alias)])
+        self.assertFalse(alias.exists())
+        outside=self.root/'custom-root-report.json'
+        with patch.dict(os.environ,{'PEOPLE_JOBS_DIR':str(self.root/'elsewhere')}),self.assertRaises(local.RetentionBlocked):
+            worker.main(['--config',str(self.config),'--report',str(outside)])
+        self.assertFalse(outside.exists())
+        self.assertEqual(before,{str(p):p.read_bytes() for p in self.config.rglob('*') if p.is_file()})
 
     def test_three_day_window_uses_publication_not_folder_age(self):
         self.db.execute('UPDATE jobs SET published=?',(self.now-2*86400,));self.db.commit()
@@ -139,6 +149,11 @@ class PeopleRetentionTests(unittest.TestCase):
     def test_catalog_and_publication_source_hashes_are_checked(self):
         self.db.execute("UPDATE publications SET source_hash='bad'");self.db.commit()
         with self.assertRaises(local.RetentionBlocked):self.plan()
+        self.db.execute('UPDATE publications SET source_hash=published_hash')
+        self.db.execute("UPDATE publications SET blob=? WHERE style='bw'",('f'*40,));self.db.commit()
+        self.remote.value[worker.REPOSITORIES['bw']]['entries']['A/Images/A.jpg']['sha']='f'*40
+        with self.assertRaisesRegex(local.RetentionBlocked,'Prepared publication blob differs'):
+            self.plan()
 
     def test_path_escape_and_source_ownership_are_rejected(self):
         for value in ['../outside','/absolute','a\\b','C:/escape','a//b','a/./b']:
@@ -153,7 +168,8 @@ class PeopleRetentionTests(unittest.TestCase):
             p.unlink()
 
     def test_failed_operation_reference_protects_legacy_file(self):
-        p=self.config/'jobs/failure/manifest.json';p.parent.mkdir();p.write_text(json.dumps({'source':str(self.config/self.rows[-2]['path'])}))
+        alias=self.config/'..'/self.config.name/self.rows[-2]['path']
+        p=self.config/'jobs/failure/manifest.json';p.parent.mkdir();p.write_text(json.dumps({'source':str(alias)}))
         self.db.execute("INSERT INTO jobs VALUES('failure','failed',0,0,NULL,'')");self.db.commit()
         with self.assertRaises(local.RetentionBlocked):self.plan()
 
@@ -247,6 +263,11 @@ class PeopleRetentionTests(unittest.TestCase):
         self.assertEqual(report['eligible_files'],7)
         self.assertEqual(report['scope'],worker.MANAGED_SCOPE)
         self.assertNotIn('people_dirs/bw/A/Images/Legacy.jpg',[r['path'] for r in report['eligible']])
+        self.assertGreater(report['jobs'][0]['total_bytes'],report['eligible_bytes'])
+        self.assertEqual(report['storage']['retained_bytes'],report['storage']['logical_bytes']-report['eligible_bytes'])
+        with patch.dict(os.environ,{'PEOPLE_JOBS_MAX_GIB':'0.00000001'}):
+            warning,_=worker.build_jobs_plan(self.config,self.remote,now=self.now)
+        self.assertTrue(warning['storage']['warnings'])
 
     def test_routine_missing_receipts_retains_job_without_recreating_state(self):
         self.db.close();p=self.config/'state/publication_state.db';p.unlink()
@@ -254,6 +275,35 @@ class PeopleRetentionTests(unittest.TestCase):
         self.assertEqual(report['eligible_files'],0)
         self.assertIn('publication_evidence_missing',report['jobs'][0]['reason'])
         self.assertFalse(p.exists())
+
+    def test_large_batch_proofs_are_linear_and_unpublished_catalog_members_stay(self):
+        manifest_path=self.config/'jobs'/self.job/'manifest.json'
+        manifest=json.loads(manifest_path.read_text())
+        for person in range(1,20):
+            for style,repo in worker.REPOSITORIES.items():
+                remote_path=f'P{person}/Images/P{person}.jpg'
+                rel=f'jobs/{self.job}/.publish/{self.job}/{style}/'+remote_path
+                image=self.add_file(rel,f'{person}-{style}'.encode(),job=self.job)
+                manifest['cleanup_files'][Path(rel).relative_to(Path('jobs')/self.job).as_posix()]=image['sha256']
+                self.entry(repo,remote_path,image);p=str(self.config/rel)
+                self.db.execute('INSERT INTO publications VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                    (self.job,style,repo,remote_path,p,image['sha256'],p,image['sha256'],image['git_blob'],
+                     'master',f'P{person}',str(person+1),'published','3'*40,self.now))
+        self.db.execute('UPDATE batches SET expected=140');self.db.commit()
+        manifest_path.write_text(json.dumps(manifest))
+        report,_=worker.build_jobs_plan(self.config,self.remote,now=self.now)
+        self.assertEqual(report['eligible_files'],140)
+        self.assertLess(len(json.dumps(report).encode()),1024*1024)
+        for row in report['eligible']:
+            self.assertEqual(len(row['proof']['receipts']),1)
+            self.assertEqual(row['proof']['verified_batch_receipts'],140)
+        # A producer catalog alone cannot authorize unpublished generated art.
+        image=self.add_file(f'jobs/{self.job}/people_dirs/bw/Unpublished.jpg',b'unpublished')
+        manifest['cleanup_files']['people_dirs/bw/Unpublished.jpg']=image['sha256']
+        manifest_path.write_text(json.dumps(manifest))
+        report,_=worker.build_jobs_plan(self.config,self.remote,now=self.now)
+        self.assertEqual(report['eligible_files'],0)
+        self.assertIn('no_corresponding_publication_receipt',report['jobs'][0]['reason'])
 
     def test_routine_failed_job_does_not_block_other_eligible_jobs(self):
         failed=self.config/'jobs/20261002T000000-abcdef123456';failed.mkdir()

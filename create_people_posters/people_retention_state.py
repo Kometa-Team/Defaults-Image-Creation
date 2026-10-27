@@ -22,11 +22,17 @@ def fingerprint(value):
         allow_nan=False, separators=(',', ':')).encode()).hexdigest()
 
 
+def canonical_root(root):
+    root=Path(root).absolute()
+    reject_links(root)
+    return root.resolve()
+
+
 def member(root, relative):
     if (not isinstance(relative, str) or not relative or '\\' in relative or ':' in relative
             or relative.startswith('/') or any(p in {'', '.', '..'} for p in relative.split('/'))):
         raise RetentionBlocked('Unsafe retention member')
-    root = Path(root).absolute()
+    root = canonical_root(root)
     path = root.joinpath(*relative.split('/'))
     reject_links(path)
     if not path.resolve().is_relative_to(root.resolve()):
@@ -100,6 +106,7 @@ class Journal:
             raise RetentionBlocked('Invalid deletion receipts')
 
     def intent(self, scope, root, row, proof):
+        root=canonical_root(root)
         key=fingerprint([scope,str(root),row['path']])
         old=self.value['files'].get(key)
         record=dict(scope=scope,root=str(root),path=row['path'],sha256=row['sha256'],
@@ -113,6 +120,7 @@ class Journal:
             atomic_json(self.path,self.value)
 
     def mark(self, scope, root, path, state):
+        root=canonical_root(root)
         if state not in {'deleted','missing_after_intent'}:
             raise RetentionBlocked('Unknown deletion state')
         key=fingerprint([scope,str(root),path])
@@ -124,6 +132,7 @@ class Journal:
 
 
 def journal_members(directory, scope, root):
+    root=canonical_root(root)
     path=Path(directory)/'deletions.json'
     reject_links(path)
     if not path.exists(): return {}
@@ -148,7 +157,7 @@ def processing_exclusion(config, scope, *, allow_existing=False):
     Unknown/stale locks are never stolen. An interrupted cleaner may reconcile
     only its own recorded dead-process lease, under the OS cleaner lease.
     """
-    config = Path(config).absolute()
+    config = canonical_root(config)
     state = config/'state'; reject_links(state)
     if not state.is_dir(): raise RetentionBlocked('Persistent state root missing')
     directory = state/'verified-retention'; reject_links(directory)

@@ -21,7 +21,7 @@ if str(SCRIPT_DIR) not in sys.path:sys.path.insert(0,str(SCRIPT_DIR))
 from create_people_posters.people_github import REPOSITORIES
 from create_people_posters.people_retention_remote import ReadOnlyGitHub, exact_entry
 from create_people_posters.people_retention_state import (RetentionBlocked, Journal,
-    atomic_json, fingerprint, inspect, journal_members, member, processing_exclusion,
+    atomic_json, canonical_root, fingerprint, inspect, journal_members, member, processing_exclusion,
     read_json, readonly_db, unlink_verified)
 from create_people_posters.people_workspaces import reject_links
 
@@ -81,13 +81,34 @@ def job_proof(config, job, state, snapshot, now, retention):
             p=Path(r[key])
             if not p.is_absolute() or not p.resolve().is_relative_to((config/'jobs'/job).resolve()):
                 raise RetentionBlocked('Publication source ownership uncertain')
-            if p.exists() and inspect(p)['sha256']!=r[digest]:
-                raise RetentionBlocked('Publication source/prepared bytes changed')
+            if p.exists():
+                current=inspect(p)
+                if current['sha256']!=r[digest]:
+                    raise RetentionBlocked('Publication source/prepared bytes changed')
+                if key=='prepared' and current['git_blob']!=r['blob']:
+                    raise RetentionBlocked('Prepared publication blob differs from current GitHub receipt')
     if any(styles!=set(REPOSITORIES) for styles in people.values()):
         raise RetentionBlocked('Incomplete seven-style publication cohort')
     if not isinstance(manifest.get('cleanup_files'),dict):
         raise RetentionBlocked('Successful job has no exact cleanup catalog')
-    return dict(manifest=manifest,receipts=proof,rows=rows),None
+    by_path={}
+    for row,entry in zip(rows,proof):
+        receipt=dict(entry,receipt_commit=row['commit_sha'],
+            source_sha256=row['source_hash'],published_sha256=row['published_hash'])
+        for path in {Path(row['source']).resolve(),Path(row['prepared']).resolve()}:
+            by_path.setdefault(path,[]).append(receipt)
+    return dict(manifest=manifest,receipts=proof,rows=rows,
+        by_path=by_path,cohort_sha256=fingerprint(proof),catalog_sha256=fingerprint(manifest['cleanup_files'])),None
+
+
+def payload_proof(path, job):
+    """Bind each payload to its own receipt; never duplicate a whole batch N times."""
+    matching=job['by_path'].get(Path(path).resolve())
+    if not matching:
+        raise RetentionBlocked('job_payload_has_no_corresponding_publication_receipt')
+    return dict(kind='existing_successful_job_receipts',receipts=matching,
+        verified_batch_receipts=len(job['receipts']),cohort_sha256=job['cohort_sha256'],
+        catalog_sha256=job['catalog_sha256'])
 
 
 def protected_references(config, state, *, for_jobs=False):
@@ -101,6 +122,8 @@ def protected_references(config, state, *, for_jobs=False):
             for v in value:visit(v)
         elif isinstance(value,str):
             v=value.replace('\\','/').casefold()
+            if '://' not in value and Path(value).is_absolute():
+                v=Path(value).resolve().as_posix().casefold()
             if v.startswith(prefix):protected.add(v[len(prefix):].rstrip('/'))
     for root in [config/'jobs',config/'state',config/'.orch',config/'edge_chop_recovery']:
         if not root.exists():continue
@@ -168,7 +191,7 @@ def protected_path(row, protected):
 
 
 def build_plan(config, approval, remote, *, now=None):
-    config=Path(config).absolute();reject_links(config)
+    config=canonical_root(config)
     now=time.time() if now is None else now
     lease=config/'state/orchestrator.lock'
     if lease.exists() and not lease.read_text(encoding='ascii').startswith(str(os.getpid())+' @ '):
@@ -221,7 +244,7 @@ def build_plan(config, approval, remote, *, now=None):
             relative=path.relative_to(config/'jobs'/row['job']).as_posix()
             if job['manifest']['cleanup_files'].get(relative)!=row['sha256']:
                 raise RetentionBlocked('Successful payload differs from owned cleanup catalog')
-            proof=dict(kind='existing_successful_job_receipts',receipts=job['receipts'])
+            proof=payload_proof(path,job)
         else:
             if protected_path(row,protected):
                 raise RetentionBlocked('Approved persistent image now required by an operation')
@@ -257,13 +280,24 @@ def build_jobs_plan(config, remote=None, *, now=None):
     Only publication staging and generated style outputs can expire. Original,
     input, recovery, checkpoint, transaction, model and unknown paths stay put.
     """
-    config=Path(config).absolute();reject_links(config)
+    config=canonical_root(config)
     now=time.time() if now is None else now
+    usage={}
+    for root,dirs,names in os.walk(config/'jobs',followlinks=False,onerror=lambda e:(_ for _ in ()).throw(e)):
+        for name in dirs+names:reject_links(Path(root)/name)
+        for name in names:
+            path=Path(root)/name;parts=path.relative_to(config/'jobs').parts
+            item=usage.setdefault(parts[0] if len(parts)>1 else '',dict(files=0,bytes=0))
+            item['files']+=1;item['bytes']+=path.stat().st_size
+    used=sum(r['bytes'] for r in usage.values())
+    budget=max(0,float(os.getenv('PEOPLE_JOBS_MAX_GIB','20')))*1024**3
+    storage=dict(files=sum(r['files'] for r in usage.values()),logical_bytes=used,budget_bytes=budget,
+        warnings=['jobs_storage_above_80_percent_of_configured_budget'] if budget and used>=0.8*budget else [])
     state=None;missing_evidence=None
     try:state=ledger(config)
     except (OSError,ValueError,__import__('sqlite3').Error):
         missing_evidence='publication_evidence_missing; retained, not recreated'
-    report=dict(version=1,scope=MANAGED_SCOPE,root=str(config),eligible=[],skipped=[],jobs=[],snapshot_heads={},references=None)
+    report=dict(version=1,scope=MANAGED_SCOPE,root=str(config),eligible=[],skipped=[],jobs=[],snapshot_heads={},references=None,storage=storage)
     directories=sorted((config/'jobs').iterdir()) if (config/'jobs').is_dir() else []
     snapshot={};protected=set();prior=journal_members(config/'state/verified-retention',MANAGED_SCOPE,config)
     references_ready=False
@@ -271,7 +305,8 @@ def build_jobs_plan(config, remote=None, *, now=None):
     for folder in directories:
         reject_links(folder)
         if not folder.is_dir():continue
-        item=dict(id=folder.name,status='unregistered',eligible_files=0,eligible_bytes=0)
+        item=dict(id=folder.name,status='unregistered',eligible_files=0,eligible_bytes=0,
+            total_files=usage.get(folder.name,{}).get('files',0),total_bytes=usage.get(folder.name,{}).get('bytes',0))
         report['jobs'].append(item)
         try:
             manifest=read_json(folder/'manifest.json')
@@ -324,7 +359,7 @@ def build_jobs_plan(config, remote=None, *, now=None):
                 if not (generated or prepared) or protected_path({'path':rel},protected):continue
                 candidates.append(dict(path=rel,bytes=identity['bytes'],sha256=identity['sha256'],git_blob=identity['git_blob'],
                     identity=identity,reason='verified_successful_job_payload',job=folder.name,
-                    proof=dict(kind='existing_successful_job_receipts',receipts=proof['receipts'])))
+                    proof=payload_proof(folder/name,proof)))
             item.update(eligible_files=len(candidates),eligible_bytes=sum(r['bytes'] for r in candidates),
                         reason='eligible' if candidates else 'protected_sources_and_metadata_only')
             report['eligible'].extend(candidates)
@@ -333,6 +368,7 @@ def build_jobs_plan(config, remote=None, *, now=None):
             item['reason']=str(error) if isinstance(error,RetentionBlocked) else 'unreadable_or_invalid_job_evidence'
     if snapshot:
         remote.confirm(snapshot);report['snapshot_heads']={repo:data['head'] for repo,data in snapshot.items()}
+    report['storage']['retained_bytes']=used-sum(r['bytes'] for r in report['eligible'])
     report['plan_digest']=fingerprint(report)
     report.update(eligible_files=len(report['eligible']),eligible_bytes=sum(r['bytes'] for r in report['eligible']),generated_utc=datetime.now(timezone.utc).isoformat())
     return report,snapshot
@@ -343,8 +379,7 @@ def cleanup_managed_jobs(manager, *, dry_run=True, now=None, remote=None):
     marker=read_json(manager.state/'verified-retention/enrollment.json')
     # Workspaces resolves its storage roots; Windows TEMP may use an 8.3 alias.
     # Compare canonical roots while still rejecting every link/reparse component.
-    reject_links(manager.config)
-    config=manager.config.resolve()
+    config=canonical_root(manager.config)
     if manager.jobs!=(config/'jobs').resolve() or manager.state!=(config/'state').resolve():
         raise RetentionBlocked('Custom workspace roots require explicit retention review')
     plan,_=build_jobs_plan(config,remote,now=now)
@@ -410,6 +445,7 @@ def rotate_ordinary_logs(config):
 
 
 def apply_plan(config, approval, remote, expected, ci_receipt, *, source_root=None,allow_existing=False):
+    config=canonical_root(config)
     source_root=Path(source_root or Path(__file__).resolve().parents[1])
     ci=remote.validate_ci(ci_receipt,source_root)
     scope=APPROVAL if approval is not None else MANAGED_SCOPE
@@ -460,7 +496,8 @@ def main(argv=None):
     parser.add_argument('--ci-receipt',type=Path)
     parser.add_argument('--apply-logs',action='store_true',help='Rotate only ordinary persistent diagnostics under the shared lease')
     args=parser.parse_args(argv)
-    config=args.config.absolute();output=args.report.absolute()
+    config=canonical_root(args.config);output=args.report.absolute()
+    reject_links(output);output=output.resolve()
     if output==config or config in output.parents or output.exists():
         parser.error('Report must be a new file outside production config')
     from dotenv import load_dotenv
@@ -468,6 +505,9 @@ def main(argv=None):
     reject_links(config/'.env')
     load_dotenv(config/'.env')
     register_environment()
+    for key,name in [('PEOPLE_JOBS_DIR','jobs'),('PEOPLE_STATE_DIR','state')]:
+        if os.getenv(key) and canonical_root(os.environ[key])!=canonical_root(config/name):
+            raise RetentionBlocked('Custom workspace roots require explicit retention review')
     approval=approved_plan(args.approval) if args.approval else None
     remote=ReadOnlyGitHub() if approval is not None or args.apply_plan or args.apply_logs else None
     if args.apply_logs:
@@ -484,7 +524,7 @@ def main(argv=None):
         result=(build_plan(config,approval,remote) if approval is not None else build_jobs_plan(config,remote))[0]
         result['ordinary_logs']=ordinary_logs(config)
     atomic_json(output,result)
-    print(json.dumps({k:result[k] for k in ('eligible_files','eligible_bytes','plan_digest','recovered_bytes') if k in result}))
+    print(json.dumps({k:result[k] for k in ('eligible_files','eligible_bytes','plan_digest','recovered_bytes','storage') if k in result}))
 
 
 if __name__=='__main__':
