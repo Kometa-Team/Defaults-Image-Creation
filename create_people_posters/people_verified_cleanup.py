@@ -5,7 +5,7 @@ Dry-run is read-only. Apply needs hosted CI proof, shared leases and a matching
 fresh plan. Scheduling is deliberately an operator-reviewed step.
 """
 from __future__ import annotations
-from contextlib import closing
+from contextlib import closing, nullcontext
 from datetime import datetime, timezone
 import json
 import os
@@ -493,7 +493,7 @@ def apply_plan(config, approval, remote, expected, ci_receipt, *, source_root=No
 FAILED_SCOPE='reviewed-failed-payloads-v1'
 
 
-def apply_reviewed_failed(config, approval, expected_digest, remote, ci_receipt, *, allow_existing=False):
+def apply_reviewed_failed(config, approval, expected_digest, remote, ci_receipt, *, allow_existing=False,dry_run=False):
     """Compact only a separately approved, exact failed-operation catalog.
 
     An approval carries preserved publication receipts, failed manifest hashes,
@@ -504,8 +504,9 @@ def apply_reviewed_failed(config, approval, expected_digest, remote, ci_receipt,
     if (fingerprint(approval)!=expected_digest or approval.get('version')!=1
             or approval.get('scope')!=FAILED_SCOPE or approval.get('root')!=str(config)):
         raise RetentionBlocked('Failed-payload approval changed or belongs to another root')
-    ci=remote.validate_ci(ci_receipt,Path(__file__).resolve().parents[1])
-    with processing_exclusion(config,FAILED_SCOPE,allow_existing=allow_existing) as directory:
+    ci=None if dry_run else remote.validate_ci(ci_receipt,Path(__file__).resolve().parents[1])
+    context=nullcontext(config/'state/verified-retention') if dry_run else processing_exclusion(config,FAILED_SCOPE,allow_existing=allow_existing)
+    with context as directory:
         snapshot=remote.snapshot();now=time.time();operations=approval['operations']
         state=dict(jobs={},publications=[],batches={},readmes=[])
         for folder in (config/'jobs').iterdir():
@@ -599,6 +600,12 @@ def apply_reviewed_failed(config, approval, expected_digest, remote, ci_receipt,
         protected,_=protected_references(config,state,for_jobs=True)
         if any(protected_path(r,protected) for r in eligible):
             raise RetentionBlocked('Failed payload still referenced by recovery or another operation')
+        if dry_run:
+            return dict(approval_sha256=expected_digest,deletion_authorized_by_dry_run=False,
+                eligible=eligible,eligible_files=len(eligible),eligible_bytes=sum(r['bytes'] for r in eligible),
+                waiting=waiting,protected_files=len(approval['preserve']),
+                protected_bytes=sum(r['identity']['bytes'] for r in approval['preserve']),
+                snapshot_heads={r:d['head'] for r,d in snapshot.items()})
         for job in operations:
             marker=member(config,'jobs/'+job+'/retention-retired.json')
             value=dict(version=1,approval_sha256=expected_digest,manifest_sha256=operations[job]['manifest_sha256'])
@@ -730,12 +737,13 @@ def main(argv=None):
     parser.add_argument('--report',required=True,type=Path,help='NEW output outside production config')
     parser.add_argument('--apply-plan',type=Path)
     parser.add_argument('--apply-failed-plan',type=Path,help='Separately approved exact failed-job payload catalog; never an age-based grant')
+    parser.add_argument('--review-failed-plan',type=Path,help='Read-only failed-catalog preflight; does not retire, enroll, lock or delete')
     parser.add_argument('--failed-approval-sha256',help='Explicit reviewed digest of the failed-job approval')
     parser.add_argument('--ci-receipt',type=Path)
     parser.add_argument('--apply-logs',action='store_true',help='Rotate only ordinary persistent diagnostics under the shared lease')
     parser.add_argument('--storage-report',action='store_true',help='Include config sizes and failed-job growth summary in read-only report')
     args=parser.parse_args(argv)
-    if sum(bool(v) for v in (args.apply_plan,args.apply_logs,args.apply_failed_plan))>1:
+    if sum(bool(v) for v in (args.apply_plan,args.apply_logs,args.apply_failed_plan,args.review_failed_plan))>1:
         parser.error('Choose one maintenance action')
     config=canonical_root(args.config);output=args.report.absolute()
     reject_links(output);output=output.resolve()
@@ -750,8 +758,12 @@ def main(argv=None):
         if os.getenv(key) and canonical_root(os.environ[key])!=canonical_root(config/name):
             raise RetentionBlocked('Custom workspace roots require explicit retention review')
     approval=approved_plan(args.approval) if args.approval else None
-    remote=ReadOnlyGitHub() if approval is not None or args.apply_plan or args.apply_logs or args.apply_failed_plan else None
-    if args.apply_failed_plan:
+    remote=ReadOnlyGitHub() if approval is not None or args.apply_plan or args.apply_logs or args.apply_failed_plan or args.review_failed_plan else None
+    if args.review_failed_plan:
+        if not args.failed_approval_sha256 or approval is not None:
+            parser.error('Failed preflight requires the exact catalog digest')
+        result=apply_reviewed_failed(config,read_json(args.review_failed_plan),args.failed_approval_sha256,remote,{},dry_run=True)
+    elif args.apply_failed_plan:
         if not args.ci_receipt or not args.failed_approval_sha256 or approval is not None:
             parser.error('Failed cleanup requires its separately reviewed digest and final HEAD CI receipt')
         result=apply_reviewed_failed(config,read_json(args.apply_failed_plan),args.failed_approval_sha256,

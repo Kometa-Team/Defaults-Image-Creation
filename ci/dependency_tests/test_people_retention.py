@@ -496,6 +496,17 @@ class PeopleRetentionTests(unittest.TestCase):
     def apply_failed(self,plan,digest=None):
         return worker.apply_reviewed_failed(self.config,plan,digest or local.fingerprint(plan),self.remote,{'head':'a'*40})
 
+    def test_failed_catalog_preflight_is_read_only_even_with_missing_central_state(self):
+        plan=self.failed_catalog();self.db.close()
+        (self.config/'state/publication_state.db').unlink();(self.config/'state').rmdir()
+        before={p.relative_to(self.config).as_posix():local.inspect(p) for p in self.config.rglob('*') if p.is_file()}
+        with patch.object(self.remote,'validate_ci',side_effect=AssertionError('No deletion CI grant required for read-only review')):
+            report=worker.apply_reviewed_failed(self.config,plan,local.fingerprint(plan),self.remote,{},dry_run=True)
+        self.assertEqual(report['eligible_files'],2)
+        self.assertFalse(report['deletion_authorized_by_dry_run'])
+        self.assertFalse((self.config/'state').exists())
+        self.assertEqual(before,{p.relative_to(self.config).as_posix():local.inspect(p) for p in self.config.rglob('*') if p.is_file()})
+
     def test_reviewed_failed_compaction_preserves_unique_sources_metadata_and_stops_resume(self):
         plan=self.failed_catalog();result=self.apply_failed(plan)
         self.assertEqual(len(result['deleted']),2)

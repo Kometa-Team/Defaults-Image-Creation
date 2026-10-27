@@ -9,7 +9,7 @@
   "members": {
     "ci/dependency_tests/test_people_retention.py": {
       "before_sha256": null,
-      "sha256": "902077877911733c3280cf2141073d6c5f4355904c9de2ecbaec548d5f106ef5"
+      "sha256": "6ffbaede7f35ded56e45436841edf82164005a36f4aa062430c9c7f9bcbeeb10"
     },
     "ci/dependency_tests/test_people_retention_maintenance.py": {
       "before_sha256": null,
@@ -29,7 +29,7 @@
     },
     "create_people_posters/people_verified_cleanup.py": {
       "before_sha256": null,
-      "sha256": "59f38cb19ceb23ce1782a9c0630dc65b343724e15bdd77121197127527d547c3"
+      "sha256": "9150271ce01baa558699afe79013a2a90bf195eb547a05f5527d384692176f82"
     },
     "create_people_posters/people_workspaces.py": {
       "before_sha256": "de2d5b6411ad042c1e923c7dee7a0cab7955194c69a039c73f9bb84ca73dc3e6",
@@ -49,7 +49,7 @@
     },
     "docs/PEOPLE_VERIFIED_CLEANUP.md": {
       "before_sha256": null,
-      "sha256": "49742f6b163f6dce4af63e7d4d8720822e807bc6dfc7570167a0c9b833a7e74f"
+      "sha256": "e0346287dc2fd3038bc3f60514fb1485018dc86916d5066404ae2e4f1f54b07e"
     }
   },
   "mandatory_unittest_ids": [
@@ -72,6 +72,7 @@
     "test_people_retention.PeopleRetentionTests.test_enrolled_workspace_cannot_run_legacy_recursive_cleanup",
     "test_people_retention.PeopleRetentionTests.test_exact_publication_and_all_seven_success_receipts_are_required",
     "test_people_retention.PeopleRetentionTests.test_exact_retention_boundary_and_longer_configured_retention",
+    "test_people_retention.PeopleRetentionTests.test_failed_catalog_preflight_is_read_only_even_with_missing_central_state",
     "test_people_retention.PeopleRetentionTests.test_failed_compaction_never_discards_active_work_or_changed_survivors",
     "test_people_retention.PeopleRetentionTests.test_failed_compaction_preserves_checkpoint_outputs_and_rejects_disposable_survivor",
     "test_people_retention.PeopleRetentionTests.test_failed_compaction_reconciles_interrupted_unlink_without_double_counting",
