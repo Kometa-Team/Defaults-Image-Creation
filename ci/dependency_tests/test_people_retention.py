@@ -339,7 +339,7 @@ class PeopleRetentionTests(unittest.TestCase):
         with patch.object(worker,'LOG_BYTES',32):
             report=worker.ordinary_logs(self.config)
             self.assertEqual([r['path'] for r in report],['logs/tmdb_people.log'])
-            changes=worker.rotate_ordinary_logs(self.config)
+            changes=worker.rotate_ordinary_logs(self.config/'..'/self.config.name)
         self.assertEqual((logs/'tmdb_people.log').stat().st_size,0)
         self.assertEqual((logs/'tmdb_people.log.1').stat().st_size,32)
         self.assertEqual((logs/'sel_remove_bg.log').stat().st_size,100)

@@ -395,7 +395,8 @@ def cleanup_managed_jobs(manager, *, dry_run=True, now=None, remote=None):
 
 def ordinary_logs(config):
     """Only text diagnostics; decision logs, CSV sets and checkpoint JSON excluded."""
-    root=Path(config)/'logs';result=[]
+    config=canonical_root(config)
+    root=config/'logs';result=[]
     for name in sorted(ORDINARY_LOGS):
         p=root/name
         if p.exists():
@@ -412,7 +413,7 @@ def rotate_ordinary_logs(config):
     Keep last5MiB of ordinary diagnostics and three numbered archives. The
     explicit whitelist excludes every text log parsed for processing decisions.
     """
-    config=Path(config)
+    config=canonical_root(config)
     removed=[]
     for row in ordinary_logs(config):
         if not row['over_limit']:continue

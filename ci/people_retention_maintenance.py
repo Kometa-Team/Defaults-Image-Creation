@@ -7,7 +7,7 @@ import subprocess
 
 ROOT=Path(__file__).resolve().parents[1]
 MANIFEST=ROOT/'ci/people-retention-maintenance-v1.json'
-PIN='baf3a2361629791d25190548eff507ba524a2aaf71c65a4f2feaea6742184300'
+PIN='d26a7b6554358699549dd9a1aa5e9ee712e4c26e1f6506896d54a63189cbba9e'
 WORKSPACE='create_people_posters/people_workspaces.py'
 ANCHORS=frozenset({'ci/people_retention_maintenance.py','ci/people-retention-maintenance-v1.json'})
 MEMBERS=frozenset({
