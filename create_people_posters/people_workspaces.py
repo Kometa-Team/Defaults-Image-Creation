@@ -208,6 +208,9 @@ class Workspaces:
             enrollment = self.state / "verified-retention" / "enrollment.json"
             reject_links(enrollment)
             if enrollment.exists():
+                if self.jobs!=(self.config/'jobs').resolve() or self.state!=(self.config/'state').resolve():
+                    print('[WARN] End-of-job maintenance retained: custom workspace roots require explicit review.')
+                    return
                 from create_people_posters.people_verified_cleanup import maintenance_after_job
                 status, _ = self.record(batch)
                 maintenance_after_job(self, completed=status["status"] in {"cleanup_eligible", "complete", "no_work"})

@@ -9,7 +9,7 @@
   "members": {
     "ci/dependency_tests/test_people_retention.py": {
       "before_sha256": null,
-      "sha256": "0a80997daefe3ada7d414e913b60602ae03b373c0b13278ff3221dd77327b622"
+      "sha256": "14848a4b4c92a2dbaa55127dd816607de98b5302604fe610e7c6549efef993fe"
     },
     "ci/dependency_tests/test_people_retention_maintenance.py": {
       "before_sha256": null,
@@ -33,7 +33,7 @@
     },
     "create_people_posters/people_workspaces.py": {
       "before_sha256": "de2d5b6411ad042c1e923c7dee7a0cab7955194c69a039c73f9bb84ca73dc3e6",
-      "sha256": "50394115874f328a21c86ea81a3fad365586542c4c011cc620ca085e509e6872"
+      "sha256": "03f9dcd6f6295e2d2ab59f631c8478f76415f652696523b5e5c91f0de4b10e5f"
     },
     "docs/PEOPLE_POSTERS_RETENTION_AUDIT.md": {
       "before_sha256": null,

@@ -450,7 +450,7 @@ class PeopleRetentionTests(unittest.TestCase):
     def test_deactivation_maintenance_requires_owned_lease_and_enrollment(self):
         from types import SimpleNamespace
         folder=self.config/'jobs'/self.job;lease=folder/'.active'
-        manager=SimpleNamespace(state=self.config/'state',path=lambda batch:folder,
+        manager=SimpleNamespace(config=self.config,jobs=self.config/'jobs',state=self.config/'state',path=lambda batch:folder,
             record=lambda batch:({'status':'cleanup_eligible'},{}))
         with patch.object(worker,'maintenance_after_job') as maintain:
             lease.write_text(str(os.getpid()),encoding='ascii')
@@ -459,6 +459,10 @@ class PeopleRetentionTests(unittest.TestCase):
             Workspaces.deactivate(manager,self.job);maintain.assert_called_once_with(manager,completed=True)
             maintain.reset_mock();lease.write_text('-999',encoding='ascii')
             Workspaces.deactivate(manager,self.job);maintain.assert_not_called()
+            manager.jobs=self.config/'custom-jobs';lease.write_text(str(os.getpid()),encoding='ascii')
+            with patch('builtins.print'):
+                Workspaces.deactivate(manager,self.job)
+            maintain.assert_not_called()
 
     def test_storage_report_missing_evidence_is_read_only_and_exposes_blocked_bytes(self):
         self.db.close();p=self.config/'state/publication_state.db';p.unlink()
