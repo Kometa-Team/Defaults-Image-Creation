@@ -440,7 +440,7 @@ class PeopleRetentionTests(unittest.TestCase):
 
     def test_end_of_job_ci_or_remote_failure_preserves_publication_and_reports_blocker(self):
         manager=self.enroll()
-        with patch.object(self.remote,'validate_ci',side_effect=local.RetentionBlocked('CI verification unavailable')):
+        with patch.object(self.remote,'validate_ci',side_effect=local.RetentionBlocked('CI verification unavailable')),patch.object(worker.sys,'stderr',io.StringIO()):
             result=worker.maintenance_after_job(manager,completed=True,remote=self.remote)
         self.assertEqual(result['status'],'blocked')
         self.assertEqual(self.db.execute('SELECT status FROM jobs').fetchone()[0],'cleanup_eligible')

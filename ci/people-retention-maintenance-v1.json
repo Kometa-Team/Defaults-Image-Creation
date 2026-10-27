@@ -9,7 +9,7 @@
   "members": {
     "ci/dependency_tests/test_people_retention.py": {
       "before_sha256": null,
-      "sha256": "6ffbaede7f35ded56e45436841edf82164005a36f4aa062430c9c7f9bcbeeb10"
+      "sha256": "0a80997daefe3ada7d414e913b60602ae03b373c0b13278ff3221dd77327b622"
     },
     "ci/dependency_tests/test_people_retention_maintenance.py": {
       "before_sha256": null,
