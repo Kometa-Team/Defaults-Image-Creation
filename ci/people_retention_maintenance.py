@@ -49,16 +49,16 @@ def manifest():
 
 def verify_checkout(root=None):
     root=Path(root or ROOT);value=manifest()
+    from ci.people_storage_maintenance import git_bytes
     subprocess.check_call(['git','merge-base','--is-ancestor',value['audit_ancestor'],'HEAD'],cwd=root)
     for name,binding in value['members'].items():
         if sha(regular(root,name).read_bytes())!=binding['sha256']:
             raise ValueError('Unreviewed retention successor: '+name)
         if binding['before_sha256'] is not None:
-            # Keep new ancestry reads independent of frozen fixtures that patch
-            # check_output for their own historical baselines. Never broaden
-            # those fixtures or substitute a caller-provided baseline.
-            old=subprocess.run(['git','show',value['baseline_commit']+':'+name],
-                cwd=root,check=True,stdout=subprocess.PIPE).stdout
+            # Reuse the existing cache ONLY for immutable Git objects. Current
+            # source/manifest bytes above remain freshly checked on every call.
+            # Its Git transport also leaves frozen check_output fixtures intact.
+            old=git_bytes(str(root),value['baseline_commit'],name)
             if sha(old)!=binding['before_sha256']:raise ValueError('Changed retention predecessor')
     for name in ANCHORS:regular(root,name)
     return value
