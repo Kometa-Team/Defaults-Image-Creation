@@ -450,7 +450,7 @@ class PeopleRetentionTests(unittest.TestCase):
     def test_deactivation_maintenance_requires_owned_lease_and_enrollment(self):
         from types import SimpleNamespace
         folder=self.config/'jobs'/self.job;lease=folder/'.active'
-        manager=SimpleNamespace(config=self.config,jobs=self.config/'jobs',state=self.config/'state',path=lambda batch:folder,
+        manager=SimpleNamespace(config=self.config,jobs=(self.config/'jobs').resolve(),state=(self.config/'state').resolve(),path=lambda batch:folder,
             record=lambda batch:({'status':'cleanup_eligible'},{}))
         with patch.object(worker,'maintenance_after_job') as maintain:
             lease.write_text(str(os.getpid()),encoding='ascii')
