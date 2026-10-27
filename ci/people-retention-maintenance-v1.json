@@ -9,7 +9,7 @@
   "members": {
     "ci/dependency_tests/test_people_retention.py": {
       "before_sha256": null,
-      "sha256": "33be52fb95faa8034ce5c3515da4688996ec9845289c1f2fe0b6f06fe6428cc4"
+      "sha256": "da92b01556314d2d07980ff5d85038cc4a4dc4732fa0a6e261efaac94f0fceed"
     },
     "ci/dependency_tests/test_people_retention_maintenance.py": {
       "before_sha256": null,
@@ -29,7 +29,7 @@
     },
     "create_people_posters/people_verified_cleanup.py": {
       "before_sha256": null,
-      "sha256": "c3b2d2dc12a9bd274fdfcc228e1a667c40a4f132269dd74fd2ce305ee0284fba"
+      "sha256": "4e56603d6f5a69f10520091efe1ce063aca8b032611f0e5686a4770286c92e7c"
     },
     "create_people_posters/people_workspaces.py": {
       "before_sha256": "de2d5b6411ad042c1e923c7dee7a0cab7955194c69a039c73f9bb84ca73dc3e6",

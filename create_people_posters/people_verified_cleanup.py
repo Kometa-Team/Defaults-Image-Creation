@@ -341,15 +341,19 @@ def build_jobs_plan(config, remote=None, *, now=None):
 def cleanup_managed_jobs(manager, *, dry_run=True, now=None, remote=None):
     """Opt-in launch adapter; same planner as the independent manual command."""
     marker=read_json(manager.state/'verified-retention/enrollment.json')
-    if manager.jobs!=manager.config/'jobs' or manager.state!=manager.config/'state':
+    # Workspaces resolves its storage roots; Windows TEMP may use an 8.3 alias.
+    # Compare canonical roots while still rejecting every link/reparse component.
+    reject_links(manager.config)
+    config=manager.config.resolve()
+    if manager.jobs!=(config/'jobs').resolve() or manager.state!=(config/'state').resolve():
         raise RetentionBlocked('Custom workspace roots require explicit retention review')
-    plan,_=build_jobs_plan(manager.config,remote,now=now)
+    plan,_=build_jobs_plan(config,remote,now=now)
     eligible=sum(j['eligible_files']>0 for j in plan['jobs'])
     manager.last_cleanup_counts=dict(eligible=eligible,deleted=0,retained=len(plan['jobs']))
     if dry_run or not marker.get('unattended_reviewed',False):
         return [(j['id'],('eligible; automatic deletion awaiting review' if j['eligible_files'] else 'retained: '+j['reason'])) for j in plan['jobs']]
     remote=remote or ReadOnlyGitHub()
-    result=apply_plan(manager.config,None,remote,plan,marker['ci_receipt'],allow_existing=True)
+    result=apply_plan(config,None,remote,plan,marker['ci_receipt'],allow_existing=True)
     manager.last_cleanup_counts['deleted']=eligible
     return [(j['id'],'compacted; sources/metadata retained' if j['eligible_files'] else 'retained: '+j['reason']) for j in plan['jobs']]
 

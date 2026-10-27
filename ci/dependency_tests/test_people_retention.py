@@ -233,7 +233,8 @@ class PeopleRetentionTests(unittest.TestCase):
             with self.assertRaises(ValueError):local.member(self.config,'people_dirs/x')
 
     def test_enrolled_workspace_cannot_run_legacy_recursive_cleanup(self):
-        manager=Workspaces(self.config)
+        # Exercise the same normalization difference as Windows TEMP aliases.
+        manager=Workspaces(self.config/'..'/self.config.name)
         self.addCleanup(manager.close)
         p=self.config/'state/verified-retention/enrollment.json';p.parent.mkdir();p.write_text('{}')
         with patch.object(worker,'ReadOnlyGitHub',return_value=self.remote):
