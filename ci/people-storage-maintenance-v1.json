@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "5c1a470502b38814b14627f32665d7fd4490bd1d",
+  "source_commit": "786bc059df3b3e16cebf68f219961f24a939e380",
+  "activation": "source_commit_is_ancestor_of_HEAD",
+  "production_members": [
+    "create_people_posters/recover_edge_chops.py"
+  ],
+  "publication_authorized": false,
+  "cohort": {
+    ".github/workflows/people-storage-validation.yml": {
+      "before_sha256": null,
+      "sha256": "370f25a4cedd57286c597713bd42f665431a122a3ca39cb7e8ee4ef075a284d0"
+    },
+    "create_people_posters/docs/PEOPLE_STORAGE_AUDIT.json": {
+      "before_sha256": null,
+      "sha256": "4f69356c8beb552577e8acefb32de919afb0af71b62eeeeebc3559e8d1d22b85"
+    },
+    "create_people_posters/docs/PEOPLE_STORAGE_LIFECYCLE.md": {
+      "before_sha256": null,
+      "sha256": "d74c0931ae9fd80851c2499f96d717494f1deb58e5b4f988a5cdd9fbf078a8ea"
+    },
+    "create_people_posters/people_cleanup_report.py": {
+      "before_sha256": null,
+      "sha256": "fd82573467c09ea9a4334e94d280a8535aa673c53340266090a57c75d7f4cccc"
+    },
+    "create_people_posters/people_recovery_storage.py": {
+      "before_sha256": null,
+      "sha256": "7a9d1e0af135b6333a39cc838795e7b1c8bdbbbc823c50bd3149a70b20da5a84"
+    },
+    "create_people_posters/recover_edge_chops.py": {
+      "before_sha256": "28685c12ea68fb2e928220669976e795abeae665ecc71e9567d97e96d79dea3a",
+      "sha256": "a945c37104ae4d9b7a8d0c5dddff69da786e3f7b82278819e33729c8e430e16f"
+    },
+    "create_people_posters/tests/test_background_orchestrator.py": {
+      "before_sha256": "1dd59af6a00fbcb9c9fb9e6c92183e995d3c2a7065720c3c9b022a3eb678aa19",
+      "sha256": "9653f2ce93558c6a2fe47ced1de359c1b66d4b879ded16f6a3a6bd772fe7928f"
+    },
+    "create_people_posters/tests/test_people_recovery_storage.py": {
+      "before_sha256": null,
+      "sha256": "85b34ad5e0df0783dd6b8d6c630686478c95cdf4245398d65ab8a5ee0e239249"
+    }
+  },
+  "infrastructure": {
+    "ci/dependency_maintenance.py": {
+      "before_sha256": "b9865a8f65f90a49f343e42d6e2e1e67732b2a96b5d0d341aa3599d6bef3f2ee",
+      "sha256": "08aa7e3bd4373d1e01e11c5fa3d7d8759d5ad4043897ff7a8dd32310b20ef29f"
+    },
+    "ci/people_security_maintenance.py": {
+      "before_sha256": "e45090c56b1955b40ce4ba1e008695477a6d3c1115e9bdd6d8de993f5ba70fb1",
+      "sha256": "234eddc193ec431fc8e255b2561c1e57cbf784d31090bbf973f08d5d9aee9f2a"
+    },
+    "ci/people_security.py": {
+      "before_sha256": "3d5af247b6c0f2e11852bdf8cd90f22d8eb3b47c0617c4c12774d8d0b86fe2d2",
+      "sha256": "e75838b1c6d116d17a48433fa672c91283f7a32cd7d9c7ddbbcfbbe55b661b25"
+    },
+    "ci/phase4_m7.py": {
+      "before_sha256": "f0fd3b0d0bdf807efa88f46d6677225ae1d4ba9fffe9a7fbaa435cb7b403d4e2",
+      "sha256": "c1526d267fb8f52d076badc44ed95172e66c7795129c43c0dc91405bc2c95c58"
+    }
+  },
+  "additions": {
+    "ci/dependency_tests/test_people_storage_maintenance.py": "26b130bd7420d0e5f9b9226b3f5c774c7b51fd0e61442a1b8fbb0b85708b9a5e",
+    "ci/PEOPLE_STORAGE_PROVENANCE.md": "bf5e8f487f9a2e3f7811ebf3d8d52b8c070d46e492f8cd570aacdf6ca2fa39e1"
+  },
+  "storage_test_ids": [
+    "create_people_posters/tests/test_people_recovery_storage.py::test_success_dry_run_and_idempotent_cleanup_preserve_evidence_and_artwork",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_unsuccessful_processing_retains_all_scratch[unresolved]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_unsuccessful_processing_retains_all_scratch[retryable]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_unsuccessful_processing_retains_all_scratch[exhausted]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_unsuccessful_processing_retains_all_scratch[error]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_unsuccessful_processing_retains_all_scratch[staged]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_ownership_and_preserved_output_checks_block_entire_cleanup[extra]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_ownership_and_preserved_output_checks_block_entire_cleanup[empty_directory]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_ownership_and_preserved_output_checks_block_entire_cleanup[changed]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_ownership_and_preserved_output_checks_block_entire_cleanup[output_changed]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_ownership_and_preserved_output_checks_block_entire_cleanup[output_missing]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_ownership_and_preserved_output_checks_block_entire_cleanup[hardlink]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_ownership_and_preserved_output_checks_block_entire_cleanup[traversal]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_symlink_cannot_escape_to_original_or_publication_destinations[file]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_symlink_cannot_escape_to_original_or_publication_destinations[directory]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_symlink_cannot_escape_to_original_or_publication_destinations[root]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_interrupted_cleanup_reports_partial_counts_and_retries",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_independent_operations_and_same_person_lease",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_reparse_attribute_is_rejected_even_without_symlink_privilege",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_concurrent_cleaner_is_rejected_and_os_lease_releases_on_process_death",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_processing_interruption_retains_staging_and_blocks_stale_lease",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_verified_recovery_cleans_only_after_checkpoint",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_stage_only_retains_raw_colorization_and_cutouts",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_staged_success_requires_final_qa_checkpoint_and_preserved_source",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_failed_model_attempt_retains_candidates_and_original_artwork",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_unsafe_person_paths_are_rejected_before_writing[../outside]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_unsafe_person_paths_are_rejected_before_writing[A/B]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_unsafe_person_paths_are_rejected_before_writing[A\\\\B]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_unsafe_person_paths_are_rejected_before_writing[C:outside]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_unsafe_person_paths_are_rejected_before_writing[..]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_unsafe_person_paths_are_rejected_before_writing[]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_unsafe_person_paths_are_rejected_before_writing[A\\x00B]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_report_is_read_only_includes_legacy_blockers_and_default_three_days",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_batch_report_agrees_with_existing_cleanup_gates[receipts]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_batch_report_agrees_with_existing_cleanup_gates[catalog]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_batch_report_agrees_with_existing_cleanup_gates[image]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_batch_report_agrees_with_existing_cleanup_gates[failed]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_batch_report_agrees_with_existing_cleanup_gates[active]",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_report_does_not_create_missing_directories_or_ledger",
+    "create_people_posters/tests/test_people_recovery_storage.py::test_apply_requires_explicit_operation_and_cannot_target_legacy"
+  ],
+  "source_base_commit": "ef3b2713cf5dcab9b92395321c6be3fdf1efdbce"
+}
