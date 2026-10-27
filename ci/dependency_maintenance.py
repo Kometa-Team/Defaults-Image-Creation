@@ -63,7 +63,8 @@ def selected_hash(name, expected):
         expected = binding["sha256"]
     if name == PROTECTION and expected in PEOPLE_PROTECTION_PREDECESSORS:
         return PEOPLE_PROTECTION_SHA256
-    return expected
+    from ci.people_storage_maintenance import selected_hash as storage_hash
+    return storage_hash(name, expected)
 
 
 @lru_cache(maxsize=32)
