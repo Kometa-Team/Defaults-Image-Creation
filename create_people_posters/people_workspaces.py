@@ -262,6 +262,11 @@ class Workspaces:
         self.set_status(batch, "cleanup_eligible")
 
     def cleanup(self, dry_run=True, now=None):
+        enrollment = self.state / "verified-retention" / "enrollment.json"
+        reject_links(enrollment)
+        if enrollment.exists():
+            from create_people_posters.people_verified_cleanup import cleanup_managed_jobs
+            return cleanup_managed_jobs(self, dry_run=dry_run, now=now)
         now = time.time() if now is None else now
         self.last_cleanup_counts = None
         rows = self.db.execute("SELECT * FROM jobs").fetchall()
