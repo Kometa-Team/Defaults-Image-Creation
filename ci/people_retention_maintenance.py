@@ -7,7 +7,7 @@ import subprocess
 
 ROOT=Path(__file__).resolve().parents[1]
 MANIFEST=ROOT/'ci/people-retention-maintenance-v1.json'
-PIN='e71f7de73cf81a143e08f716ff1a4b5de8153617471379e5c69f5f4e1e2c23c2'
+PIN='a4dc0c5b30b2ab1da3934c31b28406760a640447c66222a34113c84699e577f1'
 WORKSPACE='create_people_posters/people_workspaces.py'
 ANCHORS=frozenset({'ci/people_retention_maintenance.py','ci/people-retention-maintenance-v1.json'})
 MEMBERS=frozenset({
@@ -54,7 +54,11 @@ def verify_checkout(root=None):
         if sha(regular(root,name).read_bytes())!=binding['sha256']:
             raise ValueError('Unreviewed retention successor: '+name)
         if binding['before_sha256'] is not None:
-            old=subprocess.check_output(['git','show',value['baseline_commit']+':'+name],cwd=root)
+            # Keep new ancestry reads independent of frozen fixtures that patch
+            # check_output for their own historical baselines. Never broaden
+            # those fixtures or substitute a caller-provided baseline.
+            old=subprocess.run(['git','show',value['baseline_commit']+':'+name],
+                cwd=root,check=True,stdout=subprocess.PIPE).stdout
             if sha(old)!=binding['before_sha256']:raise ValueError('Changed retention predecessor')
     for name in ANCHORS:regular(root,name)
     return value

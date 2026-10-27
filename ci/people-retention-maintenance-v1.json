@@ -13,7 +13,7 @@
     },
     "ci/dependency_tests/test_people_retention_maintenance.py": {
       "before_sha256": null,
-      "sha256": "ed6293a6bc0220b7286734ab64d6e9ebb7a1a47cfe8d72387db2fcb44098295e"
+      "sha256": "aa617db94fb530617fe157ae28e248548801e973b901baf7018c6daeb13ef19d"
     },
     "ci/people_storage_maintenance.py": {
       "before_sha256": "434ea6eef22d71db136479969b57f335f1c66b91f2ab4f60e0de6fdd8c4277fc",

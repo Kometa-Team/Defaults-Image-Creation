@@ -15,7 +15,8 @@ ROOT=Path(__file__).resolve().parents[2]
 
 class PeopleRetentionMaintenanceTests(unittest.TestCase):
     def test_exact_checkout_manifest_and_reviewed_ancestry(self):
-        value=retention.verify_checkout()
+        with patch.object(retention.subprocess,'check_output',side_effect=AssertionError('Frozen fixture Git interceptor')):
+            value=retention.verify_checkout()
         self.assertEqual(value['production_successors'],[retention.WORKSPACE])
         self.assertFalse(value['publication_authorized'])
 
@@ -40,7 +41,7 @@ class PeopleRetentionMaintenanceTests(unittest.TestCase):
             for name in retention.scope_members():
                 p=root/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes((ROOT/name).read_bytes())
             old_bytes={name:subprocess.check_output(['git','show',value['baseline_commit']+':'+name],cwd=ROOT) for name,b in value['members'].items() if b['before_sha256'] is not None}
-            with patch.object(retention,'ROOT',root),patch.object(retention,'MANIFEST',root/'ci/people-retention-maintenance-v1.json'),patch.object(retention.subprocess,'check_call'),patch.object(retention.subprocess,'check_output',side_effect=lambda args,**kw:old_bytes[args[-1].split(':',1)[1]]):
+            with patch.object(retention,'ROOT',root),patch.object(retention,'MANIFEST',root/'ci/people-retention-maintenance-v1.json'),patch.object(retention.subprocess,'check_call'),patch.object(retention.subprocess,'run',side_effect=lambda args,**kw:type('Result',(),{'stdout':old_bytes[args[-1].split(':',1)[1]]})()):
                 retention.verify_checkout()
                 for name,binding in value['members'].items():
                     p=root/name;before=p.read_bytes()
