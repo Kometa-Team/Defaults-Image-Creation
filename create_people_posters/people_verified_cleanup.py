@@ -458,8 +458,11 @@ def apply_plan(config, approval, remote, expected, ci_receipt, *, source_root=No
         enrollment=directory/'enrollment.json'
         previous=read_json(enrollment) if enrollment.exists() else {}
         reviewed=previous.get('unattended_reviewed',False) and previous.get('head')==ci['head']
-        atomic_json(enrollment,dict(version=1,scope=scope,head=ci['head'],
-            source_root=str(source_root),ci_receipt=ci_receipt,unattended_reviewed=reviewed))
+        marker=dict(version=1,scope=scope,head=ci['head'],
+            source_root=str(source_root),ci_receipt=ci_receipt,unattended_reviewed=reviewed)
+        if previous.get('head')==ci['head'] and previous.get('failed_approval_sha256'):
+            marker['failed_approval_sha256']=previous['failed_approval_sha256']
+        atomic_json(enrollment,marker)
         journal=Journal(directory);removed=[]
         run_id=str(time.time_ns());run_path=directory/('run-'+run_id+'.json')
         try:
@@ -487,6 +490,238 @@ def apply_plan(config, approval, remote, expected, ci_receipt, *, source_root=No
         return read_json(run_path)
 
 
+FAILED_SCOPE='reviewed-failed-payloads-v1'
+
+
+def apply_reviewed_failed(config, approval, expected_digest, remote, ci_receipt, *, allow_existing=False):
+    """Compact only a separately approved, exact failed-operation catalog.
+
+    An approval carries preserved publication receipts, failed manifest hashes,
+    exact local identities and pinned survivors. It is not a new age policy.
+    Unknown missing files or evidence changes stop the entire pass before unlink.
+    """
+    config=canonical_root(config)
+    if (fingerprint(approval)!=expected_digest or approval.get('version')!=1
+            or approval.get('scope')!=FAILED_SCOPE or approval.get('root')!=str(config)):
+        raise RetentionBlocked('Failed-payload approval changed or belongs to another root')
+    ci=remote.validate_ci(ci_receipt,Path(__file__).resolve().parents[1])
+    with processing_exclusion(config,FAILED_SCOPE,allow_existing=allow_existing) as directory:
+        snapshot=remote.snapshot();now=time.time();operations=approval['operations']
+        state=dict(jobs={},publications=[],batches={},readmes=[])
+        for folder in (config/'jobs').iterdir():
+            reject_links(folder)
+            if folder.is_dir():
+                m=read_json(folder/'manifest.json');state['jobs'][folder.name]=m
+        if (config/'state/publication_state.db').exists():state=ledger(config)
+        from create_people_posters.people_workspaces import ID_PATTERN
+        for job,operation in operations.items():
+            if not ID_PATTERN.fullmatch(job):raise RetentionBlocked('Invalid failed operation')
+            folder=member(config,'jobs/'+job)
+            manifest=read_json(folder/'manifest.json')
+            if (manifest.get('id')!=job or manifest.get('managed_by')!='kometa-people-v1'
+                    or manifest.get('status')!='failed' or (folder/'.active').exists()
+                    or inspect(folder/'manifest.json')['sha256']!=operation['manifest_sha256']):
+                raise RetentionBlocked('Failed operation changed or became active')
+            current=state['jobs'].get(job,{})
+            if current.get('status') not in {None,'failed'}:
+                raise RetentionBlocked('Failed operation state changed')
+            people=operation['people']
+            if not people:raise RetentionBlocked('No independently verified replacement identities')
+            requested=folder/'people_list.txt'
+            expected=set()
+            for line in requested.read_text(encoding='utf-8-sig').splitlines():
+                line=line.strip()
+                if not line or line.startswith('#'):continue
+                fields=line.split('|',1)
+                if len(fields)!=2 or not fields[0].isdigit():
+                    raise RetentionBlocked('Failed request identity is ambiguous')
+                expected.add((fields[1].strip(),fields[0]))
+            if expected!={(p['person'],p['tmdb_id']) for p in people}:
+                raise RetentionBlocked('Unresolved or unexpected failed request identity')
+            for person in people:
+                if person['published']<=manifest['updated']:
+                    raise RetentionBlocked('Replacement did not succeed after failed operation')
+                receipts=person['receipts']
+                if len(receipts)!=7 or {r['style'] for r in receipts}!=set(REPOSITORIES):
+                    raise RetentionBlocked('Failed replacement lacks seven-style receipts')
+                for r in receipts:
+                    if (r['person']!=person['person'] or str(r['tmdb_id'])!=person['tmdb_id']
+                            or r['status']!='published' or not r['commit_sha'] or r['branch']!='master'
+                            or REPOSITORIES.get(r['style'])!=r['repo']):
+                        raise RetentionBlocked('Failed replacement receipt changed')
+                    exact_entry(snapshot,r['repo'],r['path'],r['blob'])
+            # Explicit retirement means old completed stage argv no longer
+            # schedules retries. Recovery outputs/transactions stay protected.
+            state['jobs'][job]=dict(current,status='complete')
+        rows=approval['files'];names=[r['path'] for r in rows]
+        if len(set(names))!=len(names):raise RetentionBlocked('Duplicate failed-payload approval member')
+        prior=journal_members(directory,FAILED_SCOPE,config);eligible=[];waiting=[]
+        for row in rows:
+            parts=row['path'].split('/');job=parts[1] if len(parts)>2 and parts[0]=='jobs' else None
+            if (job not in operations or Path(row['path']).suffix.lower() not in IMAGE
+                    or any(p in {'.history','edge_chop_recovery','input','models','vendor'} for p in parts)):
+                raise RetentionBlocked('Protected or unauthorized failed-payload path')
+            path=member(config,row['path']);old=prior.get(row['path'])
+            if not path.exists():
+                if not old or any(old[k]!=row[k] for k in ('sha256','bytes')):
+                    raise RetentionBlocked('Failed payload unexpectedly missing')
+                continue
+            if old and old['state']!='intent':raise RetentionBlocked('Deleted failed payload reappeared')
+            if inspect(path)!=row['identity']:raise RetentionBlocked('Failed payload identity changed')
+            if row['reason']=='exact_duplicate_with_pinned_retained_failed_job_survivor':
+                owned=(parts[2] in {'posters','sel_downloads'} or
+                    (parts[2]=='Downloads' and len(parts)>3 and parts[3] in {'color','other'}) or
+                    (parts[2]=='people_dirs' and len(parts)>3 and parts[3] in set(REPOSITORIES)|{'Downloads'}))
+                if not owned:raise RetentionBlocked('Duplicate is outside producer-owned payload paths')
+                survivor=row['retained_survivor']
+                survivor_parts=survivor.split('/')
+                if (survivor in names or len(survivor_parts)<3 or survivor_parts[0]!='jobs'
+                        or survivor_parts[1] not in operations):
+                    raise RetentionBlocked('Duplicate survivor is also disposable or unowned')
+                keep=inspect(member(config,survivor))
+                if keep['sha256']!=row['sha256'] or keep!=row['survivor_identity']:
+                    raise RetentionBlocked('Duplicate survivor changed')
+            elif row['reason']=='failed_generated_output_exactly_published_by_later_success':
+                generated=len(parts)>4 and parts[2]=='people_dirs' and parts[3] in set(REPOSITORIES)-{'original'}
+                if not generated:raise RetentionBlocked('Failed output is not producer-owned generated artwork')
+                person=next((p for p in operations[job]['people'] if p['person']==row['person'] and p['tmdb_id']==row['tmdb_id']),None)
+                if not person or not any(r['blob']==row['git_blob'] for r in person['receipts']):
+                    raise RetentionBlocked('Failed output is not an exact verified replacement')
+            else:raise RetentionBlocked('Unknown failed-payload compaction reason')
+            deadline=row.get('not_before',0)
+            if now<deadline:waiting.append(dict(path=row['path'],bytes=row['bytes'],retention_deadline=deadline));continue
+            eligible.append(row)
+        # Verify protected metadata, unique inputs and rollback evidence before
+        # retiring operations. These anchors are never deletion candidates.
+        for row in approval['preserve']:
+            if row['path'] in names or inspect(member(config,row['path']))!=row['identity']:
+                raise RetentionBlocked('Protected failed-job evidence changed')
+        protected,_=protected_references(config,state,for_jobs=True)
+        if any(protected_path(r,protected) for r in eligible):
+            raise RetentionBlocked('Failed payload still referenced by recovery or another operation')
+        for job in operations:
+            marker=member(config,'jobs/'+job+'/retention-retired.json')
+            value=dict(version=1,approval_sha256=expected_digest,manifest_sha256=operations[job]['manifest_sha256'])
+            if marker.exists():
+                if read_json(marker)!=value:raise RetentionBlocked('Failed operation retirement changed')
+            else:atomic_json(marker,value)
+        protected,reference_hash=protected_references(config,state,for_jobs=True)
+        if any(protected_path(r,protected) for r in eligible):
+            raise RetentionBlocked('Failed payload still referenced by recovery or another operation')
+        journal=Journal(directory);removed=[];path=directory/('failed-run-'+str(time.time_ns())+'.json')
+        try:
+            for row in eligible:
+                remote.confirm(snapshot)
+                if protected_references(config,state,for_jobs=True)[1]!=reference_hash:
+                    raise RetentionBlocked('Failed-operation references changed')
+                if 'retained_survivor' in row and inspect(member(config,row['retained_survivor']))!=row['survivor_identity']:
+                    raise RetentionBlocked('Failed duplicate survivor changed before unlink')
+                journal.intent(FAILED_SCOPE,config,row,dict(approval_sha256=expected_digest,heads={r:d['head'] for r,d in snapshot.items()}))
+                unlink_verified(config,row);journal.mark(FAILED_SCOPE,config,row['path'],'deleted')
+                removed.append(dict(path=row['path'],sha256=row['sha256'],bytes=row['bytes'],
+                    deleted_utc=datetime.now(timezone.utc).isoformat(),reason=row['reason']))
+            for name,old in prior.items():
+                if old['state']=='intent' and not member(config,name).exists():journal.mark(FAILED_SCOPE,config,name,'missing_after_intent')
+        finally:
+            atomic_json(path,dict(approval_sha256=expected_digest,head=ci['head'],deleted=removed,
+                recovered_bytes=sum(r['bytes'] for r in removed),waiting=waiting,completed=len(removed)==len(eligible)))
+        return read_json(path)
+
+
+def storage_report(config, plan, *, previous=None, cleanup=None):
+    """Small repeatable config summary; never hash/read cache or image payloads."""
+    config=canonical_root(config);folders={}
+    for root,dirs,names in os.walk(config,followlinks=False,onerror=lambda e:(_ for _ in ()).throw(e)):
+        for name in dirs+names:reject_links(Path(root)/name)
+        for name in names:
+            path=Path(root)/name;parts=path.relative_to(config).parts
+            key=parts[0] if len(parts)>1 else '[root files]'
+            row=folders.setdefault(key,dict(files=0,bytes=0))
+            row['files']+=1;row['bytes']+=path.stat().st_size
+    failed=[dict(id=j['id'],files=j['total_files'],bytes=j['total_bytes'],reason=j['reason'],
+                 retired=member(config,'jobs/'+j['id']+'/retention-retired.json').exists())
+            for j in plan['jobs'] if j['status'] in {'failed','partially_published','recovery_pending'}]
+    old={j['id']:j['bytes'] for j in (previous or {}).get('failed_jobs',{}).get('jobs',[])}
+    failed_bytes=sum(j['bytes'] for j in failed)
+    growth=None if previous is None else failed_bytes-sum(old.values())
+    warnings=list(plan['storage']['warnings'])
+    unresolved=any(not j['retired'] for j in failed)
+    if unresolved:warnings.append('failed_payloads_retained; review_later_successes_and_exact_compaction_candidates')
+    if unresolved and growth is not None and growth>0:warnings.append('failed_job_storage_grew')
+    return dict(version=1,generated_utc=datetime.now(timezone.utc).isoformat(),root=str(config),
+        folders=folders,total_files=sum(r['files'] for r in folders.values()),
+        total_bytes=sum(r['bytes'] for r in folders.values()),
+        eligible_files=plan['eligible_files'],eligible_bytes=plan['eligible_bytes'],
+        blocked_job_bytes=plan['storage']['retained_bytes'],jobs=plan['jobs'],
+        failed_jobs=dict(jobs=failed,bytes=failed_bytes,growth_bytes=growth,
+                         retired_bytes=sum(j['bytes'] for j in failed if j['retired'])),
+        ordinary_logs=ordinary_logs(config),warnings=warnings,
+        cleanup=cleanup or dict(status='report_only',recovered_bytes=0))
+
+
+def maintenance_after_job(manager, *, completed, remote=None):
+    """Called after child stages finish, before releasing the processing lease.
+
+    The current successful job still has its three-day window. Failed/retryable
+    payloads remain protected. Failures here must not change publication status.
+    No timer, service, batch creation, receipt reconstruction or cache pruning.
+    """
+    from create_people_posters.people_diagnostics import safe_exception
+    config=canonical_root(manager.config)
+    directory=config/'state/verified-retention'
+    latest=directory/'storage-report.json'
+    cleanup=dict(status='report_only',recovered_bytes=0)
+    try:
+        marker=read_json(directory/'enrollment.json')
+        previous=read_json(latest) if latest.exists() else None
+        plan,_=build_jobs_plan(config,remote)
+        enabled=os.getenv('PEOPLE_AUTO_CLEANUP','true').strip().lower() in {'1','true','yes','on'}
+        if completed and enabled and marker.get('unattended_reviewed',False):
+            remote=remote or ReadOnlyGitHub()
+            # The same CI/head, root, remote, reference and pinned-unlink gates
+            # as manual apply. No bypass for a completed orchestrator run.
+            result=apply_plan(config,None,remote,plan,marker['ci_receipt'],allow_existing=True)
+            cleanup=dict(status='completed',recovered_bytes=result['recovered_bytes'],
+                         deleted_files=len(result['deleted']),plan_digest=plan['plan_digest'])
+            if marker.get('failed_approval_sha256'):
+                failed=apply_reviewed_failed(config,read_json(directory/'failed-approval.json'),
+                    marker['failed_approval_sha256'],remote,marker['ci_receipt'],allow_existing=True)
+                cleanup['failed']=failed
+                cleanup['recovered_bytes']+=failed['recovered_bytes']
+            with processing_exclusion(config,MANAGED_SCOPE,allow_existing=True) as owned:
+                ci=remote.validate_ci(marker['ci_receipt'],Path(__file__).resolve().parents[1])
+                changes=rotate_ordinary_logs(config)
+                for job in plan['jobs']:
+                    if job['status'] not in SUCCESS|{'complete'}:continue
+                    folder=member(config,'jobs/'+job['id'])
+                    manifest=read_json(folder/'manifest.json')
+                    if (manifest.get('managed_by')!='kometa-people-v1' or manifest.get('id')!=job['id']
+                            or (folder/'.active').exists()):continue
+                    for change in rotate_ordinary_logs(folder):
+                        changes.append(dict(change,path='jobs/'+job['id']+'/'+change['path']))
+                atomic_json(owned/('log-run-'+str(time.time_ns())+'.json'),dict(head=ci['head'],changes=changes))
+                cleanup['log_reclaimed_bytes']=sum(r['bytes'] for r in changes)
+            plan,_=build_jobs_plan(config,remote)
+        elif not completed:cleanup['status']='failed_or_retryable_job; payload_and_logs_retained'
+        elif not enabled:cleanup['status']='automatic_cleanup_disabled'
+        else:cleanup['status']='unattended_cleanup_not_reviewed'
+        report=storage_report(config,plan,previous=previous,cleanup=cleanup)
+        atomic_json(latest,report)
+        print('[STORAGE] '+json.dumps(dict(eligible_bytes=report['eligible_bytes'],
+            blocked_job_bytes=report['blocked_job_bytes'],failed_bytes=report['failed_jobs']['bytes'],
+            failed_growth_bytes=report['failed_jobs']['growth_bytes'],cleanup=cleanup,warnings=report['warnings'])))
+        return report
+    except (OSError,ValueError,KeyError,TypeError,__import__('sqlite3').Error) as error:
+        # Keep prior successful evidence and write a bounded latest failure.
+        message=safe_exception(error)
+        failure=dict(generated_utc=datetime.now(timezone.utc).isoformat(),status='blocked',
+                     reason=message,cleanup=cleanup)
+        try:atomic_json(directory/'maintenance-error.json',failure)
+        except (OSError,ValueError):pass
+        print('[WARN] End-of-job storage maintenance blocked; retained: '+message,file=sys.stderr)
+        return failure
+
+
 def main(argv=None):
     import argparse
     parser=argparse.ArgumentParser(description=__doc__)
@@ -494,9 +729,14 @@ def main(argv=None):
     parser.add_argument('--approval',type=Path,help='Optional fixed legacy adoption inventory; routine job cleanup needs none')
     parser.add_argument('--report',required=True,type=Path,help='NEW output outside production config')
     parser.add_argument('--apply-plan',type=Path)
+    parser.add_argument('--apply-failed-plan',type=Path,help='Separately approved exact failed-job payload catalog; never an age-based grant')
+    parser.add_argument('--failed-approval-sha256',help='Explicit reviewed digest of the failed-job approval')
     parser.add_argument('--ci-receipt',type=Path)
     parser.add_argument('--apply-logs',action='store_true',help='Rotate only ordinary persistent diagnostics under the shared lease')
+    parser.add_argument('--storage-report',action='store_true',help='Include config sizes and failed-job growth summary in read-only report')
     args=parser.parse_args(argv)
+    if sum(bool(v) for v in (args.apply_plan,args.apply_logs,args.apply_failed_plan))>1:
+        parser.error('Choose one maintenance action')
     config=canonical_root(args.config);output=args.report.absolute()
     reject_links(output);output=output.resolve()
     if output==config or config in output.parents or output.exists():
@@ -510,8 +750,13 @@ def main(argv=None):
         if os.getenv(key) and canonical_root(os.environ[key])!=canonical_root(config/name):
             raise RetentionBlocked('Custom workspace roots require explicit retention review')
     approval=approved_plan(args.approval) if args.approval else None
-    remote=ReadOnlyGitHub() if approval is not None or args.apply_plan or args.apply_logs else None
-    if args.apply_logs:
+    remote=ReadOnlyGitHub() if approval is not None or args.apply_plan or args.apply_logs or args.apply_failed_plan else None
+    if args.apply_failed_plan:
+        if not args.ci_receipt or not args.failed_approval_sha256 or approval is not None:
+            parser.error('Failed cleanup requires its separately reviewed digest and final HEAD CI receipt')
+        result=apply_reviewed_failed(config,read_json(args.apply_failed_plan),args.failed_approval_sha256,
+            remote,read_json(args.ci_receipt))
+    elif args.apply_logs:
         if not args.ci_receipt or args.apply_plan or approval is not None:parser.error('Log maintenance requires CI receipt and its own invocation')
         ci=remote.validate_ci(read_json(args.ci_receipt),Path(__file__).resolve().parents[1])
         with processing_exclusion(config,MANAGED_SCOPE) as directory:
@@ -524,6 +769,10 @@ def main(argv=None):
     else:
         result=(build_plan(config,approval,remote) if approval is not None else build_jobs_plan(config,remote))[0]
         result['ordinary_logs']=ordinary_logs(config)
+        if args.storage_report:
+            if approval is not None:parser.error('Storage report requires routine managed-job mode')
+            previous=config/'state/verified-retention/storage-report.json'
+            result['storage_report']=storage_report(config,result,previous=read_json(previous) if previous.exists() else None)
     atomic_json(output,result)
     print(json.dumps({k:result[k] for k in ('eligible_files','eligible_bytes','plan_digest','recovered_bytes','storage') if k in result}))
 
