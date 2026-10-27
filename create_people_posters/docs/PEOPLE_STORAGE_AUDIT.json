@@ -1,0 +1,352 @@
+{
+  "schema_version": 1,
+  "read_only": true,
+  "generated": 1793014948.0340426,
+  "retention_days": 3,
+  "categories": {
+    "other_retained": {
+      "files": 13201,
+      "bytes": 2008584723
+    },
+    "recovery_reports_history": {
+      "files": 15,
+      "bytes": 1101499
+    },
+    "batch_inputs_and_intermediates": {
+      "files": 1486,
+      "bytes": 2255648853
+    },
+    "batch_originals": {
+      "files": 163,
+      "bytes": 78727085
+    },
+    "batch_logs": {
+      "files": 157,
+      "bytes": 513887
+    },
+    "legacy_candidates_unowned": {
+      "files": 15,
+      "bytes": 2676595
+    },
+    "rollback_evidence": {
+      "files": 33,
+      "bytes": 59489864
+    },
+    "persistent_logs": {
+      "files": 19,
+      "bytes": 26739954
+    },
+    "model_cache": {
+      "files": 15,
+      "bytes": 3299221330
+    },
+    "persistent_artwork": {
+      "files": 937,
+      "bytes": 2466139826
+    },
+    "background_mirrors": {
+      "files": 4,
+      "bytes": 1372439
+    },
+    "durable_state_receipts": {
+      "files": 17,
+      "bytes": 37196407
+    },
+    "vendor": {
+      "files": 109,
+      "bytes": 3854240
+    }
+  },
+  "retained_batch_count": 14,
+  "batches": [
+    {
+      "id": "20261015T012302-8dd3a8a196b5",
+      "files": 40,
+      "bytes": 39025081,
+      "status": "validation_only",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 11.43,
+      "updated_age_days": 11.423,
+      "blocked": "unpublished or incomplete batch; manual recovery required"
+    },
+    {
+      "id": "20261015T022054-1f3dd19d9b13",
+      "files": 14,
+      "bytes": 26031,
+      "status": "complete",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 11.39,
+      "updated_age_days": 8.009,
+      "blocked": "complete: compact evidence retained"
+    },
+    {
+      "id": "20261015T024133-6a94c50b17f5",
+      "files": 14,
+      "bytes": 27714,
+      "status": "complete",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 11.376,
+      "updated_age_days": 8.009,
+      "blocked": "complete: compact evidence retained"
+    },
+    {
+      "id": "20261015T024802-54544c0211fd",
+      "files": 6,
+      "bytes": 1411,
+      "status": "no_work",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 11.371,
+      "updated_age_days": 11.37,
+      "blocked": "unpublished or incomplete batch; manual recovery required"
+    },
+    {
+      "id": "20261018T112901-5da1b0cb1051",
+      "files": 6,
+      "bytes": 1117,
+      "status": "no_work",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 8.009,
+      "updated_age_days": 8.008,
+      "blocked": "unpublished or incomplete batch; manual recovery required"
+    },
+    {
+      "id": "20261018T113109-90d66167d868",
+      "files": 14,
+      "bytes": 14783,
+      "status": "complete",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 8.008,
+      "updated_age_days": 4.953,
+      "blocked": "complete: compact evidence retained"
+    },
+    {
+      "id": "20261018T115445-c4d1c8f214d5",
+      "files": 14,
+      "bytes": 59293,
+      "status": "complete",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 7.991,
+      "updated_age_days": 4.953,
+      "blocked": "complete: compact evidence retained"
+    },
+    {
+      "id": "20261018T202002-f182aee6bbbf",
+      "files": 6,
+      "bytes": 3116,
+      "status": "no_work",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 7.641,
+      "updated_age_days": 7.64,
+      "blocked": "unpublished or incomplete batch; manual recovery required"
+    },
+    {
+      "id": "20261021T125017-42f5984a737d",
+      "files": 14,
+      "bytes": 11535,
+      "status": "complete",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 4.953,
+      "updated_age_days": 1.605,
+      "blocked": "complete: compact evidence retained"
+    },
+    {
+      "id": "20261023T103242-8e1ebc66b31c",
+      "files": 196,
+      "bytes": 109510089,
+      "status": "failed",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 3.048,
+      "updated_age_days": 3.035,
+      "blocked": "unpublished or incomplete batch; manual recovery required"
+    },
+    {
+      "id": "20261023T120214-70d00645512c",
+      "files": 406,
+      "bytes": 679998480,
+      "status": "failed",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 2.986,
+      "updated_age_days": 2.968,
+      "blocked": "unpublished or incomplete batch; manual recovery required"
+    },
+    {
+      "id": "20261024T211114-d290caa0e40c",
+      "files": 6,
+      "bytes": 2333,
+      "status": "failed",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 1.605,
+      "updated_age_days": 1.605,
+      "blocked": "unpublished or incomplete batch; manual recovery required"
+    },
+    {
+      "id": "20261024T211204-7ddfd41e3f5f",
+      "files": 231,
+      "bytes": 28808541,
+      "status": "failed",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 1.604,
+      "updated_age_days": 1.578,
+      "blocked": "unpublished or incomplete batch; manual recovery required"
+    },
+    {
+      "id": "20261024T220933-a630709ce632",
+      "files": 692,
+      "bytes": 1360665735,
+      "status": "cleanup_eligible",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 1.565,
+      "updated_age_days": 1.538,
+      "published_age_days": 1.538,
+      "publication_verified": true,
+      "blocked": "verified-publication retention window has not elapsed"
+    },
+    {
+      "id": "20261025T112600-14b8bdba9a34",
+      "files": 30,
+      "bytes": 8834353,
+      "status": "failed",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 1.011,
+      "updated_age_days": 1.008,
+      "blocked": "unpublished or incomplete batch; manual recovery required"
+    },
+    {
+      "id": "20261026T035527-50ecd8edada4",
+      "files": 108,
+      "bytes": 141093476,
+      "status": "cleanup_eligible",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 0.324,
+      "updated_age_days": 0.319,
+      "published_age_days": 0.319,
+      "publication_verified": true,
+      "blocked": "verified-publication retention window has not elapsed"
+    },
+    {
+      "id": "20261026T040712-5f311004706e",
+      "files": 7,
+      "bytes": 2001,
+      "status": "no_work",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 0.316,
+      "updated_age_days": 0.315,
+      "blocked": "unpublished or incomplete batch; manual recovery required"
+    },
+    {
+      "id": "20261026T040944-cec290e88eff",
+      "files": 54,
+      "bytes": 28987156,
+      "status": "cleanup_eligible",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 0.314,
+      "updated_age_days": 0.312,
+      "published_age_days": 0.312,
+      "publication_verified": true,
+      "blocked": "verified-publication retention window has not elapsed"
+    },
+    {
+      "id": "20261026T104228-88cf77e523d5",
+      "files": 7,
+      "bytes": 2244,
+      "status": "no_work",
+      "eligible_files": 0,
+      "eligible_bytes": 0,
+      "age_days": 0.042,
+      "updated_age_days": 0.041,
+      "blocked": "unpublished or incomplete batch; manual recovery required"
+    }
+  ],
+  "operations": [],
+  "legacy_candidates": [
+    {
+      "root": "jobs/20261023T120214-70d00645512c/edge_chop_recovery/candidates",
+      "paths": [
+        "Gillian Bolt/001.jpg",
+        "Gillian Bolt/002.jpg",
+        "Joel Oulette/001.jpg",
+        "Joel Oulette/002.jpg",
+        "Josh Cruddas/001.jpg",
+        "Mukesh Chhabra/001.jpg",
+        "Tim Bagley/001.jpg"
+      ],
+      "files": 7,
+      "bytes": 1027769,
+      "blocked": "legacy candidates lack operation ownership and verified success evidence; manual review required"
+    },
+    {
+      "root": "jobs/20261024T220933-a630709ce632/edge_chop_recovery/candidates",
+      "paths": [
+        "Bipasha Basu/001.jpg",
+        "Bipasha Basu/002.jpg",
+        "Bipasha Basu/003.jpg",
+        "Bipasha Basu/004.jpg",
+        "Gillian Bolt/001.jpg",
+        "Gillian Bolt/002.jpg",
+        "Joel Oulette/001.jpg",
+        "Joel Oulette/002.jpg"
+      ],
+      "files": 8,
+      "bytes": 1648826,
+      "blocked": "legacy candidates lack operation ownership and verified success evidence; manual review required"
+    }
+  ],
+  "blocked_paths": [
+    {
+      "path": "validation/browser-smoke",
+      "reason": "PermissionError: unreadable or linked path"
+    },
+    {
+      "path": "validation/failed-batch-20261025/retry-fixture-htjriidu",
+      "reason": "PermissionError: unreadable or linked path"
+    },
+    {
+      "path": "validation/failed-batch-20261025/retry-fixture-_4bqch46",
+      "reason": "PermissionError: unreadable or linked path"
+    }
+  ],
+  "owned_scratch_recoverable_bytes": 0,
+  "batch_policy_recoverable_bytes": 0,
+  "audit_metadata_unchanged": true,
+  "synthetic_before_after_poster_byte_verification": {
+    "main": {
+      "original": "d276740ddf2900eb086ce4c37d3aa84c96e030455428afe3a6f3231be4cc56cc",
+      "bw": "9311efadfbc22f3e0baf4d85c6d31e59246382044e9b6fd51af65f776367d6df",
+      "diiivoy": "6efa50e379ed49aa978db95ddc4aabef79a25ed6baf04ac0a42486cc8330830d",
+      "diiivoycolor": "a4b43730322bb4de3f2ad14d2bcf84c92dc8dee1dbebf67e7a3ecb120d95ee18",
+      "rainier": "9d5bc71d0aae18615e2615e58ccb4c3b4ffc8d5b6e89dbf27d1c4f45e54731ba",
+      "signature": "610fe2c0bb40e7ed88c16a51ff5b8eed55626a55f9aadcd35b981fe2832bf226",
+      "transparent": "6bc00df51fc8298dce2afefcd5266794e9d898e498e897a0459ddbfd11fb8a67"
+    },
+    "repair": {
+      "original": "d276740ddf2900eb086ce4c37d3aa84c96e030455428afe3a6f3231be4cc56cc",
+      "bw": "9311efadfbc22f3e0baf4d85c6d31e59246382044e9b6fd51af65f776367d6df",
+      "diiivoy": "6efa50e379ed49aa978db95ddc4aabef79a25ed6baf04ac0a42486cc8330830d",
+      "diiivoycolor": "a4b43730322bb4de3f2ad14d2bcf84c92dc8dee1dbebf67e7a3ecb120d95ee18",
+      "rainier": "9d5bc71d0aae18615e2615e58ccb4c3b4ffc8d5b6e89dbf27d1c4f45e54731ba",
+      "signature": "610fe2c0bb40e7ed88c16a51ff5b8eed55626a55f9aadcd35b981fe2832bf226",
+      "transparent": "6bc00df51fc8298dce2afefcd5266794e9d898e498e897a0459ddbfd11fb8a67"
+    },
+    "all_seven_poster_bytes_identical": true
+  },
+  "old_local_files_removed": 0,
+  "old_local_bytes_recovered": 0
+}
