@@ -1,7 +1,9 @@
 """Pin the reviewed DDColor fix without refreshing historical source inventories."""
 from copy import deepcopy
 import json
+import os
 from pathlib import Path
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -12,6 +14,30 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class PeopleColorizeMaintenanceTests(unittest.TestCase):
+    def test_detached_head_is_fresh_and_git_overrides_keep_authoritative_resolution(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / '.git').mkdir()
+            head_file = root / '.git/HEAD'
+            environment = {key: value for key, value in os.environ.items()
+                           if key not in {'GIT_DIR', 'GIT_COMMON_DIR', 'GIT_WORK_TREE', 'GIT_NAMESPACE'}}
+            with patch.dict(os.environ, environment, clear=True):
+                with patch.object(colorize, '_git', side_effect=AssertionError('Unexpected Git startup')):
+                    head_file.write_text('a' * 40 + '\n')
+                    self.assertEqual(colorize._head(root), 'a' * 40)
+                    head_file.write_text('b' * 40 + '\n')
+                    self.assertEqual(colorize._head(root), 'b' * 40)
+                for setting in ('ref: refs/heads/main', 'malformed HEAD'):
+                    head_file.write_text(setting)
+                    with patch.object(colorize, '_git', return_value=b'c' * 40 + b'\n') as git:
+                        self.assertEqual(colorize._head(root), 'c' * 40)
+                        git.assert_called_once_with(root, 'rev-parse', 'HEAD')
+                head_file.write_text('a' * 40)
+                for key in ('GIT_DIR', 'GIT_COMMON_DIR', 'GIT_WORK_TREE', 'GIT_NAMESPACE'):
+                    with patch.dict(os.environ, {key: ''}), patch.object(colorize, '_git', return_value=b'd' * 40 + b'\n') as git:
+                        self.assertEqual(colorize._head(root), 'd' * 40)
+                        git.assert_called_once_with(root, 'rev-parse', 'HEAD')
+
     def test_exact_checkout_and_known_predecessor_select_successor(self):
         value = colorize.verify_checkout()
         for source in colorize.PINNED:

@@ -2,7 +2,9 @@
 from functools import lru_cache
 import hashlib
 import json
+import os
 from pathlib import Path
+import re
 import subprocess
 
 from ci.people_storage_maintenance import regular
@@ -13,7 +15,7 @@ SOURCE = 'create_people_posters/orchestrator.py'
 SOURCES = frozenset({SOURCE, 'create_people_posters/remove_bg_birefnet.py'})
 PINNED = SOURCES | {'create_people_posters/tests/test_remove_bg_birefnet.py'}
 MANIFEST = ROOT / 'ci/people-colorize-maintenance-v1.json'
-PIN = '6af0afba1c2386a54329ccc3ebdd570844ff1533633761f3dfdfaf002582585d'
+PIN = '3bf1d9f52c7b6c9fe494d261405075ec065a3a428fd92074e1f3fd7bcc2fd0b8'
 MEMBERS = frozenset({
     SOURCE, 'create_people_posters/.env.example', 'create_people_posters/README.md',
     'create_people_posters/tests/test_ddcolor_colorizer.py',
@@ -55,6 +57,22 @@ def _ancestry(root, head):
     _git(root, 'merge-base', '--is-ancestor', BASE, head)
 
 
+def _head(root):
+    # Actions checks out a detached HEAD. Read that exact commit afresh instead
+    # of spawning Git on every nested source check. Branches, worktrees and Git
+    # discovery overrides retain Git's authoritative resolution. Ancestry below
+    # is still verified for the resulting immutable commit, never a cached path.
+    if not any(name in os.environ for name in ('GIT_DIR', 'GIT_COMMON_DIR', 'GIT_WORK_TREE', 'GIT_NAMESPACE')):
+        try:
+            head = (Path(root) / '.git' / 'HEAD').read_text(encoding='ascii').strip()
+        except (OSError, UnicodeError):
+            pass
+        else:
+            if re.fullmatch(r'[0-9a-f]{40}', head):
+                return head
+    return _git(root, 'rev-parse', 'HEAD').decode().strip()
+
+
 def manifest():
     value = json.loads(regular(ROOT, MANIFEST.relative_to(ROOT).as_posix()).read_bytes())
     if (fingerprint(value) != PIN or value['version'] != 1
@@ -68,7 +86,7 @@ def manifest():
 def verify_checkout(root=None):
     root = Path(root or ROOT)
     value = manifest()
-    head = _git(root, 'rev-parse', 'HEAD').decode().strip()
+    head = _head(root)
     _ancestry(str(root), head)
     for name, binding in value['members'].items():
         if sha(regular(root, name).read_bytes()) != binding['sha256']:
