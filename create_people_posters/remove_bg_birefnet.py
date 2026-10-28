@@ -379,12 +379,16 @@ def run_batch(source_dir: Path, original_dir: Path, output_dir: Path, settings: 
                 LOG.error("%s: staged cutout has unknown/different provenance; restage its original", path.name)
                 continue
         files.append(path)
+    total = len(summary["files"]) + len(files)
+    LOG.info("Background removal: %d/%d complete (processed=%d skipped=%d failed=%d)",
+             len(summary["files"]), total, summary["processed"], summary["skipped"], summary["failed"])
     targets: dict[str, list[Path]] = {}
     for path in files:
         targets.setdefault(unicodedata.normalize("NFC", path.stem).casefold(), []).append(path)
     remover = None
     try:
         for source in files:
+            LOG.info("processing [%d/%d] input=%s", len(summary["files"]) + 1, total, source.name)
             began = time.perf_counter()
             current_operation = "input_validation"
             target = output_dir / (source.stem + ".png")
@@ -429,8 +433,8 @@ def run_batch(source_dir: Path, original_dir: Path, output_dir: Path, settings: 
                 summary[record["status"]] += 1
                 record["duration"] = time.perf_counter() - began
                 summary["files"].append(record)
-                LOG.info("%s input=%s output=%s dimensions=%s seconds=%.3f warnings=%s",
-                         record["status"], source.name, target.name, record["dimensions"],
+                LOG.info("%s [%d/%d] input=%s output=%s dimensions=%s seconds=%.3f warnings=%s",
+                         record["status"], len(summary["files"]), total, source.name, target.name, record["dimensions"],
                          record["duration"], record["warnings"])
             except Exception as exc:
                 failure = failure_record(exc, current_operation, source.name)
@@ -438,7 +442,7 @@ def run_batch(source_dir: Path, original_dir: Path, output_dir: Path, settings: 
                 summary["files"].append({"source": str(source), "output": str(target),
                                           "status": "failed", "duration": time.perf_counter() - began,
                                           "reason": safe_exception(exc) + " " + failure_text(failure), "failure": failure})
-                LOG.error("failed input=%s output=%s seconds=%.3f reason=%s", source.name,
+                LOG.error("failed [%d/%d] input=%s output=%s seconds=%.3f reason=%s", len(summary["files"]), total, source.name,
                           target.name, time.perf_counter() - began, failure_text(failure))
     finally:
         if remover is not None:

@@ -337,12 +337,22 @@ def _colorize_python_candidates(default_python: str) -> list[tuple[str, List[str
 def _python_probe(argv_prefix: List[str], require_colorize_deps: bool) -> Tuple[bool, str]:
     if not argv_prefix:
         return False, "empty interpreter command"
+    # Native ML libraries can take much longer to import on a cold Windows
+    # filesystem than Python itself takes to start. Keep no-work checks short.
+    timeout = 30
+    if require_colorize_deps:
+        try:
+            timeout = int(os.getenv("COLORIZE_PROBE_TIMEOUT", "180"))
+            if timeout <= 0:
+                raise ValueError
+        except ValueError:
+            return False, "COLORIZE_PROBE_TIMEOUT must be a positive integer (seconds)"
     probe = "import sys; print(sys.executable)"
     if require_colorize_deps:
         probe = (
             "import sys; "
-            "import torch, torchvision, cv2, numpy, PIL, huggingface_hub; "
             "assert sys.version_info >= (3, 10), 'Python 3.10+ required for DDColor'; "
+            "import torch, torchvision, cv2, numpy, PIL, huggingface_hub; "
             "print(sys.executable)"
         )
     try:
@@ -354,8 +364,15 @@ def _python_probe(argv_prefix: List[str], require_colorize_deps: bool) -> Tuple[
             text=True,
             encoding="utf-8",
             errors="replace",
-            timeout=30,
+            timeout=timeout,
         )
+    except subprocess.TimeoutExpired as e:
+        action = (
+            "DDColor dependency imports did not finish; this does not establish that packages are missing. "
+            "Increase COLORIZE_PROBE_TIMEOUT for slower startup."
+            if require_colorize_deps else "Python startup did not finish."
+        )
+        return False, f"Interpreter probe timed out after {timeout}s. {action} {safe_exception(e)}"
     except FileNotFoundError as e:
         return False, safe_exception(e)
     except Exception as e:
@@ -378,6 +395,7 @@ def build_colorize_command(default_python: str) -> List[str]:
     failures: list[str] = []
 
     for label, prefix in _colorize_python_candidates(default_python):
+        print(f"[INFO] Checking colorize interpreter: {label} ({' '.join(prefix)})", flush=True)
         ok, detail = _python_probe(prefix, require_colorize_deps=require_deps)
         if ok:
             if label != "COLORIZE_PYTHON":

@@ -49,6 +49,8 @@ def manifest():
 
 
 def verify_checkout(root=None):
+    from ci.people_colorize_maintenance import verify_checkout as verify_colorize
+    verify_colorize()
     root=Path(root or ROOT);value=manifest()
     from ci.people_storage_maintenance import git_bytes
     subprocess.check_call(['git','merge-base','--is-ancestor',value['audit_ancestor'],'HEAD'],cwd=root)
@@ -66,19 +68,28 @@ def verify_checkout(root=None):
 
 
 def selected_hash(name,expected):
-    if name not in {WORKSPACE,PROCESS}:return expected
+    if name not in {WORKSPACE,PROCESS}:
+        from ci.people_colorize_maintenance import selected_hash as colorize_hash
+        return colorize_hash(name,expected)
     binding=manifest()['members'][name]
     if expected!=binding['before_sha256']:return expected
     verify_checkout()
     return binding['sha256']
 
 
-def scope_members():return MEMBERS|ANCHORS
+def scope_members():
+    from ci.people_colorize_maintenance import scope_members as colorize_scope
+    return MEMBERS|ANCHORS|colorize_scope()
 
 
 def verify_scope(root,baseline,names):
     verify_checkout(root)
     if not names<=scope_members():raise ValueError('Unauthorized retention scope')
+    from ci.people_colorize_maintenance import scope_members as colorize_scope, verify_scope as colorize_verify
+    extra=names&colorize_scope()
+    if extra:colorize_verify(root,baseline,extra)
+    names=names-extra
+    if not names:return
     rows=subprocess.check_output(['git','diff','--raw','--no-abbrev','--no-renames','-z',baseline,'HEAD','--',*sorted(names)],cwd=root).split(b'\0')
     if rows[-1]!=b'' or len(rows)!=2*len(names)+1:raise ValueError('Incomplete retention diff')
     seen=set()

@@ -292,6 +292,12 @@ DDColor is the only supported colorizer. Leave `COLORIZE_PYTHON` blank to
 automatically select `.venv-ddcolor`, or set it to a custom interpreter with
 `requirements-ddcolor.txt` installed. Other `COLORIZE_ENGINE` values are rejected.
 
+Interpreter selection allows 180 seconds for DDColor dependency imports, which
+can be slow on a cold Windows startup. Set `COLORIZE_PROBE_TIMEOUT` to a positive
+number of seconds to adjust that limit. A timeout means the import check did not
+finish; it does not establish that dependencies are missing. When no grayscale
+files are waiting, the basic Python startup check retains its 30-second limit.
+
 The previous DeOldify implementation is preserved in Git commit `5fdded4`.
 Restore that version in a separate checkout to recover its code, configuration,
 and installation instructions. Removed environments and caches must be recreated.
@@ -1248,6 +1254,10 @@ machine; it loads one model at a time. ISNet General is a smaller comparison
 baseline, not a guaranteed faster or better portrait model.
 
 ### Configuration and Batch Processing
+
+Background-removal logs show the queue size and per-file counters such as
+`processing [1/24]` and `processed [1/24]`. Skipped and failed files count toward
+completed work while retaining their own status.
 
 Add to `config/.env`:
 

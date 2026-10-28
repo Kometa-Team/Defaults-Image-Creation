@@ -192,13 +192,21 @@ def test_single_image_preserves_source_dimensions_and_soft_rgba(tmp_path, fake_b
     assert_no_temporary_files(tmp_path)
 
 
-def test_batch_archives_exact_originals_and_initializes_one_session(folders, fake_backend):
+def test_batch_archives_exact_originals_and_initializes_one_session(folders, fake_backend, caplog):
     originals = {
         name: make_source(folders.source / name)
         for name in ("one.jpg", "two.webp", "three.png")
     }
 
-    summary = batch(folders, fake_backend)
+    with caplog.at_level(logging.INFO, logger=bg.LOG.name):
+        summary = batch(folders, fake_backend)
+
+    messages = [entry.getMessage() for entry in caplog.records if entry.name == bg.LOG.name]
+    assert messages[0] == "Background removal: 0/3 complete (processed=0 skipped=0 failed=0)"
+    for index, name in enumerate(sorted(originals, key=str.casefold), 1):
+        starting = next(i for i, message in enumerate(messages) if message == f"processing [{index}/3] input={name}")
+        finished = next(i for i, message in enumerate(messages) if message.startswith(f"processed [{index}/3] input={name} "))
+        assert starting < finished
 
     assert (summary["exit_code"], summary["outcome"]) == (0, "success")
     assert (summary["processed"], summary["skipped"], summary["failed"]) == (3, 0, 0)
@@ -305,12 +313,14 @@ def test_batch_runtime_warnings_stay_per_image_and_reuse_one_model(folders, fake
     assert_no_temporary_files(folders.source.parent)
 
 
-def test_empty_queue_ignores_auxiliary_files_without_initializing(folders, fake_backend):
+def test_empty_queue_ignores_auxiliary_files_without_initializing(folders, fake_backend, caplog):
     (folders.source / ".hidden.jpg").write_bytes(b"ignored")
     (folders.source / "person.png.bg.json").write_text("{}")
     (folders.source / "subdirectory").mkdir()
 
-    summary = batch(folders, fake_backend)
+    with caplog.at_level(logging.INFO, logger=bg.LOG.name):
+        summary = batch(folders, fake_backend)
+    assert "Background removal: 0/0 complete (processed=0 skipped=0 failed=0)" in caplog.text
 
     assert (summary["exit_code"], summary["outcome"]) == (0, "no_work")
     assert (summary["processed"], summary["skipped"], summary["failed"]) == (0, 0, 0)
@@ -335,7 +345,7 @@ def test_unreadable_or_unsupported_inputs_fail_without_model(folders, fake_backe
     assert not folders.output.exists()
 
 
-def test_partial_failure_continues_and_preserves_failed_source(folders, fake_backend):
+def test_partial_failure_continues_and_preserves_failed_source(folders, fake_backend, caplog):
     bad = make_source(folders.source / "a-bad.jpg", color=(255, 0, 0))
     good = make_source(folders.source / "b-good.jpg", color=(0, 255, 0))
 
@@ -345,7 +355,10 @@ def test_partial_failure_continues_and_preserves_failed_source(folders, fake_bac
         return cutout(image.size)
 
     fake_backend.infer = infer
-    summary = batch(folders, fake_backend)
+    with caplog.at_level(logging.INFO, logger=bg.LOG.name):
+        summary = batch(folders, fake_backend)
+    assert "failed [1/2] input=a-bad.jpg" in caplog.text
+    assert "processed [2/2] input=b-good.jpg" in caplog.text
 
     assert (summary["exit_code"], summary["outcome"]) == (1, "partial_failure")
     assert (summary["processed"], summary["failed"]) == (1, 1)
@@ -498,7 +511,7 @@ def test_skip_preserves_inference_warnings_without_duplicates_or_reprocessing(tm
     assert_no_temporary_files(tmp_path)
 
 
-def test_batch_reuses_existing_output_for_exact_restaged_original(folders, fake_backend):
+def test_batch_reuses_existing_output_for_exact_restaged_original(folders, fake_backend, caplog):
     source = folders.source / "person.jpg"
     original = make_source(source)
     assert batch(folders, fake_backend)["processed"] == 1
@@ -507,7 +520,10 @@ def test_batch_reuses_existing_output_for_exact_restaged_original(folders, fake_
     target = folders.output / staged.name
     output_before = target.read_bytes()
 
-    summary = batch(folders, fake_backend)
+    with caplog.at_level(logging.INFO, logger=bg.LOG.name):
+        summary = batch(folders, fake_backend)
+    assert "Background removal: 0/1 complete" in caplog.text
+    assert "skipped [1/1] input=person.jpg" in caplog.text
 
     assert (summary["exit_code"], summary["processed"], summary["skipped"]) == (0, 0, 1)
     assert len(fake_backend.calls) == 1

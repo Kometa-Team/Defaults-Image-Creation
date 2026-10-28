@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "baseline_commit": "fee76362f7380fb77713955289b640c11817d611",
+  "production_successors": [
+    "create_people_posters/orchestrator.py",
+    "create_people_posters/remove_bg_birefnet.py"
+  ],
+  "publication_authorized": false,
+  "members": {
+    "ci/dependency_tests/test_people_colorize_maintenance.py": {
+      "before_sha256": null,
+      "sha256": "18267a87960ac4e46637534251676f87fc6ba6c833801a1c9f59292d5ba3e52d"
+    },
+    "ci/people_retention_maintenance.py": {
+      "before_sha256": "9662408da5b611a20ddca8549ca1c03922ac456586e418fcba22b28190f10974",
+      "sha256": "6cf73c60d62e226d955767f44f4dcc3827f5ae32e49355fc3338127a073e4629"
+    },
+    "create_people_posters/.env.example": {
+      "before_sha256": "b9db776b5f58c0af1f83b9b4afa517ff419df52afd150071f5c5667f7f195a42",
+      "sha256": "645799cffde15f7d37a0a59d38d641356bdbec10d6d5a00cee76579512e404c8"
+    },
+    "create_people_posters/README.md": {
+      "before_sha256": "7484cfeee56f75d21d7e61e630331e66d3160cafc30b08fbd674aed3a405f2cb",
+      "sha256": "03cadad9d0ffd1d2a8b29d5919ebb9654678779cbf05381a180ecd1cc63c50a7"
+    },
+    "create_people_posters/orchestrator.py": {
+      "before_sha256": "22b01696d4024715374cd81323ab4978b8ff80a5fcebb50a06295ed2f0c09498",
+      "sha256": "faa2c06cdc8828aa690af8700031c2eff365e403181f5d4f521dee94eda70ddd"
+    },
+    "create_people_posters/remove_bg_birefnet.py": {
+      "before_sha256": "8f02348e192ffd488d84aa9008b1b7ad064d8b92c9388243134b9b2c9e0bfd09",
+      "sha256": "759f8ec80b21c66710118bbce5a2d8dace3f1c30f59db816908780f941e17b13"
+    },
+    "create_people_posters/tests/test_ddcolor_colorizer.py": {
+      "before_sha256": "8604e9e02ccc587e847427e013a05d5ad12a21cd91ee28a98b17fd2de456f901",
+      "sha256": "234b0c7988753c6d92bddc9ae7c18151c2a0c2938b971f67cbd613b0efddb476"
+    },
+    "create_people_posters/tests/test_remove_bg_birefnet.py": {
+      "before_sha256": "53a5f0b96a028de1622bb24b224ce5593528f7a298997d9785ce4d62c9c200c8",
+      "sha256": "1efff61d4f1b9060c8f69ef9c8d82e83fb8f45313755ea75972df8406e0b341e"
+    }
+  }
+}
