@@ -10,7 +10,7 @@ import unicodedata
 from urllib.parse import quote
 
 import requests
-from create_people_posters.github_inventory_core import get_json, complete_tree
+from create_people_posters.github_inventory_core import GitHubError, get_json, complete_tree
 from create_people_posters.people_github import REPOSITORIES, auth_token
 from create_people_posters.people_retention_state import RetentionBlocked
 
@@ -37,6 +37,14 @@ class ReadOnlyGitHub:
         try:
             return get_json(self.session, 'https://api.github.com/repos/'+repo+route,
                             sleep=bounded_sleep, attempts=3)
+        except GitHubError as error:
+            # The existing inventory walker discards the failed recursive
+            # response and verifies every nonrecursive subtree instead.
+            if (repo in REPOSITORIES.values()
+                    and re.fullmatch(r'/git/trees/[0-9a-f]{40}\?recursive=1',route)
+                    and error.status in {0,500,502,503,504}):
+                raise
+            raise RetentionBlocked('GitHub verification unavailable; retained') from None
         except Exception:
             raise RetentionBlocked('GitHub verification unavailable; retained') from None
 
@@ -67,9 +75,19 @@ class ReadOnlyGitHub:
 
     def validate_ci(self, receipt, source_root):
         head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=source_root,text=True).strip()
-        if receipt.get('head')!=head:
-            raise RetentionBlocked('CI receipt is not for this implementation HEAD')
-        if subprocess.check_output(['git','status','--porcelain','--untracked-files=no'],cwd=source_root):
+        tested=receipt.get('head')
+        if not isinstance(tested,str) or not re.fullmatch('[0-9a-f]{40}',tested):
+            raise RetentionBlocked('Invalid tested implementation HEAD')
+        if tested!=head:
+            parents=subprocess.check_output(['git','rev-list','--parents','-n','1','HEAD'],cwd=source_root,text=True).split()
+            if len(parents)!=3 or parents[0]!=head or parents[2]!=tested:
+                raise RetentionBlocked('CI receipt is not for this implementation HEAD or its exact merge')
+            trees=subprocess.check_output(['git','rev-parse','HEAD^{tree}',tested+'^{tree}'],cwd=source_root,text=True).split()
+            if len(trees)!=2 or trees[0]!=trees[1]:
+                raise RetentionBlocked('Merged implementation differs from the tested file tree')
+        # Legacy external submodule workspaces are outside People processing.
+        # Every regular tracked source edit still fails closed.
+        if subprocess.check_output(['git','status','--porcelain','--untracked-files=no','--ignore-submodules=all'],cwd=source_root):
             raise RetentionBlocked('Implementation changed after CI')
         from ci.people_retention_maintenance import verify_checkout, test_ids
         verify_checkout()
@@ -78,7 +96,7 @@ class ReadOnlyGitHub:
             if not isinstance(run_id,int) or run_id<=0: raise RetentionBlocked('Invalid CI run identifier')
             run=self.get(SOURCE_REPO,'/actions/runs/'+str(run_id))
             name=run.get('name')
-            if (name not in WORKFLOWS or name in names or run.get('head_sha')!=head
+            if (name not in WORKFLOWS or name in names or run.get('head_sha')!=tested
                     or run.get('status')!='completed' or run.get('conclusion')!='success'
                     or run.get('event')!='pull_request'):
                 raise RetentionBlocked('Missing, stale or failed mandatory workflow')
@@ -99,7 +117,7 @@ class ReadOnlyGitHub:
             observed=set(re.findall(r'\((test_people_retention(?:_maintenance)?\.[^)]+)\) \.\.\. ok',result.stdout))
             if observed!=expected:
                 raise RetentionBlocked('Missing, skipped or unexpected retention control ID')
-        return dict(head=head,workflows=jobs,retention_test_ids=sorted(expected),verified_utc=time.time())
+        return dict(head=tested,implementation_head=head,workflows=jobs,retention_test_ids=sorted(expected),verified_utc=time.time())
 
 
 def exact_entry(snapshot,repo,path,blob,size=None):

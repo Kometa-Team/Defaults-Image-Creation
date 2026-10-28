@@ -9,7 +9,7 @@
   "members": {
     "ci/dependency_tests/test_people_retention.py": {
       "before_sha256": null,
-      "sha256": "b48534bc136215facda76eee17d6a87355a7503c1a9f6f612d42e8e926eb2b5b"
+      "sha256": "d9eb0d9bdf05ec02c052fadde71e7a99f30216cc7ae99a6aed60f1fff0e2dc66"
     },
     "ci/dependency_tests/test_people_retention_maintenance.py": {
       "before_sha256": null,
@@ -21,7 +21,7 @@
     },
     "create_people_posters/people_retention_remote.py": {
       "before_sha256": null,
-      "sha256": "5e88a24d63fbfc39029bff2db54e110a38c5699c028476d818c2fcd966bc927e"
+      "sha256": "a47996b72452ba3deac0f72e797da16fce4d1344f3a5e770093422b861bfdee1"
     },
     "create_people_posters/people_retention_state.py": {
       "before_sha256": null,
@@ -29,7 +29,7 @@
     },
     "create_people_posters/people_verified_cleanup.py": {
       "before_sha256": null,
-      "sha256": "9150271ce01baa558699afe79013a2a90bf195eb547a05f5527d384692176f82"
+      "sha256": "2548e9533cee000548c9d15f7129d6494eea25c3b06b872efd1544b3b49d29fc"
     },
     "create_people_posters/people_workspaces.py": {
       "before_sha256": "de2d5b6411ad042c1e923c7dee7a0cab7955194c69a039c73f9bb84ca73dc3e6",
@@ -49,12 +49,15 @@
     },
     "docs/PEOPLE_VERIFIED_CLEANUP.md": {
       "before_sha256": null,
-      "sha256": "e0346287dc2fd3038bc3f60514fb1485018dc86916d5066404ae2e4f1f54b07e"
+      "sha256": "050cc683b3c9bdec65cb216a1910d1eae2ede811dbb4a26784f34a84cbbcb7b9"
     }
   },
   "mandatory_unittest_ids": [
+    "test_people_retention.PeopleRetentionRemoteTests.test_ci_accepts_only_identical_two_parent_merge_of_tested_head",
     "test_people_retention.PeopleRetentionRemoteTests.test_ci_requires_exact_checkout_all_five_runs_and_no_skipped_job",
     "test_people_retention.PeopleRetentionRemoteTests.test_get_only_transport_rejects_unapproved_repository_and_path",
+    "test_people_retention.PeopleRetentionRemoteTests.test_merged_checkout_still_rejects_skipped_or_wrong_head_ci",
+    "test_people_retention.PeopleRetentionRemoteTests.test_recursive_transport_failure_uses_complete_inventory_fallback_only",
     "test_people_retention.PeopleRetentionTests.test_active_and_pending_markers_block_cleanup",
     "test_people_retention.PeopleRetentionTests.test_apply_deletes_only_approved_images_and_keeps_model_and_metadata",
     "test_people_retention.PeopleRetentionTests.test_approval_inventory_tamper_and_unknown_scope_fail",
@@ -82,6 +85,8 @@
     "test_people_retention.PeopleRetentionTests.test_failed_job_exit_reports_growth_without_deleting_or_rotating_its_logs",
     "test_people_retention.PeopleRetentionTests.test_failed_operation_reference_protects_legacy_file",
     "test_people_retention.PeopleRetentionTests.test_hardlinks_and_symlinks_are_not_adopted",
+    "test_people_retention.PeopleRetentionTests.test_historical_evidence_tampering_and_changed_manifests_fail_closed",
+    "test_people_retention.PeopleRetentionTests.test_historical_receipts_respect_retention_and_current_failed_state",
     "test_people_retention.PeopleRetentionTests.test_incomplete_readme_publication_or_style_grant_blocks",
     "test_people_retention.PeopleRetentionTests.test_interrupted_unlink_is_reconciled_without_deleting_twice",
     "test_people_retention.PeopleRetentionTests.test_jost_requires_exact_authoritative_receipt_for_approved_successor",
@@ -105,6 +110,7 @@
     "test_people_retention.PeopleRetentionTests.test_routine_missing_receipts_retains_job_without_recreating_state",
     "test_people_retention.PeopleRetentionTests.test_routine_reappearing_deleted_file_requires_review",
     "test_people_retention.PeopleRetentionTests.test_routine_source_checkpoint_and_unknown_paths_are_preserved",
+    "test_people_retention.PeopleRetentionTests.test_sealed_historical_receipts_enable_only_verified_expired_payloads_without_database_writes",
     "test_people_retention.PeopleRetentionTests.test_storage_report_missing_evidence_is_read_only_and_exposes_blocked_bytes",
     "test_people_retention.PeopleRetentionTests.test_three_day_window_uses_publication_not_folder_age",
     "test_people_retention.PeopleRetentionTests.test_unreviewed_or_disabled_end_of_job_never_applies",

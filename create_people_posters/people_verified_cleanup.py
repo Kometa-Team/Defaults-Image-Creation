@@ -8,6 +8,7 @@ from __future__ import annotations
 from contextlib import closing, nullcontext
 from datetime import datetime, timezone
 import json
+import hashlib
 import os
 from pathlib import Path
 import subprocess
@@ -28,6 +29,7 @@ from create_people_posters.people_workspaces import reject_links
 APPROVAL = 'a3e61e6b763e154b2d7575cdd12588425847187c709c0be64edc6b446d35cd43'
 FONT = '564a838df86d075f9ab39e0d1f4cfe4ef90791388988dc8b5fc732f75d1ef8f5'
 REVIEW = '7599c4a55ead56cd035c3f735c5106ea7e8c6a56c38e8504dcf8a08882a0f019'
+HISTORICAL_EVIDENCE = 'ad6acfdbff6ea701308cd579583ca2fce40e4a36d49e0c7fe8709c52e0129364'
 IMAGE = {'.jpg','.jpeg','.png','.webp','.bmp','.tif','.tiff'}
 SUCCESS = {'published','cleanup_eligible'}
 
@@ -49,7 +51,36 @@ def ledger(config):
         publications=[dict(r) for r in db.execute('SELECT * FROM publications')]
         batches={r['id']:dict(r) for r in db.execute('SELECT * FROM batches')}
         readmes=[dict(r) for r in db.execute('SELECT * FROM readmes')]
-    return dict(jobs=jobs,publications=publications,batches=batches,readmes=readmes)
+    result=dict(jobs=jobs,publications=publications,batches=batches,readmes=readmes)
+    enrollment=config/'state/verified-retention/enrollment.json'
+    marker=read_json(enrollment) if enrollment.exists() else {}
+    historical=marker.get('historical_evidence')
+    if historical:
+        path=Path(historical['path'])
+        if (not path.is_absolute() or historical.get('sha256')!=HISTORICAL_EVIDENCE
+                or inspect(path)['sha256']!=HISTORICAL_EVIDENCE):
+            raise RetentionBlocked('Historical publication evidence changed')
+        raw=path.read_bytes()
+        if hashlib.sha256(raw).hexdigest()!=HISTORICAL_EVIDENCE:
+            raise RetentionBlocked('Historical publication evidence changed while reading')
+        archive=json.loads(raw)
+        if (archive.get('read_only') is not True
+                or archive.get('source_head')!='ded9f33759f9fe3ed4ddf5f315dff01b163594ad'):
+            raise RetentionBlocked('Historical publication evidence provenance mismatch')
+        # Use the sealed original receipts only in memory. Never recreate or
+        # overwrite the operational database, or infer success from a manifest.
+        for row in archive['ledger']['jobs']:
+            job=row['id']
+            if row['status'] not in SUCCESS or job in jobs or not (config/'jobs'/job).is_dir():continue
+            manifest=config/'jobs'/job/'manifest.json'
+            if inspect(manifest)['sha256']!=archive['files']['jobs/'+job+'/manifest.json']['sha256']:
+                raise RetentionBlocked('Historical successful-job manifest changed')
+            jobs[job]=dict(row)
+            for r in archive['ledger']['batches']:
+                if r['id']==job:batches[job]=dict(r)
+            publications.extend(dict(r) for r in archive['ledger']['publications'] if r['batch']==job)
+            readmes.extend(dict(r) for r in archive['ledger']['readmes'] if r['batch']==job)
+    return result
 
 
 def job_proof(config, job, state, snapshot, now, retention):
@@ -462,6 +493,8 @@ def apply_plan(config, approval, remote, expected, ci_receipt, *, source_root=No
             source_root=str(source_root),ci_receipt=ci_receipt,unattended_reviewed=reviewed)
         if previous.get('head')==ci['head'] and previous.get('failed_approval_sha256'):
             marker['failed_approval_sha256']=previous['failed_approval_sha256']
+        if previous.get('historical_evidence'):
+            marker['historical_evidence']=previous['historical_evidence']
         atomic_json(enrollment,marker)
         journal=Journal(directory);removed=[]
         run_id=str(time.time_ns());run_path=directory/('run-'+run_id+'.json')
