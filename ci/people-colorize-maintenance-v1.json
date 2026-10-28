@@ -33,7 +33,7 @@
     },
     "create_people_posters/tests/test_ddcolor_colorizer.py": {
       "before_sha256": "8604e9e02ccc587e847427e013a05d5ad12a21cd91ee28a98b17fd2de456f901",
-      "sha256": "1ff027e17f4b414c2a15c206ee774dfadf92edb34580acee2814e75d25419e82"
+      "sha256": "234b0c7988753c6d92bddc9ae7c18151c2a0c2938b971f67cbd613b0efddb476"
     },
     "create_people_posters/tests/test_remove_bg_birefnet.py": {
       "before_sha256": "53a5f0b96a028de1622bb24b224ce5593528f7a298997d9785ce4d62c9c200c8",

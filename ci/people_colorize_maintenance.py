@@ -13,7 +13,7 @@ SOURCE = 'create_people_posters/orchestrator.py'
 SOURCES = frozenset({SOURCE, 'create_people_posters/remove_bg_birefnet.py'})
 PINNED = SOURCES | {'create_people_posters/tests/test_remove_bg_birefnet.py'}
 MANIFEST = ROOT / 'ci/people-colorize-maintenance-v1.json'
-PIN = 'f6c7ed9a864f5753f1ead3e4cd4e98f4f4f32f6a71cae3dc72111cccd06097d8'
+PIN = '6af0afba1c2386a54329ccc3ebdd570844ff1533633761f3dfdfaf002582585d'
 MEMBERS = frozenset({
     SOURCE, 'create_people_posters/.env.example', 'create_people_posters/README.md',
     'create_people_posters/tests/test_ddcolor_colorizer.py',
