@@ -160,18 +160,26 @@ class Workspaces:
 
     def select(self, batch=None, new=False, people_list=None, cleanup=True):
         if batch:
+            if self.retired(batch):
+                raise ValueError("Failed operation retired after verified replacement; use a new batch for new work")
             record, _ = self.record(batch)
             if record["status"] in {"complete", "cleanup_eligible", "validation_only"}:
                 raise ValueError("Published/cleaned/validation-only batch cannot be regenerated; use --new-batch")
             return batch
         if not new:
-            row = self.db.execute("SELECT id FROM jobs WHERE status NOT IN ('complete','cleanup_eligible','published','no_work','validation_only') ORDER BY created DESC LIMIT 1").fetchone()
+            rows = self.db.execute("SELECT id FROM jobs WHERE status NOT IN ('complete','cleanup_eligible','published','no_work','validation_only') ORDER BY created DESC").fetchall()
+            row = next((row for row in rows if not self.retired(row['id'])),None)
             if row:
                 _, manifest = self.record(row["id"])
                 if people_list and Path(manifest["people_list_source"]) != Path(people_list).absolute():
                     raise ValueError("Another unfinished batch exists; use --new-batch or --batch-id")
                 return row["id"]
         return self.create(people_list, cleanup=cleanup)
+
+    def retired(self, batch):
+        marker=self.path(batch)/"retention-retired.json"
+        reject_links(marker)
+        return marker.exists()
 
     def set_status(self, batch, status, error=""):
         error = sanitize_text(error) if type(error) is str else safe_exception(error)
@@ -197,6 +205,15 @@ class Workspaces:
         lease = self.path(batch) / ".active"
         if lease.exists() and lease.read_text(encoding="ascii") == str(os.getpid()):
             lease.unlink()
+            enrollment = self.state / "verified-retention" / "enrollment.json"
+            reject_links(enrollment)
+            if enrollment.exists():
+                if self.jobs!=(self.config/'jobs').resolve() or self.state!=(self.config/'state').resolve():
+                    print('[WARN] End-of-job maintenance retained: custom workspace roots require explicit review.')
+                    return
+                from create_people_posters.people_verified_cleanup import maintenance_after_job
+                status, _ = self.record(batch)
+                maintenance_after_job(self, completed=status["status"] in {"cleanup_eligible", "complete", "no_work"})
 
     def configure(self, batch):
         self.record(batch)

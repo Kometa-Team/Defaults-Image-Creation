@@ -377,6 +377,210 @@ class PeopleRetentionTests(unittest.TestCase):
         self.assertEqual(p.read_bytes(),b'x'*100)
         self.assertEqual(q.read_bytes(),b'y'*100)
 
+    def enroll(self,reviewed=True):
+        directory=self.config/'state/verified-retention';directory.mkdir(exist_ok=True)
+        local.atomic_json(directory/'enrollment.json',dict(unattended_reviewed=reviewed,
+            head='a'*40,ci_receipt={'head':'a'*40}))
+        return type('Manager',(),{'config':self.config})()
+
+    def test_end_of_job_cleanup_reuses_verified_apply_and_same_pid_processing_lease(self):
+        manager=self.enroll()
+        lease=self.config/'state/orchestrator.lock';token=f'{os.getpid()} @ processor'
+        lease.write_text(token,encoding='ascii')
+        with patch.dict(os.environ,{'PEOPLE_AUTO_CLEANUP':'true'}):
+            result=worker.maintenance_after_job(manager,completed=True,remote=self.remote)
+        self.assertEqual(result['cleanup']['deleted_files'],7)
+        self.assertGreater(result['cleanup']['recovered_bytes'],0)
+        self.assertEqual(lease.read_text(encoding='ascii'),token)
+        self.assertTrue((self.config/'models/model.bin').is_file())
+        self.assertTrue((self.config/'jobs'/self.job/'manifest.json').is_file())
+
+    def test_end_of_job_retains_new_success_until_three_days_and_rotates_only_ordinary_logs(self):
+        manager=self.enroll()
+        self.db.execute('UPDATE jobs SET published=?',(time.time(),));self.db.commit()
+        logs=self.config/'logs';logs.mkdir()
+        (logs/'tmdb_people.log').write_bytes(b'a'*100)
+        (logs/'remove_bg_birefnet.log').write_bytes(b'b'*100)
+        joblogs=self.config/'jobs'/self.job/'logs';joblogs.mkdir()
+        (joblogs/'tmdb_people.log').write_bytes(b'c'*100)
+        (joblogs/'remove_bg_birefnet.log').write_bytes(b'd'*100)
+        with patch.dict(os.environ,{'PEOPLE_AUTO_CLEANUP':'true'}),patch.object(worker,'LOG_BYTES',32):
+            result=worker.maintenance_after_job(manager,completed=True,remote=self.remote)
+        self.assertEqual(result['cleanup']['deleted_files'],0)
+        self.assertEqual(result['jobs'][0]['reason'],'three_day_window_open')
+        self.assertEqual((logs/'remove_bg_birefnet.log').read_bytes(),b'b'*100)
+        self.assertEqual((logs/'tmdb_people.log.1').read_bytes(),b'a'*32)
+        self.assertEqual((joblogs/'tmdb_people.log.1').read_bytes(),b'c'*32)
+        self.assertEqual((joblogs/'remove_bg_birefnet.log').read_bytes(),b'd'*100)
+
+    def test_failed_job_exit_reports_growth_without_deleting_or_rotating_its_logs(self):
+        manager=self.enroll()
+        self.db.execute("UPDATE jobs SET status='failed',published=NULL");self.db.commit()
+        log=self.config/'jobs'/self.job/'logs/tmdb_people.log'
+        log.parent.mkdir();log.write_bytes(b'failed evidence'*50)
+        with patch.object(worker,'apply_plan',side_effect=AssertionError('failed apply')):
+            first=worker.maintenance_after_job(manager,completed=False,remote=self.remote)
+            log.write_bytes(log.read_bytes()+b'growth')
+            second=worker.maintenance_after_job(manager,completed=False,remote=self.remote)
+        self.assertEqual(second['failed_jobs']['growth_bytes'],6)
+        self.assertIn('failed_job_storage_grew',second['warnings'])
+        self.assertEqual(second['failed_jobs']['jobs'][0]['id'],self.job)
+        self.assertTrue(log.read_bytes().endswith(b'growth'))
+        self.assertEqual(first['cleanup']['recovered_bytes'],0)
+
+    def test_unreviewed_or_disabled_end_of_job_never_applies(self):
+        manager=self.enroll(reviewed=False)
+        with patch.object(worker,'apply_plan',side_effect=AssertionError('unapproved apply')):
+            self.assertEqual(worker.maintenance_after_job(manager,completed=True,remote=self.remote)['cleanup']['status'],
+                'unattended_cleanup_not_reviewed')
+        self.enroll(reviewed=True)
+        with patch.dict(os.environ,{'PEOPLE_AUTO_CLEANUP':'false'}),patch.object(worker,'apply_plan',side_effect=AssertionError('disabled apply')):
+            self.assertEqual(worker.maintenance_after_job(manager,completed=True,remote=self.remote)['cleanup']['status'],
+                'automatic_cleanup_disabled')
+
+    def test_end_of_job_ci_or_remote_failure_preserves_publication_and_reports_blocker(self):
+        manager=self.enroll()
+        with patch.object(self.remote,'validate_ci',side_effect=local.RetentionBlocked('CI verification unavailable')),patch.object(worker.sys,'stderr',io.StringIO()):
+            result=worker.maintenance_after_job(manager,completed=True,remote=self.remote)
+        self.assertEqual(result['status'],'blocked')
+        self.assertEqual(self.db.execute('SELECT status FROM jobs').fetchone()[0],'cleanup_eligible')
+        self.assertTrue((self.config/'state/verified-retention/maintenance-error.json').is_file())
+        self.assertFalse((self.config/'state/verified-retention/deletions.json').exists())
+
+    def test_deactivation_maintenance_requires_owned_lease_and_enrollment(self):
+        from types import SimpleNamespace
+        folder=self.config/'jobs'/self.job;lease=folder/'.active'
+        manager=SimpleNamespace(config=self.config,jobs=(self.config/'jobs').resolve(),state=(self.config/'state').resolve(),path=lambda batch:folder,
+            record=lambda batch:({'status':'cleanup_eligible'},{}))
+        with patch.object(worker,'maintenance_after_job') as maintain:
+            lease.write_text(str(os.getpid()),encoding='ascii')
+            Workspaces.deactivate(manager,self.job);maintain.assert_not_called()
+            self.enroll();lease.write_text(str(os.getpid()),encoding='ascii')
+            Workspaces.deactivate(manager,self.job);maintain.assert_called_once_with(manager,completed=True)
+            maintain.reset_mock();lease.write_text('-999',encoding='ascii')
+            Workspaces.deactivate(manager,self.job);maintain.assert_not_called()
+            manager.jobs=self.config/'custom-jobs';lease.write_text(str(os.getpid()),encoding='ascii')
+            with patch('builtins.print'):
+                Workspaces.deactivate(manager,self.job)
+            maintain.assert_not_called()
+
+    def test_storage_report_missing_evidence_is_read_only_and_exposes_blocked_bytes(self):
+        self.db.close();p=self.config/'state/publication_state.db';p.unlink()
+        plan,_=worker.build_jobs_plan(self.config,self.remote)
+        value=worker.storage_report(self.config,plan)
+        self.assertEqual(value['eligible_bytes'],0)
+        self.assertEqual(value['blocked_job_bytes'],plan['storage']['logical_bytes'])
+        self.assertEqual(value['folders']['models']['bytes'],len(b'protected-model'))
+        self.assertFalse(p.exists())
+
+    def failed_catalog(self):
+        folder=self.config/'jobs'/self.job
+        manifest=local.read_json(folder/'manifest.json')
+        manifest.update(status='failed',updated=self.now-800000)
+        local.atomic_json(folder/'manifest.json',manifest)
+        (folder/'people_list.txt').write_text('1|A\n',encoding='utf8')
+        self.db.execute("UPDATE jobs SET status='failed',published=NULL");self.db.commit()
+        self.db.row_factory=sqlite3.Row
+        receipts=[dict(r) for r in self.db.execute('SELECT * FROM publications')]
+        generated=self.add_file('jobs/'+self.job+'/people_dirs/bw/A/Images/A.jpg',b'image-bw')
+        survivor=self.add_file('jobs/'+self.job+'/posters/A.png',b'retry source')
+        duplicate=self.add_file('jobs/'+self.job+'/Downloads/other/A.png',b'retry source')
+        generated.update(identity=local.inspect(self.config/generated['path']),person='A',tmdb_id='1',
+            reason='failed_generated_output_exactly_published_by_later_success')
+        duplicate.update(identity=local.inspect(self.config/duplicate['path']),retained_survivor=survivor['path'],
+            survivor_identity=local.inspect(self.config/survivor['path']),reason='exact_duplicate_with_pinned_retained_failed_job_survivor')
+        candidates=[generated,duplicate];names={r['path'] for r in candidates}
+        preserve=[dict(path=p.relative_to(self.config).as_posix(),identity=local.inspect(p))
+            for p in folder.rglob('*') if p.is_file() and p.relative_to(self.config).as_posix() not in names]
+        return dict(version=1,scope=worker.FAILED_SCOPE,root=str(local.canonical_root(self.config)),
+            files=candidates,preserve=preserve,operations={self.job:dict(
+                manifest_sha256=local.inspect(folder/'manifest.json')['sha256'],
+                people=[dict(person='A',tmdb_id='1',published=self.now-400000,receipts=receipts)])})
+
+    def apply_failed(self,plan,digest=None):
+        return worker.apply_reviewed_failed(self.config,plan,digest or local.fingerprint(plan),self.remote,{'head':'a'*40})
+
+    def test_failed_catalog_preflight_is_read_only_even_with_missing_central_state(self):
+        plan=self.failed_catalog();self.db.close()
+        (self.config/'state/publication_state.db').unlink();(self.config/'state').rmdir()
+        before={p.relative_to(self.config).as_posix():local.inspect(p) for p in self.config.rglob('*') if p.is_file()}
+        with patch.object(self.remote,'validate_ci',side_effect=AssertionError('No deletion CI grant required for read-only review')):
+            report=worker.apply_reviewed_failed(self.config,plan,local.fingerprint(plan),self.remote,{},dry_run=True)
+        self.assertEqual(report['eligible_files'],2)
+        self.assertFalse(report['deletion_authorized_by_dry_run'])
+        self.assertFalse((self.config/'state').exists())
+        self.assertEqual(before,{p.relative_to(self.config).as_posix():local.inspect(p) for p in self.config.rglob('*') if p.is_file()})
+
+    def test_reviewed_failed_compaction_preserves_unique_sources_metadata_and_stops_resume(self):
+        plan=self.failed_catalog();result=self.apply_failed(plan)
+        self.assertEqual(len(result['deleted']),2)
+        self.assertEqual(result['recovered_bytes'],len(b'image-bw')+len(b'retry source'))
+        for row in plan['preserve']:self.assertEqual(local.inspect(self.config/row['path']),row['identity'])
+        manager=object.__new__(Workspaces);manager.jobs=self.config/'jobs'
+        self.assertTrue(manager.retired(self.job))
+        with self.assertRaisesRegex(ValueError,'retired'):manager.select(batch=self.job)
+
+    def test_failed_compaction_requires_exact_approval_current_remote_and_complete_identity_cohort(self):
+        plan=self.failed_catalog()
+        with self.assertRaises(local.RetentionBlocked):self.apply_failed(plan,'0'*64)
+        for mutate in [lambda p:p['operations'][self.job]['people'][0]['receipts'].pop(),
+                       lambda p:p['operations'][self.job]['people'][0].update(tmdb_id='99'),
+                       lambda p:p['operations'][self.job]['people'][0].update(published=0),
+                       lambda p:p['files'][1].update(path='jobs/'+self.job+'/unknown/A.png'),
+                       lambda p:p['files'][1].update(retained_survivor='jobs/20261002T000000-aaaaaaaaaaaa/A.png')]:
+            bad=deepcopy(plan);mutate(bad)
+            with self.assertRaises(local.RetentionBlocked):self.apply_failed(bad)
+        self.remote.fail=True
+        with self.assertRaises(local.RetentionBlocked):self.apply_failed(plan)
+        self.assertFalse((self.config/'jobs'/self.job/'retention-retired.json').exists())
+
+    def test_failed_compaction_never_discards_active_work_or_changed_survivors(self):
+        plan=self.failed_catalog();folder=self.config/'jobs'/self.job
+        (folder/'.active').write_text(str(os.getpid()),encoding='ascii')
+        with self.assertRaises(local.RetentionBlocked):self.apply_failed(plan)
+        (folder/'.active').unlink()
+        (self.config/plan['files'][1]['retained_survivor']).write_bytes(b'changed')
+        with self.assertRaises(local.RetentionBlocked):self.apply_failed(plan)
+        self.assertTrue(all((self.config/r['path']).exists() for r in plan['files']))
+
+    def test_failed_compaction_preserves_checkpoint_outputs_and_rejects_disposable_survivor(self):
+        plan=self.failed_catalog();bad=deepcopy(plan)
+        bad['files'][1]['retained_survivor']=bad['files'][0]['path']
+        with self.assertRaises(local.RetentionBlocked):self.apply_failed(bad)
+        checkpoint=self.config/'jobs'/self.job/'edge_chop_recovery/recovery-checkpoints.json'
+        local.atomic_json(checkpoint,dict(records={'A':dict(outputs={'bw/A/Images/A.jpg':{}})}))
+        with self.assertRaisesRegex(local.RetentionBlocked,'referenced'):self.apply_failed(plan)
+        self.assertTrue((self.config/plan['files'][0]['path']).is_file())
+
+    def test_failed_compaction_reconciles_interrupted_unlink_without_double_counting(self):
+        plan=self.failed_catalog();real=worker.unlink_verified
+        def interrupted(root,row):real(root,row);raise OSError('interrupted failed cleanup')
+        with patch.object(worker,'unlink_verified',side_effect=interrupted),self.assertRaises(OSError):self.apply_failed(plan)
+        result=self.apply_failed(plan)
+        self.assertEqual(len(result['deleted']),1)
+        again=self.apply_failed(plan);self.assertEqual(again['recovered_bytes'],0)
+        receipts=local.journal_members(self.config/'state/verified-retention',worker.FAILED_SCOPE,self.config)
+        self.assertEqual(sum(r['state']=='missing_after_intent' for r in receipts.values()),1)
+
+    def test_failed_compaction_respects_explicit_deferral_and_global_processing_lock(self):
+        plan=self.failed_catalog()
+        for row in plan['files']:row['not_before']=self.now+86400
+        result=self.apply_failed(plan)
+        self.assertEqual(result['recovered_bytes'],0);self.assertEqual(len(result['waiting']),2)
+        lease=self.config/'state/orchestrator.lock';lease.write_text(f'{os.getpid()} @ other',encoding='ascii')
+        with self.assertRaises(local.RetentionBlocked):self.apply_failed(plan)
+
+    def test_end_of_job_runs_only_the_separately_enrolled_failed_approval(self):
+        plan=self.failed_catalog();manager=self.enroll();directory=self.config/'state/verified-retention'
+        marker=local.read_json(directory/'enrollment.json');marker['failed_approval_sha256']=local.fingerprint(plan)
+        local.atomic_json(directory/'enrollment.json',marker);local.atomic_json(directory/'failed-approval.json',plan)
+        result=worker.maintenance_after_job(manager,completed=True,remote=self.remote)
+        self.assertEqual(len(result['cleanup']['failed']['deleted']),2)
+        self.assertGreater(result['failed_jobs']['retired_bytes'],0)
+        self.assertEqual(local.read_json(directory/'enrollment.json')['failed_approval_sha256'],local.fingerprint(plan))
+        again=worker.maintenance_after_job(manager,completed=True,remote=self.remote)
+        self.assertEqual(again['cleanup']['failed']['recovered_bytes'],0)
+
     def test_approval_inventory_tamper_and_unknown_scope_fail(self):
         value={'files':[]};value['sha256']=local.fingerprint(value)
         p=self.root/'plan.json';p.write_text(json.dumps(value))
