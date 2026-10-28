@@ -625,8 +625,107 @@ class PeopleRetentionTests(unittest.TestCase):
         with self.assertRaises(local.RetentionBlocked):self.plan()
         self.assertFalse(path.exists())
 
+    def historical_evidence(self):
+        self.db.row_factory=sqlite3.Row
+        archived={name:[dict(r) for r in self.db.execute('SELECT * FROM '+name)]
+                  for name in ('jobs','batches','publications','readmes')}
+        rel='jobs/'+self.job+'/manifest.json'
+        value=dict(read_only=True,source_head='ded9f33759f9fe3ed4ddf5f315dff01b163594ad',
+                   ledger=archived,files={rel:local.inspect(self.config/rel)})
+        path=self.root/'sealed-history.json';local.atomic_json(path,value)
+        digest=local.inspect(path)['sha256']
+        marker=dict(historical_evidence=dict(path=str(path),sha256=digest))
+        local.atomic_json(self.config/'state/verified-retention/enrollment.json',marker)
+        for name in archived:self.db.execute('DELETE FROM '+name)
+        self.db.commit()
+        return path,digest,value
+
+    def test_sealed_historical_receipts_enable_only_verified_expired_payloads_without_database_writes(self):
+        path,digest,value=self.historical_evidence()
+        before=(self.config/'state/publication_state.db').read_bytes()
+        with patch.object(worker,'HISTORICAL_EVIDENCE',digest):
+            plan,_=worker.build_jobs_plan(self.config,self.remote,now=self.now)
+        self.assertEqual(plan['eligible_files'],7)
+        self.assertEqual(plan['eligible_bytes'],sum(r['bytes'] for r in plan['eligible']))
+        self.assertEqual(self.db.execute('SELECT count(*) FROM jobs').fetchone()[0],0)
+        self.assertEqual(before,(self.config/'state/publication_state.db').read_bytes())
+
+    def test_historical_evidence_tampering_and_changed_manifests_fail_closed(self):
+        path,digest,value=self.historical_evidence()
+        with patch.object(worker,'HISTORICAL_EVIDENCE',digest):
+            path.write_bytes(path.read_bytes()+b' ')
+            plan,_=worker.build_jobs_plan(self.config,self.remote,now=self.now)
+            self.assertEqual(plan['eligible_files'],0)
+            local.atomic_json(path,value)
+            manifest=self.config/'jobs'/self.job/'manifest.json'
+            manifest.write_bytes(manifest.read_bytes()+b' ')
+            plan,_=worker.build_jobs_plan(self.config,self.remote,now=self.now)
+            self.assertEqual(plan['eligible_files'],0)
+
+    def test_historical_receipts_respect_retention_and_current_failed_state(self):
+        self.db.execute('UPDATE jobs SET published=?',(self.now-2*86400,));self.db.commit()
+        path,digest,value=self.historical_evidence()
+        with patch.object(worker,'HISTORICAL_EVIDENCE',digest):
+            plan,_=worker.build_jobs_plan(self.config,self.remote,now=self.now)
+            self.assertEqual(plan['eligible_files'],0)
+            self.db.execute('INSERT INTO jobs VALUES(?,?,?,?,?,?)',(self.job,'failed',0,0,None,''));self.db.commit()
+            self.assertEqual(worker.ledger(self.config)['jobs'][self.job]['status'],'failed')
+
 
 class PeopleRetentionRemoteTests(unittest.TestCase):
+    def ci_fixture(self):
+        client=object.__new__(network.ReadOnlyGitHub)
+        runs={i:(name,count) for i,(name,count) in enumerate(network.WORKFLOWS.items(),1)}
+        def get(repo,path):
+            ident=int(path.split('/')[3].split('?')[0]);name,count=runs[ident]
+            if '/jobs?' in path:return dict(total_count=count,jobs=[dict(id=ident*100+j,status='completed',conclusion='success') for j in range(count)])
+            return dict(name=name,head_sha='a'*40,status='completed',conclusion='success',event='pull_request')
+        client.get=get
+        return client,dict(head='a'*40,run_ids=list(runs))
+
+    def merged_git(self, *, changed_tree=False, wrong_parent=False, dirty=False):
+        def output(args,**kwargs):
+            if args[1]=='rev-list':return 'b'*40+' '+'c'*40+' '+('d' if wrong_parent else 'a')*40
+            if args[1]=='status':
+                self.assertIn('--ignore-submodules=all',args)
+                return b' M create_people_posters/people_verified_cleanup.py' if dirty else b''
+            if args[2]=='HEAD':return 'b'*40+'\n'
+            return 'e'*40+'\n'+('f' if changed_tree else 'e')*40+'\n'
+        return output
+
+    def test_ci_accepts_only_identical_two_parent_merge_of_tested_head(self):
+        client,receipt=self.ci_fixture()
+        log=type('R',(),dict(returncode=0,stdout='(test_people_retention.X.test_ok) ... ok'))()
+        with patch.object(network.subprocess,'check_output',side_effect=self.merged_git()),patch('ci.people_retention_maintenance.verify_checkout'),patch('ci.people_retention_maintenance.test_ids',return_value=['test_people_retention.X.test_ok']),patch.object(network.subprocess,'run',return_value=log):
+            result=client.validate_ci(receipt,Path.cwd())
+            self.assertEqual(result['head'],'a'*40)
+            self.assertEqual(result['implementation_head'],'b'*40)
+            self.assertEqual(len(result['workflows']),5)
+        for options in [dict(changed_tree=True),dict(wrong_parent=True),dict(dirty=True)]:
+            with self.subTest(options=options),patch.object(network.subprocess,'check_output',side_effect=self.merged_git(**options)),self.assertRaises(local.RetentionBlocked):
+                client.validate_ci(receipt,Path.cwd())
+
+    def test_merged_checkout_still_rejects_skipped_or_wrong_head_ci(self):
+        client,receipt=self.ci_fixture();original=client.get
+        for kind in ['head','job']:
+            def changed(repo,path):
+                value=original(repo,path)
+                if kind=='head' and '/jobs?' not in path:value['head_sha']='b'*40
+                if kind=='job' and '/jobs?' in path:value['jobs'][0]['conclusion']='skipped'
+                return value
+            client.get=changed
+            with self.subTest(kind=kind),patch.object(network.subprocess,'check_output',side_effect=self.merged_git()),patch('ci.people_retention_maintenance.verify_checkout'),self.assertRaises(local.RetentionBlocked):
+                client.validate_ci(receipt,Path.cwd())
+
+    def test_recursive_transport_failure_uses_complete_inventory_fallback_only(self):
+        client=object.__new__(network.ReadOnlyGitHub);client.session=object()
+        repo=next(iter(worker.REPOSITORIES.values()));route='/git/trees/'+'a'*40+'?recursive=1'
+        for status in [0,500,502,503,504]:
+            with self.subTest(status=status),patch.object(network,'get_json',side_effect=network.GitHubError('transport failed',status)),self.assertRaises(network.GitHubError):client.get(repo,route)
+        for status in [401,403,404]:
+            with self.subTest(status=status),patch.object(network,'get_json',side_effect=network.GitHubError('access denied',status)),self.assertRaises(local.RetentionBlocked):client.get(repo,route)
+        with patch.object(network,'get_json',side_effect=network.GitHubError('transport failed',0)),self.assertRaises(local.RetentionBlocked):client.get(repo,route.replace('?recursive=1',''))
+
     def test_get_only_transport_rejects_unapproved_repository_and_path(self):
         with patch.object(network,'auth_token',return_value='test-only-token'):
             client=network.ReadOnlyGitHub()
