@@ -318,6 +318,75 @@ def test_orchestrator_dependency_failure_propagates(monkeypatch):
     assert exc.value.code == 2
 
 
+@pytest.mark.parametrize("configured_timeout,budget", [(None, 180), ("300", 300)])
+def test_cold_dependency_probe_can_finish_after_thirty_seconds(monkeypatch, configured_timeout, budget):
+    if configured_timeout is None:
+        monkeypatch.delenv("COLORIZE_PROBE_TIMEOUT", raising=False)
+    else:
+        monkeypatch.setenv("COLORIZE_PROBE_TIMEOUT", configured_timeout)
+
+    def cold_import(argv, **kwargs):
+        assert "import torch" in argv[-1]
+        assert kwargs["timeout"] == budget
+        if kwargs["timeout"] < 45:
+            raise orchestrator.subprocess.TimeoutExpired(argv, kwargs["timeout"])
+        return SimpleNamespace(returncode=0, stdout="ddcolor-python\n", stderr="")
+
+    monkeypatch.setattr(orchestrator.subprocess, "run", cold_import)
+    assert orchestrator._python_probe(["ddcolor-python"], True) == (True, "ddcolor-python")
+
+
+def test_dependency_probe_timeout_has_actionable_diagnostic(monkeypatch):
+    monkeypatch.setenv("COLORIZE_PROBE_TIMEOUT", "240")
+
+    def stalled_import(argv, **kwargs):
+        raise orchestrator.subprocess.TimeoutExpired(argv, kwargs["timeout"])
+
+    monkeypatch.setattr(orchestrator.subprocess, "run", stalled_import)
+    ok, detail = orchestrator._python_probe(["ddcolor-python"], True)
+    assert not ok
+    assert "timed out after 240s" in detail
+    assert "does not establish that packages are missing" in detail
+    assert "Increase COLORIZE_PROBE_TIMEOUT" in detail
+
+
+def test_no_work_probe_keeps_short_timeout_and_skips_ml_imports(monkeypatch):
+    monkeypatch.setenv("COLORIZE_PROBE_TIMEOUT", "300")
+
+    def startup(argv, **kwargs):
+        assert kwargs["timeout"] == 30
+        assert "torch" not in argv[-1]
+        return SimpleNamespace(returncode=0, stdout="pipeline-python\n", stderr="")
+
+    monkeypatch.setattr(orchestrator.subprocess, "run", startup)
+    assert orchestrator._python_probe(["pipeline-python"], False) == (True, "pipeline-python")
+
+
+@pytest.mark.parametrize("setting", ["0", "-1", "invalid", "1.5"])
+def test_invalid_dependency_probe_timeout_does_not_launch(monkeypatch, setting):
+    monkeypatch.setenv("COLORIZE_PROBE_TIMEOUT", setting)
+
+    def unexpected_launch(*args, **kwargs):
+        raise AssertionError("invalid probe configuration must not launch a child")
+
+    monkeypatch.setattr(orchestrator.subprocess, "run", unexpected_launch)
+    ok, detail = orchestrator._python_probe(["ddcolor-python"], True)
+    assert not ok
+    assert "positive integer" in detail
+
+
+def test_dependency_probe_still_rejects_missing_packages(monkeypatch):
+    monkeypatch.delenv("COLORIZE_PROBE_TIMEOUT", raising=False)
+    monkeypatch.setattr(
+        orchestrator.subprocess, "run",
+        lambda *args, **kwargs: SimpleNamespace(
+            returncode=1, stdout="", stderr="ModuleNotFoundError: No module named 'torch'"),
+    )
+    ok, detail = orchestrator._python_probe(["ddcolor-python"], True)
+    assert not ok
+    assert "ModuleNotFoundError" in detail
+
+
 def test_recovery_rejects_unsupported_backend_before_staging(monkeypatch, tmp_path):
     monkeypatch.setenv("COLORIZE_ENGINE", "legacy")
     work_root = tmp_path / "work"
