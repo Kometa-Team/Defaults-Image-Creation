@@ -1,9 +1,14 @@
 """Preserve exact historical pins and reject retention scope/version drift."""
 from copy import deepcopy
 import json
+import io
+import os
 from pathlib import Path
+import queue
 import subprocess
+import sys
 import tempfile
+import threading
 import unittest
 from unittest.mock import patch
 
@@ -14,6 +19,85 @@ ROOT=Path(__file__).resolve().parents[2]
 
 
 class PeopleRetentionMaintenanceTests(unittest.TestCase):
+    def test_sanitized_progress_arrives_before_child_exit_through_buffered_parent(self):
+        # The child cannot finish until the test has received both progress
+        # lines. This checks delivery, rather than eventual captured output.
+        secret='NOT_A_REAL_LIVE_PROGRESS_CREDENTIAL_987654321'
+        with tempfile.TemporaryDirectory() as directory:
+            release=Path(directory)/'release'
+            log=Path(directory)/'progress.log'
+            child="""import os,sys,time
+from pathlib import Path
+value=os.environ['TMDB_KEY']
+print('first stdout value='+value)
+print('first stderr value='+value,file=sys.stderr)
+while not Path(sys.argv[1]).exists():time.sleep(.02)
+print('last stdout')
+print('last stderr',file=sys.stderr)
+raise SystemExit(3)
+"""
+            driver="""import os,sys
+from pathlib import Path
+from create_people_posters.people_diagnostics import protect_cli
+from create_people_posters.people_process import run_process
+protect_cli()
+result=run_process([sys.executable,'-c',sys.argv[1],sys.argv[2]],cwd=Path.cwd(),
+                   env=dict(os.environ,PYTHONUNBUFFERED='0'),tee=True,log_path=sys.argv[3],timeout=30)
+raise SystemExit(result.returncode)
+"""
+            environment=dict(os.environ,PYTHONUNBUFFERED='0',TMDB_KEY=secret,
+                             PYTHONDONTWRITEBYTECODE='1')
+            process=subprocess.Popen([sys.executable,'-c',driver,child,str(release),str(log)],
+                cwd=ROOT,env=environment,stdout=subprocess.PIPE,stderr=subprocess.PIPE,
+                text=True,encoding='utf8')
+            received=queue.Queue();lines={'stdout':[],'stderr':[]}
+            def read(name):
+                for line in getattr(process,name):
+                    lines[name].append(line);received.put((name,line))
+            threads=[threading.Thread(target=read,args=(name,),daemon=True) for name in lines]
+            for thread in threads:thread.start()
+            try:
+                seen={}
+                for _ in range(2):
+                    try:name,line=received.get(timeout=10)
+                    except queue.Empty:self.fail('Progress was buffered until process exit')
+                    seen[name]=line
+                self.assertIsNone(process.poll())
+                self.assertEqual(set(seen),{'stdout','stderr'})
+                self.assertIn('first stdout',seen['stdout'])
+                self.assertIn('first stderr',seen['stderr'])
+                self.assertNotIn(secret,''.join(seen.values()))
+                saved=log.read_text(encoding='utf8')
+                self.assertIn('first stdout',saved);self.assertIn('first stderr',saved)
+                self.assertNotIn(secret,saved)
+            finally:
+                release.touch()
+                try:process.wait(timeout=30)
+                except subprocess.TimeoutExpired:process.kill();process.wait(timeout=5)
+                for thread in threads:thread.join(timeout=5)
+                process.stdout.close();process.stderr.close()
+            self.assertEqual(process.returncode,3)
+            self.assertIn('last stdout',''.join(lines['stdout']))
+            self.assertIn('last stderr',''.join(lines['stderr']))
+            self.assertNotIn(secret,log.read_text(encoding='utf8'))
+
+    def test_capture_remains_quiet_and_partial_credentials_are_withheld(self):
+        from create_people_posters.people_process import run_process
+        from create_people_posters.people_diagnostics import WITHHELD
+        secret='NOT_A_REAL_CAPTURE_PROGRESS_CREDENTIAL_123456789'
+        environment=dict(os.environ,TMDB_KEY=secret,PYTHONUNBUFFERED='0')
+        code="import os,sys;print('visible progress');os.write(2,os.environ['TMDB_KEY'][:18].encode());raise SystemExit(4)"
+        out=io.StringIO();err=io.StringIO()
+        with tempfile.TemporaryDirectory() as directory,patch('sys.stdout',out),patch('sys.stderr',err):
+            log=Path(directory)/'capture.log'
+            result=run_process([sys.executable,'-c',code],env=environment,log_path=log,timeout=30)
+            self.assertEqual(result.returncode,4)
+            self.assertIn('visible progress',result.stdout)
+            self.assertEqual(result.stderr,WITHHELD+'\n')
+            self.assertNotIn(secret[:18],log.read_text(encoding='utf8'))
+        self.assertEqual(out.getvalue(),'');self.assertEqual(err.getvalue(),'')
+        self.assertEqual(environment['PYTHONUNBUFFERED'],'0')
+
     def test_exact_checkout_manifest_and_reviewed_ancestry(self):
         with patch.object(retention.subprocess,'check_output',side_effect=AssertionError('Frozen fixture Git interceptor')):
             value=retention.verify_checkout()
@@ -33,6 +117,9 @@ class PeopleRetentionMaintenanceTests(unittest.TestCase):
         self.assertEqual(retention.selected_hash(retention.WORKSPACE,'b'*64),'b'*64)
         value=retention.manifest()['members'][retention.WORKSPACE]
         self.assertEqual(retention.selected_hash(retention.WORKSPACE,value['before_sha256']),value['sha256'])
+        progress=retention.manifest()['members'][retention.PROCESS]
+        self.assertEqual(retention.selected_hash(retention.PROCESS,'b'*64),'b'*64)
+        self.assertEqual(retention.selected_hash(retention.PROCESS,progress['before_sha256']),progress['sha256'])
 
     def test_every_new_member_tamper_rollback_and_deletion_fails_closed(self):
         value=retention.manifest()

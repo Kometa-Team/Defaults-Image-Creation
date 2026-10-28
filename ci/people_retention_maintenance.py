@@ -7,11 +7,12 @@ import subprocess
 
 ROOT=Path(__file__).resolve().parents[1]
 MANIFEST=ROOT/'ci/people-retention-maintenance-v1.json'
-PIN='c3c1c3564c4eeecf7628af575d80f47e2491809e2561ca23a341f032a2817516'
+PIN='2cb290d27f5f4e6bf0bd7bc71f2751be851d64b5c1850d2af25cf7cb8afdea36'
 WORKSPACE='create_people_posters/people_workspaces.py'
+PROCESS='create_people_posters/people_process.py'
 ANCHORS=frozenset({'ci/people_retention_maintenance.py','ci/people-retention-maintenance-v1.json'})
 MEMBERS=frozenset({
-    WORKSPACE,'ci/people_storage_maintenance.py',
+    WORKSPACE,PROCESS,'ci/people_storage_maintenance.py',
     'create_people_posters/people_retention_state.py','create_people_posters/people_retention_remote.py',
     'create_people_posters/people_verified_cleanup.py',
     'ci/dependency_tests/test_people_retention.py','ci/dependency_tests/test_people_retention_maintenance.py',
@@ -65,7 +66,7 @@ def verify_checkout(root=None):
 
 
 def selected_hash(name,expected):
-    if name!=WORKSPACE:return expected
+    if name not in {WORKSPACE,PROCESS}:return expected
     binding=manifest()['members'][name]
     if expected!=binding['before_sha256']:return expected
     verify_checkout()
@@ -83,7 +84,7 @@ def verify_scope(root,baseline,names):
     seen=set()
     for i in range(0,len(rows)-1,2):
         fields,name=rows[i].split(),rows[i+1].decode('utf8')
-        modified=name==WORKSPACE
+        modified=name in {WORKSPACE,PROCESS}
         if (name not in names or name in seen or len(fields)!=5 or fields[:2]!=([b':100644',b'100644'] if modified else [b':000000',b'100644'])
                 or fields[4]!=(b'M' if modified else b'A')):
             raise ValueError('Retention diff must match exact regular-file additions/successor')
