@@ -50,6 +50,9 @@ def secure_argv(argv):
 def run_process(argv, *, cwd=ROOT, env=None, tee=False, log_path=None, timeout=None):
     register_environment(env)
     command = secure_argv(argv)
+    # Pipes disable Python's terminal line buffering. Every guarded launch,
+    # including the outer CLI worker, must emit progress before it exits.
+    child_env = dict(os.environ if env is None else env, PYTHONUNBUFFERED="1")
     buffers = {name: io.StringIO() for name in ("stdout", "stderr")}
     errors = []
     failure = None
@@ -67,8 +70,11 @@ def run_process(argv, *, cwd=ROOT, env=None, tee=False, log_path=None, timeout=N
                 buffers[self.name].write(text)
                 if handle is not None:handle.write(text)
                 if tee:getattr(sys, self.name).write(text)
+                self.flush()
         def flush(self):
-            if handle is not None and not handle.closed:handle.flush()
+            with lock:
+                if handle is not None and not handle.closed:handle.flush()
+                if tee:getattr(sys, self.name).flush()
     def read(pipe, name):
         stream = RedactingStream(Sink(name))
         try:
@@ -90,7 +96,7 @@ def run_process(argv, *, cwd=ROOT, env=None, tee=False, log_path=None, timeout=N
     process = None
     try:
         try:
-            process = subprocess.Popen(command, cwd=cwd, env=env, text=True, encoding="utf8", errors="replace",
+            process = subprocess.Popen(command, cwd=cwd, env=child_env, text=True, encoding="utf8", errors="replace",
                                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             threads = [threading.Thread(target=read, args=(getattr(process, name), name), daemon=True)
                        for name in ("stdout", "stderr")]
