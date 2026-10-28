@@ -14,9 +14,10 @@ ROOT = Path(__file__).resolve().parents[2]
 class PeopleColorizeMaintenanceTests(unittest.TestCase):
     def test_exact_checkout_and_known_predecessor_select_successor(self):
         value = colorize.verify_checkout()
-        binding = value['members'][colorize.SOURCE]
-        self.assertEqual(dependencies.selected_hash(colorize.SOURCE, binding['before_sha256']), binding['sha256'])
-        self.assertEqual(colorize.sha((ROOT / colorize.SOURCE).read_bytes()), binding['sha256'])
+        for source in colorize.PINNED:
+            binding = value['members'][source]
+            self.assertEqual(dependencies.selected_hash(source, binding['before_sha256']), binding['sha256'])
+            self.assertEqual(colorize.sha((ROOT / source).read_bytes()), binding['sha256'])
         self.assertFalse(value['publication_authorized'])
 
     def test_unknown_paths_and_predecessors_retain_original_pins(self):

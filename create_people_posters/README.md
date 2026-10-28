@@ -1255,6 +1255,10 @@ baseline, not a guaranteed faster or better portrait model.
 
 ### Configuration and Batch Processing
 
+Background-removal logs show the queue size and per-file counters such as
+`processing [1/24]` and `processed [1/24]`. Skipped and failed files count toward
+completed work while retaining their own status.
+
 Add to `config/.env`:
 
 ```ini

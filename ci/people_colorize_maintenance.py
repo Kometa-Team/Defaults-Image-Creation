@@ -1,4 +1,4 @@
-"""Exact DDColor probe successor; historical inventories remain immutable."""
+"""Exact People startup/progress successors; historical inventories stay sealed."""
 from functools import lru_cache
 import hashlib
 import json
@@ -10,11 +10,15 @@ from ci.people_storage_maintenance import regular
 ROOT = Path(__file__).resolve().parents[1]
 BASE = 'fee76362f7380fb77713955289b640c11817d611'
 SOURCE = 'create_people_posters/orchestrator.py'
+SOURCES = frozenset({SOURCE, 'create_people_posters/remove_bg_birefnet.py'})
+PINNED = SOURCES | {'create_people_posters/tests/test_remove_bg_birefnet.py'}
 MANIFEST = ROOT / 'ci/people-colorize-maintenance-v1.json'
-PIN = 'a20268b6aa53e9771f78b8471810d25eb6ff8fbcfe68aeba543af9b5d1e966bc'
+PIN = 'f6c7ed9a864f5753f1ead3e4cd4e98f4f4f32f6a71cae3dc72111cccd06097d8'
 MEMBERS = frozenset({
     SOURCE, 'create_people_posters/.env.example', 'create_people_posters/README.md',
     'create_people_posters/tests/test_ddcolor_colorizer.py',
+    'create_people_posters/remove_bg_birefnet.py',
+    'create_people_posters/tests/test_remove_bg_birefnet.py',
     'ci/people_retention_maintenance.py',
     'ci/dependency_tests/test_people_colorize_maintenance.py',
 })
@@ -55,7 +59,7 @@ def manifest():
     value = json.loads(regular(ROOT, MANIFEST.relative_to(ROOT).as_posix()).read_bytes())
     if (fingerprint(value) != PIN or value['version'] != 1
             or value['baseline_commit'] != BASE or set(value['members']) != MEMBERS
-            or value['production_successors'] != [SOURCE]
+            or value['production_successors'] != sorted(SOURCES)
             or value['publication_authorized'] is not False):
         raise ValueError('Changed exact DDColor maintenance transition')
     return value
@@ -78,7 +82,7 @@ def verify_checkout(root=None):
 
 
 def selected_hash(name, expected):
-    if name != SOURCE:
+    if name not in PINNED:
         return expected
     binding = manifest()['members'][name]
     if expected != binding['before_sha256']:
