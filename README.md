@@ -105,7 +105,7 @@ Defaults-Image-Creation/
 ## Requirements (consolidated)
 
 - **Default posters and overlays:** Python 3.13, `create_defaults/requirements-bulk.txt`, and the bundled validated fonts. Git/GitHub CLI are needed for explicit publication operations.
-- **People Python path:** Python 3.10+, `pip`, network access to TMDB, optional Selenium/Chrome if you use background removal.
+- **People Python path:** Python 3.11+ (3.13 recommended), `pip`, network access to TMDB, optional Selenium/Chrome if you use background removal.
 - **Legacy PowerShell reference only:** PowerShell 7+, ImageMagick CLI (`magick`), required fonts (Comfortaa, Bebas Neue, Jura, Limelight, Rye, etc.; Cairo for Arabic text).
 - **Git:** for People‑Images updates (SSH key or HTTPS token configured for `origin`).
 

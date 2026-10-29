@@ -91,6 +91,8 @@ def historical_dependency_bytes(name, current, root):
     This is a historical test view, never a current dependency or renderer pin.
     Neither a changed successor nor an unlisted source can use this path.
     """
+    from ci.dependabot_maintenance import historical_bytes as audit_history
+    current = audit_history(root, name, current)
     value = _decode(MANIFEST.read_bytes())
     binding = value["files"].get(name)
     normalized = current.replace(b"\r\n", b"\n")

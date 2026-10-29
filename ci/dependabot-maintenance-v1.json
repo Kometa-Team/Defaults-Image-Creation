@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "baseline_commit": "d013af718881dc5ec82178ee85540e29a0fb7ec3",
+  "publication_authorized": false,
+  "members": {
+    ".github/workflows/dependency-provenance-validation.yml": {
+      "before_sha256": "37a98a477f41b05372e2aad3576a8863f3852792aee9b714f01f34bfb6ecb44a",
+      "sha256": "8387e873cd828405b8691a04ca4380689ad1f43f9e6c40a24424d65cc715c910"
+    },
+    "README.md": {
+      "before_sha256": "150f5185737115913696770af1ff0f8e38c3df947ac9357dc657765204cc9f12",
+      "sha256": "f2850fe9e5539a722307c3b4ba618f8ad7064c471169d345dfa56904aa3f0beb"
+    },
+    "ci/dependency_maintenance.py": {
+      "before_sha256": "7be76406c75d88d3d6ccfa5bd2c0186b45090ff0f3934bc90daad6a1051a27fd",
+      "sha256": "4468fff249d0a0fa7533d8be6102284520594a0470e77968c4c45e8fc239c789"
+    },
+    "ci/dependency_tests/test_dependabot_audit.py": {
+      "before_sha256": null,
+      "sha256": "e29a6add045e7f3583ef7568a931643b1748f0109352bdf51b8f5649e4ec3c74"
+    },
+    "ci/dependency_tests/test_dependency_maintenance.py": {
+      "before_sha256": "7b795f242ddb0de04f6c8b4ee995f7fbeb0b479bb9d78281969d0f483bd10c13",
+      "sha256": "466bcdb4a49081014fc42bbc2ff31a33a0b776c86064bc577bc74593d161aa4a"
+    },
+    "ci/dependency_tests/test_people_readme_maintenance.py": {
+      "before_sha256": "b9e21e231c6d811fa4995d2a4cb20a043dc5859524e51de03f313f2eeb1f01b9",
+      "sha256": "120012e42ca583383c45ddd2c80192be3f555a304395716d3f5673a928c664e2"
+    },
+    "ci/people_readme_maintenance.py": {
+      "before_sha256": "63e9d40b20f62818c5c64e44e00cbd4712e0fd4b271ea7e8dff8a830f45eea52",
+      "sha256": "8d85f0962710f91c98a026863298bfd22775e1ac48635b4d06da5cef12d40157"
+    },
+    "create_defaults/phase2/requirements.txt": {
+      "before_sha256": "dd8fd92d48884ed6be660e99d063637ebab161178a11b49a101d3918df5ae926",
+      "sha256": "a140b064f590d07514bdd76ec0f11ef54a7f9dabcc191d7419c38ffb75bce019"
+    },
+    "create_people_posters/requirements-rembg.txt": {
+      "before_sha256": "e83d325e4bca2ae2c9aff93f3bea70c73e87769e76d295c4c3612ce5188f7a1e",
+      "sha256": "1712f335b9c050f4ae34f76ab9b83ff5f1e4d7fbc27a531c067b8a5ad266ab39"
+    },
+    "create_people_posters/requirements.txt": {
+      "before_sha256": "8841c545bf532a96de6dcc22be7e5168e4905caaeb1cbcdffe9741bcce0bec74",
+      "sha256": "9ad2e5fb679ef3389582ebe83291405e754260baf08d32ffff882e162df04853"
+    },
+    "docs/DEPENDABOT_AUDIT_2026-10-29.md": {
+      "before_sha256": null,
+      "sha256": "4d5c39a7c27d7c32f99f727784fcb1051046b839861ee664a3754986a1c3458f"
+    },
+    "docs/dependabot-audit-2026-10-29.json": {
+      "before_sha256": null,
+      "sha256": "411a0bc9b15f9931d65a87d982b05a4606b34a205dfc4c2be05e9a420c7c8042"
+    }
+  }
+}

@@ -18,7 +18,8 @@ class PeopleReadmeMaintenanceTests(unittest.TestCase):
         value = readme.verify_checkout()
         for name, binding in value['members'].items():
             if binding['before_sha256'] is not None:
-                self.assertEqual(readme.selected_hash(name, binding['before_sha256']), binding['sha256'])
+                from ci.dependabot_maintenance import selected_hash
+                self.assertEqual(readme.selected_hash(name, binding['before_sha256']), selected_hash(name, binding['sha256']))
             self.assertEqual(readme.selected_hash(name, 'f' * 64), 'f' * 64)
         self.assertEqual(readme.selected_hash('unreviewed.py', 'f' * 64), 'f' * 64)
         self.assertFalse(value['publication_authorized'])

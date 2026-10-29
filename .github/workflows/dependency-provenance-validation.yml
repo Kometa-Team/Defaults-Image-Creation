@@ -23,6 +23,12 @@ jobs:
       with:
         python-version: '3.13'
     - run: python -m pip install -r create_defaults/requirements-bulk.txt
+    - name: Resolve retained Phase 2 requirements without changing the environment
+      run: 'python -m pip install --dry-run --ignore-installed --only-binary=:all: -r create_defaults/phase2/requirements.txt'
+    - name: Resolve the People base profile without changing the environment
+      run: 'python -m pip install --dry-run --ignore-installed --only-binary=:all: -r create_people_posters/requirements.txt'
+    - name: Resolve the pinned People CPU profile without changing the environment
+      run: 'python -m pip install --dry-run --ignore-installed --only-binary=:all: -r create_people_posters/requirements-rembg.txt'
     - name: Exact dependency transition and tamper controls
       env:
         EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
