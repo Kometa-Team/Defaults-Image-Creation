@@ -11,8 +11,41 @@ from ci.people_storage_maintenance import regular
 ROOT = Path(__file__).resolve().parents[1]
 BASE = 'deb9a3a2f609600a395c5be8b268805de5a5efa3'
 MANIFEST = ROOT / 'ci/people-readme-maintenance-v1.json'
-PIN = '151fddb8508b71557402e7e80c75e670937109078e782102049d7e75b25b7490'
+PIN = '2d7a220a3224ea15f0f7d027d9dadf2083faeb3b57fc676f2bbc6dcd3a69d070'
 ANCHORS = frozenset({'ci/people_readme_maintenance.py', 'ci/people-readme-maintenance-v1.json'})
+MEMBERS = frozenset({
+    '.github/workflows/people-storage-validation.yml',
+    'ci/dependency_maintenance.py',
+    'ci/dependency_tests/test_people_readme_maintenance.py',
+    'ci/dependency_tests/test_people_retention_maintenance.py',
+    'ci/dependency_tests/test_people_storage_maintenance.py',
+    'ci/people_colorize_maintenance.py',
+    'ci/people_readme/README.md',
+    'ci/people_readme/targets.json',
+    'ci/people_readme/workflows/People-Images-bw.yml',
+    'ci/people_readme/workflows/People-Images-diiivoy.yml',
+    'ci/people_readme/workflows/People-Images-diiivoycolor.yml',
+    'ci/people_readme/workflows/People-Images-rainier.yml',
+    'ci/people_readme/workflows/People-Images-signature.yml',
+    'ci/people_readme/workflows/People-Images-transparent.yml',
+    'ci/people_readme/workflows/People-Images.yml',
+    'ci/people_retention_maintenance.py',
+    'ci/people_storage_maintenance.py',
+    'create_people_posters/CLONE_FREE.md',
+    'create_people_posters/README.md',
+    'create_people_posters/jost_migration.py',
+    'create_people_posters/people_cleanup_report.py',
+    'create_people_posters/people_publication_state.py',
+    'create_people_posters/people_readme_publication.py',
+    'create_people_posters/people_verified_cleanup.py',
+    'create_people_posters/publish_people_github.py',
+    'create_people_posters/sandbox_people_github.py',
+    'create_people_posters/tests/test_jost_migration.py',
+    'create_people_posters/tests/test_people_github.py',
+    'create_people_posters/tests/test_people_readme_publication.py',
+    'create_people_posters/tests/test_people_readme_workflows.py',
+    'create_people_posters/tests/test_people_workspaces.py',
+})
 
 
 def sha(raw):
@@ -24,12 +57,19 @@ def fingerprint(value):
         allow_nan=False, separators=(',', ':')).encode()).hexdigest()
 
 
-def manifest():
-    value = json.loads(regular(ROOT, MANIFEST.relative_to(ROOT).as_posix()).read_bytes())
-    if (fingerprint(value) != PIN or value['version'] != 1
+@lru_cache(maxsize=8)
+def _decoded_manifest(raw, expected_pin):
+    # Cache immutable bytes only; every call still reads and checks the actual
+    # manifest path. Replaced bytes, including equal-length edits, miss this cache.
+    value = json.loads(raw)
+    if (fingerprint(value) != expected_pin or value['version'] != 1 or set(value['members']) != MEMBERS
             or value['baseline_commit'] != BASE or value['publication_authorized'] is not False):
         raise ValueError('Changed exact README publication transition')
     return value
+
+
+def manifest():
+    return _decoded_manifest(regular(ROOT, MANIFEST.relative_to(ROOT).as_posix()).read_bytes(), PIN)
 
 
 def _git(root, *args):
@@ -67,6 +107,8 @@ def verify_checkout(root=None):
 
 
 def selected_hash(name, expected):
+    if name not in MEMBERS:
+        return expected
     binding = manifest()['members'].get(name)
     if binding is None or binding['before_sha256'] is None or expected != binding['before_sha256']:
         return expected
@@ -75,6 +117,8 @@ def selected_hash(name, expected):
 
 
 def historical_bytes(root, name, current):
+    if name not in MEMBERS:
+        return current
     binding = manifest()['members'].get(name)
     if binding is None or binding['before_sha256'] is None:
         return current

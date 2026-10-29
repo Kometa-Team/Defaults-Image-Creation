@@ -53,6 +53,21 @@ class PeopleReadmeMaintenanceTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     readme.manifest()
 
+    def test_cached_manifest_rejects_equal_length_replacement(self):
+        value = readme.manifest()
+        raw = readme.MANIFEST.read_bytes()
+        binding = next(iter(value['members'].values()))['sha256'].encode()
+        changed_raw = raw.replace(binding, b'0' * 64, 1)
+        self.assertEqual(len(changed_raw), len(raw))
+        self.assertNotEqual(changed_raw, raw)
+        original = Path.read_bytes
+        def changed(path):
+            return changed_raw if path == readme.MANIFEST else original(path)
+        with patch.object(Path, 'read_bytes', changed):
+            with self.assertRaises(ValueError):
+                readme.manifest()
+        self.assertEqual(readme.manifest(), value)
+
     def test_historical_projection_is_exact_and_rejects_rollback(self):
         for name, binding in readme.manifest()['members'].items():
             if binding['before_sha256'] is None:

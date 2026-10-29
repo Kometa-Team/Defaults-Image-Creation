@@ -129,7 +129,7 @@
     },
     "ci/dependency_tests/test_people_readme_maintenance.py": {
       "before_sha256": null,
-      "sha256": "3d3896fff38bd6a2b3dc80b1f4e3861b7af6f06d1d9e04b9c372ff77f7e4d141"
+      "sha256": "8f89c572fdafff406983a52a58bf8663599df30963312a728b0e0429fe5737ef"
     },
     "ci/dependency_tests/test_people_retention_maintenance.py": {
       "before_sha256": "f4f6e4fcaf55fbe7d693c5602319b2eea2b78bf41dd9809d9a5890b063c565f4",
