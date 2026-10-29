@@ -224,6 +224,22 @@ def test_safe_diagnostic_fields_and_immutable_record_are_preserved():
     assert secure.sanitize_text("HTTP status=429 host=api.themoviedb.org endpoint=/3/search/person") == "HTTP status=429 host=api.themoviedb.org endpoint=/3/search/person"
 
 
+def test_missing_poster_glyph_has_safe_actionable_guidance():
+    secret = canary("poster-glyph")
+    secure.register_secret(secret)
+    error = ValueError("Required font has no glyph for '铃'; " + secret)
+    message = secure.safe_exception(error)
+    assert "Poster font cannot render this name" in message
+    assert "display label" in message and "Input retained" in message
+    contains_no_secret(message, secret)
+    stream = io.StringIO()
+    logger = logging.Logger("poster-glyph", level=logging.ERROR)
+    logger.addHandler(secure.secure_handler(logging.StreamHandler(stream)))
+    logger.error("Poster failed: %s", error)
+    assert message in stream.getvalue()
+    contains_no_secret(stream.getvalue(), secret)
+
+
 def test_known_password_is_removed_whole_before_generic_field_tokenization():
     first, last = "NOT_A_REAL_FIRST_PASSWORD_SEGMENT", "NOT_A_REAL_LAST_PASSWORD_SEGMENT"
     secret = first + " , " + last

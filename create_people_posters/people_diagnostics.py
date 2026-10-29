@@ -219,6 +219,10 @@ def safe_exception(error: BaseException) -> str:
             return "cannot identify image; error_category=invalid_image"
         if type(error) in {ValueError, FileExistsError} and len(error.args) == 1 and type(error.args[0]) is str:
             message = error.args[0]
+            if message.startswith("Required font has no glyph for "):
+                # Fixed application guidance only: never echo the supplied
+                # character, font path, or arbitrary exception suffix.
+                return "Poster font cannot render this name; use a supported display label or a font with the required glyphs. Input retained."
             for phrase in ("Unsupported input format", "Ambiguous input basenames"):
                 if message.startswith(phrase):return phrase
             if message.startswith("Preserved original differs: "):
