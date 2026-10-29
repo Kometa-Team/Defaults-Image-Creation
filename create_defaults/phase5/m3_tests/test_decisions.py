@@ -124,11 +124,19 @@ def test_P5_T03_explicit_maintainer_rejection_remains_immutable(artwork_case):
 
 
 def test_P5_T13_paired_network_artwork_requires_both_native_members(native_rows):
-    case = h.case(native_rows['Network'], 'paired-network')
-    assert len(case['row'][2].to_dict()['required_members']) == 2
-    receipt = h.consume(case)
-    h.export_native(case, receipt)
-    denied(receipt)
+    row = native_rows['Network']
+    assert len(row[2].to_dict()['required_members']) == 2
+    inputs = h.artwork_inputs(row)
+    report = inputs.phase3.to_dict()
+    assert not report['chain_compatible'] and not report['simulation_eligible']
+    assert 'm3:unverified_companion_membership' in report['blockers']
+    with patch.object(h, 'artwork_inputs', return_value=inputs), pytest.raises(BulkError, match='native_evidence_unavailable'):
+        h.case(row, 'paired-network-unavailable')
+    # Complete encoded artifacts cannot bypass P3's unavailable prospective
+    # paired-identity boundary. Export the actual pair with no decision receipt.
+    case = dict(trial=row[0],row=row,inputs=inputs,selection=PackageSelection.current('Network'))
+    h.export_native(case, None, unavailable=dict(reason='unverified_companion_membership',
+        phase3_sha256=inputs.phase3.sha256, phase3=report))
 
 
 @pytest.mark.parametrize('attack,reason', [
@@ -411,13 +419,14 @@ def test_P5_T09_T12_current_registry_bytes_are_rechecked_at_consumption(case):
 
 def test_P5_T13_missing_network_companion_cannot_prepare_a_binding(native_rows):
     from create_defaults.bulk.lifecycle.composition_models import CompositionEvidence
-    case = h.case(native_rows['Network'], 'missing-network-companion')
-    value = case['row'][2].to_dict()
+    row = native_rows['Network']
+    value = row[2].to_dict()
     value['views'][0]['members'] = value['views'][0]['members'][:1]
     with pytest.raises(BulkError):
         forged = CompositionEvidence.from_dict(value)
-        SidecarStore(case['trial'].config.cache_dir).put_object(forged.encoded, expected_sha256=forged.sha256)
-        case['consumer'].prepare(case['selection'], inputs=replace(case['inputs'], composition_sha256=forged.sha256), review_id='synthetic.review.missing-companion')
+        archive = CompositionArchive(row[0].config.cache_dir)
+        archive.store.put_object(forged.encoded, expected_sha256=forged.sha256)
+        archive.load(forged.sha256, context=row[1])
 
 
 def test_P5_T14_receipt_must_still_belong_to_a_verified_owned_worker(artwork_case):

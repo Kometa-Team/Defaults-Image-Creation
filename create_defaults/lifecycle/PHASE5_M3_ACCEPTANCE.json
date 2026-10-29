@@ -181,6 +181,9 @@
     "Phase 5 M3 Exact Decision Consumption"
   ],
   "operational_authority": false,
+  "positive_native_cohorts": [
+    "Genre"
+  ],
   "publication_authorized": false,
   "real_decisions_consumed": 0,
   "real_package_approvals": 0,
@@ -299,5 +302,8 @@
       "create_defaults/phase5/m3_tests/test_decisions.py::test_P5_T09_T30_exact_contract_source_bytes_must_match_current_selection[release]",
       "create_defaults/phase5/m3_tests/test_decisions.py::test_P5_T09_T30_exact_contract_source_bytes_must_match_current_selection[registry]"
     ]
+  },
+  "unavailable_native_cohorts": {
+    "Network": "Existing P3 unverified_companion_membership for prospective paired identities"
   }
 }

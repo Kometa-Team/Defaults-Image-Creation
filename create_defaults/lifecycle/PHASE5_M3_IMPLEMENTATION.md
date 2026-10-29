@@ -133,7 +133,13 @@ Original six workflows remain independently mandatory at the same final commit.
 
 The M3 artifact includes full actual Genre default/requested JPEGs and both
 Network companion members in both appearances, plus their native composition
-and owned durable worker rows/receipts. Acceptance independently decodes all six
+and owned durable worker rows/receipts. Genre exercises positive synthetic
+two-stage consumption. Prospective Network companion identities remain
+**unavailable** under the unchanged P3 `unverified_companion_membership` gate:
+the complete pair is exported with its blocked P3 attestation and no decision
+receipt. Complete images alone cannot bypass that restriction. The missing-pair
+case independently re-enters the native archive verifier and fails.
+Acceptance independently decodes all six
 encoded images, checks exact dimensions/formats/bytes, canonical receipt hashes,
 worker specifications and complete member/view coverage. These are controlled
 fixtures, not production artwork or a second visual approval scheme.

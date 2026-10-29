@@ -71,15 +71,19 @@ def translation_snapshot():
     return replace(original, snapshot=snapshot)
 
 
-def case(row, label, *, category=None, scope='artwork'):
-    trial, context, composition, _ = row
+def artwork_inputs(row):
     snapshot = translation_snapshot()
-    if len(composition.to_dict()['required_members']) > 1:
+    if len(row[2].to_dict()['required_members']) > 1:
         from create_defaults.phase4.tests.transaction_samples import cohort_inputs
         with patch.object(review_samples, 'english_snapshot', return_value=snapshot):
-            inputs = cohort_inputs(row)
-    else:
-        inputs = review_samples.inputs(row, snapshot=snapshot)
+            return cohort_inputs(row)
+    return review_samples.inputs(row, snapshot=snapshot)
+
+
+def case(row, label, *, category=None, scope='artwork'):
+    trial, context, composition, _ = row
+    inputs = artwork_inputs(row)
+    snapshot = translation_snapshot()
     source_files = {}
     mapping = []
     for view in composition.to_dict()['views']:
@@ -127,12 +131,8 @@ def case(row, label, *, category=None, scope='artwork'):
     category = category or context.registry.view().entry(composition.to_dict()['required_members'][0])['category']
     variants = tuple(sorted({context.registry.view().entry(i)['variant'] for i in composition.to_dict()['required_members']}))
     selection = PackageSelection.current(category, variants=None if scope == 'contract' else variants)
-    try:
-        binding = consumer.prepare(selection, inputs=inputs if scope == 'artwork' else None,
-            review_id='synthetic.review.m3-' + fingerprint(label)[:24] if scope == 'artwork' else None, scope=scope)
-    except Exception:
-        reports = {name: query.read().to_dict() for name, query in queries.items()}
-        raise AssertionError({name: (value['status'], value['reason']) for name, value in reports.items()}) from None
+    binding = consumer.prepare(selection, inputs=inputs if scope == 'artwork' else None,
+        review_id='synthetic.review.m3-' + fingerprint(label)[:24] if scope == 'artwork' else None, scope=scope)
     result = dict(trial=trial, row=row, consumer=consumer, queries=queries, inputs=inputs, selection=selection, binding=binding, scope=scope)
     install(result)
     return result
@@ -203,7 +203,7 @@ def change_proposal(case, change):
         change(case['queries'][label].observer._transport.responses, prefix)
 
 
-def export_native(case, receipt):
+def export_native(case, receipt, *, unavailable=None):
     """Export actual fixture bytes/owned worker rows, never a visual approval."""
     selected = os.getenv('M3_NATIVE_EXPORT')
     if not selected:
@@ -227,5 +227,8 @@ def export_native(case, receipt):
             with archive.store.read_connection() as db:
                 worker = dict(db.execute('SELECT * FROM jobs WHERE id=?', (worker_receipt['job_id'],)).fetchone())
             rows.append(dict(file=name, member=member, receipt=worker_receipt, worker=worker))
+    assert (receipt is None) == (unavailable is not None)
     (directory/(category+'.json')).write_bytes(canonical(dict(composition_sha256=evidence.sha256,
-        composition=evidence.to_dict(), consumption_receipt=receipt.to_dict(), rows=rows)))
+        composition=evidence.to_dict(), consumption_receipt=receipt.to_dict() if receipt else None,
+        decision_status='unavailable' if unavailable else 'synthetic-consumed',
+        unavailable=unavailable, rows=rows)))
