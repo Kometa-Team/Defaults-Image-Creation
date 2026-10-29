@@ -1,0 +1,57 @@
+{
+  "adoption_intersection": [],
+  "baseline_commit": "8e0bfa22329c33bd9b342760976b23dc205eabc4",
+  "members": {
+    ".github/workflows/phase5-m2-validation.yml": {
+      "before_sha256": null,
+      "sha256": "2ea951681dcd581d4d795d1de2d903d3983a5f7526b8cf6b6a33d56630a7decc"
+    },
+    "ci/dependabot_maintenance.py": {
+      "before_sha256": "bef5c095c4399d403f926260745ea2516a7171bc1b3eabd9ea1745bdbe1f9542",
+      "sha256": "5a13d4e58b56981d964c5c0aa30edab4a5547e861c60d21979ca0d69a6668d96"
+    },
+    "ci/dependency_tests/test_phase5_m2_maintenance.py": {
+      "before_sha256": null,
+      "sha256": "8d422f73d2d3ec329da2a106600b3aa7bd37bc7698d395b78206c206bc24a4be"
+    },
+    "ci/phase5-m2-test-ids.json": {
+      "before_sha256": null,
+      "sha256": "e6f737c7dc616d23236f70ea97c37f1eb743c7d660fcddd2e8ae459d9bf1a4fb"
+    },
+    "ci/phase5_m2.py": {
+      "before_sha256": null,
+      "sha256": "95fadedad70d3fc6f2e53eebf1e22c4ce13f3e5993aec76542912fdec9833bf5"
+    },
+    "create_defaults/bulk/lifecycle/github_observation_transport.py": {
+      "before_sha256": null,
+      "sha256": "310551c9db3671e58d41e8c5b5e36cf73ede7e80c93b7d41fd5d33ab59ac7cfb"
+    },
+    "create_defaults/bulk/lifecycle/github_observations.py": {
+      "before_sha256": null,
+      "sha256": "91bc3f3141ce8e4891686cd0cc183de01a0f10adff8ca8bb4f9dff7ea89ded4c"
+    },
+    "create_defaults/lifecycle/PHASE5_M2_ACCEPTANCE.json": {
+      "before_sha256": null,
+      "sha256": "63157e6d36b42f412c12cacabe3fb08dfcada2185e2fa54cd797366169783dce"
+    },
+    "create_defaults/lifecycle/PHASE5_M2_CI_MAINTENANCE.md": {
+      "before_sha256": null,
+      "sha256": "daac17ef921cd4c3c18eecb4d18f743ed56a2c1c4524da9fceccf4f4f274c90e"
+    },
+    "create_defaults/lifecycle/PHASE5_M2_IMPLEMENTATION.md": {
+      "before_sha256": null,
+      "sha256": "9f34969e273d73ec59ee97107acc3511e9526969010e6b7f46038b74c5c82b84"
+    },
+    "create_defaults/lifecycle/ROADMAP.md": {
+      "before_sha256": "4a1fa20153c3926a2ae06cf544629b7208ceb94fe80af9fa7106fa032180286d",
+      "sha256": "8d15de091e0ff4a75f131b13ff7bce0063eadda8525e895497d190746c32a8fa"
+    },
+    "create_defaults/phase5/m2_tests/test_observations.py": {
+      "before_sha256": null,
+      "sha256": "a00872d7fb38d38e83e975ed2080bf1d5cdbe2f3315eaaad80ab6c4df47fa104"
+    }
+  },
+  "production_intersection": [],
+  "publication_authorized": false,
+  "version": 1
+}
