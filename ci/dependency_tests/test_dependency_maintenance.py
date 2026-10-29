@@ -35,8 +35,9 @@ class DependencyMaintenanceTests(unittest.TestCase):
             after = subprocess.check_output(['git', 'show', value['dependency_commit']+':'+name], cwd=ROOT)
             self.assertEqual(sha(before), binding['before_sha256'])
             self.assertEqual(sha(after), binding['sha256'])
-            self.assertEqual(sha((ROOT/name).read_bytes()), binding['sha256'])
-            self.assertEqual(transition.selected_hash(name, binding['before_sha256']), binding['sha256'])
+            selected = transition.selected_hash(name, binding['sha256'])
+            self.assertEqual(sha((ROOT/name).read_bytes()), selected)
+            self.assertEqual(transition.selected_hash(name, binding['before_sha256']), selected)
         for name,binding in value['infrastructure'].items():
             old=subprocess.check_output(['git','show',value['baseline_commit']+':'+name],cwd=ROOT)
             self.assertEqual(sha(old),binding['before_sha256'])

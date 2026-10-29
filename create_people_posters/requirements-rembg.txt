@@ -1,6 +1,6 @@
 # CPU inference profile validated in a clean Windows x64 Python 3.13 environment.
 # Production dependencies only; pytest is installed separately for tests.
-rembg[cpu]==2.0.85
+rembg[cpu]==2.0.86
 onnxruntime==1.31.0
 pillow==13.0.0
 fonttools==4.67.0

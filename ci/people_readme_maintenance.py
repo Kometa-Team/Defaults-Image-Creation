@@ -133,7 +133,9 @@ def verify_checkout(root=None):
     _ancestry(str(root), _head(root))
     paths = _regular_files(root, set(value['members']) | ANCHORS)
     for name, binding in value['members'].items():
-        if sha(paths[name].read_bytes()) != binding['sha256']:
+        from ci.dependabot_maintenance import historical_bytes as dependency_history
+        current = dependency_history(root, name, paths[name].read_bytes())
+        if sha(current) != binding['sha256']:
             raise ValueError('Unreviewed README publication successor: ' + name)
         if binding['before_sha256'] is not None and sha(_old(name)) != binding['before_sha256']:
             raise ValueError('Changed README publication predecessor: ' + name)
@@ -141,16 +143,20 @@ def verify_checkout(root=None):
 
 
 def selected_hash(name, expected):
+    from ci.dependabot_maintenance import selected_hash as dependency_hash
+    expected = dependency_hash(name, expected)
     if name not in MEMBERS:
         return expected
     binding = manifest()['members'].get(name)
     if binding is None or binding['before_sha256'] is None or expected != binding['before_sha256']:
         return expected
     verify_checkout()
-    return binding['sha256']
+    return dependency_hash(name, binding['sha256'])
 
 
 def historical_bytes(root, name, current):
+    from ci.dependabot_maintenance import historical_bytes as dependency_history
+    current = dependency_history(root, name, current)
     if name not in MEMBERS:
         return current
     binding = manifest()['members'].get(name)
@@ -165,7 +171,8 @@ def historical_bytes(root, name, current):
 
 
 def scope_members():
-    return set(manifest()['members']) | ANCHORS
+    from ci.dependabot_maintenance import scope_members as dependency_scope
+    return set(manifest()['members']) | ANCHORS | dependency_scope()
 
 
 def test_ids():
@@ -174,6 +181,13 @@ def test_ids():
 
 def verify_scope(root, baseline, names):
     verify_checkout(root)
+    from ci.dependabot_maintenance import scope_members as dependency_scope, verify_scope as dependency_verify
+    dependency_names = names & dependency_scope()
+    if dependency_names:
+        dependency_verify(root, baseline, dependency_names)
+    names = names - dependency_names
+    if not names:
+        return
     if not names <= scope_members():
         raise ValueError('Unapproved README publication scope')
     rows = _git(root, 'diff', '--raw', '--no-abbrev', '--no-renames', '-z',

@@ -1,3 +1,5 @@
 # Optional Package A schema experiment only. No installation is performed by it.
 -r ../requirements.txt
+# Mirror the inherited pin so dependency scanners see the patched version here.
+Pillow==13.0.0
 jsonschema==4.26.0
