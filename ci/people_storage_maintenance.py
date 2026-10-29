@@ -128,7 +128,7 @@ def verify(root=ROOT):
                 or sha(regular(root, name).read_bytes()) != selected_hash(name, binding['sha256'])):
             raise ValueError('Changed exact storage CI infrastructure: '+name)
     for name, expected in value['additions'].items():
-        if sha(regular(root, name).read_bytes()) != expected:
+        if sha(regular(root, name).read_bytes()) != selected_hash(name, expected):
             raise ValueError('Changed exact storage maintenance addition: '+name)
     for name in TRUST_ANCHORS:
         regular(root, name)
@@ -155,7 +155,8 @@ def selected_hash(name, expected):
 
 def extra_ids(root=ROOT):
     value = manifest()
-    return list(value['storage_test_ids']) if verify_cohort(root, value) else []
+    from ci.people_readme_maintenance import test_ids
+    return list(value['storage_test_ids']) + test_ids() if verify_cohort(root, value) else []
 
 
 def historical_bytes(root, name, current):

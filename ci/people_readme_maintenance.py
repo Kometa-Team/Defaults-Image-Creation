@@ -11,7 +11,7 @@ from ci.people_storage_maintenance import regular
 ROOT = Path(__file__).resolve().parents[1]
 BASE = 'deb9a3a2f609600a395c5be8b268805de5a5efa3'
 MANIFEST = ROOT / 'ci/people-readme-maintenance-v1.json'
-PIN = '9b921944e6b761be8c711e6c0aa6102f62be44ea77a4cc96c86eb498b082108b'
+PIN = '4bf36581375ccf6f5a842d01688bbd096555a7f27892cdfa424dbc1f0cf01914'
 ANCHORS = frozenset({'ci/people_readme_maintenance.py', 'ci/people-readme-maintenance-v1.json'})
 
 
@@ -88,6 +88,10 @@ def historical_bytes(root, name, current):
 
 def scope_members():
     return set(manifest()['members']) | ANCHORS
+
+
+def test_ids():
+    return list(manifest()['pytest_ids'])
 
 
 def verify_scope(root, baseline, names):

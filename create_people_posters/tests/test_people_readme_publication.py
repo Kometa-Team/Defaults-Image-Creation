@@ -2,10 +2,12 @@
 
 import copy
 import sqlite3
+import time
 
 import pytest
 
 from test_people_github import BATCH, plan, setup
+from test_people_workspaces import manager, published_job
 from people_github import GitHubError, REPOSITORIES
 from people_publication_state import PublicationState
 from people_readme_publication import ReadmePublication
@@ -272,3 +274,32 @@ def test_unbounded_configuration_rejected(monkeypatch, key, value):
     monkeypatch.setenv(key, value)
     with pytest.raises(ValueError):
         ReadmePublication(None, None, None)
+
+
+def test_identical_images_with_stale_indexes_still_repair_readmes(setup, tmp_path):
+    client, inventory, ledger, publisher = setup
+    rows = plan(tmp_path, ledger)
+    for row in rows:
+        files = copy.deepcopy(client.trees[client.commits[client.heads[row["repo"]]]])
+        files[row["path"]] = {"sha": row["blob"], "type": "blob", "mode": "100644", "size": Path(row["prepared"]).stat().st_size}
+        client.advance(row["repo"], files)
+    publisher.publish(BATCH)
+    assert ledger.verified(BATCH)
+    assert not any(call[0] == "PATCH" for call in client.calls)
+    assert sum("dispatches" in call[1] for call in client.calls) == 7
+
+
+
+@pytest.mark.parametrize("status", ["dispatched", "warning", "unchanged", "failed", "waiting"])
+def test_cleanup_retains_images_until_readme_verified(manager, monkeypatch, status):
+    batch = published_job(manager, monkeypatch)
+    ledger = PublicationState(manager.state)
+    try:
+        ledger.readme(batch, REPOSITORIES["bw"], status)
+        assert not ledger.verified(batch)
+        assert manager.cleanup(dry_run=False, now=time.time() + 4 * 86400) == [
+            (batch, "retained: publication receipts incomplete")]
+        assert (manager.path(batch) / "prepared").exists()
+    finally:
+        ledger.close()
+

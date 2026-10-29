@@ -236,20 +236,9 @@ def test_existing_different_is_updated(setup, tmp_path):
     assert ledger.verified(BATCH)
 
 
-def test_identical_images_with_stale_indexes_still_repair_readmes(setup, tmp_path):
-    client, inventory, ledger, publisher = setup
-    rows = plan(tmp_path, ledger)
-    for row in rows:
-        files = copy.deepcopy(client.trees[client.commits[client.heads[row["repo"]]]])
-        files[row["path"]] = {"sha": row["blob"], "type": "blob", "mode": "100644", "size": Path(row["prepared"]).stat().st_size}
-        client.advance(row["repo"], files)
-    publisher.publish(BATCH)
-    assert ledger.verified(BATCH)
-    assert not any(call[0] == "PATCH" for call in client.calls)
-    assert sum("dispatches" in call[1] for call in client.calls) == 7
 
 
-def test_identical_images_and_valid_indexes_need_no_dispatch(setup, tmp_path):
+def test_identical_new_batch_does_not_commit_or_dispatch(setup, tmp_path):
     client, inventory, ledger, publisher = setup
     rows = plan(tmp_path, ledger)
     for row in rows:
