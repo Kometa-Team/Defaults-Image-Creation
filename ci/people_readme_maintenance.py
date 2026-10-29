@@ -11,7 +11,7 @@ from ci.people_storage_maintenance import regular
 ROOT = Path(__file__).resolve().parents[1]
 BASE = 'deb9a3a2f609600a395c5be8b268805de5a5efa3'
 MANIFEST = ROOT / 'ci/people-readme-maintenance-v1.json'
-PIN = '4bf36581375ccf6f5a842d01688bbd096555a7f27892cdfa424dbc1f0cf01914'
+PIN = '3cf354ad555a560961751a21b45d9a7fb8391a39440d35c5fcadd0677c7b6121'
 ANCHORS = frozenset({'ci/people_readme_maintenance.py', 'ci/people-readme-maintenance-v1.json'})
 
 

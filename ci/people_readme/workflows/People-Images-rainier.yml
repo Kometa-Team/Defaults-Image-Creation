@@ -278,6 +278,3 @@ jobs:
           avatar_url: ${{ vars.BOT_IMAGE }}
           author: ${{ vars.GIT_NAME }}
           author_icon_url: ${{ vars.GIT_IMAGE }}
-
-
-

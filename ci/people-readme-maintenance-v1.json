@@ -139,31 +139,31 @@
     },
     "ci/people_readme/workflows/People-Images-bw.yml": {
       "before_sha256": null,
-      "sha256": "21316dd56381f2677f1618e534dbe3e2024d700646981fe5e1e3ed4f3d75f3ba"
+      "sha256": "18972dc9c67c2568b1672eb2700114f7412af1e2bf8cfc8e996afc1a57448e21"
     },
     "ci/people_readme/workflows/People-Images-diiivoy.yml": {
       "before_sha256": null,
-      "sha256": "b3b7022938198335115cbb6c48385f4cfe0c7869f4b76f4d48bebf8f2d819182"
+      "sha256": "20210dbf7853bede58b619b710e105af07c17d8231c50a8cf7592ad8c9790269"
     },
     "ci/people_readme/workflows/People-Images-diiivoycolor.yml": {
       "before_sha256": null,
-      "sha256": "6688a884b4b1b00bb837fd8e38b180b0d202105906ffefecc4ecc5819c2a21bb"
+      "sha256": "2fda56e62df5e6a643e7961064849a315f7b620f24b2f6151af4e53e35da8a60"
     },
     "ci/people_readme/workflows/People-Images-rainier.yml": {
       "before_sha256": null,
-      "sha256": "100ad53f596a51eadbba2c62a41fc4c2d3d98aed78a17e1b7fbf623d1bb9d754"
+      "sha256": "2b5d532a1123bbe6793314d14023f1fd6b29c63da47f3e49ba2f449fe13196bd"
     },
     "ci/people_readme/workflows/People-Images-signature.yml": {
       "before_sha256": null,
-      "sha256": "7ac3f8f1debb51cd6ac4b2ea94ed34d4eed00e425918cd88b7dc2cfc6da80b51"
+      "sha256": "c040b39255b0774c06dc7590c393148d3b683b94f8a513ed83505e07dbc951b6"
     },
     "ci/people_readme/workflows/People-Images-transparent.yml": {
       "before_sha256": null,
-      "sha256": "995ac03a2df1308b62d70facbd3821d4f50cfcd9440bd925d3e1493923242ff4"
+      "sha256": "1f7a989b26fe71d3464df3f0bba2b60e6e7bd4fbab782569b5dd4a2f1c3cee03"
     },
     "ci/people_readme/workflows/People-Images.yml": {
       "before_sha256": null,
-      "sha256": "17c342c3b174a58290dcef4b857daad7c0f248add9e56ba1051e99cea78ee8aa"
+      "sha256": "942f6050675d84b70dab481f929c47002fb9946f3dd35ed328bf1b50d8f44f42"
     },
     "ci/people_retention_maintenance.py": {
       "before_sha256": "6cf73c60d62e226d955767f44f4dcc3827f5ae32e49355fc3338127a073e4629",
@@ -211,7 +211,7 @@
     },
     "create_people_posters/tests/test_people_readme_publication.py": {
       "before_sha256": null,
-      "sha256": "14ea7e425e401a83156d7351c0f89d44f5d056ed739de0ead1d0b96e418bd978"
+      "sha256": "8d7d2bff905442350609b14381159658385cf1a25cd8f6322a4646864c6971e2"
     },
     "create_people_posters/tests/test_people_readme_workflows.py": {
       "before_sha256": null,

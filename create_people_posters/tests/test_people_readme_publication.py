@@ -1,6 +1,7 @@
 """Offline regression coverage for README completion and batch retention."""
 
 import copy
+from pathlib import Path
 import sqlite3
 import time
 
@@ -302,4 +303,3 @@ def test_cleanup_retains_images_until_readme_verified(manager, monkeypatch, stat
         assert (manager.path(batch) / "prepared").exists()
     finally:
         ledger.close()
-
