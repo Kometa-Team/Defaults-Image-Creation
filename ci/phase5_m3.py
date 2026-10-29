@@ -55,7 +55,21 @@ def native_artifacts(directory):
         require({v['appearance'] for v in composed['views']} == {'default', 'requested'}, 'Missing full native view')
         require(all(len(v['members']) == count//2 and {m['identity'] for m in v['members']} == set(composed['required_members'])
                     for v in composed['views']), 'Missing native companion')
-        require(all(value['consumption_receipt'][k] is False for k in ('authenticated', 'ready', 'active', 'publication_authorized', 'contract_approved')), 'Fixture artifact claims authority')
+        if category == 'Genre':
+            require(value['decision_status'] == 'synthetic-consumed' and value['unavailable'] is None,
+                    'Missing positive native fixture consumption')
+            require(all(value['consumption_receipt'][k] is False for k in ('authenticated', 'ready', 'active', 'publication_authorized', 'contract_approved')), 'Fixture artifact claims authority')
+        else:
+            blocked = value['unavailable']
+            require(value['decision_status'] == 'unavailable' and value['consumption_receipt'] is None
+                    and blocked['reason'] == 'unverified_companion_membership'
+                    and fingerprint(blocked['phase3']) == blocked['phase3_sha256']
+                    and blocked['phase3']['chain_compatible'] is False
+                    and blocked['phase3']['simulation_eligible'] is False
+                    and all(blocked['phase3'][k] is False for k in ('ready','active','publication_authorized','production_enforcement','technical_eligible'))
+                    and blocked['phase3']['m7']['exact_approvals_missing'] == 22
+                    and 'm3:unverified_companion_membership' in blocked['phase3']['blockers'],
+                    'Unsupported prospective pair became decision authority')
         for row in value['rows']:
             name, member, receipt, worker = (row[k] for k in ('file', 'member', 'receipt', 'worker'))
             require(Path(name).name == name and name not in images, 'Unsafe/duplicate native artifact')
