@@ -203,7 +203,7 @@
     },
     "create_people_posters/sandbox_people_github.py": {
       "before_sha256": "29e58c620feee987086a5f47026a7b00ca8d3fd266bf333b341193de726aebcd",
-      "sha256": "419fbdc3694d8baf76bf54ddef0d57c862768aa273a9919ab8da6b1160169e75"
+      "sha256": "d1a9c8f01b319963b3c60ec0c949e0a1e10c455f0fb23cf16d596ed3c5101984"
     },
     "create_people_posters/tests/test_people_github.py": {
       "before_sha256": "6a7b109bb50e35f91418c4806c59d03007ec5ba974445d13b3274e46da922738",

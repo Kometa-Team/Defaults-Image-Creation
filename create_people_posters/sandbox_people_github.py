@@ -62,7 +62,12 @@ def copied_readme_workflow(style):
     workflow = yaml.load(base64.b64decode(document["content"]), Loader=yaml.BaseLoader)
     if set(workflow["on"]) != {"workflow_dispatch", "push"}:
         raise ValueError("Production README triggers changed; review before cloning the workflow")
-    workflow["on"] = {"workflow_dispatch": workflow["on"]["workflow_dispatch"] or {}, "push": {}}
+    dispatch = workflow["on"]["workflow_dispatch"]
+    if not isinstance(dispatch, dict):
+        if dispatch not in (None, "", "null", "Null", "NULL", "~"):
+            raise ValueError("Unsupported README manual trigger configuration")
+        dispatch = {}
+    workflow["on"] = {"workflow_dispatch": dispatch, "push": {}}
     for item in workflow["on"]["workflow_dispatch"].get("inputs", {}).values():
         if item.get("required") in {"true", "false"}:
             item["required"] = item["required"] == "true"
