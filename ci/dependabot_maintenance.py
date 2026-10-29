@@ -74,6 +74,8 @@ def _ancestry(root, head):
 
 def verify_checkout(root=None):
     root = Path(root or ROOT)
+    from ci.phase5_m2_maintenance import verify_checkout as verify_m2
+    verify_m2(root)
     value = manifest()
     from ci.people_colorize_maintenance import _head
     _ancestry(str(root), _head(root))
@@ -112,11 +114,19 @@ def historical_bytes(root, name, current):
 
 
 def scope_members():
-    return MEMBERS | ANCHORS
+    from ci.phase5_m2_maintenance import scope_members as m2_scope
+    return MEMBERS | ANCHORS | m2_scope()
 
 
 def verify_scope(root, baseline, names):
     verify_checkout(root)
+    from ci.phase5_m2_maintenance import scope_members as m2_scope, verify_scope as verify_m2_scope
+    m2_names = names & m2_scope()
+    if m2_names:
+        verify_m2_scope(root, baseline, m2_names)
+    names = names - m2_names
+    if not names:
+        return
     if not names <= scope_members():
         raise ValueError('Unapproved dependency-audit scope')
     rows = _git(root, 'diff', '--raw', '--no-abbrev', '--no-renames', '-z',
