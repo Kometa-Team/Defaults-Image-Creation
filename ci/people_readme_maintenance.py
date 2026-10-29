@@ -4,6 +4,7 @@ from functools import lru_cache
 import hashlib
 import json
 from pathlib import Path
+import stat
 import subprocess
 
 from ci.people_storage_maintenance import regular
@@ -11,7 +12,7 @@ from ci.people_storage_maintenance import regular
 ROOT = Path(__file__).resolve().parents[1]
 BASE = 'deb9a3a2f609600a395c5be8b268805de5a5efa3'
 MANIFEST = ROOT / 'ci/people-readme-maintenance-v1.json'
-PIN = '2d7a220a3224ea15f0f7d027d9dadf2083faeb3b57fc676f2bbc6dcd3a69d070'
+PIN = '6a5b084b64b5a3895f2a5e20ac2510b4e2101c90d63d15cbe9d629b95643f5e2'
 ANCHORS = frozenset({'ci/people_readme_maintenance.py', 'ci/people-readme-maintenance-v1.json'})
 MEMBERS = frozenset({
     '.github/workflows/people-storage-validation.yml',
@@ -48,7 +49,9 @@ MEMBERS = frozenset({
 })
 
 
+@lru_cache(maxsize=256)
 def sha(raw):
+    # Only immutable byte strings are cached. Current files are read afresh.
     return hashlib.sha256(raw.replace(b'\r\n', b'\n')).hexdigest()
 
 
@@ -91,18 +94,38 @@ def _ancestry(root, head):
     _git(root, 'merge-base', '--is-ancestor', BASE, head)
 
 
+def _regular_files(root, names):
+    """Check every file and shared directory once per verification call."""
+    root = root.absolute()
+    paths = {name: root / name for name in names}
+    checked = set()
+    for name, path in paths.items():
+        if root not in path.parents or '..' in path.relative_to(root).parts:
+            raise ValueError('README publication path escaped root')
+        for part in (path, *path.parents):
+            if part not in checked:
+                info = part.lstat()
+                if stat.S_ISLNK(info.st_mode) or getattr(info, 'st_file_attributes', 0) & 0x400:
+                    raise ValueError('README publication rejects links or reparse points: ' + name)
+                if part == path and not stat.S_ISREG(info.st_mode):
+                    raise ValueError('README publication requires a regular file: ' + name)
+                checked.add(part)
+            if part == root:
+                break
+    return paths
+
+
 def verify_checkout(root=None):
     root = Path(root or ROOT)
     value = manifest()
     from ci.people_colorize_maintenance import _head
     _ancestry(str(root), _head(root))
+    paths = _regular_files(root, set(value['members']) | ANCHORS)
     for name, binding in value['members'].items():
-        if sha(regular(root, name).read_bytes()) != binding['sha256']:
+        if sha(paths[name].read_bytes()) != binding['sha256']:
             raise ValueError('Unreviewed README publication successor: ' + name)
         if binding['before_sha256'] is not None and sha(_old(name)) != binding['before_sha256']:
             raise ValueError('Changed README publication predecessor: ' + name)
-    for name in ANCHORS:
-        regular(root, name)
     return value
 
 

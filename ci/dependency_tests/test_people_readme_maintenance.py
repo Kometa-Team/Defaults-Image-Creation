@@ -4,6 +4,7 @@ from copy import deepcopy
 import json
 from pathlib import Path
 import subprocess
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -67,6 +68,23 @@ class PeopleReadmeMaintenanceTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 readme.manifest()
         self.assertEqual(readme.manifest(), value)
+
+    def test_shared_parent_checks_are_fresh_and_reject_reparse_points(self):
+        names = readme.MEMBERS | readme.ANCHORS
+        readme._regular_files(ROOT, names)
+        original = Path.lstat
+        for target in (ROOT, ROOT / 'ci', ROOT / 'create_people_posters',
+                       ROOT / 'create_people_posters/publish_people_github.py'):
+            def changed(path):
+                info = original(path)
+                return SimpleNamespace(st_mode=info.st_mode, st_file_attributes=0x400) if path == target else info
+            with self.subTest(target=target), patch.object(Path, 'lstat', changed):
+                with self.assertRaisesRegex(ValueError, 'reparse'):
+                    readme._regular_files(ROOT, names)
+        with self.assertRaisesRegex(ValueError, 'escaped'):
+            readme._regular_files(ROOT, {'../outside.py'})
+        with self.assertRaisesRegex(ValueError, 'regular file'):
+            readme._regular_files(ROOT, {'ci'})
 
     def test_historical_projection_is_exact_and_rejects_rollback(self):
         for name, binding in readme.manifest()['members'].items():
