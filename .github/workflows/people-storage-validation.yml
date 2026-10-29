@@ -34,6 +34,8 @@ jobs:
           create_people_posters/tests/test_remove_bg_birefnet.py
           create_people_posters/tests/test_pillow_poster.py
           create_people_posters/tests/test_people_github.py
+          create_people_posters/tests/test_people_readme_publication.py
+          create_people_posters/tests/test_people_readme_workflows.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: ${{ always() }}
         with:

@@ -114,6 +114,20 @@ def test_cleanup_requires_ledger_not_just_manifest(manager):
     assert manager.cleanup(dry_run=False)[0][1] == "retained: publication receipts incomplete"
 
 
+@pytest.mark.parametrize("status", ["dispatched", "warning", "unchanged", "failed", "waiting"])
+def test_cleanup_retains_images_until_readme_verified(manager, monkeypatch, status):
+    batch = published_job(manager, monkeypatch)
+    ledger = PublicationState(manager.state)
+    try:
+        ledger.readme(batch, REPOSITORIES["bw"], status)
+        assert not ledger.verified(batch)
+        assert manager.cleanup(dry_run=False, now=time.time() + 4 * 86400) == [
+            (batch, "retained: publication receipts incomplete")]
+        assert (manager.path(batch) / "prepared").exists()
+    finally:
+        ledger.close()
+
+
 def test_cleanup_interrupt_resumes(manager, monkeypatch):
     batch = published_job(manager, monkeypatch)
     import people_workspaces

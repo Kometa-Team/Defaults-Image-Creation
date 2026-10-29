@@ -467,6 +467,13 @@ local sync to copy markdown. The dispatch uses the GitHub CLI (`gh`) and is
 warning-only by default; set `UPDATE_REQUIRE_README_DISPATCH=true` if a failed
 dispatch should fail the run.
 
+The `github_api` publisher waits for README workflows and verifies that the root
+and affected per-letter indexes contain the batch's image links. Failed jobs
+and stale indexes are retried up to three times. Unresolved failures retain the
+batch and fail publication regardless of `UPDATE_REQUIRE_README_DISPATCH`.
+See [README completion and retries](CLONE_FREE.md) and the coordinated
+[seven-repository workflow updates](../ci/people_readme/README.md).
+
 `sync_people_images.py` runs source-image preflight by default, but it is
 split by severity. It blocks sync for wrong extensions, unreadable/corrupt
 files, bad dimensions, and transparent PNGs with no alpha. Grayscale in

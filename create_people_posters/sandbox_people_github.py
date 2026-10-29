@@ -62,14 +62,17 @@ def copied_readme_workflow(style):
     workflow = yaml.load(base64.b64decode(document["content"]), Loader=yaml.BaseLoader)
     if set(workflow["on"]) != {"workflow_dispatch", "push"}:
         raise ValueError("Production README triggers changed; review before cloning the workflow")
-    workflow["on"] = {"workflow_dispatch": {}, "push": {}}
+    workflow["on"] = {"workflow_dispatch": workflow["on"]["workflow_dispatch"] or {}, "push": {}}
+    for item in workflow["on"]["workflow_dispatch"].get("inputs", {}).values():
+        if item.get("required") in {"true", "false"}:
+            item["required"] = item["required"] == "true"
     workflow["concurrency"]["cancel-in-progress"] = True
     for job in workflow["jobs"].values():
         job["steps"] = [step for step in job["steps"] if "discord" not in str(step.get("uses", "")).lower()]
         for step in job["steps"]:
             if "TARGET_REPO" in step.get("env", {}) and step["env"]["TARGET_REPO"] != "${{ github.repository }}":
                 raise ValueError("README workflow is not scoped to its own repository")
-            if "TARGET_REF" in step.get("env", {}) and step["env"]["TARGET_REF"] != "master":
+            if "TARGET_REF" in step.get("env", {}) and step["env"]["TARGET_REF"] not in {"master", "${{ github.ref_name }}"}:
                 raise ValueError("Unexpected production README branch; review required")
     return yaml.safe_dump(workflow, sort_keys=False, allow_unicode=True).encode("utf-8")
 

@@ -107,7 +107,8 @@ raise SystemExit(result.returncode)
     def test_original_eight_cleanup_blobs_and_historical_manifests_stay_exact(self):
         value=storage.manifest()
         for name,binding in value['cohort'].items():
-            self.assertEqual(storage.sha((ROOT/name).read_bytes()),binding['sha256'])
+            from ci.people_readme_maintenance import historical_bytes
+            self.assertEqual(storage.sha(historical_bytes(ROOT,name,(ROOT/name).read_bytes())),binding['sha256'])
         for name in ['ci/people-security-maintenance.json','ci/dependency-maintenance-v1.json','ci/people-security-test-ids.json','ci/phase4-m7-test-ids.json','create_defaults/bulk/contracts/adoption/source-pins-v1.json']:
             old=subprocess.check_output(['git','show','ded9f33759f9fe3ed4ddf5f315dff01b163594ad:'+name],cwd=ROOT)
             self.assertEqual(retention.sha((ROOT/name).read_bytes()),retention.sha(old))

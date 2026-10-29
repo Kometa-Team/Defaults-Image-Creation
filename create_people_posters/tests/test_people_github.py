@@ -28,8 +28,33 @@ class FakeGitHub:
         self.fail_repo = None
         self.missing_branch = False
         self.conflict = None
+        self.runs = {}
+        self.readme_outcomes = {}
+        self.omit_index = set()
         for repo in REPOSITORIES.values():
-            self.advance(repo, {"README.md": {"sha": "readme", "type": "blob", "mode": "100644", "size": 1}})
+            self.blobs[blob_sha(b"")] = b""
+            self.advance(repo, {"README.md": {"sha": blob_sha(b""), "type": "blob", "mode": "100644", "size": 0}})
+
+    def generate_readmes(self, repo):
+        from urllib.parse import quote
+        files = copy.deepcopy(self.trees[self.commits[self.heads[repo]]])
+        images = [path for path in files if "/Images/" in path]
+        for index in ["README.md"] + sorted({p.split("/")[0] + "/README.md" for p in images}):
+            if (repo, index) in self.omit_index:
+                continue
+            links = [f"* [{Path(p).stem}](https://raw.githubusercontent.com/{repo}/master/{quote(p)})"
+                     for p in images if index == "README.md" or p.startswith(index.split("/")[0] + "/")]
+            data = "\n".join(links).encode()
+            sha = blob_sha(data)
+            self.blobs[sha] = data
+            files[index] = {"sha": sha, "type": "blob", "mode": "100644", "size": len(data)}
+        self.advance(repo, files)
+
+    def finish_readme(self, repo, run):
+        if run["conclusion"] == "success" and not run.get("generated"):
+            self.generate_readmes(repo)
+            run["generated"] = True
+        return run
 
     def new_sha(self):
         self.counter += 1
@@ -87,8 +112,25 @@ class FakeGitHub:
             self.heads[repo] = payload["sha"]
             return {"object": {"sha": payload["sha"]}}
         if method == "POST" and "dispatches" in route:
-            assert payload == {"ref": "master"}
+            assert payload["ref"] == "master"
+            if "inputs" in payload:
+                outcomes = self.readme_outcomes.get(repo, [])
+                conclusion = outcomes.pop(0) if outcomes else "success"
+                run = {"id": int(self.new_sha(), 16), "display_title": "README batch " + payload["inputs"]["batch_id"],
+                       "event": "workflow_dispatch", "head_branch": "master", "status": "completed",
+                       "conclusion": conclusion, "run_attempt": 1}
+                self.runs.setdefault(repo, []).append(run)
             return {}
+        if method == "GET" and route.startswith("actions/workflows/readme.yml/runs"):
+            return {"workflow_runs": [self.finish_readme(repo, run) for run in self.runs.get(repo, [])]}
+        if route.startswith("actions/runs/"):
+            run = next(r for r in self.runs[repo] if r["id"] == int(parts[6]))
+            if method == "GET":
+                return self.finish_readme(repo, run)
+            if method == "POST" and route.endswith(("/rerun-failed-jobs", "/rerun")):
+                outcomes = self.readme_outcomes.get(repo, [])
+                run.update(run_attempt=run["run_attempt"] + 1, conclusion=outcomes.pop(0) if outcomes else "success")
+                return {}
         if method == "GET" and "compare/" in route:
             return {"status": "ahead"}
         raise AssertionError((method, path))
@@ -116,6 +158,7 @@ def setup(tmp_path, monkeypatch):
     monkeypatch.setenv("PEOPLE_BRANCH", "master")
     monkeypatch.setenv("UPDATE_TRIGGER_READMES", "true")
     monkeypatch.setenv("UPDATE_REQUIRE_README_DISPATCH", "true")
+    monkeypatch.setenv("PEOPLE_README_POLL_INTERVAL", "0.001")
     monkeypatch.delenv("ORCH_COMMIT_MESSAGE", raising=False)
     client = FakeGitHub()
     ledger = PublicationState(tmp_path / "state")
@@ -193,13 +236,28 @@ def test_existing_different_is_updated(setup, tmp_path):
     assert ledger.verified(BATCH)
 
 
-def test_identical_new_batch_does_not_commit_or_dispatch(setup, tmp_path):
+def test_identical_images_with_stale_indexes_still_repair_readmes(setup, tmp_path):
     client, inventory, ledger, publisher = setup
     rows = plan(tmp_path, ledger)
     for row in rows:
         files = copy.deepcopy(client.trees[client.commits[client.heads[row["repo"]]]])
         files[row["path"]] = {"sha": row["blob"], "type": "blob", "mode": "100644", "size": Path(row["prepared"]).stat().st_size}
         client.advance(row["repo"], files)
+    publisher.publish(BATCH)
+    assert ledger.verified(BATCH)
+    assert not any(call[0] == "PATCH" for call in client.calls)
+    assert sum("dispatches" in call[1] for call in client.calls) == 7
+
+
+def test_identical_images_and_valid_indexes_need_no_dispatch(setup, tmp_path):
+    client, inventory, ledger, publisher = setup
+    rows = plan(tmp_path, ledger)
+    for row in rows:
+        files = copy.deepcopy(client.trees[client.commits[client.heads[row["repo"]]]])
+        files[row["path"]] = {"sha": row["blob"], "type": "blob", "mode": "100644", "size": 1}
+        client.advance(row["repo"], files)
+    for repo in REPOSITORIES.values():
+        client.generate_readmes(repo)
     publisher.publish(BATCH)
     assert ledger.verified(BATCH)
     assert all(call[0] == "GET" for call in client.calls)
@@ -361,8 +419,9 @@ def test_readme_error_policy(setup, tmp_path, monkeypatch):
         publisher.publish(BATCH)
     assert not ledger.verified(BATCH)
     monkeypatch.setenv("UPDATE_REQUIRE_README_DISPATCH", "false")
-    publisher.publish(BATCH)
-    assert ledger.verified(BATCH)
+    with pytest.raises(GitHubError, match="README"):
+        publisher.publish(BATCH)
+    assert not ledger.verified(BATCH)
 
 
 def test_prepare_matches_existing_normalizers(tmp_path, monkeypatch):

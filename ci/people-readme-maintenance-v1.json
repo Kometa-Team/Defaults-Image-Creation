@@ -1,0 +1,119 @@
+{
+  "version": 1,
+  "baseline_commit": "deb9a3a2f609600a395c5be8b268805de5a5efa3",
+  "publication_authorized": false,
+  "members": {
+    ".github/workflows/people-storage-validation.yml": {
+      "before_sha256": "370f25a4cedd57286c597713bd42f665431a122a3ca39cb7e8ee4ef075a284d0",
+      "sha256": "d750821066ccfbd620c12c7670b7ae3302dd5f214e2170514bb20baa052baab3"
+    },
+    "ci/dependency_maintenance.py": {
+      "before_sha256": "08aa7e3bd4373d1e01e11c5fa3d7d8759d5ad4043897ff7a8dd32310b20ef29f",
+      "sha256": "7be76406c75d88d3d6ccfa5bd2c0186b45090ff0f3934bc90daad6a1051a27fd"
+    },
+    "ci/dependency_tests/test_people_readme_maintenance.py": {
+      "before_sha256": null,
+      "sha256": "3d3896fff38bd6a2b3dc80b1f4e3861b7af6f06d1d9e04b9c372ff77f7e4d141"
+    },
+    "ci/dependency_tests/test_people_retention_maintenance.py": {
+      "before_sha256": "f4f6e4fcaf55fbe7d693c5602319b2eea2b78bf41dd9809d9a5890b063c565f4",
+      "sha256": "5031f19b1c9dd9d5f52dc6f9bc5c97d42068943116adf0f0a2369dd6d575eef0"
+    },
+    "ci/people_colorize_maintenance.py": {
+      "before_sha256": "ee3e2a7115712baa44bbbf782d91ace89671b7a87a50918283ec955cf7ad6dd0",
+      "sha256": "5cc2a4a57ba1a5e7434a58c1d26c8347e014e9e1266f0ac9b40d5eaa8292ca82"
+    },
+    "ci/people_readme/README.md": {
+      "before_sha256": null,
+      "sha256": "4c83ea62da7292da5954664069a2d6383ddedb21ce361c790b8ebffa549d66f6"
+    },
+    "ci/people_readme/targets.json": {
+      "before_sha256": null,
+      "sha256": "9fecdbf0562818bce9d705d15b62f8735e824066552b9c5f8869971076558ec8"
+    },
+    "ci/people_readme/workflows/People-Images-bw.yml": {
+      "before_sha256": null,
+      "sha256": "21316dd56381f2677f1618e534dbe3e2024d700646981fe5e1e3ed4f3d75f3ba"
+    },
+    "ci/people_readme/workflows/People-Images-diiivoy.yml": {
+      "before_sha256": null,
+      "sha256": "b3b7022938198335115cbb6c48385f4cfe0c7869f4b76f4d48bebf8f2d819182"
+    },
+    "ci/people_readme/workflows/People-Images-diiivoycolor.yml": {
+      "before_sha256": null,
+      "sha256": "6688a884b4b1b00bb837fd8e38b180b0d202105906ffefecc4ecc5819c2a21bb"
+    },
+    "ci/people_readme/workflows/People-Images-rainier.yml": {
+      "before_sha256": null,
+      "sha256": "100ad53f596a51eadbba2c62a41fc4c2d3d98aed78a17e1b7fbf623d1bb9d754"
+    },
+    "ci/people_readme/workflows/People-Images-signature.yml": {
+      "before_sha256": null,
+      "sha256": "7ac3f8f1debb51cd6ac4b2ea94ed34d4eed00e425918cd88b7dc2cfc6da80b51"
+    },
+    "ci/people_readme/workflows/People-Images-transparent.yml": {
+      "before_sha256": null,
+      "sha256": "995ac03a2df1308b62d70facbd3821d4f50cfcd9440bd925d3e1493923242ff4"
+    },
+    "ci/people_readme/workflows/People-Images.yml": {
+      "before_sha256": null,
+      "sha256": "17c342c3b174a58290dcef4b857daad7c0f248add9e56ba1051e99cea78ee8aa"
+    },
+    "ci/people_retention_maintenance.py": {
+      "before_sha256": "6cf73c60d62e226d955767f44f4dcc3827f5ae32e49355fc3338127a073e4629",
+      "sha256": "8c0a0b7c7cdf897100882a2088febe64004b5178c24c3d8315906fa0962fffed"
+    },
+    "ci/people_storage_maintenance.py": {
+      "before_sha256": "31d92de574bd26f03fe752bf21298125e8a4899995a2038b465a99186d85a4ed",
+      "sha256": "82201b21aeb88975eb5a4de329bae7ce3a3fd2fc11bcfeb2898b7705b266b97d"
+    },
+    "create_people_posters/CLONE_FREE.md": {
+      "before_sha256": "99270b7bbe8dee83a1d53dc24248cd39557a8d995cf5b3c43eb22189d3c68e11",
+      "sha256": "ae4928512528ba87657b3cb310fe275ea0c654296dd916b1f23c66d3f190d74f"
+    },
+    "create_people_posters/README.md": {
+      "before_sha256": "03cadad9d0ffd1d2a8b29d5919ebb9654678779cbf05381a180ecd1cc63c50a7",
+      "sha256": "fa39bf3a486c086c278b3312217109c0198c07fdbec6d92ad0a75eda1279da0a"
+    },
+    "create_people_posters/people_cleanup_report.py": {
+      "before_sha256": "fd82573467c09ea9a4334e94d280a8535aa673c53340266090a57c75d7f4cccc",
+      "sha256": "6ef369e5daba216d06b708128e0b96f0b4d80b13c853f88a5d3fb0d15d1fdb2f"
+    },
+    "create_people_posters/people_publication_state.py": {
+      "before_sha256": "2438c4cc4e48ab5f50659b35904d4793b598cc246cdbd567c4155c8fdf7bed7a",
+      "sha256": "b7b5a506745afe538c3cc40c2e80633d31219962fe9bb1ef7ca72e64762d87df"
+    },
+    "create_people_posters/people_readme_publication.py": {
+      "before_sha256": null,
+      "sha256": "87c2b523f8b9999e5f61a9e0f5464c51bd4954fb272edb49010133309797c051"
+    },
+    "create_people_posters/people_verified_cleanup.py": {
+      "before_sha256": "2548e9533cee000548c9d15f7129d6494eea25c3b06b872efd1544b3b49d29fc",
+      "sha256": "b7599cd041042872d320a232472808843cdf137b55879390c5908601441b427d"
+    },
+    "create_people_posters/publish_people_github.py": {
+      "before_sha256": "5707c1cba6e0527241a22a28779f17214b5911c834a883ac8b42b1f46d8ed8ac",
+      "sha256": "72bc102f0c7f2fc85ed7ca635e89f9bd5ed58fd56f0fb5e1b5d1d2584c27b105"
+    },
+    "create_people_posters/sandbox_people_github.py": {
+      "before_sha256": "29e58c620feee987086a5f47026a7b00ca8d3fd266bf333b341193de726aebcd",
+      "sha256": "419fbdc3694d8baf76bf54ddef0d57c862768aa273a9919ab8da6b1160169e75"
+    },
+    "create_people_posters/tests/test_people_github.py": {
+      "before_sha256": "6a7b109bb50e35f91418c4806c59d03007ec5ba974445d13b3274e46da922738",
+      "sha256": "af4b60c062ccee9e89d37b95562e85dd0b56dfb5fba0e3af05a0591e502c0079"
+    },
+    "create_people_posters/tests/test_people_readme_publication.py": {
+      "before_sha256": null,
+      "sha256": "3636e7a59534fa59237408010923ac51ea8bd3e20f29e366eeb7175894abb4fe"
+    },
+    "create_people_posters/tests/test_people_readme_workflows.py": {
+      "before_sha256": null,
+      "sha256": "1b075583dd594b8460031632adc22ee95fdf3214baaf2ebe6d74190bc9139194"
+    },
+    "create_people_posters/tests/test_people_workspaces.py": {
+      "before_sha256": "7a425c3c79ffa3ed24817151ee298e7757affd2c9b24ff899cd9e1bebc20861e",
+      "sha256": "5ede1b74f204968da96e2134a27c5ef0fae97fd0260b60e9fc3d8306efe2bf97"
+    }
+  }
+}

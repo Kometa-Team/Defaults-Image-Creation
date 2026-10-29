@@ -55,7 +55,8 @@ def verify_checkout(root=None):
     from ci.people_storage_maintenance import git_bytes
     subprocess.check_call(['git','merge-base','--is-ancestor',value['audit_ancestor'],'HEAD'],cwd=root)
     for name,binding in value['members'].items():
-        if sha(regular(root,name).read_bytes())!=binding['sha256']:
+        from ci.people_readme_maintenance import selected_hash
+        if sha(regular(root,name).read_bytes())!=selected_hash(name,binding['sha256']):
             raise ValueError('Unreviewed retention successor: '+name)
         if binding['before_sha256'] is not None:
             # Reuse the existing cache ONLY for immutable Git objects. Current
