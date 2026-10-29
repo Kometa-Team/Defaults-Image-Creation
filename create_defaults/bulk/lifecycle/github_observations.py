@@ -219,8 +219,8 @@ class GitHubObserver:
         _number(number)
         pull = self._get('/pulls/' + str(number))
         base, head = pull['base'], pull['head']
-        if (pull['number'] != number or base['repo']['id'] != self.target.repository_id
-                or base['repo']['owner']['id'] != self.target.owner_id or base['ref'] != self.target.branch):
+        if (_number(pull['number']) != number or _number(base['repo']['id']) != self.target.repository_id
+                or _number(base['repo']['owner']['id']) != self.target.owner_id or base['ref'] != self.target.branch):
             _failure('invalid', 'decision_repository')
         if pull['state'] not in {'open', 'closed'} or type(pull['merged']) is not bool or type(pull['draft']) is not bool:
             _failure('invalid', 'decision_state')
@@ -339,7 +339,8 @@ class GitHubObserver:
                     or type(value['content']) is not str or len(value['content']) > 11_000_000):
                 _failure('invalid', 'blob_metadata')
             raw = base64.b64decode(''.join(value['content'].split()), validate=True)
-            if len(raw) > 8_000_000 or value['size'] != len(raw) or blob_sha(raw) != entry['sha']:
+            if (len(raw) > 8_000_000 or type(value['size']) is not int
+                    or value['size'] != len(raw) or blob_sha(raw) != entry['sha']):
                 _failure('invalid', 'blob_hash')
             traces = []
             if keys:

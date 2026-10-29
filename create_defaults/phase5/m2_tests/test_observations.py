@@ -170,6 +170,16 @@ def test_P5_T03_numeric_decision_scope_mismatches(change):
     assert result(client, pull_request=7)['status'] == 'invalid'
 
 
+@pytest.mark.parametrize('field', ['number', 'repository-id', 'owner-id'])
+def test_P5_T01_T03_boolean_is_not_a_numeric_decision_identity(field):
+    client = observer()
+    pull = client._transport.responses[PREFIX + '/pulls/7'][0]
+    if field == 'number': pull['number'] = True
+    if field == 'repository-id': pull['base']['repo']['id'] = True
+    if field == 'owner-id': pull['base']['repo']['owner']['id'] = True
+    assert result(client, pull_request=7)['reason'] == 'numeric_identity'
+
+
 @pytest.mark.parametrize('change', ['page-missing', 'wrong-next-host', 'duplicate', 'empty-with-next'])
 def test_P5_T03_incomplete_or_forged_pagination(change):
     client = observer()
@@ -252,6 +262,13 @@ def test_P5_T07_T30_incomplete_trees_or_bytes_never_prove_absence(change, reason
     if change == 'blob': values[next(k for k in values if '/git/blobs/' in k)][0]['content'] = 'YmFk'
     path = 'missing.yml' if change == 'missing' else 'en.yml'
     assert result(client, paths=(path,))['reason'] == reason
+
+
+def test_P5_T30_boolean_blob_size_is_rejected_even_for_exact_one_byte_content():
+    client = observer(contents=b'x')
+    endpoint = next(k for k in client._transport.responses if '/git/blobs/' in k)
+    client._transport.responses[endpoint][0]['size'] = True
+    assert result(client, paths=('en.yml',))['reason'] == 'blob_hash'
 
 
 def test_P5_T07_head_moves_during_observation():

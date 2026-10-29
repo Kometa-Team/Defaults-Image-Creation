@@ -2,7 +2,7 @@
   "adoption_intersection": [],
   "authenticated_live_observations": 0,
   "baseline_commit": "8e0bfa22329c33bd9b342760976b23dc205eabc4",
-  "fixture_tests": 68,
+  "fixture_tests": 72,
   "historical_expected": {
     "adoption_members": 299,
     "m7_frozen_files": 2927,
@@ -38,6 +38,9 @@
         "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T01_T02_forged_and_revoked_identity_facts[read-revoked-repository_read_revoked]",
         "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T01_T02_forged_and_revoked_identity_facts[repository-id-repository_or_owner_changed]",
         "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T01_T02_forged_and_revoked_identity_facts[repository-name-repository_name_mismatch]",
+        "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T01_T03_boolean_is_not_a_numeric_decision_identity[number]",
+        "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T01_T03_boolean_is_not_a_numeric_decision_identity[owner-id]",
+        "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T01_T03_boolean_is_not_a_numeric_decision_identity[repository-id]",
         "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T01_exact_numeric_identity_and_selected_blob"
       ]
     },
@@ -64,6 +67,9 @@
       "boundary": "read-only controlled fixtures; no operational authority",
       "id": "P5-T03",
       "tests": [
+        "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T01_T03_boolean_is_not_a_numeric_decision_identity[number]",
+        "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T01_T03_boolean_is_not_a_numeric_decision_identity[owner-id]",
+        "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T01_T03_boolean_is_not_a_numeric_decision_identity[repository-id]",
         "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T03_complete_pagination_fetches_current_details",
         "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T03_decision_change_between_list_and_detail_is_stale",
         "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T03_decision_invalidation_requires_reobservation[deleted]",
@@ -170,7 +176,8 @@
         "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T07_T30_incomplete_trees_or_bytes_never_prove_absence[submodule-unsafe_tree_mode]",
         "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T07_T30_incomplete_trees_or_bytes_never_prove_absence[symlink-unsafe_tree_mode]",
         "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T07_T30_incomplete_trees_or_bytes_never_prove_absence[tree-hash-tree_hash]",
-        "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T07_T30_incomplete_trees_or_bytes_never_prove_absence[truncated-tree_incomplete]"
+        "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T07_T30_incomplete_trees_or_bytes_never_prove_absence[truncated-tree_incomplete]",
+        "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T30_boolean_blob_size_is_rejected_even_for_exact_one_byte_content"
       ]
     }
   ],
