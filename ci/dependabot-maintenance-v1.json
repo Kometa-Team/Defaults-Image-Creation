@@ -5,7 +5,7 @@
   "members": {
     ".github/workflows/dependency-provenance-validation.yml": {
       "before_sha256": "37a98a477f41b05372e2aad3576a8863f3852792aee9b714f01f34bfb6ecb44a",
-      "sha256": "5f590498c27857ad8c6a35ebbdb6941bd5ac765f8f468321c47f3df4037f4bab"
+      "sha256": "8387e873cd828405b8691a04ca4380689ad1f43f9e6c40a24424d65cc715c910"
     },
     "README.md": {
       "before_sha256": "150f5185737115913696770af1ff0f8e38c3df947ac9357dc657765204cc9f12",
@@ -17,7 +17,7 @@
     },
     "ci/dependency_tests/test_dependabot_audit.py": {
       "before_sha256": null,
-      "sha256": "39410dde62ca1c505caaeda2ac58859abb8faac718bdff5df45e27ed703da37c"
+      "sha256": "e29a6add045e7f3583ef7568a931643b1748f0109352bdf51b8f5649e4ec3c74"
     },
     "ci/dependency_tests/test_dependency_maintenance.py": {
       "before_sha256": "7b795f242ddb0de04f6c8b4ee995f7fbeb0b479bb9d78281969d0f483bd10c13",

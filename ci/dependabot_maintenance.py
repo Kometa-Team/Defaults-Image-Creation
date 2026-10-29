@@ -10,7 +10,7 @@ from ci.people_storage_maintenance import regular
 ROOT = Path(__file__).resolve().parents[1]
 BASE = 'd013af718881dc5ec82178ee85540e29a0fb7ec3'
 MANIFEST = ROOT / 'ci/dependabot-maintenance-v1.json'
-PIN = '47c949d0d3cec3f1e0cfe82b3b0ea94a8f4d68af089b0cd2673a258b55fb9e57'
+PIN = 'ce975a74d8eec8bd29c9af1cc4c88e04fcec3db75188333a08c88ab772415e74'
 MEMBERS = frozenset({
     '.github/workflows/dependency-provenance-validation.yml',
     'README.md',

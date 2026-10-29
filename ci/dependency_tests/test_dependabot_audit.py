@@ -27,6 +27,19 @@ def pillow_requirement(name):
 
 
 class DependabotAuditTests(unittest.TestCase):
+    def test_provenance_workflow_keeps_both_platforms_and_parseable_dry_runs(self):
+        import yaml
+        path = ROOT / '.github/workflows/dependency-provenance-validation.yml'
+        job = yaml.safe_load(path.read_text())['jobs']['dependency-provenance']
+        self.assertEqual(set(job['strategy']['matrix']['os']), {'ubuntu-latest', 'windows-latest'})
+        commands = [step['run'] for step in job['steps'] if 'run' in step]
+        dry_runs = [command for command in commands if '--dry-run' in command]
+        self.assertEqual(len(dry_runs), 3)
+        for name in ('create_defaults/phase2/requirements.txt', 'create_people_posters/requirements.txt',
+                     'create_people_posters/requirements-rembg.txt'):
+            command = next(command for command in dry_runs if command.endswith('-r ' + name))
+            self.assertIn('--ignore-installed --only-binary=:all:', command)
+
     def test_all_41_actual_alerts_are_reconciled_against_the_patched_version(self):
         report = json.loads(REPORT.read_text())
         alerts = report['alerts']
