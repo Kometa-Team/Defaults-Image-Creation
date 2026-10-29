@@ -89,7 +89,8 @@ def verify_checkout(root=None):
     head = _head(root)
     _ancestry(str(root), head)
     for name, binding in value['members'].items():
-        if sha(regular(root, name).read_bytes()) != binding['sha256']:
+        from ci.people_readme_maintenance import selected_hash
+        if sha(regular(root, name).read_bytes()) != selected_hash(name, binding['sha256']):
             raise ValueError('Changed exact DDColor maintenance source: ' + name)
         if binding['before_sha256'] is not None:
             if sha(_old(str(root), name)) != binding['before_sha256']:

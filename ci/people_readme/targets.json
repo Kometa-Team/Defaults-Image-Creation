@@ -1,0 +1,37 @@
+{
+  "People-Images": {
+    "repository": "Kometa-Team/People-Images",
+    "path": ".github/workflows/readme.yml",
+    "baseline_blob": "b204e3abb1c8bb48698c77cee581c202d997df63"
+  },
+  "People-Images-transparent": {
+    "repository": "Kometa-Team/People-Images-transparent",
+    "path": ".github/workflows/readme.yml",
+    "baseline_blob": "1c7193d87b0e874cb328c00b2ffab27d52e723ad"
+  },
+  "People-Images-bw": {
+    "repository": "Kometa-Team/People-Images-bw",
+    "path": ".github/workflows/readme.yml",
+    "baseline_blob": "a57a4bc980c0be0339673175e05076261cca95f9"
+  },
+  "People-Images-diiivoy": {
+    "repository": "Kometa-Team/People-Images-diiivoy",
+    "path": ".github/workflows/readme.yml",
+    "baseline_blob": "10abdf5bdfbb0d295dd403d6626c2d427864b4d3"
+  },
+  "People-Images-diiivoycolor": {
+    "repository": "Kometa-Team/People-Images-diiivoycolor",
+    "path": ".github/workflows/readme.yml",
+    "baseline_blob": "37f7af6a48ee50be5390dca856146ef51e09ab40"
+  },
+  "People-Images-rainier": {
+    "repository": "Kometa-Team/People-Images-rainier",
+    "path": ".github/workflows/readme.yml",
+    "baseline_blob": "8685367905fecec83b253b53b37c66b141b02281"
+  },
+  "People-Images-signature": {
+    "repository": "Kometa-Team/People-Images-signature",
+    "path": ".github/workflows/readme.yml",
+    "baseline_blob": "98e2829b1e02728c9f0a2294ab2680d8d350edae"
+  }
+}

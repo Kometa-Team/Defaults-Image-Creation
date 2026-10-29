@@ -545,6 +545,8 @@ def test_identical_remote_content_is_not_committed_or_rolled_back(setup):
         files=copy.deepcopy(client.trees[client.commits[client.heads[repo]]])
         files['P/Images/Person.jpg']={'sha':row['blob'],'type':'blob','mode':'100644','size':10}
         client.advance(repo,files)
+        # Identical remote publication includes indexes as well as image bytes.
+        client.generate_readmes(repo)
     client.calls.clear()
     publish(migration,mid,token)
     assert all(c[0]=='GET' for c in client.calls)

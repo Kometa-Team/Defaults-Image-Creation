@@ -191,10 +191,28 @@ reconciled against the current tree. Previously confirmed images that change
 remotely block the batch for review.
 
 README dispatch happens only after every image destination succeeds, preserving
-`[skip readme]`. `UPDATE_TRIGGER_READMES`, `UPDATE_REQUIRE_README_DISPATCH` and
-`UPDATE_README_SKIP_MARKER` retain their meanings. Required dispatch failures
-retain the batch; optional failures are recorded warnings. Dispatch confirmation
-means GitHub accepted the workflow, not that the asynchronous run finished.
+`[skip readme]`. The API publisher starts all needed workflows, waits for the
+exact run identified by each persisted dispatch ID, and checks both the root
+README and each affected letter README for links to every published image.
+It also checks the image blobs still match the batch. Existing images with valid
+indexes need no new workflow; stale indexes are repaired even without image changes.
+
+Failed, timed-out and cancelled jobs get bounded reruns. A successful job with
+stale output gets a fresh dispatch. `PEOPLE_README_ATTEMPTS` defaults to 3 total
+attempts per repository, `PEOPLE_README_TIMEOUT` to 1800 seconds for the complete
+README phase, and `PEOPLE_README_POLL_INTERVAL` to 10 seconds. Incomplete results
+fail publication and retain the batch even if `UPDATE_REQUIRE_README_DISPATCH`
+is false; that legacy warning-only setting applies only to local Git dispatch.
+An interrupted wait can resume its persisted run ID without uploading images
+or dispatching another workflow. Explicit `UPDATE_TRIGGER_READMES=false` still
+opts out of README processing and records `disabled`.
+
+The matching seven workflow updates are in `ci/people_readme/workflows/`;
+see `ci/people_readme/README.md` for installation order. They accept the optional
+`batch_id` correlation input and retry temporary API errors internally. Install
+these updates in the destination repositories before enabling this publisher.
+Old `dispatched`, `unchanged` and `warning` receipts are not proof of completion;
+resume the batch to verify or repair them before cleanup.
 
 ## Jobs, retention and recovery
 

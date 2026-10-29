@@ -114,6 +114,8 @@ def test_cleanup_requires_ledger_not_just_manifest(manager):
     assert manager.cleanup(dry_run=False)[0][1] == "retained: publication receipts incomplete"
 
 
+
+
 def test_cleanup_interrupt_resumes(manager, monkeypatch):
     batch = published_job(manager, monkeypatch)
     import people_workspaces

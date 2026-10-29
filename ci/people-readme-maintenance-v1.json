@@ -1,0 +1,247 @@
+{
+  "version": 1,
+  "baseline_commit": "deb9a3a2f609600a395c5be8b268805de5a5efa3",
+  "publication_authorized": false,
+  "pytest_ids": [
+    "create_people_posters/tests/test_people_readme_publication.py::test_failed_workflow_retried_and_verified",
+    "create_people_posters/tests/test_people_readme_publication.py::test_exhausted_job_retains_batch_and_finishes_other_six",
+    "create_people_posters/tests/test_people_readme_publication.py::test_successful_workflow_with_missing_index_is_incomplete[README.md]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_successful_workflow_with_missing_index_is_incomplete[A/README.md]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_stale_index_repaired_automatically_after_success",
+    "create_people_posters/tests/test_people_readme_publication.py::test_timeout_resumes_exact_run_without_dispatching_again",
+    "create_people_posters/tests/test_people_readme_publication.py::test_lost_dispatch_ack_reconciles_using_dispatch_id",
+    "create_people_posters/tests/test_people_readme_publication.py::test_old_failed_attempt_is_not_mistaken_for_rerun_result",
+    "create_people_posters/tests/test_people_readme_publication.py::test_index_requires_exact_repository_branch_and_image_path[People-Images-bw]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_index_requires_exact_repository_branch_and_image_path[main]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_index_requires_exact_repository_branch_and_image_path[Ada.png]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_index_requires_exact_repository_branch_and_image_path[ada.jpg]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_unicode_spaces_and_parentheses_are_verified",
+    "create_people_posters/tests/test_people_readme_publication.py::test_unverified_readme_receipt_blocks_completion[dispatched]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_unverified_readme_receipt_blocks_completion[warning]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_unverified_readme_receipt_blocks_completion[unchanged]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_unverified_readme_receipt_blocks_completion[pending]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_unverified_readme_receipt_blocks_completion[failed]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_unverified_readme_receipt_blocks_completion[waiting]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_existing_ledger_is_migrated_without_losing_receipts",
+    "create_people_posters/tests/test_people_readme_publication.py::test_unrelated_dispatch_does_not_satisfy_discovery",
+    "create_people_posters/tests/test_people_readme_publication.py::test_unaccepted_api_write_is_reconciled_then_retried[dispatches]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_unaccepted_api_write_is_reconciled_then_retried[rerun-failed-jobs]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_neutral_job_is_incomplete_without_retry",
+    "create_people_posters/tests/test_people_readme_publication.py::test_unbounded_configuration_rejected[PEOPLE_README_TIMEOUT-nan]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_unbounded_configuration_rejected[PEOPLE_README_POLL_INTERVAL-inf]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_unbounded_configuration_rejected[PEOPLE_README_ATTEMPTS-0]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_identical_images_with_stale_indexes_still_repair_readmes",
+    "create_people_posters/tests/test_people_readme_publication.py::test_cleanup_retains_images_until_readme_verified[dispatched]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_cleanup_retains_images_until_readme_verified[warning]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_cleanup_retains_images_until_readme_verified[unchanged]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_cleanup_retains_images_until_readme_verified[failed]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_cleanup_retains_images_until_readme_verified[waiting]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_transport_accepts_correlated_readme_completion",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_dispatch_keeps_strict_payload_allowlist[payload0]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_dispatch_keeps_strict_payload_allowlist[payload1]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_dispatch_keeps_strict_payload_allowlist[payload2]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_dispatch_keeps_strict_payload_allowlist[payload3]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_dispatch_keeps_strict_payload_allowlist[payload4]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_dispatch_keeps_strict_payload_allowlist[payload5]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_retries_only_correlated_readme_jobs[path-.github/workflows/other.yml]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_retries_only_correlated_readme_jobs[head_branch-main]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_retries_only_correlated_readme_jobs[event-push]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_retries_only_correlated_readme_jobs[display_title-Unrelated workflow]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_readme_reads_keep_workflow_and_branch_allowlist[actions/workflows/other.yml/runs]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_readme_reads_keep_workflow_and_branch_allowlist[actions/workflows/readme.yml/runs?event=workflow_dispatch&branch=main&per_page=100&page=1]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_readme_reads_keep_workflow_and_branch_allowlist[actions/workflows/readme.yml/runs?event=push&branch=master&per_page=100&page=1]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_all_workflows_keep_triggers_styles_and_correlate_runs[People-Images]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_all_workflows_keep_triggers_styles_and_correlate_runs[People-Images-transparent]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_all_workflows_keep_triggers_styles_and_correlate_runs[People-Images-bw]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_all_workflows_keep_triggers_styles_and_correlate_runs[People-Images-diiivoy]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_all_workflows_keep_triggers_styles_and_correlate_runs[People-Images-diiivoycolor]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_all_workflows_keep_triggers_styles_and_correlate_runs[People-Images-rainier]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_all_workflows_keep_triggers_styles_and_correlate_runs[People-Images-signature]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[429-headers0-People-Images]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[429-headers0-People-Images-transparent]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[429-headers0-People-Images-bw]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[429-headers0-People-Images-diiivoy]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[429-headers0-People-Images-diiivoycolor]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[429-headers0-People-Images-rainier]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[429-headers0-People-Images-signature]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[500-headers1-People-Images]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[500-headers1-People-Images-transparent]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[500-headers1-People-Images-bw]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[500-headers1-People-Images-diiivoy]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[500-headers1-People-Images-diiivoycolor]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[500-headers1-People-Images-rainier]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[500-headers1-People-Images-signature]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[502-headers2-People-Images]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[502-headers2-People-Images-transparent]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[502-headers2-People-Images-bw]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[502-headers2-People-Images-diiivoy]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[502-headers2-People-Images-diiivoycolor]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[502-headers2-People-Images-rainier]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[502-headers2-People-Images-signature]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[503-headers3-People-Images]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[503-headers3-People-Images-transparent]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[503-headers3-People-Images-bw]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[503-headers3-People-Images-diiivoy]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[503-headers3-People-Images-diiivoycolor]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[503-headers3-People-Images-rainier]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[503-headers3-People-Images-signature]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[504-headers4-People-Images]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[504-headers4-People-Images-transparent]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[504-headers4-People-Images-bw]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[504-headers4-People-Images-diiivoy]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[504-headers4-People-Images-diiivoycolor]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[504-headers4-People-Images-rainier]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[504-headers4-People-Images-signature]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[403-headers5-People-Images]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[403-headers5-People-Images-transparent]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[403-headers5-People-Images-bw]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[403-headers5-People-Images-diiivoy]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[403-headers5-People-Images-diiivoycolor]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[403-headers5-People-Images-rainier]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_transient_retries_succeed[403-headers5-People-Images-signature]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_permanent_errors_are_not_retried[401]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_permanent_errors_are_not_retried[403]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_permanent_errors_are_not_retried[404]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_permanent_errors_are_not_retried[409]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_permanent_errors_are_not_retried[422]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_retries_exhaust_with_failure_marker[<lambda>0]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_retries_exhaust_with_failure_marker[<lambda>1]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_retries_exhaust_with_failure_marker[<lambda>2]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_internal_retries_exhaust_with_failure_marker[<lambda>3]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_excessive_rate_limit_delay_fails_without_sleeping",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_generator_links_use_actual_repository_and_branch[People-Images]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_generator_links_use_actual_repository_and_branch[People-Images-transparent]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_generator_links_use_actual_repository_and_branch[People-Images-bw]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_generator_links_use_actual_repository_and_branch[People-Images-diiivoy]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_generator_links_use_actual_repository_and_branch[People-Images-diiivoycolor]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_generator_links_use_actual_repository_and_branch[People-Images-rainier]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_generator_links_use_actual_repository_and_branch[People-Images-signature]",
+    "create_people_posters/tests/test_people_readme_workflows.py::test_sandbox_copy_preserves_correlation_contract"
+  ],
+  "members": {
+    ".github/workflows/people-storage-validation.yml": {
+      "before_sha256": "370f25a4cedd57286c597713bd42f665431a122a3ca39cb7e8ee4ef075a284d0",
+      "sha256": "d750821066ccfbd620c12c7670b7ae3302dd5f214e2170514bb20baa052baab3"
+    },
+    "ci/dependency_maintenance.py": {
+      "before_sha256": "08aa7e3bd4373d1e01e11c5fa3d7d8759d5ad4043897ff7a8dd32310b20ef29f",
+      "sha256": "7be76406c75d88d3d6ccfa5bd2c0186b45090ff0f3934bc90daad6a1051a27fd"
+    },
+    "ci/dependency_tests/test_people_readme_maintenance.py": {
+      "before_sha256": null,
+      "sha256": "b9e21e231c6d811fa4995d2a4cb20a043dc5859524e51de03f313f2eeb1f01b9"
+    },
+    "ci/dependency_tests/test_people_retention_maintenance.py": {
+      "before_sha256": "f4f6e4fcaf55fbe7d693c5602319b2eea2b78bf41dd9809d9a5890b063c565f4",
+      "sha256": "211a3e89eb89c9e821379bd688e1d9814f13564bbf058331b7d40855d744ce6f"
+    },
+    "ci/dependency_tests/test_people_storage_maintenance.py": {
+      "before_sha256": "26b130bd7420d0e5f9b9226b3f5c774c7b51fd0e61442a1b8fbb0b85708b9a5e",
+      "sha256": "c3a646af531363542579ac51a5dacd6b6f6b8f3c287ab354ab6b5e72bf09e152"
+    },
+    "ci/people_colorize_maintenance.py": {
+      "before_sha256": "ee3e2a7115712baa44bbbf782d91ace89671b7a87a50918283ec955cf7ad6dd0",
+      "sha256": "5cc2a4a57ba1a5e7434a58c1d26c8347e014e9e1266f0ac9b40d5eaa8292ca82"
+    },
+    "ci/people_readme/README.md": {
+      "before_sha256": null,
+      "sha256": "4c83ea62da7292da5954664069a2d6383ddedb21ce361c790b8ebffa549d66f6"
+    },
+    "ci/people_readme/targets.json": {
+      "before_sha256": null,
+      "sha256": "9fecdbf0562818bce9d705d15b62f8735e824066552b9c5f8869971076558ec8"
+    },
+    "ci/people_readme/workflows/People-Images-bw.yml": {
+      "before_sha256": null,
+      "sha256": "18972dc9c67c2568b1672eb2700114f7412af1e2bf8cfc8e996afc1a57448e21"
+    },
+    "ci/people_readme/workflows/People-Images-diiivoy.yml": {
+      "before_sha256": null,
+      "sha256": "20210dbf7853bede58b619b710e105af07c17d8231c50a8cf7592ad8c9790269"
+    },
+    "ci/people_readme/workflows/People-Images-diiivoycolor.yml": {
+      "before_sha256": null,
+      "sha256": "2fda56e62df5e6a643e7961064849a315f7b620f24b2f6151af4e53e35da8a60"
+    },
+    "ci/people_readme/workflows/People-Images-rainier.yml": {
+      "before_sha256": null,
+      "sha256": "2b5d532a1123bbe6793314d14023f1fd6b29c63da47f3e49ba2f449fe13196bd"
+    },
+    "ci/people_readme/workflows/People-Images-signature.yml": {
+      "before_sha256": null,
+      "sha256": "c040b39255b0774c06dc7590c393148d3b683b94f8a513ed83505e07dbc951b6"
+    },
+    "ci/people_readme/workflows/People-Images-transparent.yml": {
+      "before_sha256": null,
+      "sha256": "1f7a989b26fe71d3464df3f0bba2b60e6e7bd4fbab782569b5dd4a2f1c3cee03"
+    },
+    "ci/people_readme/workflows/People-Images.yml": {
+      "before_sha256": null,
+      "sha256": "942f6050675d84b70dab481f929c47002fb9946f3dd35ed328bf1b50d8f44f42"
+    },
+    "ci/people_retention_maintenance.py": {
+      "before_sha256": "6cf73c60d62e226d955767f44f4dcc3827f5ae32e49355fc3338127a073e4629",
+      "sha256": "2a13d6fc1c700f000c55862cd57ab32b6f38d0fefd8d81f114dccc45b0d70f42"
+    },
+    "ci/people_storage_maintenance.py": {
+      "before_sha256": "31d92de574bd26f03fe752bf21298125e8a4899995a2038b465a99186d85a4ed",
+      "sha256": "af3e037f8b4af95d5c8d096c501b8b8f2b4a9023a7b4a1519a6fd4b46fbd4e3c"
+    },
+    "create_people_posters/CLONE_FREE.md": {
+      "before_sha256": "99270b7bbe8dee83a1d53dc24248cd39557a8d995cf5b3c43eb22189d3c68e11",
+      "sha256": "ae4928512528ba87657b3cb310fe275ea0c654296dd916b1f23c66d3f190d74f"
+    },
+    "create_people_posters/README.md": {
+      "before_sha256": "03cadad9d0ffd1d2a8b29d5919ebb9654678779cbf05381a180ecd1cc63c50a7",
+      "sha256": "fa39bf3a486c086c278b3312217109c0198c07fdbec6d92ad0a75eda1279da0a"
+    },
+    "create_people_posters/jost_migration.py": {
+      "before_sha256": "c1feaca038d8a838b73cc164a60d2a863d20bb39504672b40776803062936f1f",
+      "sha256": "918848369c13da494bb8fdf7e0cd3e4d6eeb301e6e16f6442bdf4be46ae44e4d"
+    },
+    "create_people_posters/people_cleanup_report.py": {
+      "before_sha256": "fd82573467c09ea9a4334e94d280a8535aa673c53340266090a57c75d7f4cccc",
+      "sha256": "6ef369e5daba216d06b708128e0b96f0b4d80b13c853f88a5d3fb0d15d1fdb2f"
+    },
+    "create_people_posters/people_publication_state.py": {
+      "before_sha256": "2438c4cc4e48ab5f50659b35904d4793b598cc246cdbd567c4155c8fdf7bed7a",
+      "sha256": "b7b5a506745afe538c3cc40c2e80633d31219962fe9bb1ef7ca72e64762d87df"
+    },
+    "create_people_posters/people_readme_publication.py": {
+      "before_sha256": null,
+      "sha256": "87c2b523f8b9999e5f61a9e0f5464c51bd4954fb272edb49010133309797c051"
+    },
+    "create_people_posters/people_verified_cleanup.py": {
+      "before_sha256": "2548e9533cee000548c9d15f7129d6494eea25c3b06b872efd1544b3b49d29fc",
+      "sha256": "b7599cd041042872d320a232472808843cdf137b55879390c5908601441b427d"
+    },
+    "create_people_posters/publish_people_github.py": {
+      "before_sha256": "5707c1cba6e0527241a22a28779f17214b5911c834a883ac8b42b1f46d8ed8ac",
+      "sha256": "72bc102f0c7f2fc85ed7ca635e89f9bd5ed58fd56f0fb5e1b5d1d2584c27b105"
+    },
+    "create_people_posters/sandbox_people_github.py": {
+      "before_sha256": "29e58c620feee987086a5f47026a7b00ca8d3fd266bf333b341193de726aebcd",
+      "sha256": "d1a9c8f01b319963b3c60ec0c949e0a1e10c455f0fb23cf16d596ed3c5101984"
+    },
+    "create_people_posters/tests/test_jost_migration.py": {
+      "before_sha256": "69499e0f59e87bf3ab1da3819c0c66a0a79661a0c631f5c12150525fe75017a5",
+      "sha256": "dd341c466c7148ad1125dee4c9a92800e2aa82db33a825a2be9c61f47559b787"
+    },
+    "create_people_posters/tests/test_people_github.py": {
+      "before_sha256": "6a7b109bb50e35f91418c4806c59d03007ec5ba974445d13b3274e46da922738",
+      "sha256": "6522a23581cd8309a0d8d6d8c7ecdaa317266c5c55104563c10ff9643464e1fc"
+    },
+    "create_people_posters/tests/test_people_readme_publication.py": {
+      "before_sha256": null,
+      "sha256": "58ca33d54912ec55ebe97ba88cee2537456a149a4bf861d2ba74ff99208ad46f"
+    },
+    "create_people_posters/tests/test_people_readme_workflows.py": {
+      "before_sha256": null,
+      "sha256": "1b075583dd594b8460031632adc22ee95fdf3214baaf2ebe6d74190bc9139194"
+    },
+    "create_people_posters/tests/test_people_workspaces.py": {
+      "before_sha256": "7a425c3c79ffa3ed24817151ee298e7757affd2c9b24ff899cd9e1bebc20861e",
+      "sha256": "f810959f7c3cf2c2ae96cec244f0fa725e2d6cba6b05609ac6b37c2582db7f24"
+    }
+  }
+}

@@ -104,10 +104,11 @@ def _batch(folder, row, db, entries, blocked, now, retention):
         result["published_age_days"] = round((now - row["published"]) / 86400, 3)
         batch = db.execute("SELECT expected FROM batches WHERE id=?", (folder.name,)).fetchone()
         receipts = list(db.execute("SELECT * FROM publications WHERE batch=?", (folder.name,)))
-        readmes = list(db.execute("SELECT status FROM readmes WHERE batch=?", (folder.name,)))
+        readmes = list(db.execute("SELECT repo,status FROM readmes WHERE batch=?", (folder.name,)))
         if (not batch or batch["expected"] <= 0 or len(receipts) != batch["expected"]
                 or any(r["status"] != "published" or not r["commit_sha"] for r in receipts)
-                or not readmes or any(r["status"] not in {"dispatched", "disabled", "warning", "unchanged"} for r in readmes)):
+                or {r["repo"] for r in readmes} != {r["repo"] for r in receipts}
+                or any(r["status"] not in {"verified", "disabled"} for r in readmes)):
             raise StorageBlocked("publication receipts incomplete")
         result["publication_verified"] = True
         if now - row["published"] < retention * 86400:

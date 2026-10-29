@@ -309,24 +309,10 @@ class Publisher:
             raise GitHubError("Partial publication; retry the same batch. " + "; ".join(errors))
         if dry_run:
             return
-        trigger = env_bool("UPDATE_TRIGGER_READMES", True)
-        required = env_bool("UPDATE_REQUIRE_README_DISPATCH", False)
-        for repo in self.repositories.values():
-            previous = self.ledger.db.execute("SELECT status FROM readmes WHERE batch=? AND repo=?", (batch, repo)).fetchone()
-            if previous and previous["status"] in {"dispatched", "unchanged"}:
-                continue
-            if not trigger:
-                self.ledger.readme(batch, repo, "disabled")
-                continue
-            try:
-                self.client.request("POST", f"/repos/{repo}/actions/workflows/readme.yml/dispatches", {"ref": self.branch})
-                self.ledger.readme(batch, repo, "dispatched")
-            except GitHubError as error:
-                self.ledger.readme(batch, repo, "failed" if required else "warning", safe_exception(error))
-                print(f"[WARN] README dispatch: {repo}: {safe_exception(error)}")
-                if required:
-                    errors.append(safe_exception(error))
-        if errors or not self.ledger.verified(batch):
+        from people_readme_publication import ReadmePublication
+        ReadmePublication(self.client, self.inventory, self.ledger).publish(
+            batch, enabled=env_bool("UPDATE_TRIGGER_READMES", True))
+        if not self.ledger.verified(batch):
             raise GitHubError("Required publication/README verification incomplete; files retained")
 
 

@@ -85,8 +85,8 @@ def _integrated(root, source_commit, head):
 
 
 def integrated(root, value):
-    head = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=root, check=True,
-                          stdout=subprocess.PIPE, text=True).stdout.strip()
+    from ci.people_colorize_maintenance import _head
+    head = _head(root)
     return _integrated(str(root), value['source_commit'], head)
 
 
@@ -95,6 +95,9 @@ def verify_cohort(root, value):
     field = 'sha256' if active else 'before_sha256'
     for name, binding in value['cohort'].items():
         expected = binding[field]
+        from ci.people_readme_maintenance import ROOT as readme_root, selected_hash
+        if Path(root).resolve() == readme_root.resolve() and expected is not None:
+            expected = selected_hash(name, expected)
         path = Path(root)/name
         if expected is None:
             for parent in path.parents:
@@ -120,11 +123,12 @@ def verify_cohort(root, value):
 def verify(root=ROOT):
     value = manifest()
     for name, binding in value['infrastructure'].items():
+        from ci.people_readme_maintenance import selected_hash
         if (sha(git_bytes(str(root), value['baseline_commit'], name)) != binding['before_sha256']
-                or sha(regular(root, name).read_bytes()) != binding['sha256']):
+                or sha(regular(root, name).read_bytes()) != selected_hash(name, binding['sha256'])):
             raise ValueError('Changed exact storage CI infrastructure: '+name)
     for name, expected in value['additions'].items():
-        if sha(regular(root, name).read_bytes()) != expected:
+        if sha(regular(root, name).read_bytes()) != selected_hash(name, expected):
             raise ValueError('Changed exact storage maintenance addition: '+name)
     for name in TRUST_ANCHORS:
         regular(root, name)
@@ -151,11 +155,14 @@ def selected_hash(name, expected):
 
 def extra_ids(root=ROOT):
     value = manifest()
-    return list(value['storage_test_ids']) if verify_cohort(root, value) else []
+    from ci.people_readme_maintenance import test_ids
+    return list(value['storage_test_ids']) + test_ids() if verify_cohort(root, value) else []
 
 
 def historical_bytes(root, name, current):
     """Project ONLY verified CI successors onto their exact frozen predecessors."""
+    from ci.people_readme_maintenance import historical_bytes as readme_history
+    current = readme_history(root, name, current)
     if name not in INFRASTRUCTURE:
         return current
     value = manifest()
@@ -172,13 +179,19 @@ def historical_bytes(root, name, current):
 
 def scope_members():
     from ci.people_retention_maintenance import scope_members as retention_scope
-    return COHORT | INFRASTRUCTURE | ADDITIONS | TRUST_ANCHORS | retention_scope()
+    from ci.people_readme_maintenance import scope_members as readme_scope
+    return COHORT | INFRASTRUCTURE | ADDITIONS | TRUST_ANCHORS | retention_scope() | readme_scope()
 
 
 def verify_scope(root, baseline, names):
     verify(root)
     if not names <= scope_members():
         raise ValueError('Unapproved storage maintenance path')
+    from ci.people_readme_maintenance import scope_members as readme_scope, verify_scope as readme_verify
+    readme_names = names & readme_scope()
+    if readme_names:
+        readme_verify(root, baseline, readme_names)
+    names = names - readme_names
     from ci.people_retention_maintenance import scope_members as retention_scope, verify_scope as retention_verify
     extra = names & retention_scope()
     if extra:

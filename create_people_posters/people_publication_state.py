@@ -13,6 +13,7 @@ if __name__ == "__main__":
     guard_cli()
 
 
+import json
 import sqlite3
 import time
 from pathlib import Path
@@ -40,6 +41,9 @@ class PublicationState:
           CREATE TABLE IF NOT EXISTS baselines (
             batch TEXT, repo TEXT, path TEXT, sha TEXT, PRIMARY KEY(batch, repo, path));
         """)
+        if "details" not in {row["name"] for row in self.db.execute("PRAGMA table_info(readmes)")}:
+            self.db.execute("ALTER TABLE readmes ADD COLUMN details TEXT NOT NULL DEFAULT '{}'")
+            self.db.commit()
 
     def close(self):
         self.db.close()
@@ -62,7 +66,7 @@ class PublicationState:
                     batch, row["style"], row["repo"], row["path"], row["source"], row["source_hash"],
                     row["prepared"], row["published_hash"], row["blob"], branch, row["person"], row.get("tmdb_id", ""),
                     "pending", "", 0, ""))
-                self.db.execute("INSERT OR IGNORE INTO readmes VALUES (?,?,'unchanged','')", (batch, row["repo"]))
+                self.db.execute("INSERT OR IGNORE INTO readmes (batch,repo,status,error) VALUES (?,?,'unchanged','')", (batch, row["repo"]))
         self.export(batch)
 
     def rows(self, batch, repo=None):
@@ -85,10 +89,19 @@ class PublicationState:
                                 [(status, commit, time.time(), error, batch, repo, path) for path in paths])
         self.export(batch)
 
-    def readme(self, batch, repo, status, error=""):
+    def readme_state(self, batch, repo):
+        row = self.db.execute("SELECT * FROM readmes WHERE batch=? AND repo=?", (batch, repo)).fetchone()
+        if row is None:
+            raise ValueError("Missing README publication receipt")
+        return dict(row, details=json.loads(row["details"]))
+
+    def readme(self, batch, repo, status, error="", details=None):
         error = sanitize_text(error) if type(error) is str else safe_exception(error)
         with self.db:
             self.db.execute("UPDATE readmes SET status=?,error=? WHERE batch=? AND repo=?", (status, error, batch, repo))
+            if details is not None:
+                self.db.execute("UPDATE readmes SET details=? WHERE batch=? AND repo=?",
+                                (json.dumps(details), batch, repo))
         self.export(batch)
 
     def verified(self, batch):
@@ -98,13 +111,14 @@ class PublicationState:
         entries = self.rows(batch)
         if len(entries) != row["expected"] or any(e["status"] != "published" or not e["commit_sha"] for e in entries):
             return False
-        readmes = list(self.db.execute("SELECT status FROM readmes WHERE batch=?", (batch,)))
-        return bool(readmes) and all(r["status"] in {"dispatched", "disabled", "warning", "unchanged"} for r in readmes)
+        readmes = list(self.db.execute("SELECT repo,status FROM readmes WHERE batch=?", (batch,)))
+        return ({r["repo"] for r in readmes} == {e["repo"] for e in entries}
+                and all(r["status"] in {"verified", "disabled"} for r in readmes))
 
     def export(self, batch):
         if not ID_PATTERN.fullmatch(batch):
             raise ValueError("Invalid batch identifier")
         atomic_json(self.state / "manifests" / (batch + ".json"), {
             "batch_id": batch, "publications": self.rows(batch),
-            "readmes": [dict(r) for r in self.db.execute("SELECT * FROM readmes WHERE batch=?", (batch,))],
+            "readmes": [self.readme_state(batch, r["repo"]) for r in self.db.execute("SELECT repo FROM readmes WHERE batch=?", (batch,))],
         })

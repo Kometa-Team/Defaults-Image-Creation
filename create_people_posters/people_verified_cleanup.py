@@ -94,9 +94,10 @@ def job_proof(config, job, state, snapshot, now, retention):
         raise RetentionBlocked('Job ownership mismatch')
     expected=state['batches'].get(job,{}).get('expected',0)
     rows=[r for r in state['publications'] if r['batch']==job]
-    readmes=[r['status'] for r in state['readmes'] if r['batch']==job]
-    if (not expected or len(rows)!=expected or not readmes
-            or any(s not in {'dispatched','disabled','warning','unchanged'} for s in readmes)):
+    readmes=[r for r in state['readmes'] if r['batch']==job]
+    if (not expected or len(rows)!=expected
+            or {r['repo'] for r in readmes}!={r['repo'] for r in rows}
+            or any(r['status'] not in {'verified','disabled'} for r in readmes)):
         raise RetentionBlocked('Incomplete successful-job publication grant')
     proof=[]
     people={}

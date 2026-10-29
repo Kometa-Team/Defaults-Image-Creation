@@ -185,11 +185,14 @@ class MigrationTransport:
         if method == "GET":
             if not (not route or route == "git/ref/heads/master" or re.fullmatch(
                     r"git/(?:commits|blobs)/[0-9a-f]{40}|git/trees/[0-9a-f]{40}(?:\?recursive=1)?|compare/[0-9a-f]{40}\.\.\.[0-9a-f]{40}", route)):
-                raise ValueError("Jost migration blocked an unexpected read route or branch")
+                if not re.fullmatch(r"actions/runs/[1-9][0-9]*|actions/workflows/readme\.yml/runs\?event=workflow_dispatch&branch=master&per_page=100&page=[1-9][0-9]*", route):
+                    raise ValueError("Jost migration blocked an unexpected read route or branch")
         else:
             if not self.writes:
                 raise ValueError("Read-only migration operation blocked a GitHub mutation")
             valid = method == "POST" and route in {"git/blobs", "git/trees", "git/commits", "actions/workflows/readme.yml/dispatches"}
+            retry = method == "POST" and re.fullmatch(r"actions/runs/([1-9][0-9]*)/(rerun|rerun-failed-jobs)", route)
+            valid |= bool(retry) and payload == {}
             valid |= method == "PATCH" and route == "git/refs/heads/master" and payload.get("force") is False
             if not valid:
                 raise ValueError("Jost migration blocked an unexpected write route/branch or force-push")
@@ -201,8 +204,18 @@ class MigrationTransport:
                     if (key not in self.allowed or entry.get("sha") != self.allowed[key]
                             or entry.get("mode") != "100644" or entry.get("type") != "blob"):
                         raise ValueError("Tree write differs from the approved migration manifest")
-            if route.endswith("dispatches") and payload != {"ref": BRANCH}:
-                raise ValueError("README dispatch must target master")
+            if route.endswith("dispatches"):
+                inputs = payload.get("inputs")
+                if (payload.get("ref") != BRANCH or set(payload) - {"ref", "inputs"}
+                        or ("inputs" in payload and (not isinstance(inputs, dict) or set(inputs) != {"batch_id"}
+                            or not isinstance(inputs["batch_id"], str) or not re.fullmatch(r"[0-9a-f]{32}", inputs["batch_id"])))):
+                    raise ValueError("README dispatch must target master with only an optional correlation ID")
+            if retry:
+                run = self.client.request("GET", f"/repos/{repo}/actions/runs/{retry[1]}")
+                if (run.get("path") != ".github/workflows/readme.yml" or run.get("head_branch") != BRANCH
+                        or run.get("event") != "workflow_dispatch"
+                        or not re.fullmatch(r"README batch [0-9a-f]{32}", run.get("display_title", ""))):
+                    raise ValueError("Migration retries only correlated README workflows on master")
             if route == "git/commits" and (len(payload.get("parents", [])) != 1 or payload.get("tree") not in self.trees):
                 raise ValueError("Migration commits require one existing parent and an approved migration tree")
             if method == "PATCH":

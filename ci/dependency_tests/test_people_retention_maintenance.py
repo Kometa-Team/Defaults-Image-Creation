@@ -107,7 +107,8 @@ raise SystemExit(result.returncode)
     def test_original_eight_cleanup_blobs_and_historical_manifests_stay_exact(self):
         value=storage.manifest()
         for name,binding in value['cohort'].items():
-            self.assertEqual(storage.sha((ROOT/name).read_bytes()),binding['sha256'])
+            from ci.people_readme_maintenance import historical_bytes
+            self.assertEqual(storage.sha(historical_bytes(ROOT,name,(ROOT/name).read_bytes())),binding['sha256'])
         for name in ['ci/people-security-maintenance.json','ci/dependency-maintenance-v1.json','ci/people-security-test-ids.json','ci/phase4-m7-test-ids.json','create_defaults/bulk/contracts/adoption/source-pins-v1.json']:
             old=subprocess.check_output(['git','show','ded9f33759f9fe3ed4ddf5f315dff01b163594ad:'+name],cwd=ROOT)
             self.assertEqual(retention.sha((ROOT/name).read_bytes()),retention.sha(old))
@@ -128,7 +129,9 @@ raise SystemExit(result.returncode)
             for name in retention.scope_members():
                 p=root/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes((ROOT/name).read_bytes())
             old_bytes={name:subprocess.check_output(['git','show',value['baseline_commit']+':'+name],cwd=ROOT) for name,b in value['members'].items() if b['before_sha256'] is not None}
-            with patch.object(retention,'ROOT',root),patch.object(retention,'MANIFEST',root/'ci/people-retention-maintenance-v1.json'),patch.object(retention.subprocess,'check_call'),patch.object(retention.subprocess,'run',side_effect=lambda args,**kw:type('Result',(),{'stdout':old_bytes[args[-1].split(':',1)[1]]})()):
+            from ci.people_colorize_maintenance import _head
+            fixture_head = _head(ROOT)
+            with patch.object(retention,'ROOT',root),patch.object(retention,'MANIFEST',root/'ci/people-retention-maintenance-v1.json'),patch.object(retention.subprocess,'check_call'),patch('ci.people_colorize_maintenance._head',return_value=fixture_head),patch.object(retention.subprocess,'run',side_effect=lambda args,**kw:type('Result',(),{'stdout':old_bytes[args[-1].split(':',1)[1]]})()):
                 retention.verify_checkout()
                 for name,binding in value['members'].items():
                     p=root/name;before=p.read_bytes()

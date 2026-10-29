@@ -1,4 +1,5 @@
 """Narrow reviewed cleanup successor. Historical security inventories stay sealed."""
+from functools import lru_cache
 import hashlib
 import json
 from pathlib import Path
@@ -48,14 +49,22 @@ def manifest():
     return value
 
 
+@lru_cache(maxsize=32)
+def _ancestry(root, ancestor, head):
+    # Git objects are immutable. HEAD is resolved afresh by every caller.
+    subprocess.check_call(['git','merge-base','--is-ancestor',ancestor,head],cwd=root)
+
+
 def verify_checkout(root=None):
     from ci.people_colorize_maintenance import verify_checkout as verify_colorize
     verify_colorize()
     root=Path(root or ROOT);value=manifest()
     from ci.people_storage_maintenance import git_bytes
-    subprocess.check_call(['git','merge-base','--is-ancestor',value['audit_ancestor'],'HEAD'],cwd=root)
+    from ci.people_colorize_maintenance import _head
+    _ancestry(str(root),value['audit_ancestor'],_head(root))
     for name,binding in value['members'].items():
-        if sha(regular(root,name).read_bytes())!=binding['sha256']:
+        from ci.people_readme_maintenance import selected_hash
+        if sha(regular(root,name).read_bytes())!=selected_hash(name,binding['sha256']):
             raise ValueError('Unreviewed retention successor: '+name)
         if binding['before_sha256'] is not None:
             # Reuse the existing cache ONLY for immutable Git objects. Current
