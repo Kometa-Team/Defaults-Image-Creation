@@ -7,6 +7,9 @@
   "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T01_T02_forged_and_revoked_identity_facts[read-revoked-repository_read_revoked]",
   "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T01_T02_forged_and_revoked_identity_facts[repository-id-repository_or_owner_changed]",
   "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T01_T02_forged_and_revoked_identity_facts[repository-name-repository_name_mismatch]",
+  "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T01_T03_boolean_is_not_a_numeric_decision_identity[number]",
+  "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T01_T03_boolean_is_not_a_numeric_decision_identity[owner-id]",
+  "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T01_T03_boolean_is_not_a_numeric_decision_identity[repository-id]",
   "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T01_exact_numeric_identity_and_selected_blob",
   "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T02_T29_cli_errors_never_emit_remote_credentials[401-revoked]",
   "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T02_T29_cli_errors_never_emit_remote_credentials[403-unavailable]",
@@ -66,5 +69,6 @@
   "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T29_selected_response_timestamps_cannot_emit_secrets",
   "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T29_target_and_evidence_have_explicit_size_bounds",
   "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T29_total_observation_budget_is_bounded",
-  "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T29_unexpected_exception_chains_and_bodies_are_redacted"
+  "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T29_unexpected_exception_chains_and_bodies_are_redacted",
+  "create_defaults/phase5/m2_tests/test_observations.py::test_P5_T30_boolean_blob_size_is_rejected_even_for_exact_one_byte_content"
 ]

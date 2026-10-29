@@ -8,8 +8,8 @@ needed. All five existing mandatory workflows and their budgets stay byte-identi
 
 The fixed M7 changed-path guard still requires an explicit exact successor for
 the additive M2 delivery. This is a narrowly identified CI maintenance change,
-to be reviewed independently of observation semantics. It is isolated in its own
-commit in the draft PR; implementation acceptance does not imply CI-policy approval.
+to be reviewed independently of observation semantics. It is isolated in dedicated
+commits in the draft PR; implementation acceptance does not imply CI-policy approval.
 
 Only one existing CI source changes: `ci/dependabot_maintenance.py`, the latest
 maintenance trust anchor. Three hooks verify the new exact cohort, expose its
