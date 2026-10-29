@@ -28,11 +28,13 @@ checks main ancestry, regular files/no reparse points, exact bytes, predecessors
 complete diff rows and add/modify-only modes. Unknown paths, deletion, rollback,
 rename, symlink, hash/membership changes or mixed cohorts fail closed.
 
-Seven new mandatory dependency-provenance controls exercise this transition,
+Eight new mandatory dependency-provenance controls exercise this transition,
 including every member's tamper/rollback/deletion, manifest/baseline resealing,
 unknown paths, unsafe diff modes, unchanged original workflows/manifests/IDs and
 the new reporter's exact ID/phase/head/no-skip requirements. Original provenance
-tests continue unchanged. The new separate M2 Windows/Linux workflow uses pinned
+tests continue unchanged. M7's existing allowed status path for the roadmap keeps
+its original scope routing; its exact current bytes remain bound by this cohort.
+The new separate M2 Windows/Linux workflow uses pinned
 actions, read-only repository permission, no persisted checkout credentials,
 controlled fixtures, Python 3.13, exact-head reporting and 15-minute job limits.
 

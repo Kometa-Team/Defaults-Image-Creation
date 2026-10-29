@@ -64,6 +64,11 @@ class Phase5M2MaintenanceTests(unittest.TestCase):
                 with patch.object(maintenance, '_git', return_value=row), self.assertRaisesRegex(ValueError, 'regular-file'):
                     maintenance.verify_scope(ROOT, maintenance.BASE, {name})
 
+    def test_existing_M7_status_paths_retain_their_original_scope_route(self):
+        from ci.phase4_m7 import ALLOWED
+        self.assertFalse(maintenance.scope_members() & ALLOWED)
+        self.assertIn('create_defaults/lifecycle/ROADMAP.md', maintenance.manifest()['members'])
+
     def test_original_workflows_inventories_manifests_and_baselines_unchanged(self):
         names = ('.github/workflows/default-poster-validation.yml',
             '.github/workflows/lifecycle-m6-validation.yml', '.github/workflows/lifecycle-m7-validation.yml',

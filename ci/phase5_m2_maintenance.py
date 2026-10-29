@@ -10,7 +10,7 @@ from ci.people_storage_maintenance import regular
 ROOT = Path(__file__).resolve().parents[1]
 BASE = '8e0bfa22329c33bd9b342760976b23dc205eabc4'
 MANIFEST = ROOT / 'ci/phase5-m2-maintenance-v1.json'
-PIN = '071685372cd22b197eddd6019b02e7eb4242a6e585edfb3f26ea3eaa77605fa5'
+PIN = 'cd12550aa60052fad5dcad9389da12e902dab5ef3ead5cbfa13eb85b79ce5ce6'
 MEMBERS = frozenset({
     'ci/dependabot_maintenance.py',
     'ci/dependency_tests/test_phase5_m2_maintenance.py',
@@ -84,7 +84,9 @@ def verify_checkout(root=None):
 
 
 def scope_members():
-    return MEMBERS | ANCHORS
+    # M7 already owns this status path. Keep its exact bytes bound above, but
+    # do not hijack legacy planning fixtures' existing ALLOWED path routing.
+    return (MEMBERS | ANCHORS) - {'create_defaults/lifecycle/ROADMAP.md'}
 
 
 def verify_scope(root, baseline, names):
