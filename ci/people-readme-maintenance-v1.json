@@ -129,11 +129,11 @@
     },
     "ci/dependency_tests/test_people_readme_maintenance.py": {
       "before_sha256": null,
-      "sha256": "67c2572e01eb6cdc47d660c1b7ef26b570cb8492369b3ce6a9a8800f0f64fd93"
+      "sha256": "b9e21e231c6d811fa4995d2a4cb20a043dc5859524e51de03f313f2eeb1f01b9"
     },
     "ci/dependency_tests/test_people_retention_maintenance.py": {
       "before_sha256": "f4f6e4fcaf55fbe7d693c5602319b2eea2b78bf41dd9809d9a5890b063c565f4",
-      "sha256": "5031f19b1c9dd9d5f52dc6f9bc5c97d42068943116adf0f0a2369dd6d575eef0"
+      "sha256": "211a3e89eb89c9e821379bd688e1d9814f13564bbf058331b7d40855d744ce6f"
     },
     "ci/dependency_tests/test_people_storage_maintenance.py": {
       "before_sha256": "26b130bd7420d0e5f9b9226b3f5c774c7b51fd0e61442a1b8fbb0b85708b9a5e",
@@ -181,11 +181,11 @@
     },
     "ci/people_retention_maintenance.py": {
       "before_sha256": "6cf73c60d62e226d955767f44f4dcc3827f5ae32e49355fc3338127a073e4629",
-      "sha256": "8c0a0b7c7cdf897100882a2088febe64004b5178c24c3d8315906fa0962fffed"
+      "sha256": "2a13d6fc1c700f000c55862cd57ab32b6f38d0fefd8d81f114dccc45b0d70f42"
     },
     "ci/people_storage_maintenance.py": {
       "before_sha256": "31d92de574bd26f03fe752bf21298125e8a4899995a2038b465a99186d85a4ed",
-      "sha256": "1afd429998bad9da0cbf14e3cac2e0e490f7c8a906c04df5278e406c8c6fe2b1"
+      "sha256": "af3e037f8b4af95d5c8d096c501b8b8f2b4a9023a7b4a1519a6fd4b46fbd4e3c"
     },
     "create_people_posters/CLONE_FREE.md": {
       "before_sha256": "99270b7bbe8dee83a1d53dc24248cd39557a8d995cf5b3c43eb22189d3c68e11",

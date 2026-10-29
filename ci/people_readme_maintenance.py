@@ -12,7 +12,7 @@ from ci.people_storage_maintenance import regular
 ROOT = Path(__file__).resolve().parents[1]
 BASE = 'deb9a3a2f609600a395c5be8b268805de5a5efa3'
 MANIFEST = ROOT / 'ci/people-readme-maintenance-v1.json'
-PIN = '6a5b084b64b5a3895f2a5e20ac2510b4e2101c90d63d15cbe9d629b95643f5e2'
+PIN = '60f0359dbd199310bf6d646cac0bfb6af25f1b6b9c5d88ace4fac5d4f0bc42ac'
 ANCHORS = frozenset({'ci/people_readme_maintenance.py', 'ci/people-readme-maintenance-v1.json'})
 MEMBERS = frozenset({
     '.github/workflows/people-storage-validation.yml',
@@ -94,25 +94,36 @@ def _ancestry(root, head):
     _git(root, 'merge-base', '--is-ancestor', BASE, head)
 
 
-def _regular_files(root, names):
-    """Check every file and shared directory once per verification call."""
-    root = root.absolute()
-    paths = {name: root / name for name in names}
-    checked = set()
-    for name, path in paths.items():
+@lru_cache(maxsize=32)
+def _file_plan(root, names):
+    # Cache path arithmetic only, without any filesystem reads or metadata.
+    root = Path(root)
+    paths = tuple((name, root / name) for name in names)
+    directories = set()
+    for name, path in paths:
         if root not in path.parents or '..' in path.relative_to(root).parts:
             raise ValueError('README publication path escaped root')
-        for part in (path, *path.parents):
-            if part not in checked:
-                info = part.lstat()
-                if stat.S_ISLNK(info.st_mode) or getattr(info, 'st_file_attributes', 0) & 0x400:
-                    raise ValueError('README publication rejects links or reparse points: ' + name)
-                if part == path and not stat.S_ISREG(info.st_mode):
-                    raise ValueError('README publication requires a regular file: ' + name)
-                checked.add(part)
+        for part in path.parents:
+            directories.add(part)
             if part == root:
                 break
-    return paths
+    return paths, tuple(directories)
+
+
+def _regular_files(root, names):
+    """Check every file and shared directory afresh on each call."""
+    paths, directories = _file_plan(str(root.absolute()), tuple(sorted(names)))
+    for name, path in paths:
+        info = path.lstat()
+        if stat.S_ISLNK(info.st_mode) or getattr(info, 'st_file_attributes', 0) & 0x400:
+            raise ValueError('README publication rejects links or reparse points: ' + name)
+        if not stat.S_ISREG(info.st_mode):
+            raise ValueError('README publication requires a regular file: ' + name)
+    for part in directories:
+        info = part.lstat()
+        if stat.S_ISLNK(info.st_mode) or getattr(info, 'st_file_attributes', 0) & 0x400:
+            raise ValueError('README publication rejects links or reparse points: ' + str(part))
+    return dict(paths)
 
 
 def verify_checkout(root=None):

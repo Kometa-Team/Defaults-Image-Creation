@@ -85,8 +85,8 @@ def _integrated(root, source_commit, head):
 
 
 def integrated(root, value):
-    head = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=root, check=True,
-                          stdout=subprocess.PIPE, text=True).stdout.strip()
+    from ci.people_colorize_maintenance import _head
+    head = _head(root)
     return _integrated(str(root), value['source_commit'], head)
 
 

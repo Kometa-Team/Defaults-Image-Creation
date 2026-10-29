@@ -86,6 +86,27 @@ class PeopleReadmeMaintenanceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'regular file'):
             readme._regular_files(ROOT, {'ci'})
 
+    def test_storage_and_retention_ancestry_follow_changed_heads(self):
+        from ci import people_storage_maintenance as storage, people_retention_maintenance as retention
+        heads = ['a' * 40, 'b' * 40]
+        with patch('ci.people_colorize_maintenance._head', side_effect=heads), \
+                patch.object(storage, '_integrated', return_value=True) as integrated:
+            for _ in heads:
+                self.assertTrue(storage.integrated(ROOT, {'source_commit': readme.BASE}))
+            self.assertEqual([call.args[-1] for call in integrated.call_args_list], heads)
+        retention._ancestry.cache_clear()
+        try:
+            with patch.object(retention.subprocess, 'check_call') as git:
+                for head in (heads[0], heads[0], heads[1]):
+                    retention._ancestry(str(ROOT), readme.BASE, head)
+                self.assertEqual([call.args[0][-1] for call in git.call_args_list], heads)
+            with patch.object(retention.subprocess, 'check_call', side_effect=subprocess.CalledProcessError(1, 'git')):
+                for _ in range(2):
+                    with self.assertRaises(subprocess.CalledProcessError):
+                        retention._ancestry(str(ROOT), readme.BASE, 'c' * 40)
+        finally:
+            retention._ancestry.cache_clear()
+
     def test_historical_projection_is_exact_and_rejects_rollback(self):
         for name, binding in readme.manifest()['members'].items():
             if binding['before_sha256'] is None:
