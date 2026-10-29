@@ -117,6 +117,7 @@ class FakeGitHub:
                 outcomes = self.readme_outcomes.get(repo, [])
                 conclusion = outcomes.pop(0) if outcomes else "success"
                 run = {"id": int(self.new_sha(), 16), "display_title": "README batch " + payload["inputs"]["batch_id"],
+                       "path": ".github/workflows/readme.yml",
                        "event": "workflow_dispatch", "head_branch": "master", "status": "completed",
                        "conclusion": conclusion, "run_attempt": 1}
                 self.runs.setdefault(repo, []).append(run)

@@ -36,6 +36,20 @@
     "create_people_posters/tests/test_people_readme_publication.py::test_cleanup_retains_images_until_readme_verified[unchanged]",
     "create_people_posters/tests/test_people_readme_publication.py::test_cleanup_retains_images_until_readme_verified[failed]",
     "create_people_posters/tests/test_people_readme_publication.py::test_cleanup_retains_images_until_readme_verified[waiting]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_transport_accepts_correlated_readme_completion",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_dispatch_keeps_strict_payload_allowlist[payload0]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_dispatch_keeps_strict_payload_allowlist[payload1]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_dispatch_keeps_strict_payload_allowlist[payload2]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_dispatch_keeps_strict_payload_allowlist[payload3]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_dispatch_keeps_strict_payload_allowlist[payload4]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_dispatch_keeps_strict_payload_allowlist[payload5]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_retries_only_correlated_readme_jobs[path-.github/workflows/other.yml]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_retries_only_correlated_readme_jobs[head_branch-main]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_retries_only_correlated_readme_jobs[event-push]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_retries_only_correlated_readme_jobs[display_title-Unrelated workflow]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_readme_reads_keep_workflow_and_branch_allowlist[actions/workflows/other.yml/runs]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_readme_reads_keep_workflow_and_branch_allowlist[actions/workflows/readme.yml/runs?event=workflow_dispatch&branch=main&per_page=100&page=1]",
+    "create_people_posters/tests/test_people_readme_publication.py::test_migration_readme_reads_keep_workflow_and_branch_allowlist[actions/workflows/readme.yml/runs?event=push&branch=master&per_page=100&page=1]",
     "create_people_posters/tests/test_people_readme_workflows.py::test_all_workflows_keep_triggers_styles_and_correlate_runs[People-Images]",
     "create_people_posters/tests/test_people_readme_workflows.py::test_all_workflows_keep_triggers_styles_and_correlate_runs[People-Images-transparent]",
     "create_people_posters/tests/test_people_readme_workflows.py::test_all_workflows_keep_triggers_styles_and_correlate_runs[People-Images-bw]",
@@ -181,6 +195,10 @@
       "before_sha256": "03cadad9d0ffd1d2a8b29d5919ebb9654678779cbf05381a180ecd1cc63c50a7",
       "sha256": "fa39bf3a486c086c278b3312217109c0198c07fdbec6d92ad0a75eda1279da0a"
     },
+    "create_people_posters/jost_migration.py": {
+      "before_sha256": "c1feaca038d8a838b73cc164a60d2a863d20bb39504672b40776803062936f1f",
+      "sha256": "918848369c13da494bb8fdf7e0cd3e4d6eeb301e6e16f6442bdf4be46ae44e4d"
+    },
     "create_people_posters/people_cleanup_report.py": {
       "before_sha256": "fd82573467c09ea9a4334e94d280a8535aa673c53340266090a57c75d7f4cccc",
       "sha256": "6ef369e5daba216d06b708128e0b96f0b4d80b13c853f88a5d3fb0d15d1fdb2f"
@@ -205,13 +223,17 @@
       "before_sha256": "29e58c620feee987086a5f47026a7b00ca8d3fd266bf333b341193de726aebcd",
       "sha256": "d1a9c8f01b319963b3c60ec0c949e0a1e10c455f0fb23cf16d596ed3c5101984"
     },
+    "create_people_posters/tests/test_jost_migration.py": {
+      "before_sha256": "69499e0f59e87bf3ab1da3819c0c66a0a79661a0c631f5c12150525fe75017a5",
+      "sha256": "dd341c466c7148ad1125dee4c9a92800e2aa82db33a825a2be9c61f47559b787"
+    },
     "create_people_posters/tests/test_people_github.py": {
       "before_sha256": "6a7b109bb50e35f91418c4806c59d03007ec5ba974445d13b3274e46da922738",
-      "sha256": "402abfb61066f3650f1eb27df8a2cb3eb4e327ed788c9806d45730612f84d36d"
+      "sha256": "6522a23581cd8309a0d8d6d8c7ecdaa317266c5c55104563c10ff9643464e1fc"
     },
     "create_people_posters/tests/test_people_readme_publication.py": {
       "before_sha256": null,
-      "sha256": "8d7d2bff905442350609b14381159658385cf1a25cd8f6322a4646864c6971e2"
+      "sha256": "58ca33d54912ec55ebe97ba88cee2537456a149a4bf861d2ba74ff99208ad46f"
     },
     "create_people_posters/tests/test_people_readme_workflows.py": {
       "before_sha256": null,

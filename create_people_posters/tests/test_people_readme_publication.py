@@ -303,3 +303,61 @@ def test_cleanup_retains_images_until_readme_verified(manager, monkeypatch, stat
         assert (manager.path(batch) / "prepared").exists()
     finally:
         ledger.close()
+
+
+def test_migration_transport_accepts_correlated_readme_completion(setup):
+    from jost_migration import MigrationTransport
+    client, _, _, _ = setup
+    transport = MigrationTransport(client, writes=True)
+    repo = REPOSITORIES["diiivoy"]
+    transport.request("POST", f"/repos/{repo}/actions/workflows/readme.yml/dispatches",
+                      {"ref": "master", "inputs": {"batch_id": "a" * 32}})
+    runs = transport.request("GET", f"/repos/{repo}/actions/workflows/readme.yml/runs?event=workflow_dispatch&branch=master&per_page=100&page=1")
+    run = runs["workflow_runs"][0]
+    assert transport.request("GET", f"/repos/{repo}/actions/runs/{run['id']}")["id"] == run["id"]
+    run["conclusion"] = "failure"
+    transport.request("POST", f"/repos/{repo}/actions/runs/{run['id']}/rerun-failed-jobs", {})
+    assert run["run_attempt"] == 2
+
+
+@pytest.mark.parametrize("payload", [
+    {"ref": "main"}, {"ref": "master", "inputs": {}},
+    {"ref": "master", "inputs": {"batch_id": "invalid"}},
+    {"ref": "master", "inputs": {"batch_id": "a" * 32, "other": "value"}},
+    {"ref": "master", "inputs": {"batch_id": 123}},
+    {"ref": "master", "other": "value"}])
+def test_migration_dispatch_keeps_strict_payload_allowlist(setup, payload):
+    from jost_migration import MigrationTransport
+    client, _, _, _ = setup
+    with pytest.raises(ValueError):
+        MigrationTransport(client, writes=True).request("POST",
+            f"/repos/{REPOSITORIES['diiivoy']}/actions/workflows/readme.yml/dispatches", payload)
+    assert not client.calls
+
+
+@pytest.mark.parametrize("field,value", [("path", ".github/workflows/other.yml"), ("head_branch", "main"),
+                                        ("event", "push"), ("display_title", "Unrelated workflow")])
+def test_migration_retries_only_correlated_readme_jobs(setup, field, value):
+    from jost_migration import MigrationTransport
+    client, _, _, _ = setup
+    transport = MigrationTransport(client, writes=True)
+    repo = REPOSITORIES["diiivoy"]
+    transport.request("POST", f"/repos/{repo}/actions/workflows/readme.yml/dispatches",
+                      {"ref": "master", "inputs": {"batch_id": "a" * 32}})
+    run = client.runs[repo][0]
+    run[field] = value
+    client.calls.clear()
+    with pytest.raises(ValueError):
+        transport.request("POST", f"/repos/{repo}/actions/runs/{run['id']}/rerun", {})
+    assert all(method == "GET" for method, _, _ in client.calls)
+
+
+@pytest.mark.parametrize("route", ["actions/workflows/other.yml/runs",
+    "actions/workflows/readme.yml/runs?event=workflow_dispatch&branch=main&per_page=100&page=1",
+    "actions/workflows/readme.yml/runs?event=push&branch=master&per_page=100&page=1"])
+def test_migration_readme_reads_keep_workflow_and_branch_allowlist(setup, route):
+    from jost_migration import MigrationTransport
+    client, _, _, _ = setup
+    with pytest.raises(ValueError):
+        MigrationTransport(client).request("GET", f"/repos/{REPOSITORIES['diiivoy']}/{route}")
+    assert not client.calls
