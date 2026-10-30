@@ -123,6 +123,9 @@ def test_unicode_escaped_cross_job_reference_is_preserved(manager):
     raw = json.dumps({'source': str(manager.path(target))}).replace('jobs', '\\u006aobs')
     (manager.path(other) / 'recovery.json').write_text(raw)
     assert 'referenced_by_another' in dict(manager.cleanup())[target]
+    alias = manager.jobs / '..' / manager.jobs.name / target
+    (manager.path(other) / 'recovery.json').write_text(json.dumps({'source': str(alias)}))
+    assert 'referenced_by_another' in dict(manager.cleanup())[target]
 
 
 @pytest.mark.parametrize('fold_case', [False, True])
@@ -134,6 +137,12 @@ def test_pending_database_reference_protects_input_without_json_export(manager, 
     if fold_case:
         source = source.lower()
     manager.db.execute('INSERT INTO publications VALUES(?,?,?,?)', (owner, 'pending', source, source))
+    manager.db.commit()
+    assert 'referenced_by_another' in dict(manager.cleanup())[target]
+    alias = str(manager.jobs / '..' / manager.jobs.name / target / 'posters/source.jpg')
+    if fold_case:
+        alias = alias.lower()
+    manager.db.execute('UPDATE publications SET source=?,prepared=?', (alias, alias))
     manager.db.commit()
     assert 'referenced_by_another' in dict(manager.cleanup())[target]
 

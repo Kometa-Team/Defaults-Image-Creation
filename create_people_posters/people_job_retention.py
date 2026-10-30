@@ -99,6 +99,18 @@ def recovery_blocker(folder):
     return None
 
 
+def reference_paths(value):
+    """Expand aliases only to preserve dependencies, never to grant deletion."""
+    candidates = [value.replace('\\', '/').casefold()]
+    try:
+        path = Path(value)
+        if path.is_absolute():
+            candidates.append(path.resolve().as_posix().casefold())
+    except (OSError, ValueError, RuntimeError):
+        pass
+    return candidates
+
+
 def dependencies(jobs, state):
     """Only cross-job references are leases; a job's own fulfilled paths aren't.
 
@@ -141,7 +153,8 @@ def dependencies(jobs, state):
                             pending.extend(part.keys()); pending.extend(part.values())
                         elif isinstance(part, list):
                             pending.extend(part)
-                    raw = (text + '\n' + '\n'.join(decoded)).replace('\\\\', '/').replace('\\', '/').casefold()
+                    references = [candidate for part in decoded for candidate in reference_paths(part)]
+                    raw = (text + '\n' + '\n'.join(references)).replace('\\\\', '/').replace('\\', '/').casefold()
                     # Fulfilled state publication exports aren't recovery leases.
                     if base == state / 'manifests':
                         receipts = value.get('publications') if isinstance(value, dict) else None
@@ -210,11 +223,11 @@ def plan(config, jobs, state, *, now=None, only=None):
             value = receipt.get(key)
             if not isinstance(value, str):
                 continue
-            normalized = value.replace('\\', '/').casefold()
-            if normalized.startswith(prefix):
-                target = value.replace('\\', '/')[len(prefix):].split('/')[0]
-                if target.casefold() != str(receipt.get('batch')).casefold():
-                    protected.add(job_names.get(target.casefold(), target))
+            for normalized in reference_paths(value):
+                if normalized.startswith(prefix):
+                    target = normalized[len(prefix):].split('/')[0]
+                    if target != str(receipt.get('batch')).casefold():
+                        protected.add(job_names.get(target, target))
     report = dict(observed=now, jobs=[], eligible_bytes=0, eligible_jobs=0, scope=SCOPE)
     for folder in sorted(jobs.iterdir()):
         if only is not None and folder.name != only:
