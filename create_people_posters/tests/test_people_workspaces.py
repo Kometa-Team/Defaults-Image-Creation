@@ -111,7 +111,7 @@ def test_cleanup_requires_ledger_not_just_manifest(manager):
     manager.set_status(batch, "cleanup_eligible")
     with manager.db:
         manager.db.execute("UPDATE jobs SET published=? WHERE id=?", (time.time() - 10 * 86400, batch))
-    assert manager.cleanup(dry_run=False)[0][1] == "retained: publication_receipts_incomplete"
+    assert manager.cleanup(dry_run=False)[0][1] == "retained: publication receipts incomplete"
 
 
 

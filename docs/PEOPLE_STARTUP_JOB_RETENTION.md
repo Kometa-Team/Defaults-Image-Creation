@@ -193,9 +193,11 @@ admission, deadlines surviving retries, last-step/exit measurement, unreadable
 storage, completed-receipt expiry and preservation of interrupted intents.
 The added Windows/Linux PR workflow runs the startup suite; it has no schedule.
 
-This is a reviewable source change, not a production deployment. The repository's
-exact-source integrity manifests pin several changed files and their test
-inventory. They are intentionally unchanged. An exact predecessor/successor
-maintenance transition must be reviewed before this draft can satisfy those
-mandatory integrity gates or deploy. Do not merge or run production apply from
-this draft until that review and the required hosted checks are complete.
+The exact-source maintenance transition is recorded separately in
+`ci/people-job-retention-maintenance-v1.json`, against main commit
+`120ed09a166ddfdc5380219aad35959c8a0de169`. It pins every changed source, test,
+workflow and investigation document to its predecessor and successor. Historical
+manifests and test inventories remain unchanged. New tamper controls reject
+unknown changes, rollback, missing files, links, deletions and unrelated history.
+This source change requires review and passing hosted checks before deployment.
+No production cleanup has been applied and no merge has been authorized.

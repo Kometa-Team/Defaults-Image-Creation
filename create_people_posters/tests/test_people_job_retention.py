@@ -246,7 +246,7 @@ def test_legacy_readme_handoff_does_not_adopt_current_unverified_readmes(manager
     batch = published_job(manager, monkeypatch)
     manager.db.execute("UPDATE readmes SET status='dispatched'")
     manager.db.commit()
-    assert 'publication_receipts_incomplete' in manager.cleanup(now=time.time() + 4 * 86400)[0][1]
+    assert 'publication receipts incomplete' in manager.cleanup(now=time.time() + 4 * 86400)[0][1]
 
 
 @pytest.mark.parametrize('sql', ["UPDATE publications SET style='original' WHERE style='bw'",

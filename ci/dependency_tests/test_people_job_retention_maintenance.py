@@ -1,0 +1,73 @@
+"""Preserve predecessor evidence and reject unlisted startup-retention changes."""
+from copy import deepcopy
+import json
+from pathlib import Path
+import unittest
+from unittest.mock import patch
+
+from ci import people_job_retention_maintenance as maintenance
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+class StartupRetentionMaintenanceTests(unittest.TestCase):
+    def test_exact_successors_and_unknown_predecessors(self):
+        value = maintenance.verify_checkout()
+        self.assertFalse(value['publication_authorized'])
+        for name, binding in value['members'].items():
+            self.assertEqual(maintenance.selected_hash(name, 'f' * 64), 'f' * 64)
+            if binding['before_sha256'] is not None:
+                self.assertEqual(maintenance.selected_hash(name, binding['before_sha256']), binding['sha256'])
+                old = maintenance.historical_bytes(ROOT, name, (ROOT / name).read_bytes())
+                self.assertEqual(maintenance.sha(old), binding['before_sha256'])
+                with self.assertRaises(ValueError):
+                    maintenance.historical_bytes(ROOT, name, old)
+        self.assertEqual(maintenance.selected_hash('unlisted.py', 'f' * 64), 'f' * 64)
+
+    def test_every_member_rejects_tamper_rollback_and_missing_files(self):
+        value = maintenance.verify_checkout()
+        original = Path.read_bytes
+        for name, binding in value['members'].items():
+            replacements = [original(ROOT / name) + b'\nunreviewed']
+            if binding['before_sha256'] is not None:
+                replacements.append(maintenance._old(name))
+            for replacement in replacements:
+                def changed(path):
+                    return replacement if path == ROOT / name else original(path)
+                with self.subTest(name=name), patch.object(Path, 'read_bytes', changed), self.assertRaises(ValueError):
+                    maintenance.verify_checkout()
+            def missing(path):
+                if path == ROOT / name:
+                    raise FileNotFoundError(name)
+                return original(path)
+            with self.subTest(missing=name), patch.object(Path, 'read_bytes', missing), self.assertRaises(OSError):
+                maintenance.verify_checkout()
+
+    def test_manifest_rejects_resealed_hashes_membership_and_baseline(self):
+        original = Path.read_bytes
+        for field in ('members', 'baseline_commit', 'publication_authorized'):
+            altered = deepcopy(maintenance.manifest())
+            altered[field] = 'unreviewed'
+            replacement = json.dumps(altered).encode()
+            def changed(path):
+                return replacement if path == maintenance.MANIFEST else original(path)
+            with self.subTest(field=field), patch.object(Path, 'read_bytes', changed), self.assertRaises(ValueError):
+                maintenance.manifest()
+
+    def test_scope_rejects_unlisted_deletions_links_renames_and_incomplete_diff(self):
+        with patch.object(maintenance, 'verify_checkout'):
+            with self.assertRaisesRegex(ValueError, 'Unapproved startup-retention scope'):
+                maintenance.verify_scope(ROOT, maintenance.BASE, {'unlisted.py'})
+            name = 'create_people_posters/people_workspaces.py'
+            for old, new, change in (('100644', '000000', 'D'), ('000000', '120000', 'A'),
+                                     ('100644', '100644', 'R100')):
+                row = (f':{old} {new} ' + '0' * 40 + ' ' + '1' * 40 + f' {change}\0{name}\0').encode()
+                with patch.object(maintenance, '_git', return_value=row), self.assertRaisesRegex(ValueError, 'regular-file'):
+                    maintenance.verify_scope(ROOT, maintenance.BASE, {name})
+            with patch.object(maintenance, '_git', return_value=b''), self.assertRaisesRegex(ValueError, 'Incomplete'):
+                maintenance.verify_scope(ROOT, maintenance.BASE, {name})
+
+    def test_unrelated_history_is_rejected(self):
+        with patch.object(maintenance, '_git', side_effect=ValueError('unrelated history')):
+            with self.assertRaises(ValueError):
+                maintenance._ancestry(str(ROOT), 'f' * 40)

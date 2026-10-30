@@ -70,11 +70,13 @@ def _ancestry(root, head):
 
 def verify_checkout(root=None):
     root = Path(root or ROOT)
+    from ci.people_job_retention_maintenance import verify_checkout as verify_retention, historical_bytes as retention_history
+    verify_retention(root)
     value = manifest()
     from ci.people_colorize_maintenance import _head
     _ancestry(str(root), _head(root))
     for name, binding in value['members'].items():
-        if sha(regular(root, name).read_bytes()) != binding['sha256']:
+        if sha(retention_history(root, name, regular(root, name).read_bytes())) != binding['sha256']:
             raise ValueError('Unreviewed M3 successor: ' + name)
         if binding['before_sha256'] is not None and sha(_old(name)) != binding['before_sha256']:
             raise ValueError('Changed M3 predecessor: ' + name)
@@ -84,6 +86,8 @@ def verify_checkout(root=None):
 
 
 def historical_bytes(root, name, current):
+    from ci.people_job_retention_maintenance import historical_bytes as retention_history
+    current = retention_history(root, name, current)
     if name not in MEMBERS:
         return current
     binding = manifest()['members'][name]

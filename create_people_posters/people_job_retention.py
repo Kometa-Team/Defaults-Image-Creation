@@ -355,6 +355,11 @@ def expire_completed_receipts(manager, *, now):
             continue
 
 
+def retention_outcome(reason):
+    # Preserve the existing public outcome used by README-publication callers.
+    return 'retained: ' + ('publication receipts incomplete' if reason == 'publication_receipts_incomplete' else reason)
+
+
 def cleanup(manager, *, dry_run=True, now=None):
     for root in (manager.config, manager.jobs, manager.state):
         reject_links(root)
@@ -367,7 +372,7 @@ def cleanup(manager, *, dry_run=True, now=None):
         report = plan(config, jobs, state, now=now)
         manager.last_cleanup_report = report
         manager.last_cleanup_counts = dict(eligible=report['eligible_jobs'], deleted=0, retained=len(report['jobs']))
-        return [(j['id'], 'eligible' if j['eligible'] else 'retained: ' + j['reason']) for j in report['jobs']]
+        return [(j['id'], 'eligible' if j['eligible'] else retention_outcome(j['reason'])) for j in report['jobs']]
     results = []
     with processing_exclusion(config, SCOPE, allow_existing=True):
         # The process may have died after removing the directory, before its
@@ -393,7 +398,7 @@ def cleanup(manager, *, dry_run=True, now=None):
         manager.last_cleanup_counts = dict(eligible=report['eligible_jobs'], deleted=0, retained=len(report['jobs']))
         for item in report['jobs']:
             if not item['eligible']:
-                results.append((item['id'], 'retained: ' + item['reason']))
+                results.append((item['id'], retention_outcome(item['reason'])))
                 continue
             try:
                 # Revalidate ownership, references and membership immediately before applying.

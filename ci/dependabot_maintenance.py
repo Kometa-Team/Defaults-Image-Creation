@@ -79,8 +79,9 @@ def verify_checkout(root=None):
     value = manifest()
     from ci.people_colorize_maintenance import _head
     _ancestry(str(root), _head(root))
+    from ci.people_job_retention_maintenance import historical_bytes as retention_history
     for name, binding in value['members'].items():
-        if sha(regular(root, name).read_bytes()) != binding['sha256']:
+        if sha(retention_history(root, name, regular(root, name).read_bytes())) != binding['sha256']:
             raise ValueError('Unreviewed dependency-audit successor: ' + name)
         if binding['before_sha256'] is not None and sha(_old(name)) != binding['before_sha256']:
             raise ValueError('Changed dependency-audit predecessor: ' + name)
@@ -90,16 +91,20 @@ def verify_checkout(root=None):
 
 
 def selected_hash(name, expected):
+    from ci.people_job_retention_maintenance import selected_hash as retention_hash
+    expected = retention_hash(name, expected)
     if name not in MEMBERS:
         return expected
     binding = manifest()['members'][name]
     if binding['before_sha256'] is None or expected != binding['before_sha256']:
         return expected
     verify_checkout()
-    return binding['sha256']
+    return retention_hash(name, binding['sha256'])
 
 
 def historical_bytes(root, name, current):
+    from ci.people_job_retention_maintenance import historical_bytes as retention_history
+    current = retention_history(root, name, current)
     if name not in MEMBERS:
         return current
     binding = manifest()['members'][name]
@@ -115,11 +120,17 @@ def historical_bytes(root, name, current):
 
 def scope_members():
     from ci.phase5_m2_maintenance import scope_members as m2_scope
-    return MEMBERS | ANCHORS | m2_scope()
+    from ci.people_job_retention_maintenance import scope_members as retention_scope
+    return MEMBERS | ANCHORS | m2_scope() | retention_scope()
 
 
 def verify_scope(root, baseline, names):
     verify_checkout(root)
+    from ci.people_job_retention_maintenance import scope_members as retention_scope, verify_scope as verify_retention_scope
+    retention_names = names & retention_scope()
+    if retention_names:
+        verify_retention_scope(root, baseline, retention_names)
+    names = names - retention_names
     from ci.phase5_m2_maintenance import scope_members as m2_scope, verify_scope as verify_m2_scope
     m2_names = names & m2_scope()
     if m2_names:
