@@ -70,11 +70,13 @@ def _ancestry(root, head):
 
 def verify_checkout(root=None):
     root = Path(root or ROOT)
+    from ci.phase5_m4_maintenance import verify_checkout as verify_m4, historical_bytes as m4_bytes
+    verify_m4(root)
     value = manifest()
     from ci.people_colorize_maintenance import _head
     _ancestry(str(root), _head(root))
     for name, binding in value['members'].items():
-        if sha(regular(root, name).read_bytes()) != binding['sha256']:
+        if sha(m4_bytes(root, name, regular(root, name).read_bytes())) != binding['sha256']:
             raise ValueError('Unreviewed M3 successor: ' + name)
         if binding['before_sha256'] is not None and sha(_old(name)) != binding['before_sha256']:
             raise ValueError('Changed M3 predecessor: ' + name)
@@ -84,6 +86,8 @@ def verify_checkout(root=None):
 
 
 def historical_bytes(root, name, current):
+    from ci.phase5_m4_maintenance import historical_bytes as m4_bytes
+    current = m4_bytes(root, name, current)
     if name not in MEMBERS:
         return current
     binding = manifest()['members'][name]
@@ -98,11 +102,17 @@ def historical_bytes(root, name, current):
 
 
 def scope_members():
-    return (MEMBERS | ANCHORS) - {'create_defaults/lifecycle/ROADMAP.md'}
+    from ci.phase5_m4_maintenance import scope_members as m4_scope
+    return ((MEMBERS | ANCHORS) - {'create_defaults/lifecycle/ROADMAP.md'}) | m4_scope()
 
 
 def verify_scope(root, baseline, names):
     verify_checkout(root)
+    from ci.phase5_m4_maintenance import scope_members as m4_scope, verify_scope as verify_m4_scope
+    m4_names = names & m4_scope()
+    if m4_names:
+        verify_m4_scope(root, baseline, m4_names)
+    names = names - m4_names
     if not names <= scope_members():
         raise ValueError('Unapproved M3 scope')
     if not names:

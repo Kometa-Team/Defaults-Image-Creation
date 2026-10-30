@@ -1,0 +1,94 @@
+{
+  "version": 1,
+  "baseline_commit": "120ed09a166ddfdc5380219aad35959c8a0de169",
+  "publication_authorized": false,
+  "production_intersection": [],
+  "adoption_intersection": [],
+  "frozen_m7_intersection": [
+    "create_defaults/bulk/lifecycle/apply.py",
+    "create_defaults/bulk/lifecycle/mappings.py",
+    "create_defaults/bulk/lifecycle/recovery.py"
+  ],
+  "members": {
+    ".github/workflows/phase5-m4-validation.yml": {
+      "before_sha256": null,
+      "sha256": "5fd78a08a7e0fb14ecf04e6b7f985c0ac13a5de18a7b428a9e74d180cba3e0e0"
+    },
+    "ci/dependabot_maintenance.py": {
+      "before_sha256": "5a13d4e58b56981d964c5c0aa30edab4a5547e861c60d21979ca0d69a6668d96",
+      "sha256": "b3eaa38e945dcedf39a28578f9ded1fec555c2d909c7aaee4b0712344a8faeb5"
+    },
+    "ci/dependency_tests/test_phase5_m3_maintenance.py": {
+      "before_sha256": "0aadc809100a84b52fc8a39749260c5f920329e6d9e184c01e7d7a5aff1b6c07",
+      "sha256": "159aa71d339c00a11d62adc8be9ec713c2d054c333da2c619bfced51aae59c9e"
+    },
+    "ci/dependency_tests/test_phase5_m4_maintenance.py": {
+      "before_sha256": null,
+      "sha256": "ef1c169f0b4be81a31629b1da8d525e780c5ab28fde09539bca6b49cb30207be"
+    },
+    "ci/phase5-m4-test-ids.json": {
+      "before_sha256": null,
+      "sha256": "7867baf7f2bc0d5fa80361a67fc3ab88f5f137bb88f9d95a782f98a356a0cef7"
+    },
+    "ci/phase5_m3_maintenance.py": {
+      "before_sha256": "0b482f323a62a65867946ea54ce791b7aa532f71413d7a10c87614ec548b767c",
+      "sha256": "e449d0fed2bbcddb84027b81198941dfbf03c6af9fe13d1b18bf3fdb7cb0ce7c"
+    },
+    "ci/phase5_m4.py": {
+      "before_sha256": null,
+      "sha256": "93fa528fb5b169122c0797bdacbe9fbc9babafe591fd5dd2dab80c9fba7ba12d"
+    },
+    "create_defaults/bulk/lifecycle/apply.py": {
+      "before_sha256": "65b5df9290044fece61aa921cca910b6917007fd88a2ff76b68d6613b77c557e",
+      "sha256": "2f43fb9757020d5ba4e576afa0ced6a436dc3e47c8ada7e9d7976795370d6056"
+    },
+    "create_defaults/bulk/lifecycle/current_mapping.py": {
+      "before_sha256": null,
+      "sha256": "d6e8d5e9250874a081fe5ab0f292a877601832a33a5737774c8efb4374ef641b"
+    },
+    "create_defaults/bulk/lifecycle/mappings.py": {
+      "before_sha256": "4f74da247645013e994da131d590c9ce653d272acb7882d671527771c5d5817a",
+      "sha256": "69ad60140dfec8cdecda9d12d3fac5e40a47e5b69444c43e230945d8abb9f6b8"
+    },
+    "create_defaults/bulk/lifecycle/recovery.py": {
+      "before_sha256": "9f5f5c6260a3564511f3462dec89c68ae0a981f72fc4bd750fcbfa45da38246f",
+      "sha256": "246574f6974363d4f862e9d5e279db724a443537bcb18202de1f50c94dc7097d"
+    },
+    "create_defaults/lifecycle/PHASE5_M4_ACCEPTANCE.json": {
+      "before_sha256": null,
+      "sha256": "e07f438da71dd34913852ee98f6955ec619ef55056c3619db4a51b8bed4e6d04"
+    },
+    "create_defaults/lifecycle/PHASE5_M4_CI_MAINTENANCE.md": {
+      "before_sha256": null,
+      "sha256": "0358081a2b2eb5ff8365393323f3542d68448813ecc2d677ec27c3f60b59f821"
+    },
+    "create_defaults/lifecycle/PHASE5_M4_COVERAGE.json": {
+      "before_sha256": null,
+      "sha256": "4d9d7c7c950a2308fd791586b3a28233794384e06fe57df4ab7c36551765a1aa"
+    },
+    "create_defaults/lifecycle/PHASE5_M4_IMPLEMENTATION.md": {
+      "before_sha256": null,
+      "sha256": "cb7b0e9fbcecfdb78f56175e2a8c194047ec28da719aa9ce2cfce7da4f074a9a"
+    },
+    "create_defaults/lifecycle/ROADMAP.md": {
+      "before_sha256": "f776dea7e1d719439df2fb1f6c8ddea30297eda6bf63f30e9f93cea7f502ca96",
+      "sha256": "c830b33101d202e6118c84c7d63ccf40b0a7639eefcaa6687d73e2c9469d87fc"
+    },
+    "create_defaults/phase5/m4_tests/conftest.py": {
+      "before_sha256": null,
+      "sha256": "593ab86d5fb4b4b90ca1eb94d6ff53735d71009056db73e3d6c6bd92ce43c529"
+    },
+    "create_defaults/phase5/m4_tests/helpers.py": {
+      "before_sha256": null,
+      "sha256": "5815172d3468dbccd47bb41561902a1a504576f478cb022184e2a9a53175388d"
+    },
+    "create_defaults/phase5/m4_tests/test_current_mapping.py": {
+      "before_sha256": null,
+      "sha256": "3c0fecdad598270ffdebd4318e7192a12abd07770c86139976e78ca205ff8b0d"
+    },
+    "create_defaults/phase5/m4_tests/test_guards.py": {
+      "before_sha256": null,
+      "sha256": "75aa33de4a248e137b1e9507fe04baf17282c3466a9705f5b27eca4e3e33e00d"
+    }
+  }
+}
