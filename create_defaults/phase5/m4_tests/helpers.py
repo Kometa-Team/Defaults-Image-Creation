@@ -42,7 +42,9 @@ def candidate(case,selected,label='m4-update',mutate_source=True):
         first=next(iter(content));entry=r.view().entry(first)
         path=trial.config.asset_dir/entry['names']['source']['path']
         image=Image.open(BytesIO(path.read_bytes())).convert('RGBA')
-        ImageDraw.Draw(image).ellipse((70,60,190,180),fill=(0,0,0,0))
+        # M5 already removed the left rectangle. Change the remaining visible
+        # blue ellipse so this epoch demonstrates different encoded artwork.
+        ImageDraw.Draw(image).ellipse((240,65,325,140),fill=(0,0,0,0))
         out=BytesIO();image.save(out,format='PNG')
         source=stage_source(selected,trial,first,out.getvalue(),expected_source_sha256=entry['names']['source']['sha256'])
         for i in content:
