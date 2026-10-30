@@ -31,6 +31,8 @@ class Phase5M3MaintenanceTests(unittest.TestCase):
         for name, (before, after) in expected.items():
             self.assertEqual(maintenance.sha(maintenance._old(name)), before)
             raw = (ROOT/name).read_bytes()
+            from ci.phase5_m4_maintenance import historical_bytes as m4_bytes
+            raw = m4_bytes(ROOT, name, raw)
             self.assertEqual(maintenance.sha(raw), after)
             self.assertEqual(maintenance.sha(maintenance.historical_bytes(ROOT, name, raw)), before)
 

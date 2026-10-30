@@ -165,7 +165,8 @@ def _state(registry, store, db):
             if value is None:
                 value=dict(schema_version=1,kind='m5-dependency-snapshot',basis=payload(snapshot['proposed_graph_json'])['basis'],nodes={},outputs={},unresolved=[])
             for i in snapshot['members']:
-                if i in seen_m6:
+                if (i in seen_m6 and state.get('current_mapping_commits', {}).get(record['id'])
+                        != refs[0]['sha256']):
                     fail('m5_reuses_m6_identity')
                 for n,row in _scope(index,[i]).items():
                     # M5's original replay separately validates source updates;

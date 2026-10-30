@@ -107,7 +107,8 @@ def _commit_synthetic(transaction, *, expected_snapshot_sha256, authority=None, 
     heads and all M1 subject/dependency/namespace heads are checked under the
     original SQLite write lock. Archived decisions are not live authority.
     """
-    if type(transaction) is not Transaction:
+    from .current_mapping import CurrentTransaction
+    if type(transaction) not in {Transaction, CurrentTransaction}:
         fail('typed_transaction')
     from .evidence import ReviewInputs
     from .composition import CompositionContext
@@ -132,7 +133,10 @@ def _commit_synthetic(transaction, *, expected_snapshot_sha256, authority=None, 
     with writer.transaction() as db:
         state = inspect_db(root,writer,db)
         from .mappings import require_m5_compatible
-        require_m5_compatible(root,writer,db,ctx.candidate)
+        if type(transaction) is CurrentTransaction:
+            transaction.require_current(writer, db, state)
+        else:
+            require_m5_compatible(root,writer,db,ctx.candidate)
         op_id = ctx.impact.to_dict()['operation']['id']
         existing = state['commits'].get(op_id)
         if existing is not None:
@@ -155,7 +159,10 @@ def _commit_synthetic(transaction, *, expected_snapshot_sha256, authority=None, 
             fail('snapshot_pin')
         s = snapshot.to_dict()
         validate_state_impact(ctx.candidate,state)
-        verify_before(snapshot,state['snapshots'],state['outputs'])
+        if type(transaction) is CurrentTransaction:
+            transaction.verify_before(snapshot, writer, db, state)
+        else:
+            verify_before(snapshot,state['snapshots'],state['outputs'])
         for identity, expected in s['expected_snapshots'].items():
             if state['outputs'].get(identity,{}).get('snapshot_sha256') != expected:
                 raise Conflict('Authoritative isolated snapshot changed')
@@ -181,6 +188,8 @@ def _commit_synthetic(transaction, *, expected_snapshot_sha256, authority=None, 
         writer.event(db,'phase4_isolated_commit',op_id,dict(snapshot_sha256=snapshot.sha256,
             record_sha256=marker.sha256,review_sha256=s['review_sha256'],members=s['members'],
             isolated_committed=True,**FLAGS))
+        if type(transaction) is CurrentTransaction:
+            transaction.record_lineage(snapshot, writer, db)
         _checkpoint('receipt_index')
         # Original M1 and M5 immutable restart verification must accept all
         # proposed rows before the single existing Package E COMMIT.
