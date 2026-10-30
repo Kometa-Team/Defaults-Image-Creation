@@ -136,7 +136,7 @@ class Workspaces:
         if cleanup and os.getenv("PEOPLE_AUTO_CLEANUP", "true").strip().lower() in {"1", "true", "yes", "on"}:
             for batch, outcome in self.cleanup(dry_run=False):
                 print(f"[CLEANUP] {batch}: {outcome}")
-        self.check_budget()
+        self.check_budget(admitting=True)
         batch = time.strftime("%Y%m%dT%H%M%S", time.gmtime()) + "-" + uuid.uuid4().hex[:12]
         path = self.path(batch)
         path.mkdir()
@@ -217,6 +217,11 @@ class Workspaces:
             # Terminal-job retention runs once at startup under the shared
             # processing lease. Legacy exact-artwork maintenance stays manual;
             # its historical CI enrollment is not a runtime job-expiry gate.
+            from create_people_posters.people_storage_watch import report
+            try:
+                report(self, announce=True)
+            except (OSError, ValueError, sqlite3.Error) as error:
+                print('[STORAGE] Final storage measurement failed; inspect retained work: ' + safe_exception(error))
 
     def configure(self, batch):
         self.record(batch)
@@ -246,17 +251,9 @@ class Workspaces:
                 raise ValueError(f"{key} must be outside managed temporary jobs")
         return path
 
-    def check_budget(self):
-        limit = float(os.getenv("PEOPLE_JOBS_MAX_GIB", "20")) * 1024 ** 3
-        used = 0
-        for root, dirs, files in os.walk(self.jobs, followlinks=False):
-            for name in dirs + files:
-                reject_links(Path(root) / name)
-            used += sum((Path(root) / name).stat().st_size for name in files)
-        if limit > 0 and used >= limit:
-            raise ValueError("Managed jobs storage budget exceeded; retry/inspect retained failed jobs or raise PEOPLE_JOBS_MAX_GIB")
-        if shutil.disk_usage(self.jobs).free < 256 * 1024 ** 2:
-            raise ValueError("Insufficient free disk space for another processing step")
+    def check_budget(self, admitting=False):
+        from create_people_posters.people_storage_watch import check
+        return check(self, admitting=admitting)
 
     def confirm_published(self, batch, ledger):
         if not ledger.verified(batch):

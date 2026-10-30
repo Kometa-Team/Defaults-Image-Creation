@@ -27,6 +27,37 @@ processing lease, before admitting a new batch against the storage budget.
 non-deletion behavior. No scheduler is introduced. Releasing a job lease no
 longer invokes the legacy exact-artwork maintenance worker.
 
+## Growth monitoring and enforced admission
+
+Preservation exceptions are monitored, not silently exempt from capacity limits.
+Each startup, processing-step admission and owned job exit refreshes one
+`state/job-retention/storage-report.json` with jobs/state bytes, growth since
+the previous check, per-job retained bytes/reasons, review deadlines, free disk
+space and admission blockers. Startup and exit print totals; warnings appear
+at 80% of the configured storage limit. Reports overwrite the same file rather
+than accumulating per launch.
+
+`PEOPLE_JOBS_MAX_GIB=20` now covers jobs **and state**, including receipt archives.
+It must be finite and positive; zero, negative and NaN values cannot disable the
+guard. At the limit, with insufficient free space, or if usage cannot be measured
+safely, new batches and subsequent processing steps stop. This is an admission
+limit, not an OS disk quota: an already-running child can exceed it before its
+next stage/exit check. There is no background monitor when the orchestrator is
+not running, and no scheduler has been added.
+
+`PEOPLE_RECOVERY_REVIEW_DAYS=14` gives unresolved retained jobs a review deadline.
+An overdue exception blocks **new batches**, while existing recovery can still
+resume below the storage limit. A retry does not silently extend the previously
+recorded deadline. This forces a visible decision to finish recovery or verify
+that retained material can be retired; it never deletes rollback evidence to
+make room. The report identifies the exact job, bytes, reason and deadline.
+
+`PEOPLE_CLEANUP_RECEIPT_RETENTION_DAYS=14` expires this worker's completed cleanup
+receipts and associated error records only after the job directory is absent
+and its terminal ledger status is reconciled. Interrupted intents, live recovery
+data, historical approvals and authoritative publication receipts are retained.
+Their storage still counts against the combined admission limit.
+
 The historical artwork cleaner remains a separate manual scope. Runtime job
 expiry uses durable producer/publication evidence, rather than a hosted CI
 receipt pinned to an earlier source checkout. It never sweeps configuration,
@@ -155,6 +186,9 @@ incomplete/active jobs, partial publication, rollback and cross-job dependencies
 malformed JSON and non-object manifests, sealed history mismatch, interrupted
 unlink and manifest removal, crash reconciliation, changed payloads, idempotency,
 safe correlation evidence, storage-budget admission and filesystem link guards.
+Growth tests cover combined jobs/state accounting, 80% warnings, overdue review
+admission, deadlines surviving retries, last-step/exit measurement, unreadable
+storage, completed-receipt expiry and preservation of interrupted intents.
 The added Windows/Linux PR workflow runs the startup suite; it has no schedule.
 
 This is a reviewable source change, not a production deployment. The repository's

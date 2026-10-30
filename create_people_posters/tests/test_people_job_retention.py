@@ -2,6 +2,7 @@
 import json
 import os
 import time
+from unittest.mock import patch
 
 import pytest
 
@@ -10,7 +11,10 @@ from create_people_posters import people_job_retention as retention
 
 
 def terminal(manager, status, age):
-    batch = manager.create(cleanup=False)
+    # Build historical fixtures without admitting new production work behind
+    # an already-overdue fixture. Admission itself has separate coverage.
+    with patch.object(manager, 'check_budget'):
+        batch = manager.create(cleanup=False)
     manager.set_status(batch, status)
     timestamp = time.time() - age * 86400
     manager.db.execute('UPDATE jobs SET created=?,updated=? WHERE id=?', (timestamp, timestamp, batch))

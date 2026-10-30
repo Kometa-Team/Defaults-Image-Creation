@@ -28,6 +28,7 @@ jobs:
         run: >-
           ${{ matrix.python }} -m pytest -q --junitxml=startup-retention-results.xml
           create_people_posters/tests/test_people_job_retention.py
+          create_people_posters/tests/test_people_storage_watch.py
           create_people_posters/tests/test_people_workspaces.py
           create_people_posters/tests/test_people_api_orchestrator.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

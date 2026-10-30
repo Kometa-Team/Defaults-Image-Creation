@@ -291,8 +291,8 @@ def test_launch_auto_cleanup_can_be_disabled(launch_jobs,monkeypatch):
 
 def test_launch_cleanup_frees_expired_data_before_new_batch_budget_check(launch_jobs,monkeypatch):
     manager,old,resume=launch_jobs
-    (manager.path(old)/'logs/large.log').write_bytes(b'x'*100000)
-    monkeypatch.setenv('PEOPLE_JOBS_MAX_GIB',str(50*1024/1024**3))
+    (manager.path(old)/'logs/large.log').write_bytes(b'x'*(2*1024**2))
+    monkeypatch.setenv('PEOPLE_JOBS_MAX_GIB',str(1/1024))
     invoke(monkeypatch,'--new-batch','--stop-after','ensure_repo')
     assert not manager.path(old).exists()
 
@@ -311,11 +311,10 @@ def test_launch_cleanup_preserves_incomplete_active_and_external_data(launch_job
         protected.append(image)
     unverified=manager.create(cleanup=False)
     manager.set_status(unverified,'cleanup_eligible')
+    active=published_job(manager,monkeypatch)
     with manager.db:
         manager.db.execute('UPDATE jobs SET updated=? WHERE status!=?',(time.time()-100*86400,'complete'))
         manager.db.execute('UPDATE jobs SET published=? WHERE id=?',(time.time()-4*86400,unverified))
-    active=published_job(manager,monkeypatch)
-    with manager.db:
         manager.db.execute('UPDATE jobs SET published=? WHERE id=?',(time.time()-4*86400,active))
     manager.activate(active)
     for relative in ('people_dirs/historical.jpg','models/cached-model.bin','clone/.git/marker','source.jpg'):
@@ -324,7 +323,7 @@ def test_launch_cleanup_preserves_incomplete_active_and_external_data(launch_job
         path.write_bytes(b'external')
         protected.append(path)
     try:
-        invoke(monkeypatch,'--new-batch','--stop-after','ensure_repo')
+        invoke(monkeypatch,'--batch-id',resume,'--stop-after','ensure_repo')
         assert (manager.path(active)/'prepared').exists()
         assert manager.record(unverified)[0]['status']=='cleanup_eligible'
         assert all(p.read_bytes() in {b'only-copy',b'external'} for p in protected)

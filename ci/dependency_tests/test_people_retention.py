@@ -454,17 +454,21 @@ class PeopleRetentionTests(unittest.TestCase):
 
     def test_deactivation_maintenance_requires_owned_lease_and_enrollment(self):
         from types import SimpleNamespace
+        from create_people_posters import people_storage_watch
         folder=self.config/'jobs'/self.job;lease=folder/'.active'
         manager=SimpleNamespace(config=self.config,jobs=(self.config/'jobs').resolve(),state=(self.config/'state').resolve(),path=lambda batch:folder,
             record=lambda batch:({'status':'cleanup_eligible'},{}))
-        with patch.object(worker,'maintenance_after_job') as maintain:
+        with patch.object(worker,'maintenance_after_job') as maintain, patch.object(people_storage_watch,'report') as monitor:
             lease.write_text(str(os.getpid()),encoding='ascii')
             Workspaces.deactivate(manager,self.job);maintain.assert_not_called()
+            monitor.assert_called_once_with(manager,announce=True)
+            monitor.reset_mock()
             self.enroll();lease.write_text(str(os.getpid()),encoding='ascii')
             # Startup owns job retention now. Releasing a job lease must not
             # invoke the legacy cleaner with a stale implementation CI receipt.
             Workspaces.deactivate(manager,self.job);maintain.assert_not_called()
             self.assertFalse(lease.exists())
+            monitor.assert_called_once_with(manager,announce=True)
             maintain.reset_mock();lease.write_text('-999',encoding='ascii')
             Workspaces.deactivate(manager,self.job);maintain.assert_not_called()
             manager.jobs=self.config/'custom-jobs';lease.write_text(str(os.getpid()),encoding='ascii')

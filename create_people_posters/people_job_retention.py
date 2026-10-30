@@ -325,6 +325,36 @@ def apply_job(item, jobs, state):
     return removed
 
 
+def expire_completed_receipts(manager, *, now):
+    """Only finished cleanup evidence with no remaining job; never recovery intents."""
+    from create_people_posters.people_storage_watch import positive_setting
+    retention = positive_setting('PEOPLE_CLEANUP_RECEIPT_RETENTION_DAYS', 14) * 86400
+    for path in (manager.state / 'job-retention').glob('*.json'):
+        if not ID_PATTERN.fullmatch(path.stem):
+            continue
+        try:
+            value = read_json(path)
+            if (value.get('scope') != SCOPE or value.get('id') != path.stem
+                    or value.get('root') != str(manager.jobs) or value.get('completed') is not True
+                    or member(manager.jobs, path.stem).exists()
+                    or now - number(value.get('completed_at')) < retention):
+                continue
+            # Reconciliation above persisted the terminal DB state first.
+            row = manager.db.execute('SELECT status FROM jobs WHERE id=?', (path.stem,)).fetchone()
+            if row is not None and row['status'] != 'complete':
+                continue
+            error_path = path.with_name(path.stem + '-error.json')
+            if error_path.exists():
+                failure = read_json(error_path)
+                if failure.get('operation') == 'job_cleanup' and failure.get('input_identifier') == path.stem:
+                    identity = inspect(error_path)
+                    unlink_verified(error_path.parent, dict(path=error_path.name, identity=identity, sha256=identity['sha256']))
+            identity = inspect(path)
+            unlink_verified(path.parent, dict(path=path.name, identity=identity, sha256=identity['sha256']))
+        except (OSError, ValueError, KeyError, TypeError, AttributeError, sqlite3.Error):
+            continue
+
+
 def cleanup(manager, *, dry_run=True, now=None):
     for root in (manager.config, manager.jobs, manager.state):
         reject_links(root)
@@ -357,6 +387,7 @@ def cleanup(manager, *, dry_run=True, now=None):
                         atomic_json(path, intent)
             except (OSError, ValueError, KeyError, TypeError, sqlite3.Error):
                 continue
+        expire_completed_receipts(manager, now=time.time() if now is None else now)
         report = plan(config, jobs, state, now=now)
         manager.last_cleanup_report = report
         manager.last_cleanup_counts = dict(eligible=report['eligible_jobs'], deleted=0, retained=len(report['jobs']))
@@ -383,6 +414,9 @@ def cleanup(manager, *, dry_run=True, now=None):
                 except (OSError, ValueError):
                     pass
                 results.append((item['id'], 'retained: cleanup_interrupted correlation_id=' + failure['correlation_id']))
+        manager.last_cleanup_results = results
+        from create_people_posters.people_storage_watch import report as storage_report
+        storage_report(manager, now=now, announce=True)
     return results
 
 
