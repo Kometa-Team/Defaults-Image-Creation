@@ -286,7 +286,7 @@ def plan(config, jobs, state, *, now=None, only=None):
             else:
                 # Partial remote writes always need recovery, including a failed job.
                 receipts = [r for r in data['publications'] if r['batch'] == folder.name]
-                if status == 'failed' and any(r.get('commit_sha') or r['status'] == 'published' for r in receipts):
+                if any(r.get('commit_sha') or r['status'] == 'published' for r in receipts):
                     raise RetentionBlocked('partial_publication_requires_recovery')
             item.update(eligible=True, reason='expired_terminal_job')
             report['eligible_jobs'] += 1

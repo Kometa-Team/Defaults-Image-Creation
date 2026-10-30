@@ -197,8 +197,9 @@ def test_success_age_is_publication_age(manager, monkeypatch):
     assert manager.cleanup(now=published + 3 * 86400) == [(batch, 'eligible')]
 
 
-def test_partial_publication_in_failed_job_is_not_expired(manager):
-    batch = terminal(manager, 'failed', 100)
+@pytest.mark.parametrize('status', ['failed', 'validation_only', 'no_work'])
+def test_partial_publication_in_terminal_job_is_not_expired(manager, status):
+    batch = terminal(manager, status, 100)
     manager.db.execute('CREATE TABLE publications(batch TEXT,status TEXT,commit_sha TEXT)')
     manager.db.execute('INSERT INTO publications VALUES(?,?,?)', (batch, 'published', 'abc'))
     manager.db.commit()

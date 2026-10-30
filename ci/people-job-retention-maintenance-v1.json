@@ -33,7 +33,7 @@
     },
     "create_people_posters/people_job_retention.py": {
       "before_sha256": null,
-      "sha256": "81b37a4f7f53dd60879c5829d6d288044bb815ee62a474153d0d7360ae3635a7"
+      "sha256": "868c8bebb2bdf1000aa68014041b99b004723b3f61949214efac3211929c0056"
     },
     "create_people_posters/people_storage_watch.py": {
       "before_sha256": null,
@@ -49,7 +49,7 @@
     },
     "create_people_posters/tests/test_people_job_retention.py": {
       "before_sha256": null,
-      "sha256": "2271c836a92e9da6e995516fed57117e51d9bf258f586855070b5ef9c2b86c11"
+      "sha256": "f7355551d03bcb74995519eb56111f605c1e6e4fff65805d819435a0a6e8afd1"
     },
     "create_people_posters/tests/test_people_storage_watch.py": {
       "before_sha256": null,
@@ -65,7 +65,7 @@
     },
     "docs/PEOPLE_STARTUP_JOB_RETENTION.md": {
       "before_sha256": null,
-      "sha256": "ed87d19bc1fd93a89018256007ea5631344a7e7f5852fd7fbeeb51b41705d92e"
+      "sha256": "a3a7038480971749c829d296af303dcec1d5e164fda7f0ffa2a425bfa8becfce"
     }
   }
 }

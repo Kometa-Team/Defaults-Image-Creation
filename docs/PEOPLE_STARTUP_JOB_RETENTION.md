@@ -11,7 +11,7 @@ lifecycle row and exact file identities outside the expiring directory.
 | --- | --- | --- |
 | `published`, `cleanup_eligible`, `complete` | `PEOPLE_BATCH_RETENTION_DAYS=3`, from publication | Require fulfilled image receipts, consistent lifecycle and unchanged remaining catalogued images. |
 | `failed` | `PEOPLE_FAILED_BATCH_RETENTION_DAYS=14`, from last lifecycle update | Terminal standalone failures expire, including unpublished temporary inputs. Partial remote publication, recovery leases and rollback transactions override expiry. |
-| `validation_only`, `no_work` | `PEOPLE_VALIDATION_BATCH_RETENTION_DAYS`, defaults to the success retention (3) | Terminal temporary work expires without requiring publication. |
+| `validation_only`, `no_work` | `PEOPLE_VALIDATION_BATCH_RETENTION_DAYS`, defaults to the success retention (3) | Terminal temporary work expires if there are no remote writes needing recovery. |
 | Active or selected resume | No age-based grant | Retain. Both explicit and automatic resume acquire the job lease before cleanup. |
 | Pending, processing, generated, validated, recovery pending, partially published | No terminal completion | Retain for recovery. |
 | Recovery/rollback, external references, models/vendor/config/Git material, uncertain ownership | Independent protection | Retain with a specific blocker, regardless of terminal status. |
@@ -64,8 +64,8 @@ The historical artwork cleaner remains a separate manual scope. Runtime job
 expiry uses durable producer/publication evidence, rather than a hosted CI
 receipt pinned to an earlier source checkout. It never sweeps configuration,
 published repositories, shared models or unrelated historical directories.
-The existing source integrity checks still apply to reviewing/deploying this
-source change; this worker does not change those checks or their trust anchors.
+The source integrity checks still apply to reviewing/deploying this source
+change through the separately pinned maintenance transition described below.
 
 ## Ownership, interruption and isolation
 
@@ -179,6 +179,12 @@ The other 13 jobs are younger than three days and retained: eight no-work,
 one failed, three successfully published, and one partially published. The
 machine-readable snapshot identifies each one. Ages are measured from recorded
 creation, while eligibility uses publication/update deadlines as specified above.
+
+A second read-only inventory at 2026-10-30 18:29 UTC still found the same 13
+eligible directories and 209,254,958 recoverable bytes. The newest job had since
+changed to `no_work` while retaining publication records; any partial remote
+writes protect it from later expiry even if its terminal label changes. The
+original timestamped snapshot above remains the initial investigation evidence.
 
 ## Regression coverage and deployment boundary
 
