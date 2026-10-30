@@ -10,11 +10,12 @@ from ci.people_storage_maintenance import regular
 ROOT = Path(__file__).resolve().parents[1]
 BASE = '120ed09a166ddfdc5380219aad35959c8a0de169'
 MANIFEST = ROOT / 'ci/people-job-retention-maintenance-v1.json'
-PIN = 'baceda5d486edcf2668088e21376ebca47f8d8a5d91e218574650335c5d250a1'
+PIN = '7f2ef8dbbd120c6fbce410d20e249210f64d21eb574aaa22cbbf9482152074b5'
 MEMBERS = frozenset({
     '.github/workflows/people-job-retention.yml',
     'ci/dependabot_maintenance.py',
     'ci/phase5_m3_maintenance.py',
+    'ci/dependency_tests/test_people_colorize_maintenance.py',
     'ci/dependency_tests/test_people_retention.py',
     'ci/dependency_tests/test_people_job_retention_maintenance.py',
     'create_people_posters/.env.example',

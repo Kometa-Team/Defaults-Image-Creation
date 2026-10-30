@@ -40,10 +40,14 @@ class PeopleColorizeMaintenanceTests(unittest.TestCase):
 
     def test_exact_checkout_and_known_predecessor_select_successor(self):
         value = colorize.verify_checkout()
+        from ci.people_job_retention_maintenance import selected_hash, historical_bytes
         for source in colorize.PINNED:
             binding = value['members'][source]
-            self.assertEqual(dependencies.selected_hash(source, binding['before_sha256']), binding['sha256'])
-            self.assertEqual(colorize.sha((ROOT / source).read_bytes()), binding['sha256'])
+            expected = selected_hash(source, binding['sha256'])
+            self.assertEqual(dependencies.selected_hash(source, binding['before_sha256']), expected)
+            current = (ROOT / source).read_bytes()
+            self.assertEqual(colorize.sha(current), expected)
+            self.assertEqual(colorize.sha(historical_bytes(ROOT, source, current)), binding['sha256'])
         self.assertFalse(value['publication_authorized'])
 
     def test_unknown_paths_and_predecessors_retain_original_pins(self):
