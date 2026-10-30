@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "120ed09a166ddfdc5380219aad35959c8a0de169",
+  "operational_authority": false,
+  "requirements": [
+    {
+      "id": "P5-T12",
+      "tests": [
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T20_changed_or_malicious_current_catalog_blocks[unknown-field]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T20_changed_or_malicious_current_catalog_blocks[duplicate-key]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T20_changed_or_malicious_current_catalog_blocks[path-traversal]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T20_changed_or_malicious_current_catalog_blocks[locked-font]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T20_changed_or_malicious_current_catalog_blocks[dependency]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T14_tampered_current_lineage_blocks[before-pin]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T14_tampered_current_lineage_blocks[closure-pin]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T14_tampered_current_lineage_blocks[accepted-snapshot]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T14_tampered_current_lineage_blocks[mapping-plan]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T14_tampered_current_lineage_blocks[foreign-registry]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T14_tampered_current_lineage_blocks[source-object]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_fresh_native_context_is_required_at_commit[source]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_fresh_native_context_is_required_at_commit[definition]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_fresh_native_context_is_required_at_commit[translation]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_fresh_native_context_is_required_at_commit[destination]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_fresh_native_context_is_required_at_commit[review]"
+      ],
+      "boundary": "Real native lifecycle interfaces; exact expected guard asserted in each test",
+      "expected_result": "Safe isolated current mapping or explicit blocked unsupported/stale input; no production authority"
+    },
+    {
+      "id": "P5-T13",
+      "tests": [
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[Playlist]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[Network]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[Streaming]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[Overlays]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[Studio]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[non-English]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[retired]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[historical]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[generated]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[dependent]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[placeholder]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[family]"
+      ],
+      "boundary": "Real native lifecycle interfaces; exact expected guard asserted in each test",
+      "expected_result": "Safe isolated current mapping or explicit blocked unsupported/stale input; no production authority"
+    },
+    {
+      "id": "P5-T14",
+      "tests": [
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T14_tampered_current_lineage_blocks[before-pin]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T14_tampered_current_lineage_blocks[closure-pin]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T14_tampered_current_lineage_blocks[accepted-snapshot]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T14_tampered_current_lineage_blocks[mapping-plan]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T14_tampered_current_lineage_blocks[foreign-registry]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T14_tampered_current_lineage_blocks[source-object]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T14_T27_corrupt_committed_current_evidence_blocks[lineage-object]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T14_T27_corrupt_committed_current_evidence_blocks[lineage-index]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T14_T27_corrupt_committed_current_evidence_blocks[owned-receipt]"
+      ],
+      "boundary": "Real native lifecycle interfaces; exact expected guard asserted in each test",
+      "expected_result": "Safe isolated current mapping or explicit blocked unsupported/stale input; no production authority"
+    },
+    {
+      "id": "P5-T15",
+      "tests": [
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T15_retired_identity_never_selects_current_UPDATE",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[Playlist]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[Network]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[Streaming]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[Overlays]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[Studio]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[non-English]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[retired]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[historical]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[generated]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[dependent]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[placeholder]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[family]"
+      ],
+      "boundary": "Real native lifecycle interfaces; exact expected guard asserted in each test",
+      "expected_result": "Safe isolated current mapping or explicit blocked unsupported/stale input; no production authority"
+    },
+    {
+      "id": "P5-T16",
+      "tests": [
+        "create_defaults/phase5/m4_tests/test_current_mapping.py::test_P5_T16_native_current_mapping_sequence"
+      ],
+      "boundary": "Real native lifecycle interfaces; exact expected guard asserted in each test",
+      "expected_result": "Safe isolated current mapping or explicit blocked unsupported/stale input; no production authority"
+    },
+    {
+      "id": "P5-T17",
+      "tests": [
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T17_old_M5_retry_still_rejects_after_RENAME"
+      ],
+      "boundary": "Real native lifecycle interfaces; exact expected guard asserted in each test",
+      "expected_result": "Safe isolated current mapping or explicit blocked unsupported/stale input; no production authority"
+    },
+    {
+      "id": "P5-T18",
+      "tests": [
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T18_literal_case_unicode_and_punctuation_mapping[fixture]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T18_literal_case_unicode_and_punctuation_mapping[Fixture Pok\\xe9mon]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T18_literal_case_unicode_and_punctuation_mapping[Fixture (A & B)!]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T18_stale_epoch_after_second_RENAME_blocks",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T18_exact_registry_alias_extension_only[None]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T18_exact_registry_alias_extension_only[removed]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T18_exact_registry_alias_extension_only[injected]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T18_cross_owner_epoch_never_creates_an_intent",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T18_concurrent_UPDATE_invalidates_earlier_exact_review",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T18_concurrent_RENAME_cannot_adopt_uncommitted_source_revision",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T18_T26_unrelated_native_identity_and_receipt_survive"
+      ],
+      "boundary": "Real native lifecycle interfaces; exact expected guard asserted in each test",
+      "expected_result": "Safe isolated current mapping or explicit blocked unsupported/stale input; no production authority"
+    },
+    {
+      "id": "P5-T19",
+      "tests": [
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[Playlist]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[Network]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[Streaming]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[Overlays]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[Studio]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[non-English]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[retired]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[historical]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[generated]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[dependent]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[placeholder]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T13_T15_T19_real_closed_cohort_guard[family]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T19_shared_source_requires_complete_current_closure"
+      ],
+      "boundary": "Real native lifecycle interfaces; exact expected guard asserted in each test",
+      "expected_result": "Safe isolated current mapping or explicit blocked unsupported/stale input; no production authority"
+    },
+    {
+      "id": "P5-T20",
+      "tests": [
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T20_changed_or_malicious_current_catalog_blocks[unknown-field]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T20_changed_or_malicious_current_catalog_blocks[duplicate-key]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T20_changed_or_malicious_current_catalog_blocks[path-traversal]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T20_changed_or_malicious_current_catalog_blocks[locked-font]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T20_changed_or_malicious_current_catalog_blocks[dependency]"
+      ],
+      "boundary": "Real native lifecycle interfaces; exact expected guard asserted in each test",
+      "expected_result": "Safe isolated current mapping or explicit blocked unsupported/stale input; no production authority"
+    },
+    {
+      "id": "P5-T26",
+      "tests": [
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T26_real_operation_and_public_mutation_remain_unavailable",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T18_T26_unrelated_native_identity_and_receipt_survive",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T26_M6_retirement_after_current_UPDATE_retains_latest_artwork"
+      ],
+      "boundary": "Real native lifecycle interfaces; exact expected guard asserted in each test",
+      "expected_result": "Safe isolated current mapping or explicit blocked unsupported/stale input; no production authority"
+    },
+    {
+      "id": "P5-T27",
+      "tests": [
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T27_atomic_faults_rollback_without_losing_history[snapshot_blob]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T27_atomic_faults_rollback_without_losing_history[record_index]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T27_atomic_faults_rollback_without_losing_history[member_head]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T27_atomic_faults_rollback_without_losing_history[receipt_index]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T27_atomic_faults_rollback_without_losing_history[before_commit]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T27_cancellation_before_commit_is_not_application",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T27_lost_acknowledgement_retries_exact_committed_operation",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T14_T27_corrupt_committed_current_evidence_blocks[lineage-object]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T14_T27_corrupt_committed_current_evidence_blocks[lineage-index]",
+        "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T14_T27_corrupt_committed_current_evidence_blocks[owned-receipt]"
+      ],
+      "boundary": "Real native lifecycle interfaces; exact expected guard asserted in each test",
+      "expected_result": "Safe isolated current mapping or explicit blocked unsupported/stale input; no production authority"
+    }
+  ]
+}

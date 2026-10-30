@@ -102,6 +102,9 @@ def inspect_db(root, store, db):
     if size[0]>MAX_EVENTS or size[1]>MAX_ARCHIVE_BYTES:
         fail('archive_limit')
     packages = [tuple(r) for r in db.execute("SELECT subject,payload FROM events WHERE kind='phase4_isolated_commit' ORDER BY sequence")]
+    from .current_mapping import lineage_events, verify_archived_lineage
+    lineage = lineage_events(store, db)
+    current_commits = {}
     expected_events, snapshots, committed, outputs = [], {}, {}, {}
     budget = 0
     archive = CompositionArchive(root,readonly=True)
@@ -200,11 +203,17 @@ def inspect_db(root, store, db):
                 if sha256(raw_source).hexdigest()!=source['sha256']:
                     fail('archived_source_hash')
                 check_bytes(source['object_sha256'])
-        verify_before(snapshot,snapshots,outputs)
+        current = verify_archived_lineage(snapshot, lineage.get(v['id']),
+            store=store, db=db, snapshots=snapshots, outputs=outputs,
+            records=records, events=events, commit_sequence=ev['sequence'])
+        if current:
+            current_commits[v['id']] = pin
+        else:
+            verify_before(snapshot,snapshots,outputs)
         for i,previous in s['expected_snapshots'].items():
             if outputs.get(i,{}).get('snapshot_sha256')!=previous:
                 fail('snapshot_history_conflict')
-            if s['operation_type']=='UPDATE':
+            if s['operation_type']=='UPDATE' and not current:
                 old = snapshots[previous].to_dict()
                 old_proposal = payload(old['proposed_json'])
                 before = payload(s['before_json'])
@@ -228,10 +237,14 @@ def inspect_db(root, store, db):
         committed[v['id']]=dict(snapshot_sha256=pin,record_sha256=record.sha256,event_sha256=event.sha256,revision=v['revision'])
         expected_events.append((v['id'],canonical(dict(snapshot_sha256=pin,record_sha256=record.sha256,
             review_sha256=s['review_sha256'],members=s['members'],isolated_committed=True,**FLAGS)).decode()))
+    if set(lineage) != set(current_commits):
+        fail('current_mapping_commit_index')
     if packages != expected_events:
         fail('commit_event_index')
     result=dict(outputs=outputs,commits=committed,snapshots=snapshots,
         journal_sha256=events[-1].sha256 if events else None,heads=heads,records=records,events=events)
+    if current_commits:
+        result['current_mapping_commits'] = current_commits
     committed_graph(result)
     return result
 
