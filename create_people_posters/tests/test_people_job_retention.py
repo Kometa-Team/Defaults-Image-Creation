@@ -1,5 +1,6 @@
 """Lifecycle retention: isolated owned fixtures; never production paths."""
 import json
+from pathlib import Path
 import os
 import time
 from unittest.mock import patch
@@ -186,6 +187,20 @@ def test_config_models_and_unknown_ownership_are_untouched(manager):
     foreign.mkdir()
     assert all(outcome.startswith('retained:') for _, outcome in manager.cleanup(dry_run=False))
     assert model.read_bytes() == b'preserve' and foreign.exists()
+
+
+def test_publication_receipts_accept_canonical_workspace_alias(manager, monkeypatch):
+    batch = published_job(manager, monkeypatch)
+    folder = manager.path(batch)
+    for row in list(manager.db.execute('SELECT rowid,source,prepared FROM publications')):
+        # Reproduce the lexical/canonical difference of Windows TEMP aliases
+        # deterministically on both platforms, without creating filesystem links.
+        paths = [str(folder.parent / '..' / folder.parent.name / batch / Path(row[key]).relative_to(folder))
+                 for key in ('source', 'prepared')]
+        manager.db.execute('UPDATE publications SET source=?,prepared=? WHERE rowid=?', (*paths, row['rowid']))
+    manager.db.commit()
+    assert manager.cleanup(dry_run=False, now=time.time() + 4 * 86400) == [(batch, 'cleaned')]
+    assert not folder.exists()
 
 
 def test_success_age_is_publication_age(manager, monkeypatch):

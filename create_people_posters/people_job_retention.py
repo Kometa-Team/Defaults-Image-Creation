@@ -278,9 +278,13 @@ def plan(config, jobs, state, *, now=None, only=None):
                     for key, digest in [('source', 'source_hash'), ('prepared', 'published_hash')]:
                         p = Path(receipt[key])
                         reject_links(p)
-                        if not p.is_absolute() or not p.resolve().is_relative_to(folder):
+                        resolved = p.resolve()
+                        if not p.is_absolute() or not resolved.is_relative_to(folder):
                             raise RetentionBlocked('publication_source_ownership_uncertain')
-                        rel = p.relative_to(folder).as_posix()
+                        # Windows TEMP can use an 8.3 alias while the workspace
+                        # was resolved to its long path. Derive membership and
+                        # the catalog key from the same canonical path.
+                        rel = resolved.relative_to(folder).as_posix()
                         if rel in files and files[rel]['sha256'] != receipt[digest]:
                             raise RetentionBlocked('publication_source_changed')
             else:

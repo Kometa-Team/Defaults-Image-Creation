@@ -10,7 +10,7 @@ from ci.people_storage_maintenance import regular
 ROOT = Path(__file__).resolve().parents[1]
 BASE = '120ed09a166ddfdc5380219aad35959c8a0de169'
 MANIFEST = ROOT / 'ci/people-job-retention-maintenance-v1.json'
-PIN = '7f2ef8dbbd120c6fbce410d20e249210f64d21eb574aaa22cbbf9482152074b5'
+PIN = 'ab68a85ddcb399b9ddf219b3e118a498030a18b82042c0fe467137178e784019'
 MEMBERS = frozenset({
     '.github/workflows/people-job-retention.yml',
     'ci/dependabot_maintenance.py',

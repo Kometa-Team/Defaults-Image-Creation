@@ -37,7 +37,7 @@
     },
     "create_people_posters/people_job_retention.py": {
       "before_sha256": null,
-      "sha256": "868c8bebb2bdf1000aa68014041b99b004723b3f61949214efac3211929c0056"
+      "sha256": "1c430e49ffeff3c60d05750a69b51e97103e7c6788e8cadb3952bcc7cacfcca9"
     },
     "create_people_posters/people_storage_watch.py": {
       "before_sha256": null,
@@ -53,7 +53,7 @@
     },
     "create_people_posters/tests/test_people_job_retention.py": {
       "before_sha256": null,
-      "sha256": "f7355551d03bcb74995519eb56111f605c1e6e4fff65805d819435a0a6e8afd1"
+      "sha256": "729292b80c18b1dced1a72b3b9292a171c847eaeae58125076e8b50d2a14aa3a"
     },
     "create_people_posters/tests/test_people_storage_watch.py": {
       "before_sha256": null,
