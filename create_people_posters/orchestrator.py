@@ -527,6 +527,13 @@ def cleanup_on_launch(manager):
         for batch, outcome in manager.cleanup(dry_run=False):
             print(f"[CLEANUP] {batch}: {outcome}")
     except (OSError, ValueError, sqlite3.Error) as error:
+        from create_people_posters.people_failures import failure_record
+        from create_people_posters.people_retention_state import atomic_json
+        failure = failure_record(error, 'startup_job_cleanup', 'managed_jobs')
+        try:
+            atomic_json(manager.state / 'job-retention' / 'launch-error.json', failure)
+        except (OSError, ValueError):
+            pass
         print(f"[WARN] Launch cleanup incomplete; retained jobs can be retried: {safe_exception(error)}", file=sys.stderr)
     finally:
         counts = getattr(manager, "last_cleanup_counts", None)
@@ -737,13 +744,20 @@ def _main(resources):
         LOCK_FILE = manager.state / "orchestrator.lock"
         acquire_lock()
         try:
-            # Protect an explicitly resumed workspace before considering older jobs.
-            if args.batch_id:
-                batch = manager.select(args.batch_id, args.new_batch, args.people_list, cleanup=False)
-                manager.activate(batch)
-                resources.callback(manager.deactivate, batch)
+            # Protect both explicit and automatic resumption before expiry.
+            resume = args.batch_id or (manager.resume_candidate() if not args.new_batch else None)
+            resume_error = None
+            if resume:
+                try:
+                    batch = manager.select(resume, args.new_batch, args.people_list, cleanup=False)
+                    manager.activate(batch)
+                    resources.callback(manager.deactivate, batch)
+                except (OSError, ValueError) as error:
+                    resume_error = error
             if _bool_env("PEOPLE_AUTO_CLEANUP", True) and not args.dry_run:
                 cleanup_on_launch(manager)
+            if resume_error is not None:
+                raise resume_error
             if batch is None:
                 batch = manager.select(None, args.new_batch, args.people_list, cleanup=False)
                 manager.activate(batch)

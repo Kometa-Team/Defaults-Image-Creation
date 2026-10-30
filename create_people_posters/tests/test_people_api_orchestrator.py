@@ -42,6 +42,71 @@ def invoke(monkeypatch, *args):
     return orch.main()
 
 
+@pytest.mark.parametrize('resume_mode', ['new', 'automatic', 'explicit'])
+def test_startup_cleanup_runs_and_protects_resumed_job(isolated, monkeypatch, resume_mode):
+    import time
+    from people_workspaces import Workspaces
+    manager = Workspaces(isolated)
+    old = manager.create(cleanup=False)
+    manager.set_status(old, 'no_work')
+    resume = manager.create(cleanup=False)
+    manager.set_status(resume, 'failed')
+    manager.db.execute('UPDATE jobs SET created=?,updated=?', (time.time() - 30 * 86400,) * 2)
+    manager.db.commit()
+    manager.close()
+    checks = []
+    real = Workspaces.cleanup
+    def cleanup(self, **kwargs):
+        checks.append((self.path(resume) / '.active').exists())
+        return real(self, **kwargs)
+    monkeypatch.setattr(Workspaces, 'cleanup', cleanup)
+    monkeypatch.setattr(orch, 'run_cmd', lambda *args, **kwargs: (0, None, None))
+    monkeypatch.setattr(orch, 'build_colorize_command', lambda py: [py, 'colorize_noncolor_ddcolor.py'])
+    monkeypatch.setenv('TMDB_KEY', 'NOT_A_REAL_TMDB_FIXTURE_SECRET_20261024')
+    args = ['--publish-mode', 'github_api', '--workspace-mode', 'batch', '--stop-after', 'ensure_repo']
+    args += ['--new-batch'] if resume_mode == 'new' else ['--batch-id', resume] if resume_mode == 'explicit' else []
+    invoke(monkeypatch, *args)
+    assert checks == [resume_mode != 'new']
+    assert not (isolated / 'jobs' / old).exists()
+    assert (isolated / 'jobs' / resume).exists() == (resume_mode != 'new')
+
+
+@pytest.mark.parametrize('content', ['{broken', '[]', 'null'])
+def test_corrupt_automatic_resume_does_not_prevent_other_startup_cleanup(isolated, monkeypatch, content):
+    import time
+    from people_workspaces import Workspaces
+    manager = Workspaces(isolated)
+    good = manager.create(cleanup=False)
+    manager.set_status(good, 'no_work')
+    manager.db.execute('UPDATE jobs SET updated=? WHERE id=?', (time.time() - 4 * 86400, good))
+    manager.db.commit()
+    bad = manager.create(cleanup=False)
+    manager.set_status(bad, 'failed')
+    (manager.path(bad) / 'manifest.json').write_text(content)
+    manager.close()
+    with pytest.raises(SystemExit) as error:
+        invoke(monkeypatch, '--stop-after', 'ensure_repo')
+    assert error.value.code == 2
+    assert not (isolated / 'jobs' / good).exists()
+    assert (isolated / 'jobs' / bad).exists()
+
+
+def test_launch_cleanup_failure_persists_safe_stack_and_same_correlation(isolated, capsys):
+    import re
+    from types import SimpleNamespace
+    def fail(**kwargs):
+        raise ValueError('private provider diagnostic must not escape')
+    manager = SimpleNamespace(state=isolated / 'state', cleanup=fail)
+    orch.cleanup_on_launch(manager)
+    output = capsys.readouterr()
+    correlation = re.search(r'correlation_id=([0-9a-f]{32})', output.err).group(1)
+    receipt = (manager.state / 'job-retention/launch-error.json').read_text()
+    value = json.loads(receipt)
+    assert value['correlation_id'] == correlation
+    assert value['locations']
+    assert 'private provider diagnostic' not in receipt + output.err
+
+
 def test_api_mode_without_clones_preserves_step_names(isolated, monkeypatch):
     calls = []
     monkeypatch.setattr(orch, "run_cmd", lambda title, argv, **kw: (calls.append(argv) or (0, None, None)))
@@ -197,7 +262,7 @@ def test_launch_cleanup_runs_once_under_shared_lock_including_resume(launch_jobs
     args=['--new-batch'] if selection=='new' else ['--batch-id',resume] if selection=='explicit' else []
     invoke(monkeypatch,*args,'--stop-after','ensure_repo')
     assert calls==[{'dry_run':False}]
-    assert manager.record(old)[0]['status']=='complete'
+    assert not manager.path(old).exists()
     assert not (manager.path(old)/'prepared').exists()
     assert (manager.path(resume)/'input').exists()
     assert not orch.LOCK_FILE.exists()
@@ -229,15 +294,14 @@ def test_launch_cleanup_frees_expired_data_before_new_batch_budget_check(launch_
     (manager.path(old)/'logs/large.log').write_bytes(b'x'*100000)
     monkeypatch.setenv('PEOPLE_JOBS_MAX_GIB',str(50*1024/1024**3))
     invoke(monkeypatch,'--new-batch','--stop-after','ensure_repo')
-    assert manager.record(old)[0]['status']=='complete'
-    assert (manager.path(old)/'logs/large.log').stat().st_size==32768
+    assert not manager.path(old).exists()
 
 
 def test_launch_cleanup_preserves_incomplete_active_and_external_data(launch_jobs,monkeypatch):
     import time
     from test_people_workspaces import published_job
     manager,old,resume=launch_jobs
-    statuses=['pending','processing','failed','partially_published','validated','validation_only']
+    statuses=['pending','processing','partially_published','validated']
     protected=[]
     for status in statuses:
         batch=manager.create(cleanup=False)
@@ -269,17 +333,17 @@ def test_launch_cleanup_preserves_incomplete_active_and_external_data(launch_job
 
 
 def test_launch_cleanup_error_is_visible_without_failing_resumed_job(launch_jobs,monkeypatch,capsys):
-    import people_workspaces
+    from create_people_posters import people_job_retention as retention
     manager,old,resume=launch_jobs
-    actual=people_workspaces.shutil.rmtree
-    def fail(path,*a,**kw):
-        if Path(path).is_relative_to(manager.path(old)):
+    actual=retention.unlink_verified
+    def fail(root,row):
+        if root == manager.path(old):
             raise OSError('cleanup denied')
-        return actual(path,*a,**kw)
-    monkeypatch.setattr(people_workspaces.shutil,'rmtree',fail)
+        return actual(root,row)
+    monkeypatch.setattr(retention,'unlink_verified',fail)
     invoke(monkeypatch,'--batch-id',resume,'--stop-after','ensure_repo')
     output=capsys.readouterr()
-    assert 'Launch cleanup incomplete' in output.err and 'error_category=io_error' in output.err
+    assert 'cleanup_interrupted correlation_id=' in output.out
     assert 'cleanup denied' not in output.err  # Raw exception text is no longer an output contract.
     assert 'eligible=1 deleted=0 retained=2' in output.out
     assert manager.record(resume)[0]['status']=='processing'

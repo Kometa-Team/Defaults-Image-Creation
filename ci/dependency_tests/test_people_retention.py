@@ -253,10 +253,15 @@ class PeopleRetentionTests(unittest.TestCase):
         manager=Workspaces(self.config/'..'/self.config.name)
         self.addCleanup(manager.close)
         p=self.config/'state/verified-retention/enrollment.json';p.parent.mkdir();p.write_text('{}')
-        with patch.object(worker,'ReadOnlyGitHub',return_value=self.remote):
+        manifest_path=self.config/'jobs'/self.job/'manifest.json'
+        manifest=json.loads(manifest_path.read_text());manifest['created']=self.now-500000
+        manifest_path.write_text(json.dumps(manifest))
+        with patch.object(worker,'apply_plan',side_effect=AssertionError('Legacy artwork cleaner must remain separate')):
             results=manager.cleanup(dry_run=False,now=self.now)
-        self.assertIn('automatic deletion awaiting review',results[0][1])
-        self.assertTrue((self.config/self.rows[0]['path']).exists())
+        self.assertEqual(results,[(self.job,'cleaned')])
+        self.assertFalse((self.config/'jobs'/self.job).exists())
+        self.assertTrue((self.config/'people_dirs/bw/A/Images/Legacy.jpg').exists())
+        self.assertEqual(p.read_text(),'{}')
 
     def test_routine_jobs_plan_uses_producer_catalog_without_audit_inventory(self):
         report,_=worker.build_jobs_plan(self.config,self.remote,now=self.now)
@@ -456,7 +461,10 @@ class PeopleRetentionTests(unittest.TestCase):
             lease.write_text(str(os.getpid()),encoding='ascii')
             Workspaces.deactivate(manager,self.job);maintain.assert_not_called()
             self.enroll();lease.write_text(str(os.getpid()),encoding='ascii')
-            Workspaces.deactivate(manager,self.job);maintain.assert_called_once_with(manager,completed=True)
+            # Startup owns job retention now. Releasing a job lease must not
+            # invoke the legacy cleaner with a stale implementation CI receipt.
+            Workspaces.deactivate(manager,self.job);maintain.assert_not_called()
+            self.assertFalse(lease.exists())
             maintain.reset_mock();lease.write_text('-999',encoding='ascii')
             Workspaces.deactivate(manager,self.job);maintain.assert_not_called()
             manager.jobs=self.config/'custom-jobs';lease.write_text(str(os.getpid()),encoding='ascii')

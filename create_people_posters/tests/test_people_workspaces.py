@@ -74,7 +74,7 @@ def test_configure_paths_without_model_movement(manager, monkeypatch):
         os.environ.update(old_env)
 
 
-def test_successful_cleanup_retains_receipts_models_and_logs(manager, monkeypatch):
+def test_successful_cleanup_removes_job_and_retains_durable_receipts_and_models(manager, monkeypatch):
     batch = published_job(manager, monkeypatch)
     model = manager.config / "models/rembg/model.onnx"
     model.parent.mkdir(parents=True)
@@ -91,18 +91,18 @@ def test_successful_cleanup_retains_receipts_models_and_logs(manager, monkeypatc
     assert model.read_bytes() == b"persistent"
     assert (manager.state / "publication_state.db").exists()
     assert (manager.state / "manifests" / (batch + ".json")).exists()
-    assert log.stat().st_size == 32768
-    assert manager.record(batch)[0]["status"] == "complete"
+    assert not manager.path(batch).exists()
+    assert manager.db.execute("SELECT status FROM jobs WHERE id=?", (batch,)).fetchone()[0] == "complete"
 
 
-@pytest.mark.parametrize("status", ["pending", "processing", "generated", "validated", "partially_published", "failed"])
+@pytest.mark.parametrize("status", ["pending", "processing", "generated", "validated", "partially_published"])
 def test_unpublished_files_never_expire(manager, status):
     batch = manager.create()
     image = manager.path(batch) / "posters/unpublished.jpg"
     image.write_bytes(b"only-copy")
     manager.set_status(batch, status)
     result = manager.cleanup(dry_run=False, now=time.time() + 100 * 86400)
-    assert result == [(batch, "retained: unpublished; manual recovery required")]
+    assert result == [(batch, "retained: incomplete_or_inconsistent_lifecycle")]
     assert image.read_bytes() == b"only-copy"
 
 
@@ -111,26 +111,25 @@ def test_cleanup_requires_ledger_not_just_manifest(manager):
     manager.set_status(batch, "cleanup_eligible")
     with manager.db:
         manager.db.execute("UPDATE jobs SET published=? WHERE id=?", (time.time() - 10 * 86400, batch))
-    assert manager.cleanup(dry_run=False)[0][1] == "retained: publication receipts incomplete"
+    assert manager.cleanup(dry_run=False)[0][1] == "retained: publication_receipts_incomplete"
 
 
 
 
 def test_cleanup_interrupt_resumes(manager, monkeypatch):
     batch = published_job(manager, monkeypatch)
-    import people_workspaces
-    original = people_workspaces.shutil.rmtree
-    def fail(path):
-        raise OSError("interrupted cleanup")
-    monkeypatch.setattr(people_workspaces.shutil, "rmtree", fail)
-    with pytest.raises(OSError, match="interrupted"):
-        manager.cleanup(dry_run=False, now=time.time() + 4 * 86400)
+    from create_people_posters import people_job_retention as retention
+    original = retention.unlink_verified
+    def fail(root, row):
+        original(root, row)
+        raise OSError("interrupted after unlink")
+    monkeypatch.setattr(retention, "unlink_verified", fail)
+    result = manager.cleanup(dry_run=False, now=time.time() + 4 * 86400)
+    assert "cleanup_interrupted" in result[0][1]
     assert manager.last_cleanup_counts == {"eligible":1,"deleted":0,"retained":1}
-    assert manager.record(batch)[0]["status"] == "cleanup_eligible"
-    monkeypatch.setattr(people_workspaces.shutil, "rmtree", original)
+    monkeypatch.setattr(retention, "unlink_verified", original)
     manager.cleanup(dry_run=False, now=time.time() + 4 * 86400)
-    assert manager.record(batch)[0]["status"] == "complete"
-
+    assert not manager.path(batch).exists()
 
 @pytest.mark.parametrize("batch", ["..", "../outside", "/absolute", "C:/outside", "", "bad-id"])
 def test_batch_traversal_prevented(manager, batch):
@@ -148,8 +147,7 @@ def test_symlink_prevents_any_cleanup(manager, monkeypatch, tmp_path):
         link.symlink_to(outside, target_is_directory=True)
     except OSError:
         pytest.skip("OS account cannot create symlinks")
-    with pytest.raises(ValueError, match="Symlink"):
-        manager.cleanup(dry_run=False, now=time.time() + 4 * 86400)
+    assert manager.cleanup(dry_run=False, now=time.time() + 4 * 86400)[0][1].startswith('retained:')
     assert (outside / "important.jpg").read_bytes() == b"do-not-delete"
 
 
@@ -157,7 +155,7 @@ def test_active_job_not_cleaned(manager, monkeypatch):
     batch = published_job(manager, monkeypatch)
     manager.activate(batch)
     try:
-        assert manager.cleanup(dry_run=False, now=time.time() + 4 * 86400) == []
+        assert "active_or_recovery" in manager.cleanup(dry_run=False, now=time.time() + 4 * 86400)[0][1]
     finally:
         manager.deactivate(batch)
 
@@ -167,7 +165,7 @@ def test_new_unpublished_image_after_success_is_retained(manager, monkeypatch):
     image = manager.path(batch) / "posters/new-unpublished.jpg"
     image.write_bytes(b"only copy")
     result = manager.cleanup(dry_run=False, now=time.time() + 4 * 86400)
-    assert result == [(batch, "retained: local image changed after publication")]
+    assert result == [(batch, "retained: local_image_changed_after_publication")]
     assert image.read_bytes() == b"only copy"
 
 
@@ -184,8 +182,7 @@ def test_windows_junction_prevents_cleanup(manager, monkeypatch, tmp_path):
     if result.returncode:
         pytest.skip("Account/filesystem cannot create junctions")
     try:
-        with pytest.raises(ValueError, match="reparse"):
-            manager.cleanup(dry_run=False, now=time.time() + 4 * 86400)
+        assert manager.cleanup(dry_run=False, now=time.time() + 4 * 86400)[0][1].startswith('retained:')
         assert image.exists()
     finally:
         os.rmdir(link)
