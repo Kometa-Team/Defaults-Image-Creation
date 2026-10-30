@@ -11,6 +11,10 @@
       "before_sha256": "5a13d4e58b56981d964c5c0aa30edab4a5547e861c60d21979ca0d69a6668d96",
       "sha256": "093d9c0d128a1cd33890486bbeb5cacfbfcca5b92d514f35a481a4c0320cfd37"
     },
+    "ci/dependency_tests/test_dependabot_audit.py": {
+      "before_sha256": "e29a6add045e7f3583ef7568a931643b1748f0109352bdf51b8f5649e4ec3c74",
+      "sha256": "a3bc8103a127072773c46c94062e5dfa05f82cde3182c77f275cd7e8c8ab02b4"
+    },
     "ci/dependency_tests/test_people_colorize_maintenance.py": {
       "before_sha256": "18267a87960ac4e46637534251676f87fc6ba6c833801a1c9f59292d5ba3e52d",
       "sha256": "8a8565f8377fbfc0d4d3e8487fbec3bc40dbb74b01d018da531b71969273db09"
