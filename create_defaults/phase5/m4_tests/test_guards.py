@@ -18,8 +18,8 @@ from create_defaults.phase4.tests.transaction_samples import transaction
 from create_defaults.phase5.m4_tests.helpers import rename, epoch, candidate, prepare_update, commit_update
 
 
-def test_P5_T17_old_M5_retry_still_rejects_after_RENAME(m4_case):
-    case=m4_case;rename(case)
+def test_P5_T17_old_M5_retry_still_rejects_after_RENAME(m7_case):
+    case=m7_case;rename(case)
     registry=case['row'][1].registry;before=mappings.recover(registry)
     with pytest.raises(BulkError,match='m6_mapping_requires_current_adapter'):
         apply.commit_synthetic(case['update_tx'],expected_snapshot_sha256=case['update_snapshot'].sha256,

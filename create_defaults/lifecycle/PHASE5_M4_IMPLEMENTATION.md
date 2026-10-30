@@ -135,8 +135,9 @@ precommit faults, lost acknowledgement and subsequent M6 retirement. Metadata
 negative controls enter the real cohort guard; they do not claim unsupported
 positive composition or bypass production guards.
 
-The fault/recovery fixtures use an independent actual native ADD then RENAME;
-the full native sequence independently retains its initial material M5 UPDATE.
+Mapping and unrelated-member guards start from an actual native ADD; fault and
+recovery fixtures additionally commit RENAME. The full native sequence and the
+old M5 retry guard independently retain their initial material M5 UPDATE.
 No archived grants or portable fixture checkpoints establish authority. Reusing
 the already committed rename's definition as caller input avoids an extra full
 recovery to serialize YAML; the real selector still independently replays and

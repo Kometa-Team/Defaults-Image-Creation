@@ -4,8 +4,20 @@ from create_defaults.phase4.m7_tests.conftest import m7_seed, m7_case
 from create_defaults.phase4.tests.transaction_samples import transaction_case
 import pytest
 
-# Fixture aliases preserve the original native constructor and isolation.
-m4_case = m7_case
+@pytest.fixture(scope='session')
+def mapping_seed():
+    """One real ADD is sufficient for mapping and unrelated-member guards."""
+    from create_defaults.bulk.lifecycle import apply
+    from create_defaults.phase4.tests.transaction_samples import transaction
+    for original in transaction_seed.__wrapped__():
+        tx,snapshot=transaction(original)
+        apply.commit_synthetic(tx,expected_snapshot_sha256=snapshot.sha256,authority=original['authority'])
+        yield dict(original,add_snapshot=snapshot)
+
+
+@pytest.fixture
+def m4_case(mapping_seed):
+    yield from transaction_case.__wrapped__(mapping_seed)
 
 
 @pytest.fixture(scope='session')

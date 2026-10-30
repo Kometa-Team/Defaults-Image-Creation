@@ -12,7 +12,7 @@
   "members": {
     ".github/workflows/phase5-m4-validation.yml": {
       "before_sha256": null,
-      "sha256": "c4728dceea112c3fe8a462a3c735ce07367911afb4ce7543df4ed9c1dd081b2a"
+      "sha256": "9b918245f6ce6d31054c8d4164d10a480bdcb127b811333e10bb3943aa357e6c"
     },
     "ci/dependabot_maintenance.py": {
       "before_sha256": "5a13d4e58b56981d964c5c0aa30edab4a5547e861c60d21979ca0d69a6668d96",
@@ -28,7 +28,7 @@
     },
     "ci/phase5-m4-test-ids.json": {
       "before_sha256": null,
-      "sha256": "e61414e4ecbfb38e9d8aaef9c29f10d6f57950a2b4dfd4623a845f03db840f1d"
+      "sha256": "ea1e7d70ea270d9f9b21f6120d5728446a1a53dd8136bb5a13aede790c83e851"
     },
     "ci/phase5_m3_maintenance.py": {
       "before_sha256": "0b482f323a62a65867946ea54ce791b7aa532f71413d7a10c87614ec548b767c",
@@ -36,7 +36,7 @@
     },
     "ci/phase5_m4.py": {
       "before_sha256": null,
-      "sha256": "77084d55bb545233ab87a97214517b5b97c307fd2394e24d47418eb6e2383063"
+      "sha256": "276eb9d6898413533def73e7516a0bf88204c6cce5e52de265c70f91e3a857aa"
     },
     "create_defaults/bulk/lifecycle/apply.py": {
       "before_sha256": "65b5df9290044fece61aa921cca910b6917007fd88a2ff76b68d6613b77c557e",
@@ -60,7 +60,7 @@
     },
     "create_defaults/lifecycle/PHASE5_M4_CI_MAINTENANCE.md": {
       "before_sha256": null,
-      "sha256": "3760daf23ddc5450be69b2774bf8eef849e3edb9255d636b20a1d447a9b6931b"
+      "sha256": "2db877ae8ac9eb7799fc25df7a8cac08184e83aaf30519132e4e1cd5b476bcc1"
     },
     "create_defaults/lifecycle/PHASE5_M4_COVERAGE.json": {
       "before_sha256": null,
@@ -68,7 +68,7 @@
     },
     "create_defaults/lifecycle/PHASE5_M4_IMPLEMENTATION.md": {
       "before_sha256": null,
-      "sha256": "05512f427d9c095236b523405b757cfd6fb57bc8af5462b1a38820ad4a8df906"
+      "sha256": "e9cd16215de436ef4cbec79d3dab64b74aeaacecb5feba0920d2ff929c8c149f"
     },
     "create_defaults/lifecycle/ROADMAP.md": {
       "before_sha256": "f776dea7e1d719439df2fb1f6c8ddea30297eda6bf63f30e9f93cea7f502ca96",
@@ -76,7 +76,7 @@
     },
     "create_defaults/phase5/m4_tests/conftest.py": {
       "before_sha256": null,
-      "sha256": "018df7fd3eeba3274e69b84495afa28bfbb74a35cd0f75eb937d741fb3be7a57"
+      "sha256": "bcf039ad7527e6b13df5555dece3c260c1267ee8665efdd7906f15f9d1e78027"
     },
     "create_defaults/phase5/m4_tests/helpers.py": {
       "before_sha256": null,
@@ -84,11 +84,11 @@
     },
     "create_defaults/phase5/m4_tests/test_current_mapping.py": {
       "before_sha256": null,
-      "sha256": "3c0fecdad598270ffdebd4318e7192a12abd07770c86139976e78ca205ff8b0d"
+      "sha256": "fee4f9dcdebc728b78fe86c400626f9ed2a641e2d80d8908777b8b330faf4b34"
     },
     "create_defaults/phase5/m4_tests/test_guards.py": {
       "before_sha256": null,
-      "sha256": "55152bbab506dd2a35c86b7f617e944f39365df7f535e8e831dd9ddc9a2c832d"
+      "sha256": "916a5ae59e5fdfea6ca13203c11558ccca0615426652869b4b505ebd779fbbe7"
     }
   }
 }

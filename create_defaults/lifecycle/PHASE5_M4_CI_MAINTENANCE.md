@@ -59,7 +59,9 @@ independent review. M5–M7 and Phase 6 remain unstarted.
 The additive M4 native fault/recovery groups are partitioned after observing a
 Windows timeout; the 15-minute cap is unchanged. Their independent native seed
 needs ADD then RENAME, while the complete sequence separately retains its real
-initial M5 UPDATE. No original assertion, validator or live capability is skipped.
+initial M5 UPDATE. Mapping and unrelated-member guards likewise use a real ADD
+baseline; the old M5 retry guard runs separately with its actual M5 UPDATE.
+No original assertion, validator or live capability is skipped.
 
 The additive M4 Windows/Linux workflow retains read-only permissions, pinned
 actions, existing requirements and 15-minute limits. Every inherited mandatory

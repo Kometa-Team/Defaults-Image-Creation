@@ -19,7 +19,6 @@
     "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T18_cross_owner_epoch_never_creates_an_intent"
   ],
   "catalog": [
-    "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T17_old_M5_retry_still_rejects_after_RENAME",
     "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T18_literal_case_unicode_and_punctuation_mapping[fixture]",
     "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T18_literal_case_unicode_and_punctuation_mapping[Fixture Pok\\xe9mon]",
     "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T18_literal_case_unicode_and_punctuation_mapping[Fixture (A & B)!]",
@@ -30,6 +29,9 @@
     "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T20_changed_or_malicious_current_catalog_blocks[path-traversal]",
     "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T20_changed_or_malicious_current_catalog_blocks[locked-font]",
     "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T12_T20_changed_or_malicious_current_catalog_blocks[dependency]"
+  ],
+  "legacy": [
+    "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T17_old_M5_retry_still_rejects_after_RENAME"
   ],
   "sequence": [
     "create_defaults/phase5/m4_tests/test_current_mapping.py::test_P5_T16_native_current_mapping_sequence"

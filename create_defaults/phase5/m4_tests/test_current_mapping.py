@@ -13,8 +13,8 @@ from create_defaults.bulk.lifecycle.recovery import recover
 from create_defaults.phase5.m4_tests.helpers import rename, epoch, commit_update
 
 
-def test_P5_T16_native_current_mapping_sequence(m4_case):
-    case=m4_case
+def test_P5_T16_native_current_mapping_sequence(m7_case):
+    case=m7_case
     registry=case['row'][1].registry
     original=registry.view().entries()
     plan=rename(case,name='fixture')
