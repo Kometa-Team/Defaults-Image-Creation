@@ -3,6 +3,7 @@ import math
 import os
 from pathlib import Path
 import shutil
+import sqlite3
 import stat
 import time
 
@@ -49,6 +50,23 @@ def timestamp(value, fallback):
     return value if type(value) in {int, float} and math.isfinite(value) and value >= 0 else fallback
 
 
+def verified_completion(manager, folder, row):
+    """A fulfilled publication can resolve a hold; a status edit cannot."""
+    if row.get('status') not in {'published', 'cleanup_eligible', 'complete'}:
+        return None
+    published = timestamp(row.get('published'), None)
+    if published is None:
+        return None
+    try:
+        from create_people_posters.people_job_retention import evidence, publication_proof, recovery_blocker
+        if recovery_blocker(folder):
+            return None
+        publication_proof(folder.name, evidence(manager.config, manager.state))
+        return published
+    except (OSError, ValueError, KeyError, TypeError, AttributeError, sqlite3.Error):
+        return None
+
+
 def report(manager, *, now=None, persist=True, announce=False):
     now = time.time() if now is None else now
     budget = positive_setting('PEOPLE_JOBS_MAX_GIB', 20) * 1024 ** 3
@@ -85,12 +103,20 @@ def report(manager, *, now=None, persist=True, announce=False):
         base = (row.get('published') if status in {'published', 'cleanup_eligible', 'complete'} else None)
         base = timestamp(base, timestamp(row.get('updated'), timestamp(row.get('created'), initial)))
         deadline = base + review_days * 86400
-        deadline = min(deadline, timestamp(earlier.get(job, {}).get('review_deadline'), deadline))
+        prior = earlier.get(job, {})
+        verified = prior.get('verified_publication')
+        prior_deadline = timestamp(prior.get('review_deadline'), deadline)
+        if prior and status in {'published', 'cleanup_eligible', 'complete'} and row.get('published') != verified:
+            completed = verified_completion(manager, folder, row)
+            if completed is not None:
+                verified, prior_deadline = completed, deadline
+        deadline = min(deadline, prior_deadline)
         outcome = outcomes.get(job)
         reason = (outcome.removeprefix('retained: ') if outcome and outcome != 'cleaned'
                   else cached.get('reason', earlier.get(job, {}).get('reason', 'awaiting_lifecycle_cleanup')))
         jobs.append(dict(id=job, bytes=by_job.get(job, 0), status=status, reason=reason,
-                         first_observed=initial, review_deadline=deadline, review_overdue=now >= deadline))
+                         first_observed=initial, review_deadline=deadline, review_overdue=now >= deadline,
+                         verified_publication=verified))
     total = jobs_bytes + state_bytes
     measurement_complete = not job_errors and not state_errors
     free = min(shutil.disk_usage(manager.jobs).free, shutil.disk_usage(manager.state).free)

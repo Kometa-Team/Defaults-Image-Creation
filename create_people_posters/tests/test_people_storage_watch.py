@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import pytest
 
-from test_people_workspaces import manager
+from test_people_workspaces import manager, published_job
 from test_people_job_retention import terminal
 from create_people_posters import people_storage_watch as watch
 
@@ -84,6 +84,31 @@ def test_retry_does_not_silently_extend_review_deadline(manager):
     second = watch.report(manager)
     assert second['jobs'][0]['review_deadline'] == first['jobs'][0]['review_deadline']
     assert second['overdue_jobs'] == 1
+
+
+def test_verified_success_resolves_review_hold_without_waiting_for_expiry(manager, monkeypatch):
+    from people_publication_state import PublicationState
+    batch = published_job(manager, monkeypatch)
+    manager.set_status(batch, 'failed')
+    manager.db.execute('UPDATE jobs SET updated=? WHERE id=?', (time.time() - 30 * 86400, batch))
+    manager.db.commit()
+    assert watch.report(manager)['overdue_jobs'] == 1
+    ledger = PublicationState(manager.state)
+    try:
+        manager.confirm_published(batch, ledger)
+    finally:
+        ledger.close()
+    assert watch.report(manager)['overdue_jobs'] == 0
+    manager.check_budget(admitting=True)
+
+
+def test_status_change_without_publication_evidence_cannot_clear_hold(manager):
+    batch = terminal(manager, 'failed', 30)
+    assert watch.report(manager)['overdue_jobs'] == 1
+    manager.set_status(batch, 'cleanup_eligible')
+    manager.db.execute('UPDATE jobs SET published=? WHERE id=?', (time.time(), batch))
+    manager.db.commit()
+    assert watch.report(manager)['overdue_jobs'] == 1
 
 
 def test_completed_receipts_expire_but_interrupted_intents_remain(manager):

@@ -51,6 +51,8 @@ resume below the storage limit. A retry does not silently extend the previously
 recorded deadline. This forces a visible decision to finish recovery or verify
 that retained material can be retired; it never deletes rollback evidence to
 make room. The report identifies the exact job, bytes, reason and deadline.
+Verified publication with no outstanding recovery markers resolves the hold;
+editing a status or retrying without that evidence does not clear it.
 
 `PEOPLE_CLEANUP_RECEIPT_RETENTION_DAYS=14` expires this worker's completed cleanup
 receipts and associated error records only after the job directory is absent
