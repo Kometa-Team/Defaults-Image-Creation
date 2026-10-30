@@ -69,5 +69,3 @@ def test_launch_cleanup_failure_persists_safe_stack_and_same_correlation(isolate
     assert value['correlation_id'] == correlation
     assert value['locations']
     assert 'private provider diagnostic' not in receipt + output.err
-
-

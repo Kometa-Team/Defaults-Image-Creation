@@ -65,7 +65,7 @@
     },
     "create_people_posters/tests/test_people_startup_retention.py": {
       "before_sha256": null,
-      "sha256": "4efa12f292155db723984a69df7f62a29d5b532c6ac3d76162ad474b19b0f40e"
+      "sha256": "f461ef9d09ed0c989a738801caa6cfb4ff6b714051e5baead70cce4e9aabca5c"
     },
     "create_people_posters/tests/test_people_storage_watch.py": {
       "before_sha256": null,
