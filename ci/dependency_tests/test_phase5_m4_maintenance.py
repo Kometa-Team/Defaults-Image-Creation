@@ -98,6 +98,13 @@ class Phase5M4MaintenanceTests(unittest.TestCase):
         from ci.phase4_m7 import ALLOWED
         self.assertFalse(maintenance.scope_members()&ALLOWED)
 
+    def test_foreign_planning_repository_does_not_inherit_runtime_scope(self):
+        from ci import phase4_m7
+        with patch.object(phase4_m7,'ROOT',ROOT/'unowned-inspection-target'):
+            self.assertEqual(maintenance.scope_members(),frozenset())
+            with patch.object(maintenance,'verify_checkout'),self.assertRaisesRegex(ValueError,'Unapproved M4 scope'):
+                maintenance.verify_scope(ROOT,maintenance.BASE,set(maintenance.FROZEN))
+
     def test_closed_coverage_has_every_exact_package_and_variant(self):
         value=json.loads((ROOT/'create_defaults/lifecycle/PHASE5_M4_COVERAGE.json').read_bytes())
         release=json.loads((ROOT/'create_defaults/bulk/contracts/categories/data/release-v1.json').read_bytes())

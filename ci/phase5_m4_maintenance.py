@@ -10,7 +10,7 @@ from ci.people_storage_maintenance import regular
 ROOT=Path(__file__).resolve().parents[1]
 BASE='120ed09a166ddfdc5380219aad35959c8a0de169'
 MANIFEST=ROOT/'ci/phase5-m4-maintenance-v1.json'
-PIN='a438bb63ae2371a92ad233aa4fc201f84ebdb17889367f555f0a0497680e551c'
+PIN='32dfc99236994f2ce862b41b6c36aaa0c241ca263686995ec17a0935d685dfbf'
 MEMBERS=frozenset({
     'ci/phase5_m3_maintenance.py','ci/dependabot_maintenance.py',
     'ci/dependency_tests/test_phase5_m3_maintenance.py',
@@ -104,6 +104,12 @@ def historical_bytes(root,name,current):
 
 
 def scope_members():
+    # A caller inspecting a different/minimal repository cannot inherit the
+    # runtime allowance owned by this exact source checkout. That repository
+    # must load its own reviewed policy from its own checkout.
+    from ci.phase4_m7 import ROOT as policy_root
+    if Path(policy_root).resolve()!=ROOT.resolve():
+        return frozenset()
     return (MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}
 
 

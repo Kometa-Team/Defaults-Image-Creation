@@ -37,6 +37,12 @@ The existing M3 test keeps its ID and exact old assertions after that verified
 projection. New independent controls reject tamper, rollback, missing files,
 manifest resealing, unknown membership, deletion, rename and symlink modes.
 
+The M4 scope belongs only to the checkout that owns its source/verifier. An
+inspection of a different or minimal planning repository cannot inherit these
+runtime allowances. Its original unknown-runtime rejection remains in place;
+neither its missing history nor a policy module from another checkout supplies
+the exact M4 prerequisite. Existing M7 tests and assertions remain unchanged.
+
 Exactly three frozen runtime seams change: the original atomic coordinator can
 consume one concrete current transaction, native recovery can verify its exact
 immutable lineage against the accepted prefix, and M6 replay can consume only

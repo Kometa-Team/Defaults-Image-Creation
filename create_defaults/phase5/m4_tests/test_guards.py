@@ -227,8 +227,9 @@ def test_P5_T14_T27_corrupt_committed_current_evidence_blocks(prepared_current,t
     path=store.root/'objects'/(checksum+'.json');raw=path.read_bytes()
     try:
         path.write_bytes(b'{}')
-        with pytest.raises(BulkError,match='corrupt_contract_evidence'):
+        with pytest.raises(BulkError) as error:
             mappings.recover(r)
+        assert error.value.code=='corrupt_contract_evidence'
     finally:
         path.write_bytes(raw)
 
