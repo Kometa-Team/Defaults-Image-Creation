@@ -21,7 +21,7 @@
     },
     "ci/dependency_tests/test_people_job_retention_maintenance.py": {
       "before_sha256": null,
-      "sha256": "18e13f154cc06e6cc16b707a53ea2d682c321a94fa0d22404091e3fcb039670b"
+      "sha256": "c8e03edba1c697e73995d584d5026099273965098479297daf0a7f064fe50258"
     },
     "ci/dependency_tests/test_people_retention.py": {
       "before_sha256": "d9eb0d9bdf05ec02c052fadde71e7a99f30216cc7ae99a6aed60f1fff0e2dc66",

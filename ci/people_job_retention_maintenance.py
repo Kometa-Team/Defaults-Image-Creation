@@ -10,7 +10,7 @@ from ci.people_storage_maintenance import regular
 ROOT = Path(__file__).resolve().parents[1]
 BASE = 'cd8d4eecd64f5bff201e8ecd7daccebd955f87af'
 MANIFEST = ROOT / 'ci/people-job-retention-maintenance-v1.json'
-PIN = '3dcee7c7848edfc510f19db72036714e6babc3cb27f7868a68891d000530b5d7'
+PIN = '71afd736a86139d85a8f3406e41047d485908a728cd6977e134bc17dfaa9141b'
 MEMBERS = frozenset({
     '.github/workflows/people-job-retention.yml',
     'ci/dependabot_maintenance.py',
@@ -97,16 +97,18 @@ def verify_checkout(root=None):
     value = manifest()
     from ci.people_colorize_maintenance import _head
     _ancestry(str(root), _head(root))
+    from ci.people_readme_maintenance import _regular_files
+    # Recheck every member and shared ancestor on every pass. Only path
+    # arithmetic is cached by this existing checker, never filesystem evidence.
+    paths = _regular_files(root, MEMBERS | ANCHORS)
     for name, binding in value['members'].items():
-        if sha(regular(root, name).read_bytes()) != binding['sha256']:
+        if sha(paths[name].read_bytes()) != binding['sha256']:
             raise ValueError('Unreviewed startup-retention successor: ' + name)
         if binding['before_sha256'] is None:
             if _baseline_entry(name):
                 raise ValueError('Startup-retention addition already exists: ' + name)
         elif sha(_old(name)) != binding['before_sha256']:
             raise ValueError('Changed startup-retention predecessor: ' + name)
-    for name in ANCHORS:
-        regular(root, name)
     return value
 
 

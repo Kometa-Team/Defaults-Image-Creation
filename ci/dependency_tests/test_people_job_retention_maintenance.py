@@ -2,10 +2,12 @@
 from copy import deepcopy
 import json
 from pathlib import Path
+import stat
 import subprocess
 import sys
 import tempfile
 import unittest
+from types import SimpleNamespace
 from unittest.mock import patch
 
 from ci import people_job_retention_maintenance as maintenance
@@ -56,6 +58,27 @@ class StartupRetentionMaintenanceTests(unittest.TestCase):
                 return replacement if path == maintenance.MANIFEST else original(path)
             with self.subTest(field=field), patch.object(Path, 'read_bytes', changed), self.assertRaises(ValueError):
                 maintenance.manifest()
+
+    def test_each_pass_rechecks_shared_directories_without_caching_metadata(self):
+        original = Path.lstat
+        calls = []
+        def observed(path):
+            calls.append(path)
+            return original(path)
+        for _ in range(2):
+            calls.clear()
+            with patch.object(Path, 'lstat', observed):
+                maintenance.verify_checkout()
+            # One manifest-path check and one shared-directory check per pass.
+            self.assertEqual(calls.count(ROOT), 2)
+            self.assertEqual(calls.count(ROOT / 'create_people_posters'), 1)
+        ancestor = ROOT / 'create_people_posters/tests'
+        def linked(path):
+            if path == ancestor:
+                return SimpleNamespace(st_mode=stat.S_IFLNK | 0o777, st_file_attributes=0)
+            return original(path)
+        with patch.object(Path, 'lstat', linked), self.assertRaisesRegex(ValueError, 'links or reparse'):
+            maintenance.verify_checkout()
 
     def test_scope_rejects_unlisted_deletions_links_renames_and_incomplete_diff(self):
         with patch.object(maintenance, 'verify_checkout'):
