@@ -12,12 +12,16 @@ def mapping_seed():
     for original in transaction_seed.__wrapped__():
         tx,snapshot=transaction(original)
         apply.commit_synthetic(tx,expected_snapshot_sha256=snapshot.sha256,authority=original['authority'])
-        yield dict(original,add_snapshot=snapshot)
+        # M6's original helper reads this field to select the member and its
+        # definition. It references the accepted ADD here, without fabricating
+        # an UPDATE operation or receipt.
+        yield dict(original,add_snapshot=snapshot,update_snapshot=snapshot)
 
 
 @pytest.fixture
-def m4_case(mapping_seed):
-    yield from transaction_case.__wrapped__(mapping_seed)
+def m4_case(mapping_seed,request):
+    for case in transaction_case.__wrapped__(mapping_seed):
+        yield dict(case,label=request.node.name)
 
 
 @pytest.fixture(scope='session')
