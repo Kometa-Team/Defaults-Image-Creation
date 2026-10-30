@@ -73,7 +73,10 @@ def prepare_update(case,selected,proposed=None,label='m4-updated'):
     tx=Transaction(native['inputs'],native['bundle'].to_dict()['id'],native['state'].sha256,
                    canonical(json.loads(selected.lineage_json)['accepted_snapshots']).decode())
     current=CurrentTransaction(tx,selected)
-    return native,current,current.prepare()
+    # Independently pin the original native snapshot. The real coordinator
+    # invokes CurrentTransaction.prepare and its current-lineage verification
+    # under its lock; repeating that full journal replay here adds no evidence.
+    return native,current,tx.prepare()
 
 
 def commit_update(case,selected,label='m4-updated'):

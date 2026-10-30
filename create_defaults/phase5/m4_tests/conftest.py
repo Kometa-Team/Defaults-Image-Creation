@@ -25,6 +25,32 @@ def m4_case(mapping_seed,request):
 
 
 @pytest.fixture(scope='session')
+def sequence_seed():
+    """The original native ADD/UPDATE path, without a redundant final report."""
+    from create_defaults.bulk.lifecycle import apply
+    from create_defaults.bulk.lifecycle.operations import propose
+    from create_defaults.phase4.tests.transaction_samples import reviewed, transaction, update_candidate
+    for original in transaction_seed.__wrapped__():
+        trial,context,_,_=original['row']
+        add_tx,added=transaction(original)
+        add_result=apply.commit_synthetic(add_tx,expected_snapshot_sha256=added.sha256,authority=original['authority'])
+        proposed,frozen=update_candidate(original,label='m4-sequence-update')
+        ctx=propose(context.registry,before=frozen,candidate=proposed,
+                    identity='synthetic.operation.m4-sequence-update',operation='UPDATE')
+        updated=reviewed(trial,ctx,label='m4-sequence-updated')
+        tx,snapshot=transaction(updated,{i:add_result['snapshot_sha256'] for i in proposed.graph.index().outputs})
+        result=apply.commit_synthetic(tx,expected_snapshot_sha256=snapshot.sha256,authority=updated['authority'])
+        assert result['snapshot_sha256']==snapshot.sha256 and result['isolated_committed']
+        yield dict(updated,add_snapshot=added,update_snapshot=snapshot,update_tx=tx)
+
+
+@pytest.fixture
+def sequence_case(sequence_seed,request):
+    for case in transaction_case.__wrapped__(sequence_seed):
+        yield dict(case,label=request.node.name)
+
+
+@pytest.fixture(scope='session')
 def scope_context():
     from create_defaults.bulk.lifecycle.previews import CompositionTrial
     from create_defaults.phase4.tests.composition_samples import poster

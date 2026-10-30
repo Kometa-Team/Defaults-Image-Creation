@@ -68,7 +68,7 @@
     },
     "create_defaults/lifecycle/PHASE5_M4_IMPLEMENTATION.md": {
       "before_sha256": null,
-      "sha256": "e9cd16215de436ef4cbec79d3dab64b74aeaacecb5feba0920d2ff929c8c149f"
+      "sha256": "f88c0dceeadad4a5aee19d6d04d7e6b6fc521f3232c69a61e670bdde97449459"
     },
     "create_defaults/lifecycle/ROADMAP.md": {
       "before_sha256": "f776dea7e1d719439df2fb1f6c8ddea30297eda6bf63f30e9f93cea7f502ca96",
@@ -76,15 +76,15 @@
     },
     "create_defaults/phase5/m4_tests/conftest.py": {
       "before_sha256": null,
-      "sha256": "8773f6d410914d0362c407dabae4a41022b1aebe47b3865deb77e5b6288fc55c"
+      "sha256": "b4d8a44000217c190743b11b84156948032b009653cff018d52b322d3f98e9e5"
     },
     "create_defaults/phase5/m4_tests/helpers.py": {
       "before_sha256": null,
-      "sha256": "eac2c7f2adfac6c75bb372a22797ea614bb045038d772be878063b71905e80b2"
+      "sha256": "edce31154936864b18dc1cb37fe9545ce225848b6349ab8017929d0046350e88"
     },
     "create_defaults/phase5/m4_tests/test_current_mapping.py": {
       "before_sha256": null,
-      "sha256": "fee4f9dcdebc728b78fe86c400626f9ed2a641e2d80d8908777b8b330faf4b34"
+      "sha256": "6354c8b026c3313725b2cdbbe04c12d00f7de3b66eea0529a90b13d51e8b1d9d"
     },
     "create_defaults/phase5/m4_tests/test_guards.py": {
       "before_sha256": null,

@@ -144,6 +144,13 @@ recovery to serialize YAML; the real selector still independently replays and
 compares the committed mapping. Original Transaction preparation runs once per
 prepared value. No native validator is mocked or removed. Heavy fault/recovery
 groups are partitioned to retain the existing Windows time budget.
+The full sequence constructs its ADD/UPDATE with those same original native
+APIs, without a redundant fixture-end recovery report. Hot and cold mapping
+replay both remain mandatory; an exact journal-event count binds all three
+native commits to the three immutable snapshots without a third full replay.
+The caller pins the original native prepared snapshot; the coordinator still
+executes the concrete current adapter's full preparation and lineage guards
+under its lock.
 
 The additive workflow runs bounded exact-ID groups on Windows/Linux with the
 existing requirements, pinned actions, read-only permissions and 15-minute caps.

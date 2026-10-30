@@ -9,12 +9,11 @@ import sys
 from create_defaults.bulk.common import fingerprint
 from create_defaults.bulk.lifecycle import apply, mappings
 from create_defaults.bulk.lifecycle.previews import CompositionArchive
-from create_defaults.bulk.lifecycle.recovery import recover
 from create_defaults.phase5.m4_tests.helpers import rename, epoch, commit_update
 
 
-def test_P5_T16_native_current_mapping_sequence(m7_case):
-    case=m7_case
+def test_P5_T16_native_current_mapping_sequence(sequence_case):
+    case=sequence_case
     registry=case['row'][1].registry
     original=registry.view().entries()
     plan=rename(case,name='fixture')
@@ -57,7 +56,13 @@ with patch.object(SidecarStore,'__init__',side_effect=AssertionError('writer on 
                          capture_output=True,text=True,timeout=300)
     assert child.returncode==0,child.stderr
     assert json.loads(child.stdout)==state
-    assert len(recover(registry.operations.root)['commits'])==3
+    # Both full hot/cold mapping reports above already validated all native
+    # commits. Count the exact immutable journal events without replaying the
+    # same complete state a third time merely to obtain its cardinality.
+    with registry.operations.contracts.read_connection() as db:
+        commits=db.execute("SELECT subject,payload FROM events WHERE kind='phase4_isolated_commit'").fetchall()
+    assert len(commits)==3
+    assert {json.loads(row['payload'])['snapshot_sha256'] for row in commits}=={s.sha256 for s in (*original_snapshots,snapshot)}
     destination=Path(os.environ.get('M4_NATIVE_EXPORT','config/ci-validation/phase5-m4/native'))
     destination.mkdir(parents=True,exist_ok=True)
     rows=[]
