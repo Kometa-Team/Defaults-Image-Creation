@@ -70,11 +70,13 @@ def _ancestry(root, head):
 
 def verify_checkout(root=None):
     root = Path(root or ROOT)
+    from ci.phase5_m3_maintenance import verify_checkout as verify_m3, historical_bytes as m3_bytes
+    verify_m3(root)
     value = manifest()
     from ci.people_colorize_maintenance import _head
     _ancestry(str(root), _head(root))
     for name, binding in value['members'].items():
-        if sha(regular(root, name).read_bytes()) != binding['sha256']:
+        if sha(m3_bytes(root, name, regular(root, name).read_bytes())) != binding['sha256']:
             raise ValueError('Unreviewed M2 successor: ' + name)
         if binding['before_sha256'] is not None and sha(_old(name)) != binding['before_sha256']:
             raise ValueError('Changed M2 predecessor: ' + name)
@@ -86,11 +88,17 @@ def verify_checkout(root=None):
 def scope_members():
     # M7 already owns this status path. Keep its exact bytes bound above, but
     # do not hijack legacy planning fixtures' existing ALLOWED path routing.
-    return (MEMBERS | ANCHORS) - {'create_defaults/lifecycle/ROADMAP.md'}
+    from ci.phase5_m3_maintenance import scope_members as m3_scope
+    return ((MEMBERS | ANCHORS) - {'create_defaults/lifecycle/ROADMAP.md'}) | m3_scope()
 
 
 def verify_scope(root, baseline, names):
     verify_checkout(root)
+    from ci.phase5_m3_maintenance import scope_members as m3_scope, verify_scope as verify_m3_scope
+    m3_names = names & m3_scope()
+    if m3_names:
+        verify_m3_scope(root, baseline, m3_names)
+    names = names - m3_names
     if not names <= scope_members():
         raise ValueError('Unapproved M2 scope')
     if not names:

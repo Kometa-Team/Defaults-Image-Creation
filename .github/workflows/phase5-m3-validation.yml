@@ -1,0 +1,68 @@
+name: Phase 5 M3 Exact Decision Consumption
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  m3:
+    name: Phase 5 M3 ${{ matrix.group }} (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    env:
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+      PYTHONDONTWRITEBYTECODE: '1'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        group: [protocol, artwork, context]
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        fetch-depth: 0
+        persist-credentials: false
+        ref: ${{ github.event.pull_request.head.sha }}
+    - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+      with:
+        python-version: '3.13'
+    - run: python -m pip install -r create_defaults/requirements-bulk.txt
+    - run: python ci/phase5_m3.py run --group "${{ matrix.group }}"
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: phase5-m3-${{ matrix.group }}-${{ matrix.os }}
+        path: config/ci-validation/phase5-m3/**
+        if-no-files-found: error
+        retention-days: 14
+  acceptance:
+    name: Phase 5 M3 acceptance
+    if: ${{ always() }}
+    needs: [m3]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+      M3_JOB_RESULTS: ${{ toJSON(needs) }}
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        fetch-depth: 0
+        persist-credentials: false
+        ref: ${{ github.event.pull_request.head.sha }}
+    - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+      with:
+        python-version: '3.13'
+    - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+      with:
+        pattern: phase5-m3-*
+        path: config/m3-downloaded
+    - run: python -m pip install -r create_defaults/requirements-bulk.txt
+    - run: python ci/phase5_m3.py accept
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      with:
+        name: phase5-m3-acceptance
+        path: config/ci-validation/phase5-m3/acceptance.json
+        if-no-files-found: error
+        retention-days: 14

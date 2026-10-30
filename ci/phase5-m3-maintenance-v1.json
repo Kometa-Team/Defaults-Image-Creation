@@ -1,0 +1,58 @@
+{
+  "adoption_intersection": [],
+  "baseline_commit": "67525e98c79425dfb669f7e9da1141f9b3c3a00e",
+  "frozen_m7_intersection": [],
+  "members": {
+    ".github/workflows/phase5-m3-validation.yml": {
+      "before_sha256": null,
+      "sha256": "f2c2e75e1fa85f36efd7a00ed3421fdd94726532186642d720000cab1d97a0a2"
+    },
+    "ci/dependency_tests/test_phase5_m3_maintenance.py": {
+      "before_sha256": null,
+      "sha256": "0aadc809100a84b52fc8a39749260c5f920329e6d9e184c01e7d7a5aff1b6c07"
+    },
+    "ci/phase5-m3-test-ids.json": {
+      "before_sha256": null,
+      "sha256": "b1cb2e2c68afde0aeac976bfd0b6ab7bed2abeea0857452187cee79579d93da0"
+    },
+    "ci/phase5_m2_maintenance.py": {
+      "before_sha256": "c76fca14c13dc4d6e6832ea9ef351c9029a5fd70098e1be15b8e633c469a963a",
+      "sha256": "e9e514cf8145c3f43893b9a5dfe14543e8287192862d98940f848183189c7f4b"
+    },
+    "ci/phase5_m3.py": {
+      "before_sha256": null,
+      "sha256": "a6d741c26254eb4912b3a15c0e0b25d686b30c19af93a4ea060d2a65023b2124"
+    },
+    "create_defaults/bulk/lifecycle/github_decisions.py": {
+      "before_sha256": null,
+      "sha256": "35012ae2a0946d6d11b3676674928a936457b8067bb1cee22b9738d32bedb078"
+    },
+    "create_defaults/lifecycle/PHASE5_M3_ACCEPTANCE.json": {
+      "before_sha256": null,
+      "sha256": "263e323e008225fd55e7ee363b3de12abf3899d3ec1df717596ed68221dd0764"
+    },
+    "create_defaults/lifecycle/PHASE5_M3_CI_MAINTENANCE.md": {
+      "before_sha256": null,
+      "sha256": "348d440ef38ff051b979e7bdd9ba0abba685a611df9fbc210bd0b465bb296e2a"
+    },
+    "create_defaults/lifecycle/PHASE5_M3_IMPLEMENTATION.md": {
+      "before_sha256": null,
+      "sha256": "f8cac49a4be40747c9028cb7652716043eb9f7a7bb9f578e1de62c3d76fc47da"
+    },
+    "create_defaults/lifecycle/ROADMAP.md": {
+      "before_sha256": "8d15de091e0ff4a75f131b13ff7bce0063eadda8525e895497d190746c32a8fa",
+      "sha256": "f776dea7e1d719439df2fb1f6c8ddea30297eda6bf63f30e9f93cea7f502ca96"
+    },
+    "create_defaults/phase5/m3_tests/helpers.py": {
+      "before_sha256": null,
+      "sha256": "29b532b31804860836adbd6430d19d4d83c275f6b77e7192f5a4e6cf8df9e12d"
+    },
+    "create_defaults/phase5/m3_tests/test_decisions.py": {
+      "before_sha256": null,
+      "sha256": "9510beaf07b9bb556cbce76ed67971e8d41782dfa966764a0c758b6eb8e32486"
+    }
+  },
+  "production_intersection": [],
+  "publication_authorized": false,
+  "version": 1
+}
