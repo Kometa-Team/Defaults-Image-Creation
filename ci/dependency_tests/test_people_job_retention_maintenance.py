@@ -2,6 +2,9 @@
 from copy import deepcopy
 import json
 from pathlib import Path
+import subprocess
+import sys
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -45,7 +48,7 @@ class StartupRetentionMaintenanceTests(unittest.TestCase):
 
     def test_manifest_rejects_resealed_hashes_membership_and_baseline(self):
         original = Path.read_bytes
-        for field in ('members', 'baseline_commit', 'publication_authorized'):
+        for field in ('members', 'baseline_commit', 'publication_authorized', 'pytest_ids'):
             altered = deepcopy(maintenance.manifest())
             altered[field] = 'unreviewed'
             replacement = json.dumps(altered).encode()
@@ -71,3 +74,21 @@ class StartupRetentionMaintenanceTests(unittest.TestCase):
         with patch.object(maintenance, '_git', side_effect=ValueError('unrelated history')):
             with self.assertRaises(ValueError):
                 maintenance._ancestry(str(ROOT), 'f' * 40)
+
+    def test_original_collection_and_complete_people_namespace_remain_exact(self):
+        from ci.people_security import selections
+        groups, original = selections()
+        with tempfile.TemporaryDirectory() as folder:
+            destination = Path(folder) / 'collection.json'
+            def collect(paths):
+                subprocess.run([sys.executable, str(ROOT / 'ci/validation.py'), 'pytest',
+                                '--collect-only', '--report', str(destination), '--', *paths],
+                               cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+                return json.loads(destination.read_text(encoding='utf8'))['nodes']
+            original_paths = sorted({n.split('::')[0] for n in original})
+            self.assertEqual(set(collect(original_paths)), original)
+            expected = original | set().union(*map(set, groups.values()))
+            complete = collect(['create_people_posters/tests'])
+            self.assertEqual(len(complete), len(set(complete)))
+            self.assertEqual(set(complete), expected)
+            self.assertEqual(set(collect(sorted(maintenance.TEST_MODULES))), set(maintenance.test_ids()))

@@ -10,11 +10,12 @@ from ci.people_storage_maintenance import regular
 ROOT = Path(__file__).resolve().parents[1]
 BASE = '120ed09a166ddfdc5380219aad35959c8a0de169'
 MANIFEST = ROOT / 'ci/people-job-retention-maintenance-v1.json'
-PIN = 'ab68a85ddcb399b9ddf219b3e118a498030a18b82042c0fe467137178e784019'
+PIN = '33ff17e292715c1bf198bd37d9d5df61240825af87e9559e5bb96ba5bc45e4c1'
 MEMBERS = frozenset({
     '.github/workflows/people-job-retention.yml',
     'ci/dependabot_maintenance.py',
     'ci/phase5_m3_maintenance.py',
+    'ci/people_readme_maintenance.py',
     'ci/dependency_tests/test_people_colorize_maintenance.py',
     'ci/dependency_tests/test_people_retention.py',
     'ci/dependency_tests/test_people_job_retention_maintenance.py',
@@ -26,11 +27,17 @@ MEMBERS = frozenset({
     'create_people_posters/tests/test_people_api_orchestrator.py',
     'create_people_posters/tests/test_people_job_retention.py',
     'create_people_posters/tests/test_people_storage_watch.py',
+    'create_people_posters/tests/test_people_startup_retention.py',
     'create_people_posters/tests/test_people_workspaces.py',
     'docs/PEOPLE_JOB_RETENTION_INVENTORY_2026-10-30.json',
     'docs/PEOPLE_STARTUP_JOB_RETENTION.md',
 })
 ANCHORS = frozenset({'ci/people_job_retention_maintenance.py', 'ci/people-job-retention-maintenance-v1.json'})
+TEST_MODULES = frozenset({
+    'create_people_posters/tests/test_people_job_retention.py',
+    'create_people_posters/tests/test_people_storage_watch.py',
+    'create_people_posters/tests/test_people_startup_retention.py',
+})
 
 
 def sha(raw):
@@ -47,6 +54,8 @@ def _decode(raw, pin):
     value = json.loads(raw)
     if (fingerprint(value) != pin or value['version'] != 1
             or value['baseline_commit'] != BASE or set(value['members']) != MEMBERS
+            or {n.split('::')[0] for n in value['pytest_ids']} != TEST_MODULES
+            or len(value['pytest_ids']) != len(set(value['pytest_ids']))
             or value['publication_authorized'] is not False):
         raise ValueError('Changed exact startup-retention transition')
     return value
@@ -124,6 +133,10 @@ def historical_bytes(root, name, current):
 
 def scope_members():
     return MEMBERS | ANCHORS
+
+
+def test_ids():
+    return list(manifest()['pytest_ids'])
 
 
 def verify_scope(root, baseline, names):

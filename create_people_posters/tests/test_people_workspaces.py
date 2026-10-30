@@ -74,7 +74,7 @@ def test_configure_paths_without_model_movement(manager, monkeypatch):
         os.environ.update(old_env)
 
 
-def test_successful_cleanup_removes_job_and_retains_durable_receipts_and_models(manager, monkeypatch):
+def test_successful_cleanup_retains_receipts_models_and_logs(manager, monkeypatch):
     batch = published_job(manager, monkeypatch)
     model = manager.config / "models/rembg/model.onnx"
     model.parent.mkdir(parents=True)
@@ -95,13 +95,19 @@ def test_successful_cleanup_removes_job_and_retains_durable_receipts_and_models(
     assert manager.db.execute("SELECT status FROM jobs WHERE id=?", (batch,)).fetchone()[0] == "complete"
 
 
-@pytest.mark.parametrize("status", ["pending", "processing", "generated", "validated", "partially_published"])
+@pytest.mark.parametrize("status", ["pending", "processing", "generated", "validated", "partially_published", "failed"])
 def test_unpublished_files_never_expire(manager, status):
     batch = manager.create()
     image = manager.path(batch) / "posters/unpublished.jpg"
     image.write_bytes(b"only-copy")
     manager.set_status(batch, status)
     result = manager.cleanup(dry_run=False, now=time.time() + 100 * 86400)
+    if status == 'failed':
+        # Preserve this original collection ID while asserting the corrected
+        # bounded terminal-failure policy, covered in detail by the new suite.
+        assert result == [(batch, 'cleaned')]
+        assert not manager.path(batch).exists()
+        return
     assert result == [(batch, "retained: incomplete_or_inconsistent_lifecycle")]
     assert image.read_bytes() == b"only-copy"
 
