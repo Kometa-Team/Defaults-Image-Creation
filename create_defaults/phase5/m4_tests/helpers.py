@@ -10,7 +10,7 @@ from create_defaults.bulk.common import canonical
 from create_defaults.bulk.lifecycle import apply, mappings
 from create_defaults.bulk.lifecycle.candidates import poster_candidate
 from create_defaults.bulk.lifecycle.current_mapping import select_current, stage_source, CurrentTransaction, propose_current
-from create_defaults.bulk.lifecycle.operations import propose
+from create_defaults.bulk.lifecycle.operations import propose, Transaction
 from create_defaults.phase4.m7_tests.helpers import prepare, commit
 from create_defaults.phase4.tests.transaction_samples import reviewed, transaction
 
@@ -18,19 +18,24 @@ from create_defaults.phase4.tests.transaction_samples import reviewed, transacti
 def rename(case, name='Fixture Current', suffix='-rename'):
     plan=prepare(case,name=name,suffix=suffix)
     commit(case,plan)
+    case['definition_hint']=plan.to_dict()['definitions']
     return plan
 
 
 def epoch(case,label='current'):
     trial,ctx,_,_=case['row'];registry=ctx.registry
-    current=mappings.recover(registry)
+    # This is only caller input for the real selector, which independently
+    # reconstructs and compares current committed definitions. It grants no
+    # authority and avoids a duplicate full recovery merely to serialize YAML.
+    definitions=case.get('definition_hint')
+    if definitions is None:definitions=mappings.recover(registry)['definitions']
     content=json.loads(ctx.candidate.content_json)
     for i in content:
         names=registry.view().entry(i)['names']
         content[i].update(display_name=names['display_name'],source=names['source'])
     path=trial.root/(label+'.yml')
     path.write_text(yaml.safe_dump(dict(schema_version=1,category='Genre',
-        definitions=[current['definitions'][i] for i in sorted(content)])),encoding='utf8')
+        definitions=[definitions[i] for i in sorted(content)])),encoding='utf8')
     return select_current(registry,expected=registry.view().head,paths=[path],
         profiles_path=ctx.candidate.profiles_path,posters=sorted(content),content=content,trial=trial)
 
@@ -65,7 +70,8 @@ def prepare_update(case,selected,proposed=None,label='m4-updated'):
     proposed=proposed or candidate(case,selected,label=label)
     context=propose_current(selected,proposed,identity='synthetic.operation.'+label)
     native=reviewed(trial,context,label=label)
-    tx,_=transaction(native,json.loads(selected.lineage_json)['accepted_snapshots'])
+    tx=Transaction(native['inputs'],native['bundle'].to_dict()['id'],native['state'].sha256,
+                   canonical(json.loads(selected.lineage_json)['accepted_snapshots']).decode())
     current=CurrentTransaction(tx,selected)
     return native,current,current.prepare()
 

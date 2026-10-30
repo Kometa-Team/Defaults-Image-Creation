@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-        group: [protocol, catalog, sequence, lineage, atomic, atomic-tail, recovery, concurrent, closure, control, freshness]
+        group: [protocol, catalog, sequence, lineage, atomic, atomic-tail, final-fault, recovery, recovery-objects, retirement, concurrent, closure, control, freshness]
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       with:

@@ -49,14 +49,20 @@
   ],
   "atomic-tail": [
     "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T27_atomic_faults_rollback_without_losing_history[receipt_index]",
-    "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T27_atomic_faults_rollback_without_losing_history[before_commit]",
     "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T27_cancellation_before_commit_is_not_application"
+  ],
+  "final-fault": [
+    "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T27_atomic_faults_rollback_without_losing_history[before_commit]"
   ],
   "recovery": [
     "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T27_lost_acknowledgement_retries_exact_committed_operation",
+    "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T14_T27_corrupt_committed_current_evidence_blocks[lineage-index]"
+  ],
+  "recovery-objects": [
     "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T14_T27_corrupt_committed_current_evidence_blocks[lineage-object]",
-    "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T14_T27_corrupt_committed_current_evidence_blocks[lineage-index]",
-    "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T14_T27_corrupt_committed_current_evidence_blocks[owned-receipt]",
+    "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T14_T27_corrupt_committed_current_evidence_blocks[owned-receipt]"
+  ],
+  "retirement": [
     "create_defaults/phase5/m4_tests/test_guards.py::test_P5_T26_M6_retirement_after_current_UPDATE_retains_latest_artwork"
   ],
   "concurrent": [

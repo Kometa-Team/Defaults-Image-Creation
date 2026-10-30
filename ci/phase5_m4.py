@@ -13,7 +13,8 @@ from ci.validation import identity, read, write, require, unique, pytest_run, va
 IDS=ROOT/'ci/phase5-m4-test-ids.json'
 OUT=ROOT/'config/ci-validation/phase5-m4'
 TESTS='create_defaults/phase5/m4_tests'
-GROUPS=('protocol','catalog','sequence','lineage','atomic','atomic-tail','recovery','concurrent','closure','control','freshness')
+GROUPS=('protocol','catalog','sequence','lineage','atomic','atomic-tail','final-fault',
+        'recovery','recovery-objects','retirement','concurrent','closure','control','freshness')
 SOURCES=('create_defaults/bulk/lifecycle/current_mapping.py',
     'create_defaults/bulk/lifecycle/apply.py','create_defaults/bulk/lifecycle/recovery.py',
     'create_defaults/bulk/lifecycle/mappings.py',TESTS+'/conftest.py',TESTS+'/helpers.py',

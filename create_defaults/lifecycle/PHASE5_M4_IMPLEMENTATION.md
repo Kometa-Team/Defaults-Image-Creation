@@ -135,6 +135,15 @@ precommit faults, lost acknowledgement and subsequent M6 retirement. Metadata
 negative controls enter the real cohort guard; they do not claim unsupported
 positive composition or bypass production guards.
 
+The fault/recovery fixtures use an independent actual native ADD then RENAME;
+the full native sequence independently retains its initial material M5 UPDATE.
+No archived grants or portable fixture checkpoints establish authority. Reusing
+the already committed rename's definition as caller input avoids an extra full
+recovery to serialize YAML; the real selector still independently replays and
+compares the committed mapping. Original Transaction preparation runs once per
+prepared value. No native validator is mocked or removed. Heavy fault/recovery
+groups are partitioned to retain the existing Windows time budget.
+
 The additive workflow runs bounded exact-ID groups on Windows/Linux with the
 existing requirements, pinned actions, read-only permissions and 15-minute caps.
 Its acceptance step independently decodes six actual full-resolution JPEGs,
