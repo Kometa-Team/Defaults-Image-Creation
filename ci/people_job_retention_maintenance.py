@@ -8,13 +8,15 @@ import subprocess
 from ci.people_storage_maintenance import regular
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = '120ed09a166ddfdc5380219aad35959c8a0de169'
+BASE = 'cd8d4eecd64f5bff201e8ecd7daccebd955f87af'
 MANIFEST = ROOT / 'ci/people-job-retention-maintenance-v1.json'
-PIN = '11f62ab4fb64192d967b37338ce8ede87edb6780243c08dae11f00ff29ba3bac'
+PIN = '3dcee7c7848edfc510f19db72036714e6babc3cb27f7868a68891d000530b5d7'
 MEMBERS = frozenset({
     '.github/workflows/people-job-retention.yml',
     'ci/dependabot_maintenance.py',
     'ci/phase5_m3_maintenance.py',
+    'ci/phase5_m4_maintenance.py',
+    'ci/dependency_tests/test_phase5_m4_maintenance.py',
     'ci/people_readme_maintenance.py',
     'ci/dependency_tests/test_people_colorize_maintenance.py',
     'ci/dependency_tests/test_dependabot_audit.py',

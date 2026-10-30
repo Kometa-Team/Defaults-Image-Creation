@@ -201,9 +201,14 @@ The added Windows/Linux PR workflow runs the startup suite; it has no schedule.
 
 The exact-source maintenance transition is recorded separately in
 `ci/people-job-retention-maintenance-v1.json`, against main commit
-`120ed09a166ddfdc5380219aad35959c8a0de169`. It pins every changed source, test,
+`cd8d4eecd64f5bff201e8ecd7daccebd955f87af` (including PR #58's M4 transition).
+It pins every changed source, test,
 workflow and investigation document to its predecessor and successor. Historical
 manifests and test inventories remain unchanged. New tamper controls reject
 unknown changes, rollback, missing files, links, deletions and unrelated history.
+The overlapping M3 and dependency readers preserve both exact transitions:
+current retention bytes project to the pinned M4 successor, then to its original
+predecessor. The M4 manifest, workflow, IDs and runtime implementation are unchanged;
+physical rollback or tampering still fails before any historical projection.
 This source change requires review and passing hosted checks before deployment.
 No production cleanup has been applied and no merge has been authorized.

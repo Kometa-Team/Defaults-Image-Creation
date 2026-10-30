@@ -75,6 +75,21 @@ class StartupRetentionMaintenanceTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 maintenance._ancestry(str(ROOT), 'f' * 40)
 
+    def test_m4_predecessor_projection_preserves_both_exact_bindings(self):
+        from ci import phase5_m4_maintenance as m4
+        retained = maintenance.verify_checkout()
+        previous = m4.verify_checkout()
+        for name in ('ci/dependabot_maintenance.py', 'ci/phase5_m3_maintenance.py'):
+            current = (ROOT / name).read_bytes()
+            self.assertEqual(retained['members'][name]['before_sha256'], previous['members'][name]['sha256'])
+            self.assertEqual(maintenance.sha(current), retained['members'][name]['sha256'])
+            projected = m4.historical_bytes(ROOT, name, current)
+            self.assertEqual(m4.sha(projected), previous['members'][name]['before_sha256'])
+            self.assertEqual(m4.historical_bytes(ROOT, name, projected), projected)
+        for name in ('ci/phase5-m4-maintenance-v1.json', 'ci/phase5-m4-test-ids.json',
+                     '.github/workflows/phase5-m4-validation.yml'):
+            self.assertEqual(maintenance.sha((ROOT / name).read_bytes()), maintenance.sha(maintenance._old(name)))
+
     def test_original_collection_and_complete_people_namespace_remain_exact(self):
         from ci.people_security import selections
         groups, original = selections()

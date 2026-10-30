@@ -105,6 +105,8 @@ def selected_hash(name, expected):
 def historical_bytes(root, name, current):
     from ci.people_job_retention_maintenance import historical_bytes as retention_history
     current = retention_history(root, name, current)
+    from ci.phase5_m4_maintenance import historical_bytes as m4_bytes
+    current = m4_bytes(root, name, current)
     if name not in MEMBERS:
         return current
     binding = manifest()['members'][name]

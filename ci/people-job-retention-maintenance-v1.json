@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "baseline_commit": "120ed09a166ddfdc5380219aad35959c8a0de169",
+  "baseline_commit": "cd8d4eecd64f5bff201e8ecd7daccebd955f87af",
   "publication_authorized": false,
   "members": {
     ".github/workflows/people-job-retention.yml": {
@@ -8,8 +8,8 @@
       "sha256": "fa07b96c296283ca5a4c1ff791afec6f4cadd1d8cd19a709f240c61fbe6d6304"
     },
     "ci/dependabot_maintenance.py": {
-      "before_sha256": "5a13d4e58b56981d964c5c0aa30edab4a5547e861c60d21979ca0d69a6668d96",
-      "sha256": "093d9c0d128a1cd33890486bbeb5cacfbfcca5b92d514f35a481a4c0320cfd37"
+      "before_sha256": "b3eaa38e945dcedf39a28578f9ded1fec555c2d909c7aaee4b0712344a8faeb5",
+      "sha256": "b82b688ca74c180c7d6f78ca7bc66c467ae40b5207e311d41209f080c5f2b1c2"
     },
     "ci/dependency_tests/test_dependabot_audit.py": {
       "before_sha256": "e29a6add045e7f3583ef7568a931643b1748f0109352bdf51b8f5649e4ec3c74",
@@ -21,19 +21,27 @@
     },
     "ci/dependency_tests/test_people_job_retention_maintenance.py": {
       "before_sha256": null,
-      "sha256": "14c9586dc57712054352f3efba7c9d64290cadc384263ed529e2c899e6860164"
+      "sha256": "18e13f154cc06e6cc16b707a53ea2d682c321a94fa0d22404091e3fcb039670b"
     },
     "ci/dependency_tests/test_people_retention.py": {
       "before_sha256": "d9eb0d9bdf05ec02c052fadde71e7a99f30216cc7ae99a6aed60f1fff0e2dc66",
       "sha256": "45c818204f72595a78b471b2d76a52a8769b7d90d4c8d487e1135faaacb2d100"
+    },
+    "ci/dependency_tests/test_phase5_m4_maintenance.py": {
+      "before_sha256": "ea0e237accf3fca42c93283cae75009e4fd2b908f7a3b0959f1240c6ec7797da",
+      "sha256": "27c4e891a91880a84235402086b9465b3ff6ebf8d0197e3d7c2c116f387747b4"
     },
     "ci/people_readme_maintenance.py": {
       "before_sha256": "8d85f0962710f91c98a026863298bfd22775e1ac48635b4d06da5cef12d40157",
       "sha256": "e10105cfe24ca2fb8dbd78b2e81894b5dd05f923581f7a754bfc590f2a936fbb"
     },
     "ci/phase5_m3_maintenance.py": {
-      "before_sha256": "0b482f323a62a65867946ea54ce791b7aa532f71413d7a10c87614ec548b767c",
-      "sha256": "f986478d5c3689f41c6ee3062fb10daa46dc3a7d038f5285cb7e6b9049034ffb"
+      "before_sha256": "e449d0fed2bbcddb84027b81198941dfbf03c6af9fe13d1b18bf3fdb7cb0ce7c",
+      "sha256": "10068ee6121efad5e329f314698567f58a5857c97ed96ae3ad98cb7e9d4b1fc5"
+    },
+    "ci/phase5_m4_maintenance.py": {
+      "before_sha256": "9d2cd0f449c701abf05c23763728afcad22d9211ff0e98db812750169e8dbf91",
+      "sha256": "4a38d98fb4f96d2886ca5c31aff2bc974120e114e60b94ce012b1f0c12ec1a9c"
     },
     "create_people_posters/.env.example": {
       "before_sha256": "645799cffde15f7d37a0a59d38d641356bdbec10d6d5a00cee76579512e404c8",
@@ -81,7 +89,7 @@
     },
     "docs/PEOPLE_STARTUP_JOB_RETENTION.md": {
       "before_sha256": null,
-      "sha256": "a3a7038480971749c829d296af303dcec1d5e164fda7f0ffa2a425bfa8becfce"
+      "sha256": "7e77275afa75594b4479b44a0c753fac1a32d8c50323ab2cf58e58f0e8382ef1"
     }
   },
   "pytest_ids": [
