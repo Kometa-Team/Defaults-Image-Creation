@@ -202,6 +202,7 @@ def plan(config, jobs, state, *, now=None, only=None):
     # A pending DB receipt can be newer than its exported JSON manifest.
     # Protect cross-job inputs directly from the authoritative ledger too.
     prefix = jobs.as_posix().casefold() + '/'
+    job_names = {p.name.casefold(): p.name for p in jobs.iterdir() if ID_PATTERN.fullmatch(p.name)}
     for receipt in data['publications']:
         if receipt.get('status') == 'published':
             continue
@@ -212,8 +213,8 @@ def plan(config, jobs, state, *, now=None, only=None):
             normalized = value.replace('\\', '/').casefold()
             if normalized.startswith(prefix):
                 target = value.replace('\\', '/')[len(prefix):].split('/')[0]
-                if target != receipt.get('batch'):
-                    protected.add(target)
+                if target.casefold() != str(receipt.get('batch')).casefold():
+                    protected.add(job_names.get(target.casefold(), target))
     report = dict(observed=now, jobs=[], eligible_bytes=0, eligible_jobs=0, scope=SCOPE)
     for folder in sorted(jobs.iterdir()):
         if only is not None and folder.name != only:

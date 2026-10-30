@@ -120,11 +120,14 @@ def test_unicode_escaped_cross_job_reference_is_preserved(manager):
     assert 'referenced_by_another' in dict(manager.cleanup())[target]
 
 
-def test_pending_database_reference_protects_input_without_json_export(manager):
+@pytest.mark.parametrize('fold_case', [False, True])
+def test_pending_database_reference_protects_input_without_json_export(manager, fold_case):
     target = terminal(manager, 'no_work', 100)
     owner = terminal(manager, 'processing', 100)
     manager.db.execute('CREATE TABLE publications(batch TEXT,status TEXT,source TEXT,prepared TEXT)')
     source = str(manager.path(target) / 'posters/source.jpg')
+    if fold_case:
+        source = source.lower()
     manager.db.execute('INSERT INTO publications VALUES(?,?,?,?)', (owner, 'pending', source, source))
     manager.db.commit()
     assert 'referenced_by_another' in dict(manager.cleanup())[target]
