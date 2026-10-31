@@ -44,11 +44,11 @@
     },
     "create_defaults/bulk/lifecycle/preparation_progress.py": {
       "before_sha256": null,
-      "sha256": "46c14beb320e412f3b45203928facf925c068efe30f912356dfa9333168a176a"
+      "sha256": "eebe73b3ec2ef38370195f83574181dedc394507bc513a8fae976af9a8bfa61b"
     },
     "create_defaults/bulk/lifecycle/publication_preparation.py": {
       "before_sha256": null,
-      "sha256": "5c9d7befb08096d83106cea571b465667a8c68b6050b48b25fe3b0ef1be69a62"
+      "sha256": "9a0808658ce7ff6786f04a4979cf7af14fc9c3cf25e1c75bbf46bec099781fc8"
     },
     "create_defaults/bulk/lifecycle/schemas/preparation-v1.schema.json": {
       "before_sha256": null,
@@ -92,7 +92,7 @@
     },
     "create_defaults/phase5/m5_tests/test_offline_git.py": {
       "before_sha256": null,
-      "sha256": "bc943c3bdc149cdb01d75a68bfa8dc1136f729a74e9bfabdcc5f09cd50b7fd3a"
+      "sha256": "33676b44fb0b2fafec7ef6f5b8fa1240fc2cad4dc4fa48347e1903ba148547fd"
     },
     "create_defaults/phase5/m5_tests/test_publication.py": {
       "before_sha256": null,

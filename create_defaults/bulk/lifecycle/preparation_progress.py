@@ -73,11 +73,18 @@ class Progress:
         with store.transaction() as db:
             from .storage import _replay
             heads=_replay(store,db)[3]
+            from .operations import DefinitionSnapshot,payload
+            snapshot=DefinitionSnapshot.from_bytes(store.read_object(self.preparation.to_dict()['snapshot_sha256'])).to_dict()
+            references={(r['kind'],r['id']):r for r in payload(snapshot['intent_json'])['reads']}
             for expected_head in self.preparation.to_dict()['native_heads']:
                 k=(expected_head['kind'],expected_head['id'])
-                if state!='UNKNOWN' and heads.get(k,dict(kind=k[0],id=k[1],subjects=[],revision=0,sha256=None))!=expected_head:raise Conflict('Native scoped heads changed')
-            from .operations import DefinitionSnapshot
-            snapshot=DefinitionSnapshot.from_bytes(store.read_object(self.preparation.to_dict()['snapshot_sha256'])).to_dict()
+                if state!='UNKNOWN':
+                    observed=heads.get(k)
+                    if observed is None:
+                        reference=references.get(k)
+                        if reference is None or (reference['revision'],reference['sha256'])!=(0,None):raise Conflict('Native scoped heads changed')
+                        observed=reference
+                    if observed!=expected_head:raise Conflict('Native scoped heads changed')
             review=db.execute('SELECT sha256 FROM p4m4_reviews WHERE id=? ORDER BY revision DESC LIMIT 1',(snapshot['review_id'],)).fetchone()
             if state!='UNKNOWN' and (not review or review[0]!=snapshot['review_sha256']):raise Conflict('Native review changed')
             current=_read(store,db,self.preparation)

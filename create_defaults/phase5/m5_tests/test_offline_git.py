@@ -12,6 +12,11 @@ from create_defaults.phase5.m5_tests.helpers import prepared,export_native
 
 def test_P5_T16_current_mapping_full_native_sequence_and_plan(current_native):
     selection,patch,target,result=prepared(current_native)
+    from create_defaults.bulk.common import Conflict,fingerprint
+    from create_defaults.bulk.lifecycle.operations import payload
+    references={(r['kind'],r['id']):r for r in payload(current_native['snapshot'].to_dict()['intent_json'])['reads']}
+    absent=[h for h in result.to_dict()['native_heads'] if h['revision']==0]
+    assert absent and all(h==references[h['kind'],h['id']] and h['subjects'] for h in absent)
     from create_defaults.bulk.library_transport import run
     root=target.trial.root/('m5-transport-'+result.sha256)
     progress=Progress(selection.registry.operations.root,result)
@@ -22,6 +27,15 @@ def test_P5_T16_current_mapping_full_native_sequence_and_plan(current_native):
     assert observed['complete'] and result.to_dict()['members'][0]['destination']=='genre/fixture.jpg'
     assert len({s.to_dict()['artwork'][s.to_dict()['members'][0]]['sha256'] for s in current_native['snapshots']})==3
     export_native(current_native,patch,target,result,observed,name='current')
+    # A validly resealed preparation cannot invent an absent head's subjects.
+    # The transaction must compare the accepted intent's scope independently.
+    from create_defaults.bulk.lifecycle.preparation_models import Preparation
+    forged=result.to_dict()
+    next(h for h in forged['native_heads'] if h['revision']==0)['subjects']=['synthetic.item.'+'f'*64]
+    forged['native_heads_sha256']=fingerprint(forged['native_heads'])
+    with pytest.raises(Conflict):
+        Progress(selection.registry.operations.root,Preparation.from_dict(forged)).append('PREPARED',0,None,expected=None)
+    assert progress.read()['state']=='OFFLINE_VERIFIED'
 
 
 def test_P5_T25_multi_member_partial_batches_forward_recover(multi_native):

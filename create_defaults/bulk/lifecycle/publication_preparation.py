@@ -101,10 +101,21 @@ class NativeSelection:
         if current.encoded!=before.encoded:fail('current_phase3')
         # M4/M6 replay above validates native pixels, original review decisions,
         # immutable snapshots and original owned receipt/job records.
-        needed={(r['kind'],r['id']) for r in payload(s['intent_json'])['reads']}
+        references={(r['kind'],r['id']):r for r in payload(s['intent_json'])['reads']}
+        needed=set(references)
         needed.update((r['kind'],r['id']) for r in payload(s['intent_json'])['writes'])
         needed.add(('evidence',self.registry.subject))
-        heads=[state['heads'].get(k,dict(kind=k[0],id=k[1],subjects=[],revision=0,sha256=None)) for k in sorted(needed)]
+        heads=[]
+        for k in sorted(needed):
+            head=state['heads'].get(k)
+            if head is None:
+                # An unchanged read-only dependency can remain absent after a
+                # retained rename. Its original intent owns the subject scope;
+                # absence is still exactly revision zero with no object.
+                reference=references.get(k)
+                if reference is None or (reference['revision'],reference['sha256'])!=(0,None):fail('missing_native_head')
+                head=reference
+            heads.append(head)
         return s,dict(registry_sha256=self.registry.view().snapshot.sha256,native_heads=heads,
             native_heads_sha256=fingerprint(heads),definitions={i:definitions[i] for i in s['members']},
             phase3_sha256=current.sha256)
