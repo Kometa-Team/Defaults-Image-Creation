@@ -9,6 +9,13 @@ retained as evidence, not current font-selection instructions.
 
 ## Reference audit
 
+The Python-only dynamic COLLECTION update is documented in
+[COLLECTION_RENDERING.md](COLLECTION_RENDERING.md). Python now uses three
+textless overlay variants and draws COLLECTION with bundled Montserrat fonts.
+The four original artwork files remain unchanged for historical/reference
+comparisons. The PowerShell renderer retains its existing behavior; the
+reference-operation descriptions below describe the original baked lettering.
+
 The original reference was `create_people_poster.ps1` v2.7 (1012 lines, including
 eight base64 literals: four artwork, four fonts). The current PowerShell fallback
 retains its rendering operations but uses the approved Jost font and size instead
@@ -57,12 +64,12 @@ style-behavior change, not part of the renderer migration.
 
 ## Fonts and rights
 
-Bundled files: Comfortaa Medium, Fuggles Regular, Jost static weight 260 and
-Montserrat SemiBold. No platform font lookup or unrelated substitution is
+Bundled files: Comfortaa Medium, Fuggles Regular, Jost static weight 260,
+Montserrat SemiBold and Montserrat Light. No platform font lookup or unrelated substitution is
 allowed. A font directory override must contain the same filenames, including
 `Jost-260.ttf`; an old Futura-only directory is insufficient.
 
-All four bundled fonts identify SIL OFL 1.1 in their
+All five bundled fonts identify SIL OFL 1.1 in their
 name tables. Preserve their notices and license when redistributing. Upstream
 license references: [Comfortaa](https://github.com/google/fonts/blob/main/ofl/comfortaa/OFL.txt),
 [Fuggles](https://github.com/google/fonts/blob/main/ofl/fuggles/OFL.txt),

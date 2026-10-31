@@ -26,8 +26,22 @@ from people_workspaces import atomic_json, reject_links
 SCRIPT_DIR = Path(__file__).resolve().parent
 SIZE = (2000, 3000)
 STYLES = ("original", "bw", "diiivoy", "diiivoycolor", "rainier", "signature", "transparent")
-ARTWORK = ("@zbase-People.jpg", "@zbase-People-Clear2.png", "@zbase-Signature.png", "@zbase-People-Clear3.png")
-FONTS = ("Comfortaa-Medium.ttf", "Fuggles-Regular.ttf", "Jost-260.ttf", "Montserrat-SemiBold.ttf")
+COLLECTION_ARTWORK = {
+    "signature": "@zbase-Signature-no-text.png",
+    "rainier": "@zbase-People-Clear2-no-text.png",
+    "diiivoy": "@zbase-People-Clear3-no-text.png",
+    "diiivoycolor": "@zbase-People-Clear3-no-text.png",
+}
+# Keep the original resources for reference comparisons and their existing audit.
+ARTWORK = ("@zbase-People.jpg", "@zbase-People-Clear2.png", "@zbase-Signature.png", "@zbase-People-Clear3.png",
+           *dict.fromkeys(COLLECTION_ARTWORK.values()))
+FONTS = ("Comfortaa-Medium.ttf", "Fuggles-Regular.ttf", "Jost-260.ttf", "Montserrat-SemiBold.ttf", "Montserrat-Light.ttf")
+COLLECTION_CONFIG = {
+    "signature": {"font": "Montserrat-SemiBold.ttf", "size": 92, "tracking": 12.5, "stroke": 0, "x": 643, "y": 2791},
+    "rainier": {"font": "Montserrat-Light.ttf", "size": 110, "tracking": 18.0, "stroke": 0, "x": 201, "y": 809},
+    "diiivoy": {"font": "Montserrat-SemiBold.ttf", "size": 100, "tracking": 83.0, "stroke": 1, "x": 309, "y": 2857},
+    "diiivoycolor": {"font": "Montserrat-SemiBold.ttf", "size": 100, "tracking": 83.0, "stroke": 1, "x": 309, "y": 2857},
+}
 DIIIVOY_POINT_SIZE = 190
 LOG = logging.getLogger("people.poster")
 
@@ -123,6 +137,35 @@ class Renderer:
     def width(self, text, font, size):
         return max((self.metrics[font].positions(line, size)[1] for line in text.splitlines()), default=0)
 
+    def render_collection(self, poster, style):
+        """Composite one tracked white label, anchored by its visible ink bounds.
+
+        Keep fractional advances until Pillow rasterizes each character. Padding
+        accommodates font bearings and the artificial stroke before trimming;
+        no resizing, thresholding or filtering changes the antialiased lettering.
+        """
+        config = COLLECTION_CONFIG[style]
+        font = self.font(config["font"], config["size"])
+        text = "COLLECTION"
+        padding = config["size"] + config["stroke"]
+        advance = sum(font.getlength(character) for character in text) + config["tracking"] * (len(text) - 1)
+        layer = Image.new("RGBA", (math.ceil(advance) + padding * 2, padding * 4))
+        draw = ImageDraw.Draw(layer)
+        x = float(padding)
+        for character in text:
+            draw.text((x, padding), character, font=font, fill="white",
+                      stroke_width=config["stroke"], stroke_fill="white")
+            x += font.getlength(character) + config["tracking"]
+        ink = layer.getchannel("A").getbbox()
+        if ink is None or ink[0] == 0 or ink[1] == 0 or ink[2] == layer.width or ink[3] == layer.height:
+            raise ValueError(f"Clipped or empty COLLECTION lettering: {style}")
+        layer = layer.crop(ink)
+        x, y = config["x"], config["y"]
+        if x < 0 or y < 0 or x + layer.width > poster.width or y + layer.height > poster.height:
+            raise ValueError(f"COLLECTION lettering exceeds poster bounds: {style}")
+        poster.alpha_composite(layer, (x, y))
+        return (x, y, x + layer.width, y + layer.height)
+
     def label(self, text, font_name, box, pointsize=None, align="center", vertical="center"):
         lines = text.splitlines() or [""]
         if not any(lines):
@@ -216,7 +259,8 @@ class Renderer:
         outputs = {}
         for style in styles:
             subject = gray_subject if style == "diiivoy" else color_subject
-            poster = Image.alpha_composite(Image.alpha_composite(self.art[ARTWORK[0]], subject), self.art[ARTWORK[3]])
+            poster = Image.alpha_composite(Image.alpha_composite(self.art[ARTWORK[0]], subject), self.art[COLLECTION_ARTWORK[style]])
+            self.render_collection(poster, style)
             size = DIIIVOY_POINT_SIZE if self.width(title, FONTS[2], DIIIVOY_POINT_SIZE) <= 1900 else None
             poster.alpha_composite(self.label(title, FONTS[2], (1900, 580), size), (50, 80))
             outputs[style] = poster.convert("RGB")
@@ -242,14 +286,16 @@ class Renderer:
         bw = gray(color).convert("RGBA")
         bw.alpha_composite(self.label(bw_title, FONTS[0], (1900, 500), bw_size), (50, 0))
         outputs["bw"] = bw.convert("L")
-        signature = Image.alpha_composite(Image.alpha_composite(base, cutout), self.art[ARTWORK[2]])
+        signature = Image.alpha_composite(Image.alpha_composite(base, cutout), self.art[COLLECTION_ARTWORK["signature"]])
+        self.render_collection(signature, "signature")
         signature.alpha_composite(self.label(label, FONTS[1], (1900, 600), vertical="south"), (50, 2150))
         outputs["signature"] = signature.convert("RGB")
         # The reference reuses diiivoy's gray temporary when Push-Down makes
         # no new image. Preserve that high-margin portrait quirk for parity.
         later_subject = gray(shifted) if cutout.getchannel("A").getbbox()[1] >= 500 else shifted
         outputs.update(self.diiivoy_styles(cutout, shifted, title, ("diiivoy", "diiivoycolor")))
-        rainier = Image.alpha_composite(Image.alpha_composite(base, later_subject), self.art[ARTWORK[1]])
+        rainier = Image.alpha_composite(Image.alpha_composite(base, later_subject), self.art[COLLECTION_ARTWORK["rainier"]])
+        self.render_collection(rainier, "rainier")
         rain_title, rain_size = self.rainier_label(title)
         rainier.alpha_composite(self.label(rain_title, FONTS[0], (1600, 580), rain_size, align="west"), (200, 80))
         outputs["rainier"] = rainier.convert("RGB")
