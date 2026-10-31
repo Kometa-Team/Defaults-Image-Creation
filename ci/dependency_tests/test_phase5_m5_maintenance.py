@@ -109,6 +109,11 @@ class Phase5M5MaintenanceTests(unittest.TestCase):
         from ci import phase5_m2_maintenance,phase5_m3_maintenance,phase5_m4_maintenance,people_job_retention_maintenance
         for module in (phase5_m2_maintenance,phase5_m3_maintenance,phase5_m4_maintenance,people_job_retention_maintenance):
             self.assertFalse(module.verify_checkout()['publication_authorized'])
+        name='create_defaults/lifecycle/ROADMAP.md'
+        older=phase5_m4_maintenance.historical_bytes(ROOT,name,(ROOT/name).read_bytes())
+        self.assertEqual(m5.historical_bytes(ROOT,name,older),older)
+        self.assertEqual(phase5_m3_maintenance.sha(phase5_m3_maintenance.historical_bytes(ROOT,name,older)),
+            phase5_m3_maintenance.manifest()['members'][name]['before_sha256'])
 
     def test_workflow_remains_pinned_readonly_bounded_and_both_platforms(self):
         import yaml

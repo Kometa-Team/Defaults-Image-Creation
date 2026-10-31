@@ -10,7 +10,7 @@ from ci.people_storage_maintenance import regular
 ROOT=Path(__file__).resolve().parents[1]
 BASE='3c15fb56b63bababa5d216b8d885e7dee257c11d'
 MANIFEST=ROOT/'ci/phase5-m5-maintenance-v1.json'
-PIN='78a80a6b031d77c3b09e56e9e382bd76cfccd80c7c01e6156999845f48f6f9e5'
+PIN='aff744c88fe3deeda6667aad722cfd1a2919319e43a9e9cd0170ad23bb8e2995'
 MEMBERS=frozenset({
     '.github/workflows/phase5-m5-validation.yml',
     'ci/dependency_tests/test_phase5_m4_maintenance.py','ci/dependency_tests/test_phase5_m5_maintenance.py',
@@ -42,6 +42,7 @@ RETAINED={
 }
 
 
+@lru_cache(maxsize=128)
 def sha(raw):return hashlib.sha256(raw.replace(b'\r\n',b'\n')).hexdigest()
 def fingerprint(v):return hashlib.sha256(json.dumps(v,sort_keys=True,ensure_ascii=True,allow_nan=False,separators=(',',':')).encode()).hexdigest()
 
@@ -86,11 +87,13 @@ def verify_checkout(root=None):
     value=manifest()
     from ci.people_colorize_maintenance import _head
     _ancestry(str(root),_head(root))
+    from ci.people_readme_maintenance import _regular_files
+    # Check every file and shared directory afresh; cache no filesystem facts.
+    paths=_regular_files(root,MEMBERS|ANCHORS)
     for name,binding in value['members'].items():
-        if sha(regular(root,name).read_bytes())!=binding['sha256']:raise ValueError('Changed physical M5 successor: '+name)
+        if sha(paths[name].read_bytes())!=binding['sha256']:raise ValueError('Changed physical M5 successor: '+name)
         if binding['before_sha256'] is not None and sha(_old(name))!=binding['before_sha256']:raise ValueError('Changed M5 predecessor')
         if binding['before_sha256'] is None and _baseline_entry(name).strip():raise ValueError('M5 addition exists in predecessor')
-    for name in ANCHORS:regular(root,name)
     return value
 
 
@@ -107,6 +110,14 @@ def historical_bytes(root,name,current):
     before=_old(name)
     if name in RETAINED and sha(current)==RETAINED[name]:
         if sha(before)!=binding['before_sha256']:raise ValueError('Changed M5 predecessor')
+        return current
+    if name=='create_defaults/lifecycle/ROADMAP.md' and sha(current) not in {binding['sha256'],binding['before_sha256']}:
+        # M3's unchanged tests pass M4's already-projected roadmap back through
+        # the inherited chain. Delegate to that original pinned boundary rather
+        # than introduce another historical hash or accept arbitrary input.
+        from ci import phase5_m4_maintenance as m4
+        if sha(current)!=m4.manifest()['members'][name]['before_sha256']:raise ValueError('Forged inherited M4 projection')
+        if m4.historical_bytes(root,name,current)!=current:raise ValueError('Changed inherited M4 projection')
         return current
     if sha(before)!=binding['before_sha256'] or sha(current) not in {binding['sha256'],binding['before_sha256']}:raise ValueError('Forged M5 projection')
     return before
