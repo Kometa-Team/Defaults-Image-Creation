@@ -20,6 +20,53 @@ EXPECTED={
 
 
 class Phase5M5MaintenanceTests(unittest.TestCase):
+    def test_pinned_predecessors_use_one_tree_and_one_blob_batch(self):
+        from ci import people_colorize_maintenance as colorize
+        m5._baseline_tree.cache_clear();m5._predecessors.cache_clear()
+        m5._old.cache_clear();m5._baseline_entry.cache_clear()
+        with patch.object(m5,'_git_raw',wraps=m5._git_raw) as git,patch.object(colorize,'_head',wraps=colorize._head) as head:
+            first=m5.verify_checkout();m5.verify_checkout()
+            commands=[call.args[1] for call in git.call_args_list]
+            self.assertEqual(commands.count('ls-tree'),1)
+            self.assertEqual(commands.count('cat-file'),1)
+            self.assertNotIn('show',commands)
+            self.assertEqual(head.call_count,2)
+        for name in EXPECTED:self.assertEqual(m5.sha(m5._old(name)),first['members'][name]['before_sha256'])
+
+    def test_batched_predecessors_reject_bad_tree_framing_objects_and_hashes(self):
+        original=m5._git_raw
+        tree=original(ROOT,'ls-tree','-z',m5.BASE,'--',*sorted(m5.MEMBERS))
+        entries=m5._baseline_tree()
+        batch=original(ROOT,'cat-file','--batch',input=b''.join(oid+b'\n' for _,oid in entries))
+        for attack in (tree[:-1],tree+tree.split(b'\0')[0]+b'\0',tree.replace(b'100644',b'120000',1),
+                tree.replace(entries[0][0].encode(),b'ci/unauthorized.py',1),tree.split(b'\0',1)[1]):
+            m5._baseline_tree.cache_clear()
+            with self.subTest(tree=attack[:70]),patch.object(m5,'_git_raw',return_value=attack),self.assertRaises(ValueError):m5._baseline_tree()
+        m5._baseline_tree.cache_clear();m5._baseline_tree()
+        header_end=batch.index(b'\n')
+        for attack in (batch[:-1],batch+b'extra',batch.replace(b' blob ',b' tree ',1),
+                b'f'*40+batch[40:],batch[:header_end+1]+bytes([batch[header_end+1]^1])+batch[header_end+2:]):
+            m5._predecessors.cache_clear()
+            with self.subTest(batch=attack[:70]),patch.object(m5,'_git_raw',return_value=attack),self.assertRaises(ValueError):m5._predecessors()
+        m5._predecessors.cache_clear();m5._predecessors()
+
+    def test_warm_immutable_caches_never_hide_fresh_parent_or_leaf_checks(self):
+        import stat
+        from types import SimpleNamespace
+        m5.verify_checkout()
+        name='ci/phase5_m4_maintenance.py';current=(ROOT/name).read_bytes();original=Path.lstat
+        for target in (ROOT/'ci',ROOT/name):
+            for link,reparse in ((True,False),(False,True)):
+                def changed(path,*args,**kwargs):
+                    info=original(path,*args,**kwargs)
+                    return SimpleNamespace(st_mode=stat.S_IFLNK if link else info.st_mode,st_file_attributes=0x400 if reparse else 0) if path==target else info
+                with self.subTest(path=str(target),link=link,reparse=reparse),patch.object(Path,'lstat',changed):
+                    with self.assertRaises(ValueError):m5.verify_checkout()
+                    with self.assertRaises(ValueError):m5.historical_bytes(ROOT,name,current)
+                    raw=(f':100644 100644 '+ '0'*40+' '+'1'*40+f' M\0{name}\0').encode()
+                    with patch.object(m5,'verify_checkout'),patch.object(m5,'_git',return_value=raw),self.assertRaises(ValueError):m5.verify_scope(ROOT,m5.BASE,{name})
+        m5.verify_checkout()
+
     def test_five_independent_successors_exact_27_paths_and_predecessors(self):
         value=m5.verify_checkout()
         self.assertEqual(m5.BASE,'3c15fb56b63bababa5d216b8d885e7dee257c11d')

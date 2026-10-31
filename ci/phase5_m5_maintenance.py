@@ -10,7 +10,7 @@ from ci.people_storage_maintenance import regular
 ROOT=Path(__file__).resolve().parents[1]
 BASE='3c15fb56b63bababa5d216b8d885e7dee257c11d'
 MANIFEST=ROOT/'ci/phase5-m5-maintenance-v1.json'
-PIN='bb8262b4380fb230a0a6ae5aec4e95abfc79d3895b056325d7a367a39339c265'
+PIN='a12653370efaea1455f7e0a7037d0750e75b64b258c483cc03c5955b62405dfe'
 MEMBERS=frozenset({
     '.github/workflows/phase5-m5-validation.yml',
     'ci/dependency_tests/test_phase5_m4_maintenance.py','ci/dependency_tests/test_phase5_m5_maintenance.py',
@@ -48,9 +48,13 @@ def fingerprint(v):return hashlib.sha256(json.dumps(v,sort_keys=True,ensure_asci
 
 
 def _git(root,*args):
-    result=subprocess.run(['git',*args],cwd=root,capture_output=True)
+    return _git_raw(root,*args).replace(b'\r\n',b'\n')
+
+
+def _git_raw(root,*args,input=None):
+    result=subprocess.run(['git',*args],cwd=root,input=input,capture_output=True)
     if result.returncode:raise ValueError('Cannot verify M5 history')
-    return result.stdout.replace(b'\r\n',b'\n')
+    return result.stdout
 
 
 @lru_cache(maxsize=8)
@@ -69,27 +73,72 @@ def _decode(raw,pin):
 def manifest():return _decode(regular(ROOT,MANIFEST.relative_to(ROOT).as_posix()).read_bytes(),PIN)
 
 
+@lru_cache(maxsize=1)
+def _baseline_tree():
+    # Only immutable objects at the fixed, independently approved BASE are cached.
+    raw=_git_raw(ROOT,'ls-tree','-z',BASE,'--',*sorted(MEMBERS))
+    if not raw.endswith(b'\0'):raise ValueError('Incomplete M5 predecessor tree')
+    entries={}
+    for row in raw[:-1].split(b'\0'):
+        fields,name=row.split(b'\t',1);name=name.decode('utf8');fields=fields.split()
+        if (name not in APPROVED or name in entries or len(fields)!=3 or fields[:2]!=[b'100644',b'blob']
+                or len(fields[2])!=40 or any(c not in b'0123456789abcdef' for c in fields[2])):raise ValueError('Changed M5 predecessor tree')
+        entries[name]=fields[2]
+    if set(entries)!=set(APPROVED):raise ValueError('Changed M5 predecessor membership')
+    return tuple(sorted(entries.items()))
+
+
+@lru_cache(maxsize=1)
+def _predecessors():
+    entries=_baseline_tree()
+    raw=_git_raw(ROOT,'cat-file','--batch',input=b''.join(oid+b'\n' for _,oid in entries))
+    values=[];offset=0
+    for name,oid in entries:
+        end=raw.find(b'\n',offset)
+        fields=raw[offset:end].split()
+        if end<offset or len(fields)!=3 or fields[:2]!=[oid,b'blob'] or not fields[2].isdigit():raise ValueError('Invalid M5 predecessor batch')
+        size=int(fields[2]);start=end+1;end=start+size
+        if end>=len(raw) or raw[end:end+1]!=b'\n':raise ValueError('Truncated M5 predecessor batch')
+        data=raw[start:end]
+        if (hashlib.sha1(b'blob '+str(size).encode()+b'\0'+data).hexdigest().encode()!=oid
+                or sha(data)!=APPROVED[name][0]):raise ValueError('Changed M5 predecessor bytes')
+        values.append((name,data.replace(b'\r\n',b'\n')));offset=end+1
+    if offset!=len(raw):raise ValueError('Unexpected M5 predecessor batch data')
+    return tuple(values)
+
+
 @lru_cache(maxsize=32)
-def _old(name):return _git(ROOT,'show',BASE+':'+name)
+def _old(name):
+    if name in APPROVED:return dict(_predecessors())[name]
+    return _git(ROOT,'show',BASE+':'+name)
 
 
 @lru_cache(maxsize=64)
-def _baseline_entry(name):return _git(ROOT,'ls-tree',BASE,'--',name)
+def _baseline_entry(name):
+    if name in MEMBERS:
+        oid=dict(_baseline_tree()).get(name)
+        return b'100644 blob '+oid+b'\t'+name.encode()+b'\n' if oid is not None else b''
+    return _git(ROOT,'ls-tree',BASE,'--',name)
 
 
 @lru_cache(maxsize=32)
 def _ancestry(root,head):_git(root,'merge-base','--is-ancestor',BASE,head)
 
 
+def _physical_paths(root,names):
+    from ci.people_readme_maintenance import _regular_files
+    # A new lstat of every leaf and shared ancestor on EVERY call. The inherited
+    # helper caches path arithmetic only, never filesystem or permission facts.
+    return _regular_files(root,names|{MANIFEST.relative_to(ROOT).as_posix()})
+
+
 def verify_checkout(root=None):
     root=Path(root or ROOT)
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M5 policy checkout')
-    value=manifest()
+    paths=_physical_paths(root,MEMBERS|ANCHORS)
+    value=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)
     from ci.people_colorize_maintenance import _head
     _ancestry(str(root),_head(root))
-    from ci.people_readme_maintenance import _regular_files
-    # Check every file and shared directory afresh; cache no filesystem facts.
-    paths=_regular_files(root,MEMBERS|ANCHORS)
     for name,binding in value['members'].items():
         if sha(paths[name].read_bytes())!=binding['sha256']:raise ValueError('Changed physical M5 successor: '+name)
         if binding['before_sha256'] is not None and sha(_old(name))!=binding['before_sha256']:raise ValueError('Changed M5 predecessor')
@@ -101,8 +150,9 @@ def historical_bytes(root,name,current):
     if name not in MEMBERS:return current
     root=Path(root)
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M5 historical projection')
-    binding=manifest()['members'][name]
-    actual=regular(root,name).read_bytes()
+    paths=_physical_paths(root,{name})
+    binding=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)['members'][name]
+    actual=paths[name].read_bytes()
     if sha(actual)!=binding['sha256']:raise ValueError('Changed M5 physical successor: '+name)
     if binding['before_sha256'] is None:
         if sha(current)!=binding['sha256']:raise ValueError('Changed M5 new member')
@@ -140,4 +190,5 @@ def verify_scope(root,baseline,names):
         fields,name=rows[offset].split(),rows[offset+1].decode('utf8')
         if (name not in names or name in seen or len(fields)!=5 or fields[:2] not in ([b':000000',b'100644'],[b':100644',b'100644'])
                 or fields[4]!=(b'A' if fields[0]==b':000000' else b'M')):raise ValueError('M5 requires regular-file additions/modifications')
-        regular(Path(root),name);seen.add(name)
+        seen.add(name)
+    _physical_paths(Path(root),seen)
