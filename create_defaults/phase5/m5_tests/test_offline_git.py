@@ -41,8 +41,17 @@ def test_P5_T30_actual_tree_or_namespace_substitution_fails(native,mutation):
     if mutation=='same_bytes_case_collision':
         path=result.to_dict()['members'][0]['destination'];raw=Path(result.to_dict()['members'][0]['source']).read_bytes()
         from create_defaults.bulk.lifecycle.publication_preparation import OfflineDestination,plan_operation
-        alternate=OfflineDestination(target.trial,existing={path.upper():raw})
+        alternate=OfflineDestination(target.trial,existing={'genre/'+Path(path).name.upper():raw})
         with pytest.raises(BulkError):plan_operation(selection,patch,alternate)
+        # Build actual NFC/NFD Git entries without relying on the host's
+        # filesystem Unicode normalization or case behavior.
+        import subprocess
+        from create_defaults.bulk.lifecycle.publication_preparation import tree
+        blob=git(target.root,'hash-object','-w',result.to_dict()['members'][0]['source']).strip()
+        entries=b''.join(b'100644 blob '+blob+b'\t'+name+b'\0' for name in sorted([
+            'Caf\u00e9.jpg'.encode('utf8'),'Cafe\u0301.jpg'.encode('utf8')]))
+        made=subprocess.run(['git','-C',str(target.root),'mktree','-z'],input=entries,check=True,capture_output=True).stdout.decode().strip()
+        with pytest.raises(BulkError):tree(target.root,made)
         return
     run_offline(result,selection,patch,target)
     root=target.trial.root/('m5-transport-'+result.sha256);work=root/'work';remote=root/'remote.git'

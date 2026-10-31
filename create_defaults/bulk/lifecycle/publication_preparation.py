@@ -207,7 +207,7 @@ def _finish_owned_staging(preparation,target,root):
     for commit,batch in zip(chain,value['plan']['batches']):
         if git(work,'rev-parse',commit+'^').decode().strip()!=previous:fail('commit_parent')
         verify_diff(work,previous,commit,batch['members']);previous=commit
-    dirty=[r for r in git(work,'status','--porcelain','-z').split(b'\0') if r]
+    dirty=[r for r in git(work,'status','--porcelain','--untracked-files=all','-z').split(b'\0') if r]
     if not dirty:return
     if len(chain)==len(value['plan']['batches']):fail('unexpected_worktree')
     batch=value['plan']['batches'][len(chain)];allowed={m['destination']:m for m in batch['members']}

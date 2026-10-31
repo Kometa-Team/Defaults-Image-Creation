@@ -10,7 +10,7 @@ from ci.people_storage_maintenance import regular
 ROOT=Path(__file__).resolve().parents[1]
 BASE='3c15fb56b63bababa5d216b8d885e7dee257c11d'
 MANIFEST=ROOT/'ci/phase5-m5-maintenance-v1.json'
-PIN='aff744c88fe3deeda6667aad722cfd1a2919319e43a9e9cd0170ad23bb8e2995'
+PIN='4541f381251198176455a2b64c113bb0f8e9fa19c03af5c7b1be9ff68c91c7a5'
 MEMBERS=frozenset({
     '.github/workflows/phase5-m5-validation.yml',
     'ci/dependency_tests/test_phase5_m4_maintenance.py','ci/dependency_tests/test_phase5_m5_maintenance.py',

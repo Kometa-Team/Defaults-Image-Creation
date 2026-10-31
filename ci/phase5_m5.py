@@ -76,6 +76,7 @@ def native_artifacts(directory,label):
     require(len(value['members'])==(2 if label=='multi' else 1),'Wrong complete operation size')
     if label=='current':
         i=value['required_members'][0];mapping=proof['mapping'];last=snapshots[-1].to_dict()
+        require(len({s.to_dict()['artwork'][i]['sha256'] for s in snapshots})==3,'Missing distinct native artwork epochs')
         require(mapping['members']==[i] and mapping['after'][i]['names']['public_path']=='genre/fixture.jpg','Missing case-only retained mapping')
         require(last['expected_snapshots']=={i:snapshots[1].sha256}
             and last['entries'][i]['original_names']==mapping['before'][i]['original_names']

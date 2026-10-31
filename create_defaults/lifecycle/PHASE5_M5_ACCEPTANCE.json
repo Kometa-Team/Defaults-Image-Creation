@@ -40,6 +40,7 @@
       "t27-missing-immutable-progress-object-blocks",
       "t25-partial-membership-cannot-be-marked-complete",
       "t22-progress-cas-rejects-stale-writer",
+      "t27-resealed-journal-cannot-forge-types-or-progress",
       "t22-local-object-or-commit-failure-finishes-only-owned-staging-add",
       "t22-local-object-or-commit-failure-finishes-only-owned-staging-commit"
     ],
@@ -78,12 +79,13 @@
       "t27-missing-immutable-progress-object-blocks",
       "t25-partial-membership-cannot-be-marked-complete",
       "t22-progress-cas-rejects-stale-writer",
+      "t27-resealed-journal-cannot-forge-types-or-progress",
       "t22-local-object-or-commit-failure-finishes-only-owned-staging-add",
       "t22-local-object-or-commit-failure-finishes-only-owned-staging-commit"
     ]
   },
   "ids_path": "ci/phase5-m5-test-ids.json",
-  "actual_pytest_ids": 84,
+  "actual_pytest_ids": 85,
   "required_workflows": [
     "Default Poster Candidate Validation",
     "Dependency provenance maintenance",
@@ -244,7 +246,8 @@
     ],
     "P5-T27": [
       "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T27_cold_read_only_replay_requires_fresh_observation",
-      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T27_missing_immutable_progress_object_blocks"
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T27_missing_immutable_progress_object_blocks",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T27_resealed_journal_cannot_forge_types_or_progress"
     ],
     "P5-T28": [
       "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_production_entrypoints_remain_unavailable[commit_operational]",

@@ -149,6 +149,9 @@
   "t22-progress-cas-rejects-stale-writer": [
     "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_progress_CAS_rejects_stale_writer"
   ],
+  "t27-resealed-journal-cannot-forge-types-or-progress": [
+    "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T27_resealed_journal_cannot_forge_types_or_progress"
+  ],
   "t22-local-object-or-commit-failure-finishes-only-owned-staging-add": [
     "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_local_object_or_commit_failure_finishes_only_owned_staging[add]"
   ],

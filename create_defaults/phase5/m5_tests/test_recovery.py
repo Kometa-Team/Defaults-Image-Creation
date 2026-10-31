@@ -27,7 +27,9 @@ def test_P5_T22_intent_and_transaction_faults_are_recoverable(native,boundary):
 @pytest.mark.parametrize('point',['after_commit','after_push'])
 def test_P5_T23_actual_commit_and_ambiguous_push_reobserve_before_retry(native,point):
     selection,patch,target,result=prepared(native)
-    with pytest.raises(BulkError,match='injected_interruption'):run_offline(result,selection,patch,target,fail_at=point)
+    with pytest.raises(BulkError) as interrupted:
+        run_offline(result,selection,patch,target,fail_at=point)
+    assert interrupted.value.code=='injected_interruption'
     progress=Progress(selection.registry.operations.root,result).read()
     assert progress['state']=='UNKNOWN'
     root=target.trial.root/('m5-transport-'+result.sha256)
@@ -94,6 +96,30 @@ def test_P5_T22_progress_CAS_rejects_stale_writer(native):
     prior=progress.append('PREPARED',0,None,expected=None)
     with pytest.raises(Conflict):progress.append('UNKNOWN',0,None,expected=None,error=RuntimeError('x'))
     assert progress.read()==prior
+
+
+def test_P5_T27_resealed_journal_cannot_forge_types_or_progress(native):
+    from create_defaults.bulk.lifecycle.preparation_progress import _read
+    selection,patch,target,result=prepared(native)
+    store=SidecarStore(selection.registry.operations.root)
+    progress=Progress(store.root,result)
+    prior=progress.append('PREPARED',0,None,expected=None)
+    for mutation in ('version_bool','missing_observation','unknown_increase','prepared_again','extra_field'):
+        forged={k:v for k,v in prior.items() if k!='sha256'}
+        forged.update(revision=2,previous_sha256=prior['sha256'],state='UNKNOWN')
+        if mutation=='version_bool':forged['version']=True
+        elif mutation=='missing_observation':forged.update(state='OFFLINE_VERIFIED',verified_batches=1)
+        elif mutation=='unknown_increase':forged.update(verified_batches=1,head='a'*40)
+        elif mutation=='prepared_again':forged['state']='PREPARED'
+        else:forged['unreviewed']='extra'
+        checksum=fingerprint(forged)
+        store.put_object(canonical(forged),expected_sha256=checksum)
+        # An actual sealed object/event still cannot legitimize these records.
+        # The failed transaction rolls back only this adversarial fixture insert.
+        with pytest.raises(BulkError),store.transaction() as db:
+            store.event(db,KIND,result.sha256,dict(sha256=checksum))
+            _read(store,db,result)
+        assert progress.read()==prior
 
 
 @pytest.mark.parametrize('command',['add','commit'])

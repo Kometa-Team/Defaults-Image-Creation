@@ -31,6 +31,7 @@ def current_native():
     from create_defaults.phase5.m4_tests.helpers import rename,epoch,commit_update
     for base in sequence_seed.__wrapped__():
         for example in transaction_case.__wrapped__(base):
+            example=dict(example,label='m5-current-sequence')
             mapping=rename(example,name='fixture')
             selected=epoch(example)
             native,_,snapshot,result=commit_update(example,selected,label='m5-current-update')

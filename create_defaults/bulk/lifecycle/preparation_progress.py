@@ -21,7 +21,7 @@ def _read(store,db,preparation):
         payload=decode_json(row['payload'].encode())
         if set(payload)!={'sha256'}:fail('journal_index')
         value=decode_json(store.read_object(payload['sha256']))
-        if set(value)!=KEYS or value['version']!=1 or value['kind']!=KIND or value['state'] not in STATES:fail('journal_schema')
+        if set(value)!=KEYS or type(value['version']) is not int or value['version']!=1 or value['kind']!=KIND or value['state'] not in STATES:fail('journal_schema')
         pin=fingerprint(value);identity=value['preparation_sha256'];prior=states.get(identity)
         if pin!=payload['sha256'] or identity!=row['subject'] or value['simulation'] is not True or value['publication_authorized'] is not False:fail('journal_binding')
         if value['revision']!=(1 if prior is None else prior['revision']+1) or value['previous_sha256']!=(None if prior is None else prior['sha256']):fail('journal_chain')
@@ -29,6 +29,9 @@ def _read(store,db,preparation):
                 or type(value['verified_batches']) is not int or not 0<=value['verified_batches']<=value['planned_batches']<=32
                 or value['head'] is not None and (not isinstance(value['head'],str) or re.fullmatch('[0-9a-f]{40}',value['head']) is None)):fail('journal_count')
         if prior is None and (value['state']!='PREPARED' or value['verified_batches']!=0):fail('journal_initial')
+        if value['state']=='PREPARED' and (prior is not None or value['head'] is not None):fail('journal_initial')
+        if value['state'] in {'INCOMPLETE','OFFLINE_VERIFIED'} and value['head'] is None:fail('journal_observation')
+        if prior is not None and value['state']=='UNKNOWN' and (value['verified_batches'],value['head'])!=(prior['verified_batches'],prior['head']):fail('journal_unknown_observation')
         if prior is not None and (value['planned_batches']!=prior['planned_batches'] or value['verified_batches']<prior['verified_batches']):fail('journal_regression')
         if value['state']=='OFFLINE_VERIFIED' and value['verified_batches']!=value['planned_batches']:fail('journal_incomplete')
         if value['failure'] is not None:
