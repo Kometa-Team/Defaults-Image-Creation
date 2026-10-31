@@ -1,0 +1,40 @@
+name: People startup job retention
+'on':
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  retention:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python: python3.13
+          - os: windows-latest
+            python: py -3.13
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.13'
+      - run: ${{ matrix.python }} -m pip install -r create_defaults/requirements-bulk.txt
+      - name: Test startup retention and recovery boundaries
+        run: >-
+          ${{ matrix.python }} -m pytest -q --junitxml=startup-retention-results.xml
+          create_people_posters/tests/test_people_job_retention.py
+          create_people_posters/tests/test_people_storage_watch.py
+          create_people_posters/tests/test_people_startup_retention.py
+          create_people_posters/tests/test_people_workspaces.py
+          create_people_posters/tests/test_people_api_orchestrator.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ always() }}
+        with:
+          name: people-startup-retention-${{ matrix.os }}
+          path: startup-retention-results.xml
+          if-no-files-found: error

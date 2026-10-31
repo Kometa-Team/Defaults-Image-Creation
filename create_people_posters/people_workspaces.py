@@ -1,4 +1,4 @@
-"""Isolated, resumable jobs. Only verified publications become deletion candidates."""
+"""Isolated, resumable jobs with bounded terminal-job startup retention."""
 
 # A single canonical diagnostic registry is shared by CLI and imported callers.
 import sys as _security_sys
@@ -128,7 +128,7 @@ class Workspaces:
         manifest = self.path(batch) / "manifest.json"
         reject_links(manifest)
         data = json.loads(manifest.read_text(encoding="utf-8"))
-        if data.get("id") != batch or data.get("managed_by") != "kometa-people-v1":
+        if not isinstance(data, dict) or data.get("id") != batch or data.get("managed_by") != "kometa-people-v1":
             raise ValueError("Unrecognized workspace manifest")
         return dict(row), data
 
@@ -136,7 +136,7 @@ class Workspaces:
         if cleanup and os.getenv("PEOPLE_AUTO_CLEANUP", "true").strip().lower() in {"1", "true", "yes", "on"}:
             for batch, outcome in self.cleanup(dry_run=False):
                 print(f"[CLEANUP] {batch}: {outcome}")
-        self.check_budget()
+        self.check_budget(admitting=True)
         batch = time.strftime("%Y%m%dT%H%M%S", time.gmtime()) + "-" + uuid.uuid4().hex[:12]
         path = self.path(batch)
         path.mkdir()
@@ -167,14 +167,23 @@ class Workspaces:
                 raise ValueError("Published/cleaned/validation-only batch cannot be regenerated; use --new-batch")
             return batch
         if not new:
-            rows = self.db.execute("SELECT id FROM jobs WHERE status NOT IN ('complete','cleanup_eligible','published','no_work','validation_only') ORDER BY created DESC").fetchall()
-            row = next((row for row in rows if not self.retired(row['id'])),None)
-            if row:
-                _, manifest = self.record(row["id"])
+            candidate = self.resume_candidate()
+            if candidate:
+                _, manifest = self.record(candidate)
                 if people_list and Path(manifest["people_list_source"]) != Path(people_list).absolute():
                     raise ValueError("Another unfinished batch exists; use --new-batch or --batch-id")
-                return row["id"]
+                return candidate
         return self.create(people_list, cleanup=cleanup)
+
+    def resume_candidate(self):
+        rows = self.db.execute("SELECT id FROM jobs WHERE status NOT IN ('complete','cleanup_eligible','published','no_work','validation_only') ORDER BY created DESC").fetchall()
+        for row in rows:
+            try:
+                if isinstance(row['id'], str) and ID_PATTERN.fullmatch(row['id']) and not self.retired(row['id']):
+                    return row['id']
+            except (OSError, ValueError):
+                continue
+        return None
 
     def retired(self, batch):
         marker=self.path(batch)/"retention-retired.json"
@@ -205,15 +214,14 @@ class Workspaces:
         lease = self.path(batch) / ".active"
         if lease.exists() and lease.read_text(encoding="ascii") == str(os.getpid()):
             lease.unlink()
-            enrollment = self.state / "verified-retention" / "enrollment.json"
-            reject_links(enrollment)
-            if enrollment.exists():
-                if self.jobs!=(self.config/'jobs').resolve() or self.state!=(self.config/'state').resolve():
-                    print('[WARN] End-of-job maintenance retained: custom workspace roots require explicit review.')
-                    return
-                from create_people_posters.people_verified_cleanup import maintenance_after_job
-                status, _ = self.record(batch)
-                maintenance_after_job(self, completed=status["status"] in {"cleanup_eligible", "complete", "no_work"})
+            # Terminal-job retention runs once at startup under the shared
+            # processing lease. Legacy exact-artwork maintenance stays manual;
+            # its historical CI enrollment is not a runtime job-expiry gate.
+            from create_people_posters.people_storage_watch import report
+            try:
+                report(self, announce=True)
+            except (OSError, ValueError, sqlite3.Error) as error:
+                print('[STORAGE] Final storage measurement failed; inspect retained work: ' + safe_exception(error))
 
     def configure(self, batch):
         self.record(batch)
@@ -243,17 +251,9 @@ class Workspaces:
                 raise ValueError(f"{key} must be outside managed temporary jobs")
         return path
 
-    def check_budget(self):
-        limit = float(os.getenv("PEOPLE_JOBS_MAX_GIB", "20")) * 1024 ** 3
-        used = 0
-        for root, dirs, files in os.walk(self.jobs, followlinks=False):
-            for name in dirs + files:
-                reject_links(Path(root) / name)
-            used += sum((Path(root) / name).stat().st_size for name in files)
-        if limit > 0 and used >= limit:
-            raise ValueError("Managed jobs storage budget exceeded; retry/inspect retained failed jobs or raise PEOPLE_JOBS_MAX_GIB")
-        if shutil.disk_usage(self.jobs).free < 256 * 1024 ** 2:
-            raise ValueError("Insufficient free disk space for another processing step")
+    def check_budget(self, admitting=False):
+        from create_people_posters.people_storage_watch import check
+        return check(self, admitting=admitting)
 
     def confirm_published(self, batch, ledger):
         if not ledger.verified(batch):
@@ -279,93 +279,16 @@ class Workspaces:
         self.set_status(batch, "cleanup_eligible")
 
     def cleanup(self, dry_run=True, now=None):
-        enrollment = self.state / "verified-retention" / "enrollment.json"
-        reject_links(enrollment)
-        if enrollment.exists():
-            from create_people_posters.people_verified_cleanup import cleanup_managed_jobs
-            return cleanup_managed_jobs(self, dry_run=dry_run, now=now)
-        now = time.time() if now is None else now
         self.last_cleanup_counts = None
-        rows = self.db.execute("SELECT * FROM jobs").fetchall()
-        self.last_cleanup_counts = {"eligible": 0, "deleted": 0,
-                                    "retained": sum(row["status"] != "complete" for row in rows)}
-        retention = float(os.getenv("PEOPLE_BATCH_RETENTION_DAYS", "3"))
-        failed_retention = float(os.getenv("PEOPLE_FAILED_BATCH_RETENTION_DAYS", "14"))
-        if retention < 0 or failed_retention < 0:
-            raise ValueError("Retention days cannot be negative")
-        results = []
-        for row in rows:
-            batch = row["id"]
-            _, manifest = self.record(batch)
-            path = self.path(batch)
-            if (path / ".active").exists():
-                continue
-            if row["status"] not in {"published", "cleanup_eligible"} or row["published"] is None:
-                if row["status"] != "complete" and now - row["updated"] > failed_retention * 86400:
-                    results.append((batch, "retained: unpublished; manual recovery required"))
-                continue
-            if now - row["published"] < retention * 86400:
-                continue
-            from people_publication_state import PublicationState
-            ledger = PublicationState(self.state)
-            try:
-                if not ledger.verified(batch):
-                    results.append((batch, "retained: publication receipts incomplete"))
-                    continue
-                for root, dirs, files in os.walk(path, followlinks=False):
-                    for name in dirs + files:
-                        reject_links(Path(root) / name)
-                from publish_people_github import file_hash
-                from people_remote_inventory import IMAGE_SUFFIXES
-                catalog = manifest.get("cleanup_files")
-                if catalog is None:
-                    results.append((batch, "retained: cleanup image catalog missing"))
-                    continue
-                changed = any(image.suffix.lower() in IMAGE_SUFFIXES
-                              and catalog.get(image.relative_to(path).as_posix()) != file_hash(image)
-                              for image in path.rglob("*") if image.is_file())
-                for receipt in ledger.rows(batch):
-                    for key, digest in (("prepared", "published_hash"), ("source", "source_hash")):
-                        image = Path(receipt[key])
-                        if image.exists() and file_hash(image) != receipt[digest]:
-                            changed = True
-                if changed:
-                    results.append((batch, "retained: local image changed after publication"))
-                    continue
-                self.last_cleanup_counts["eligible"] += 1
-                results.append((batch, "eligible" if dry_run else "cleaned"))
-                if dry_run:
-                    continue
-                ledger.export(batch)
-                # Keep durable manifest and compact logs; a crash can safely resume this pass.
-                for child in path.iterdir():
-                    reject_links(child)
-                    if child.name in {"manifest.json", "logs"}:
-                        continue
-                    if child.is_dir():
-                        shutil.rmtree(child)
-                    else:
-                        child.unlink()
-                for log in (path / "logs").rglob("*"):
-                    if log.is_file() and log.stat().st_size > 32768:
-                        with log.open("rb") as handle:
-                            handle.seek(-32768, 2)
-                            tail = handle.read()
-                        log.write_bytes(tail)
-                self.set_status(batch, "complete")
-                self.last_cleanup_counts["deleted"] += 1
-                self.last_cleanup_counts["retained"] -= 1
-            finally:
-                ledger.close()
-        return results
-
+        from create_people_posters.people_job_retention import cleanup
+        return cleanup(self, dry_run=dry_run, now=now)
 
 def main():
     import argparse
     from dotenv import load_dotenv
     load_dotenv(ROOT / ".env")
     register_environment()
-    parser = argparse.ArgumentParser(description="Clean only verified, retained batch workspaces")
+    parser = argparse.ArgumentParser(description="Clean expired owned terminal jobs; retain active/recovery/rollback data")
     parser.add_argument("--apply", action="store_true", help="Default is cleanup dry-run")
     args = parser.parse_args()
     manager = Workspaces()

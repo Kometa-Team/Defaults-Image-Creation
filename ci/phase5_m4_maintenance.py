@@ -73,11 +73,13 @@ def _ancestry(root,head):
 
 def verify_checkout(root=None):
     root=Path(root or ROOT)
+    from ci.people_job_retention_maintenance import verify_checkout as verify_retention, historical_bytes as retention_bytes
+    verify_retention(root)
     value=manifest()
     from ci.people_colorize_maintenance import _head
     _ancestry(str(root),_head(root))
     for name,binding in value['members'].items():
-        if sha(regular(root,name).read_bytes())!=binding['sha256']:
+        if sha(retention_bytes(root,name,regular(root,name).read_bytes()))!=binding['sha256']:
             raise ValueError('Unreviewed M4 successor: '+name)
         if binding['before_sha256'] is not None and sha(_old(name))!=binding['before_sha256']:
             raise ValueError('Changed M4 predecessor: '+name)
@@ -93,7 +95,10 @@ def historical_bytes(root,name,current):
     # project the same in-memory predecessor. A rollback of the actual path
     # never qualifies for this idempotent historical-only projection.
     actual=regular(Path(root),name).read_bytes()
-    if sha(actual)!=binding['sha256']:
+    from ci.people_job_retention_maintenance import historical_bytes as retention_bytes
+    physical=retention_bytes(root,name,actual)
+    if current==actual: current=physical
+    if sha(physical)!=binding['sha256']:
         raise ValueError('Changed M4 physical successor: '+name)
     before=_old(name)
     if sha(before)!=binding['before_sha256']:

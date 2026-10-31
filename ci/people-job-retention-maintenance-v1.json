@@ -1,0 +1,168 @@
+{
+  "version": 1,
+  "baseline_commit": "cd8d4eecd64f5bff201e8ecd7daccebd955f87af",
+  "publication_authorized": false,
+  "members": {
+    ".github/workflows/people-job-retention.yml": {
+      "before_sha256": null,
+      "sha256": "fa07b96c296283ca5a4c1ff791afec6f4cadd1d8cd19a709f240c61fbe6d6304"
+    },
+    "ci/dependabot_maintenance.py": {
+      "before_sha256": "b3eaa38e945dcedf39a28578f9ded1fec555c2d909c7aaee4b0712344a8faeb5",
+      "sha256": "b82b688ca74c180c7d6f78ca7bc66c467ae40b5207e311d41209f080c5f2b1c2"
+    },
+    "ci/dependency_tests/test_dependabot_audit.py": {
+      "before_sha256": "e29a6add045e7f3583ef7568a931643b1748f0109352bdf51b8f5649e4ec3c74",
+      "sha256": "a3bc8103a127072773c46c94062e5dfa05f82cde3182c77f275cd7e8c8ab02b4"
+    },
+    "ci/dependency_tests/test_people_colorize_maintenance.py": {
+      "before_sha256": "18267a87960ac4e46637534251676f87fc6ba6c833801a1c9f59292d5ba3e52d",
+      "sha256": "8a8565f8377fbfc0d4d3e8487fbec3bc40dbb74b01d018da531b71969273db09"
+    },
+    "ci/dependency_tests/test_people_job_retention_maintenance.py": {
+      "before_sha256": null,
+      "sha256": "c8e03edba1c697e73995d584d5026099273965098479297daf0a7f064fe50258"
+    },
+    "ci/dependency_tests/test_people_retention.py": {
+      "before_sha256": "d9eb0d9bdf05ec02c052fadde71e7a99f30216cc7ae99a6aed60f1fff0e2dc66",
+      "sha256": "45c818204f72595a78b471b2d76a52a8769b7d90d4c8d487e1135faaacb2d100"
+    },
+    "ci/dependency_tests/test_phase5_m4_maintenance.py": {
+      "before_sha256": "ea0e237accf3fca42c93283cae75009e4fd2b908f7a3b0959f1240c6ec7797da",
+      "sha256": "27c4e891a91880a84235402086b9465b3ff6ebf8d0197e3d7c2c116f387747b4"
+    },
+    "ci/people_readme_maintenance.py": {
+      "before_sha256": "8d85f0962710f91c98a026863298bfd22775e1ac48635b4d06da5cef12d40157",
+      "sha256": "e10105cfe24ca2fb8dbd78b2e81894b5dd05f923581f7a754bfc590f2a936fbb"
+    },
+    "ci/phase5_m3_maintenance.py": {
+      "before_sha256": "e449d0fed2bbcddb84027b81198941dfbf03c6af9fe13d1b18bf3fdb7cb0ce7c",
+      "sha256": "10068ee6121efad5e329f314698567f58a5857c97ed96ae3ad98cb7e9d4b1fc5"
+    },
+    "ci/phase5_m4_maintenance.py": {
+      "before_sha256": "9d2cd0f449c701abf05c23763728afcad22d9211ff0e98db812750169e8dbf91",
+      "sha256": "4a38d98fb4f96d2886ca5c31aff2bc974120e114e60b94ce012b1f0c12ec1a9c"
+    },
+    "create_people_posters/.env.example": {
+      "before_sha256": "645799cffde15f7d37a0a59d38d641356bdbec10d6d5a00cee76579512e404c8",
+      "sha256": "789283c54a16a7d7ccb2765ce3d138cd6632f6e90ce557fad9cb39670697f61f"
+    },
+    "create_people_posters/orchestrator.py": {
+      "before_sha256": "faa2c06cdc8828aa690af8700031c2eff365e403181f5d4f521dee94eda70ddd",
+      "sha256": "3d867940e78f934b5f940d1548012d0baa2816a0f59249644fc484f4d08a7200"
+    },
+    "create_people_posters/people_job_retention.py": {
+      "before_sha256": null,
+      "sha256": "1f0afbe7761921b3c44d7becd3e8c6e0866a41b59df284609f913d23fdebeba2"
+    },
+    "create_people_posters/people_storage_watch.py": {
+      "before_sha256": null,
+      "sha256": "8b41fff659167316da93e65556ee88ac17af9fc9d3df7cd365daa8f329319d77"
+    },
+    "create_people_posters/people_workspaces.py": {
+      "before_sha256": "03f9dcd6f6295e2d2ab59f631c8478f76415f652696523b5e5c91f0de4b10e5f",
+      "sha256": "66523dec76743438fa9e5ee935ba9aad1b49e5f63cf13c1e8e5b71bf4e95f4c9"
+    },
+    "create_people_posters/tests/test_people_api_orchestrator.py": {
+      "before_sha256": "5b182674bb3f21010c20c0cfb5fcecdcc4ec0ed0c184f585ca93681d0ccbd38c",
+      "sha256": "9308754202c7dab68c0e4acfa0f75203e9539459420a12c3565545e1918944ad"
+    },
+    "create_people_posters/tests/test_people_job_retention.py": {
+      "before_sha256": null,
+      "sha256": "a84638b2e2cfb0f534392369eafbe1e0504e2ce9f813e1f02498498fcbf164ee"
+    },
+    "create_people_posters/tests/test_people_startup_retention.py": {
+      "before_sha256": null,
+      "sha256": "f461ef9d09ed0c989a738801caa6cfb4ff6b714051e5baead70cce4e9aabca5c"
+    },
+    "create_people_posters/tests/test_people_storage_watch.py": {
+      "before_sha256": null,
+      "sha256": "1ca65b8a73fa83f9298b500d86e19db90ba39cd100ef9ee2c9749ab553f4eb49"
+    },
+    "create_people_posters/tests/test_people_workspaces.py": {
+      "before_sha256": "f810959f7c3cf2c2ae96cec244f0fa725e2d6cba6b05609ac6b37c2582db7f24",
+      "sha256": "9429e4c99c9321b3500791a6cfad0ab57f7647d2d665e3bd394be85ee55245cf"
+    },
+    "docs/PEOPLE_JOB_RETENTION_INVENTORY_2026-10-30.json": {
+      "before_sha256": null,
+      "sha256": "5a9da9ad1ae74c0dbe8816d4825b7010c1df46abd74998812ace1f258ccc0fbe"
+    },
+    "docs/PEOPLE_STARTUP_JOB_RETENTION.md": {
+      "before_sha256": null,
+      "sha256": "7e77275afa75594b4479b44a0c753fac1a32d8c50323ab2cf58e58f0e8382ef1"
+    }
+  },
+  "pytest_ids": [
+    "create_people_posters/tests/test_people_job_retention.py::test_changed_payload_after_interruption_is_retained",
+    "create_people_posters/tests/test_people_job_retention.py::test_cleanup_reconciles_crash_after_directory_removal",
+    "create_people_posters/tests/test_people_job_retention.py::test_config_models_and_unknown_ownership_are_untouched",
+    "create_people_posters/tests/test_people_job_retention.py::test_corrupt_job_does_not_block_another_job[[]]",
+    "create_people_posters/tests/test_people_job_retention.py::test_corrupt_job_does_not_block_another_job[null]",
+    "create_people_posters/tests/test_people_job_retention.py::test_corrupt_job_does_not_block_another_job[{\"id\":\"wrong\"}]",
+    "create_people_posters/tests/test_people_job_retention.py::test_corrupt_job_does_not_block_another_job[{broken]",
+    "create_people_posters/tests/test_people_job_retention.py::test_corrupt_publication_cohort_never_authorizes_deletion[UPDATE publications SET branch='unexpected' WHERE style='bw']",
+    "create_people_posters/tests/test_people_job_retention.py::test_corrupt_publication_cohort_never_authorizes_deletion[UPDATE publications SET style='original' WHERE style='bw']",
+    "create_people_posters/tests/test_people_job_retention.py::test_corrupt_state_export_does_not_block_unrelated_expired_job[\"text\"]",
+    "create_people_posters/tests/test_people_job_retention.py::test_corrupt_state_export_does_not_block_unrelated_expired_job[[]]",
+    "create_people_posters/tests/test_people_job_retention.py::test_corrupt_state_export_does_not_block_unrelated_expired_job[null]",
+    "create_people_posters/tests/test_people_job_retention.py::test_corrupt_state_export_does_not_block_unrelated_expired_job[{broken]",
+    "create_people_posters/tests/test_people_job_retention.py::test_dry_run_is_read_only_and_uses_lifecycle_not_mtime",
+    "create_people_posters/tests/test_people_job_retention.py::test_explicit_failed_and_validation_retention_overrides",
+    "create_people_posters/tests/test_people_job_retention.py::test_incomplete_jobs_are_recoverable_even_when_very_old[generated]",
+    "create_people_posters/tests/test_people_job_retention.py::test_incomplete_jobs_are_recoverable_even_when_very_old[partially_published]",
+    "create_people_posters/tests/test_people_job_retention.py::test_incomplete_jobs_are_recoverable_even_when_very_old[pending]",
+    "create_people_posters/tests/test_people_job_retention.py::test_incomplete_jobs_are_recoverable_even_when_very_old[processing]",
+    "create_people_posters/tests/test_people_job_retention.py::test_incomplete_jobs_are_recoverable_even_when_very_old[recovery_pending]",
+    "create_people_posters/tests/test_people_job_retention.py::test_incomplete_jobs_are_recoverable_even_when_very_old[validated]",
+    "create_people_posters/tests/test_people_job_retention.py::test_interrupt_after_manifest_unlink_resumes_without_manifest",
+    "create_people_posters/tests/test_people_job_retention.py::test_interrupted_job_does_not_prevent_other_deletions",
+    "create_people_posters/tests/test_people_job_retention.py::test_invalid_retention_never_authorizes_deletion[-1]",
+    "create_people_posters/tests/test_people_job_retention.py::test_invalid_retention_never_authorizes_deletion[inf]",
+    "create_people_posters/tests/test_people_job_retention.py::test_invalid_retention_never_authorizes_deletion[nan]",
+    "create_people_posters/tests/test_people_job_retention.py::test_invalid_retention_never_authorizes_deletion[nonsense]",
+    "create_people_posters/tests/test_people_job_retention.py::test_leases_pending_work_and_rollback_override_expiry[.active]",
+    "create_people_posters/tests/test_people_job_retention.py::test_leases_pending_work_and_rollback_override_expiry[.orch/render.pending.json]",
+    "create_people_posters/tests/test_people_job_retention.py::test_leases_pending_work_and_rollback_override_expiry[edge_chop_recovery/transactions/x/transaction.json]",
+    "create_people_posters/tests/test_people_job_retention.py::test_legacy_readme_handoff_does_not_adopt_current_unverified_readmes",
+    "create_people_posters/tests/test_people_job_retention.py::test_missing_ledger_job_requires_sealed_matching_history",
+    "create_people_posters/tests/test_people_job_retention.py::test_partial_publication_in_terminal_job_is_not_expired[failed]",
+    "create_people_posters/tests/test_people_job_retention.py::test_partial_publication_in_terminal_job_is_not_expired[no_work]",
+    "create_people_posters/tests/test_people_job_retention.py::test_partial_publication_in_terminal_job_is_not_expired[validation_only]",
+    "create_people_posters/tests/test_people_job_retention.py::test_pending_database_reference_protects_input_without_json_export[False]",
+    "create_people_posters/tests/test_people_job_retention.py::test_pending_database_reference_protects_input_without_json_export[True]",
+    "create_people_posters/tests/test_people_job_retention.py::test_publication_receipts_accept_canonical_workspace_alias",
+    "create_people_posters/tests/test_people_job_retention.py::test_referenced_job_retained_even_when_referring_metadata_is_corrupt",
+    "create_people_posters/tests/test_people_job_retention.py::test_success_age_is_publication_age",
+    "create_people_posters/tests/test_people_job_retention.py::test_terminal_jobs_expire_at_exact_boundary[failed-14]",
+    "create_people_posters/tests/test_people_job_retention.py::test_terminal_jobs_expire_at_exact_boundary[no_work-3]",
+    "create_people_posters/tests/test_people_job_retention.py::test_terminal_jobs_expire_at_exact_boundary[validation_only-3]",
+    "create_people_posters/tests/test_people_job_retention.py::test_unicode_escaped_cross_job_reference_is_preserved",
+    "create_people_posters/tests/test_people_startup_retention.py::test_corrupt_automatic_resume_does_not_prevent_other_startup_cleanup[[]]",
+    "create_people_posters/tests/test_people_startup_retention.py::test_corrupt_automatic_resume_does_not_prevent_other_startup_cleanup[null]",
+    "create_people_posters/tests/test_people_startup_retention.py::test_corrupt_automatic_resume_does_not_prevent_other_startup_cleanup[{broken]",
+    "create_people_posters/tests/test_people_startup_retention.py::test_launch_cleanup_failure_persists_safe_stack_and_same_correlation",
+    "create_people_posters/tests/test_people_startup_retention.py::test_startup_cleanup_runs_and_protects_resumed_job[automatic]",
+    "create_people_posters/tests/test_people_startup_retention.py::test_startup_cleanup_runs_and_protects_resumed_job[explicit]",
+    "create_people_posters/tests/test_people_startup_retention.py::test_startup_cleanup_runs_and_protects_resumed_job[new]",
+    "create_people_posters/tests/test_people_storage_watch.py::test_budget_counts_state_and_stops_next_step_without_deleting",
+    "create_people_posters/tests/test_people_storage_watch.py::test_completed_receipts_expire_but_interrupted_intents_remain",
+    "create_people_posters/tests/test_people_storage_watch.py::test_corrupt_previous_storage_report_is_replaced_safely",
+    "create_people_posters/tests/test_people_storage_watch.py::test_growth_during_last_step_is_reported_when_job_releases_lease",
+    "create_people_posters/tests/test_people_storage_watch.py::test_limits_cannot_be_disabled_or_bypassed[-1-PEOPLE_JOBS_MAX_GIB]",
+    "create_people_posters/tests/test_people_storage_watch.py::test_limits_cannot_be_disabled_or_bypassed[-1-PEOPLE_RECOVERY_REVIEW_DAYS]",
+    "create_people_posters/tests/test_people_storage_watch.py::test_limits_cannot_be_disabled_or_bypassed[0-PEOPLE_JOBS_MAX_GIB]",
+    "create_people_posters/tests/test_people_storage_watch.py::test_limits_cannot_be_disabled_or_bypassed[0-PEOPLE_RECOVERY_REVIEW_DAYS]",
+    "create_people_posters/tests/test_people_storage_watch.py::test_limits_cannot_be_disabled_or_bypassed[bad-PEOPLE_JOBS_MAX_GIB]",
+    "create_people_posters/tests/test_people_storage_watch.py::test_limits_cannot_be_disabled_or_bypassed[bad-PEOPLE_RECOVERY_REVIEW_DAYS]",
+    "create_people_posters/tests/test_people_storage_watch.py::test_limits_cannot_be_disabled_or_bypassed[inf-PEOPLE_JOBS_MAX_GIB]",
+    "create_people_posters/tests/test_people_storage_watch.py::test_limits_cannot_be_disabled_or_bypassed[inf-PEOPLE_RECOVERY_REVIEW_DAYS]",
+    "create_people_posters/tests/test_people_storage_watch.py::test_limits_cannot_be_disabled_or_bypassed[nan-PEOPLE_JOBS_MAX_GIB]",
+    "create_people_posters/tests/test_people_storage_watch.py::test_limits_cannot_be_disabled_or_bypassed[nan-PEOPLE_RECOVERY_REVIEW_DAYS]",
+    "create_people_posters/tests/test_people_storage_watch.py::test_overdue_recovery_blocks_new_batches_and_remains_resumable",
+    "create_people_posters/tests/test_people_storage_watch.py::test_retry_does_not_silently_extend_review_deadline",
+    "create_people_posters/tests/test_people_storage_watch.py::test_status_change_without_publication_evidence_cannot_clear_hold",
+    "create_people_posters/tests/test_people_storage_watch.py::test_unreadable_tree_blocks_admission_instead_of_reporting_zero",
+    "create_people_posters/tests/test_people_storage_watch.py::test_verified_success_resolves_review_hold_without_waiting_for_expiry",
+    "create_people_posters/tests/test_people_storage_watch.py::test_warning_growth_and_persistent_report_do_not_accumulate"
+  ]
+}

@@ -197,7 +197,7 @@ def test_launch_cleanup_runs_once_under_shared_lock_including_resume(launch_jobs
     args=['--new-batch'] if selection=='new' else ['--batch-id',resume] if selection=='explicit' else []
     invoke(monkeypatch,*args,'--stop-after','ensure_repo')
     assert calls==[{'dry_run':False}]
-    assert manager.record(old)[0]['status']=='complete'
+    assert not manager.path(old).exists()
     assert not (manager.path(old)/'prepared').exists()
     assert (manager.path(resume)/'input').exists()
     assert not orch.LOCK_FILE.exists()
@@ -226,18 +226,17 @@ def test_launch_auto_cleanup_can_be_disabled(launch_jobs,monkeypatch):
 
 def test_launch_cleanup_frees_expired_data_before_new_batch_budget_check(launch_jobs,monkeypatch):
     manager,old,resume=launch_jobs
-    (manager.path(old)/'logs/large.log').write_bytes(b'x'*100000)
-    monkeypatch.setenv('PEOPLE_JOBS_MAX_GIB',str(50*1024/1024**3))
+    (manager.path(old)/'logs/large.log').write_bytes(b'x'*(2*1024**2))
+    monkeypatch.setenv('PEOPLE_JOBS_MAX_GIB',str(1/1024))
     invoke(monkeypatch,'--new-batch','--stop-after','ensure_repo')
-    assert manager.record(old)[0]['status']=='complete'
-    assert (manager.path(old)/'logs/large.log').stat().st_size==32768
+    assert not manager.path(old).exists()
 
 
 def test_launch_cleanup_preserves_incomplete_active_and_external_data(launch_jobs,monkeypatch):
     import time
     from test_people_workspaces import published_job
     manager,old,resume=launch_jobs
-    statuses=['pending','processing','failed','partially_published','validated','validation_only']
+    statuses=['pending','processing','partially_published','validated']
     protected=[]
     for status in statuses:
         batch=manager.create(cleanup=False)
@@ -247,11 +246,10 @@ def test_launch_cleanup_preserves_incomplete_active_and_external_data(launch_job
         protected.append(image)
     unverified=manager.create(cleanup=False)
     manager.set_status(unverified,'cleanup_eligible')
+    active=published_job(manager,monkeypatch)
     with manager.db:
         manager.db.execute('UPDATE jobs SET updated=? WHERE status!=?',(time.time()-100*86400,'complete'))
         manager.db.execute('UPDATE jobs SET published=? WHERE id=?',(time.time()-4*86400,unverified))
-    active=published_job(manager,monkeypatch)
-    with manager.db:
         manager.db.execute('UPDATE jobs SET published=? WHERE id=?',(time.time()-4*86400,active))
     manager.activate(active)
     for relative in ('people_dirs/historical.jpg','models/cached-model.bin','clone/.git/marker','source.jpg'):
@@ -260,7 +258,7 @@ def test_launch_cleanup_preserves_incomplete_active_and_external_data(launch_job
         path.write_bytes(b'external')
         protected.append(path)
     try:
-        invoke(monkeypatch,'--new-batch','--stop-after','ensure_repo')
+        invoke(monkeypatch,'--batch-id',resume,'--stop-after','ensure_repo')
         assert (manager.path(active)/'prepared').exists()
         assert manager.record(unverified)[0]['status']=='cleanup_eligible'
         assert all(p.read_bytes() in {b'only-copy',b'external'} for p in protected)
@@ -269,17 +267,17 @@ def test_launch_cleanup_preserves_incomplete_active_and_external_data(launch_job
 
 
 def test_launch_cleanup_error_is_visible_without_failing_resumed_job(launch_jobs,monkeypatch,capsys):
-    import people_workspaces
+    from create_people_posters import people_job_retention as retention
     manager,old,resume=launch_jobs
-    actual=people_workspaces.shutil.rmtree
-    def fail(path,*a,**kw):
-        if Path(path).is_relative_to(manager.path(old)):
+    actual=retention.unlink_verified
+    def fail(root,row):
+        if root == manager.path(old):
             raise OSError('cleanup denied')
-        return actual(path,*a,**kw)
-    monkeypatch.setattr(people_workspaces.shutil,'rmtree',fail)
+        return actual(root,row)
+    monkeypatch.setattr(retention,'unlink_verified',fail)
     invoke(monkeypatch,'--batch-id',resume,'--stop-after','ensure_repo')
     output=capsys.readouterr()
-    assert 'Launch cleanup incomplete' in output.err and 'error_category=io_error' in output.err
+    assert 'cleanup_interrupted correlation_id=' in output.out
     assert 'cleanup denied' not in output.err  # Raw exception text is no longer an output contract.
     assert 'eligible=1 deleted=0 retained=2' in output.out
     assert manager.record(resume)[0]['status']=='processing'

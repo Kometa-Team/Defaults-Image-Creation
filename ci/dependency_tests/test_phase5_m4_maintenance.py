@@ -32,7 +32,8 @@ class Phase5M4MaintenanceTests(unittest.TestCase):
         changed={n for n,b in value['members'].items() if b['before_sha256'] is not None}
         self.assertEqual(changed,set(APPROVED))
         for name,expected in APPROVED.items():
-            self.assertEqual(maintenance.sha((ROOT/name).read_bytes()),expected,name)
+            from ci.people_job_retention_maintenance import historical_bytes as retention_bytes
+            self.assertEqual(maintenance.sha(retention_bytes(ROOT,name,(ROOT/name).read_bytes())),expected,name)
             self.assertEqual(value['members'][name]['sha256'],expected)
             self.assertEqual(maintenance.sha(maintenance._old(name)),value['members'][name]['before_sha256'])
 

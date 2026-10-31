@@ -106,7 +106,8 @@ class DependabotAuditTests(unittest.TestCase):
         for name, binding in value['members'].items():
             self.assertEqual(audit.selected_hash(name, 'f' * 64), 'f' * 64)
             if binding['before_sha256'] is not None:
-                self.assertEqual(audit.selected_hash(name, binding['before_sha256']), binding['sha256'])
+                from ci.people_job_retention_maintenance import selected_hash
+                self.assertEqual(audit.selected_hash(name, binding['before_sha256']), selected_hash(name, binding['sha256']))
                 current = (ROOT / name).read_bytes()
                 old = audit.historical_bytes(ROOT, name, current)
                 self.assertEqual(audit.sha(old), binding['before_sha256'])
