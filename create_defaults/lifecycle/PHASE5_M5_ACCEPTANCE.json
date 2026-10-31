@@ -1,0 +1,283 @@
+{
+  "version": 1,
+  "kind": "phase5-m5-acceptance-contract",
+  "status": "implementation; exact-head CI acceptance required",
+  "baseline": "3c15fb56b63bababa5d216b8d885e7dee257c11d",
+  "original_baseline": "cd8d4eecd64f5bff201e8ecd7daccebd955f87af",
+  "platform_groups": {
+    "Windows": [
+      "protocol",
+      "authority",
+      "t21-staged-artwork-tampering-is-not-repaired",
+      "t22-concurrent-transport-is-blocked-by-os-lock",
+      "t21-fresh-native-permissions-and-context-required-source",
+      "t21-fresh-native-permissions-and-context-required-definition",
+      "t21-fresh-native-permissions-and-context-required-translation",
+      "t21-fresh-native-permissions-and-context-required-destination",
+      "t21-fresh-native-permissions-and-context-required-review",
+      "catalog",
+      "current",
+      "multi",
+      "t30-actual-tree-or-namespace-substitution-fails-foreign-ref",
+      "t30-actual-tree-or-namespace-substitution-fails-unrelated-tree",
+      "t30-actual-tree-or-namespace-substitution-fails-symlink-mode",
+      "t30-actual-tree-or-namespace-substitution-fails-same-bytes-case-collision",
+      "draft",
+      "native-plan",
+      "transport",
+      "membership",
+      "t21-identical-bytes-keep-required-members-and-revalidate",
+      "t22-intent-and-transaction-faults-are-recoverable-before-intent",
+      "t22-intent-and-transaction-faults-are-recoverable-intent-object",
+      "t22-intent-and-transaction-faults-are-recoverable-after-intent",
+      "t22-intent-and-transaction-faults-are-recoverable-progress-object",
+      "t22-intent-and-transaction-faults-are-recoverable-before-progress-commit",
+      "t22-intent-and-transaction-faults-are-recoverable-after-progress-commit",
+      "t23-actual-commit-and-ambiguous-push-reobserve-before-retry-after-commit",
+      "t23-actual-commit-and-ambiguous-push-reobserve-before-retry-after-push",
+      "t22-cancel-before-transport-preserves-intent",
+      "t27-cold-read-only-replay-requires-fresh-observation",
+      "t27-missing-immutable-progress-object-blocks",
+      "t25-partial-membership-cannot-be-marked-complete",
+      "t22-progress-cas-rejects-stale-writer",
+      "t22-local-object-or-commit-failure-finishes-only-owned-staging-add",
+      "t22-local-object-or-commit-failure-finishes-only-owned-staging-commit"
+    ],
+    "Linux": [
+      "protocol",
+      "authority",
+      "t21-staged-artwork-tampering-is-not-repaired",
+      "t22-concurrent-transport-is-blocked-by-os-lock",
+      "t21-fresh-native-permissions-and-context-required-source",
+      "t21-fresh-native-permissions-and-context-required-definition",
+      "t21-fresh-native-permissions-and-context-required-translation",
+      "t21-fresh-native-permissions-and-context-required-destination",
+      "t21-fresh-native-permissions-and-context-required-review",
+      "catalog",
+      "current",
+      "multi",
+      "t30-actual-tree-or-namespace-substitution-fails-foreign-ref",
+      "t30-actual-tree-or-namespace-substitution-fails-unrelated-tree",
+      "t30-actual-tree-or-namespace-substitution-fails-symlink-mode",
+      "t30-actual-tree-or-namespace-substitution-fails-same-bytes-case-collision",
+      "draft",
+      "native-plan",
+      "transport",
+      "membership",
+      "t21-identical-bytes-keep-required-members-and-revalidate",
+      "t22-intent-and-transaction-faults-are-recoverable-before-intent",
+      "t22-intent-and-transaction-faults-are-recoverable-intent-object",
+      "t22-intent-and-transaction-faults-are-recoverable-after-intent",
+      "t22-intent-and-transaction-faults-are-recoverable-progress-object",
+      "t22-intent-and-transaction-faults-are-recoverable-before-progress-commit",
+      "t22-intent-and-transaction-faults-are-recoverable-after-progress-commit",
+      "t23-actual-commit-and-ambiguous-push-reobserve-before-retry-after-commit",
+      "t23-actual-commit-and-ambiguous-push-reobserve-before-retry-after-push",
+      "t22-cancel-before-transport-preserves-intent",
+      "t27-cold-read-only-replay-requires-fresh-observation",
+      "t27-missing-immutable-progress-object-blocks",
+      "t25-partial-membership-cannot-be-marked-complete",
+      "t22-progress-cas-rejects-stale-writer",
+      "t22-local-object-or-commit-failure-finishes-only-owned-staging-add",
+      "t22-local-object-or-commit-failure-finishes-only-owned-staging-commit"
+    ]
+  },
+  "ids_path": "ci/phase5-m5-test-ids.json",
+  "actual_pytest_ids": 84,
+  "required_workflows": [
+    "Default Poster Candidate Validation",
+    "Dependency provenance maintenance",
+    "Lifecycle M6 Validation",
+    "Lifecycle M7 Validation",
+    "People recovery storage regression",
+    "Phase 5 M2 Read-only Observations",
+    "Phase 5 M3 Exact Decision Consumption",
+    "Phase 5 M4 Current Mapping Validation",
+    "People startup job retention",
+    "Phase 5 M5 Owned Catalog Preparation"
+  ],
+  "mandatory_native_groups": {
+    "transport": {
+      "epochs": 1,
+      "images": 2
+    },
+    "current": {
+      "epochs": 3,
+      "images": 6
+    },
+    "multi": {
+      "epochs": 1,
+      "images": 4
+    }
+  },
+  "authority": false,
+  "production_catalog_writes": 0,
+  "public_artwork_writes": 0,
+  "real_contract_approvals": 0,
+  "historical_posters": 9957,
+  "historical_overlays": 4122,
+  "historical_total": 14079,
+  "historical_artwork_regenerated": 0,
+  "packages": 22,
+  "variants": 278,
+  "conditional_variants": 27,
+  "blocked_variants": 251,
+  "budgets": {
+    "worker_rss_bytes": 536870912,
+    "files": 300,
+    "artifact_bytes": 209715200,
+    "job_timeout_minutes": 15
+  },
+  "reviewed_paths": [
+    ".github/workflows/phase5-m5-validation.yml",
+    "ci/dependency_tests/test_people_job_retention_maintenance.py",
+    "ci/dependency_tests/test_phase5_m4_maintenance.py",
+    "ci/dependency_tests/test_phase5_m5_maintenance.py",
+    "ci/people_job_retention_maintenance.py",
+    "ci/phase5-m5-maintenance-v1.json",
+    "ci/phase5-m5-test-ids.json",
+    "ci/phase5_m4_maintenance.py",
+    "ci/phase5_m5.py",
+    "ci/phase5_m5_maintenance.py",
+    "create_defaults/bulk/lifecycle/catalog_preparation.py",
+    "create_defaults/bulk/lifecycle/preparation_models.py",
+    "create_defaults/bulk/lifecycle/preparation_progress.py",
+    "create_defaults/bulk/lifecycle/publication_preparation.py",
+    "create_defaults/bulk/lifecycle/schemas/preparation-v1.schema.json",
+    "create_defaults/lifecycle/PHASE5_M5_ACCEPTANCE.json",
+    "create_defaults/lifecycle/PHASE5_M5_CI_MAINTENANCE.md",
+    "create_defaults/lifecycle/PHASE5_M5_COVERAGE.json",
+    "create_defaults/lifecycle/PHASE5_M5_IMPLEMENTATION.md",
+    "create_defaults/lifecycle/ROADMAP.md",
+    "create_defaults/phase5/m5_tests/conftest.py",
+    "create_defaults/phase5/m5_tests/helpers.py",
+    "create_defaults/phase5/m5_tests/test_boundaries.py",
+    "create_defaults/phase5/m5_tests/test_catalog.py",
+    "create_defaults/phase5/m5_tests/test_offline_git.py",
+    "create_defaults/phase5/m5_tests/test_publication.py",
+    "create_defaults/phase5/m5_tests/test_recovery.py"
+  ],
+  "test_requirements": {
+    "P5-T13": [
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_native_complete_plan",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[omitted_member]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[withheld_manifest]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[omitted_batch]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[extra_member]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[foreign_receipt]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[changed_artifact]"
+    ],
+    "P5-T14": [
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_native_complete_plan",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[omitted_member]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[withheld_manifest]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[omitted_batch]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[extra_member]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[foreign_receipt]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[changed_artifact]"
+    ],
+    "P5-T15": [
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T15_unsupported_catalog_cohort[retired]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T15_unsupported_catalog_cohort[Network]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T15_unsupported_catalog_cohort[generator]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T15_unsupported_catalog_cohort[historical_id]"
+    ],
+    "P5-T16": [
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T16_current_mapping_full_native_sequence_and_plan"
+    ],
+    "P5-T20": [
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_new_block_preserves_all_preimage_bytes_and_lookup",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_scalar_patch_preserves_BOM_CRLF_comments_and_other_bytes[display_name-Literal Pok\\xe9mon (A & B)!]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_scalar_patch_preserves_BOM_CRLF_comments_and_other_bytes[display_name-Literal 'quote']",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_scalar_patch_preserves_BOM_CRLF_comments_and_other_bytes[display_name-true]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_strict_or_unowned_catalog_changes_fail[duplicate]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_strict_or_unowned_catalog_changes_fail[unknown]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_strict_or_unowned_catalog_changes_fail[traversal]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_strict_or_unowned_catalog_changes_fail[historical]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_strict_or_unowned_catalog_changes_fail[profile]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_strict_or_unowned_catalog_changes_fail[missing_index]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_strict_or_unowned_catalog_changes_fail[index_hash]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_unknown_source_root_is_not_accepted"
+    ],
+    "P5-T21": [
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T21_staged_artwork_tampering_is_not_repaired",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T21_fresh_native_permissions_and_context_required[source]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T21_fresh_native_permissions_and_context_required[definition]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T21_fresh_native_permissions_and_context_required[translation]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T21_fresh_native_permissions_and_context_required[destination]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T21_fresh_native_permissions_and_context_required[review]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T21_stale_source_commit_invalidates_prepared_patch",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T21_identical_bytes_keep_required_members_and_revalidate"
+    ],
+    "P5-T22": [
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T22_concurrent_transport_is_blocked_by_OS_lock",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T22_catalog_faults_leave_original_source_unchanged[before_catalog]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T22_catalog_faults_leave_original_source_unchanged[after_postimage]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T22_cancelled_staging_retains_source",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_intent_and_transaction_faults_are_recoverable[before_intent]",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_intent_and_transaction_faults_are_recoverable[intent_object]",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_intent_and_transaction_faults_are_recoverable[after_intent]",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_intent_and_transaction_faults_are_recoverable[progress_object]",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_intent_and_transaction_faults_are_recoverable[before_progress_commit]",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_intent_and_transaction_faults_are_recoverable[after_progress_commit]",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_cancel_before_transport_preserves_intent",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_progress_CAS_rejects_stale_writer",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_local_object_or_commit_failure_finishes_only_owned_staging[add]",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_local_object_or_commit_failure_finishes_only_owned_staging[commit]"
+    ],
+    "P5-T23": [
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T23_actual_commit_and_ambiguous_push_reobserve_before_retry[after_commit]",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T23_actual_commit_and_ambiguous_push_reobserve_before_retry[after_push]"
+    ],
+    "P5-T24": [
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T24_existing_draft_reconciliation_is_isolated_and_exact[OPEN]",
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T24_existing_draft_reconciliation_is_isolated_and_exact[CLOSED]",
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T24_existing_draft_reconciliation_is_isolated_and_exact[MERGED]",
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T24_existing_draft_reconciliation_is_isolated_and_exact[wrong-head]",
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T24_existing_draft_reconciliation_is_isolated_and_exact[wrong-base]",
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T24_existing_draft_reconciliation_is_isolated_and_exact[not-draft]",
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T24_existing_draft_reconciliation_is_isolated_and_exact[duplicate]"
+    ],
+    "P5-T25": [
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T25_multi_member_partial_batches_forward_recover",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T25_partial_membership_cannot_be_marked_complete"
+    ],
+    "P5-T27": [
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T27_cold_read_only_replay_requires_fresh_observation",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T27_missing_immutable_progress_object_blocks"
+    ],
+    "P5-T28": [
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_production_entrypoints_remain_unavailable[commit_operational]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_production_entrypoints_remain_unavailable[publish_operational]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[authenticated]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[operation_accepted]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[applied]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[artwork_approved]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[contract_approved]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[ready]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[active]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[production_enforcement]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[publication_authorized]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[remote_writes_authorized]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[merge_authorized]"
+    ],
+    "P5-T29": [
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T29_diagnostics_are_bounded_and_redacted[bearer]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T29_diagnostics_are_bounded_and_redacted[url]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T29_diagnostics_are_bounded_and_redacted[oversized]"
+    ],
+    "P5-T30": [
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T30_actual_tree_or_namespace_substitution_fails[foreign_ref]",
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T30_actual_tree_or_namespace_substitution_fails[unrelated_tree]",
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T30_actual_tree_or_namespace_substitution_fails[symlink_mode]",
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T30_actual_tree_or_namespace_substitution_fails[same_bytes_case_collision]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T30_native_offline_tree"
+    ],
+    "P5-T31": [
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T31_original_batch_caps_cannot_be_enlarged[301-209715200]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T31_original_batch_caps_cannot_be_enlarged[300-209715201]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T31_original_batch_caps_cannot_be_enlarged[True-100]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T31_original_batch_caps_cannot_be_enlarged[0-100]"
+    ]
+  }
+}

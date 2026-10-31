@@ -1,0 +1,68 @@
+name: Phase 5 M5 Owned Catalog Preparation
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  m5:
+    name: Phase 5 M5 ${{ matrix.group }} (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    env:
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+      PYTHONDONTWRITEBYTECODE: '1'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        group: [protocol, authority, t21-staged-artwork-tampering-is-not-repaired, t22-concurrent-transport-is-blocked-by-os-lock, t21-fresh-native-permissions-and-context-required-source, t21-fresh-native-permissions-and-context-required-definition, t21-fresh-native-permissions-and-context-required-translation, t21-fresh-native-permissions-and-context-required-destination, t21-fresh-native-permissions-and-context-required-review, catalog, current, multi, t30-actual-tree-or-namespace-substitution-fails-foreign-ref, t30-actual-tree-or-namespace-substitution-fails-unrelated-tree, t30-actual-tree-or-namespace-substitution-fails-symlink-mode, t30-actual-tree-or-namespace-substitution-fails-same-bytes-case-collision, draft, native-plan, transport, membership, t21-identical-bytes-keep-required-members-and-revalidate, t22-intent-and-transaction-faults-are-recoverable-before-intent, t22-intent-and-transaction-faults-are-recoverable-intent-object, t22-intent-and-transaction-faults-are-recoverable-after-intent, t22-intent-and-transaction-faults-are-recoverable-progress-object, t22-intent-and-transaction-faults-are-recoverable-before-progress-commit, t22-intent-and-transaction-faults-are-recoverable-after-progress-commit, t23-actual-commit-and-ambiguous-push-reobserve-before-retry-after-commit, t23-actual-commit-and-ambiguous-push-reobserve-before-retry-after-push, t22-cancel-before-transport-preserves-intent, t27-cold-read-only-replay-requires-fresh-observation, t27-missing-immutable-progress-object-blocks, t25-partial-membership-cannot-be-marked-complete, t22-progress-cas-rejects-stale-writer, t22-local-object-or-commit-failure-finishes-only-owned-staging-add, t22-local-object-or-commit-failure-finishes-only-owned-staging-commit]
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        fetch-depth: 0
+        persist-credentials: false
+        ref: ${{ github.event.pull_request.head.sha }}
+    - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+      with:
+        python-version: '3.13'
+    - run: python -m pip install -r create_defaults/requirements-bulk.txt
+    - run: python ci/phase5_m5.py run --group "${{ matrix.group }}"
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: phase5-m5-${{ matrix.group }}-${{ matrix.os }}
+        path: config/ci-validation/phase5-m5/**
+        if-no-files-found: error
+        retention-days: 14
+  acceptance:
+    name: Phase 5 M5 acceptance
+    if: ${{ always() }}
+    needs: [m5]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+      M5_JOB_RESULTS: ${{ toJSON(needs) }}
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        fetch-depth: 0
+        persist-credentials: false
+        ref: ${{ github.event.pull_request.head.sha }}
+    - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+      with:
+        python-version: '3.13'
+    - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+      with:
+        pattern: phase5-m5-*
+        path: config/m5-downloaded
+    - run: python -m pip install -r create_defaults/requirements-bulk.txt
+    - run: python ci/phase5_m5.py accept
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      with:
+        name: phase5-m5-acceptance
+        path: config/ci-validation/phase5-m5/acceptance.json
+        if-no-files-found: error
+        retention-days: 14

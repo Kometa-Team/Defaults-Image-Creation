@@ -73,13 +73,15 @@ def _ancestry(root,head):
 
 def verify_checkout(root=None):
     root=Path(root or ROOT)
+    from ci.phase5_m5_maintenance import verify_checkout as verify_m5, historical_bytes as m5_bytes
+    verify_m5(root)
     from ci.people_job_retention_maintenance import verify_checkout as verify_retention, historical_bytes as retention_bytes
     verify_retention(root)
     value=manifest()
     from ci.people_colorize_maintenance import _head
     _ancestry(str(root),_head(root))
     for name,binding in value['members'].items():
-        if sha(retention_bytes(root,name,regular(root,name).read_bytes()))!=binding['sha256']:
+        if sha(retention_bytes(root,name,m5_bytes(root,name,regular(root,name).read_bytes())))!=binding['sha256']:
             raise ValueError('Unreviewed M4 successor: '+name)
         if binding['before_sha256'] is not None and sha(_old(name))!=binding['before_sha256']:
             raise ValueError('Changed M4 predecessor: '+name)
@@ -88,21 +90,24 @@ def verify_checkout(root=None):
 
 
 def historical_bytes(root,name,current):
-    if name not in MEMBERS: return current
+    from ci.phase5_m5_maintenance import historical_bytes as m5_bytes
+    if name not in MEMBERS: return m5_bytes(root,name,current)
     binding=manifest()['members'][name]
-    if binding['before_sha256'] is None: return current
+    if binding['before_sha256'] is None: return m5_bytes(root,name,current)
     # Verify the physical successor even when several inherited validators
     # project the same in-memory predecessor. A rollback of the actual path
     # never qualifies for this idempotent historical-only projection.
-    actual=regular(Path(root),name).read_bytes()
     from ci.people_job_retention_maintenance import historical_bytes as retention_bytes
-    physical=retention_bytes(root,name,actual)
-    if current==actual: current=physical
-    if sha(physical)!=binding['sha256']:
+    actual=retention_bytes(root,name,m5_bytes(root,name,regular(Path(root),name).read_bytes()))
+    if sha(actual)!=binding['sha256']:
         raise ValueError('Changed M4 physical successor: '+name)
     before=_old(name)
     if sha(before)!=binding['before_sha256']:
         raise ValueError('Changed M4 historical predecessor: '+name)
+    # Preserve M4's already-projected in-memory predecessor on repeated calls.
+    # m5_bytes still verifies the actual physical successor above.
+    if sha(current) not in {binding['sha256'],binding['before_sha256']}:
+        current=retention_bytes(root,name,m5_bytes(root,name,current))
     if sha(current) not in {binding['sha256'],binding['before_sha256']}:
         raise ValueError('Changed M4 historical input: '+name)
     return before
@@ -115,11 +120,16 @@ def scope_members():
     from ci.phase4_m7 import ROOT as policy_root
     if Path(policy_root).resolve()!=ROOT.resolve():
         return frozenset()
-    return (MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}
+    from ci.phase5_m5_maintenance import scope_members as m5_scope
+    return ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'})|m5_scope()
 
 
 def verify_scope(root,baseline,names):
     verify_checkout(root)
+    from ci.phase5_m5_maintenance import scope_members as m5_scope, verify_scope as verify_m5_scope
+    m5_names=names&m5_scope()
+    if m5_names: verify_m5_scope(root,baseline,m5_names)
+    names=names-m5_names
     if not names<=scope_members(): raise ValueError('Unapproved M4 scope')
     if not names: return
     rows=_git(root,'diff','--raw','--no-abbrev','--no-renames','-z',baseline,'HEAD','--',*sorted(names)).split(b'\0')
