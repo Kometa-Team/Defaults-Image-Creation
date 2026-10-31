@@ -1,0 +1,719 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kometa:phase5:preparation:v1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "phase5-offline-preparation"
+    },
+    "simulation": {
+      "const": true
+    },
+    "record_only": {
+      "const": true
+    },
+    "authenticated": {
+      "const": false
+    },
+    "operation_accepted": {
+      "const": false
+    },
+    "applied": {
+      "const": false
+    },
+    "artwork_approved": {
+      "const": false
+    },
+    "contract_approved": {
+      "const": false
+    },
+    "ready": {
+      "const": false
+    },
+    "active": {
+      "const": false
+    },
+    "production_enforcement": {
+      "const": false
+    },
+    "publication_authorized": {
+      "const": false
+    },
+    "remote_writes_authorized": {
+      "const": false
+    },
+    "merge_authorized": {
+      "const": false
+    },
+    "operation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "event_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "id",
+        "revision",
+        "sha256",
+        "event_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "snapshot_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "registry_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "native_heads": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 512,
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "enum": [
+              "subject",
+              "namespace",
+              "evidence",
+              "dependency"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "subjects": {
+            "type": "array",
+            "maxItems": 512,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096
+            }
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "kind",
+          "id",
+          "subjects",
+          "revision",
+          "sha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "native_heads_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "review_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "phase3_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "catalog_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "repository": {
+          "const": "Kometa-Team/Defaults-Image-Creation"
+        },
+        "repository_id": {
+          "const": 1040960557
+        },
+        "branch": {
+          "const": "main"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "tree": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "origin_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "files": {
+          "type": "object",
+          "properties": {
+            "genre.yml": {
+              "type": "object",
+              "properties": {
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "git_blob": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{40}$"
+                }
+              },
+              "required": [
+                "sha256",
+                "git_blob"
+              ],
+              "additionalProperties": false
+            },
+            "profiles.yml": {
+              "type": "object",
+              "properties": {
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "git_blob": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{40}$"
+                }
+              },
+              "required": [
+                "sha256",
+                "git_blob"
+              ],
+              "additionalProperties": false
+            },
+            "index-v1.json": {
+              "type": "object",
+              "properties": {
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "git_blob": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{40}$"
+                }
+              },
+              "required": [
+                "sha256",
+                "git_blob"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "genre.yml",
+            "profiles.yml",
+            "index-v1.json"
+          ],
+          "additionalProperties": false
+        },
+        "simulation": {
+          "const": true
+        },
+        "production_authorized": {
+          "const": false
+        }
+      },
+      "required": [
+        "repository",
+        "repository_id",
+        "branch",
+        "commit",
+        "tree",
+        "origin_commit",
+        "files",
+        "simulation",
+        "production_authorized"
+      ],
+      "additionalProperties": false
+    },
+    "required_members": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4096
+      }
+    },
+    "members": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "items": {
+        "type": "object",
+        "properties": {
+          "identity": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "destination": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 209715200
+          },
+          "git_blob": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$"
+          },
+          "previous_sha256": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "previous_git_blob": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$"
+          },
+          "object_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "receipt_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "receipt_object_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "identity",
+          "destination",
+          "source",
+          "sha256",
+          "size",
+          "git_blob",
+          "previous_sha256",
+          "previous_git_blob",
+          "object_sha256",
+          "receipt_sha256",
+          "receipt_object_sha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "destination": {
+      "type": "object",
+      "properties": {
+        "repository": {
+          "const": "Kometa-Team/Default-Images"
+        },
+        "branch": {
+          "const": "master"
+        },
+        "head": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "tree": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        }
+      },
+      "required": [
+        "repository",
+        "branch",
+        "head",
+        "tree"
+      ],
+      "additionalProperties": false
+    },
+    "manifest": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "approved-library-publication-manifest"
+        },
+        "baseline": {
+          "type": "object",
+          "properties": {
+            "repository": {
+              "const": "Kometa-Team/Default-Images"
+            },
+            "branch": {
+              "const": "master"
+            },
+            "head": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "tree": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            }
+          },
+          "required": [
+            "repository",
+            "branch",
+            "head",
+            "tree"
+          ],
+          "additionalProperties": false
+        },
+        "members": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "type": "object",
+            "properties": {
+              "destination": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 4096
+              },
+              "source": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 4096
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "size": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 209715200
+              },
+              "previous_sha256": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "git_blob": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{40}$"
+              },
+              "previous_git_blob": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{40}$"
+              },
+              "context_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "destination",
+              "source",
+              "sha256",
+              "size",
+              "previous_sha256",
+              "git_blob",
+              "previous_git_blob",
+              "context_sha256"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "withheld": {
+          "const": []
+        },
+        "exact_matches_skipped": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          }
+        },
+        "simulation": {
+          "const": true
+        },
+        "remote_writes_authorized": {
+          "const": false
+        },
+        "merge_authorized": {
+          "const": false
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "kind",
+        "baseline",
+        "members",
+        "withheld",
+        "exact_matches_skipped",
+        "simulation",
+        "remote_writes_authorized",
+        "merge_authorized",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "plan": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "kind": {
+          "const": "local-git-batch-plan"
+        },
+        "baseline": {
+          "type": "object",
+          "properties": {
+            "repository": {
+              "const": "Kometa-Team/Default-Images"
+            },
+            "branch": {
+              "const": "master"
+            },
+            "head": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "tree": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            }
+          },
+          "required": [
+            "repository",
+            "branch",
+            "head",
+            "tree"
+          ],
+          "additionalProperties": false
+        },
+        "publication_manifest_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "max_files": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 300
+        },
+        "max_bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 209715200
+        },
+        "max_pack_bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 263192576
+        },
+        "batches": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "type": "object",
+            "properties": {
+              "sequence": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 32
+              },
+              "members": {
+                "type": "array",
+                "maxItems": 32,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "destination": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 4096
+                    },
+                    "source": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 4096
+                    },
+                    "sha256": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    },
+                    "size": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 209715200
+                    },
+                    "previous_sha256": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "pattern": "^[0-9a-f]{64}$"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "git_blob": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{40}$"
+                    },
+                    "previous_git_blob": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{40}$"
+                    },
+                    "context_sha256": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    }
+                  },
+                  "required": [
+                    "destination",
+                    "source",
+                    "sha256",
+                    "size",
+                    "previous_sha256",
+                    "git_blob",
+                    "previous_git_blob",
+                    "context_sha256"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "bytes": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 209715200
+              },
+              "membership_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "sequence",
+              "members",
+              "bytes",
+              "membership_sha256"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "remote_writes_authorized": {
+          "const": false
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "schema_version",
+        "kind",
+        "baseline",
+        "publication_manifest_sha256",
+        "max_files",
+        "max_bytes",
+        "max_pack_bytes",
+        "batches",
+        "remote_writes_authorized",
+        "sha256"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "simulation",
+    "record_only",
+    "authenticated",
+    "operation_accepted",
+    "applied",
+    "artwork_approved",
+    "contract_approved",
+    "ready",
+    "active",
+    "production_enforcement",
+    "publication_authorized",
+    "remote_writes_authorized",
+    "merge_authorized",
+    "operation",
+    "snapshot_sha256",
+    "registry_sha256",
+    "native_heads",
+    "native_heads_sha256",
+    "review_sha256",
+    "phase3_sha256",
+    "catalog_sha256",
+    "source",
+    "required_members",
+    "members",
+    "destination",
+    "manifest",
+    "plan"
+  ],
+  "additionalProperties": false
+}

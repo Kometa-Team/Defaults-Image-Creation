@@ -94,6 +94,8 @@ def _ancestry(root, head):
 
 def verify_checkout(root=None):
     root = Path(root or ROOT)
+    from ci.phase5_m5_maintenance import verify_checkout as verify_m5, historical_bytes as m5_bytes
+    verify_m5(root)
     value = manifest()
     from ci.people_colorize_maintenance import _head
     _ancestry(str(root), _head(root))
@@ -102,7 +104,7 @@ def verify_checkout(root=None):
     # arithmetic is cached by this existing checker, never filesystem evidence.
     paths = _regular_files(root, MEMBERS | ANCHORS)
     for name, binding in value['members'].items():
-        if sha(paths[name].read_bytes()) != binding['sha256']:
+        if sha(m5_bytes(root, name, paths[name].read_bytes())) != binding['sha256']:
             raise ValueError('Unreviewed startup-retention successor: ' + name)
         if binding['before_sha256'] is None:
             if _baseline_entry(name):
@@ -123,6 +125,8 @@ def selected_hash(name, expected):
 
 
 def historical_bytes(root, name, current):
+    from ci.phase5_m5_maintenance import historical_bytes as m5_bytes
+    current = m5_bytes(root, name, current)
     if name not in MEMBERS:
         return current
     binding = manifest()['members'][name]

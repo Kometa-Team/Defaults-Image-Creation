@@ -1,0 +1,3953 @@
+{
+  "baseline": "120ed09a166ddfdc5380219aad35959c8a0de169",
+  "packages": [
+    {
+      "category": "Aspect",
+      "kind": "poster",
+      "variants": 2,
+      "selected": 0,
+      "blocked": 2,
+      "contract_sha256": "fc14d583c50d28e4f616c2aa853acdfcebdf1a4a9626500912791a8e3baa2b08"
+    },
+    {
+      "category": "AudioLanguage",
+      "kind": "poster",
+      "variants": 8,
+      "selected": 0,
+      "blocked": 8,
+      "contract_sha256": "bb3c4cb548bcf2cb1f5c4d5a0d1b310ef55509fa99dceed6c835bd8ddbc8072c"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "variants": 35,
+      "selected": 0,
+      "blocked": 35,
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9"
+    },
+    {
+      "category": "Based",
+      "kind": "poster",
+      "variants": 1,
+      "selected": 0,
+      "blocked": 1,
+      "contract_sha256": "2fbcdbcfa7ead20213143fecfff7a39ab5ef3b86214f54eaf67225f9cc2f5103"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "variants": 36,
+      "selected": 0,
+      "blocked": 36,
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f"
+    },
+    {
+      "category": "ContentRating",
+      "kind": "poster",
+      "variants": 3,
+      "selected": 0,
+      "blocked": 3,
+      "contract_sha256": "fb4494c27910daf618ae9c58e7df8a867a0836e4a1b40f7c64b46cff6ffbaef3"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "variants": 56,
+      "selected": 0,
+      "blocked": 56,
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd"
+    },
+    {
+      "category": "Decade",
+      "kind": "poster",
+      "variants": 17,
+      "selected": 0,
+      "blocked": 17,
+      "contract_sha256": "e215dc4c5a41ea1fb51415f9ddf841033a066b2e3472ea648e28bffb8dedea8c"
+    },
+    {
+      "category": "Franchise",
+      "kind": "poster",
+      "variants": 2,
+      "selected": 0,
+      "blocked": 2,
+      "contract_sha256": "3f95c0f4c80df9aba2934c5e1e4e50065bdd894e9202ec2f0a3aa5f80d19bf1b"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "variants": 28,
+      "selected": 27,
+      "blocked": 1,
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a"
+    },
+    {
+      "category": "Network",
+      "kind": "poster",
+      "variants": 10,
+      "selected": 0,
+      "blocked": 10,
+      "contract_sha256": "fd090570f6b7976e064660dec91f9f8207980cbb9e6e7d6e2aeafa3cc7b05b0c"
+    },
+    {
+      "category": "Playlist",
+      "kind": "poster",
+      "variants": 1,
+      "selected": 0,
+      "blocked": 1,
+      "contract_sha256": "5047d834ecd3f8e5a0ed76ae24760b6947ae6b83e95198ce602e1715e445016b"
+    },
+    {
+      "category": "Resolution",
+      "kind": "poster",
+      "variants": 2,
+      "selected": 0,
+      "blocked": 2,
+      "contract_sha256": "4475c9bb450380395a2a2e982fcf72cb33f8453fe3d4665ea8a171e9f6570865"
+    },
+    {
+      "category": "Seasonal",
+      "kind": "poster",
+      "variants": 6,
+      "selected": 0,
+      "blocked": 6,
+      "contract_sha256": "1124fecbde06c2c78c8fba9772d16de65d9cc70ae0d29a8f203b931f2e2507c7"
+    },
+    {
+      "category": "Separators",
+      "kind": "poster",
+      "variants": 3,
+      "selected": 0,
+      "blocked": 3,
+      "contract_sha256": "f846c148539eebf0bcdad47cb9b2c2e68c3e7517c8566b12acf40dc7426e3331"
+    },
+    {
+      "category": "Streaming",
+      "kind": "poster",
+      "variants": 12,
+      "selected": 0,
+      "blocked": 12,
+      "contract_sha256": "89869d979fa4236590f9195eb216838feab1a63662fb35a78cc49a9c863566de"
+    },
+    {
+      "category": "Studio",
+      "kind": "poster",
+      "variants": 6,
+      "selected": 0,
+      "blocked": 6,
+      "contract_sha256": "d675c3b036fc8a44741552d8c8cf32587b986aa3302343f666da510ea83e35fd"
+    },
+    {
+      "category": "SubtitleLanguage",
+      "kind": "poster",
+      "variants": 8,
+      "selected": 0,
+      "blocked": 8,
+      "contract_sha256": "dc899a0611b93ea461fb5af6ef79abf2fa6d7fab27c41bf1fb17c5b83bce9e45"
+    },
+    {
+      "category": "Universe",
+      "kind": "poster",
+      "variants": 3,
+      "selected": 0,
+      "blocked": 3,
+      "contract_sha256": "e85fd297c7e3d537134de23221919d20ff7a2500ca3409c650d8448962b6809c"
+    },
+    {
+      "category": "VideoFormat",
+      "kind": "poster",
+      "variants": 2,
+      "selected": 0,
+      "blocked": 2,
+      "contract_sha256": "c872e26f91424b8eb87f7f48bac8d741eac5d479f6a61dadec01951e06c97c4f"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "variants": 19,
+      "selected": 0,
+      "blocked": 19,
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "variants": 18,
+      "selected": 0,
+      "blocked": 18,
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551"
+    }
+  ],
+  "variants": [
+    {
+      "category": "Aspect",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "fc14d583c50d28e4f616c2aa853acdfcebdf1a4a9626500912791a8e3baa2b08",
+      "variant": "logo-single-b3ad77cb3133f479",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Aspect",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "fc14d583c50d28e4f616c2aa853acdfcebdf1a4a9626500912791a8e3baa2b08",
+      "variant": "placeholder-single-fa4978e71f7c453d",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "AudioLanguage",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bb3c4cb548bcf2cb1f5c4d5a0d1b310ef55509fa99dceed6c835bd8ddbc8072c",
+      "variant": "placeholder-single-0a711f667b2abf0c",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "AudioLanguage",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bb3c4cb548bcf2cb1f5c4d5a0d1b310ef55509fa99dceed6c835bd8ddbc8072c",
+      "variant": "placeholder-single-2a0c824d3229540e",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "AudioLanguage",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bb3c4cb548bcf2cb1f5c4d5a0d1b310ef55509fa99dceed6c835bd8ddbc8072c",
+      "variant": "placeholder-single-5f67319cf634a91c",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "AudioLanguage",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bb3c4cb548bcf2cb1f5c4d5a0d1b310ef55509fa99dceed6c835bd8ddbc8072c",
+      "variant": "placeholder-single-63343afe99633920",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "AudioLanguage",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bb3c4cb548bcf2cb1f5c4d5a0d1b310ef55509fa99dceed6c835bd8ddbc8072c",
+      "variant": "placeholder-single-7b994db0da53b7c5",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "AudioLanguage",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bb3c4cb548bcf2cb1f5c4d5a0d1b310ef55509fa99dceed6c835bd8ddbc8072c",
+      "variant": "placeholder-single-b96a50e99998438c",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "AudioLanguage",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bb3c4cb548bcf2cb1f5c4d5a0d1b310ef55509fa99dceed6c835bd8ddbc8072c",
+      "variant": "placeholder-single-f971203202f35bc8",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "AudioLanguage",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bb3c4cb548bcf2cb1f5c4d5a0d1b310ef55509fa99dceed6c835bd8ddbc8072c",
+      "variant": "placeholder-single-fa4978e71f7c453d",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-00bd98b885de8174",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-1d5101f6bc892f5b",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-21cba7456fc5bfd5",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-276ce3a3032bda18",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-2c8df0f3d489a3a3",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-2d4ce8c1f8038bc7",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-2dd56c67d8d5eca7",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-37ea3cd3ca8293b9",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-3ed1dd9872d28e8d",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-482e5a4c167a6147",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-5008e5abeef32232",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-50ba22fff6c39095",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-57d48205233fcc7f",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-63994adae48a4adf",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-6a34235c92f152dc",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-6bd447739a13499e",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-6f74d19af2da6255",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-73515cb81f6f6403",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-7d4480082422a3bc",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-7ed075f6515bbe1d",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-8707426c6914c37d",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-96807d6c0925ac5c",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-9f2f89e1ddf7e207",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-a85f6f303eac2d3e",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-b1ae0d1c1036cb9d",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-b5eadf8a9f2872e5",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-b79ad00f9879fb47",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-bc7f1548b1f6176c",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-c50f677463571c98",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-da25a0c8130159f4",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-db3ee94a45014ec6",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-e0b431a5bb5ab8e7",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-e6b7800f6cb5dba3",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-f39ffe02947e1699",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Awards",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "7c0dd7e17e0c2053548d168359f3e6a676412ac8864577c191851013b407b1b9",
+      "variant": "logo-single-f735a2c6a16d508e",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Based",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "2fbcdbcfa7ead20213143fecfff7a39ab5ef3b86214f54eaf67225f9cc2f5103",
+      "variant": "placeholder-single-efe4bc572a9ca105",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-color-12cf75d1e4f48a7d",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-color-12dadb7ba6087df7",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-color-1459346da8e79f92",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-color-302bfa70c92e12e1",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-color-4be498b22f5ada3f",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-color-5a26d8a6169063f0",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-color-5cf76e7a62ed4fcd",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-color-62f4d60cfe1d4cb2",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-color-7953f6085314baf8",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-color-8abeee338f18ac27",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-color-8ca957312ba5897e",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-color-90119fcc32f5beef",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-color-9a643ea888416458",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-color-a0b3488c7c584597",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-color-b363dab69b0b2931",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-color-f2915b81ab99ef88",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-color-fbb161df73d6b370",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-color-fce0d71a2e3e1b2b",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-white-0df6faf10c466828",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-white-0f36782d97e78998",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-white-1c27bfae6e170cb5",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-white-1f66581aae44fea3",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-white-1fec1f8e89a26a10",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-white-25655ab9d1b3e584",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-white-436cf0175768ad27",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-white-5d0cb252c83a9228",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-white-6a146bc0f5771b05",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-white-77aa074eabc46c25",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-white-86a0b38d9e8b36b7",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-white-86ff1608d4812fba",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-white-9bb0c55c37ccdfdc",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-white-b4765b60d05cc57e",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-white-c41067ec7adbcc53",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-white-c92ce8094f1b58f0",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-white-d557ac0207553aa3",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Chart",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "31e51f40fedc6c7b713bc8778c37fe4f2261b6190e7ff68b36088dbb08f0141f",
+      "variant": "logo-white-e16302a6ae577b92",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "ContentRating",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "fb4494c27910daf618ae9c58e7df8a867a0836e4a1b40f7c64b46cff6ffbaef3",
+      "variant": "logo-single-2dd56c67d8d5eca7",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "ContentRating",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "fb4494c27910daf618ae9c58e7df8a867a0836e4a1b40f7c64b46cff6ffbaef3",
+      "variant": "logo-single-3a78d252fcf78440",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "ContentRating",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "fb4494c27910daf618ae9c58e7df8a867a0836e4a1b40f7c64b46cff6ffbaef3",
+      "variant": "placeholder-single-fa4978e71f7c453d",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-0398fd670b8a5d32",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-10687ff9f2c43e82",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-13b0298c04e19382",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-149ee66a45046294",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-2236751e50a58506",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-25330c4af1ebebaf",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-34baa0a1bb52ab3b",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-3b32317ac626e5f7",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-3c598968d3d55554",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-42d56890bc4cc85a",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-48ec4fbd63274f8d",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-49e4e8d490caab45",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-5bdc7c9344410ef2",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-81fe39deefc05175",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-83ce13bb7779cc0a",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-8e5beb0c01e64a1b",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-b6f47639e87f7505",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-c5364a569382a915",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-c7f354001183bdde",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-d13dabaa45a7063f",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-dd278fd9bd4c9646",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-deafa348158386db",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-e7207399fc3404a5",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-eacbd6d86df1be26",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-f1085f9bf38c65ef",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-f7914debd6902da1",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-color-fea8e5e49ac68739",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-00bcaaf0e73fef5c",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-149dbf0ddcb278b5",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-25e7e69d94a6ec06",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-2b0695d2b6145647",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-38a1243741adbffc",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-3d93ea9eafffc3fd",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-41416810c869152b",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-4c7af1e7255f4cd5",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-4cd48263cb332ced",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-5050a6eaa022cc42",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-598c88422c45734a",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-5d4ac5c5aa25fa27",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-5e0450e50edacb8f",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-6599aba48adc9b94",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-745c996fd23ecbaa",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-7b589dbd9980ebd7",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-86b99b27126cdf6d",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-883a122ddca2070c",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-9076fb0d8db65e5e",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-b5c9aa7446ca37b0",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-becbfc1f44438a27",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-c14a65786ab6d73e",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-cc138f2ed1215a02",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-e503b271bfabf560",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-e59c4a3898aff42b",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-e5d2b94a489445ad",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "logo-white-e73d1d3dee570242",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "placeholder-color-c9ed5dadc46a61a9",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Country",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "bcfc3498f96b8412b016c1c93a600448fe591c485a5994f52798f14bb3ec99cd",
+      "variant": "placeholder-white-48e947565da62f8a",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Decade",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e215dc4c5a41ea1fb51415f9ddf841033a066b2e3472ea648e28bffb8dedea8c",
+      "variant": "composition-single-d258608c72064467",
+      "source_kind": "composition",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Decade",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e215dc4c5a41ea1fb51415f9ddf841033a066b2e3472ea648e28bffb8dedea8c",
+      "variant": "placeholder-single-055bd00a18e51d77",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Decade",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e215dc4c5a41ea1fb51415f9ddf841033a066b2e3472ea648e28bffb8dedea8c",
+      "variant": "placeholder-single-12e8c38b941a0925",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Decade",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e215dc4c5a41ea1fb51415f9ddf841033a066b2e3472ea648e28bffb8dedea8c",
+      "variant": "placeholder-single-6373ca59ef6fed3c",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Decade",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e215dc4c5a41ea1fb51415f9ddf841033a066b2e3472ea648e28bffb8dedea8c",
+      "variant": "placeholder-single-6b6b2339da863fa5",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Decade",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e215dc4c5a41ea1fb51415f9ddf841033a066b2e3472ea648e28bffb8dedea8c",
+      "variant": "placeholder-single-71799fc3ff320a91",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Decade",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e215dc4c5a41ea1fb51415f9ddf841033a066b2e3472ea648e28bffb8dedea8c",
+      "variant": "placeholder-single-8f3c072657b810f9",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Decade",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e215dc4c5a41ea1fb51415f9ddf841033a066b2e3472ea648e28bffb8dedea8c",
+      "variant": "placeholder-single-930661784fc17cc4",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Decade",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e215dc4c5a41ea1fb51415f9ddf841033a066b2e3472ea648e28bffb8dedea8c",
+      "variant": "placeholder-single-98c1800baa45137e",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Decade",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e215dc4c5a41ea1fb51415f9ddf841033a066b2e3472ea648e28bffb8dedea8c",
+      "variant": "placeholder-single-9e2d03d42104d81a",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Decade",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e215dc4c5a41ea1fb51415f9ddf841033a066b2e3472ea648e28bffb8dedea8c",
+      "variant": "placeholder-single-b3ab69b1cea78521",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Decade",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e215dc4c5a41ea1fb51415f9ddf841033a066b2e3472ea648e28bffb8dedea8c",
+      "variant": "placeholder-single-babee65f716f2a89",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Decade",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e215dc4c5a41ea1fb51415f9ddf841033a066b2e3472ea648e28bffb8dedea8c",
+      "variant": "placeholder-single-bc5ca729b398c842",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Decade",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e215dc4c5a41ea1fb51415f9ddf841033a066b2e3472ea648e28bffb8dedea8c",
+      "variant": "placeholder-single-c569182cbb9429a6",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Decade",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e215dc4c5a41ea1fb51415f9ddf841033a066b2e3472ea648e28bffb8dedea8c",
+      "variant": "placeholder-single-d1b2a4f29aa9e180",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Decade",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e215dc4c5a41ea1fb51415f9ddf841033a066b2e3472ea648e28bffb8dedea8c",
+      "variant": "placeholder-single-d99577fccbf15cd7",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Decade",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e215dc4c5a41ea1fb51415f9ddf841033a066b2e3472ea648e28bffb8dedea8c",
+      "variant": "placeholder-single-fa4978e71f7c453d",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Franchise",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "3f95c0f4c80df9aba2934c5e1e4e50065bdd894e9202ec2f0a3aa5f80d19bf1b",
+      "variant": "logo-single-3bef1f4ee4565f08",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Franchise",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "3f95c0f4c80df9aba2934c5e1e4e50065bdd894e9202ec2f0a3aa5f80d19bf1b",
+      "variant": "logo-single-8b0feb5753113095",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-089f43d446722055",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-09fb18859a572280",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-1c8acfcb7a4a61dc",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-1f0363809a14a632",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-2dd56c67d8d5eca7",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-2e26e8dee2642488",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-38466fbffaa6d9ae",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-3f4f6387ea9af884",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-52ac1e3c40781087",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-54b9b90e88dca67e",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-59decc50ff063c7d",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-5a892cbfb31d61b6",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-6648666c8627f735",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-8a4f3536e2285f32",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-8abeafb0859d0adc",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-9ae7953eb8e6f5a2",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-adf13d7f27452a20",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-b3fdab351cbc736d",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-b440d84be1d85089",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-bacf231cf7474fb0",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-dd5c4049f4094e7e",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-df40776539748f48",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-dfe9fb21b047e00e",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-e25438b4d54c9819",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-ee3188cf31afa307",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-fdb2defad6a7efa6",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "logo-single-ffdb1d804bad3993",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "conditional_synthetic_adapter",
+      "reason": "Selected active assigned English Genre single-logo current-mapping adapter; mandatory native/context guards; final acceptance pending"
+    },
+    {
+      "category": "Genre",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "ad2bb267b9fb0b0452fd92da9630f323f9ca86c80c169b930fbf8387d96a778a",
+      "variant": "placeholder-single-fa4978e71f7c453d",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Network",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "fd090570f6b7976e064660dec91f9f8207980cbb9e6e7d6e2aeafa3cc7b05b0c",
+      "variant": "logo-color-00b143eefc278042",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Network",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "fd090570f6b7976e064660dec91f9f8207980cbb9e6e7d6e2aeafa3cc7b05b0c",
+      "variant": "logo-color-45d15d3945fe855f",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Network",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "fd090570f6b7976e064660dec91f9f8207980cbb9e6e7d6e2aeafa3cc7b05b0c",
+      "variant": "logo-color-67635de5394a3872",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Network",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "fd090570f6b7976e064660dec91f9f8207980cbb9e6e7d6e2aeafa3cc7b05b0c",
+      "variant": "logo-color-990101e775009d40",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Network",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "fd090570f6b7976e064660dec91f9f8207980cbb9e6e7d6e2aeafa3cc7b05b0c",
+      "variant": "logo-white-4e2137c2fa78928c",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Network",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "fd090570f6b7976e064660dec91f9f8207980cbb9e6e7d6e2aeafa3cc7b05b0c",
+      "variant": "logo-white-ca5eb0deca4fb8c4",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Network",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "fd090570f6b7976e064660dec91f9f8207980cbb9e6e7d6e2aeafa3cc7b05b0c",
+      "variant": "logo-white-dd406ab893336210",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Network",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "fd090570f6b7976e064660dec91f9f8207980cbb9e6e7d6e2aeafa3cc7b05b0c",
+      "variant": "logo-white-ec17b599a56d3610",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Network",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "fd090570f6b7976e064660dec91f9f8207980cbb9e6e7d6e2aeafa3cc7b05b0c",
+      "variant": "placeholder-color-c9ed5dadc46a61a9",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Network",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "fd090570f6b7976e064660dec91f9f8207980cbb9e6e7d6e2aeafa3cc7b05b0c",
+      "variant": "placeholder-white-48e947565da62f8a",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Playlist",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "5047d834ecd3f8e5a0ed76ae24760b6947ae6b83e95198ce602e1715e445016b",
+      "variant": "timeline-order",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Resolution",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "4475c9bb450380395a2a2e982fcf72cb33f8453fe3d4665ea8a171e9f6570865",
+      "variant": "logo-single-b3ad77cb3133f479",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Resolution",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "4475c9bb450380395a2a2e982fcf72cb33f8453fe3d4665ea8a171e9f6570865",
+      "variant": "placeholder-single-70528e5084a8fc70",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Seasonal",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "1124fecbde06c2c78c8fba9772d16de65d9cc70ae0d29a8f203b931f2e2507c7",
+      "variant": "logo-single-1f0363809a14a632",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Seasonal",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "1124fecbde06c2c78c8fba9772d16de65d9cc70ae0d29a8f203b931f2e2507c7",
+      "variant": "logo-single-2dd56c67d8d5eca7",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Seasonal",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "1124fecbde06c2c78c8fba9772d16de65d9cc70ae0d29a8f203b931f2e2507c7",
+      "variant": "logo-single-50c797b0baee9279",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Seasonal",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "1124fecbde06c2c78c8fba9772d16de65d9cc70ae0d29a8f203b931f2e2507c7",
+      "variant": "logo-single-59decc50ff063c7d",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Seasonal",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "1124fecbde06c2c78c8fba9772d16de65d9cc70ae0d29a8f203b931f2e2507c7",
+      "variant": "logo-single-a58ef0cf093b8fdb",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Seasonal",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "1124fecbde06c2c78c8fba9772d16de65d9cc70ae0d29a8f203b931f2e2507c7",
+      "variant": "logo-single-db4122cd5c8efc19",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Separators",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "f846c148539eebf0bcdad47cb9b2c2e68c3e7517c8566b12acf40dc7426e3331",
+      "variant": "composition-single-638eee61722a1798",
+      "source_kind": "composition",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Separators",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "f846c148539eebf0bcdad47cb9b2c2e68c3e7517c8566b12acf40dc7426e3331",
+      "variant": "composition-single-c7e4aece5c2136d9",
+      "source_kind": "composition",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Separators",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "f846c148539eebf0bcdad47cb9b2c2e68c3e7517c8566b12acf40dc7426e3331",
+      "variant": "logo-single-30b636e3464d58b0",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Streaming",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "89869d979fa4236590f9195eb216838feab1a63662fb35a78cc49a9c863566de",
+      "variant": "logo-color-45d15d3945fe855f",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Streaming",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "89869d979fa4236590f9195eb216838feab1a63662fb35a78cc49a9c863566de",
+      "variant": "logo-color-582dda22db619586",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Streaming",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "89869d979fa4236590f9195eb216838feab1a63662fb35a78cc49a9c863566de",
+      "variant": "logo-color-67635de5394a3872",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Streaming",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "89869d979fa4236590f9195eb216838feab1a63662fb35a78cc49a9c863566de",
+      "variant": "logo-color-6f2be78b2e0b08f1",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Streaming",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "89869d979fa4236590f9195eb216838feab1a63662fb35a78cc49a9c863566de",
+      "variant": "logo-color-990101e775009d40",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Streaming",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "89869d979fa4236590f9195eb216838feab1a63662fb35a78cc49a9c863566de",
+      "variant": "logo-color-c783565926642577",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Streaming",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "89869d979fa4236590f9195eb216838feab1a63662fb35a78cc49a9c863566de",
+      "variant": "logo-white-128c662517ed4dd7",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Streaming",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "89869d979fa4236590f9195eb216838feab1a63662fb35a78cc49a9c863566de",
+      "variant": "logo-white-4e2137c2fa78928c",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Streaming",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "89869d979fa4236590f9195eb216838feab1a63662fb35a78cc49a9c863566de",
+      "variant": "logo-white-9345c1e9154a4085",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Streaming",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "89869d979fa4236590f9195eb216838feab1a63662fb35a78cc49a9c863566de",
+      "variant": "logo-white-c6f037b8301b6704",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Streaming",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "89869d979fa4236590f9195eb216838feab1a63662fb35a78cc49a9c863566de",
+      "variant": "logo-white-ca5eb0deca4fb8c4",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Streaming",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "89869d979fa4236590f9195eb216838feab1a63662fb35a78cc49a9c863566de",
+      "variant": "logo-white-ec17b599a56d3610",
+      "source_kind": "logo",
+      "required_presentations": [
+        "white",
+        "color"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Studio",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "d675c3b036fc8a44741552d8c8cf32587b986aa3302343f666da510ea83e35fd",
+      "variant": "logo-single-1df3b4fb5b6b6e2e",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Studio",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "d675c3b036fc8a44741552d8c8cf32587b986aa3302343f666da510ea83e35fd",
+      "variant": "logo-single-2985198f0cbd1417",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Studio",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "d675c3b036fc8a44741552d8c8cf32587b986aa3302343f666da510ea83e35fd",
+      "variant": "logo-single-90b14d98ff781bad",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Studio",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "d675c3b036fc8a44741552d8c8cf32587b986aa3302343f666da510ea83e35fd",
+      "variant": "logo-single-a76b36d0386a574c",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Studio",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "d675c3b036fc8a44741552d8c8cf32587b986aa3302343f666da510ea83e35fd",
+      "variant": "logo-single-fd21888a4572bc3c",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Studio",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "d675c3b036fc8a44741552d8c8cf32587b986aa3302343f666da510ea83e35fd",
+      "variant": "placeholder-single-fa4978e71f7c453d",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "SubtitleLanguage",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "dc899a0611b93ea461fb5af6ef79abf2fa6d7fab27c41bf1fb17c5b83bce9e45",
+      "variant": "placeholder-single-2281d27cbca2bd1f",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "SubtitleLanguage",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "dc899a0611b93ea461fb5af6ef79abf2fa6d7fab27c41bf1fb17c5b83bce9e45",
+      "variant": "placeholder-single-2ac2d80349d4e3d8",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "SubtitleLanguage",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "dc899a0611b93ea461fb5af6ef79abf2fa6d7fab27c41bf1fb17c5b83bce9e45",
+      "variant": "placeholder-single-3ea36b9a298a5c4b",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "SubtitleLanguage",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "dc899a0611b93ea461fb5af6ef79abf2fa6d7fab27c41bf1fb17c5b83bce9e45",
+      "variant": "placeholder-single-4e4adf84fcc19313",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "SubtitleLanguage",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "dc899a0611b93ea461fb5af6ef79abf2fa6d7fab27c41bf1fb17c5b83bce9e45",
+      "variant": "placeholder-single-9ab9bd86b005e4df",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "SubtitleLanguage",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "dc899a0611b93ea461fb5af6ef79abf2fa6d7fab27c41bf1fb17c5b83bce9e45",
+      "variant": "placeholder-single-9ec8eb1926d9512c",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "SubtitleLanguage",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "dc899a0611b93ea461fb5af6ef79abf2fa6d7fab27c41bf1fb17c5b83bce9e45",
+      "variant": "placeholder-single-e0780055c94adf8b",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "SubtitleLanguage",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "dc899a0611b93ea461fb5af6ef79abf2fa6d7fab27c41bf1fb17c5b83bce9e45",
+      "variant": "placeholder-single-fa4978e71f7c453d",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Universe",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e85fd297c7e3d537134de23221919d20ff7a2500ca3409c650d8448962b6809c",
+      "variant": "logo-single-3a78d252fcf78440",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Universe",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e85fd297c7e3d537134de23221919d20ff7a2500ca3409c650d8448962b6809c",
+      "variant": "logo-single-b3ad77cb3133f479",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Universe",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "e85fd297c7e3d537134de23221919d20ff7a2500ca3409c650d8448962b6809c",
+      "variant": "logo-single-d26fdc6f4097f312",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "VideoFormat",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "c872e26f91424b8eb87f7f48bac8d741eac5d479f6a61dadec01951e06c97c4f",
+      "variant": "logo-single-a76b36d0386a574c",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "VideoFormat",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "c872e26f91424b8eb87f7f48bac8d741eac5d479f6a61dadec01951e06c97c4f",
+      "variant": "logo-single-fc0eb05375e8659b",
+      "source_kind": "logo",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "composition-single-d258608c72064467",
+      "source_kind": "composition",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "placeholder-single-0aae5ea161749703",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "placeholder-single-0c519b094daf5a2e",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "placeholder-single-1850c1635837ae36",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "placeholder-single-1e66bb50ef79458f",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "placeholder-single-2f26b71c8c67cd79",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "placeholder-single-3021a9f3b59f1461",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "placeholder-single-305169151886b789",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "placeholder-single-39c42b0cc233853b",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "placeholder-single-3a90e9e03a7ae0ed",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "placeholder-single-4a682c0ea4a059af",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "placeholder-single-9b4d52c711855341",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "placeholder-single-a9e7b32e17e720ba",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "placeholder-single-c56399b512c7e030",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "placeholder-single-d3fe45b577298cdc",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "placeholder-single-dca311416132278f",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "placeholder-single-f8e778eabec812b6",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "placeholder-single-fa4978e71f7c453d",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Year",
+      "kind": "poster",
+      "version": "1.0.0",
+      "contract_sha256": "9536beb851ef832f64493e7467f544db9ad77b07234f9f5dd53613bdb6fc5926",
+      "variant": "placeholder-single-fde73f690d364a7f",
+      "source_kind": "placeholder",
+      "required_presentations": [
+        "single"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "version": "1.0.0",
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+      "variant": "aspect",
+      "source_kind": "overlay_source",
+      "required_presentations": [
+        "standard",
+        "bigger"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "version": "1.0.0",
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+      "variant": "award",
+      "source_kind": "overlay_source",
+      "required_presentations": [
+        "standard",
+        "bigger"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "version": "1.0.0",
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+      "variant": "chart",
+      "source_kind": "overlay_source",
+      "required_presentations": [
+        "standard",
+        "bigger"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "version": "1.0.0",
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+      "variant": "chart.white",
+      "source_kind": "overlay_source",
+      "required_presentations": [
+        "standard",
+        "bigger"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "version": "1.0.0",
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+      "variant": "content_rating",
+      "source_kind": "overlay_source",
+      "required_presentations": [
+        "standard",
+        "bigger"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "version": "1.0.0",
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+      "variant": "country",
+      "source_kind": "overlay_source",
+      "required_presentations": [
+        "standard",
+        "bigger"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "version": "1.0.0",
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+      "variant": "franchise",
+      "source_kind": "overlay_source",
+      "required_presentations": [
+        "standard",
+        "bigger"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "version": "1.0.0",
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+      "variant": "genre",
+      "source_kind": "overlay_source",
+      "required_presentations": [
+        "standard",
+        "bigger"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "version": "1.0.0",
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+      "variant": "network",
+      "source_kind": "overlay_source",
+      "required_presentations": [
+        "standard",
+        "bigger"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "version": "1.0.0",
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+      "variant": "network.white",
+      "source_kind": "overlay_source",
+      "required_presentations": [
+        "standard",
+        "bigger"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "version": "1.0.0",
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+      "variant": "playlist",
+      "source_kind": "overlay_source",
+      "required_presentations": [
+        "standard",
+        "bigger"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "version": "1.0.0",
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+      "variant": "resolution",
+      "source_kind": "overlay_source",
+      "required_presentations": [
+        "standard",
+        "bigger"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "version": "1.0.0",
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+      "variant": "seasonal",
+      "source_kind": "overlay_source",
+      "required_presentations": [
+        "standard",
+        "bigger"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "version": "1.0.0",
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+      "variant": "streaming",
+      "source_kind": "overlay_source",
+      "required_presentations": [
+        "standard",
+        "bigger"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "version": "1.0.0",
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+      "variant": "streaming.white",
+      "source_kind": "overlay_source",
+      "required_presentations": [
+        "standard",
+        "bigger"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "version": "1.0.0",
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+      "variant": "studio",
+      "source_kind": "overlay_source",
+      "required_presentations": [
+        "standard",
+        "bigger"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "version": "1.0.0",
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+      "variant": "universe",
+      "source_kind": "overlay_source",
+      "required_presentations": [
+        "standard",
+        "bigger"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    },
+    {
+      "category": "Overlays",
+      "kind": "overlay",
+      "version": "1.0.0",
+      "contract_sha256": "b79d5aa935a349137718109adb56dbc4a67b7bc760fc3917eccba595cb5fa551",
+      "variant": "video_format",
+      "source_kind": "overlay_source",
+      "required_presentations": [
+        "standard",
+        "bigger"
+      ],
+      "disposition": "blocked",
+      "reason": "Outside initial English Genre single-logo cohort"
+    }
+  ],
+  "counts": {
+    "packages": 22,
+    "variants": 278,
+    "selected_pending_implementation": 27,
+    "blocked": 251
+  },
+  "requirements": [
+    "assigned origin",
+    "active, nonretired identity",
+    "English only",
+    "exact current mapping",
+    "fresh full native validation and independent review",
+    "no generated/dependent members",
+    "complete shared-source closure",
+    "no new exceptions"
+  ],
+  "implemented": true,
+  "production_authorized": false,
+  "implementation_status": "IMPLEMENTED; final-head validation and independent review pending",
+  "milestone": "Phase 5 M5",
+  "implementation_scope": "offline owned catalog and complete Package E preparation",
+  "publication_authorized": false,
+  "ready": false,
+  "active": false
+}

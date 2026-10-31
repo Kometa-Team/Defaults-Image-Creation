@@ -1,0 +1,110 @@
+{
+  "version": 1,
+  "baseline_commit": "3c15fb56b63bababa5d216b8d885e7dee257c11d",
+  "members": {
+    ".github/workflows/phase5-m5-validation.yml": {
+      "before_sha256": null,
+      "sha256": "f3b9f1384292f3186d4160bac3f280cb826fb4d4d0d9efe9c1f5f8bb5bbdff97"
+    },
+    "ci/dependency_tests/test_people_job_retention_maintenance.py": {
+      "before_sha256": "c8e03edba1c697e73995d584d5026099273965098479297daf0a7f064fe50258",
+      "sha256": "2955e546701a6cb6fc7fc2771952d44dbc9f26350dab21fc76b145e7eda88be6"
+    },
+    "ci/dependency_tests/test_phase5_m4_maintenance.py": {
+      "before_sha256": "27c4e891a91880a84235402086b9465b3ff6ebf8d0197e3d7c2c116f387747b4",
+      "sha256": "38d8dde83e2f1a06bf666e476185544ba7c532186d260cd5afa1da56328a3442"
+    },
+    "ci/dependency_tests/test_phase5_m5_maintenance.py": {
+      "before_sha256": null,
+      "sha256": "c52e04c1d57d4eccd48155a7da4c8404dc0dba7a9f7be2557e99c33bc092985c"
+    },
+    "ci/people_job_retention_maintenance.py": {
+      "before_sha256": "4f8b7e54488f1c9b0103ee75a75c100d4f320d68a9a52008f865125427ae169a",
+      "sha256": "c4049fff0510e11591906aa77f99cdce78a7f79699248217659f779a44ee0736"
+    },
+    "ci/phase5-m5-test-ids.json": {
+      "before_sha256": null,
+      "sha256": "3929f1d2910c44c711e54db6be7799fc257f0bca1caf4c7034988b1d39f2b5aa"
+    },
+    "ci/phase5_m4_maintenance.py": {
+      "before_sha256": "4a38d98fb4f96d2886ca5c31aff2bc974120e114e60b94ce012b1f0c12ec1a9c",
+      "sha256": "fd92f30d1525616b17875595c9a3c1abd59b9440e11c0ac8c5660c4c60c08eee"
+    },
+    "ci/phase5_m5.py": {
+      "before_sha256": null,
+      "sha256": "f5296de95d90d915fbe89d876994990914e0de2e6dac99331f4f2d012d3f45e2"
+    },
+    "create_defaults/bulk/lifecycle/catalog_preparation.py": {
+      "before_sha256": null,
+      "sha256": "89c5e3fdadce53d807f9af51791885bc386d813e4d0553e3f2aad0e68c803492"
+    },
+    "create_defaults/bulk/lifecycle/preparation_models.py": {
+      "before_sha256": null,
+      "sha256": "3da4e87141952a2db30d1f655272b90a133857332367f2aa8b0c57d19f478563"
+    },
+    "create_defaults/bulk/lifecycle/preparation_progress.py": {
+      "before_sha256": null,
+      "sha256": "eebe73b3ec2ef38370195f83574181dedc394507bc513a8fae976af9a8bfa61b"
+    },
+    "create_defaults/bulk/lifecycle/publication_preparation.py": {
+      "before_sha256": null,
+      "sha256": "9a0808658ce7ff6786f04a4979cf7af14fc9c3cf25e1c75bbf46bec099781fc8"
+    },
+    "create_defaults/bulk/lifecycle/schemas/preparation-v1.schema.json": {
+      "before_sha256": null,
+      "sha256": "b67fc9e7b403cebb15d69a5b59b0939637fb95d0d8866458d11f8c906497e750"
+    },
+    "create_defaults/lifecycle/PHASE5_M5_ACCEPTANCE.json": {
+      "before_sha256": null,
+      "sha256": "4982256320e9132c1251ba1f876c840efaf7e86a518506a310017bf4d5ec5c52"
+    },
+    "create_defaults/lifecycle/PHASE5_M5_CI_MAINTENANCE.md": {
+      "before_sha256": null,
+      "sha256": "e2da9b2f397ca68a2e43c30300922496dc6738548161c220506fd191cabc4733"
+    },
+    "create_defaults/lifecycle/PHASE5_M5_COVERAGE.json": {
+      "before_sha256": null,
+      "sha256": "02e9d2a6772fa9aea84022004bd1ebf063d71b23891501583b8d6457ea091626"
+    },
+    "create_defaults/lifecycle/PHASE5_M5_IMPLEMENTATION.md": {
+      "before_sha256": null,
+      "sha256": "6a99d4eb07b8e818c05c7aac298354f598001cd0908bc786c28f1dc98d33be2b"
+    },
+    "create_defaults/lifecycle/ROADMAP.md": {
+      "before_sha256": "c830b33101d202e6118c84c7d63ccf40b0a7639eefcaa6687d73e2c9469d87fc",
+      "sha256": "79a722ebfd77be147b9375673ea77dbb44e6ef62ac325b6299bd77ec24a690e9"
+    },
+    "create_defaults/phase5/m5_tests/conftest.py": {
+      "before_sha256": null,
+      "sha256": "f3406743b73268bd79503063df869202768c61883d6f9522e37ee5c256a1fdba"
+    },
+    "create_defaults/phase5/m5_tests/helpers.py": {
+      "before_sha256": null,
+      "sha256": "b7f86150895833478af85f8c899195d949593806e9bfaf8f386f5049c715c812"
+    },
+    "create_defaults/phase5/m5_tests/test_boundaries.py": {
+      "before_sha256": null,
+      "sha256": "e031fafa9d10b0d618a9e1a44941ce1c48955a95921ef7241e5dcb0ec5dc0ab6"
+    },
+    "create_defaults/phase5/m5_tests/test_catalog.py": {
+      "before_sha256": null,
+      "sha256": "c42f62ed527bb594649ee1cd0322c20d38c59999ec1fd1c647968386c3e83f77"
+    },
+    "create_defaults/phase5/m5_tests/test_offline_git.py": {
+      "before_sha256": null,
+      "sha256": "33676b44fb0b2fafec7ef6f5b8fa1240fc2cad4dc4fa48347e1903ba148547fd"
+    },
+    "create_defaults/phase5/m5_tests/test_publication.py": {
+      "before_sha256": null,
+      "sha256": "fece34b958ad0fe924409620e4244d0114bb9284735d5f218771789a32021b5b"
+    },
+    "create_defaults/phase5/m5_tests/test_recovery.py": {
+      "before_sha256": null,
+      "sha256": "30b49cf85cd06948c8f7c06b40da7966cae0934f92cb691c6549a139b1972e9d"
+    }
+  },
+  "publication_authorized": false,
+  "production_intersection": [],
+  "adoption_intersection": [],
+  "frozen_m7_intersection": []
+}

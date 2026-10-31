@@ -60,15 +60,29 @@ class StartupRetentionMaintenanceTests(unittest.TestCase):
                 maintenance.manifest()
 
     def test_each_pass_rechecks_shared_directories_without_caching_metadata(self):
+        from ci import phase5_m5_maintenance as m5
         original = Path.lstat
-        calls = []
+        calls, m5_calls = [], []
+        depth = [0]
+        def observe_m5(function):
+            def wrapped(*args, **kwargs):
+                depth[0] += 1
+                try:
+                    return function(*args, **kwargs)
+                finally:
+                    depth[0] -= 1
+            return wrapped
         def observed(path):
-            calls.append(path)
+            (m5_calls if depth[0] else calls).append(path)
             return original(path)
         for _ in range(2):
-            calls.clear()
-            with patch.object(Path, 'lstat', observed):
+            calls.clear(); m5_calls.clear()
+            # Instrument the real successor checks, without bypassing them.
+            with patch.object(Path, 'lstat', observed), \
+                    patch.object(m5, 'verify_checkout', observe_m5(m5.verify_checkout)), \
+                    patch.object(m5, 'historical_bytes', observe_m5(m5.historical_bytes)):
                 maintenance.verify_checkout()
+            self.assertIn(ROOT, m5_calls)
             # One manifest-path check and one shared-directory check per pass.
             self.assertEqual(calls.count(ROOT), 2)
             self.assertEqual(calls.count(ROOT / 'create_people_posters'), 1)
