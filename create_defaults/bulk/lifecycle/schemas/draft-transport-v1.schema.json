@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kometa:phase5:draft-transport:v1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "simulation": {
+      "const": true
+    },
+    "record_only": {
+      "const": true
+    },
+    "authenticated": {
+      "const": false
+    },
+    "operation_accepted": {
+      "const": false
+    },
+    "applied": {
+      "const": false
+    },
+    "artwork_approved": {
+      "const": false
+    },
+    "contract_approved": {
+      "const": false
+    },
+    "ready": {
+      "const": false
+    },
+    "active": {
+      "const": false
+    },
+    "production_enforcement": {
+      "const": false
+    },
+    "publication_authorized": {
+      "const": false
+    },
+    "remote_writes_authorized": {
+      "const": false
+    },
+    "merge_authorized": {
+      "const": false
+    },
+    "kind": {
+      "const": "phase5-offline-draft-binding"
+    },
+    "preparation_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "catalog_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "preparation": {
+      "type": "object"
+    },
+    "inventory": {
+      "type": "object"
+    },
+    "manifest": {
+      "type": "object"
+    },
+    "plan": {
+      "type": "object"
+    },
+    "authorization": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "simulation",
+    "record_only",
+    "authenticated",
+    "operation_accepted",
+    "applied",
+    "artwork_approved",
+    "contract_approved",
+    "ready",
+    "active",
+    "production_enforcement",
+    "publication_authorized",
+    "remote_writes_authorized",
+    "merge_authorized",
+    "kind",
+    "preparation_sha256",
+    "catalog_sha256",
+    "preparation",
+    "inventory",
+    "manifest",
+    "plan",
+    "authorization"
+  ],
+  "additionalProperties": false
+}

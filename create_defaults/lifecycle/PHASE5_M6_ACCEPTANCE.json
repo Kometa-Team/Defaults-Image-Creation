@@ -1,0 +1,591 @@
+{
+  "version": 1,
+  "kind": "phase5-m6-acceptance-contract",
+  "status": "offline implementation; exact-head acceptance artifacts required",
+  "baseline": "463ba791b77c82c232aead1da218fc0ca0142868",
+  "original_baseline": "cd8d4eecd64f5bff201e8ecd7daccebd955f87af",
+  "platform_groups": {
+    "Windows": [
+      "test-m6-exact-binding-rejects-resealed-membership-and-context",
+      "test-m6-equal-required-members-produce-no-artwork-draft",
+      "protocol",
+      "test-m6-owned-draft-rejects-changed-context-closed",
+      "test-m6-owned-draft-rejects-changed-context-merged",
+      "test-m6-owned-draft-rejects-changed-context-wrong-head",
+      "test-m6-owned-draft-rejects-changed-context-wrong-base",
+      "test-m6-owned-draft-rejects-changed-context-not-draft",
+      "test-m6-owned-draft-rejects-changed-context-receipt",
+      "test-m6-owned-draft-rejects-changed-context-replayed-auth",
+      "test-m6-owned-draft-rejects-changed-context-foreign-target",
+      "test-m6-fresh-authority-is-required-before-transport-missing",
+      "test-m6-fresh-authority-is-required-before-transport-revoked",
+      "test-m6-fresh-authority-is-required-before-transport-role",
+      "test-m6-fresh-authority-is-required-before-transport-expired",
+      "test-m6-fresh-context-and-remote-tampering-blocks-resume-source",
+      "test-m6-fresh-context-and-remote-tampering-blocks-resume-artwork",
+      "test-m6-fresh-context-and-remote-tampering-blocks-resume-definition",
+      "test-m6-fresh-context-and-remote-tampering-blocks-resume-review",
+      "test-m6-fresh-context-and-remote-tampering-blocks-resume-destination",
+      "test-m6-fresh-context-and-remote-tampering-blocks-resume-foreign-ref",
+      "test-m6-fresh-context-and-remote-tampering-blocks-resume-unrelated-tree",
+      "test-m6-fresh-context-and-remote-tampering-blocks-resume-rollback",
+      "test-m6-fresh-context-and-remote-tampering-blocks-resume-draft-rollback",
+      "test-m6-interrupted-push-reconciles-exact-prefix-after-commit",
+      "test-m6-interrupted-push-reconciles-exact-prefix-after-push",
+      "test-m6-accepted-push-with-lost-ack-is-reobserved",
+      "test-m6-cold-replay-is-read-only-and-never-authority",
+      "test-m6-journal-cas-and-forged-progress-fail-closed",
+      "transport",
+      "multi",
+      "current"
+    ],
+    "Linux": [
+      "test-m6-exact-binding-rejects-resealed-membership-and-context",
+      "test-m6-equal-required-members-produce-no-artwork-draft",
+      "protocol",
+      "test-m6-owned-draft-rejects-changed-context-closed",
+      "test-m6-owned-draft-rejects-changed-context-merged",
+      "test-m6-owned-draft-rejects-changed-context-wrong-head",
+      "test-m6-owned-draft-rejects-changed-context-wrong-base",
+      "test-m6-owned-draft-rejects-changed-context-not-draft",
+      "test-m6-owned-draft-rejects-changed-context-receipt",
+      "test-m6-owned-draft-rejects-changed-context-replayed-auth",
+      "test-m6-owned-draft-rejects-changed-context-foreign-target",
+      "test-m6-fresh-authority-is-required-before-transport-missing",
+      "test-m6-fresh-authority-is-required-before-transport-revoked",
+      "test-m6-fresh-authority-is-required-before-transport-role",
+      "test-m6-fresh-authority-is-required-before-transport-expired",
+      "test-m6-fresh-context-and-remote-tampering-blocks-resume-source",
+      "test-m6-fresh-context-and-remote-tampering-blocks-resume-artwork",
+      "test-m6-fresh-context-and-remote-tampering-blocks-resume-definition",
+      "test-m6-fresh-context-and-remote-tampering-blocks-resume-review",
+      "test-m6-fresh-context-and-remote-tampering-blocks-resume-destination",
+      "test-m6-fresh-context-and-remote-tampering-blocks-resume-foreign-ref",
+      "test-m6-fresh-context-and-remote-tampering-blocks-resume-unrelated-tree",
+      "test-m6-fresh-context-and-remote-tampering-blocks-resume-rollback",
+      "test-m6-fresh-context-and-remote-tampering-blocks-resume-draft-rollback",
+      "test-m6-interrupted-push-reconciles-exact-prefix-after-commit",
+      "test-m6-interrupted-push-reconciles-exact-prefix-after-push",
+      "test-m6-accepted-push-with-lost-ack-is-reobserved",
+      "test-m6-cold-replay-is-read-only-and-never-authority",
+      "test-m6-journal-cas-and-forged-progress-fail-closed",
+      "transport",
+      "multi",
+      "current"
+    ]
+  },
+  "ids_path": "ci/phase5-m6-test-ids.json",
+  "actual_pytest_ids": [
+    "create_defaults/phase5/m6_tests/test_binding.py::test_M6_exact_binding_rejects_resealed_membership_and_context",
+    "create_defaults/phase5/m6_tests/test_binding.py::test_M6_equal_required_members_produce_no_artwork_draft",
+    "create_defaults/phase5/m6_tests/test_binding.py::test_M6_unowned_or_subclassed_inputs_rejected_before_io[arbitrary]",
+    "create_defaults/phase5/m6_tests/test_binding.py::test_M6_unowned_or_subclassed_inputs_rejected_before_io[subclass]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[normal-operator-policy-stage]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[normal-operator-policy-run]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[normal-operator-policy-diff]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[normal-operator-policy-draft]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[normal-operator-policy-bridge-admission]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[phase5-M6-offline-draft-transport-stage]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[phase5-M6-offline-draft-transport-run]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[phase5-M6-offline-draft-transport-diff]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[phase5-M6-offline-draft-transport-draft]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[phase5-M6-offline-draft-transport-bridge-admission]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[None-stage]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[None-run]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[None-diff]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[None-draft]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[None-bridge-admission]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[missing-stage]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[missing-run]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[missing-diff]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[missing-draft]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[missing-bridge-admission]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[False-stage]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[False-run]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[False-diff]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[False-draft]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[False-bridge-admission]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[1-stage]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[1-run]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[1-diff]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[1-draft]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[1-bridge-admission]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[True-stage]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[True-run]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[True-diff]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[True-draft]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[True-bridge-admission]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_test_only_authorization_still_cannot_simulate[stage]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_test_only_authorization_still_cannot_simulate[run]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_test_only_authorization_still_cannot_simulate[diff]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_test_only_authorization_still_cannot_simulate[draft]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_test_only_authorization_still_cannot_simulate[bridge-admission]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_rejects_concrete_protocol_before_owner_proof[stage]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_rejects_concrete_protocol_before_owner_proof[run]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_rejects_concrete_protocol_before_owner_proof[diff]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_rejects_concrete_protocol_before_owner_proof[draft]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_rejects_concrete_protocol_before_owner_proof[bridge-admission]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[arbitrary-stage]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[arbitrary-run]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[arbitrary-diff]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[arbitrary-draft]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[arbitrary-bridge-admission]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[subclass-stage]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[subclass-run]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[subclass-diff]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[subclass-draft]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[subclass-bridge-admission]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[forged-concrete-stage]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[forged-concrete-run]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[forged-concrete-diff]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[forged-concrete-draft]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[forged-concrete-bridge-admission]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_authorization_cannot_omit_owned_protocol[stage]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_authorization_cannot_omit_owned_protocol[run]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_authorization_cannot_omit_owned_protocol[diff]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_authorization_cannot_omit_owned_protocol[draft]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_authorization_cannot_omit_owned_protocol[bridge-admission]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_simulated_draft_receipt_rejected_under_non_test_authorization[stage]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_simulated_draft_receipt_rejected_under_non_test_authorization[run]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_simulated_draft_receipt_rejected_under_non_test_authorization[diff]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_simulated_draft_receipt_rejected_under_non_test_authorization[draft]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_simulated_draft_receipt_rejected_under_non_test_authorization[bridge-admission]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_stage_and_draft_authorization_must_remain_exact[changed-authorization-diff]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_stage_and_draft_authorization_must_remain_exact[changed-authorization-draft]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_stage_and_draft_authorization_must_remain_exact[changed-authorization-bridge-admission]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_stage_and_draft_authorization_must_remain_exact[replayed-authorization-diff]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_stage_and_draft_authorization_must_remain_exact[replayed-authorization-draft]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_stage_and_draft_authorization_must_remain_exact[replayed-authorization-bridge-admission]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_auth_change_during_owner_proof_is_rechecked",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_mode_without_simulation_retains_legacy_admission",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_authority_changed_inside_write_guard_rejected_before_mutation[workspace]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_authority_changed_inside_write_guard_rejected_before_mutation[initialize]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_authority_changed_inside_write_guard_rejected_before_mutation[draft]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_each_tree_query_rechecks_authority_and_reads_current_heads",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_revocation_inside_write_guard_reaches_fresh_proof_before_mutation[workspace]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_revocation_inside_write_guard_reaches_fresh_proof_before_mutation[initialize]",
+    "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_revocation_inside_write_guard_reaches_fresh_proof_before_mutation[draft]",
+    "create_defaults/phase5/m6_tests/test_draft.py::test_M6_owned_draft_rejects_changed_context[closed]",
+    "create_defaults/phase5/m6_tests/test_draft.py::test_M6_owned_draft_rejects_changed_context[merged]",
+    "create_defaults/phase5/m6_tests/test_draft.py::test_M6_owned_draft_rejects_changed_context[wrong-head]",
+    "create_defaults/phase5/m6_tests/test_draft.py::test_M6_owned_draft_rejects_changed_context[wrong-base]",
+    "create_defaults/phase5/m6_tests/test_draft.py::test_M6_owned_draft_rejects_changed_context[not-draft]",
+    "create_defaults/phase5/m6_tests/test_draft.py::test_M6_owned_draft_rejects_changed_context[receipt]",
+    "create_defaults/phase5/m6_tests/test_draft.py::test_M6_owned_draft_rejects_changed_context[replayed-auth]",
+    "create_defaults/phase5/m6_tests/test_draft.py::test_M6_owned_draft_rejects_changed_context[foreign-target]",
+    "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_authority_is_required_before_transport[missing]",
+    "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_authority_is_required_before_transport[revoked]",
+    "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_authority_is_required_before_transport[role]",
+    "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_authority_is_required_before_transport[expired]",
+    "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_context_and_remote_tampering_blocks_resume[source]",
+    "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_context_and_remote_tampering_blocks_resume[artwork]",
+    "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_context_and_remote_tampering_blocks_resume[definition]",
+    "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_context_and_remote_tampering_blocks_resume[review]",
+    "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_context_and_remote_tampering_blocks_resume[destination]",
+    "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_context_and_remote_tampering_blocks_resume[foreign-ref]",
+    "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_context_and_remote_tampering_blocks_resume[unrelated-tree]",
+    "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_context_and_remote_tampering_blocks_resume[rollback]",
+    "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_context_and_remote_tampering_blocks_resume[draft-rollback]",
+    "create_defaults/phase5/m6_tests/test_recovery.py::test_M6_interrupted_push_reconciles_exact_prefix[after_commit]",
+    "create_defaults/phase5/m6_tests/test_recovery.py::test_M6_interrupted_push_reconciles_exact_prefix[after_push]",
+    "create_defaults/phase5/m6_tests/test_recovery.py::test_M6_accepted_push_with_lost_ack_is_reobserved",
+    "create_defaults/phase5/m6_tests/test_recovery.py::test_M6_cold_replay_is_read_only_and_never_authority",
+    "create_defaults/phase5/m6_tests/test_recovery.py::test_M6_journal_cas_and_forged_progress_fail_closed",
+    "create_defaults/phase5/m6_tests/test_transport.py::test_M6_complete_native_operator_transport",
+    "create_defaults/phase5/m6_tests/test_transport.py::test_M6_multi_member_partial_batches_resume_without_recreating",
+    "create_defaults/phase5/m6_tests/test_transport.py::test_M6_retained_current_mapping_history_is_preserved"
+  ],
+  "required_workflows": [
+    "Default Poster Candidate Validation",
+    "Dependency provenance maintenance",
+    "Lifecycle M6 Validation",
+    "Lifecycle M7 Validation",
+    "People recovery storage regression",
+    "Phase 5 M2 Read-only Observations",
+    "Phase 5 M3 Exact Decision Consumption",
+    "Phase 5 M4 Current Mapping Validation",
+    "People startup job retention",
+    "Phase 5 M5 Owned Catalog Preparation",
+    "Phase 5 M6 Offline Draft Transport"
+  ],
+  "mandatory_native_groups": {
+    "transport": {
+      "epochs": 1,
+      "images": 2
+    },
+    "multi": {
+      "epochs": 1,
+      "images": 4
+    },
+    "current": {
+      "epochs": 3,
+      "images": 6
+    }
+  },
+  "authority": false,
+  "production_catalog_writes": 0,
+  "public_artwork_writes": 0,
+  "real_contract_approvals": 0,
+  "historical_posters": 9957,
+  "historical_overlays": 4122,
+  "historical_total": 14079,
+  "historical_artwork_regenerated": 0,
+  "packages": 22,
+  "variants": 278,
+  "conditional_variants": 27,
+  "blocked_variants": 251,
+  "budgets": {
+    "worker_rss_bytes": 536870912,
+    "files": 300,
+    "artifact_bytes": 209715200,
+    "job_timeout_minutes": 15,
+    "native_transport_integration_timeout_seconds": 1800,
+    "native_transport_integration_group": "transport",
+    "native_transport_integration_test": "create_defaults/phase5/m6_tests/test_transport.py::test_M6_complete_native_operator_transport",
+    "native_transport_integration_job_timeout_minutes": 30
+  },
+  "reviewed_paths": [
+    ".github/workflows/phase5-m6-validation.yml",
+    "ci/dependabot_maintenance.py",
+    "ci/dependency_maintenance.py",
+    "ci/dependency_tests/test_people_job_retention_maintenance.py",
+    "ci/dependency_tests/test_phase5_m5_maintenance.py",
+    "ci/dependency_tests/test_phase5_m6_maintenance.py",
+    "ci/people_storage_maintenance.py",
+    "ci/phase4.py",
+    "ci/phase5-m6-maintenance-v1.json",
+    "ci/phase5-m6-test-ids.json",
+    "ci/phase5_m5_maintenance.py",
+    "ci/phase5_m6.py",
+    "ci/phase5_m6_maintenance.py",
+    "create_defaults/bulk/contracts/models.py",
+    "create_defaults/bulk/library_stage.py",
+    "create_defaults/bulk/lifecycle/draft_models.py",
+    "create_defaults/bulk/lifecycle/draft_progress.py",
+    "create_defaults/bulk/lifecycle/draft_transport.py",
+    "create_defaults/bulk/lifecycle/models.py",
+    "create_defaults/bulk/lifecycle/schemas/draft-transport-v1.schema.json",
+    "create_defaults/bulk/operator_publication.py",
+    "create_defaults/lifecycle/PHASE5_M6_ACCEPTANCE.json",
+    "create_defaults/lifecycle/PHASE5_M6_CI_MAINTENANCE.md",
+    "create_defaults/lifecycle/PHASE5_M6_COVERAGE.json",
+    "create_defaults/lifecycle/PHASE5_M6_IMPLEMENTATION.md",
+    "create_defaults/lifecycle/ROADMAP.md",
+    "create_defaults/phase5/m6_tests/conftest.py",
+    "create_defaults/phase5/m6_tests/helpers.py",
+    "create_defaults/phase5/m6_tests/test_binding.py",
+    "create_defaults/phase5/m6_tests/test_boundaries.py",
+    "create_defaults/phase5/m6_tests/test_draft.py",
+    "create_defaults/phase5/m6_tests/test_preservation.py",
+    "create_defaults/phase5/m6_tests/test_recovery.py",
+    "create_defaults/phase5/m6_tests/test_transport.py"
+  ],
+  "inherited_test_requirements": {
+    "P5-T13": [
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_native_complete_plan",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[omitted_member]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[withheld_manifest]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[omitted_batch]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[extra_member]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[foreign_receipt]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[changed_artifact]"
+    ],
+    "P5-T14": [
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_native_complete_plan",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[omitted_member]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[withheld_manifest]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[omitted_batch]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[extra_member]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[foreign_receipt]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T13_T14_operator_manifest_cannot_change_native_membership[changed_artifact]"
+    ],
+    "P5-T15": [
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T15_unsupported_catalog_cohort[retired]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T15_unsupported_catalog_cohort[Network]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T15_unsupported_catalog_cohort[generator]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T15_unsupported_catalog_cohort[historical_id]"
+    ],
+    "P5-T16": [
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T16_current_mapping_full_native_sequence_and_plan"
+    ],
+    "P5-T20": [
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_new_block_preserves_all_preimage_bytes_and_lookup",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_scalar_patch_preserves_BOM_CRLF_comments_and_other_bytes[display_name-Literal Pok\\xe9mon (A & B)!]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_scalar_patch_preserves_BOM_CRLF_comments_and_other_bytes[display_name-Literal 'quote']",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_scalar_patch_preserves_BOM_CRLF_comments_and_other_bytes[display_name-true]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_strict_or_unowned_catalog_changes_fail[duplicate]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_strict_or_unowned_catalog_changes_fail[unknown]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_strict_or_unowned_catalog_changes_fail[traversal]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_strict_or_unowned_catalog_changes_fail[historical]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_strict_or_unowned_catalog_changes_fail[profile]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_strict_or_unowned_catalog_changes_fail[missing_index]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_strict_or_unowned_catalog_changes_fail[index_hash]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T20_unknown_source_root_is_not_accepted"
+    ],
+    "P5-T21": [
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T21_staged_artwork_tampering_is_not_repaired",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T21_fresh_native_permissions_and_context_required[source]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T21_fresh_native_permissions_and_context_required[definition]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T21_fresh_native_permissions_and_context_required[translation]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T21_fresh_native_permissions_and_context_required[destination]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T21_fresh_native_permissions_and_context_required[review]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T21_stale_source_commit_invalidates_prepared_patch",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T21_identical_bytes_keep_required_members_and_revalidate"
+    ],
+    "P5-T22": [
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T22_concurrent_transport_is_blocked_by_OS_lock",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T22_catalog_faults_leave_original_source_unchanged[before_catalog]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T22_catalog_faults_leave_original_source_unchanged[after_postimage]",
+      "create_defaults/phase5/m5_tests/test_catalog.py::test_P5_T22_cancelled_staging_retains_source",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_intent_and_transaction_faults_are_recoverable[before_intent]",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_intent_and_transaction_faults_are_recoverable[intent_object]",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_intent_and_transaction_faults_are_recoverable[after_intent]",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_intent_and_transaction_faults_are_recoverable[progress_object]",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_intent_and_transaction_faults_are_recoverable[before_progress_commit]",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_intent_and_transaction_faults_are_recoverable[after_progress_commit]",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_cancel_before_transport_preserves_intent",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_progress_CAS_rejects_stale_writer",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_local_object_or_commit_failure_finishes_only_owned_staging[add]",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T22_local_object_or_commit_failure_finishes_only_owned_staging[commit]"
+    ],
+    "P5-T23": [
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T23_actual_commit_and_ambiguous_push_reobserve_before_retry[after_commit]",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T23_actual_commit_and_ambiguous_push_reobserve_before_retry[after_push]"
+    ],
+    "P5-T24": [
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T24_existing_draft_reconciliation_is_isolated_and_exact[OPEN]",
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T24_existing_draft_reconciliation_is_isolated_and_exact[CLOSED]",
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T24_existing_draft_reconciliation_is_isolated_and_exact[MERGED]",
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T24_existing_draft_reconciliation_is_isolated_and_exact[wrong-head]",
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T24_existing_draft_reconciliation_is_isolated_and_exact[wrong-base]",
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T24_existing_draft_reconciliation_is_isolated_and_exact[not-draft]",
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T24_existing_draft_reconciliation_is_isolated_and_exact[duplicate]"
+    ],
+    "P5-T25": [
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T25_multi_member_partial_batches_forward_recover",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T25_partial_membership_cannot_be_marked_complete"
+    ],
+    "P5-T27": [
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T27_cold_read_only_replay_requires_fresh_observation",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T27_missing_immutable_progress_object_blocks",
+      "create_defaults/phase5/m5_tests/test_recovery.py::test_P5_T27_resealed_journal_cannot_forge_types_or_progress"
+    ],
+    "P5-T28": [
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_production_entrypoints_remain_unavailable[commit_operational]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_production_entrypoints_remain_unavailable[publish_operational]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[authenticated]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[operation_accepted]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[applied]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[artwork_approved]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[contract_approved]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[ready]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[active]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[production_enforcement]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[publication_authorized]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[remote_writes_authorized]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T28_no_preparation_flag_can_grant_authority[merge_authorized]"
+    ],
+    "P5-T29": [
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T29_diagnostics_are_bounded_and_redacted[bearer]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T29_diagnostics_are_bounded_and_redacted[url]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T29_diagnostics_are_bounded_and_redacted[oversized]"
+    ],
+    "P5-T30": [
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T30_actual_tree_or_namespace_substitution_fails[foreign_ref]",
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T30_actual_tree_or_namespace_substitution_fails[unrelated_tree]",
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T30_actual_tree_or_namespace_substitution_fails[symlink_mode]",
+      "create_defaults/phase5/m5_tests/test_offline_git.py::test_P5_T30_actual_tree_or_namespace_substitution_fails[same_bytes_case_collision]",
+      "create_defaults/phase5/m5_tests/test_publication.py::test_P5_T30_native_offline_tree"
+    ],
+    "P5-T31": [
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T31_original_batch_caps_cannot_be_enlarged[301-209715200]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T31_original_batch_caps_cannot_be_enlarged[300-209715201]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T31_original_batch_caps_cannot_be_enlarged[True-100]",
+      "create_defaults/phase5/m5_tests/test_boundaries.py::test_P5_T31_original_batch_caps_cannot_be_enlarged[0-100]"
+    ]
+  },
+  "test_requirements": {
+    "test-m6-exact-binding-rejects-resealed-membership-and-context": [
+      "create_defaults/phase5/m6_tests/test_binding.py::test_M6_exact_binding_rejects_resealed_membership_and_context"
+    ],
+    "test-m6-equal-required-members-produce-no-artwork-draft": [
+      "create_defaults/phase5/m6_tests/test_binding.py::test_M6_equal_required_members_produce_no_artwork_draft"
+    ],
+    "protocol": [
+      "create_defaults/phase5/m6_tests/test_binding.py::test_M6_unowned_or_subclassed_inputs_rejected_before_io[arbitrary]",
+      "create_defaults/phase5/m6_tests/test_binding.py::test_M6_unowned_or_subclassed_inputs_rejected_before_io[subclass]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[normal-operator-policy-stage]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[normal-operator-policy-run]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[normal-operator-policy-diff]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[normal-operator-policy-draft]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[normal-operator-policy-bridge-admission]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[phase5-M6-offline-draft-transport-stage]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[phase5-M6-offline-draft-transport-run]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[phase5-M6-offline-draft-transport-diff]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[phase5-M6-offline-draft-transport-draft]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[phase5-M6-offline-draft-transport-bridge-admission]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[None-stage]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[None-run]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[None-diff]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[None-draft]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_cannot_select_offline_protocol[None-bridge-admission]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[missing-stage]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[missing-run]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[missing-diff]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[missing-draft]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[missing-bridge-admission]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[False-stage]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[False-run]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[False-diff]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[False-draft]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[False-bridge-admission]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[1-stage]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[1-run]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[1-diff]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[1-draft]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[1-bridge-admission]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[True-stage]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[True-run]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[True-diff]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[True-draft]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_mode_requires_exact_true_test_only[True-bridge-admission]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_test_only_authorization_still_cannot_simulate[stage]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_test_only_authorization_still_cannot_simulate[run]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_test_only_authorization_still_cannot_simulate[diff]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_test_only_authorization_still_cannot_simulate[draft]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_test_only_authorization_still_cannot_simulate[bridge-admission]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_rejects_concrete_protocol_before_owner_proof[stage]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_rejects_concrete_protocol_before_owner_proof[run]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_rejects_concrete_protocol_before_owner_proof[diff]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_rejects_concrete_protocol_before_owner_proof[draft]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_authorization_rejects_concrete_protocol_before_owner_proof[bridge-admission]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[arbitrary-stage]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[arbitrary-run]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[arbitrary-diff]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[arbitrary-draft]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[arbitrary-bridge-admission]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[subclass-stage]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[subclass-run]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[subclass-diff]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[subclass-draft]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[subclass-bridge-admission]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[forged-concrete-stage]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[forged-concrete-run]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[forged-concrete-diff]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[forged-concrete-draft]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_forged_or_subclassed_protocol_cannot_select_simulation[forged-concrete-bridge-admission]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_authorization_cannot_omit_owned_protocol[stage]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_authorization_cannot_omit_owned_protocol[run]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_authorization_cannot_omit_owned_protocol[diff]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_authorization_cannot_omit_owned_protocol[draft]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_offline_authorization_cannot_omit_owned_protocol[bridge-admission]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_simulated_draft_receipt_rejected_under_non_test_authorization[stage]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_simulated_draft_receipt_rejected_under_non_test_authorization[run]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_simulated_draft_receipt_rejected_under_non_test_authorization[diff]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_simulated_draft_receipt_rejected_under_non_test_authorization[draft]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_simulated_draft_receipt_rejected_under_non_test_authorization[bridge-admission]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_stage_and_draft_authorization_must_remain_exact[changed-authorization-diff]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_stage_and_draft_authorization_must_remain_exact[changed-authorization-draft]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_stage_and_draft_authorization_must_remain_exact[changed-authorization-bridge-admission]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_stage_and_draft_authorization_must_remain_exact[replayed-authorization-diff]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_stage_and_draft_authorization_must_remain_exact[replayed-authorization-draft]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_stage_and_draft_authorization_must_remain_exact[replayed-authorization-bridge-admission]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_auth_change_during_owner_proof_is_rechecked",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_normal_mode_without_simulation_retains_legacy_admission",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_authority_changed_inside_write_guard_rejected_before_mutation[workspace]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_authority_changed_inside_write_guard_rejected_before_mutation[initialize]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_authority_changed_inside_write_guard_rejected_before_mutation[draft]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_each_tree_query_rechecks_authority_and_reads_current_heads",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_revocation_inside_write_guard_reaches_fresh_proof_before_mutation[workspace]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_revocation_inside_write_guard_reaches_fresh_proof_before_mutation[initialize]",
+      "create_defaults/phase5/m6_tests/test_boundaries.py::test_M6_revocation_inside_write_guard_reaches_fresh_proof_before_mutation[draft]"
+    ],
+    "test-m6-owned-draft-rejects-changed-context-closed": [
+      "create_defaults/phase5/m6_tests/test_draft.py::test_M6_owned_draft_rejects_changed_context[closed]"
+    ],
+    "test-m6-owned-draft-rejects-changed-context-merged": [
+      "create_defaults/phase5/m6_tests/test_draft.py::test_M6_owned_draft_rejects_changed_context[merged]"
+    ],
+    "test-m6-owned-draft-rejects-changed-context-wrong-head": [
+      "create_defaults/phase5/m6_tests/test_draft.py::test_M6_owned_draft_rejects_changed_context[wrong-head]"
+    ],
+    "test-m6-owned-draft-rejects-changed-context-wrong-base": [
+      "create_defaults/phase5/m6_tests/test_draft.py::test_M6_owned_draft_rejects_changed_context[wrong-base]"
+    ],
+    "test-m6-owned-draft-rejects-changed-context-not-draft": [
+      "create_defaults/phase5/m6_tests/test_draft.py::test_M6_owned_draft_rejects_changed_context[not-draft]"
+    ],
+    "test-m6-owned-draft-rejects-changed-context-receipt": [
+      "create_defaults/phase5/m6_tests/test_draft.py::test_M6_owned_draft_rejects_changed_context[receipt]"
+    ],
+    "test-m6-owned-draft-rejects-changed-context-replayed-auth": [
+      "create_defaults/phase5/m6_tests/test_draft.py::test_M6_owned_draft_rejects_changed_context[replayed-auth]"
+    ],
+    "test-m6-owned-draft-rejects-changed-context-foreign-target": [
+      "create_defaults/phase5/m6_tests/test_draft.py::test_M6_owned_draft_rejects_changed_context[foreign-target]"
+    ],
+    "test-m6-fresh-authority-is-required-before-transport-missing": [
+      "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_authority_is_required_before_transport[missing]"
+    ],
+    "test-m6-fresh-authority-is-required-before-transport-revoked": [
+      "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_authority_is_required_before_transport[revoked]"
+    ],
+    "test-m6-fresh-authority-is-required-before-transport-role": [
+      "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_authority_is_required_before_transport[role]"
+    ],
+    "test-m6-fresh-authority-is-required-before-transport-expired": [
+      "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_authority_is_required_before_transport[expired]"
+    ],
+    "test-m6-fresh-context-and-remote-tampering-blocks-resume-source": [
+      "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_context_and_remote_tampering_blocks_resume[source]"
+    ],
+    "test-m6-fresh-context-and-remote-tampering-blocks-resume-artwork": [
+      "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_context_and_remote_tampering_blocks_resume[artwork]"
+    ],
+    "test-m6-fresh-context-and-remote-tampering-blocks-resume-definition": [
+      "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_context_and_remote_tampering_blocks_resume[definition]"
+    ],
+    "test-m6-fresh-context-and-remote-tampering-blocks-resume-review": [
+      "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_context_and_remote_tampering_blocks_resume[review]"
+    ],
+    "test-m6-fresh-context-and-remote-tampering-blocks-resume-destination": [
+      "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_context_and_remote_tampering_blocks_resume[destination]"
+    ],
+    "test-m6-fresh-context-and-remote-tampering-blocks-resume-foreign-ref": [
+      "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_context_and_remote_tampering_blocks_resume[foreign-ref]"
+    ],
+    "test-m6-fresh-context-and-remote-tampering-blocks-resume-unrelated-tree": [
+      "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_context_and_remote_tampering_blocks_resume[unrelated-tree]"
+    ],
+    "test-m6-fresh-context-and-remote-tampering-blocks-resume-rollback": [
+      "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_context_and_remote_tampering_blocks_resume[rollback]"
+    ],
+    "test-m6-fresh-context-and-remote-tampering-blocks-resume-draft-rollback": [
+      "create_defaults/phase5/m6_tests/test_preservation.py::test_M6_fresh_context_and_remote_tampering_blocks_resume[draft-rollback]"
+    ],
+    "test-m6-interrupted-push-reconciles-exact-prefix-after-commit": [
+      "create_defaults/phase5/m6_tests/test_recovery.py::test_M6_interrupted_push_reconciles_exact_prefix[after_commit]"
+    ],
+    "test-m6-interrupted-push-reconciles-exact-prefix-after-push": [
+      "create_defaults/phase5/m6_tests/test_recovery.py::test_M6_interrupted_push_reconciles_exact_prefix[after_push]"
+    ],
+    "test-m6-accepted-push-with-lost-ack-is-reobserved": [
+      "create_defaults/phase5/m6_tests/test_recovery.py::test_M6_accepted_push_with_lost_ack_is_reobserved"
+    ],
+    "test-m6-cold-replay-is-read-only-and-never-authority": [
+      "create_defaults/phase5/m6_tests/test_recovery.py::test_M6_cold_replay_is_read_only_and_never_authority"
+    ],
+    "test-m6-journal-cas-and-forged-progress-fail-closed": [
+      "create_defaults/phase5/m6_tests/test_recovery.py::test_M6_journal_cas_and_forged_progress_fail_closed"
+    ],
+    "transport": [
+      "create_defaults/phase5/m6_tests/test_transport.py::test_M6_complete_native_operator_transport"
+    ],
+    "multi": [
+      "create_defaults/phase5/m6_tests/test_transport.py::test_M6_multi_member_partial_batches_resume_without_recreating"
+    ],
+    "current": [
+      "create_defaults/phase5/m6_tests/test_transport.py::test_M6_retained_current_mapping_history_is_preserved"
+    ]
+  }
+}

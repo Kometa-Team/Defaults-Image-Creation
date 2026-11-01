@@ -135,24 +135,28 @@ def _physical_paths(root,names):
 def verify_checkout(root=None):
     root=Path(root or ROOT)
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M5 policy checkout')
+    from ci.phase5_m6_maintenance import verify_checkout as verify_m6, historical_bytes as m6_bytes
+    verify_m6(root)
     paths=_physical_paths(root,MEMBERS|ANCHORS)
     value=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)
     from ci.people_colorize_maintenance import _head
     _ancestry(str(root),_head(root))
     for name,binding in value['members'].items():
-        if sha(paths[name].read_bytes())!=binding['sha256']:raise ValueError('Changed physical M5 successor: '+name)
+        if sha(m6_bytes(root,name,paths[name].read_bytes()))!=binding['sha256']:raise ValueError('Changed physical M5 successor: '+name)
         if binding['before_sha256'] is not None and sha(_old(name))!=binding['before_sha256']:raise ValueError('Changed M5 predecessor')
         if binding['before_sha256'] is None and _baseline_entry(name).strip():raise ValueError('M5 addition exists in predecessor')
     return value
 
 
 def historical_bytes(root,name,current):
+    from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
+    current=m6_bytes(root,name,current)
     if name not in MEMBERS:return current
     root=Path(root)
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M5 historical projection')
     paths=_physical_paths(root,{name})
     binding=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)['members'][name]
-    actual=paths[name].read_bytes()
+    actual=m6_bytes(root,name,paths[name].read_bytes())
     if sha(actual)!=binding['sha256']:raise ValueError('Changed M5 physical successor: '+name)
     if binding['before_sha256'] is None:
         if sha(current)!=binding['sha256']:raise ValueError('Changed M5 new member')
@@ -176,11 +180,16 @@ def historical_bytes(root,name,current):
 def scope_members():
     from ci.phase4_m7 import ROOT as policy_root
     if Path(policy_root).resolve()!=ROOT.resolve():return frozenset()
-    return (MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}
+    from ci.phase5_m6_maintenance import scope_members as m6_scope
+    return ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'})|m6_scope()
 
 
 def verify_scope(root,baseline,names):
     verify_checkout(root)
+    from ci.phase5_m6_maintenance import scope_members as m6_scope, verify_scope as verify_m6_scope
+    m6_names=names&m6_scope()
+    if m6_names:verify_m6_scope(root,baseline,m6_names)
+    names=names-m6_names
     if not names<=scope_members():raise ValueError('Unapproved M5 scope')
     if not names:return
     rows=_git(root,'diff','--raw','--no-abbrev','--no-renames','-z',baseline,'HEAD','--',*sorted(names)).split(b'\0')

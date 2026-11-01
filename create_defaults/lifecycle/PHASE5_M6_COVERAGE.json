@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "kind": "phase5-m6-coverage",
+  "simulation": true,
+  "publication_authorized": false,
+  "supported": "active assigned English Genre single-logo only",
+  "blocked": "all other cohorts and real operational transport",
+  "required_families": [
+    "native-binding",
+    "multi-member",
+    "retained-mapping",
+    "partial-resume",
+    "uncertain-ack",
+    "draft-reconciliation",
+    "stale-authority",
+    "full-tree",
+    "immutable-recovery",
+    "historical-provenance"
+  ],
+  "supported_conditional_variants": 27,
+  "blocked_variants": 251
+}

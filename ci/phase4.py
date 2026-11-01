@@ -48,7 +48,9 @@ def verify_m2_baseline():
     for name in ('models.py','storage.py','package_e.py','schemas/operations-v1.schema.json'):
         path='create_defaults/bulk/lifecycle/'+name
         original=subprocess.check_output(['git','show',M1_BASE+':'+path],cwd=ROOT).replace(b'\r\n',b'\n')
-        require(hashlib.sha256(original).hexdigest()==checksum(ROOT/path),'Changed frozen M1 infrastructure: '+path)
+        from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
+        current=m6_bytes(ROOT,path,(ROOT/path).read_bytes()).replace(b'\r\n',b'\n')
+        require(hashlib.sha256(original).hexdigest()==hashlib.sha256(current).hexdigest(),'Changed frozen M1 infrastructure: '+path)
 
 
 def verify_m3_baseline():

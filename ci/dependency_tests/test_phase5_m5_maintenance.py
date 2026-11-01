@@ -21,16 +21,18 @@ EXPECTED={
 
 class Phase5M5MaintenanceTests(unittest.TestCase):
     def test_pinned_predecessors_use_one_tree_and_one_blob_batch(self):
-        from ci import people_colorize_maintenance as colorize
+        from ci import people_colorize_maintenance as colorize,phase5_m6_maintenance as m6
         m5._baseline_tree.cache_clear();m5._predecessors.cache_clear()
         m5._old.cache_clear();m5._baseline_entry.cache_clear()
-        with patch.object(m5,'_git_raw',wraps=m5._git_raw) as git,patch.object(colorize,'_head',wraps=colorize._head) as head:
+        with patch.object(m5,'_git_raw',wraps=m5._git_raw) as git,patch.object(colorize,'_head',wraps=colorize._head) as head,patch.object(m6,'verify_checkout',wraps=m6.verify_checkout) as successor:
             first=m5.verify_checkout();m5.verify_checkout()
             commands=[call.args[1] for call in git.call_args_list]
             self.assertEqual(commands.count('ls-tree'),1)
             self.assertEqual(commands.count('cat-file'),1)
             self.assertNotIn('show',commands)
-            self.assertEqual(head.call_count,2)
+            # Two fresh original M5 observations plus one per new M6 pass.
+            self.assertEqual(successor.call_count,2)
+            self.assertEqual(head.call_count-successor.call_count,2)
         for name in EXPECTED:self.assertEqual(m5.sha(m5._old(name)),first['members'][name]['before_sha256'])
 
     def test_batched_predecessors_reject_bad_tree_framing_objects_and_hashes(self):
@@ -73,7 +75,8 @@ class Phase5M5MaintenanceTests(unittest.TestCase):
         self.assertEqual(len(m5.MEMBERS|m5.ANCHORS),27)
         self.assertEqual({n:b['sha256'] for n,b in value['members'].items() if b['before_sha256'] is not None},EXPECTED)
         for name,expected in EXPECTED.items():
-            self.assertEqual(m5.sha((ROOT/name).read_bytes()),expected)
+            from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
+            self.assertEqual(m5.sha(m6_bytes(ROOT,name,(ROOT/name).read_bytes())),expected)
             self.assertEqual(m5.sha(m5._old(name)),value['members'][name]['before_sha256'])
         for field in ('production_intersection','adoption_intersection','frozen_m7_intersection'):self.assertEqual(value[field],[])
         self.assertIs(value['publication_authorized'],False)
