@@ -114,7 +114,18 @@ def verify_checkout(root=None):
     return value
 
 
+def collection_test_ids():
+    # Establish the unchanged M5/startup checks before current CI selections.
+    verify_checkout()
+    from ci.phase5_m5_maintenance import collection_adapter
+    return collection_adapter().test_ids()
+
+
 def selected_hash(name, expected):
+    from ci.phase5_m5_maintenance import collection_adapter
+    if name in collection_adapter().SOURCE_PATHS:
+        verify_checkout()
+        return collection_adapter().selected_hash(name, expected)
     if name not in MEMBERS:
         return expected
     binding = manifest()['members'][name]
@@ -125,6 +136,9 @@ def selected_hash(name, expected):
 
 
 def historical_bytes(root, name, current):
+    from ci.phase5_m5_maintenance import collection_adapter
+    if name in collection_adapter().SOURCE_PATHS:
+        current = collection_adapter().historical_bytes(root, name, current)
     from ci.phase5_m5_maintenance import historical_bytes as m5_bytes
     current = m5_bytes(root, name, current)
     if name not in MEMBERS:
@@ -141,7 +155,8 @@ def historical_bytes(root, name, current):
 
 
 def scope_members():
-    return MEMBERS | ANCHORS
+    from ci.phase5_m5_maintenance import collection_adapter
+    return MEMBERS | ANCHORS | collection_adapter().scope_members()
 
 
 def test_ids():
@@ -152,6 +167,10 @@ def verify_scope(root, baseline, names):
     verify_checkout(root)
     if not names <= scope_members():
         raise ValueError('Unapproved startup-retention scope')
+    from ci.phase5_m5_maintenance import collection_adapter
+    collection_names = names - MEMBERS - ANCHORS
+    if collection_names:
+        collection_adapter().verify_scope(root, baseline, collection_names)
     if not names:
         return
     rows = _git(root, 'diff', '--raw', '--no-abbrev', '--no-renames', '-z',

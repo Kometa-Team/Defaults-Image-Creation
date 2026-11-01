@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "baseline_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f",
+  "files": {
+    "ci/people_job_retention_maintenance.py": {
+      "before_sha256": "c4049fff0510e11591906aa77f99cdce78a7f79699248217659f779a44ee0736",
+      "sha256": "e114ce686d4493948699f2fdebd528df039510fbf629f34b28ac3b4cd1757435",
+      "before_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f"
+    },
+    "ci/people_security.py": {
+      "before_sha256": "e75838b1c6d116d17a48433fa672c91283f7a32cd7d9c7ddbbcfbbe55b661b25",
+      "sha256": "27c8cd933862be63ebceb9f4a54df3b2080ea567877a5928ef75e2205947ca3c",
+      "before_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f"
+    },
+    "ci/dependency_tests/test_people_storage_maintenance.py": {
+      "before_sha256": "c3a646af531363542579ac51a5dacd6b6f6b8f3c287ab354ab6b5e72bf09e152",
+      "sha256": "d545ebd185090432b1a4e23d09e5b60419a9f1fd5d4a76d9738b1e63975783e1",
+      "before_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f"
+    },
+    "ci/dependency_tests/test_phase5_m5_maintenance.py": {
+      "before_sha256": "c52e04c1d57d4eccd48155a7da4c8404dc0dba7a9f7be2557e99c33bc092985c",
+      "sha256": "0f8c9f9772baba3b65230b59e635e81907c40a120be47975d04a24992f5f6807",
+      "before_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f"
+    },
+    "create_people_posters/create_people_poster.py": {
+      "before_sha256": "d881eaa90d6b14649b540f4193025e85b70a26a9113f1b676ae55f20193f97e0",
+      "sha256": "2deb8db73668ac9ff3a482fb0de1672e396d38b0baa9177d34c5e8b94de45dee",
+      "before_commit": "463ba791b77c82c232aead1da218fc0ca0142868",
+      "approved_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f"
+    },
+    "create_people_posters/tests/test_collection_poster.py": {
+      "before_sha256": "ff096c228f4e9095fcec4993125a511ac266e7f63a66f53b387fb912f68b1bd3",
+      "sha256": "ff096c228f4e9095fcec4993125a511ac266e7f63a66f53b387fb912f68b1bd3",
+      "before_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f",
+      "approved_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f"
+    }
+  },
+  "pytest_ids": [
+    "create_people_posters/tests/test_collection_poster.py::test_exact_production_configuration_and_font_inventory",
+    "create_people_posters/tests/test_collection_poster.py::test_fonts_are_valid_bundled_and_licensed[Comfortaa-Medium.ttf-500-Comfortaa]",
+    "create_people_posters/tests/test_collection_poster.py::test_fonts_are_valid_bundled_and_licensed[Fuggles-Regular.ttf-400-Fuggles]",
+    "create_people_posters/tests/test_collection_poster.py::test_fonts_are_valid_bundled_and_licensed[Jost-260.ttf-260-Jost]",
+    "create_people_posters/tests/test_collection_poster.py::test_fonts_are_valid_bundled_and_licensed[Montserrat-SemiBold.ttf-600-Montserrat]",
+    "create_people_posters/tests/test_collection_poster.py::test_fonts_are_valid_bundled_and_licensed[Montserrat-Light.ttf-300-Montserrat]",
+    "create_people_posters/tests/test_collection_poster.py::test_textless_artwork_preserves_every_pixel_outside_old_lettering[signature]",
+    "create_people_posters/tests/test_collection_poster.py::test_textless_artwork_preserves_every_pixel_outside_old_lettering[rainier]",
+    "create_people_posters/tests/test_collection_poster.py::test_textless_artwork_preserves_every_pixel_outside_old_lettering[diiivoy]",
+    "create_people_posters/tests/test_collection_poster.py::test_textless_artwork_preserves_every_pixel_outside_old_lettering[diiivoycolor]",
+    "create_people_posters/tests/test_collection_poster.py::test_visible_bounds_antialiasing_no_clipping_and_determinism[signature]",
+    "create_people_posters/tests/test_collection_poster.py::test_visible_bounds_antialiasing_no_clipping_and_determinism[rainier]",
+    "create_people_posters/tests/test_collection_poster.py::test_visible_bounds_antialiasing_no_clipping_and_determinism[diiivoy]",
+    "create_people_posters/tests/test_collection_poster.py::test_visible_bounds_antialiasing_no_clipping_and_determinism[diiivoycolor]",
+    "create_people_posters/tests/test_collection_poster.py::test_fractional_tracking_is_retained_until_rasterization",
+    "create_people_posters/tests/test_collection_poster.py::test_artificial_stroke_expands_ink_and_preserves_center",
+    "create_people_posters/tests/test_collection_poster.py::test_out_of_bounds_fails_without_modifying_poster",
+    "create_people_posters/tests/test_collection_poster.py::test_all_styles_use_textless_art_once_and_keep_name_layout",
+    "create_people_posters/tests/test_collection_poster.py::test_selective_diiivoy_has_one_label_and_matches_full_render",
+    "create_people_posters/tests/test_collection_poster.py::test_only_collection_regions_change_and_unrelated_styles_are_identical",
+    "create_people_posters/tests/test_collection_poster.py::test_fingerprint_covers_every_artwork_and_font",
+    "create_people_posters/tests/test_collection_poster.py::test_missing_resource_fails_without_substitution[@zbase-Signature-no-text.png]",
+    "create_people_posters/tests/test_collection_poster.py::test_missing_resource_fails_without_substitution[@zbase-People-Clear2-no-text.png]",
+    "create_people_posters/tests/test_collection_poster.py::test_missing_resource_fails_without_substitution[@zbase-People-Clear3-no-text.png0]",
+    "create_people_posters/tests/test_collection_poster.py::test_missing_resource_fails_without_substitution[@zbase-People-Clear3-no-text.png1]",
+    "create_people_posters/tests/test_collection_poster.py::test_missing_resource_fails_without_substitution[Comfortaa-Medium.ttf]",
+    "create_people_posters/tests/test_collection_poster.py::test_missing_resource_fails_without_substitution[Fuggles-Regular.ttf]",
+    "create_people_posters/tests/test_collection_poster.py::test_missing_resource_fails_without_substitution[Jost-260.ttf]",
+    "create_people_posters/tests/test_collection_poster.py::test_missing_resource_fails_without_substitution[Montserrat-SemiBold.ttf]",
+    "create_people_posters/tests/test_collection_poster.py::test_missing_resource_fails_without_substitution[Montserrat-Light.ttf]",
+    "create_people_posters/tests/test_collection_poster.py::test_invalid_new_font_fails_before_rendering",
+    "create_people_posters/tests/test_collection_poster.py::test_metrics_and_comparison_preserve_full_resolution"
+  ],
+  "publication_authorized": false,
+  "frozen_files": {
+    "ci/phase5-m5-maintenance-v1.json": "d937fb032181cd26629f89fbd604e83529aeff39c8f35ef87c8fd89d87a3a3c7",
+    "ci/people-security-test-ids.json": "1060c0986217b8be1fbbf3f918cfc01ad6fc9198461ce27e27bdbae4f61e722a",
+    "create_defaults/bulk/contracts/activation/data/production-pins-v1.json": "d9a596e86345224d6fc5f06add6a1f35a328b9ad5e3df6d5842cba23af352a44"
+  },
+  "justification": "PR61 additive CI compatibility: retain every historical M5/M7 manifest, hash, ID and count assertion; recognize only the reviewed committed COLLECTION delivery and exact CI successors. This receipt grants no publication authority.",
+  "delivery_files": {
+    "create_people_posters/COLLECTION_RENDERING.md": {
+      "before_commit": "463ba791b77c82c232aead1da218fc0ca0142868",
+      "before_sha256": null,
+      "approved_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f",
+      "sha256": "53d33d0b71f8fe269d57425fe049b0f1ada3a6341088d1c6a5eca4113f74e0bd",
+      "text_lf": true,
+      "approved_blob": "e5a68970ca489473313af2eebb0180c77e29d510"
+    },
+    "create_people_posters/POSTER_RENDERER.md": {
+      "before_commit": "463ba791b77c82c232aead1da218fc0ca0142868",
+      "before_sha256": "bced9bc1bd8ae8d0205c81cf08b6206c8892667afaa0a39f42dbeb57f484ef95",
+      "approved_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f",
+      "sha256": "85153ca7798d9caf98f9f39a93c3e7ab9d80c8a27811f3bb6379d16269c300b0",
+      "text_lf": true,
+      "approved_blob": "daf2e10e871afd157a68f4bd8360344ee48dda48"
+    },
+    "create_people_posters/assets/people/@zbase-People-Clear2-no-text.png": {
+      "before_commit": "463ba791b77c82c232aead1da218fc0ca0142868",
+      "before_sha256": null,
+      "approved_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f",
+      "sha256": "ad95d73fc5ef3ffa23119b56ff3113c6c78eab81f4d01364da266a6134ed1e3f",
+      "text_lf": false,
+      "approved_blob": "c249ddca1f6c0195f36d2481468e4349011f46a2"
+    },
+    "create_people_posters/assets/people/@zbase-People-Clear3-no-text.png": {
+      "before_commit": "463ba791b77c82c232aead1da218fc0ca0142868",
+      "before_sha256": null,
+      "approved_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f",
+      "sha256": "8d3607d8fddbe785e9bc78e70de4204253f94ae84eb2ba5a3794759d3c01330b",
+      "text_lf": false,
+      "approved_blob": "3318f9d708d0a73969edfbed27a12fdd3ae5892d"
+    },
+    "create_people_posters/assets/people/@zbase-Signature-no-text.png": {
+      "before_commit": "463ba791b77c82c232aead1da218fc0ca0142868",
+      "before_sha256": null,
+      "approved_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f",
+      "sha256": "bcbcece5dc4b3be19cf511cce0dd860be707e5a9c842694b2654d8da5df7f7f6",
+      "text_lf": false,
+      "approved_blob": "f229d96d77e35b02a6e7e194b408cf4698385bb6"
+    },
+    "create_people_posters/compare_collection.py": {
+      "before_commit": "463ba791b77c82c232aead1da218fc0ca0142868",
+      "before_sha256": null,
+      "approved_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f",
+      "sha256": "c4173b518f7cb97d2e2f42adc44dbe54925f7b615e78660540956273f7ad178f",
+      "text_lf": true,
+      "approved_blob": "511206210deaec1c9b4383da2a1c09c79206ffcf"
+    },
+    "create_people_posters/fonts/Montserrat-Light.ttf": {
+      "before_commit": "463ba791b77c82c232aead1da218fc0ca0142868",
+      "before_sha256": null,
+      "approved_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f",
+      "sha256": "963d772c9c44b3c401b257d693ad26006fc7bd54215957d51356b40e36353f84",
+      "text_lf": false,
+      "approved_blob": "881f12d067d93c910479e042f454c613d62bcca8"
+    },
+    "create_people_posters/fonts/README.md": {
+      "before_commit": "463ba791b77c82c232aead1da218fc0ca0142868",
+      "before_sha256": "7a4de05d9e7bd1f3cf185a4c53b34085b3fe60d5b22109f3260ab1833b8fd7d6",
+      "approved_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f",
+      "sha256": "53475732c1fb2a8ad9bb302360d358b804d8dfb53cf8d35ac1f03c4158f766ae",
+      "text_lf": true,
+      "approved_blob": "3b73afa2d831ef5c06c9517fb6257b8316946b2b"
+    }
+  }
+}

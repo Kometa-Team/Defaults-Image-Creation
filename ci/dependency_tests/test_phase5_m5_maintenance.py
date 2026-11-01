@@ -73,7 +73,8 @@ class Phase5M5MaintenanceTests(unittest.TestCase):
         self.assertEqual(len(m5.MEMBERS|m5.ANCHORS),27)
         self.assertEqual({n:b['sha256'] for n,b in value['members'].items() if b['before_sha256'] is not None},EXPECTED)
         for name,expected in EXPECTED.items():
-            self.assertEqual(m5.sha((ROOT/name).read_bytes()),expected)
+            actual = (ROOT/name).read_bytes()
+            self.assertEqual(m5.sha(m5.collection_view(ROOT,name,actual)),expected)
             self.assertEqual(m5.sha(m5._old(name)),value['members'][name]['before_sha256'])
         for field in ('production_intersection','adoption_intersection','frozen_m7_intersection'):self.assertEqual(value[field],[])
         self.assertIs(value['publication_authorized'],False)
@@ -196,3 +197,245 @@ class Phase5M5MaintenanceTests(unittest.TestCase):
             elif attack=='authority':value['operational_authority']=True
             else:value['native_artifacts']={}
             with self.subTest(attack=attack),self.assertRaises(ValueError):runner.verify(value,expected)
+
+
+class CollectionCompatibilityTests(unittest.TestCase):
+    """Current exact successors add no authority over historical M5/M7 evidence."""
+
+    def adapter(self):
+        return m5.collection_adapter()
+
+    def test_exact_committed_renderer_and_eight_individually_pinned_deliveries(self):
+        adapter = self.adapter()
+        value = adapter.verify()
+        self.assertEqual(len(value['delivery_files']), 8)
+        self.assertEqual(set(value['delivery_files']), adapter.DELIVERY)
+        self.assertIs(value['publication_authorized'], False)
+        for name, binding in value['delivery_files'].items():
+            self.assertEqual(adapter.digest((ROOT/name).read_bytes(), binding['text_lf']), binding['sha256'])
+            self.assertEqual(adapter.digest(adapter._blob(binding['approved_commit'], name), binding['text_lf']), binding['sha256'])
+            if binding['before_sha256'] is None:
+                self.assertEqual(adapter._entry(binding['before_commit'], name), b'')
+            else:
+                self.assertEqual(adapter.digest(adapter._blob(binding['before_commit'], name), binding['text_lf']), binding['before_sha256'])
+        for name in (adapter.RENDERER, adapter.TEST_MODULE):
+            binding = value['files'][name]
+            self.assertEqual(adapter.sha(adapter._committed(binding['approved_commit'], name)), binding['sha256'])
+
+    def test_all_1184_historical_ids_plus_exactly_32_disjoint_ids(self):
+        from ci import people_security
+        adapter = self.adapter()
+        added = adapter.test_ids()
+        groups, original = people_security.selections()
+        actual = [*original, *(node for nodes in groups.values() for node in nodes)]
+        self.assertEqual((len(added), len(set(added))), (32, 32))
+        self.assertEqual((len(actual), len(set(actual))), (1216, 1216))
+        self.assertEqual(len(set(actual)-set(added)), 1184)
+        self.assertFalse(set(added) & (set(actual)-set(added)))
+        self.assertTrue(all(node.startswith(adapter.TEST_MODULE+'::') for node in added))
+
+    def test_every_current_member_rejects_tamper_missing_and_physical_rollback(self):
+        adapter = self.adapter()
+        value = adapter.verify()
+        original = Path.read_bytes
+        for name, binding in {**value['files'], **value['delivery_files']}.items():
+            variants = [original(ROOT/name)+b'unreviewed']
+            if binding['before_sha256'] not in (None, binding['sha256']):
+                variants.append(adapter._blob(binding['before_commit'], name))
+            for replacement in variants:
+                def changed(path):
+                    return replacement if path == ROOT/name else original(path)
+                with self.subTest(name=name, attack='bytes'), patch.object(Path, 'read_bytes', changed), self.assertRaises(ValueError):
+                    adapter.verify()
+            def missing(path):
+                if path == ROOT/name:
+                    raise FileNotFoundError(name)
+                return original(path)
+            with self.subTest(name=name, attack='missing'), patch.object(Path, 'read_bytes', missing), self.assertRaises(OSError):
+                adapter.verify()
+
+    def test_binary_crlf_changes_are_not_normalized_or_exempted(self):
+        adapter = self.adapter()
+        original = Path.read_bytes
+        for name, binding in adapter.verify()['delivery_files'].items():
+            if binding['text_lf']:
+                continue
+            current = original(ROOT/name)
+            replacement = current.replace(b'\r\n', b'\n')
+            if replacement == current:
+                replacement = current+b'\r\n'
+            def changed(path):
+                return replacement if path == ROOT/name else original(path)
+            with self.subTest(name=name), patch.object(Path, 'read_bytes', changed), self.assertRaises(ValueError):
+                adapter.verify()
+
+    def test_all_exact_historical_views_reject_forged_inputs(self):
+        adapter = self.adapter()
+        value = adapter.verify()
+        for name, binding in value['files'].items():
+            before = adapter._committed(binding['before_commit'], name)
+            self.assertEqual(adapter.historical_bytes(ROOT, name, (ROOT/name).read_bytes()), before)
+            self.assertEqual(adapter.historical_bytes(ROOT, name, before), before)
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                adapter.historical_bytes(ROOT, name, b'forged')
+            if name in adapter.M5_PATHS:
+                with self.assertRaises(ValueError):
+                    m5.historical_bytes(ROOT, name, b'forged')
+
+    def test_unknown_expected_hashes_never_authorize_a_successor(self):
+        adapter = self.adapter()
+        for name, binding in adapter.verify()['files'].items():
+            self.assertEqual(adapter.selected_hash(name, binding['before_sha256']), binding['sha256'])
+            self.assertEqual(adapter.selected_hash(name, 'f'*64), 'f'*64)
+            self.assertNotEqual(adapter.sha((ROOT/name).read_bytes()), 'f'*64)
+        self.assertEqual(adapter.selected_hash('unreviewed.py', 'f'*64), 'f'*64)
+
+    def test_manifest_tamper_expansion_authority_duplicate_and_unknown_hash_fail(self):
+        adapter = self.adapter()
+        value = adapter.verify()
+        original = Path.read_bytes
+        for attack in ('expansion', 'hash', 'authority', 'duplicate', 'baseline', 'delivery'):
+            altered = deepcopy(value)
+            if attack == 'expansion':
+                altered['files']['ci/unknown.py'] = dict(altered['files'][adapter.RENDERER])
+            elif attack == 'hash':
+                altered['files'][adapter.RENDERER]['sha256'] = 'f'*64
+            elif attack == 'authority':
+                altered['publication_authorized'] = True
+            elif attack == 'duplicate':
+                altered['pytest_ids'][-1] = altered['pytest_ids'][0]
+            elif attack == 'baseline':
+                altered['baseline_commit'] = 'f'*40
+            else:
+                altered['delivery_files'].pop(next(iter(adapter.DELIVERY)))
+            def changed(path):
+                return json.dumps(altered).encode() if path == ROOT/adapter.MANIFEST else original(path)
+            with self.subTest(attack=attack), patch.object(Path, 'read_bytes', changed), self.assertRaises(ValueError):
+                adapter.verify()
+
+    def test_independent_adapter_pin_rejects_source_tamper(self):
+        original = Path.read_bytes
+        name = 'ci/people_collection_maintenance.py'
+        def changed(path):
+            return original(path)+b'\n# unreviewed' if path == ROOT/name else original(path)
+        with patch.object(Path, 'read_bytes', changed), self.assertRaises(ValueError):
+            m5.collection_adapter()
+
+    def test_frozen_records_remain_required_after_warming_immutable_caches(self):
+        adapter = self.adapter()
+        value = adapter.verify()
+        original = Path.read_bytes
+        for name in value['frozen_files']:
+            def changed(path):
+                return original(path)+b' ' if path == ROOT/name else original(path)
+            with self.subTest(name=name), patch.object(Path, 'read_bytes', changed), self.assertRaises(ValueError):
+                adapter.verify()
+
+    def test_fresh_heads_reject_ancestry_rollback_and_foreign_roots(self):
+        adapter = self.adapter()
+        adapter.verify()
+        with self.assertRaises(ValueError):
+            adapter.verify(ROOT/'foreign')
+        with patch.object(adapter, '_head', return_value='463ba791b77c82c232aead1da218fc0ca0142868'), self.assertRaises(ValueError):
+            adapter.verify()
+        with patch.object(adapter, '_head', wraps=adapter._head) as head:
+            adapter.verify(); adapter.verify()
+            self.assertEqual(head.call_count, 2)
+
+    def test_loose_head_resolution_is_fresh_and_unsupported_cases_use_git(self):
+        import os
+        import tempfile
+        adapter = self.adapter()
+        with tempfile.TemporaryDirectory() as folder, patch.dict(os.environ, clear=True):
+            root = Path(folder)
+            metadata = root/'metadata'
+            metadata.mkdir()
+            marker = root/'.git'
+            marker.write_text('gitdir: metadata\n', encoding='utf8')
+            head = metadata/'HEAD'
+            head.write_text('1'*40+'\n', encoding='ascii')
+            with patch.object(adapter, '_git', side_effect=AssertionError('unexpected Git fallback')):
+                self.assertEqual(adapter._head(root), '1'*40)
+                head.write_text('2'*40+'\n', encoding='ascii')
+                self.assertEqual(adapter._head(root), '2'*40)
+                common = root/'common'
+                (common/'refs/heads').mkdir(parents=True)
+                (metadata/'commondir').write_text('../common\n', encoding='utf8')
+                head.write_text('ref: refs/heads/fixture\n', encoding='ascii')
+                branch = common/'refs/heads/fixture'
+                branch.write_text('3'*40+'\n', encoding='ascii')
+                self.assertEqual(adapter._head(root), '3'*40)
+                branch.write_text('4'*40+'\n', encoding='ascii')
+                self.assertEqual(adapter._head(root), '4'*40)
+            branch.unlink()
+            with patch.object(adapter, '_git', return_value=('5'*40+'\n').encode()) as git:
+                self.assertEqual(adapter._head(root), '5'*40)
+                self.assertEqual(git.call_args.args, (root, 'rev-parse', 'HEAD'))
+                head.write_text('ref: refs/heads/../unsafe\n', encoding='ascii')
+                self.assertEqual(adapter._head(root), '5'*40)
+                with patch.dict(os.environ, {'GIT_NAMESPACE': 'fixture'}):
+                    head.write_text('6'*40+'\n', encoding='ascii')
+                    self.assertEqual(adapter._head(root), '5'*40)
+            with patch.dict(os.environ, {'GIT_NAMESPACE': 'fixture'}), patch.object(adapter, '_git', return_value=b'not-a-commit\n'), self.assertRaises(ValueError):
+                adapter._head(root)
+
+    def test_fresh_leaf_and_parent_checks_reject_links_and_reparse_points(self):
+        import stat
+        from types import SimpleNamespace
+        adapter = self.adapter()
+        adapter.verify()
+        original = Path.lstat
+        name = 'create_people_posters/fonts/Montserrat-Light.ttf'
+        for target in (ROOT/'create_people_posters/fonts', ROOT/name):
+            for link, reparse in ((True, False), (False, True)):
+                def changed(path, *args, **kwargs):
+                    info = original(path, *args, **kwargs)
+                    if path == target:
+                        return SimpleNamespace(st_mode=stat.S_IFLNK if link else info.st_mode, st_file_attributes=0x400 if reparse else 0)
+                    return info
+                with self.subTest(path=str(target), link=link), patch.object(Path, 'lstat', changed), self.assertRaises(ValueError):
+                    adapter.verify()
+
+    def test_committed_delivery_bytes_and_metadata_must_match_the_reviewed_receipt(self):
+        adapter = self.adapter()
+        value = adapter.verify()
+        name = next(iter(adapter.DELIVERY))
+        binding = value['delivery_files'][name]
+        original_blob, original_entry = adapter._blob, adapter._entry
+        def changed_blob(commit, path):
+            return b'forged' if (commit, path) == (binding['approved_commit'], name) else original_blob(commit, path)
+        with patch.object(adapter, '_blob', changed_blob), self.assertRaises(ValueError):
+            adapter.verify()
+        def changed_entry(commit, path):
+            return b'120000 blob '+'f'.encode()*40+b'\t'+name.encode()+b'\0' if (commit, path) == (binding['approved_commit'], name) else original_entry(commit, path)
+        with patch.object(adapter, '_entry', changed_entry), self.assertRaises(ValueError):
+            adapter.verify()
+
+    def test_exact_m7_delivery_scope_and_static_enumeration_grant_no_exemption(self):
+        adapter = self.adapter()
+        adapter.verify_scope(ROOT, adapter.M7_BASE, adapter.DELIVERY)
+        with patch.object(adapter, 'verify', side_effect=ValueError('not accepted')):
+            self.assertTrue(adapter.DELIVERY <= adapter.scope_members())
+            with self.assertRaises(ValueError):
+                adapter.verify_scope(ROOT, adapter.M7_BASE, adapter.DELIVERY)
+        with self.assertRaises(ValueError):
+            adapter.verify_scope(ROOT, adapter.M7_BASE, {'unreviewed.py'})
+        with self.assertRaises(ValueError):
+            adapter.verify_scope(ROOT, 'f'*40, adapter.DELIVERY)
+
+    def test_scope_rejects_forged_blob_unsafe_modes_renames_deletion_and_incomplete_diff(self):
+        adapter = self.adapter()
+        value = adapter.verify()
+        name = next(iter(adapter.DELIVERY))
+        oid = value['delivery_files'][name]['approved_blob']
+        attacks = [b'', (f':000000 100644 '+ '0'*40+' '+'f'*40+f' A\0{name}\0').encode()]
+        for old, new, status in [('100644', '000000', 'D'), ('000000', '120000', 'A'), ('100644', '100644', 'R100')]:
+            attacks.append((f':{old} {new} '+'0'*40+' '+oid+f' {status}\0{name}\0').encode())
+        valid = (f':000000 100644 '+'0'*40+' '+oid+f' A\0{name}\0').encode()
+        attacks.extend((valid[:-1], valid+valid, valid.replace(name.encode(), b'ci/unknown.py')))
+        original = adapter._git
+        for raw in attacks:
+            def changed(root, *args):
+                return raw if args[0] == 'diff' else original(root, *args)
+            with self.subTest(raw=raw[:80]), patch.object(adapter, '_git', changed), self.assertRaises(ValueError):
+                adapter.verify_scope(ROOT, adapter.M7_BASE, {name})

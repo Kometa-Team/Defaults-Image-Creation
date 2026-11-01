@@ -26,7 +26,8 @@ def require_jobs(needs):
 def selections():
     groups = read(IDS)
     from ci.people_storage_maintenance import extra_ids
-    groups["compatibility"] = groups["compatibility"] + extra_ids(ROOT)
+    from ci.people_job_retention_maintenance import collection_test_ids
+    groups["compatibility"] = groups["compatibility"] + extra_ids(ROOT) + collection_test_ids()
     require(set(groups) == GROUPS, "Changed mandatory People groups")
     seen = set()
     for name, ids in groups.items():
