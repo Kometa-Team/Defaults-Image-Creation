@@ -12,8 +12,8 @@ from ci.people_storage_maintenance import regular
 ROOT = Path(__file__).resolve().parents[1]
 BASE = 'ae397cb8d252a62d3bc56966a6b0710a0f09a47f'
 MANIFEST = 'ci/people-collection-maintenance-v1.json'
-PIN = 'e2d0a775b8e2bcab8f20c064e5552c726e4d163bd1832fe24cbafa02662e97a1'
-MEMBERS = frozenset(('ci/dependency_tests/test_people_storage_maintenance.py', 'ci/dependency_tests/test_phase5_m5_maintenance.py', 'ci/people_job_retention_maintenance.py', 'ci/people_security.py', 'create_people_posters/create_people_poster.py', 'create_people_posters/tests/test_collection_poster.py'))
+PIN = '87d074cc393c8c96f91ec11e50cd7f0e54541c769ea831953276c49909ac2b34'
+MEMBERS = frozenset(('ci/dependency_tests/test_people_storage_maintenance.py', 'ci/dependency_tests/test_phase5_m5_maintenance.py', 'ci/people_job_retention_maintenance.py', 'ci/people_security.py', 'ci/phase4.py', 'ci/phase4_transactions.py', 'create_people_posters/create_people_poster.py', 'create_people_posters/tests/test_collection_poster.py'))
 M5_PATHS = frozenset(('ci/people_job_retention_maintenance.py', 'ci/dependency_tests/test_phase5_m5_maintenance.py'))
 SOURCE_PATHS = MEMBERS - M5_PATHS
 RENDERER = 'create_people_posters/create_people_poster.py'
@@ -190,6 +190,15 @@ def m5_view(root, name, current):
     if sha(current) == binding['sha256']:
         return _committed(binding['before_commit'], name)
     return current
+
+
+def m5_bindings(root):
+    # One fresh full-cohort proof per M5 entry point. These immutable bindings
+    # are local to that call; no path, HEAD or acceptance result is cached.
+    value = verify(root)
+    return {name: (value['files'][name]['sha256'],
+                  _committed(value['files'][name]['before_commit'], name))
+            for name in M5_PATHS}
 
 
 def test_ids():

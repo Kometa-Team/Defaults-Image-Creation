@@ -43,7 +43,7 @@ RETAINED={
 
 
 # Exact additive COLLECTION adapter; the original M5 manifest stays unchanged.
-COLLECTION_ADAPTER_SHA256 = 'afa02727bc693b3a2484018a2cf55d10676e80e03f3f79ebe2658627b920b991'
+COLLECTION_ADAPTER_SHA256 = '6d858ad3f444f33da5fec7a719a5158c5d280aeda6c93f3757f6e341351b1630'
 
 
 @lru_cache(maxsize=8)
@@ -165,8 +165,14 @@ def verify_checkout(root=None):
     value=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)
     from ci.people_colorize_maintenance import _head
     _ancestry(str(root),_head(root))
+    collection=collection_adapter().m5_bindings(root)
     for name,binding in value['members'].items():
-        if sha(collection_view(root,name,paths[name].read_bytes()))!=binding['sha256']:raise ValueError('Changed physical M5 successor: '+name)
+        actual=paths[name].read_bytes()
+        if name in collection:
+            approved,before=collection[name]
+            if sha(actual)!=approved:raise ValueError('Changed physical COLLECTION successor: '+name)
+            actual=before
+        if sha(actual)!=binding['sha256']:raise ValueError('Changed physical M5 successor: '+name)
         if binding['before_sha256'] is not None and sha(_old(name))!=binding['before_sha256']:raise ValueError('Changed M5 predecessor')
         if binding['before_sha256'] is None and _baseline_entry(name).strip():raise ValueError('M5 addition exists in predecessor')
     return value
@@ -178,8 +184,13 @@ def historical_bytes(root,name,current):
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M5 historical projection')
     paths=_physical_paths(root,{name})
     binding=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)['members'][name]
-    actual=collection_view(root,name,paths[name].read_bytes())
-    current=collection_view(root,name,current)
+    collection=collection_adapter().m5_bindings(root) if name in {'ci/people_job_retention_maintenance.py','ci/dependency_tests/test_phase5_m5_maintenance.py'} else {}
+    actual=paths[name].read_bytes()
+    if name in collection:
+        approved,before=collection[name]
+        if sha(actual)!=approved:raise ValueError('Changed physical COLLECTION successor: '+name)
+        actual=before
+        if sha(current)==approved:current=before
     if sha(actual)!=binding['sha256']:raise ValueError('Changed M5 physical successor: '+name)
     if binding['before_sha256'] is None:
         if sha(current)!=binding['sha256']:raise ValueError('Changed M5 new member')

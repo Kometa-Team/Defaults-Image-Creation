@@ -41,6 +41,14 @@ TEST_MODULES = frozenset({
     'create_people_posters/tests/test_people_storage_watch.py',
     'create_people_posters/tests/test_people_startup_retention.py',
 })
+COLLECTION_SOURCES = frozenset({
+    'ci/phase4.py',
+    'ci/phase4_transactions.py',
+    'ci/dependency_tests/test_people_storage_maintenance.py',
+    'ci/people_security.py',
+    'create_people_posters/create_people_poster.py',
+    'create_people_posters/tests/test_collection_poster.py',
+})
 
 
 def sha(raw):
@@ -123,7 +131,7 @@ def collection_test_ids():
 
 def selected_hash(name, expected):
     from ci.phase5_m5_maintenance import collection_adapter
-    if name in collection_adapter().SOURCE_PATHS:
+    if name in COLLECTION_SOURCES:
         verify_checkout()
         return collection_adapter().selected_hash(name, expected)
     if name not in MEMBERS:
@@ -137,7 +145,7 @@ def selected_hash(name, expected):
 
 def historical_bytes(root, name, current):
     from ci.phase5_m5_maintenance import collection_adapter
-    if name in collection_adapter().SOURCE_PATHS:
+    if name in COLLECTION_SOURCES:
         current = collection_adapter().historical_bytes(root, name, current)
     from ci.phase5_m5_maintenance import historical_bytes as m5_bytes
     current = m5_bytes(root, name, current)

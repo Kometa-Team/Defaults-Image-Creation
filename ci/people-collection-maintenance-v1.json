@@ -4,7 +4,7 @@
   "files": {
     "ci/people_job_retention_maintenance.py": {
       "before_sha256": "c4049fff0510e11591906aa77f99cdce78a7f79699248217659f779a44ee0736",
-      "sha256": "e114ce686d4493948699f2fdebd528df039510fbf629f34b28ac3b4cd1757435",
+      "sha256": "ef8a0e978a9c471d5ff6b8b7db29a65273c172c5e3d1b2ac6b4d1e472597dab5",
       "before_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f"
     },
     "ci/people_security.py": {
@@ -19,7 +19,7 @@
     },
     "ci/dependency_tests/test_phase5_m5_maintenance.py": {
       "before_sha256": "c52e04c1d57d4eccd48155a7da4c8404dc0dba7a9f7be2557e99c33bc092985c",
-      "sha256": "0f8c9f9772baba3b65230b59e635e81907c40a120be47975d04a24992f5f6807",
+      "sha256": "b24a74e41af88e3a81f27f0b7a2a58a69bccdea48075446a11bbe0bd876787fd",
       "before_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f"
     },
     "create_people_posters/create_people_poster.py": {
@@ -33,6 +33,16 @@
       "sha256": "ff096c228f4e9095fcec4993125a511ac266e7f63a66f53b387fb912f68b1bd3",
       "before_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f",
       "approved_commit": "ae397cb8d252a62d3bc56966a6b0710a0f09a47f"
+    },
+    "ci/phase4_transactions.py": {
+      "before_sha256": "ac90546a4d5b1ee177f73e94bee464ce2970ccdeaa05c74e1eb364cf993ce0f9",
+      "sha256": "620ae24d7ff41d20080cb11623318454df4bfe6195db140872ba7f3e8a8dd15c",
+      "before_commit": "1db9196622088984f8a87a2bdecb4cf1cb74221e"
+    },
+    "ci/phase4.py": {
+      "before_sha256": "16e7c89d628f42d719a726b805b578483a76bc5f6183a6dbeed06e0609f24677",
+      "sha256": "1ce5155558ffcfb4c6c9f28d0813658df52d4170a6af44022425460951ef7a1d",
+      "before_commit": "1db9196622088984f8a87a2bdecb4cf1cb74221e"
     }
   },
   "pytest_ids": [

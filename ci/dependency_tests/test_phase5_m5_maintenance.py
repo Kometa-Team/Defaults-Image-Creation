@@ -234,6 +234,43 @@ class CollectionCompatibilityTests(unittest.TestCase):
         self.assertFalse(set(added) & (set(actual)-set(added)))
         self.assertTrue(all(node.startswith(adapter.TEST_MODULE+'::') for node in added))
 
+    def test_one_fresh_collection_proof_per_m5_call_and_exact_source_dispatch(self):
+        from ci import people_job_retention_maintenance as startup
+        adapter = self.adapter()
+        self.assertEqual(startup.COLLECTION_SOURCES, adapter.SOURCE_PATHS)
+        with patch.object(adapter, 'verify', wraps=adapter.verify) as verify:
+            m5.verify_checkout()
+            self.assertEqual(verify.call_count, 1)
+            for name in sorted(adapter.M5_PATHS):
+                m5.historical_bytes(ROOT, name, (ROOT/name).read_bytes())
+            self.assertEqual(verify.call_count, 3)
+        # Unrelated paths receive no COLLECTION authority or adapter load.
+        with patch.object(m5, 'collection_adapter', side_effect=AssertionError('unrelated adapter load')):
+            self.assertEqual(startup.selected_hash('unreviewed.py', 'f'*64), 'f'*64)
+            self.assertEqual(startup.historical_bytes(ROOT, 'unreviewed.py', b'forged'), b'forged')
+
+    def test_m5_local_bindings_reject_rollbacks_after_cohort_verification(self):
+        adapter = self.adapter()
+        value = adapter.verify()
+        original_read, original_verify = Path.read_bytes, adapter.verify
+        for name in sorted(adapter.M5_PATHS):
+            current = original_read(ROOT/name)
+            before = adapter._committed(value['files'][name]['before_commit'], name)
+            for operation in ('checkout', 'history'):
+                verified = False
+                def verify(root):
+                    nonlocal verified
+                    result = original_verify(root)
+                    verified = True
+                    return result
+                def changed(path):
+                    return before if verified and path == ROOT/name else original_read(path)
+                with self.subTest(name=name, operation=operation), patch.object(adapter, 'verify', verify), patch.object(Path, 'read_bytes', changed), self.assertRaises(ValueError):
+                    if operation == 'checkout':
+                        m5.verify_checkout()
+                    else:
+                        m5.historical_bytes(ROOT, name, current)
+
     def test_every_current_member_rejects_tamper_missing_and_physical_rollback(self):
         adapter = self.adapter()
         value = adapter.verify()
@@ -439,3 +476,189 @@ class CollectionCompatibilityTests(unittest.TestCase):
                 return raw if args[0] == 'diff' else original(root, *args)
             with self.subTest(raw=raw[:80]), patch.object(adapter, '_git', changed), self.assertRaises(ValueError):
                 adapter.verify_scope(ROOT, adapter.M7_BASE, {name})
+
+
+class FoundationVerifierBoundaryTests(unittest.TestCase):
+    """Invocation-local metadata never waives fresh physical or historical checks."""
+
+    def test_boundary_invocations_reverify_security_and_all_190_sources(self):
+        from ci import phase4, phase4_transactions as tx, people_security_maintenance as security
+        pins=json.loads((ROOT/security.PINS).read_bytes())
+        original=Path.read_bytes
+        for call in (lambda:phase4.historical_checksum(ROOT,'ci/phase4.py'),
+                     lambda:tx.verify_maintenance(ROOT)):
+            observed=set()
+            def read(path):
+                observed.add(path)
+                return original(path)
+            with self.subTest(operation=call), patch.object(Path,'read_bytes',read), patch.object(security,'verify',wraps=security.verify) as verify:
+                call()
+                self.assertEqual(verify.call_count,1)
+                self.assertTrue({ROOT/n for n in pins['files']}<=observed)
+                observed.clear()
+                call()
+                self.assertEqual(verify.call_count,2)
+                self.assertTrue({ROOT/n for n in pins['files']}<=observed)
+
+    def test_checksum_rejects_tamper_and_rollback_after_full_proof(self):
+        from ci import phase4, people_security_maintenance as security
+        adapter=m5.collection_adapter()
+        value=adapter.verify()
+        original_read,original_verify=Path.read_bytes,security.verify
+        for name in ('ci/phase4.py','ci/phase4_transactions.py'):
+            current=original_read(ROOT/name)
+            old=adapter._committed(value['files'][name]['before_commit'],name)
+            for changed in (current+b'\n# tampered',old):
+                proved=False
+                def verify(root):
+                    nonlocal proved
+                    result=original_verify(root);proved=True
+                    return result
+                def read(path):
+                    return changed if proved and path==ROOT/name else original_read(path)
+                with self.subTest(name=name,rollback=changed==old),patch.object(security,'verify',verify),patch.object(Path,'read_bytes',read),self.assertRaises(ValueError):
+                    phase4.historical_checksum(ROOT,name)
+
+    def test_transaction_views_reject_tamper_and_rollback_after_full_proof(self):
+        from ci import phase4_transactions as tx, people_security_maintenance as security
+        original_read,original_verify=Path.read_bytes,security.verify
+        for name in ('.github/workflows/default-poster-validation.yml',security.PINS,
+                     'create_defaults/bulk/contracts/activation/protection.py'):
+            current=original_read(ROOT/name)
+            old=security._old(ROOT,name)
+            for changed in (current+b'\n# tampered',old):
+                proved=False
+                def verify(root):
+                    nonlocal proved
+                    result=original_verify(root);proved=True
+                    return result
+                def read(path):
+                    return changed if proved and path==ROOT/name else original_read(path)
+                with self.subTest(name=name,rollback=changed==old),patch.object(security,'verify',verify),patch.object(Path,'read_bytes',read),self.assertRaises(ValueError):
+                    tx.verify_maintenance(ROOT)
+
+    def test_checksum_hashes_exact_historical_bytes_after_proof(self):
+        from ci import phase4, people_security_maintenance as security
+        import hashlib
+        name='ci/phase4.py'
+        self.assertEqual(phase4.historical_checksum(ROOT,name),
+                         hashlib.sha256(security._old(ROOT,name)).hexdigest())
+        original_verify,original_old=security.verify,security._old
+        proved=False
+        def verify(root):
+            nonlocal proved
+            result=original_verify(root);proved=True
+            return result
+        def old(root,path):
+            return b'forged historical bytes' if proved and path==name else original_old(root,path)
+        with patch.object(security,'verify',verify),patch.object(security,'_old',old),self.assertRaises(ValueError):
+            phase4.historical_checksum(ROOT,name)
+
+    def test_transactions_hash_exact_historical_bytes_after_proof(self):
+        from ci import phase4_transactions as tx, people_security_maintenance as security
+        original_verify,original_old=security.verify,security._old
+        for target in (security.PINS,
+                       'create_defaults/bulk/contracts/activation/protection.py'):
+            proved=False
+            def verify(root):
+                nonlocal proved
+                result=original_verify(root);proved=True
+                return result
+            def old(root,path):
+                return b'forged historical bytes' if proved and path==target else original_old(root,path)
+            with self.subTest(target=target),patch.object(security,'verify',verify),patch.object(security,'_old',old),self.assertRaises(ValueError):
+                tx.verify_maintenance(ROOT)
+
+    def test_boundary_source_projections_reject_foreign_and_forged_inputs(self):
+        adapter=m5.collection_adapter()
+        value=adapter.verify()
+        self.assertTrue({'ci/phase4.py','ci/phase4_transactions.py'}<=adapter.SOURCE_PATHS)
+        for name in ('ci/phase4.py','ci/phase4_transactions.py'):
+            binding=value['files'][name]
+            current=(ROOT/name).read_bytes()
+            old=adapter._committed(binding['before_commit'],name)
+            self.assertEqual(adapter.historical_bytes(ROOT,name,current),old)
+            self.assertEqual(adapter.historical_bytes(ROOT,name,old),old)
+            self.assertEqual(adapter.selected_hash(name,'f'*64),'f'*64)
+            with self.assertRaises(ValueError):
+                adapter.historical_bytes(ROOT,name,b'forged')
+            with self.assertRaises(ValueError):
+                adapter.historical_bytes(ROOT/'foreign',name,current)
+
+    def test_new_boundary_bytes_cannot_roll_back_on_a_later_public_call(self):
+        from ci import phase4, phase4_transactions as tx
+        adapter=m5.collection_adapter();value=adapter.verify()
+        original=Path.read_bytes
+        for name in ('ci/phase4.py','ci/phase4_transactions.py'):
+            old=adapter._committed(value['files'][name]['before_commit'],name)
+            phase4.historical_checksum(ROOT,name)
+            tx.verify_maintenance(ROOT)
+            def read(path):
+                return old if path==ROOT/name else original(path)
+            with self.subTest(name=name),patch.object(Path,'read_bytes',read):
+                with self.assertRaises(ValueError):phase4.historical_checksum(ROOT,name)
+                with self.assertRaises(ValueError):tx.verify_maintenance(ROOT)
+
+    def test_used_paths_recheck_leaf_and_parent_modes_after_the_full_proof(self):
+        from ci import phase4, phase4_transactions as tx, people_security_maintenance as security
+        from types import SimpleNamespace
+        import stat
+        original_verify,original_lstat=security.verify,Path.lstat
+        operations=(
+            (lambda:phase4.historical_checksum(ROOT,'ci/phase4.py'),ROOT/'ci/phase4.py',ROOT/'ci'),
+            (lambda:tx.verify_maintenance(ROOT),ROOT/'.github/workflows/default-poster-validation.yml',ROOT/'.github/workflows'),
+        )
+        for call,leaf,parent in operations:
+            for target in (leaf,parent):
+                for mode in ('symlink','reparse'):
+                    proved=False
+                    def verify(root):
+                        nonlocal proved
+                        result=original_verify(root);proved=True
+                        return result
+                    def lstat(path,*args,**kwargs):
+                        result=original_lstat(path,*args,**kwargs)
+                        if proved and path==target:
+                            return SimpleNamespace(st_mode=stat.S_IFLNK if mode=='symlink' else result.st_mode,
+                                st_file_attributes=0x400 if mode=='reparse' else 0)
+                        return result
+                    with self.subTest(leaf=str(leaf),target=str(target),mode=mode),patch.object(security,'verify',verify),patch.object(Path,'lstat',lstat),self.assertRaises(ValueError):
+                        call()
+
+
+class FoundationBatchFreshnessTests(unittest.TestCase):
+    def test_batch_rechecks_all_190_sources_on_every_invocation(self):
+        from ci import phase4,people_security_maintenance as security
+        paths=('ci/phase4.py','ci/phase4_transactions.py')
+        pins=json.loads((ROOT/security.PINS).read_bytes())
+        original=Path.read_bytes
+        for unused in range(2):
+            seen=set()
+            def read(path):
+                seen.add(path)
+                return original(path)
+            with patch.object(Path,'read_bytes',read),patch.object(security,'verify',wraps=security.verify) as verify:
+                actual=phase4.historical_checksums(ROOT,paths)
+                self.assertEqual(verify.call_count,1)
+                self.assertTrue({ROOT/n for n in pins['files']}<=seen)
+                self.assertEqual(set(actual),set(paths))
+
+    def test_batch_rejects_tamper_and_rollback_on_later_invocation(self):
+        from ci import phase4
+        adapter=m5.collection_adapter();value=adapter.verify()
+        paths=('ci/phase4.py','ci/phase4_transactions.py')
+        original=Path.read_bytes
+        phase4.historical_checksums(ROOT,paths)
+        for target in paths:
+            before=adapter._committed(value['files'][target]['before_commit'],target)
+            for replacement in (before,original(ROOT/target)+b'\n# tampered'):
+                def read(path):
+                    return replacement if path==ROOT/target else original(path)
+                with self.subTest(target=target),patch.object(Path,'read_bytes',read),self.assertRaises(ValueError):
+                    phase4.historical_checksums(ROOT,paths)
+
+    def test_aggregate_uses_four_fresh_security_proofs_without_caching_acceptance(self):
+        from ci import phase4,people_security_maintenance as security
+        with patch.object(security,'verify',wraps=security.verify) as verify:
+            phase4.verify_maintenance()
+            self.assertEqual(verify.call_count,4)
