@@ -68,12 +68,29 @@ def verify_historical_reports(reports):
 def checksum(path):return hashlib.sha256(path.read_bytes().replace(b'\r\n',b'\n')).hexdigest()
 
 
-def historical_checksum(root,path):
-    from ci.people_security_maintenance import historical_bytes, verify as verify_security
+def historical_checksums(root,paths):
+    # One fresh full security proof for this explicit batch, never a retained
+    # checkout approval or caller-supplied provenance object.
+    from ci.people_security_maintenance import _old, verify as verify_security
+    from ci.people_storage_maintenance import regular
     security=verify_security(root)
-    if path not in security['files']:return checksum(root/path)
-    require(checksum(root/path)==security['files'][path]['sha256'],'Changed authorized maintenance file: '+path)
-    return hashlib.sha256(historical_bytes(root,path)).hexdigest()
+    result={}
+    for path in paths:
+        current=regular(root,path)
+        actual=checksum(current)
+        if path not in security['files']:
+            result[path]=actual
+            continue
+        require(actual==security['files'][path]['sha256'],'Changed authorized maintenance file: '+path)
+        before=_old(Path(root),path)
+        require(hashlib.sha256(before).hexdigest()==security['files'][path]['before_sha256'],
+            'Changed authorized maintenance predecessor: '+path)
+        result[path]=hashlib.sha256(before).hexdigest()
+    return result
+
+
+def historical_checksum(root,path):
+    return historical_checksums(root,(path,))[path]
 
 
 def fingerprint(value):
@@ -87,13 +104,14 @@ def fingerprint(value):
 def verify_m3_maintenance(root=ROOT):
     value=read(root/'ci/phase4-m3-maintenance.json')
     require(fingerprint(value)==M3_MAINTENANCE_PIN and value['base']==M2_BASE and set(value['files'])==M3_MAINTAINED,'Unexpected M3 CI maintenance')
+    historical=historical_checksums(root,set(value['files'])-{'ci/validation-plan.json'})
     for path,pins in value['files'].items():
         original=subprocess.check_output(['git','show',M2_BASE+':'+path],cwd=root).replace(b'\r\n',b'\n')
         require(hashlib.sha256(original).hexdigest()==pins['before_sha256'],'Changed M3 baseline: '+path)
         if path=='ci/validation-plan.json':
             from ci.phase4_review import verify_maintenance as verify_m4
             require(verify_m4(root)['files'][path]['before_sha256']==pins['sha256'],'Broken M3/M4 plan maintenance chain')
-        else:require(historical_checksum(root,path)==pins['sha256'],'Changed M3 maintenance: '+path)
+        else:require(historical[path]==pins['sha256'],'Changed M3 maintenance: '+path)
     original=subprocess.check_output(['git','show',M2_BASE+':ci/validation-plan.json'],cwd=root)
     verify_original_plan(original,root=root)
     return value
@@ -120,19 +138,22 @@ def verify_maintenance(root=ROOT):
     require(fingerprint(value)==MAINTENANCE_PIN,'Unapproved P4/M1 maintenance manifest')
     require(value['base']==BASE and set(value['files'])==MAINTAINED-{ADOPTION_SOURCE},'Unexpected maintenance scope')
     m3=verify_m3_maintenance(root)
+    extension_paths={'.github/workflows/default-poster-validation.yml',
+        'create_defaults/bulk/contracts/activation/protection.py',
+        'create_defaults/bulk/contracts/activation/data/production-pins-v1.json'}
+    from ci.phase4_transactions import verify_maintenance as verify_m5
+    extension_files=verify_m5(root)['files']
+    historical=historical_checksums(root,set(value['files'])-set(m3['files'])-extension_paths)
     for path,pins in value['files'].items():
         before=subprocess.check_output(['git','show',BASE+':'+path],cwd=root).replace(b'\r\n',b'\n')
         require(hashlib.sha256(before).hexdigest()==pins['before_sha256'],'Wrong maintenance baseline: '+path)
         if path in m3['files']:
             require(m3['files'][path]['before_sha256']==pins['sha256'],'Broken M1/M3 maintenance chain')
-        elif path in {'.github/workflows/default-poster-validation.yml',
-                'create_defaults/bulk/contracts/activation/protection.py',
-                'create_defaults/bulk/contracts/activation/data/production-pins-v1.json'}:
-            from ci.phase4_transactions import verify_maintenance as verify_m5
-            extension=verify_m5(root)['files'][path]
+        elif path in extension_paths:
+            extension=extension_files[path]
             require(extension['before_sha256']==pins['sha256'] and checksum(root/path)==extension['sha256'],
                 'Broken exact M1/M5 protected CI maintenance chain')
-        else:require(historical_checksum(root,path)==pins['sha256'],'Changed authorized maintenance file: '+path)
+        else:require(historical[path]==pins['sha256'],'Changed authorized maintenance file: '+path)
     protected='create_defaults/bulk/contracts/activation/data/production-pins-v1.json'
     old=json.loads(subprocess.check_output(['git','show',BASE+':'+protected],cwd=root))
     from ci.people_security_maintenance import baseline_pins

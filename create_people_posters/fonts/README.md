@@ -1,7 +1,7 @@
 # Poster fonts
 
-Both renderers use local repository files, without system-font lookup or runtime
-font downloads:
+The Python renderer uses these five production fonts from local repository
+files, without system-font lookup or runtime font downloads:
 
 | File | Embedded identification | License notice |
 | --- | --- | --- |
@@ -9,13 +9,22 @@ font downloads:
 | Fuggles-Regular.ttf | Fuggles Regular; Copyright 2021 The Fuggles Pro Project Authors | SIL OFL 1.1, see OFL-Fuggles.txt |
 | Montserrat-SemiBold.ttf | Montserrat SemiBold; Copyright 2011 The Montserrat Project Authors | SIL OFL 1.1, see OFL-Montserrat.txt |
 | Jost-260.ttf | Jost v3.710, upright, static weight 260; Copyright 2020 The Jost Project Authors | SIL OFL 1.1, see OFL-Jost.txt |
+| Montserrat-Light.ttf | Montserrat Light, weight 300; Copyright 2011 The Montserrat Project Authors | SIL OFL 1.1, see OFL-Montserrat.txt |
+
+Comfortaa Medium draws BW and rainier person names. Fuggles Regular draws
+signature person names. Jost-260 draws diiivoy/diiivoycolor person names.
+Montserrat SemiBold draws dynamic COLLECTION lettering for signature,
+diiivoy and diiivoycolor; Montserrat Light draws it for rainier. The two
+Montserrat files share the retained Montserrat OFL notice. The legacy
+PowerShell renderer is unchanged by this Python-only COLLECTION update.
 
 **Diiivoy and diiivoycolor use Jost weight 260 at a 190px preferred size**, with
 the existing 1900x580 auto-fit for longer uppercase names. There is no artificial
 bolding, horizontal stretching or extra tracking. The 61,084-byte font is the
 exact static instance approved in the local font comparison, not a system-font
-substitution. Other styles retain Comfortaa/Fuggles or have no generated text.
-Montserrat is retained for the legacy font preflight, not style text rendering.
+substitution. Existing person-name positioning and fitting are unchanged.
+Only COLLECTION uses additional tracking and, for diiivoy/diiivoycolor,
+a one-pixel artificial white stroke.
 
 ## Jost provenance
 
@@ -40,7 +49,13 @@ local comparison evidence are not rewritten by this change. Choosing Jost does
 not grant rights to redistribute historical Futura font copies.
 
 `POSTER_FONT_DIR` overrides the Python renderer's directory and requires the
-four exact filenames above, including `Jost-260.ttf`. The PowerShell fallback
+five exact filenames above, including `Jost-260.ttf` and `Montserrat-Light.ttf`. The PowerShell fallback
 uses this repository directory. See [the renderer audit](../POSTER_RENDERER.md)
 for layout coverage and the in-memory adapter, which does not save modified font
 files during rendering.
+
+The COLLECTION preflight audited this directory and repository-wide font
+references, including tests and validation dependencies. Its TTF inventory was
+already exactly these five files; there were no unused calibration fonts to
+remove. Keep all four OFL notices. Exact SHA-256 hashes for every font and
+notice are included in each local COLLECTION comparison report.

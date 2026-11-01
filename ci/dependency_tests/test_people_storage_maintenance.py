@@ -196,7 +196,12 @@ class PeopleStorageMaintenanceTests(unittest.TestCase):
         self.assertEqual(len(set(ids)), 40)
         self.assertTrue(all(n.startswith('create_people_posters/tests/test_people_recovery_storage.py::') for n in ids))
         from ci.people_readme_maintenance import test_ids
-        self.assertEqual(groups['compatibility'], frozen['compatibility']+(ids+test_ids() if active else []))
+        from ci.people_job_retention_maintenance import collection_test_ids
+        collection = collection_test_ids()
+        self.assertEqual(len(collection), 32)
+        self.assertEqual(len(set(collection)), 32)
+        self.assertFalse(set(collection) & (original | set().union(*map(set, frozen.values())) | set(ids) | set(test_ids())))
+        self.assertEqual(groups['compatibility'], frozen['compatibility']+(ids+test_ids() if active else [])+collection)
         self.assertFalse(set(ids)&(original | set().union(*map(set, frozen.values()))))
 
     def test_m7_preserves_all_2927_original_files_and_rejects_unapproved_scope(self):
