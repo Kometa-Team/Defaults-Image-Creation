@@ -612,11 +612,11 @@ names, stages viable candidates, and hands off to the normal orchestrator flow.
 Do not start a new recovery batch while `config/people_dirs/Downloads` still has
 pending JPGs from a prior batch.
 
-Run ad hoc QA reports:
+Run ad hoc QA reports (replace `/path/to/People-Images` with your local repository root):
 
 ```bash
-python image_check.py --input_directory "C:/Users/bullmoose20/Kometa-People-Images/transparent" --style transparent
-python compare_image_trees.py --repo-root "C:/Users/bullmoose20/Kometa-People-Images"
+python image_check.py --input_directory "/path/to/People-Images/transparent" --style transparent
+python compare_image_trees.py --repo-root "/path/to/People-Images"
 ```
 
 Use `image_check.py` for one style/tree when you want detailed image-quality
@@ -627,7 +627,7 @@ reporting in one pass.
 Check local git status across the seven People repos:
 
 ```bash
-python update_people_repos.py --op status --repo-root "C:/Users/bullmoose20/Kometa-People-Images"
+python update_people_repos.py --op status --repo-root "/path/to/People-Images"
 ```
 
 Use this when a workflow push was rejected, README counts look inconsistent, or
@@ -636,7 +636,7 @@ you need to know which repos are dirty, ahead, or behind before continuing.
 Push repo changes manually:
 
 ```bash
-python update_people_repos.py --op push --repo-root "C:/Users/bullmoose20/Kometa-People-Images"
+python update_people_repos.py --op push --repo-root "/path/to/People-Images"
 ```
 
 Use this only when images were already synced into the seven repos but the
@@ -1147,7 +1147,7 @@ After syncing images to the repo (step 11), you can run:
 python image_check.py --input_directory "./config/people_dirs/transparent" --style transparent
 
 # Compare local repo style trees, including README, presence, dimension, and quality issues
-python compare_image_trees.py --repo-root "C:/Users/bullmoose20/Kometa-People-Images"
+python compare_image_trees.py --repo-root "/path/to/People-Images"
 ```
 
 Quality rules allow grayscale only for `bw` and `diiivoy`. `original`, `rainier`,
@@ -1410,3 +1410,10 @@ Check the model publishers' terms and training-data restrictions for your use;
 code licenses do not license the photographs. BRIA RMBG 2.0 is excluded from
 required models because its [model terms](https://huggingface.co/briaai/RMBG-2.0)
 restrict the openly available weights to noncommercial use.
+
+## Standalone Docker bulk regeneration
+
+For occasional, resumable regeneration of one or more People poster styles, see
+[the portable Docker bulk operator guide](bulk/README.md). It uses private staging,
+audited source pins and the existing COLLECTION renderer; it does not change the
+daily workflow or publish posters. ZFS snapshots are optional.

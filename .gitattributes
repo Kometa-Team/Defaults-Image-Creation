@@ -3,3 +3,9 @@ create_defaults/bulk/evidence/package-d/overlay-observations.json text eol=lf
 create_defaults/bulk/evidence/production-20261019/*.json text eol=lf
 create_defaults/bulk/evidence/production-20261019/*.md text eol=lf
 create_defaults/bulk/evidence/production-20261019/*.xml text eol=lf
+
+# Portable bulk scripts, Compose and the runtime seal use reproducible LF text.
+create_people_posters/bulk*.py text eol=lf
+create_people_posters/bulk/** text eol=lf
+create_people_posters/tests/test_bulk*.py text eol=lf
+.github/workflows/people-bulk-validation.yml text eol=lf
