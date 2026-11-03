@@ -12,8 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
+          fetch-depth: 0
           persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha }}
+      - name: Verify additive bulk scope and unchanged historical provenance
+        run: python -m unittest discover -s ci/bulk_tests -v
       - name: Build isolated test image
         run: docker build --target test -t people-bulk-tests -f create_people_posters/bulk/Dockerfile .
       - name: Run offline rendering, sync, validation and publication-safety fixtures

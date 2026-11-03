@@ -13,7 +13,7 @@ from unittest.mock import patch
 import pytest
 from PIL import Image, ImageDraw
 
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0,str(next(p for p in Path(__file__).resolve().parents if (p/'bulk_regenerate.py').is_file())))
 import bulk_regenerate as cli
 import bulk_regeneration_plan as plan
 import bulk_regeneration_state as state

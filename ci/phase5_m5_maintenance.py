@@ -44,6 +44,8 @@ RETAINED={
 
 # Exact additive COLLECTION adapter; the original M5 manifest stays unchanged.
 COLLECTION_ADAPTER_SHA256 = '6d858ad3f444f33da5fec7a719a5158c5d280aeda6c93f3757f6e341351b1630'
+# Independent additive delivery; no original COLLECTION/M5 receipt is resealed.
+BULK_ADAPTER_SHA256 = 'a8c435a6670d0e2e165569566b6bf079e1eba49a6f9e697462edcca8b880c40f'
 
 
 @lru_cache(maxsize=8)
@@ -66,6 +68,22 @@ def collection_view(root, name, current):
     if name not in {'ci/people_job_retention_maintenance.py', 'ci/dependency_tests/test_phase5_m5_maintenance.py'}:
         return current
     return collection_adapter().m5_view(root, name, current)
+
+
+@lru_cache(maxsize=8)
+def _bulk_module(raw):
+    from types import ModuleType
+    module = ModuleType('verified_people_bulk_maintenance')
+    module.__file__ = str(ROOT / 'ci/people_bulk_maintenance.py')
+    exec(compile(raw, module.__file__, 'exec'), module.__dict__)
+    return module
+
+
+def bulk_adapter():
+    raw = regular(ROOT, 'ci/people_bulk_maintenance.py').read_bytes()
+    if sha(raw) != BULK_ADAPTER_SHA256:
+        raise ValueError('Changed pinned bulk adapter')
+    return _bulk_module(raw)
 
 
 @lru_cache(maxsize=128)
@@ -214,12 +232,16 @@ def historical_bytes(root,name,current):
 def scope_members():
     from ci.phase4_m7 import ROOT as policy_root
     if Path(policy_root).resolve()!=ROOT.resolve():return frozenset()
-    return (MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}
+    return ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}) | bulk_adapter().scope_members()
 
 
 def verify_scope(root,baseline,names):
     verify_checkout(root)
     if not names<=scope_members():raise ValueError('Unapproved M5 scope')
+    bulk_names = names & bulk_adapter().scope_members()
+    if bulk_names:
+        bulk_adapter().verify_scope(root, baseline, bulk_names)
+    names = names - bulk_names
     if not names:return
     rows=_git(root,'diff','--raw','--no-abbrev','--no-renames','-z',baseline,'HEAD','--',*sorted(names)).split(b'\0')
     if rows[-1]!=b'' or len(rows)!=2*len(names)+1:raise ValueError('Incomplete M5 scope diff')

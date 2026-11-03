@@ -46,7 +46,13 @@ docker build --target release -t kometa-people-bulk:local \
 ```
 
 The dedicated PR workflow runs these builds/tests with read-only GitHub permissions
-and no persisted checkout credentials. Existing daily/provenance workflows are unchanged.
+and no persisted checkout credentials. Bulk test sources live under `bulk/tests`,
+outside the frozen historical People test namespace; the isolated Docker test stage
+copies them beside its own conftest. Existing daily/provenance workflows and test-ID
+inventories are unchanged. An independently pinned additive CI scope adapter binds
+the exact new bulk files and preserves the previous COLLECTION/M5 receipts and
+renderer. Its separate maintenance tests exercise file/receipt tampering, scope
+expansion, authority changes and unchanged historical code/inventories.
 
 ## Repeat a bounded fresh-source compatibility test
 

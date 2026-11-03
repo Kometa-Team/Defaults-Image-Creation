@@ -30,7 +30,7 @@ FROM runtime AS test
 USER root
 COPY create_people_posters/bulk/test-requirements.lock /tmp/test-requirements.lock
 RUN python -m pip install --no-cache-dir --require-hashes -r /tmp/test-requirements.lock
-COPY create_people_posters/tests/conftest.py create_people_posters/tests/test_bulk*.py \
+COPY create_people_posters/tests/conftest.py create_people_posters/bulk/tests/test_bulk*.py \
      create_people_posters/tests/test_collection_poster.py create_people_posters/tests/test_pillow_poster.py ./create_people_posters/tests/
 COPY create_people_posters/compare_collection.py create_people_posters/create_people_poster.ps1 \
      create_people_posters/sync_people_images.py create_people_posters/publish_people_github.py \

@@ -14,7 +14,7 @@ import time
 import pytest
 from PIL import Image
 
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0,str(next(p for p in Path(__file__).resolve().parents if (p/'bulk_regenerate.py').is_file())))
 import bulk_git_sync as sync
 import bulk_reconcile as publication
 import bulk_source as source
