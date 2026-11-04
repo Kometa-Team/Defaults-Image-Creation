@@ -14,6 +14,12 @@
       "sha256": "929470bd3302a968cd28d2c7afbcdcd503cafa21ccf8dc934ce8ecbe250a229a",
       "text_lf": true
     },
+    ".github/workflows/people-storage-validation.yml": {
+      "before_sha256": "d750821066ccfbd620c12c7670b7ae3302dd5f214e2170514bb20baa052baab3",
+      "operation": "M",
+      "sha256": "09d9cd05e43142429049b2f5e02afbc3ec0b6032d68aa76eb76c26bfc248e0bd",
+      "text_lf": true
+    },
     "ci/people_bulk_maintenance.py": {
       "before_sha256": "a8c435a6670d0e2e165569566b6bf079e1eba49a6f9e697462edcca8b880c40f",
       "operation": "M",
@@ -41,13 +47,19 @@
     "ci/unicode_tests/test_people_unicode_maintenance.py": {
       "before_sha256": null,
       "operation": "A",
-      "sha256": "3bd726207ff736ba1301a6bd1226745784fff9385f468319de07a1edd0249d94",
+      "sha256": "200bf89b6dcbccc78ae20bae72ed572e2d2ba98dde53c6498fe16b51cbd7f8b4",
       "text_lf": true
     },
     "ci/validation.py": {
       "before_sha256": "10f1c45e661e5f2446d9b7bc23c980b6bd0118782d5e5284e363c107618a2732",
       "operation": "M",
       "sha256": "1551daf63c34b870666c8af93c6c0c3458a3de9a7e9b9db3747cc7a98ed88f25",
+      "text_lf": true
+    },
+    "create_people_posters/tests/test_ddcolor_colorizer.py": {
+      "before_sha256": "234b0c7988753c6d92bddc9ae7c18151c2a0c2938b971f67cbd613b0efddb476",
+      "operation": "M",
+      "sha256": "7bdfab4557917f86897f9042c87c268273bbee4daad97ddc722d7322f7eaf7d0",
       "text_lf": true
     }
   },

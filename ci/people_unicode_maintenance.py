@@ -18,9 +18,9 @@ M7_BASE = '68179d1c568449375ca72b23239b57770dfc229e'
 SOURCE = 'ci/people-unicode-source-v1.json'
 DELIVERY = 'ci/people-unicode-ci-v1.json'
 SOURCE_PIN = '6437d0994153e168fc182a4d05c1226e4ca90812340ab5f54d50a99752233a2b'
-DELIVERY_PIN = '46f8b880e82e3ebe547a4dc36e4ec37592754543f61170f52c9eb2f33093cc77'
+DELIVERY_PIN = '48339eda047465837bf36f76031c8746bebe72431d2d4ecbf88ed9f71abf52c0'
 SOURCE_MEMBERS = frozenset(('.dockerignore', 'create_people_posters/bulk/Dockerfile', 'create_people_posters/bulk/requirements.lock', 'create_people_posters/bulk_regenerate.py', 'create_people_posters/bulk_regeneration_plan.py', 'create_people_posters/bulk_runtime.py', 'create_people_posters/create_people_poster.ps1', 'create_people_posters/create_people_poster.py', 'create_people_posters/fonts/Inter-Light.ttf', 'create_people_posters/fonts/OFL-Inter.txt', 'create_people_posters/poster_fonts.py', 'create_people_posters/poster_renderer.py', 'create_people_posters/requirements-bulk-regenerate.txt', 'create_people_posters/requirements.txt', 'create_people_posters/unicode/README.md', 'create_people_posters/unicode/font-provenance.json', 'create_people_posters/unicode/qualify.py', 'create_people_posters/unicode/runtime-release-v3.json', 'create_people_posters/unicode/tests/test_unicode_successor.py', 'create_people_posters/unicode_labels.py', 'create_people_posters/unicode_review.py', 'create_people_posters/unicode_runtime.py'))
-CI_MEMBERS = frozenset(('.github/workflows/dependency-provenance-validation.yml', '.github/workflows/people-bulk-validation.yml', 'ci/people_bulk_maintenance.py', 'ci/people_collection_maintenance.py', 'ci/people_readme_maintenance.py', 'ci/people_unicode_profile.py', 'ci/unicode_tests/test_people_unicode_maintenance.py', 'ci/validation.py'))
+CI_MEMBERS = frozenset(('.github/workflows/dependency-provenance-validation.yml', '.github/workflows/people-bulk-validation.yml', '.github/workflows/people-storage-validation.yml', 'ci/people_bulk_maintenance.py', 'ci/people_collection_maintenance.py', 'ci/people_readme_maintenance.py', 'ci/people_unicode_profile.py', 'ci/unicode_tests/test_people_unicode_maintenance.py', 'ci/validation.py', 'create_people_posters/tests/test_ddcolor_colorizer.py'))
 ANCHORS = frozenset((SOURCE, DELIVERY, 'ci/people_unicode_maintenance.py',
                      'ci/phase5_m5_maintenance.py'))
 
