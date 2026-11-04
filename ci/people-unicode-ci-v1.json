@@ -2,6 +2,12 @@
   "baseline_commit": "05ea93ba4b75a6c8fbd3755bdf817cb6c8485338",
   "ci_authorized": false,
   "files": {
+    ".github/workflows/default-poster-validation.yml": {
+      "before_sha256": "a910d48f65dcdad6fa71beaf795790e142ae749edc4a834bfeaa19d52701c923",
+      "operation": "M",
+      "sha256": "4683aff64fc98dffc76334432e02d939414309dad0eebd2cccc04b7e570c9ab7",
+      "text_lf": true
+    },
     ".github/workflows/dependency-provenance-validation.yml": {
       "before_sha256": "8387e873cd828405b8691a04ca4380689ad1f43f9e6c40a24424d65cc715c910",
       "operation": "M",
@@ -47,7 +53,7 @@
     "ci/unicode_tests/test_people_unicode_maintenance.py": {
       "before_sha256": null,
       "operation": "A",
-      "sha256": "200bf89b6dcbccc78ae20bae72ed572e2d2ba98dde53c6498fe16b51cbd7f8b4",
+      "sha256": "8857e88afe2f37f9e8337b5972ca20227692a1b860e0e7e383fbaa891d662447",
       "text_lf": true
     },
     "ci/validation.py": {
