@@ -234,10 +234,16 @@ def renderer_version():
         raise ValueError("Required renderer resource missing")
     repo = SCRIPT_DIR.parent
     release = SCRIPT_DIR/'.bulk-runtime.json'
+    if not release.is_file() and (SCRIPT_DIR/'unicode/runtime-release-v3.json').is_file():
+        release = SCRIPT_DIR/'unicode/runtime-release-v3.json'
     if release.is_file():
         from bulk_runtime import verify_release
         value=verify_release(SCRIPT_DIR,release)
-        fingerprint['verified_renderer_commit']=value['renderer_commit']
+        if value['version']==3:
+            fingerprint['verified_renderer_parent']=value['parent_commit']
+            fingerprint['verified_renderer_profile']=value['profile']
+        else:
+            fingerprint['verified_renderer_commit']=value['renderer_commit']
         fingerprint['release_sha256']=canonical(value)
         fingerprint['python']=sys.version.split()[0]
         return fingerprint

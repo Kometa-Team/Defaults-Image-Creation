@@ -94,16 +94,21 @@ def verify(root=ROOT):
         raise ValueError('Changed exact bulk delivery receipt')
     from ci.people_collection_maintenance import _head
     ancestry(_head(ROOT))
+    from ci.phase5_m5_maintenance import unicode_adapter
+    successor = unicode_adapter()
+    successor.verify(root)
     for name, binding in value['files'].items():
         if set(binding) != {'sha256', 'before_sha256'}:
             raise ValueError('Changed bulk member binding')
         old = predecessor(name)
         if binding['before_sha256'] != (sha(old) if old is not None else None):
             raise ValueError('Changed bulk predecessor: '+name)
-        if sha(regular(ROOT, name).read_bytes()) != binding['sha256']:
+        current = successor.historical_bytes(root, name, regular(ROOT, name).read_bytes())
+        if sha(current) != binding['sha256']:
             raise ValueError('Changed physical bulk member: '+name)
     for name, expected in value['frozen_files'].items():
-        if sha(predecessor(name)) != expected or sha(regular(ROOT, name).read_bytes()) != expected:
+        current = successor.historical_bytes(root, name, regular(ROOT, name).read_bytes())
+        if sha(predecessor(name)) != expected or sha(current) != expected:
             raise ValueError('Changed frozen bulk predecessor: '+name)
     return value
 

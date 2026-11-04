@@ -93,7 +93,11 @@ def baseline():
     for path in paths:
         if not Path(path).name.startswith('test_') or not path.endswith('.py'):continue
         old=ast.parse(subprocess.check_output(['git','show',BASE+':'+path],cwd=ROOT))
-        new=ast.parse((ROOT/path).read_text(encoding='utf-8-sig'))
+        current=(ROOT/path).read_text(encoding='utf-8-sig')
+        if path=='create_defaults/phase4/tests/test_ci_foundations.py':
+            from ci.phase5_m5_maintenance import unicode_adapter
+            current=unicode_adapter().historical_bytes(ROOT,path,current.encode('utf8')).decode('utf8')
+        new=ast.parse(current)
         tests=lambda t:{n.name:ast.dump(n,include_attributes=False) for n in t.body if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef)) and n.name.startswith('test_')}
         require(tests(old)==tests(new),'Changed original Phase 4 assertions: '+path)
 

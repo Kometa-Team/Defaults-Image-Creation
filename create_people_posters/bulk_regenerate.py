@@ -22,7 +22,7 @@ from bulk_regeneration_state import (STYLES, STATE, MARKER, atomic_json, canonic
     database, evidence, human, inspect, log, metadata, process_identity, read_json,
     reject_links, set_meta, sha, writer_lock, resource_usage, read_inventory, sync_parent,require_durable_local_state)
 
-VERSION = "2"
+VERSION = "3-unicode-inter-v1"
 _local = threading.local()
 
 
@@ -46,6 +46,13 @@ def validated_receipt(root, item, style, renderer_id, batch_id):
         expected = dict(batch_id=batch_id, renderer_id=renderer_id, source_sha256=item["source_hash"],
                         source=item["relative"], output=relative, style=style)
         if any(receipt.get(k) != v for k, v in expected.items()) or sha(target) != receipt["sha256"]:
+            return None
+        from unicode_labels import POLICY_SHA256
+        label=receipt.get('label_resolution',{})
+        if (label.get('policy_sha256') != POLICY_SHA256 or label.get('style') != style
+                or label.get('original_name') != item['name'] or label.get('filename') != item['name']
+                or label.get('resolution_method') not in {'original','normalized','substituted','fallback-font'}
+                or canonical(label) != receipt.get('label_resolution_sha256')):
             return None
         from PIL import Image
         with Image.open(target) as image:
@@ -117,7 +124,6 @@ def render_one(root, source, item, styles, renderer_id, batch_id):
             tick = time.perf_counter()
             renderer = _renderer()
             timings['renderer_initialization_seconds'] = time.perf_counter()-tick
-            label = item["name"].replace("_ccexpress", "")
             collection_calls = {}
             original_collection = renderer.render_collection
             original_label = getattr(renderer, 'label', None)
@@ -139,15 +145,11 @@ def render_one(root, source, item, styles, renderer_id, batch_id):
                     font_seconds += time.perf_counter()-tick
             renderer.render_collection = collection
             renderer.label = timed_label
-            # The established selective API supports the two diiivoy styles.
-            # For Rainier/Signature use the exact merged normal renderer, close
-            # its unused in-memory frames, and never write unrelated styles.
+            # Resolve and render only pending styles, with independent failures.
             try:
                 tick = time.perf_counter()
-                if set(styles) <= {"diiivoy", "diiivoycolor"}:
-                    outputs, warnings = renderer.render_styles(image, label, styles)
-                else:
-                    outputs, warnings = renderer.render(image, label)
+                rendered = renderer.render_independent(image,item['name'],styles,filename=item['name'])
+                outputs, warnings = rendered['outputs'],rendered['warnings']
                 timings['render_seconds'] = time.perf_counter()-tick
                 timings['font_render_seconds'] = font_seconds
                 timings['compositing_and_geometry_seconds'] = max(0,timings['render_seconds']-font_seconds)
@@ -157,30 +159,51 @@ def render_one(root, source, item, styles, renderer_id, batch_id):
                     del renderer.label
                 else:
                     renderer.label = original_label
-            if any(collection_calls.get(style) != 1 for style in styles if style != "bw") or collection_calls.get("bw", 0):
-                raise ValueError("Each requested style must render COLLECTION exactly once")
+            for style in tuple(outputs):
+                if collection_calls.get(style,0) != (0 if style == 'bw' else 1):
+                    outputs.pop(style).close()
+                    rendered['errors'][style] = dict(style=style,error='Unexpected COLLECTION count')
         del source_bytes
         tick = time.perf_counter()
         if sha(source_path) != item["source_hash"]:
             raise ValueError("Source changed during rendering")
         timings['source_hash_after_seconds'] = time.perf_counter()-tick
         receipts = []
-        for style in styles:
+        errors = dict(rendered['errors'])
+        for style in outputs:
             target = output_path(Path(root), style, item["name"])
             relative = target.relative_to(root).as_posix()
-            receipt = dict(batch_id=batch_id, renderer_id=renderer_id, source=item["relative"],
-                           source_sha256=item["source_hash"], output=relative, style=style,
-                           completed_at=time.time(), warnings=warnings, collection_calls=collection_calls,
-                           timings=timings,
-                           **atomic_poster(outputs[style], target, style))
-            path = receipt_path(root, relative)
-            path.parent.mkdir(parents=True, exist_ok=True)
-            atomic_json(path, receipt)
-            receipts.append(receipt)
+            try:
+                resolution=rendered['labels'][style]
+                receipt = dict(batch_id=batch_id, renderer_id=renderer_id, source=item["relative"],
+                               source_sha256=item["source_hash"], output=relative, style=style,
+                               completed_at=time.time(), warnings=warnings, collection_calls=collection_calls,
+                               label_resolution=resolution,label_resolution_sha256=canonical(resolution),
+                               timings=timings,**atomic_poster(outputs[style],target,style))
+                path = receipt_path(root, relative)
+                path.parent.mkdir(parents=True, exist_ok=True)
+                atomic_json(path, receipt)
+                receipts.append(receipt)
+            except (OSError,ValueError) as error:
+                errors[style]=dict(error=str(error),style=style)
+        if errors:
+            from unicode_review import write_review
+            from unicode_labels import STYLE_FONTS
+            for style,record in errors.items():
+                record=dict(record,original_name=item['name'],filename=item['name'],style=style,
+                            font=record.get('font',STYLE_FONTS[style]))
+                write_review(Path(root)/STATE/'unicode-review'/str(item['number'])/style,record,renderer)
+            raise StyleFailures(errors)
         return receipts
     finally:
         for image in outputs.values():
             image.close()
+
+
+class StyleFailures(ValueError):
+    def __init__(self, errors):
+        self.errors=errors
+        super().__init__('Independent poster styles require review: '+json.dumps(errors,ensure_ascii=False))
 
 
 def _schema(db):
@@ -410,7 +433,7 @@ def run_batch(root, db, manifest, workers=1, progress_seconds=15, stop=None, wor
                             else:
                                 with db:
                                     db.execute("UPDATE outputs SET status='failed',error=?,updated=? WHERE number=? AND style=?",
-                                               (error_text, time.time(), item["number"], style))
+                                               (json.dumps(error.errors.get(style,{}),ensure_ascii=False)[:2000] if isinstance(error,StyleFailures) else error_text, time.time(), item["number"], style))
                         with db:
                             set_meta(db, last_error=dict(image=item["relative"], summary=error_text, time=time.time()))
                         log(root, "Input failed: "+item["relative"], dict(error=error_text))

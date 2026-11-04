@@ -1,0 +1,94 @@
+{
+  "baseline_commit": "05ea93ba4b75a6c8fbd3755bdf817cb6c8485338",
+  "ci_authorized": false,
+  "files": {
+    ".github/workflows/default-poster-validation.yml": {
+      "before_sha256": "a910d48f65dcdad6fa71beaf795790e142ae749edc4a834bfeaa19d52701c923",
+      "operation": "M",
+      "sha256": "2ef4b8bb0c5f6461be4a83eb18b7cacb28e7f823237c30af4879e07cc6ad9fca",
+      "text_lf": true
+    },
+    ".github/workflows/dependency-provenance-validation.yml": {
+      "before_sha256": "8387e873cd828405b8691a04ca4380689ad1f43f9e6c40a24424d65cc715c910",
+      "operation": "M",
+      "sha256": "17bf5f5048c3d17e968c298c58d908b33662b61b44c7c03df90508fd50521c67",
+      "text_lf": true
+    },
+    ".github/workflows/people-bulk-validation.yml": {
+      "before_sha256": "f8a7f36c2f757e22283ea60f887c03f7a5141823c3543a230d5694aae29e84e3",
+      "operation": "M",
+      "sha256": "929470bd3302a968cd28d2c7afbcdcd503cafa21ccf8dc934ce8ecbe250a229a",
+      "text_lf": true
+    },
+    ".github/workflows/people-storage-validation.yml": {
+      "before_sha256": "d750821066ccfbd620c12c7670b7ae3302dd5f214e2170514bb20baa052baab3",
+      "operation": "M",
+      "sha256": "09d9cd05e43142429049b2f5e02afbc3ec0b6032d68aa76eb76c26bfc248e0bd",
+      "text_lf": true
+    },
+    "ci/people_bulk_maintenance.py": {
+      "before_sha256": "a8c435a6670d0e2e165569566b6bf079e1eba49a6f9e697462edcca8b880c40f",
+      "operation": "M",
+      "sha256": "e6f0ed2e679194eb18fc93b0493daa69b6dd1170793efb3f02c96850e3afbe9c",
+      "text_lf": true
+    },
+    "ci/people_collection_maintenance.py": {
+      "before_sha256": "6d858ad3f444f33da5fec7a719a5158c5d280aeda6c93f3757f6e341351b1630",
+      "operation": "M",
+      "sha256": "6c36970120b28bc37132466eb07c187e729b461d8c462c87bda26dea848c2696",
+      "text_lf": true
+    },
+    "ci/people_readme_maintenance.py": {
+      "before_sha256": "e10105cfe24ca2fb8dbd78b2e81894b5dd05f923581f7a754bfc590f2a936fbb",
+      "operation": "M",
+      "sha256": "f774f23ba259b3749507ed28f3181e9fe1def540b8ee706ff9da752d1da8bf90",
+      "text_lf": true
+    },
+    "ci/people_unicode_profile.py": {
+      "before_sha256": null,
+      "operation": "A",
+      "sha256": "7f58d1beb61b75aa196c268c5d3d955d4f63a4c001cc94ab7389ce795057e3b0",
+      "text_lf": true
+    },
+    "ci/phase4_transactions.py": {
+      "before_sha256": "620ae24d7ff41d20080cb11623318454df4bfe6195db140872ba7f3e8a8dd15c",
+      "operation": "M",
+      "sha256": "28f9dd3a5bcb37ffd02331e3374d5c98b9bb2123eb7a788dced23e308c009950",
+      "text_lf": true
+    },
+    "ci/tests/test_validation.py": {
+      "before_sha256": "15f1b5cbcb2d9cdf08cbe23560052745cf40fdda5b7c13cf359af7b4bedd3fda",
+      "operation": "M",
+      "sha256": "57eb6e22ff5a4695d133e4e06720e54e8e36be529ebdc61c6ecf640ad813b645",
+      "text_lf": true
+    },
+    "ci/unicode_tests/test_people_unicode_maintenance.py": {
+      "before_sha256": null,
+      "operation": "A",
+      "sha256": "1d5172fc9a467931e88090b50eabdab1c230cb14fde309dcc1996e2ae97d5f95",
+      "text_lf": true
+    },
+    "ci/validation.py": {
+      "before_sha256": "10f1c45e661e5f2446d9b7bc23c980b6bd0118782d5e5284e363c107618a2732",
+      "operation": "M",
+      "sha256": "1551daf63c34b870666c8af93c6c0c3458a3de9a7e9b9db3747cc7a98ed88f25",
+      "text_lf": true
+    },
+    "create_defaults/phase4/tests/test_ci_foundations.py": {
+      "before_sha256": "54f37e811ceebc40d82f12106e52ef5fd02d98d5369b3d1f73f5118da0c53347",
+      "operation": "M",
+      "sha256": "87d0b0b302f490cd2bedecca7f2d8f3b84c74e1ea3a56b17a3e840d89fc50946",
+      "text_lf": true
+    },
+    "create_people_posters/tests/test_ddcolor_colorizer.py": {
+      "before_sha256": "234b0c7988753c6d92bddc9ae7c18151c2a0c2938b971f67cbd613b0efddb476",
+      "operation": "M",
+      "sha256": "7bdfab4557917f86897f9042c87c268273bbee4daad97ddc722d7322f7eaf7d0",
+      "text_lf": true
+    }
+  },
+  "publication_authorized": false,
+  "purpose": "EXACT-CI-REGISTRATION-NO-RUNTIME-AUTHORITY",
+  "source_receipt_sha256": "6437d0994153e168fc182a4d05c1226e4ca90812340ab5f54d50a99752233a2b",
+  "version": 1
+}

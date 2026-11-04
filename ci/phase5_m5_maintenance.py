@@ -48,6 +48,28 @@ COLLECTION_ADAPTER_SHA256 = '6d858ad3f444f33da5fec7a719a5158c5d280aeda6c93f3757f
 BULK_ADAPTER_SHA256 = 'a8c435a6670d0e2e165569566b6bf079e1eba49a6f9e697462edcca8b880c40f'
 
 
+# Versioned Unicode successor pins; predecessor constants/receipts stay intact.
+UNICODE_ADAPTER_SHA256 = '4be4f8aa19e59cd27568779b58c02eb4d88efdc0fc59a2a43e9e6cb2ca92c3fc'
+UNICODE_COLLECTION_ADAPTER_SHA256 = '6c36970120b28bc37132466eb07c187e729b461d8c462c87bda26dea848c2696'
+UNICODE_BULK_ADAPTER_SHA256 = 'e6f0ed2e679194eb18fc93b0493daa69b6dd1170793efb3f02c96850e3afbe9c'
+
+
+@lru_cache(maxsize=8)
+def _unicode_module(raw):
+    from types import ModuleType
+    module = ModuleType('verified_people_unicode_maintenance')
+    module.__file__ = str(ROOT / 'ci/people_unicode_maintenance.py')
+    exec(compile(raw, module.__file__, 'exec'), module.__dict__)
+    return module
+
+
+def unicode_adapter():
+    raw = regular(ROOT, 'ci/people_unicode_maintenance.py').read_bytes()
+    if sha(raw) != UNICODE_ADAPTER_SHA256:
+        raise ValueError('Changed pinned Unicode successor adapter')
+    return _unicode_module(raw)
+
+
 @lru_cache(maxsize=8)
 def _collection_module(raw):
     from types import ModuleType
@@ -59,8 +81,9 @@ def _collection_module(raw):
 
 def collection_adapter():
     raw = regular(ROOT, 'ci/people_collection_maintenance.py').read_bytes()
-    if sha(raw) != COLLECTION_ADAPTER_SHA256:
+    if sha(raw) != UNICODE_COLLECTION_ADAPTER_SHA256:
         raise ValueError('Changed pinned COLLECTION adapter')
+    unicode_adapter().verify(ROOT)
     return _collection_module(raw)
 
 
@@ -81,8 +104,9 @@ def _bulk_module(raw):
 
 def bulk_adapter():
     raw = regular(ROOT, 'ci/people_bulk_maintenance.py').read_bytes()
-    if sha(raw) != BULK_ADAPTER_SHA256:
+    if sha(raw) != UNICODE_BULK_ADAPTER_SHA256:
         raise ValueError('Changed pinned bulk adapter')
+    unicode_adapter().verify(ROOT)
     return _bulk_module(raw)
 
 
@@ -197,6 +221,7 @@ def verify_checkout(root=None):
 
 
 def historical_bytes(root,name,current):
+    current = unicode_adapter().historical_bytes(root, name, current)
     if name not in MEMBERS:return current
     root=Path(root)
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M5 historical projection')
@@ -232,12 +257,16 @@ def historical_bytes(root,name,current):
 def scope_members():
     from ci.phase4_m7 import ROOT as policy_root
     if Path(policy_root).resolve()!=ROOT.resolve():return frozenset()
-    return ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}) | bulk_adapter().scope_members()
+    return ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}) | bulk_adapter().scope_members() | unicode_adapter().scope_members()
 
 
 def verify_scope(root,baseline,names):
     verify_checkout(root)
     if not names<=scope_members():raise ValueError('Unapproved M5 scope')
+    unicode_names = names & unicode_adapter().scope_members()
+    if unicode_names:
+        unicode_adapter().verify_scope(root, baseline, unicode_names)
+    names = names - unicode_names
     bulk_names = names & bulk_adapter().scope_members()
     if bulk_names:
         bulk_adapter().verify_scope(root, baseline, bulk_names)

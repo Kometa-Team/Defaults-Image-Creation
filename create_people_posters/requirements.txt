@@ -3,6 +3,7 @@ requests
 Pillow==13.0.0
 # Portable font metrics/kerning for Pillow builds without RAQM (no system DLLs).
 fonttools>=4.67.0
+uharfbuzz==0.56.3
 numpy
 # The pipeline uses rembg's Python API. CLI/server extras introduce unrelated
 # Gradio/FastAPI constraints that conflict with the DDColor dependency profile.

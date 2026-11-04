@@ -245,7 +245,11 @@ def main():
         options = [*args.paths, "--rootdir", str(ROOT), "-q", "-rs", "-p", "no:cacheprovider", "--durations=20"]
         if args.collect_only:
             options.append("--collect-only")
-        return int(pytest.main(options, plugins=[PytestEvidence(args.report)]))
+        from ci.people_unicode_profile import historical_people_profile
+        with historical_people_profile(args.paths) as profile:
+            evidence = PytestEvidence(args.report)
+            evidence.data["people_runtime_profile"] = profile
+            return int(pytest.main(options, plugins=[evidence]))
     if args.action == "unit":
         root = args.paths[0]
         suite = unit_suite(root)

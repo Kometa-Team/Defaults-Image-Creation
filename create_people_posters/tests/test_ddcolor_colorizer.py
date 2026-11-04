@@ -303,7 +303,9 @@ def test_ddcolor_is_the_default_and_only_backend(monkeypatch, setting):
 def test_both_runners_prefer_local_ddcolor_environment(monkeypatch):
     monkeypatch.delenv("COLORIZE_PYTHON", raising=False)
     suffix = "Scripts/python.exe" if sys.platform.startswith("win") else "bin/python"
-    expected = str(SCRIPT_DIR / ".venv-ddcolor" / suffix)
+    runtime_dir = Path(orchestrator.__file__).resolve().parent
+    assert runtime_dir == Path(recover_edge_chops.__file__).resolve().parent
+    expected = str(runtime_dir / ".venv-ddcolor" / suffix)
     assert orchestrator._colorize_python_candidates("pipeline-python")[0][1] == [expected]
     assert recover_edge_chops.colorize_python_candidates()[0] == [expected]
 

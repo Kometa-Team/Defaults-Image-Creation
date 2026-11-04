@@ -2,6 +2,8 @@
 
 from io import BytesIO
 from math import ceil
+from pathlib import Path
+from functools import lru_cache
 import unicodedata
 
 from fontTools.ttLib import TTFont
@@ -10,8 +12,11 @@ from fontTools.ttLib.tables._c_m_a_p import CmapSubtable
 
 class FontMetrics:
     """Use original glyph outlines, kerning, ligatures and contextual forms."""
-    def __init__(self, path):
+    def __init__(self, path, *, shaping=False):
+        self.shaping = shaping
+        self.original_data = Path(path).read_bytes()
         with TTFont(path) as font:
+            self.glyph_order = font.getGlyphOrder()
             self.cmap = font.getBestCmap()
             self.advances = dict(font["hmtx"].metrics)
             self.units = font["head"].unitsPerEm
@@ -46,6 +51,10 @@ class FontMetrics:
             bridge.platformID, bridge.platEncID, bridge.language = 3, 10, 0
             bridge.cmap = dict(self.cmap)
             bridge.cmap.update({ord(character): glyph for glyph, character in self.characters.items()})
+            # Replace this Unicode subtable instead of appending a duplicate.
+            # Inter already has (platform 3, encoding 10, language 0).
+            font["cmap"].tables = [table for table in font["cmap"].tables
+                if (table.platformID, table.platEncID, table.language) != (3, 10, 0)]
             font["cmap"].tables.append(bridge)
             buffer = BytesIO()
             font.save(buffer)
@@ -93,6 +102,8 @@ class FontMetrics:
                         return
 
     def glyphs(self, text):
+        if self.requires_shaping(text):
+            return [self.glyph_order[g] for g, *_ in self.shaped(text)]
         text = unicodedata.normalize("NFC", text)
         missing = [c for c in text if ord(c) not in self.cmap]
         if missing:
@@ -104,6 +115,43 @@ class FontMetrics:
                 self.substitute(result, index, lookup)
                 index += 1
         return result
+
+    def requires_shaping(self, text):
+        # Preserve the established NFC Latin layout whenever it was sufficient.
+        # Shape remaining combining clusters and complex scripts as a unit.
+        text = unicodedata.normalize('NFC', text)
+        # A missing precomposed cmap entry is not proof of a missing cluster:
+        # HarfBuzz may render its canonical base + combining mark correctly.
+        return self.shaping or any(ord(c) not in self.cmap or unicodedata.combining(c) or unicodedata.bidirectional(c) in {'R','AL','AN'}
+            or 0x900 <= ord(c) <= 0x109F for c in text)
+
+    @lru_cache(maxsize=1024)
+    def shaped(self, text):
+        import uharfbuzz as hb
+        if not hasattr(self, '_hb_font'):
+            self._hb_font = hb.Font(hb.Face(self.original_data))
+            self._hb_font.scale = (self.units, self.units)
+        font = self._hb_font
+        buffer = hb.Buffer()
+        buffer.add_str(text)
+        buffer.guess_segment_properties()
+        hb.shape(font, buffer)
+        result = tuple((info.codepoint, p.x_advance, p.x_offset, p.y_offset)
+                       for info,p in zip(buffer.glyph_infos,buffer.glyph_positions))
+        if any(g == 0 for g,*_ in result):
+            raise ValueError('Required font has no glyph for the original Unicode cluster')
+        return result
+
+    def layout(self, text, size):
+        if not self.requires_shaping(text):
+            positions, advance = self.positions(text,size)
+            return [(c,x,0) for c,x in positions],advance
+        positions,advance = [],0
+        scale = size/self.units
+        for glyph,width,x,y in self.shaped(text):
+            positions.append((self.characters[self.glyph_order[glyph]],advance+x*scale,-y*scale))
+            advance += width*scale
+        return positions,advance
 
     def kern(self, left, right):
         value = self.pairs.get((left, right), 0)
@@ -120,6 +168,9 @@ class FontMetrics:
         return value
 
     def positions(self, text, size):
+        if self.requires_shaping(text):
+            positions,advance = self.layout(text,size)
+            return [(c,x) for c,x,y in positions],advance
         positions, advance, previous = [], 0, None
         scale = size / self.units
         for glyph in self.glyphs(text):
