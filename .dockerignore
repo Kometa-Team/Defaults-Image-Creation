@@ -20,3 +20,10 @@
 !create_people_posters/tests/conftest.py
 !create_people_posters/tests/test_collection_poster.py
 !create_people_posters/tests/test_pillow_poster.py
+
+!create_people_posters/unicode/
+!create_people_posters/unicode/runtime-release-v3.json
+!create_people_posters/unicode/tests/
+!create_people_posters/unicode/tests/*.py
+**/__pycache__/
+**/*.pyc

@@ -1,0 +1,58 @@
+{
+  "baseline_commit": "05ea93ba4b75a6c8fbd3755bdf817cb6c8485338",
+  "ci_authorized": false,
+  "files": {
+    ".github/workflows/dependency-provenance-validation.yml": {
+      "before_sha256": "8387e873cd828405b8691a04ca4380689ad1f43f9e6c40a24424d65cc715c910",
+      "operation": "M",
+      "sha256": "17bf5f5048c3d17e968c298c58d908b33662b61b44c7c03df90508fd50521c67",
+      "text_lf": true
+    },
+    ".github/workflows/people-bulk-validation.yml": {
+      "before_sha256": "f8a7f36c2f757e22283ea60f887c03f7a5141823c3543a230d5694aae29e84e3",
+      "operation": "M",
+      "sha256": "929470bd3302a968cd28d2c7afbcdcd503cafa21ccf8dc934ce8ecbe250a229a",
+      "text_lf": true
+    },
+    "ci/people_bulk_maintenance.py": {
+      "before_sha256": "a8c435a6670d0e2e165569566b6bf079e1eba49a6f9e697462edcca8b880c40f",
+      "operation": "M",
+      "sha256": "e6f0ed2e679194eb18fc93b0493daa69b6dd1170793efb3f02c96850e3afbe9c",
+      "text_lf": true
+    },
+    "ci/people_collection_maintenance.py": {
+      "before_sha256": "6d858ad3f444f33da5fec7a719a5158c5d280aeda6c93f3757f6e341351b1630",
+      "operation": "M",
+      "sha256": "6c36970120b28bc37132466eb07c187e729b461d8c462c87bda26dea848c2696",
+      "text_lf": true
+    },
+    "ci/people_readme_maintenance.py": {
+      "before_sha256": "e10105cfe24ca2fb8dbd78b2e81894b5dd05f923581f7a754bfc590f2a936fbb",
+      "operation": "M",
+      "sha256": "f774f23ba259b3749507ed28f3181e9fe1def540b8ee706ff9da752d1da8bf90",
+      "text_lf": true
+    },
+    "ci/people_unicode_profile.py": {
+      "before_sha256": null,
+      "operation": "A",
+      "sha256": "7f58d1beb61b75aa196c268c5d3d955d4f63a4c001cc94ab7389ce795057e3b0",
+      "text_lf": true
+    },
+    "ci/unicode_tests/test_people_unicode_maintenance.py": {
+      "before_sha256": null,
+      "operation": "A",
+      "sha256": "3bd726207ff736ba1301a6bd1226745784fff9385f468319de07a1edd0249d94",
+      "text_lf": true
+    },
+    "ci/validation.py": {
+      "before_sha256": "10f1c45e661e5f2446d9b7bc23c980b6bd0118782d5e5284e363c107618a2732",
+      "operation": "M",
+      "sha256": "1551daf63c34b870666c8af93c6c0c3458a3de9a7e9b9db3747cc7a98ed88f25",
+      "text_lf": true
+    }
+  },
+  "publication_authorized": false,
+  "purpose": "EXACT-CI-REGISTRATION-NO-RUNTIME-AUTHORITY",
+  "source_receipt_sha256": "6437d0994153e168fc182a4d05c1226e4ca90812340ab5f54d50a99752233a2b",
+  "version": 1
+}

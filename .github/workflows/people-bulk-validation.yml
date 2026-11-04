@@ -15,10 +15,17 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha }}
-      - name: Verify additive bulk scope and unchanged historical provenance
-        run: python -m unittest discover -s ci/bulk_tests -v
+      - name: Verify exact Unicode successor, current provenance and tamper controls
+        run: python -m unittest discover -s ci/unicode_tests -v
+      - name: Retain the independently qualified historical bulk profile
+        run: |
+          git worktree add --detach "$RUNNER_TEMP/people-pr63" 05ea93ba4b75a6c8fbd3755bdf817cb6c8485338
+          cd "$RUNNER_TEMP/people-pr63"
+          python -m unittest discover -s ci/bulk_tests -v
+          docker build --target test -t people-bulk-jost-tests -f create_people_posters/bulk/Dockerfile .
+          docker run --rm --network none --cpus 4 --memory 8g --read-only --tmpfs /tmp:rw,size=4g,mode=1777 people-bulk-jost-tests
       - name: Build isolated test image
-        run: docker build --target test -t people-bulk-tests -f create_people_posters/bulk/Dockerfile .
+        run: docker build --target unicode-test -t people-bulk-tests -f create_people_posters/bulk/Dockerfile .
       - name: Run offline rendering, sync, validation and publication-safety fixtures
         run: docker run --rm --network none --cpus 4 --memory 8g --read-only --tmpfs /tmp:rw,size=4g,mode=1777 people-bulk-tests
       - name: Build production image without publishing it

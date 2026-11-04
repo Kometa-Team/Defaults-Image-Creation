@@ -33,6 +33,9 @@ def release_files(root):
 def verify_release(root,path):
     root=Path(root);reject_links(path)
     value=json.loads(Path(path).read_text(encoding='utf8'))
+    if value.get('version') == 3:
+        from unicode_runtime import verify_release as verify_unicode_release
+        return verify_unicode_release(root,path)
     if value.get('version') not in {1,2} or value.get('renderer_commit')!='fe59024c53f1bb50cd55d1bf81a3cf8a73339512':
         raise ValueError('Unknown renderer release provenance')
     expected={p.relative_to(root).as_posix() for p in release_files(root) if p.is_file()}
@@ -71,7 +74,11 @@ def main():
     parser.add_argument('--manifest',type=Path,required=True)
     args=parser.parse_args()
     value=seal(args.root,args.manifest) if args.command=='seal' else verify_release(args.root,args.manifest)
-    print(json.dumps(dict(renderer_commit=value['renderer_commit'],verified_files=len(value['files']))))
+    if value['version']==3:
+        print(json.dumps(dict(profile=value['profile'],parent_commit=value['parent_commit'],
+                              verified_files=len(value['files']),ci_authorized=False,publication_authorized=False)))
+    else:
+        print(json.dumps(dict(renderer_commit=value['renderer_commit'],verified_files=len(value['files']))))
 
 
 if __name__=='__main__':main()

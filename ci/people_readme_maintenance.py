@@ -142,7 +142,7 @@ def verify_checkout(root=None):
     return value
 
 
-def selected_hash(name, expected):
+def _pre_unicode_selected_hash(name, expected):
     from ci.dependabot_maintenance import selected_hash as dependency_hash
     expected = dependency_hash(name, expected)
     if name not in MEMBERS:
@@ -152,6 +152,11 @@ def selected_hash(name, expected):
         return expected
     verify_checkout()
     return dependency_hash(name, binding['sha256'])
+
+
+def selected_hash(name, expected):
+    from ci.phase5_m5_maintenance import unicode_adapter
+    return unicode_adapter().selected_hash(name, _pre_unicode_selected_hash(name, expected))
 
 
 def historical_bytes(root, name, current):

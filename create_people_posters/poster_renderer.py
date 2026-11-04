@@ -16,7 +16,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 def poster_engine():
     engine = os.getenv("POSTER_ENGINE", DEFAULT_ENGINE).strip().lower() or DEFAULT_ENGINE
     if engine not in {"python", "powershell"}:
-        raise ValueError("Unknown POSTER_ENGINE; select python (Pillow) or powershell (PowerShell + ImageMagick)")
+        raise ValueError("Unknown POSTER_ENGINE; select python (Pillow) or powershell (PowerShell canonical Python bridge)")
     return engine
 
 
@@ -29,9 +29,12 @@ def poster_fingerprint(script_dir=SCRIPT_DIR):
             raise ValueError("Python poster dependencies missing; install requirements.txt in the orchestrator venv and requirements-rembg.txt in the recovery venv. No PowerShell fallback was attempted.") from error
         return renderer_fingerprint()
     script = Path(script_dir) / "create_people_poster.ps1"
-    fonts = Path(script_dir) / "fonts"
-    files = [script, *sorted(fonts.glob("*.ttf"))]
-    return {"engine": engine, "files": {str(p.resolve()): hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file() else "missing" for p in files}}
+    from create_people_poster import renderer_fingerprint
+    result = renderer_fingerprint()
+    result['engine'] = engine
+    result['backend'] = 'canonical-python-unicode-v1'
+    result['files'][str(script.resolve())] = hashlib.sha256(script.read_bytes()).hexdigest() if script.is_file() else 'missing'
+    return result
 
 
 def checkpoint_changed(state_dir, fingerprint):
@@ -89,5 +92,5 @@ def renderer_command(python, script_dir=SCRIPT_DIR, find_powershell=None):
         return [python, str(Path(script_dir) / "create_people_poster.py")]
     ps = find_powershell() if find_powershell else shutil.which("pwsh")
     if not ps:
-        raise ValueError("POSTER_ENGINE=powershell requires PowerShell and ImageMagick; install them or select POSTER_ENGINE=python")
-    return [ps, "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(Path(script_dir) / "create_people_poster.ps1")]
+        raise ValueError("POSTER_ENGINE=powershell requires PowerShell and the canonical Python dependencies; install them or select POSTER_ENGINE=python")
+    return [ps, "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(Path(script_dir) / "create_people_poster.ps1"), "-PythonExecutable", str(python)]

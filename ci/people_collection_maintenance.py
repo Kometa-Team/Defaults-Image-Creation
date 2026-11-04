@@ -144,8 +144,12 @@ def verify(root=ROOT):
     _ancestry(str(root), _head(root))
     from ci.people_readme_maintenance import _regular_files
     paths = _regular_files(root, MEMBERS | DELIVERY | set(value['frozen_files']))
+    from ci.phase5_m5_maintenance import unicode_adapter
+    successor = unicode_adapter()
+    successor.verify(root)
     for name, binding in value['files'].items():
-        if sha(paths[name].read_bytes()) != binding['sha256']:
+        current = successor.historical_bytes(root, name, paths[name].read_bytes())
+        if sha(current) != binding['sha256']:
             raise ValueError('Changed physical COLLECTION successor: ' + name)
         if sha(_committed(binding['before_commit'], name)) != binding['before_sha256']:
             raise ValueError('Changed COLLECTION predecessor: ' + name)
@@ -171,6 +175,8 @@ def selected_hash(name, expected):
 
 def historical_bytes(root, name, current):
     value = verify(root)
+    from ci.phase5_m5_maintenance import unicode_adapter
+    current = unicode_adapter().historical_bytes(root, name, current)
     binding = value['files'].get(name)
     if binding is None:
         return current
