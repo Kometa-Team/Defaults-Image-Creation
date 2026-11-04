@@ -5,7 +5,7 @@
     ".github/workflows/default-poster-validation.yml": {
       "before_sha256": "a910d48f65dcdad6fa71beaf795790e142ae749edc4a834bfeaa19d52701c923",
       "operation": "M",
-      "sha256": "4683aff64fc98dffc76334432e02d939414309dad0eebd2cccc04b7e570c9ab7",
+      "sha256": "6e142c98b533117147444fbc3b450cb34a9ee14ac3e4f76041434f87253adea2",
       "text_lf": true
     },
     ".github/workflows/dependency-provenance-validation.yml": {
@@ -50,22 +50,34 @@
       "sha256": "7f58d1beb61b75aa196c268c5d3d955d4f63a4c001cc94ab7389ce795057e3b0",
       "text_lf": true
     },
+    "ci/phase4_transactions.py": {
+      "before_sha256": "620ae24d7ff41d20080cb11623318454df4bfe6195db140872ba7f3e8a8dd15c",
+      "operation": "M",
+      "sha256": "28f9dd3a5bcb37ffd02331e3374d5c98b9bb2123eb7a788dced23e308c009950",
+      "text_lf": true
+    },
     "ci/tests/test_validation.py": {
       "before_sha256": "15f1b5cbcb2d9cdf08cbe23560052745cf40fdda5b7c13cf359af7b4bedd3fda",
       "operation": "M",
-      "sha256": "f2ae213c6384196c163a9555e6991f44e73afad5981be6be2582066aae98a94d",
+      "sha256": "e3797c7b896cc5acbf20f810a693f5777075bf591b260b2fcb10ccae93558893",
       "text_lf": true
     },
     "ci/unicode_tests/test_people_unicode_maintenance.py": {
       "before_sha256": null,
       "operation": "A",
-      "sha256": "557104e6be09ec7c1ea3cc2ce93e7ca4139b3c4b63b19715574db2d0bcd18b9a",
+      "sha256": "1d5172fc9a467931e88090b50eabdab1c230cb14fde309dcc1996e2ae97d5f95",
       "text_lf": true
     },
     "ci/validation.py": {
       "before_sha256": "10f1c45e661e5f2446d9b7bc23c980b6bd0118782d5e5284e363c107618a2732",
       "operation": "M",
       "sha256": "1551daf63c34b870666c8af93c6c0c3458a3de9a7e9b9db3747cc7a98ed88f25",
+      "text_lf": true
+    },
+    "create_defaults/phase4/tests/test_ci_foundations.py": {
+      "before_sha256": "54f37e811ceebc40d82f12106e52ef5fd02d98d5369b3d1f73f5118da0c53347",
+      "operation": "M",
+      "sha256": "87d0b0b302f490cd2bedecca7f2d8f3b84c74e1ea3a56b17a3e840d89fc50946",
       "text_lf": true
     },
     "create_people_posters/tests/test_ddcolor_colorizer.py": {

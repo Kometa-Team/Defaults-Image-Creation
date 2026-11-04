@@ -19,7 +19,7 @@ class UnicodeMaintenanceTests(unittest.TestCase):
 
     def test_exact_new_cohort_and_all_retained_provenance(self):
         adapter = self.adapter()
-        self.assertEqual(len(adapter.verify()), 34)
+        self.assertEqual(len(adapter.verify()), 36)
         for value in adapter.receipts():
             self.assertIs(value['ci_authorized'], False)
             self.assertIs(value['publication_authorized'], False)
