@@ -118,6 +118,7 @@ class GateTests(unittest.TestCase):
         for name in sorted(required):
             job = jobs[name]
             self.assertEqual(job["timeout-minutes"],
+                "${{ matrix.os == 'windows-latest' && 60 || 15 }}" if name == "phase3" else
                 "${{ matrix.group == 'foundations' && 60 || 15 }}" if name == "phase4" else
                 "${{ matrix.os == 'windows-latest' && matrix.group == 'contracts' && 60 || 15 }}" if name == "validation" else 15)
             self.assertFalse(job["strategy"]["fail-fast"])

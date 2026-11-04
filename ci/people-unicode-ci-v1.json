@@ -5,7 +5,7 @@
     ".github/workflows/default-poster-validation.yml": {
       "before_sha256": "a910d48f65dcdad6fa71beaf795790e142ae749edc4a834bfeaa19d52701c923",
       "operation": "M",
-      "sha256": "6e142c98b533117147444fbc3b450cb34a9ee14ac3e4f76041434f87253adea2",
+      "sha256": "2ef4b8bb0c5f6461be4a83eb18b7cacb28e7f823237c30af4879e07cc6ad9fca",
       "text_lf": true
     },
     ".github/workflows/dependency-provenance-validation.yml": {
@@ -59,7 +59,7 @@
     "ci/tests/test_validation.py": {
       "before_sha256": "15f1b5cbcb2d9cdf08cbe23560052745cf40fdda5b7c13cf359af7b4bedd3fda",
       "operation": "M",
-      "sha256": "e3797c7b896cc5acbf20f810a693f5777075bf591b260b2fcb10ccae93558893",
+      "sha256": "57eb6e22ff5a4695d133e4e06720e54e8e36be529ebdc61c6ecf640ad813b645",
       "text_lf": true
     },
     "ci/unicode_tests/test_people_unicode_maintenance.py": {
