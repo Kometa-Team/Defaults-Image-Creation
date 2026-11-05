@@ -19,7 +19,7 @@ class UnicodeMaintenanceTests(unittest.TestCase):
 
     def test_exact_new_cohort_and_all_retained_provenance(self):
         adapter = self.adapter()
-        self.assertEqual(len(adapter.verify()), 36)
+        self.assertEqual(len(adapter.verify()), 41)
         for value in adapter.receipts():
             self.assertIs(value['ci_authorized'], False)
             self.assertIs(value['publication_authorized'], False)
@@ -136,7 +136,7 @@ class UnicodeMaintenanceTests(unittest.TestCase):
         current = (ROOT/'ci/phase5_m5_maintenance.py').read_bytes()
         parse = lambda raw: {n.name:ast.dump(n) for n in ast.parse(raw).body if isinstance(n, ast.FunctionDef)}
         before, after = parse(old), parse(current)
-        changed = {'collection_adapter', 'bulk_adapter', 'historical_bytes', 'scope_members', 'verify_scope'}
+        changed = {'collection_adapter', 'bulk_adapter', 'historical_bytes', 'scope_members', 'verify_scope', 'verify_checkout'}
         self.assertEqual({name for name in before if before[name] != after[name]}, changed)
         self.assertEqual(m5.COLLECTION_ADAPTER_SHA256, '6d858ad3f444f33da5fec7a719a5158c5d280aeda6c93f3757f6e341351b1630')
         self.assertEqual(m5.BULK_ADAPTER_SHA256, 'a8c435a6670d0e2e165569566b6bf079e1eba49a6f9e697462edcca8b880c40f')
@@ -148,6 +148,47 @@ class UnicodeMaintenanceTests(unittest.TestCase):
             self.assertEqual(profile['name'], 'current-checkout')
         with self.assertRaises(ValueError):
             with historical_people_profile(['create_people_posters/unicode/tests']): pass
+
+
+    def test_five_windows_timeout_successors_preserve_current_and_historical_controls(self):
+        import yaml
+        targets = (
+            ('default-poster-validation.yml', 'validation', 'people'),
+            ('phase5-m4-validation.yml', 'm4', 'sequence'),
+            ('phase5-m3-validation.yml', 'm3', 'artwork'),
+            ('lifecycle-m7-validation.yml', 'm7', 'sequence'),
+            ('phase5-m5-validation.yml', 'm5', 'current'))
+        adapter = self.adapter()
+        adapter.verify()
+        for filename, job, group in targets:
+            name = '.github/workflows/' + filename
+            raw = (ROOT/name).read_bytes()
+            workflow = yaml.safe_load(raw)
+            expression = "${{ matrix.os == 'windows-latest' && matrix.group == '" + group + "' && 60 || 15 }}"
+            if job == 'validation':
+                expression = "${{ matrix.os == 'windows-latest' && (matrix.group == 'contracts' || matrix.group == 'people') && 60 || 15 }}"
+            self.assertEqual(workflow['jobs'][job]['timeout-minutes'], expression)
+            self.assertEqual(workflow['permissions'], {'contents': 'read'})
+            matrix = workflow['jobs'][job]['strategy']['matrix']
+            self.assertEqual(matrix['os'], ['ubuntu-latest', 'windows-latest'])
+            self.assertIn(group, matrix['group'])
+            self.assertFalse(workflow['jobs'][job]['strategy']['fail-fast'])
+            for candidate in workflow['jobs'].values():
+                self.assertNotIn('continue-on-error', candidate)
+                for step in candidate['steps']:
+                    if 'uses' in step:
+                        self.assertRegex(step['uses'], r'@[0-9a-f]{40}$')
+                    if step.get('uses', '').startswith('actions/checkout@'):
+                        self.assertIs(step['with']['persist-credentials'], False)
+            self.assertEqual(adapter.historical_bytes(ROOT, name, raw), adapter.predecessor(name))
+        # Existing original M5 physical-byte assertions remain mandatory after
+        # the one exact, independently hash-bound workflow projection.
+        m5.verify_checkout()
+        name = '.github/workflows/phase5-m5-validation.yml'
+        original = Path.read_bytes
+        for bad in (original(ROOT/name) + b'\n# unauthorized', adapter.predecessor(name)):
+            with patch.object(Path, 'read_bytes', lambda p: bad if p == ROOT/name else original(p)):
+                with self.assertRaises(ValueError): m5.verify_checkout()
 
 
 if __name__ == '__main__': unittest.main()

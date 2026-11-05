@@ -49,7 +49,7 @@ BULK_ADAPTER_SHA256 = 'a8c435a6670d0e2e165569566b6bf079e1eba49a6f9e697462edcca8b
 
 
 # Versioned Unicode successor pins; predecessor constants/receipts stay intact.
-UNICODE_ADAPTER_SHA256 = '4be4f8aa19e59cd27568779b58c02eb4d88efdc0fc59a2a43e9e6cb2ca92c3fc'
+UNICODE_ADAPTER_SHA256 = '9b4cf6721b2534862ea065eb96e560557c6a609ba640ee4dfc54cfc05368f350'
 UNICODE_COLLECTION_ADAPTER_SHA256 = '6c36970120b28bc37132466eb07c187e729b461d8c462c87bda26dea848c2696'
 UNICODE_BULK_ADAPTER_SHA256 = 'e6f0ed2e679194eb18fc93b0493daa69b6dd1170793efb3f02c96850e3afbe9c'
 
@@ -210,6 +210,8 @@ def verify_checkout(root=None):
     collection=collection_adapter().m5_bindings(root)
     for name,binding in value['members'].items():
         actual=paths[name].read_bytes()
+        if name=='.github/workflows/phase5-m5-validation.yml':
+            actual=unicode_adapter().historical_bytes(root,name,actual)
         if name in collection:
             approved,before=collection[name]
             if sha(actual)!=approved:raise ValueError('Changed physical COLLECTION successor: '+name)
@@ -229,6 +231,8 @@ def historical_bytes(root,name,current):
     binding=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)['members'][name]
     collection=collection_adapter().m5_bindings(root) if name in {'ci/people_job_retention_maintenance.py','ci/dependency_tests/test_phase5_m5_maintenance.py'} else {}
     actual=paths[name].read_bytes()
+    if name=='.github/workflows/phase5-m5-validation.yml':
+        actual=unicode_adapter().historical_bytes(root,name,actual)
     if name in collection:
         approved,before=collection[name]
         if sha(actual)!=approved:raise ValueError('Changed physical COLLECTION successor: '+name)

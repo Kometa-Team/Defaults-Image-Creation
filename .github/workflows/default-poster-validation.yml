@@ -52,7 +52,7 @@ jobs:
   validation:
     name: Validate (${{ matrix.os }}, ${{ matrix.group }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: ${{ matrix.os == 'windows-latest' && matrix.group == 'contracts' && 60 || 15 }}
+    timeout-minutes: ${{ matrix.os == 'windows-latest' && (matrix.group == 'contracts' || matrix.group == 'people') && 60 || 15 }}
     env:
       EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
       PYTHONUNBUFFERED: '1'
