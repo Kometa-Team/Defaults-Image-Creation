@@ -5,13 +5,19 @@
     ".github/workflows/default-poster-validation.yml": {
       "before_sha256": "a910d48f65dcdad6fa71beaf795790e142ae749edc4a834bfeaa19d52701c923",
       "operation": "M",
-      "sha256": "2ef4b8bb0c5f6461be4a83eb18b7cacb28e7f823237c30af4879e07cc6ad9fca",
+      "sha256": "5d8d7ca25ed1c5c0bc7d2e27c1415672d4528fd05be5d29fb515f9c6aa519fe1",
       "text_lf": true
     },
     ".github/workflows/dependency-provenance-validation.yml": {
       "before_sha256": "8387e873cd828405b8691a04ca4380689ad1f43f9e6c40a24424d65cc715c910",
       "operation": "M",
       "sha256": "17bf5f5048c3d17e968c298c58d908b33662b61b44c7c03df90508fd50521c67",
+      "text_lf": true
+    },
+    ".github/workflows/lifecycle-m7-validation.yml": {
+      "before_sha256": "1a8fde7076cd7266294a36f8c6242dcde83363413de8ac931babc6430ca7e3e4",
+      "operation": "M",
+      "sha256": "e158b93e2de990caadd4145e3021d0dfb4941882a7f62fc7d9a83025bfc599c0",
       "text_lf": true
     },
     ".github/workflows/people-bulk-validation.yml": {
@@ -24,6 +30,24 @@
       "before_sha256": "d750821066ccfbd620c12c7670b7ae3302dd5f214e2170514bb20baa052baab3",
       "operation": "M",
       "sha256": "09d9cd05e43142429049b2f5e02afbc3ec0b6032d68aa76eb76c26bfc248e0bd",
+      "text_lf": true
+    },
+    ".github/workflows/phase5-m3-validation.yml": {
+      "before_sha256": "f2c2e75e1fa85f36efd7a00ed3421fdd94726532186642d720000cab1d97a0a2",
+      "operation": "M",
+      "sha256": "61db64d42d810a09ed858372572afd727090ecda863ae6419fe8304207d0b4ba",
+      "text_lf": true
+    },
+    ".github/workflows/phase5-m4-validation.yml": {
+      "before_sha256": "9b918245f6ce6d31054c8d4164d10a480bdcb127b811333e10bb3943aa357e6c",
+      "operation": "M",
+      "sha256": "84bf1281f09d62e00ba5f59eb0a1a71fbf23e73a268aae257aa335e6d46ace89",
+      "text_lf": true
+    },
+    ".github/workflows/phase5-m5-validation.yml": {
+      "before_sha256": "f3b9f1384292f3186d4160bac3f280cb826fb4d4d0d9efe9c1f5f8bb5bbdff97",
+      "operation": "M",
+      "sha256": "6df3fad99aaf1a8e70ee0585b1d7b71fb1697e1f01ed6d948ff5df5986dddbca",
       "text_lf": true
     },
     "ci/people_bulk_maintenance.py": {
@@ -59,19 +83,25 @@
     "ci/tests/test_validation.py": {
       "before_sha256": "15f1b5cbcb2d9cdf08cbe23560052745cf40fdda5b7c13cf359af7b4bedd3fda",
       "operation": "M",
-      "sha256": "57eb6e22ff5a4695d133e4e06720e54e8e36be529ebdc61c6ecf640ad813b645",
+      "sha256": "4a9cc86acf36445c6c6dec71ac729c4b0258bb9861a1f5002218fbe16db12d55",
       "text_lf": true
     },
     "ci/unicode_tests/test_people_unicode_maintenance.py": {
       "before_sha256": null,
       "operation": "A",
-      "sha256": "1d5172fc9a467931e88090b50eabdab1c230cb14fde309dcc1996e2ae97d5f95",
+      "sha256": "38f81930feba9f213d7e3746d42fa415a7fa887a908068ba19355ee214373370",
       "text_lf": true
     },
     "ci/validation.py": {
       "before_sha256": "10f1c45e661e5f2446d9b7bc23c980b6bd0118782d5e5284e363c107618a2732",
       "operation": "M",
       "sha256": "1551daf63c34b870666c8af93c6c0c3458a3de9a7e9b9db3747cc7a98ed88f25",
+      "text_lf": true
+    },
+    "create_defaults/phase4/m7_tests/test_ci.py": {
+      "before_sha256": "f258419cd4cf95dede070c75a28ad3d3ec54e1e09cf5f0167b6cca3ee117ad4a",
+      "operation": "M",
+      "sha256": "5fb5f6356a59e1ed07269397106903e90fe95b075cd9b60f0377c6d60aa9e8d8",
       "text_lf": true
     },
     "create_defaults/phase4/tests/test_ci_foundations.py": {
