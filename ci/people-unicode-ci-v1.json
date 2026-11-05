@@ -107,7 +107,7 @@
     "create_defaults/phase4/tests/test_ci_foundations.py": {
       "before_sha256": "54f37e811ceebc40d82f12106e52ef5fd02d98d5369b3d1f73f5118da0c53347",
       "operation": "M",
-      "sha256": "87d0b0b302f490cd2bedecca7f2d8f3b84c74e1ea3a56b17a3e840d89fc50946",
+      "sha256": "68a9ff7ff545d5d3b8ca137efcd31a57bb6c6471ef40c28646042109944f5289",
       "text_lf": true
     },
     "create_people_posters/tests/test_ddcolor_colorizer.py": {
