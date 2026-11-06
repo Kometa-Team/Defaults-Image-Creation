@@ -1,0 +1,50 @@
+{
+  "baseline_commit": "a3c379b0681e583ec4387d83b040b504aa6bc33b",
+  "ci_authorized": false,
+  "files": {
+    ".github/workflows/people-bulk-validation.yml": {
+      "before_sha256": "929470bd3302a968cd28d2c7afbcdcd503cafa21ccf8dc934ce8ecbe250a229a",
+      "operation": "M",
+      "sha256": "82a923a22fdf27673851c62cffbe3bf56022ea6ae6f33392220090149a27876d",
+      "text_lf": true
+    },
+    "ci/publication_tests/test_publication_maintenance.py": {
+      "before_sha256": null,
+      "operation": "A",
+      "sha256": "dc19a39c1978c9e0134e14a584b778f193198f895b43339e7850ba7f49933507",
+      "text_lf": true
+    },
+    "create_people_posters/people_github.py": {
+      "before_sha256": "829da894ff9bdd6b5bc68f8d71d3c7c70dbcafb9b0b467812ac78520df11a07f",
+      "operation": "M",
+      "sha256": "c2438262e187f2438117aa39e4eebf650859ad141a8c90d29c9c32c15ac3d39a",
+      "text_lf": true
+    },
+    "create_people_posters/people_publication_state.py": {
+      "before_sha256": "b7b5a506745afe538c3cc40c2e80633d31219962fe9bb1ef7ca72e64762d87df",
+      "operation": "M",
+      "sha256": "223cff3fdb344d4187142cdecac39174a5da6b418b9b01bff3d652d0b7951a5c",
+      "text_lf": true
+    },
+    "create_people_posters/publish_people_github.py": {
+      "before_sha256": "72bc102f0c7f2fc85ed7ca635e89f9bd5ed58fd56f0fb5e1b5d1d2584c27b105",
+      "operation": "M",
+      "sha256": "6313069ff2307026a9e060667a7faed6b4ee97eb90aead4794c79c414954488c",
+      "text_lf": true
+    },
+    "create_people_posters/reliability_tests/test_publication_reliability.py": {
+      "before_sha256": null,
+      "operation": "A",
+      "sha256": "fe4c4e8731f59e71d329f4b52e34495d9af6d9ec76c29b145e733de630b582e7",
+      "text_lf": true
+    },
+    "create_people_posters/reliability_tests/test_tree_diagnostic.py": {
+      "before_sha256": null,
+      "operation": "A",
+      "sha256": "71e3d6133b3a9d4ca9aa36e2d30b086d2b36753989d2eba76810b5ad3f6d357c",
+      "text_lf": true
+    }
+  },
+  "publication_authorized": false,
+  "version": 1
+}
