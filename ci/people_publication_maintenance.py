@@ -22,6 +22,39 @@ ANCHORS = frozenset((RECEIPT, 'ci/people_publication_maintenance.py'))
 CI_TEST_LOCK = 'create_people_posters/bulk/test-requirements.lock'
 CI_TEST_LOCK_BEFORE_SHA = 'ec7e3966bf58314bf284e9bce0f0c4ab646380daed8a01bde5fcc8a243674722'
 CI_TEST_LOCK_SHA = '6536842b317555b0d34384f7bebc7a371569f2519bb90527331fae8aa64b9cc7'
+GIT_RECEIPT = 'ci/people-publication-git-v2.json'
+GIT_PIN = '8b942f48ef2f75174a58b846b2ce109cd8f8e1a47a466e4aa20a3202a2945b3a'
+GIT_MEMBERS = frozenset(('create_people_posters/publish_people_github.py',
+    'create_people_posters/people_publication_state.py', 'create_people_posters/people_git_transport.py',
+    'create_people_posters/reliability_tests/test_git_publication.py',
+    'ci/publication_tests/test_git_publication_maintenance.py',
+    'create_people_posters/people_native_operator.py',
+    'create_people_posters/reliability_tests/test_native_operator.py'))
+
+
+def git_bindings(root=ROOT):
+    """Exact additive v2; embedded v1 bytes remain bound to the immutable receipt."""
+    if Path(root).resolve() != ROOT.resolve():
+        raise ValueError('Foreign native Git policy checkout')
+    value = json.loads(regular(ROOT, GIT_RECEIPT).read_bytes())
+    if (fingerprint(value) != GIT_PIN or set(value) != {'version', 'files', 'ci_authorized', 'publication_authorized', 'historical_receipt_sha256'}
+            or value['version'] != 2 or set(value['files']) != GIT_MEMBERS
+            or value['ci_authorized'] is not False or value['publication_authorized'] is not False
+            or digest(regular(ROOT, RECEIPT).read_bytes()) != value['historical_receipt_sha256']):
+        raise ValueError('Changed exact native Git receipt or authority')
+    historical = json.loads(regular(ROOT, RECEIPT).read_bytes())['files']
+    for name, binding in value['files'].items():
+        if (set(binding) != {'operation','before_sha256','sha256','text_lf','predecessor_lf'}
+                or binding['text_lf'] is not True or digest(regular(ROOT,name).read_bytes()) != binding['sha256']):
+            raise ValueError('Changed physical native Git successor: '+name)
+        if name in historical:
+            if (binding['operation'] != 'M' or type(binding['predecessor_lf']) is not str
+                    or digest(binding['predecessor_lf'].encode()) != binding['before_sha256']
+                    or binding['before_sha256'] != historical[name]['sha256']):
+                raise ValueError('Changed native Git qualified predecessor')
+        elif binding['operation'] != 'A' or binding['before_sha256'] is not None or binding['predecessor_lf'] is not None or predecessor(name) is not None:
+            raise ValueError('Expanded native Git addition scope')
+    return value['files']
 
 
 def digest(raw):
@@ -68,14 +101,19 @@ def verify(root=ROOT):
     if (digest(regular(ROOT, CI_TEST_LOCK).read_bytes()) != CI_TEST_LOCK_SHA
             or digest(predecessor(CI_TEST_LOCK)) != CI_TEST_LOCK_BEFORE_SHA):
         raise ValueError('Changed exact Windows test dependency successor')
+    successors = git_bindings(root)
+    effective = {}
     for name, binding in value['files'].items():
         before = predecessor(name)
+        physical = regular(ROOT, name).read_bytes()
+        historical_current = successors[name]['predecessor_lf'].encode() if name in successors else physical
         if (set(binding) != {'operation', 'before_sha256', 'sha256', 'text_lf'} or binding['text_lf'] is not True
                 or binding['operation'] != ('A' if before is None else 'M')
                 or binding['before_sha256'] != (None if before is None else digest(before))
-                or digest(regular(ROOT, name).read_bytes()) != binding['sha256']):
+                or digest(historical_current) != binding['sha256']):
             raise ValueError('Changed physical publication successor: ' + name)
-    return value['files']
+        effective[name] = dict(binding, sha256=successors[name]['sha256']) if name in successors else binding
+    return effective
 
 
 def historical_bytes(root, name, current):
@@ -98,4 +136,4 @@ def selected_hash(name, expected):
 
 
 def scope_members():
-    return MEMBERS | ANCHORS | {CI_TEST_LOCK}
+    return MEMBERS | ANCHORS | GIT_MEMBERS | {GIT_RECEIPT, CI_TEST_LOCK}
