@@ -18,6 +18,10 @@ MEMBERS = frozenset(('.github/workflows/people-bulk-validation.yml',
     'create_people_posters/reliability_tests/test_tree_diagnostic.py',
     'ci/publication_tests/test_publication_maintenance.py'))
 ANCHORS = frozenset((RECEIPT, 'ci/people_publication_maintenance.py'))
+# Exact v1 dependency successor; the historical bulk receipt remains immutable.
+CI_TEST_LOCK = 'create_people_posters/bulk/test-requirements.lock'
+CI_TEST_LOCK_BEFORE_SHA = 'ec7e3966bf58314bf284e9bce0f0c4ab646380daed8a01bde5fcc8a243674722'
+CI_TEST_LOCK_SHA = '6536842b317555b0d34384f7bebc7a371569f2519bb90527331fae8aa64b9cc7'
 GIT_RECEIPT = 'ci/people-publication-git-v2.json'
 GIT_PIN = 'c94ab21b0330c22e4fea05c268ec0fa4dd9509b8409bc0c835295e690bd40b21'
 GIT_MEMBERS = frozenset(('create_people_posters/publish_people_github.py',
@@ -68,7 +72,10 @@ def git(*args):
 
 @lru_cache(maxsize=32)
 def ancestry(head):
-    git('merge-base', '--is-ancestor', BASE, head)
+    try:
+        git('merge-base', '--is-ancestor', BASE, head)
+    except subprocess.CalledProcessError:
+        raise ValueError('Cannot verify publication commit ancestry') from None
 
 
 @lru_cache(maxsize=32)
@@ -91,6 +98,9 @@ def verify(root=ROOT):
         raise ValueError('Changed exact publication reliability receipt or authority')
     from ci.people_collection_maintenance import _head
     ancestry(_head(ROOT))
+    if (digest(regular(ROOT, CI_TEST_LOCK).read_bytes()) != CI_TEST_LOCK_SHA
+            or digest(predecessor(CI_TEST_LOCK)) != CI_TEST_LOCK_BEFORE_SHA):
+        raise ValueError('Changed exact Windows test dependency successor')
     successors = git_bindings(root)
     effective = {}
     for name, binding in value['files'].items():
@@ -107,6 +117,9 @@ def verify(root=ROOT):
 
 
 def historical_bytes(root, name, current):
+    if name == CI_TEST_LOCK:
+        verify(root)
+        return predecessor(name) if digest(current) == CI_TEST_LOCK_SHA else current
     if name not in MEMBERS:
         return current
     bindings = verify(root)
@@ -123,4 +136,4 @@ def selected_hash(name, expected):
 
 
 def scope_members():
-    return MEMBERS | ANCHORS | GIT_MEMBERS | {GIT_RECEIPT}
+    return MEMBERS | ANCHORS | GIT_MEMBERS | {GIT_RECEIPT, CI_TEST_LOCK}
