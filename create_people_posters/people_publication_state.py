@@ -25,6 +25,61 @@ from people_workspaces import ID_PATTERN, atomic_json, reject_links
 
 
 class PublicationState:
+    def git_schema(self):
+        """Versioned, additive transport journal; legacy receipts/settings stay exact."""
+        self.db.execute("PRAGMA synchronous=FULL")
+        self.db.executescript("""
+          CREATE TABLE IF NOT EXISTS publication_git_controls (
+            batch TEXT, repo TEXT, approval TEXT, contract TEXT,
+            PRIMARY KEY(batch,repo,approval));
+          CREATE TABLE IF NOT EXISTS publication_git_windows (
+            batch TEXT, repo TEXT, number INTEGER, data TEXT,
+            PRIMARY KEY(batch,repo,number));
+          CREATE TABLE IF NOT EXISTS publication_git_members (
+            batch TEXT, repo TEXT, number INTEGER, position INTEGER, path TEXT, object_sha TEXT DEFAULT '',
+            PRIMARY KEY(batch,repo,number,position), UNIQUE(batch,repo,path));
+        """)
+
+    def git_window(self, batch, repo, number, data=None):
+        if data is not None:
+            if sanitize_data(data) != data:
+                raise ValueError("Unsafe native Git window metadata")
+            raw = json.dumps(data, sort_keys=True, separators=(",", ":"), allow_nan=False)
+            with self.db:
+                self.db.execute("INSERT INTO publication_git_windows VALUES (?,?,?,?) "
+                    "ON CONFLICT(batch,repo,number) DO UPDATE SET data=excluded.data", (batch, repo, number, raw))
+        row = self.db.execute("SELECT data FROM publication_git_windows WHERE batch=? AND repo=? AND number=?",
+                              (batch, repo, number)).fetchone()
+        return json.loads(row[0]) if row else None
+
+    def git_complete_window(self, batch, repo, number, window):
+        """Verified window + individual poster receipts commit in ONE transaction."""
+        if window["stage"] != "remote_verified":
+            raise ValueError("Native Git window is not remotely verified")
+        rows = self.git_members(batch, repo, number)
+        if (not rows or self.unit_binding(rows) != window["binding"]
+                or any(r["status"] == "published" for r in rows)):
+            raise ValueError("Native Git receipt membership changed")
+        value = dict(window, stage="completed", status="completed", not_before=0, error={})
+        if sanitize_data(value) != value:
+            raise ValueError("Unsafe native Git completion")
+        with self.db:
+            head = self.db.execute("SELECT head FROM publication_controls WHERE batch=? AND repo=?", (batch, repo)).fetchone()
+            current = self.git_window(batch, repo, number)
+            if not head or head[0] != window["parent"] or current != window:
+                raise ValueError("Native Git window ownership changed")
+            self.db.executemany("UPDATE publications SET status='published',commit_sha=?,last_attempt=?,error='' "
+                "WHERE batch=? AND repo=? AND path=? AND status!='published'",
+                [(window["tip"], time.time(), batch, repo, r["path"]) for r in rows])
+            self.db.execute("UPDATE publication_controls SET head=? WHERE batch=? AND repo=?", (window["tip"], batch, repo))
+            self.db.execute("UPDATE publication_git_windows SET data=? WHERE batch=? AND repo=? AND number=?",
+                (json.dumps(value, sort_keys=True, separators=(",", ":")), batch, repo, number))
+
+    def git_members(self, batch, repo, number):
+        return [dict(r) for r in self.db.execute("SELECT p.* FROM publication_git_members m JOIN publications p "
+            "ON p.batch=m.batch AND p.repo=m.repo AND p.path=m.path "
+            "WHERE m.batch=? AND m.repo=? AND m.number=? ORDER BY m.position", (batch, repo, number))]
+
     def reliability_schema(self):
         """Additive only: no legacy row, receipt or index is rewritten."""
         self.db.execute("PRAGMA synchronous=FULL")
@@ -157,6 +212,15 @@ class PublicationState:
             status = units.get(members.get(row["path"]), {}).get("status", "pending")
             key = "published" if row["status"] == "published" else "permanently_failed" if status == "permanently_failed" or row["status"] == "conflict" else status if status in {"retrying", "blocked"} else "pending"
             result[key] += 1
+        if self.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='publication_git_windows'").fetchone():
+            for (raw,) in self.db.execute("SELECT data FROM publication_git_windows WHERE batch=? AND repo=?", (batch, repo)):
+                window = json.loads(raw)
+                if window["status"] in {"retrying", "blocked"}:
+                    paths = {r[0] for r in self.db.execute("SELECT path FROM publication_git_members WHERE batch=? AND repo=? AND number=?", (batch,repo,window["number"]))}
+                    pending = sum(r["path"] in paths and r["status"] != "published" for r in self.rows(batch, repo))
+                    result["pending"] -= pending;result[window["status"]] += pending
+            result["completed_git_windows"] = sum(json.loads(r[0])["stage"] == "completed" for r in self.db.execute(
+                "SELECT data FROM publication_git_windows WHERE batch=? AND repo=?", (batch,repo)))
         return result
 
     def __init__(self, state):

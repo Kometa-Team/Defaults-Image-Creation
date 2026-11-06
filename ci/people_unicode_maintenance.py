@@ -24,7 +24,7 @@ CI_MEMBERS = frozenset(('.github/workflows/default-poster-validation.yml', '.git
 ANCHORS = frozenset((SOURCE, DELIVERY, 'ci/people_unicode_maintenance.py',
                      'ci/phase5_m5_maintenance.py'))
 
-PUBLICATION_ADAPTER_SHA256 = '8265ae8a5b40fb3ad050e5c163bde1b2bb0f6cd21d050935bc94194809992842'
+PUBLICATION_ADAPTER_SHA256 = 'e7f50482df15e80f046340299abddf118802aa0caed554fb359f0983621c9345'
 
 
 @lru_cache(maxsize=8)
@@ -139,7 +139,7 @@ def scope_members():
 
 
 def verify_scope(root, baseline, names):
-    bindings = {**verify(root), **publication_adapter().verify(root)}
+    bindings = {**verify(root), **publication_adapter().verify(root), **publication_adapter().git_bindings(root)}
     if baseline != M7_BASE or not names <= scope_members():
         raise ValueError('Unapproved Unicode scope or baseline')
     if not names:

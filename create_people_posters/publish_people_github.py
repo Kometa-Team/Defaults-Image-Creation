@@ -388,7 +388,8 @@ class Publisher:
             self.ledger.complete_unit(batch, repo, number, rows, state)
             self.checkpoint_hook("published")
 
-    def _schedule_retry(self, batch, repo, number, state, error, settings):
+    def _schedule_retry(self, batch, repo, number, state, error, settings, persist=None):
+        save = persist or (lambda value: self._save(batch, repo, number, value))
         now = self.clock()
         state["attempts"] += 1
         state["first_failure"] = state["first_failure"] or now
@@ -398,12 +399,12 @@ class Publisher:
         if (state["attempts"] >= settings["max_attempts"] or delay > settings["max_wait"]
                 or now + delay - state["first_failure"] > settings["max_elapsed"]):
             state.update(status="blocked", error=dict(category="retry_budget_exhausted"))
-            self._save(batch, repo, number, state)
+            save(state)
             raise GitHubError("Durable retry budget exhausted; preserve this unit")
         state.update(status="retrying", not_before=now + delay,
                      error=dict(category=getattr(error, "category", "unclassified"), http_status=error.status,
                                 diagnostic=getattr(error, "diagnostic", {})))
-        self._save(batch, repo, number, state)
+        save(state)
 
     def publish_reliable(self, batch, dry_run=False):
         if getattr(self.client, "sandbox", None):
@@ -477,40 +478,43 @@ class Publisher:
                                 state.update(status="blocked", error=dict(category="integrity_or_storage"))
                                 self._save(batch, repo, number, state)
                             raise
-            # Preserve existing README dispatch, approval and verification mechanisms.
-            from people_readme_publication import ReadmePublication
-            for style, repo in self.repositories.items():
-                control = self.ledger.db.execute("SELECT head FROM publication_controls WHERE batch=? AND repo=?", (batch, repo)).fetchone()
-                if self.ledger.readme_state(batch, repo)["status"] not in {"waiting", "verified"} and self.client.head(repo, self.branch)[0] != control[0]:
-                    raise GitHubError("HEAD changed before README phase", 409)
-                state = self.ledger.unit(batch, repo, "readme", [], dict(stage="readme", parent=control[0], commit=control[0]))
-                helper = ReadmePublication(_ReadmeClient(self.client), self.inventory, self.ledger, sleep=self.sleep, now=self.clock)
-                helper.timeout = float(os.getenv("PEOPLE_README_TIMEOUT", str(settings["max_elapsed"])))
-                # Keep the existing correlated dispatch/wait/recovery machinery.
-                while True:
-                    if state["status"] == "blocked":
-                        raise GitHubError("README retry budget requires operator review")
-                    while self.clock() < state["not_before"]:
-                        self.sleep(min(30, state["not_before"] - self.clock()))
+            self.publish_readme_reliable(batch, settings)
+
+    def publish_readme_reliable(self, batch, settings):
+        # Existing README logic shared verbatim by both approved transports.
+        from people_readme_publication import ReadmePublication
+        for style, repo in self.repositories.items():
+            control = self.ledger.db.execute("SELECT head FROM publication_controls WHERE batch=? AND repo=?", (batch, repo)).fetchone()
+            if self.ledger.readme_state(batch, repo)["status"] not in {"waiting", "verified"} and self.client.head(repo, self.branch)[0] != control[0]:
+                raise GitHubError("HEAD changed before README phase", 409)
+            state = self.ledger.unit(batch, repo, "readme", [], dict(stage="readme", parent=control[0], commit=control[0]))
+            helper = ReadmePublication(_ReadmeClient(self.client), self.inventory, self.ledger, sleep=self.sleep, now=self.clock)
+            helper.timeout = float(os.getenv("PEOPLE_README_TIMEOUT", str(settings["max_elapsed"])))
+            # Keep the existing correlated dispatch/wait/recovery machinery.
+            while True:
+                if state["status"] == "blocked":
+                    raise GitHubError("README retry budget requires operator review")
+                while self.clock() < state["not_before"]:
+                    self.sleep(min(30, state["not_before"] - self.clock()))
+                try:
+                    old_client = self.inventory.client
+                    self.inventory.client = helper.client
                     try:
-                        old_client = self.inventory.client
-                        self.inventory.client = helper.client
-                        try:
-                            helper.publish(batch, enabled=env_bool("UPDATE_TRIGGER_READMES", True))
-                        finally:
-                            self.inventory.client = old_client
-                        state.update(status="completed", not_before=0)
+                        helper.publish(batch, enabled=env_bool("UPDATE_TRIGGER_READMES", True))
+                    finally:
+                        self.inventory.client = old_client
+                    state.update(status="completed", not_before=0)
+                    self._save(batch, repo, "readme", state)
+                    break
+                except _ReadmePause as pause:
+                    if not getattr(pause.error, "retryable", False):
+                        state.update(status="blocked", error=dict(category=getattr(pause.error, "category", "unclassified"),
+                            http_status=pause.error.status, diagnostic=getattr(pause.error, "diagnostic", {})))
                         self._save(batch, repo, "readme", state)
-                        break
-                    except _ReadmePause as pause:
-                        if not getattr(pause.error, "retryable", False):
-                            state.update(status="blocked", error=dict(category=getattr(pause.error, "category", "unclassified"),
-                                http_status=pause.error.status, diagnostic=getattr(pause.error, "diagnostic", {})))
-                            self._save(batch, repo, "readme", state)
-                            raise pause.error
-                        self._schedule_retry(batch, repo, "readme", state, pause.error, settings)
-            if not self.ledger.verified(batch):
-                raise GitHubError("Publication and README receipts are incomplete")
+                        raise pause.error
+                    self._schedule_retry(batch, repo, "readme", state, pause.error, settings)
+        if not self.ledger.verified(batch):
+            raise GitHubError("Publication and README receipts are incomplete")
 
     def validate(self):
         for style, repo in self.repositories.items():
@@ -615,6 +619,21 @@ class Publisher:
         raise GitHubError("Concurrent branch updates exhausted retries; resume this batch later")
 
     def publish(self, batch, dry_run=False):
+        backend = os.getenv("PEOPLE_PUBLICATION_BACKEND", "rest-v1")
+        if backend == "git-v2":
+            if dry_run or not env_bool("PEOPLE_RELIABLE_PUBLISH", False):
+                raise ValueError("Native Git requires an explicitly approved reliable operation")
+            from people_git_transport import NativePublication
+            return NativePublication(self).publish(batch)
+        if backend != "rest-v1":
+            raise ValueError("Unknown publication backend")
+        if self.ledger.db.execute("SELECT 1 FROM sqlite_master WHERE name='publication_git_controls'").fetchone():
+            if self.ledger.db.execute("SELECT 1 FROM publication_git_controls WHERE batch=?", (batch,)).fetchone():
+                raise ValueError("Batch uses versioned native Git ownership; REST continuation is disabled")
+        if self.ledger.db.execute("SELECT 1 FROM sqlite_master WHERE name='publication_git_windows'").fetchone():
+            for (raw,) in self.ledger.db.execute("SELECT data FROM publication_git_windows WHERE batch=?", (batch,)):
+                if json.loads(raw)["stage"] != "completed":
+                    raise ValueError("Unresolved native Git window; use its approved recovery backend")
         if env_bool("PEOPLE_RELIABLE_PUBLISH", False):
             return self.publish_reliable(batch, dry_run)
         planned = self.ledger.rows(batch)
