@@ -24,7 +24,7 @@ CI_MEMBERS = frozenset(('.github/workflows/default-poster-validation.yml', '.git
 ANCHORS = frozenset((SOURCE, DELIVERY, 'ci/people_unicode_maintenance.py',
                      'ci/phase5_m5_maintenance.py'))
 
-PUBLICATION_ADAPTER_SHA256 = '8265ae8a5b40fb3ad050e5c163bde1b2bb0f6cd21d050935bc94194809992842'
+PUBLICATION_ADAPTER_SHA256 = '7aaeb579785844e81d90132fd98c145099764f64158a186b5f7c714293d7c49f'
 
 
 @lru_cache(maxsize=8)
