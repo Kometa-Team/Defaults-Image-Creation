@@ -18,14 +18,14 @@
     "create_people_posters/people_git_transport.py": {
       "operation": "A",
       "before_sha256": null,
-      "sha256": "2ce3aae8ebec32a0d4fd68f4092c822308f64a123e3f2c2229e4537aba1b81a4",
+      "sha256": "3827e1d4f273d121f28a2886edf8eec1d0f9026b485052c4ca48ff06527b7f60",
       "text_lf": true,
       "predecessor_lf": null
     },
     "create_people_posters/reliability_tests/test_git_publication.py": {
       "operation": "A",
       "before_sha256": null,
-      "sha256": "71c09eb76fc8b8dca40a76aee5fd67fc4cd41ff84b1b81fa3b0b0843ce1f6b24",
+      "sha256": "bab95677068c24169b90ae6a47ab780ad9755ed505d43b5e965ba60b2fc3a64b",
       "text_lf": true,
       "predecessor_lf": null
     },

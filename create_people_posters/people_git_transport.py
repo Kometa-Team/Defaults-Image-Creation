@@ -92,7 +92,7 @@ class GitTransport:
             reject_links(self.directory/name)
         need(not (self.directory/"objects/info/alternates").exists() and not (self.directory/"info/grafts").exists())
         # Refuse contaminated local configuration, helpers and promisor endpoints.
-        allowed = {"core.repositoryformatversion", "core.filemode", "core.bare", "core.ignorecase", "remote.origin.url",
+        allowed = {"core.repositoryformatversion", "core.filemode", "core.bare", "core.ignorecase", "core.symlinks", "remote.origin.url",
                    "remote.origin.promisor", "remote.origin.partialclonefilter"}
         for item in self.git("config", "--local", "--null", "--list").split(b"\0"):
             if not item:continue
@@ -102,6 +102,7 @@ class GitTransport:
             if key == "core.bare":need(value == "true")
             if key == "core.repositoryformatversion":need(value == "0")
             if key == "core.ignorecase":need(value in {"true", "false"})  # Every command overrides this for raw index paths.
+            if key == "core.symlinks":need(value == "false")  # Git init may record unavailable symlink support.
             if key == "remote.origin.promisor":need(not self.local and value == "true")
             if key == "remote.origin.partialclonefilter":need(not self.local and value == "blob:none")
 

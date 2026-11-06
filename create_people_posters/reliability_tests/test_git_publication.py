@@ -167,7 +167,13 @@ def test_integrity_and_security_rejections(tmp_path,monkeypatch,kind):
         return
     elif kind=='helper':(x.t.root/'guard.py').write_text('raise SystemExit(0)\n')
     elif kind=='object_link':
-        foreign=tmp_path/'foreign-objects';foreign.mkdir();(x.t.directory/'objects/ab').symlink_to(foreign,target_is_directory=True)
+        foreign=tmp_path/'foreign-objects';foreign.mkdir();link=x.t.directory/'objects/ab'
+        try:link.symlink_to(foreign,target_is_directory=True)
+        except OSError as error:
+            if os.name!='nt' or getattr(error,'winerror',None)!=1314:raise
+            import _winapi
+            _winapi.CreateJunction(str(foreign),str(link))
+            assert link.is_junction()
     with pytest.raises(Exception):run(x)
     assert not x.readmes
 
@@ -211,9 +217,11 @@ def test_private_askpass_pipe_and_unknown_prompt_rejection(tmp_path,monkeypatch,
     env=t.environment(network=True)
     prompt="Password for 'https://x-access-token@github.com/"+REPO+".git': "
     result=subprocess.run([sys.executable,str(t.root/'askpass.py'),prompt],capture_output=True,env=env)
-    assert result.returncode==0 and result.stdout==secret.encode()+b'\n' and not result.stderr
+    assert result.returncode==0 and result.stdout==secret.encode()+os.linesep.encode() and not result.stderr
     result=subprocess.run([sys.executable,str(t.root/'askpass.py'),"Password for 'https://evil.invalid': "],capture_output=True,env=env)
     assert result.returncode!=0 and secret.encode() not in result.stdout+result.stderr
+    fields=dict(line.split(b'=',1) for line in t.git('credential','fill',data=b'protocol=https\nhost=github.com\n\n',network=True).splitlines() if b'=' in line)
+    assert fields[b'password']==secret.encode()
     assert secret not in ''.join(capsys.readouterr())
 
 def test_retry_after_success_is_bounded_and_persisted(tmp_path,monkeypatch):
@@ -250,7 +258,7 @@ def test_receipt_transaction_rolls_back_after_mid_update_failure(tmp_path,monkey
 
 def test_noexec_workspace_is_rejected(tmp_path,monkeypatch):
     access=os.access
-    monkeypatch.setattr(os,'access',lambda p,mode:False if str(p).endswith('/pre-push') else access(p,mode))
+    monkeypatch.setattr(os,'access',lambda p,mode:False if Path(p).name=='pre-push' else access(p,mode))
     with pytest.raises(ValueError):GitTransport(tmp_path/'noexec',REPO,'master','fake-noexec-credential')
 
 def test_unknown_write_with_unavailable_outcome_never_becomes_retryable(tmp_path,monkeypatch):
@@ -370,7 +378,10 @@ def test_real_push_interrupted_during_received_pack_resumes(tmp_path,monkeypatch
                 try:ready=path.is_file() and path.stat().st_size>32768
                 except FileNotFoundError:continue
                 if ready:
-                    observed.append(True);os.kill(os.getpid(),signal.SIGINT);return
+                    observed.append(True)
+                    if os.name == "nt":signal.raise_signal(signal.SIGINT)
+                    else:os.kill(os.getpid(),signal.SIGINT)
+                    return
     thread=threading.Thread(target=interrupt_transfer,daemon=True);thread.start()
     try:
         with pytest.raises(KeyboardInterrupt):run(x)
@@ -378,3 +389,34 @@ def test_real_push_interrupted_during_received_pack_resumes(tmp_path,monkeypatch
     assert observed and windows(x)[0]['stage']=='push_intent'
     run(x);assert x.ledger.verified(BATCH)
     assert bare(x.remote,'rev-list','--count','master').strip()==b'2'
+
+
+def config_transport(tmp_path):
+    remote=tmp_path/'config-remote.git';remote.mkdir();bare(remote,'init','--bare')
+    return GitTransport(tmp_path/'config-workspace',REPO,'master','fake-config-test-credential',local_remote=remote),remote
+
+
+def test_git_init_symlink_capability_false_is_accepted(tmp_path):
+    transport,remote=config_transport(tmp_path)
+    transport.git('config','core.symlinks','false')
+    resumed=GitTransport(transport.root,REPO,'master','fake-config-test-credential',local_remote=remote)
+    assert resumed.git('config','--get','core.symlinks').strip()==b'false'
+
+
+@pytest.mark.parametrize('key,value',[
+    ('core.symlinks','true'),('core.symlinks','yes'),('core.symlinks','0'),
+    ('core.symlinks','nonsense'),('core.symlinks',''),
+    ('credential.helper','!unsafe-helper'),
+    ('http.extraHeader','AUTHORIZATION: fake-config-test-credential'),
+    ('remote.origin.url','https://evil.invalid/repository.git'),
+    ('remote.origin.pushurl','https://evil.invalid/repository.git'),
+    ('url.https://evil.invalid/.insteadOf','https://github.com/'),
+    ('core.hooksPath','unsafe-hooks'),('core.sshCommand','unsafe-helper'),
+    ('filter.unsafe.clean','unsafe-helper'),
+])
+def test_symlink_setting_does_not_expand_config_authority(tmp_path,capsys,key,value):
+    transport,remote=config_transport(tmp_path)
+    transport.git('config',key,value)
+    with pytest.raises(ValueError,match='Native Git approval, artifact or checkpoint integrity mismatch'):
+        GitTransport(transport.root,REPO,'master','fake-config-test-credential',local_remote=remote)
+    assert 'fake-config-test-credential' not in ''.join(capsys.readouterr())
