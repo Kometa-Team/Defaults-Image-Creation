@@ -113,6 +113,74 @@ def auth_token():
     return token
 
 
+
+def _report_tree_failure(response, emit=True):
+    """Emit only closed facts; never serialize provider text or exceptions."""
+    from create_people_posters.people_diagnostics import WITHHELD
+    match = re.search(r"correlation_id=([0-9a-f]{32})\]$", WITHHELD)
+    record = dict(error_code="malformed_response")
+    if match:
+        record["correlation_id"] = match.group(1)
+    status = response.status_code
+    if type(status) is int and 100 <= status <= 599:
+        record["http_status"] = status
+    else:
+        return {}
+    try:
+        if type(response.content) is not bytes or len(response.content) > 16384:
+            raise ValueError()
+        body = response.json()
+        if (type(body) is not dict or not set(body) <= {"message", "errors", "documentation_url", "status"}
+                or type(body.get("message")) is not str or len(body["message"]) > 1024):
+            raise ValueError()
+        if "documentation_url" in body and type(body["documentation_url"]) is not str:
+            raise ValueError()
+        if "status" in body and (type(body["status"]) not in (str, int) or str(body["status"]) != str(status)):
+            raise ValueError()
+        errors = body.get("errors", [])
+        if type(errors) is not list or len(errors) > 100:
+            raise ValueError()
+        safe_errors = []
+        for item in errors:
+            if (type(item) is not dict or not set(item) <= {"resource", "field", "code", "message", "value"}
+                    or type(item.get("code")) is not str
+                    or item["code"] not in {"missing", "missing_field", "invalid", "already_exists", "unprocessable", "custom"}):
+                raise ValueError()
+            safe = {"code": item["code"]}
+            for key, allowed in (("resource", {"Tree", "GitTree", "Blob"}),
+                    ("field", {"base_tree", "tree", "path", "mode", "type", "sha", "content"})):
+                if key in item:
+                    if type(item[key]) is not str or item[key] not in allowed:
+                        raise ValueError()
+                    safe[key] = item[key]
+            safe_errors.append(safe)
+        rates = {}
+        for header, field in (("X-RateLimit-Limit", "limit"), ("X-RateLimit-Remaining", "remaining"),
+                ("X-RateLimit-Used", "used"), ("X-RateLimit-Reset", "reset"), ("Retry-After", "retry_after_seconds")):
+            value = response.headers.get(header)
+            if value is not None:
+                if type(value) is not str or re.fullmatch(r"[0-9]{1,12}", value) is None:
+                    raise ValueError()
+                rates[field] = int(value)
+        code = "validation_failed" if safe_errors or body["message"].casefold() == "validation failed" else "unclassified"
+        if body["message"] in {
+                "You have exceeded a secondary rate limit. Please wait a few minutes before you try again.",
+                "You have exceeded a secondary rate limit.",
+                "You have exceeded a secondary rate limit and have been temporarily blocked from content creation. Please retry your request again later."}:
+            code = "secondary_rate_limit"
+        elif status in {403, 429} and rates.get("remaining") == 0:
+            code = "primary_rate_limit"
+        record.update(error_code=code, errors=safe_errors, rate_limit=rates)
+    except Exception:
+        # Unrecognized schemas/values retain only status and correlation ID.
+        pass
+    if sanitize_data(record) != record:
+        return {}
+    if emit:
+        _security_sys.stderr.write("[GITHUB_TREE_DIAGNOSTIC] " + json.dumps(record, sort_keys=True) + "\n")
+    return record
+
+
 class GitHubClient:
     def __init__(self, token=None, session=None, sleep=time.sleep, attempts=4):
         self.sandbox = sandbox_settings()
@@ -125,6 +193,12 @@ class GitHubClient:
         self.attempts = attempts
         self.last_write = 0.0
         self.write_interval = max(0.0, float(os.getenv("PEOPLE_GITHUB_WRITE_INTERVAL", "1")))
+        self.reliable = os.getenv("PEOPLE_RELIABLE_PUBLISH", "false").lower() in {"true", "1", "yes", "on"}
+        self.last_read = 0.0
+        if self.reliable:
+            self.write_interval = int(os.getenv("PEOPLE_GITHUB_WRITE_INTERVAL", "15"))
+            if not 15 <= self.write_interval <= 86400:
+                raise ValueError("Reliable write interval must be 15 to 86400 seconds")
         self.session.headers.update({"Authorization": "Bearer " + self.token,
                                      "Accept": "application/vnd.github+json",
                                      "X-GitHub-Api-Version": "2022-11-28"})
@@ -140,6 +214,8 @@ class GitHubClient:
                     or any(segment in {".", ".."} for segment in segments)
                     or "/".join(segments[2:4]).casefold() not in allowed):
                 raise ValueError("Sandbox transport blocked a request outside its explicit repository allowlist")
+        if self.reliable:
+            return self._reliable_request(method, path, payload)
         for attempt in range(self.attempts):
             if method != "GET":
                 delay = self.write_interval - (time.monotonic() - self.last_write)
@@ -164,6 +240,11 @@ class GitHubClient:
                         raise GitHubError("GitHub returned an incomplete JSON response; retry the operation.") from None
                     self.sleep(2 ** attempt)
                     continue
+            if method == "POST" and re.fullmatch(r"/repos/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/git/trees", path):
+                try:
+                    _report_tree_failure(response)
+                except Exception:
+                    pass  # Diagnostic failure never changes the original HTTP handling.
             rate_limited = response.status_code == 429 or (response.status_code == 403 and (
                 response.headers.get("X-RateLimit-Remaining") == "0" or "Retry-After" in response.headers
                 or "rate limit" in response.text.lower()))
@@ -189,6 +270,52 @@ class GitHubClient:
             else:
                 detail = "Request failed; check GitHub status and API limits."
             raise GitHubError(f"GitHub HTTP {status}: {detail}", status)
+
+    @staticmethod
+    def reliability_error(category, status=0, retryable=False, ambiguous=False, diagnostic=None):
+        error = GitHubError("Publication stopped: " + category, status)
+        error.category = category
+        error.retryable = retryable
+        error.ambiguous = ambiguous
+        error.diagnostic = diagnostic or {}
+        return error
+
+    def _reliable_request(self, method, path, payload):
+        """One attempt only. The durable unit controller owns every retry."""
+        read = method == "GET"
+        delay = (1.0 if read else self.write_interval) - (time.monotonic() - (self.last_read if read else self.last_write))
+        if delay > 0:
+            self.sleep(delay)
+        if read:
+            self.last_read = time.monotonic()
+        else:
+            self.last_write = time.monotonic()
+        try:
+            response = self.session.request(method, "https://api.github.com" + path,
+                json=payload, timeout=(10, 90), allow_redirects=False)
+        except requests.RequestException:
+            raise self.reliability_error("network", retryable=True, ambiguous=not read) from None
+        status = response.status_code
+        if 200 <= status < 300:
+            if status == 204:
+                return {}
+            try:
+                return response.json()
+            except ValueError:
+                raise self.reliability_error("invalid_success_response", retryable=True, ambiguous=not read) from None
+        diagnostic = _report_tree_failure(response, emit=method == "POST" and path.endswith("/git/trees"))
+        code = diagnostic.get("error_code")
+        validation = any(e.get("code") in {"missing", "missing_field", "invalid", "already_exists", "unprocessable"}
+                         for e in diagnostic.get("errors", []))
+        category = ("rate_limit" if code in {"primary_rate_limit", "secondary_rate_limit"} or status == 429 else
+                    "service" if status in {500, 502, 503, 504} else
+                    "authentication" if status == 401 else "permission" if status == 403 else
+                    "remote_conflict" if status == 409 else
+                    "validation" if status == 422 and validation else "unclassified")
+        retryable = category in {"rate_limit", "service"}
+        if category == "rate_limit" and code == "malformed_response":
+            category, retryable = "unclassified", False
+        raise self.reliability_error(category, status, retryable, not read and category == "service", diagnostic)
 
     def head(self, repo, branch):
         ref = self.request("GET", f"/repos/{repo}/git/ref/heads/{quote(branch, safe='/')}")

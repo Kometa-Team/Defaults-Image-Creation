@@ -24,6 +24,24 @@ CI_MEMBERS = frozenset(('.github/workflows/default-poster-validation.yml', '.git
 ANCHORS = frozenset((SOURCE, DELIVERY, 'ci/people_unicode_maintenance.py',
                      'ci/phase5_m5_maintenance.py'))
 
+PUBLICATION_ADAPTER_SHA256 = '8265ae8a5b40fb3ad050e5c163bde1b2bb0f6cd21d050935bc94194809992842'
+
+
+@lru_cache(maxsize=8)
+def _publication_module(raw):
+    from types import ModuleType
+    module = ModuleType('verified_people_publication_maintenance')
+    module.__file__ = str(ROOT / 'ci/people_publication_maintenance.py')
+    exec(compile(raw, module.__file__, 'exec'), module.__dict__)
+    return module
+
+
+def publication_adapter():
+    raw = regular(ROOT, 'ci/people_publication_maintenance.py').read_bytes()
+    if digest(raw) != PUBLICATION_ADAPTER_SHA256:
+        raise ValueError('Changed independently pinned publication adapter')
+    return _publication_module(raw)
+
 
 def digest(raw, text_lf=True):
     return hashlib.sha256(raw.replace(b'\r\n', b'\n') if text_lf else raw).hexdigest()
@@ -77,6 +95,8 @@ def verify(root=ROOT):
     if digest(regular(ROOT, 'ci/people_unicode_maintenance.py').read_bytes()) != UNICODE_ADAPTER_SHA256:
         raise ValueError('Changed independently pinned Unicode adapter')
     source, ci = receipts()
+    publication = publication_adapter()
+    publication.verify(root)
     from ci.people_collection_maintenance import _head
     ancestry(_head(ROOT))
     bindings = {**source['files'], **ci['files']}
@@ -89,12 +109,13 @@ def verify(root=ROOT):
         before = predecessor(name)
         if (binding['operation'] != ('A' if before is None else 'M')
                 or binding['before_sha256'] != (None if before is None else digest(before, binding['text_lf']))
-                or digest(paths[name].read_bytes(), binding['text_lf']) != binding['sha256']):
+                or digest(publication.historical_bytes(root, name, paths[name].read_bytes()), binding['text_lf']) != binding['sha256']):
             raise ValueError('Changed Unicode predecessor/successor: '+name)
     return bindings
 
 
 def historical_bytes(root, name, current):
+    current = publication_adapter().historical_bytes(root, name, current)
     if name not in SOURCE_MEMBERS | CI_MEMBERS:
         return current
     binding = verify(root)[name]
@@ -106,6 +127,7 @@ def historical_bytes(root, name, current):
 
 
 def selected_hash(name, expected):
+    expected = publication_adapter().selected_hash(name, expected)
     if name not in SOURCE_MEMBERS | CI_MEMBERS:
         return expected
     binding = verify()[name]
@@ -113,11 +135,11 @@ def selected_hash(name, expected):
 
 
 def scope_members():
-    return SOURCE_MEMBERS | CI_MEMBERS | ANCHORS
+    return SOURCE_MEMBERS | CI_MEMBERS | ANCHORS | publication_adapter().scope_members()
 
 
 def verify_scope(root, baseline, names):
-    bindings = verify(root)
+    bindings = {**verify(root), **publication_adapter().verify(root)}
     if baseline != M7_BASE or not names <= scope_members():
         raise ValueError('Unapproved Unicode scope or baseline')
     if not names:
