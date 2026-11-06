@@ -363,7 +363,9 @@ def test_missing_new_object_cannot_use_inherited_blob_exception(tmp_path,monkeyp
     x=setup(tmp_path,monkeypatch,count=3)
     x.p.checkpoint_hook=lambda stage:(_ for _ in ()).throw(Crash()) if stage=='git_object_prepared' else None
     with pytest.raises(Crash):run(x)
-    sha=x.rows[0]['blob'];(x.t.directory/'objects'/sha[:2]/sha[2:]).unlink()
+    sha=x.rows[0]['blob'];object_path=x.t.directory/'objects'/sha[:2]/sha[2:]
+    if os.name=='nt':object_path.chmod(0o600)
+    object_path.unlink()
     x.p.checkpoint_hook=lambda stage:None
     with pytest.raises(Exception):run(x)
     assert bare(x.remote,'rev-list','--count','master').strip()==b'1'

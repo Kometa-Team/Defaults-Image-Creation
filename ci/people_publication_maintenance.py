@@ -23,7 +23,7 @@ CI_TEST_LOCK = 'create_people_posters/bulk/test-requirements.lock'
 CI_TEST_LOCK_BEFORE_SHA = 'ec7e3966bf58314bf284e9bce0f0c4ab646380daed8a01bde5fcc8a243674722'
 CI_TEST_LOCK_SHA = '6536842b317555b0d34384f7bebc7a371569f2519bb90527331fae8aa64b9cc7'
 GIT_RECEIPT = 'ci/people-publication-git-v2.json'
-GIT_PIN = 'c5769496573a669ba2ef4db54195e9e76e73ef5193d049c760177aec80c5e5c1'
+GIT_PIN = '8b942f48ef2f75174a58b846b2ce109cd8f8e1a47a466e4aa20a3202a2945b3a'
 GIT_MEMBERS = frozenset(('create_people_posters/publish_people_github.py',
     'create_people_posters/people_publication_state.py', 'create_people_posters/people_git_transport.py',
     'create_people_posters/reliability_tests/test_git_publication.py',
