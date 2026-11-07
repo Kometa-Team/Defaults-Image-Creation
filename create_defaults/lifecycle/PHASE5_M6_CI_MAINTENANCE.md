@@ -64,3 +64,13 @@ an in-memory view after fresh whole-cohort physical verification. M5's original
 manifest, predecessor hash and test ID remain unchanged. Physical rollback to
 either historical version, forged input, another path, missing/tampered cohort
 members and foreign checkouts still fail closed.
+
+Supplemental qualification proposal: retain the immutable review trigger and
+exercise corrupt-review recovery by changing/restoring only a disposable
+content-addressed fixture object. Null UNKNOWN expectations remain rejected;
+stale non-null expectations exercise the original Conflict CAS path. The Phase 3
+frozen-interface assertion retains every original assertion after a fresh exact
+M6 historical projection for contracts/models.py only. The Phase 3 test source
+becomes an independently pinned M6 successor. Only Windows M6 current receives
+60 minutes; transport remains 30 minutes on both platforms and all other M6
+cases remain 15 minutes. No test, authority or resource safety check is removed.

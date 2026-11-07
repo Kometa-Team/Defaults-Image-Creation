@@ -5,7 +5,7 @@
   "members": {
     ".github/workflows/phase5-m6-validation.yml": {
       "before_sha256": null,
-      "sha256": "89d3444dd37d2a1111bc066dd63f4c0f069c4133b472925d71659f405f6d0777"
+      "sha256": "f311eb9ab628fd93cd55bbddf5b2e776798bd7cda759d609c897947135e3a02f"
     },
     "ci/dependency_maintenance.py": {
       "before_sha256": "4468fff249d0a0fa7533d8be6102284520594a0470e77968c4c45e8fc239c789",
@@ -17,7 +17,7 @@
     },
     "ci/dependency_tests/test_phase5_m6_maintenance.py": {
       "before_sha256": null,
-      "sha256": "d8a1e4d59b774e72d5b466ae8ae5058ccf6bfccf345357efbaddcb94059da6ab"
+      "sha256": "af7bb8a8e175a9d56c5923b3c01de315107c2d56e116012e627eea8499c43dcc"
     },
     "ci/phase5-m6-test-ids.json": {
       "before_sha256": null,
@@ -57,11 +57,11 @@
     },
     "create_defaults/lifecycle/PHASE5_M6_ACCEPTANCE.json": {
       "before_sha256": null,
-      "sha256": "39ad2bb7303f7dde8d7897f446180d418ea1f1d69424a33a75903513cfcb540a"
+      "sha256": "6f119f7a5f5b51025163e9a795e955d4d3f5223854bdda49b14dcdfbcfbbccc2"
     },
     "create_defaults/lifecycle/PHASE5_M6_CI_MAINTENANCE.md": {
       "before_sha256": null,
-      "sha256": "569f8c6043234cffc3d3688f343754230c6e911a1df12a7c2a5b7918a346d6c7"
+      "sha256": "cd5299221882790ae72d2399fb2a7fdca1f1fd5c869bfe9fce0483a73162698f"
     },
     "create_defaults/lifecycle/PHASE5_M6_COVERAGE.json": {
       "before_sha256": null,
@@ -97,11 +97,11 @@
     },
     "create_defaults/phase5/m6_tests/test_preservation.py": {
       "before_sha256": null,
-      "sha256": "e9772715d4f2d07cc920efc1a41c3d7b33a34c853d22787050021b5d258959e5"
+      "sha256": "558905d12f6e17269da42a12ec3b0086d3502925635f19c9580342e4a7017a16"
     },
     "create_defaults/phase5/m6_tests/test_recovery.py": {
       "before_sha256": null,
-      "sha256": "a3b07e68178d948272082eeabd1dfbec99e27b71ece17ea63a4f0dffbe03b33a"
+      "sha256": "efdc2c2cb5dcbe59a217d59454d4649b472628042fb045056256e9cf9677119f"
     },
     "create_defaults/phase5/m6_tests/test_transport.py": {
       "before_sha256": null,
@@ -125,11 +125,15 @@
     },
     "ci/phase4.py": {
       "before_sha256": "1ce5155558ffcfb4c6c9f28d0813658df52d4170a6af44022425460951ef7a1d",
-      "sha256": "2f24f810d3f7ea0e20c80df7a3a1b02a5a1c0e7a206e1603eabf04d87c2cab2e"
+      "sha256": "dae564e48195a0fe9d124ab5c12ac19e4bc61062dea823f8dbdd55b6f2506dce"
     },
     "ci/dependency_tests/test_people_job_retention_maintenance.py": {
       "before_sha256": "2955e546701a6cb6fc7fc2771952d44dbc9f26350dab21fc76b145e7eda88be6",
       "sha256": "04909acdd3e81b58cbef8631cd1fe2e9df990f65e16a00537efc6e1c05f1fb43"
+    },
+    "create_defaults/phase3/tests/test_final_phase3_acceptance.py": {
+      "before_sha256": "9d7b8f29966b7b7017c5da16ef0aaaa056459b012b8869eba316e8463530f104",
+      "sha256": "9a6539d75cac6d64a27ab21fd6fdb663f0505bafa95489f5293899c2bff0f143"
     }
   },
   "production_intersection": [
@@ -147,6 +151,7 @@
     "create_defaults/bulk/contracts/models.py",
     "create_defaults/bulk/library_stage.py",
     "create_defaults/bulk/lifecycle/models.py",
-    "create_defaults/bulk/operator_publication.py"
+    "create_defaults/bulk/operator_publication.py",
+    "create_defaults/phase3/tests/test_final_phase3_acceptance.py"
   ]
 }

@@ -11,8 +11,8 @@ ROOT=m6.ROOT
 class Phase5M6MaintenanceTests(unittest.TestCase):
     def test_eight_exact_successors_and_30_paths(self):
         value=m6.verify_checkout()
-        self.assertEqual(len(m6.MEMBERS|m6.ANCHORS),34)
-        self.assertEqual(len(m6.APPROVED),12)
+        self.assertEqual(len(m6.MEMBERS|m6.ANCHORS),35)
+        self.assertEqual(len(m6.APPROVED),13)
         for name,(old,new) in m6.APPROVED.items():
             self.assertEqual(m6.sha((ROOT/name).read_bytes()),new)
             self.assertEqual(m6.sha(m6._old(name)),old)
@@ -217,6 +217,42 @@ class Phase5M6MaintenanceTests(unittest.TestCase):
             with self.assertRaises(models.BulkError):models._json_value(chr(0xd800))
             self.assertEqual(models.ord.call_count,2)
 
+    def test_phase3_exact_projection_preserves_assertions_and_rejects_tamper(self):
+        target='create_defaults/bulk/contracts/models.py'
+        current=(ROOT/target).read_bytes()
+        before=m6._old(target)
+        self.assertEqual(m6.historical_bytes(ROOT,target,current),before)
+        original=Path.read_bytes
+        for changed in (current+b'\n# unauthorized',before):
+            def read(path):return changed if path==ROOT/target else original(path)
+            with patch.object(Path,'read_bytes',read),self.assertRaises(ValueError):
+                m6.historical_bytes(ROOT,target,current)
+        with self.assertRaises(ValueError):m6.historical_bytes(ROOT,target,b'forged')
+        path='create_defaults/phase3/tests/test_final_phase3_acceptance.py'
+        def assertions(raw):
+            function=next(n for n in ast.parse(raw).body if isinstance(n,ast.FunctionDef)
+                and n.name=='test_all_existing_phase3_ids_and_production_interfaces_are_unchanged')
+            return [ast.dump(n,include_attributes=False) for n in ast.walk(function) if isinstance(n,ast.Assert)]
+        current_assertions=assertions((ROOT/path).read_bytes())
+        for node in assertions(m6._old(path)):self.assertIn(node,current_assertions)
+
+    def test_m3_phase3_checksum_projects_exact_successor_and_rejects_tamper(self):
+        from ci import phase4
+        target='create_defaults/phase3/tests/test_final_phase3_acceptance.py'
+        expected=json.loads((ROOT/'ci/phase4-m3-maintenance.json').read_bytes())['files'][target]['sha256']
+        self.assertEqual(phase4.historical_checksum(ROOT,target),expected)
+        self.assertNotEqual(m6.sha((ROOT/target).read_bytes()),expected)
+        original=Path.read_bytes
+        for bad in (original(ROOT/target)+b'\n# unauthorized',m6._old(target)):
+            def read(path):return bad if path==ROOT/target else original(path)
+            with patch.object(Path,'read_bytes',read),self.assertRaises(ValueError):
+                phase4.historical_checksum(ROOT,target)
+        def missing(path):
+            if path==ROOT/target:raise FileNotFoundError(target)
+            return original(path)
+        with patch.object(Path,'read_bytes',missing),self.assertRaises(OSError):
+            phase4.historical_checksum(ROOT,target)
+
     def test_actual_report_requires_every_ID_phase_and_no_authority(self):
         from ci import phase5_m6 as runner
         nodes=runner.selections()['protocol'];expected=dict(head='a'*40,plan_sha256='b'*64)
@@ -245,7 +281,7 @@ class Phase5M6MaintenanceTests(unittest.TestCase):
         self.assertEqual(set(value['jobs']['m6']['strategy']['matrix']['os']),{'windows-latest','ubuntu-latest'})
         self.assertEqual(set(value['jobs']['m6']['strategy']['matrix']['group']),set(runner.GROUPS))
         for name,job in value['jobs'].items():
-            timeout="${{ matrix.group == 'transport' && 30 || 15 }}" if name=='m6' else 15
+            timeout="${{ matrix.os == 'windows-latest' && matrix.group == 'current' && 60 || matrix.group == 'transport' && 30 || 15 }}" if name=='m6' else 15
             self.assertEqual(job['timeout-minutes'],timeout)
             for step in job['steps']:
                 if 'uses' in step:self.assertRegex(step['uses'],r'@[0-9a-f]{40}$')
@@ -255,6 +291,7 @@ class Phase5M6MaintenanceTests(unittest.TestCase):
         self.assertEqual(len(contract['required_workflows']),11)
         self.assertEqual(contract['platform_groups'],{p:list(runner.GROUPS) for p in ('Windows','Linux')})
         self.assertEqual(contract['budgets']['job_timeout_minutes'],15)
+        self.assertEqual(contract['budgets']['windows_current_integration_timeout_minutes'],60)
         self.assertEqual(contract['budgets']['native_transport_integration_timeout_seconds'],1800)
         self.assertEqual(contract['budgets']['native_transport_integration_job_timeout_minutes'],30)
         self.assertEqual(contract['budgets']['native_transport_integration_group'],'transport')

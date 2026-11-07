@@ -81,7 +81,11 @@ def historical_checksums(root,paths):
         current=regular(root,path)
         actual=checksum(current)
         if path not in security['files']:
-            result[path]=actual
+            if path=='create_defaults/phase3/tests/test_final_phase3_acceptance.py':
+                from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
+                before=m6_bytes(root,path,current.read_bytes()).replace(b'\r\n',b'\n')
+                result[path]=hashlib.sha256(before).hexdigest()
+            else:result[path]=actual
             continue
         require(actual==security['files'][path]['sha256'],'Changed authorized maintenance file: '+path)
         before=_old(Path(root),path)

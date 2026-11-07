@@ -61,7 +61,13 @@ with patch.object(SidecarStore,'__init__',side_effect=AssertionError('writer')):
 def test_M6_journal_cas_and_forged_progress_fail_closed(native):
     protocol,c=connected(native);root=c.selection.registry.operations.root
     progress=DraftProgress(root,c.binding);prior=progress.read();store=SidecarStore(root)
-    with pytest.raises(Conflict):progress.append('UNKNOWN',expected=None,error=RuntimeError('x'))
+    with pytest.raises(BulkError) as invalid:
+        progress.append('UNKNOWN',expected=None,error=RuntimeError('x'))
+    assert type(invalid.value) is BulkError and invalid.value.code=='p5m6_journal_unknown'
+    assert progress.read()==prior
+    stale=dict(prior,revision=prior['revision']-1)
+    with pytest.raises(Conflict):progress.append('UNKNOWN',expected=stale,error=RuntimeError('x'))
+    assert progress.read()==prior
     for attack in ('version','increase','prepared','complete','extra'):
         value={k:v for k,v in prior.items() if k!='sha256'}
         value.update(state='UNKNOWN',revision=2,previous_sha256=prior['sha256'])
