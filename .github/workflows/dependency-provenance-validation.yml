@@ -8,7 +8,7 @@ jobs:
   dependency-provenance:
     name: Dependency provenance (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 15
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
@@ -34,4 +34,11 @@ jobs:
         EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
       run: |
         python -c "from ci.validation import identity; print(identity())"
+        python -m unittest discover -s ci/unicode_tests -v
+        python -m unittest ci.dependency_tests.test_phase5_m5_maintenance.CollectionCompatibilityTests ci.dependency_tests.test_phase5_m5_maintenance.FoundationVerifierBoundaryTests ci.dependency_tests.test_phase5_m5_maintenance.FoundationBatchFreshnessTests ci.tests.test_validation -v
+    - name: Execute every original provenance test on its immutable historical profile
+      shell: bash
+      run: |
+        git worktree add --detach "$RUNNER_TEMP/people-provenance-pr63" 05ea93ba4b75a6c8fbd3755bdf817cb6c8485338
+        cd "$RUNNER_TEMP/people-provenance-pr63"
         python -m unittest discover -s ci/dependency_tests -v

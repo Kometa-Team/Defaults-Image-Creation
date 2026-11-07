@@ -14,6 +14,9 @@ if __name__ == "__main__":
 
 
 import json
+from contextlib import contextmanager
+import hashlib
+import os
 import sqlite3
 import time
 from pathlib import Path
@@ -22,6 +25,204 @@ from people_workspaces import ID_PATTERN, atomic_json, reject_links
 
 
 class PublicationState:
+    def git_schema(self):
+        """Versioned, additive transport journal; legacy receipts/settings stay exact."""
+        self.db.execute("PRAGMA synchronous=FULL")
+        self.db.executescript("""
+          CREATE TABLE IF NOT EXISTS publication_git_controls (
+            batch TEXT, repo TEXT, approval TEXT, contract TEXT,
+            PRIMARY KEY(batch,repo,approval));
+          CREATE TABLE IF NOT EXISTS publication_git_windows (
+            batch TEXT, repo TEXT, number INTEGER, data TEXT,
+            PRIMARY KEY(batch,repo,number));
+          CREATE TABLE IF NOT EXISTS publication_git_members (
+            batch TEXT, repo TEXT, number INTEGER, position INTEGER, path TEXT, object_sha TEXT DEFAULT '',
+            PRIMARY KEY(batch,repo,number,position), UNIQUE(batch,repo,path));
+        """)
+
+    def git_window(self, batch, repo, number, data=None):
+        if data is not None:
+            if sanitize_data(data) != data:
+                raise ValueError("Unsafe native Git window metadata")
+            raw = json.dumps(data, sort_keys=True, separators=(",", ":"), allow_nan=False)
+            with self.db:
+                self.db.execute("INSERT INTO publication_git_windows VALUES (?,?,?,?) "
+                    "ON CONFLICT(batch,repo,number) DO UPDATE SET data=excluded.data", (batch, repo, number, raw))
+        row = self.db.execute("SELECT data FROM publication_git_windows WHERE batch=? AND repo=? AND number=?",
+                              (batch, repo, number)).fetchone()
+        return json.loads(row[0]) if row else None
+
+    def git_complete_window(self, batch, repo, number, window):
+        """Verified window + individual poster receipts commit in ONE transaction."""
+        if window["stage"] != "remote_verified":
+            raise ValueError("Native Git window is not remotely verified")
+        rows = self.git_members(batch, repo, number)
+        if (not rows or self.unit_binding(rows) != window["binding"]
+                or any(r["status"] == "published" for r in rows)):
+            raise ValueError("Native Git receipt membership changed")
+        value = dict(window, stage="completed", status="completed", not_before=0, error={})
+        if sanitize_data(value) != value:
+            raise ValueError("Unsafe native Git completion")
+        with self.db:
+            head = self.db.execute("SELECT head FROM publication_controls WHERE batch=? AND repo=?", (batch, repo)).fetchone()
+            current = self.git_window(batch, repo, number)
+            if not head or head[0] != window["parent"] or current != window:
+                raise ValueError("Native Git window ownership changed")
+            self.db.executemany("UPDATE publications SET status='published',commit_sha=?,last_attempt=?,error='' "
+                "WHERE batch=? AND repo=? AND path=? AND status!='published'",
+                [(window["tip"], time.time(), batch, repo, r["path"]) for r in rows])
+            self.db.execute("UPDATE publication_controls SET head=? WHERE batch=? AND repo=?", (window["tip"], batch, repo))
+            self.db.execute("UPDATE publication_git_windows SET data=? WHERE batch=? AND repo=? AND number=?",
+                (json.dumps(value, sort_keys=True, separators=(",", ":")), batch, repo, number))
+
+    def git_members(self, batch, repo, number):
+        return [dict(r) for r in self.db.execute("SELECT p.* FROM publication_git_members m JOIN publications p "
+            "ON p.batch=m.batch AND p.repo=m.repo AND p.path=m.path "
+            "WHERE m.batch=? AND m.repo=? AND m.number=? ORDER BY m.position", (batch, repo, number))]
+
+    def reliability_schema(self):
+        """Additive only: no legacy row, receipt or index is rewritten."""
+        self.db.execute("PRAGMA synchronous=FULL")
+        self.db.executescript("""
+          BEGIN IMMEDIATE;
+          CREATE TABLE IF NOT EXISTS publication_controls (
+            batch TEXT, repo TEXT, origin_head TEXT, head TEXT, settings TEXT,
+            PRIMARY KEY(batch,repo));
+          CREATE TABLE IF NOT EXISTS publication_units (
+            batch TEXT, repo TEXT, unit TEXT, binding TEXT, data TEXT,
+            PRIMARY KEY(batch,repo,unit));
+          CREATE TABLE IF NOT EXISTS publication_unit_members (
+            batch TEXT, repo TEXT, path TEXT, unit TEXT,
+            PRIMARY KEY(batch,repo,path));
+          COMMIT;
+        """)
+
+    @contextmanager
+    def publication_lock(self):
+        """Kernel-owned exclusive lock: crash releases it; never delete it."""
+        path = self.state / "publication.lock"
+        reject_links(path)
+        descriptor = os.open(path, os.O_CREAT | os.O_RDWR | getattr(os, "O_NOFOLLOW", 0), 0o600)
+        acquired = False
+        try:
+            if os.name == "nt":
+                import msvcrt
+                if os.fstat(descriptor).st_size == 0:
+                    os.write(descriptor, b"\0")
+                os.lseek(descriptor, 0, 0)
+                msvcrt.locking(descriptor, msvcrt.LK_NBLCK, 1)
+            else:
+                import fcntl
+                fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            acquired = True
+            yield
+        finally:
+            if acquired:
+                if os.name == "nt":
+                    import msvcrt
+                    os.lseek(descriptor, 0, 0)
+                    msvcrt.locking(descriptor, msvcrt.LK_UNLCK, 1)
+                else:
+                    import fcntl
+                    fcntl.flock(descriptor, fcntl.LOCK_UN)
+            os.close(descriptor)
+
+    @staticmethod
+    def unit_binding(rows):
+        keys = ("style", "repo", "path", "source", "prepared", "source_hash", "published_hash", "blob", "person", "tmdb_id")
+        value = [{key: row.get(key, "") for key in keys} for row in rows]
+        return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode()).hexdigest()
+
+    def legacy_review(self, batch, repo):
+        rows = self.rows(batch, repo)
+        value = dict(batch=batch, repo=repo, binding=self.unit_binding(rows),
+                     records=[(r["path"], r["status"], r["commit_sha"], r["last_attempt"], r["error"]) for r in rows])
+        return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode()).hexdigest()
+
+    def reliability_control(self, batch, repo, expected_head, settings, legacy_review):
+        if sanitize_data(settings) != settings:
+            raise ValueError("Unsafe reliability settings; nothing persisted")
+        raw = json.dumps(settings, sort_keys=True, separators=(",", ":"))
+        old = self.db.execute("SELECT * FROM publication_controls WHERE batch=? AND repo=?", (batch, repo)).fetchone()
+        if old:
+            if old["settings"] != raw or (expected_head and expected_head != old["origin_head"]):
+                raise ValueError("Reliability settings or approved origin changed")
+            return dict(old)
+        if not expected_head or len(expected_head) != 40 or any(c not in "0123456789abcdef" for c in expected_head):
+            raise ValueError("Reliability migration requires the explicitly reviewed expected HEAD")
+        if any(r["last_attempt"] for r in self.rows(batch, repo)) and legacy_review != self.legacy_review(batch, repo):
+            raise ValueError("Legacy attempts require an explicit matching review digest before migration")
+        with self.db:
+            self.db.execute("INSERT INTO publication_controls VALUES (?,?,?,?,?)", (batch, repo, expected_head, expected_head, raw))
+        return dict(self.db.execute("SELECT * FROM publication_controls WHERE batch=? AND repo=?", (batch, repo)).fetchone())
+
+    def unit(self, batch, repo, number, rows, initial=None):
+        binding = self.unit_binding(rows)
+        key = str(number)
+        old = self.db.execute("SELECT binding,data FROM publication_units WHERE batch=? AND repo=? AND unit=?", (batch, repo, key)).fetchone()
+        if old:
+            if old["binding"] != binding:
+                raise ValueError("Frozen publication unit changed")
+            return json.loads(old["data"])
+        if initial is None:
+            return None
+        data = dict(initial, stage=initial.get("stage", "prepared"), status="pending", done=[], intent=None,
+                    attempts=0, first_failure=0, not_before=0, error={})
+        raw = json.dumps(data, sort_keys=True, separators=(",", ":"))
+        if sanitize_data(data) != data:
+            raise ValueError("Unsafe unit metadata")
+        with self.db:
+            self.db.execute("INSERT INTO publication_units VALUES (?,?,?,?,?)", (batch, repo, key, binding, raw))
+            self.db.executemany("INSERT INTO publication_unit_members VALUES (?,?,?,?)", [(batch, repo, r["path"], key) for r in rows])
+        return data
+
+    def save_unit(self, batch, repo, number, data):
+        if sanitize_data(data) != data:
+            raise ValueError("Unsafe unit metadata")
+        with self.db:
+            result = self.db.execute("UPDATE publication_units SET data=? WHERE batch=? AND repo=? AND unit=?",
+                (json.dumps(data, sort_keys=True, separators=(",", ":")), batch, repo, str(number)))
+            if result.rowcount != 1:
+                raise ValueError("Missing publication unit")
+
+    def complete_unit(self, batch, repo, number, rows, data):
+        """Remote verification precedes one atomic ownership/receipt transition."""
+        value = dict(data, stage="published", status="completed", intent=None, not_before=0, error={})
+        if sanitize_data(value) != value:
+            raise ValueError("Unsafe unit metadata")
+        with self.db:
+            head = self.db.execute("SELECT head FROM publication_controls WHERE batch=? AND repo=?", (batch, repo)).fetchone()
+            if not head or head[0] != data["parent"]:
+                raise ValueError("Publication ownership changed")
+            # Previously completed receipts retain their exact SHA and timestamps.
+            self.db.executemany("UPDATE publications SET status='published',commit_sha=?,last_attempt=?,error='' "
+                "WHERE batch=? AND repo=? AND path=? AND status!='published'",
+                [(data["commit"], time.time(), batch, repo, r["path"]) for r in rows])
+            self.db.execute("UPDATE publication_controls SET head=? WHERE batch=? AND repo=?", (data["commit"], batch, repo))
+            self.db.execute("UPDATE publication_units SET data=? WHERE batch=? AND repo=? AND unit=?",
+                (json.dumps(value, sort_keys=True, separators=(",", ":")), batch, repo, str(number)))
+
+    def reliability_progress(self, batch, repo):
+        units = {r["unit"]: json.loads(r["data"]) for r in self.db.execute(
+            "SELECT unit,data FROM publication_units WHERE batch=? AND repo=?", (batch, repo))}
+        members = dict(self.db.execute("SELECT path,unit FROM publication_unit_members WHERE batch=? AND repo=?", (batch, repo)))
+        result = dict(published=0, pending=0, retrying=0, permanently_failed=0, blocked=0,
+                      completed_units=sum(u["status"] == "completed" for u in units.values()))
+        for row in self.rows(batch, repo):
+            status = units.get(members.get(row["path"]), {}).get("status", "pending")
+            key = "published" if row["status"] == "published" else "permanently_failed" if status == "permanently_failed" or row["status"] == "conflict" else status if status in {"retrying", "blocked"} else "pending"
+            result[key] += 1
+        if self.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='publication_git_windows'").fetchone():
+            for (raw,) in self.db.execute("SELECT data FROM publication_git_windows WHERE batch=? AND repo=?", (batch, repo)):
+                window = json.loads(raw)
+                if window["status"] in {"retrying", "blocked"}:
+                    paths = {r[0] for r in self.db.execute("SELECT path FROM publication_git_members WHERE batch=? AND repo=? AND number=?", (batch,repo,window["number"]))}
+                    pending = sum(r["path"] in paths and r["status"] != "published" for r in self.rows(batch, repo))
+                    result["pending"] -= pending;result[window["status"]] += pending
+            result["completed_git_windows"] = sum(json.loads(r[0])["stage"] == "completed" for r in self.db.execute(
+                "SELECT data FROM publication_git_windows WHERE batch=? AND repo=?", (batch,repo)))
+        return result
+
     def __init__(self, state):
         self.state = Path(state)
         reject_links(self.state)
@@ -118,6 +319,21 @@ class PublicationState:
     def export(self, batch):
         if not ID_PATTERN.fullmatch(batch):
             raise ValueError("Invalid batch identifier")
+        rows = self.rows(batch)
+        if len(rows) > 4096:
+            # Reuse the proven operator adapter's content-addressed export.
+            # Old parts remain recovery evidence; only the index is replaced.
+            chunks = []
+            for offset in range(0, len(rows), 1000):
+                value = dict(batch_id=batch, publications=rows[offset:offset + 1000])
+                digest = hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
+                name = batch + "/" + f"{offset // 1000:04d}-" + digest + ".json"
+                atomic_json(self.state / "manifests" / name, value)
+                chunks.append(dict(path=name, count=len(value["publications"])))
+            atomic_json(self.state / "manifests" / (batch + ".json"), dict(batch_id=batch,
+                publication_count=len(rows), publication_chunks=chunks,
+                readmes=[self.readme_state(batch, r["repo"]) for r in self.db.execute("SELECT repo FROM readmes WHERE batch=?", (batch,))]))
+            return
         atomic_json(self.state / "manifests" / (batch + ".json"), {
             "batch_id": batch, "publications": self.rows(batch),
             "readmes": [self.readme_state(batch, r["repo"]) for r in self.db.execute("SELECT repo FROM readmes WHERE batch=?", (batch,))],

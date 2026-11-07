@@ -22,6 +22,8 @@ import shutil
 import sys
 import time
 import uuid
+import random
+from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
 from urllib.parse import quote
 
@@ -33,6 +35,30 @@ from people_workspaces import atomic_json, reject_links
 
 def env_bool(key, default):
     return os.getenv(key, str(default)).strip().lower() in {"1", "true", "yes", "on"}
+
+
+class _ReadmePause(Exception):
+    def __init__(self, error):
+        super().__init__("Durable README transport pause")
+        self.error = error
+
+
+class _ReadmeClient:
+    """Keep existing dispatch-token recovery; interrupt before errors aggregate."""
+    def __init__(self, client):
+        self.client = client
+
+    def request(self, *args, **kwargs):
+        try:
+            return self.client.request(*args, **kwargs)
+        except GitHubError as error:
+            raise _ReadmePause(error) from None
+
+    def head(self, *args):
+        try:
+            return self.client.head(*args)
+        except GitHubError as error:
+            raise _ReadmePause(error) from None
 
 
 def file_hash(path):
@@ -157,11 +183,338 @@ def prepare(config, batch, ledger, branch):
 
 
 class Publisher:
-    def __init__(self, client, inventory, ledger, conflict_attempts=3):
+    def __init__(self, client, inventory, ledger, conflict_attempts=3, clock=time.time, sleep=time.sleep, jitter=None, checkpoint_hook=None):
         self.client, self.inventory, self.ledger = client, inventory, ledger
         self.branch = inventory.branch
         self.repositories = inventory.repositories
         self.conflict_attempts = conflict_attempts
+        self.clock, self.sleep = clock, sleep
+        self.jitter = jitter or (lambda: random.SystemRandom().uniform(0, 30))
+        self.checkpoint_hook = checkpoint_hook or (lambda stage: None)
+
+    @staticmethod
+    def git_object(kind, raw):
+        return hashlib.sha1(kind.encode() + b" " + str(len(raw)).encode() + b"\0" + raw).hexdigest()
+
+    @classmethod
+    def tree_identity(cls, entries):
+        ordered = sorted(entries, key=lambda e: e["path"].encode("utf8") + (b"/" if e["type"] == "tree" else b"\0"))
+        raw = b"".join(("40000" if e["type"] == "tree" else e["mode"]).encode() + b" " +
+            e["path"].encode("utf8") + b"\0" + bytes.fromhex(e["sha"]) for e in ordered)
+        return cls.git_object("tree", raw)
+
+    @classmethod
+    def commit_identity(cls, payload):
+        lines = ["tree " + payload["tree"]] + ["parent " + p for p in payload["parents"]]
+        for role in ("author", "committer"):
+            person = payload[role]
+            epoch = int(datetime.fromisoformat(person["date"].replace("Z", "+00:00")).timestamp())
+            lines.append(f"{role} {person['name']} <{person['email']}> {epoch} +0000")
+        return cls.git_object("commit", ("\n".join(lines) + "\n\n" + payload["message"]).encode("utf8"))
+
+    def replacement_tree(self, repo, base, updates):
+        entries = {r["path"]: dict(r) for r in self.inventory.db.execute(
+            "SELECT path,sha,type,mode FROM entries WHERE repo=? AND branch=?", (repo, self.branch))}
+        def children(folder):
+            prefix = folder + "/" if folder else ""
+            return [dict(e, path=p[len(prefix):]) for p, e in entries.items()
+                    if p.startswith(prefix) and "/" not in p[len(prefix):]]
+        if self.tree_identity(children("")) != base:
+            raise ValueError("Cached root tree identity mismatch")
+        affected = {""}
+        for entry in updates:
+            parts = entry["path"].split("/")
+            affected.update("/".join(parts[:n]) for n in range(1, len(parts)))
+        for folder in affected - {""}:
+            if folder in entries and self.tree_identity(children(folder)) != entries[folder]["sha"]:
+                raise ValueError("Cached subtree identity mismatch")
+        entries.update({e["path"]: e for e in updates})
+        for folder in sorted(affected, key=lambda p: (p.count("/"), len(p)), reverse=True):
+            identity = self.tree_identity(children(folder))
+            if not folder:
+                return identity
+            entries[folder] = dict(path=folder, mode="040000", type="tree", sha=identity)
+
+    def reliable_settings(self):
+        def number(name, default, low, high):
+            value = int(os.getenv(name, str(default)))
+            if not low <= value <= high:
+                raise ValueError("Reliability setting outside reviewed bounds")
+            return value
+        name = os.getenv("PEOPLE_PUBLICATION_AUTHOR_NAME", "Kometa People Publisher")
+        email = os.getenv("PEOPLE_PUBLICATION_AUTHOR_EMAIL", "people-publisher@users.noreply.github.com")
+        if (not name or len(name) > 100 or not email or len(email) > 200
+                or any(ord(c) < 32 or c in "<>" for c in name + email) or "@" not in email):
+            raise ValueError("Invalid explicit publication identity")
+        return dict(version=1, unit_size=50, max_attempts=number("PEOPLE_PUBLICATION_MAX_ATTEMPTS", 20, 1, 100),
+                    max_wait=number("PEOPLE_PUBLICATION_MAX_WAIT", 86400, 60, 604800),
+                    max_elapsed=number("PEOPLE_PUBLICATION_MAX_ELAPSED", 604800, 60, 2592000),
+                    author=name, email=email, write_interval=number("PEOPLE_GITHUB_WRITE_INTERVAL", 15, 15, 86400))
+
+    def _save(self, batch, repo, number, state, stage=None):
+        if stage:
+            state["stage"] = stage
+        self.ledger.save_unit(batch, repo, number, state)
+        self.checkpoint_hook(state["stage"])
+
+    def _owned_head(self, repo, state):
+        head, _ = self.client.head(repo, self.branch)
+        if head not in {state["parent"], state["commit"]}:
+            raise GitHubError("Unowned remote HEAD; publication stopped", 409)
+        return head
+
+    def _object_result(self, repo, route, expected, payload, state, batch, number):
+        # Every intent is durable BEFORE a request can reach GitHub.
+        intent = dict(route=route, expected=expected)
+        if state["intent"]:
+            if state["intent"] != intent:
+                raise ValueError("Durable write intent differs from resumed operation")
+            try:
+                found = self.client.request("GET", f"/repos/{repo}/git/{route}/{expected}")
+            except GitHubError as error:
+                if error.status != 404:
+                    raise
+            else:
+                if found.get("sha") != expected:
+                    raise ValueError("Recovered object identity mismatch")
+                return found
+        state["intent"] = intent
+        self._save(batch, repo, number, state)
+        result = self.client.request("POST", f"/repos/{repo}/git/{route}", payload)
+        if result.get("sha") != expected:
+            raise ValueError("GitHub object differs from deterministic write intent")
+        self.checkpoint_hook(route + "_ack")
+        return result
+
+    def _prepare_unit(self, batch, style, repo, number, rows, control, settings):
+        head, base = self.inventory.refresh(style)
+        if head != control["head"]:
+            raise GitHubError("Unexpected remote HEAD before unit preparation", 409)
+        updates = []
+        for row in rows:
+            if row["status"] == "conflict":
+                raise GitHubError("Existing destination conflict requires review", 409)
+            current = self.check_destination(style, row["path"])
+            actual = current["sha"] if current else None
+            if row["status"] == "published" and actual != row["blob"]:
+                raise ValueError("Previously verified destination changed")
+            if actual != row["blob"]:
+                if actual != self.ledger.baseline(batch, repo, row["path"], actual):
+                    raise GitHubError("Approved destination baseline changed", 409)
+                updates.append(dict(path=row["path"], mode="100644", type="blob", sha=row["blob"]))
+        tree = self.replacement_tree(repo, base, updates) if updates else base
+        date = datetime.fromtimestamp(int(self.clock()), timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        author = dict(name=settings["author"], email=settings["email"], date=date)
+        message = f"chore: sync posters - batch {batch} unit {number} [skip readme]\n"
+        payload = dict(tree=tree, parents=[head], message=message, author=author, committer=author)
+        state = dict(parent=head, base_tree=base, tree=tree, commit=self.commit_identity(payload) if updates else head,
+                     commit_payload=payload, updates=updates)
+        existing = self.ledger.unit(batch, repo, number, rows)
+        existing.update(state)
+        self._save(batch, repo, number, existing, "prepared")
+        return existing
+
+    def _run_unit(self, batch, style, repo, number, rows, state):
+        expected = {r["path"]: r["blob"] for r in rows}
+        if (any(set(e) != {"path", "mode", "type", "sha"} or e["mode"] != "100644" or e["type"] != "blob"
+                or expected.get(e["path"]) != e["sha"] for e in state["updates"])
+                or len({e["path"] for e in state["updates"]}) != len(state["updates"])
+                or (state["updates"] and (self.commit_identity(state["commit_payload"]) != state["commit"]
+                    or state["commit_payload"]["parents"] != [state["parent"]]
+                    or state["commit_payload"]["tree"] != state["tree"]))):
+            raise ValueError("Durable unit differs from approved content")
+        self._owned_head(repo, state)
+        wanted = {r["path"]: r for r in rows}
+        if state["stage"] == "prepared":
+            for update in state["updates"]:
+                row = wanted[update["path"]]
+                if row["blob"] in state["done"]:
+                    continue
+                path = Path(row["prepared"])
+                reject_links(path)
+                data = path.read_bytes()
+                if blob_sha(data) != row["blob"] or hashlib.sha256(data).hexdigest() != row["published_hash"]:
+                    raise ValueError("Prepared artwork identity changed")
+                source = Path(row["source"])
+                reject_links(source)
+                if source.exists() and file_hash(source) != row["source_hash"]:
+                    raise ValueError("Approved source identity changed")
+                self._object_result(repo, "blobs", row["blob"], dict(content=base64.b64encode(data).decode("ascii"), encoding="base64"), state, batch, number)
+                state["done"].append(row["blob"])
+                state["intent"] = None
+                self._save(batch, repo, number, state)
+            self._save(batch, repo, number, state, "blobs_uploaded")
+        if state["stage"] == "blobs_uploaded":
+            if state["updates"]:
+                self._object_result(repo, "trees", state["tree"], dict(base_tree=state["base_tree"], tree=state["updates"]), state, batch, number)
+            state["intent"] = None
+            self._save(batch, repo, number, state, "tree_created")
+        if state["stage"] == "tree_created":
+            if state["updates"]:
+                self._object_result(repo, "commits", state["commit"], state["commit_payload"], state, batch, number)
+            state["intent"] = None
+            self._save(batch, repo, number, state, "commit_created")
+        if state["stage"] == "commit_created":
+            state["intent"] = dict(route="ref", expected=state["commit"])
+            self._save(batch, repo, number, state)
+            head = self._owned_head(repo, state)
+            if head != state["commit"]:
+                result = self.client.request("PATCH", f"/repos/{repo}/git/refs/heads/{quote(self.branch, safe='/')}",
+                                             dict(sha=state["commit"], force=False))
+                if result.get("object", {}).get("sha") != state["commit"]:
+                    raise ValueError("GitHub did not acknowledge the owned branch update")
+                self.checkpoint_hook("ref_ack")
+            state["intent"] = None
+            self._save(batch, repo, number, state, "branch_updated")
+        if state["stage"] == "branch_updated":
+            if state["updates"]:
+                comparison = self.client.request("GET", f"/repos/{repo}/compare/{state['parent']}...{state['commit']}")
+                changed = {e["filename"]: e["sha"] for e in comparison.get("files", [])}
+                if (comparison.get("status") != "ahead" or comparison.get("total_commits") != 1
+                        or changed != {e["path"]: e["sha"] for e in state["updates"]}
+                        or any(e["status"] not in {"added", "modified"} for e in comparison["files"])):
+                    raise ValueError("Owned commit contains unapproved changes")
+            head, _ = self.inventory.refresh(style)
+            if head != state["commit"]:
+                raise GitHubError("Unexpected HEAD during remote verification", 409)
+            for row in rows:
+                actual = self.check_destination(style, row["path"])
+                if not actual or actual["sha"] != row["blob"]:
+                    raise ValueError("Remote artwork verification failed")
+            self._save(batch, repo, number, state, "remote_verified")
+        if state["stage"] == "remote_verified":
+            if self._owned_head(repo, state) != state["commit"]:
+                raise GitHubError("HEAD changed before receipt transaction", 409)
+            self.ledger.complete_unit(batch, repo, number, rows, state)
+            self.checkpoint_hook("published")
+
+    def _schedule_retry(self, batch, repo, number, state, error, settings, persist=None):
+        save = persist or (lambda value: self._save(batch, repo, number, value))
+        now = self.clock()
+        state["attempts"] += 1
+        state["first_failure"] = state["first_failure"] or now
+        rates = getattr(error, "diagnostic", {}).get("rate_limit", {})
+        delay = max(min(3600, 60 * 2 ** min(state["attempts"] - 1, 10)) + max(0, min(30, self.jitter())),
+                    rates.get("retry_after_seconds", 0), max(0, rates.get("reset", 0) - now) if rates.get("remaining") == 0 else 0)
+        if (state["attempts"] >= settings["max_attempts"] or delay > settings["max_wait"]
+                or now + delay - state["first_failure"] > settings["max_elapsed"]):
+            state.update(status="blocked", error=dict(category="retry_budget_exhausted"))
+            save(state)
+            raise GitHubError("Durable retry budget exhausted; preserve this unit")
+        state.update(status="retrying", not_before=now + delay,
+                     error=dict(category=getattr(error, "category", "unclassified"), http_status=error.status,
+                                diagnostic=getattr(error, "diagnostic", {})))
+        save(state)
+
+    def publish_reliable(self, batch, dry_run=False):
+        if getattr(self.client, "sandbox", None):
+            self.validate()
+        if dry_run:
+            raise ValueError("Reliable publication requires the existing reviewed read-only reconciliation first")
+        settings = self.reliable_settings()
+        if len(self.repositories) != 1 or {r["repo"] for r in self.ledger.rows(batch)} != set(self.repositories.values()):
+            raise ValueError("Reliable publication requires one existing reviewed repository batch")
+        with self.ledger.publication_lock():
+            self.ledger.reliability_schema()
+            for style, repo in self.repositories.items():
+                rows = self.ledger.rows(batch, repo)
+                if not rows or any(r["style"] != style or r["branch"] != self.branch for r in rows):
+                    raise ValueError("Existing batch destination or branch mismatch")
+                control = self.ledger.reliability_control(batch, repo, os.getenv("PEOPLE_PUBLICATION_EXPECTED_HEAD", ""),
+                    settings, os.getenv("PEOPLE_PUBLICATION_LEGACY_REVIEW_SHA256", ""))
+                self.client.reliable = True
+                self.client.write_interval = settings["write_interval"]
+                for offset in range(0, len(rows), settings["unit_size"]):
+                    group, number = rows[offset:offset + settings["unit_size"]], offset // settings["unit_size"]
+                    state = self.ledger.unit(batch, repo, number, group)
+                    if state is None and all(r["status"] == "published" for r in group):
+                        # Verify remote completed artwork, preserving exact old receipts.
+                        head, _ = self.inventory.refresh(style)
+                        active = [json.loads(r[0]) for r in self.ledger.db.execute("SELECT data FROM publication_units WHERE batch=? AND repo=?", (batch, repo))]
+                        allowed = {control["head"]} | {u["commit"] for u in active if u["parent"] == control["head"] and u["status"] != "completed"}
+                        if head not in allowed:
+                            raise GitHubError("Unexpected HEAD while checking legacy receipts", 409)
+                        for row in group:
+                            current = self.check_destination(style, row["path"])
+                            if not current or current["sha"] != row["blob"]:
+                                raise ValueError("Previously completed artwork changed")
+                        continue
+                    if state and state["status"] == "completed":
+                        continue
+                    if state and state["status"] in {"blocked", "permanently_failed"}:
+                        raise GitHubError("Stopped unit requires explicit operator review")
+                    if state is None:
+                        state = self.ledger.unit(batch, repo, number, group, dict(stage="preparing", parent=control["head"],
+                            commit=control["head"], tree="", base_tree="", updates=[], commit_payload={}))
+                    while True:
+                        try:
+                            if state["first_failure"] and self.clock() - state["first_failure"] > settings["max_elapsed"]:
+                                state.update(status="blocked", error=dict(category="retry_budget_exhausted"))
+                                self._save(batch, repo, number, state)
+                                raise GitHubError("Durable retry elapsed budget expired during downtime")
+                            while self.clock() < state["not_before"]:
+                                print(json.dumps(dict(event="retry_wait", unit=number, attempts=state["attempts"], not_before=state["not_before"])), flush=True)
+                                self.sleep(min(30, state["not_before"] - self.clock()))
+                            if state["stage"] == "preparing":
+                                state = self._prepare_unit(batch, style, repo, number, group, control, settings)
+                            if state["updates"] and self.ledger.readme_state(batch, repo)["status"] == "unchanged":
+                                self.ledger.readme(batch, repo, "pending")
+                            self._run_unit(batch, style, repo, number, group, state)
+                            control = dict(self.ledger.db.execute("SELECT * FROM publication_controls WHERE batch=? AND repo=?", (batch, repo)).fetchone())
+                            print(json.dumps(dict(event="unit_completed", unit=number, **self.ledger.reliability_progress(batch, repo))), flush=True)
+                            break
+                        except GitHubError as error:
+                            if state is not None and getattr(error, "retryable", False):
+                                self._schedule_retry(batch, repo, number, state, error, settings)
+                                continue
+                            if state is not None:
+                                state.update(status="permanently_failed" if getattr(error, "category", "") == "validation" else "blocked",
+                                             error=dict(category=getattr(error, "category", "unclassified"), http_status=error.status,
+                                                        diagnostic=getattr(error, "diagnostic", {})))
+                                self._save(batch, repo, number, state)
+                            raise
+                        except (OSError, ValueError):
+                            if state is not None:
+                                state.update(status="blocked", error=dict(category="integrity_or_storage"))
+                                self._save(batch, repo, number, state)
+                            raise
+            self.publish_readme_reliable(batch, settings)
+
+    def publish_readme_reliable(self, batch, settings):
+        # Existing README logic shared verbatim by both approved transports.
+        from people_readme_publication import ReadmePublication
+        for style, repo in self.repositories.items():
+            control = self.ledger.db.execute("SELECT head FROM publication_controls WHERE batch=? AND repo=?", (batch, repo)).fetchone()
+            if self.ledger.readme_state(batch, repo)["status"] not in {"waiting", "verified"} and self.client.head(repo, self.branch)[0] != control[0]:
+                raise GitHubError("HEAD changed before README phase", 409)
+            state = self.ledger.unit(batch, repo, "readme", [], dict(stage="readme", parent=control[0], commit=control[0]))
+            helper = ReadmePublication(_ReadmeClient(self.client), self.inventory, self.ledger, sleep=self.sleep, now=self.clock)
+            helper.timeout = float(os.getenv("PEOPLE_README_TIMEOUT", str(settings["max_elapsed"])))
+            # Keep the existing correlated dispatch/wait/recovery machinery.
+            while True:
+                if state["status"] == "blocked":
+                    raise GitHubError("README retry budget requires operator review")
+                while self.clock() < state["not_before"]:
+                    self.sleep(min(30, state["not_before"] - self.clock()))
+                try:
+                    old_client = self.inventory.client
+                    self.inventory.client = helper.client
+                    try:
+                        helper.publish(batch, enabled=env_bool("UPDATE_TRIGGER_READMES", True))
+                    finally:
+                        self.inventory.client = old_client
+                    state.update(status="completed", not_before=0)
+                    self._save(batch, repo, "readme", state)
+                    break
+                except _ReadmePause as pause:
+                    if not getattr(pause.error, "retryable", False):
+                        state.update(status="blocked", error=dict(category=getattr(pause.error, "category", "unclassified"),
+                            http_status=pause.error.status, diagnostic=getattr(pause.error, "diagnostic", {})))
+                        self._save(batch, repo, "readme", state)
+                        raise pause.error
+                    self._schedule_retry(batch, repo, "readme", state, pause.error, settings)
+        if not self.ledger.verified(batch):
+            raise GitHubError("Publication and README receipts are incomplete")
 
     def validate(self):
         for style, repo in self.repositories.items():
@@ -266,6 +619,23 @@ class Publisher:
         raise GitHubError("Concurrent branch updates exhausted retries; resume this batch later")
 
     def publish(self, batch, dry_run=False):
+        backend = os.getenv("PEOPLE_PUBLICATION_BACKEND", "rest-v1")
+        if backend == "git-v2":
+            if dry_run or not env_bool("PEOPLE_RELIABLE_PUBLISH", False):
+                raise ValueError("Native Git requires an explicitly approved reliable operation")
+            from people_git_transport import NativePublication
+            return NativePublication(self).publish(batch)
+        if backend != "rest-v1":
+            raise ValueError("Unknown publication backend")
+        if self.ledger.db.execute("SELECT 1 FROM sqlite_master WHERE name='publication_git_controls'").fetchone():
+            if self.ledger.db.execute("SELECT 1 FROM publication_git_controls WHERE batch=?", (batch,)).fetchone():
+                raise ValueError("Batch uses versioned native Git ownership; REST continuation is disabled")
+        if self.ledger.db.execute("SELECT 1 FROM sqlite_master WHERE name='publication_git_windows'").fetchone():
+            for (raw,) in self.ledger.db.execute("SELECT data FROM publication_git_windows WHERE batch=?", (batch,)):
+                if json.loads(raw)["stage"] != "completed":
+                    raise ValueError("Unresolved native Git window; use its approved recovery backend")
+        if env_bool("PEOPLE_RELIABLE_PUBLISH", False):
+            return self.publish_reliable(batch, dry_run)
         planned = self.ledger.rows(batch)
         if (set(row["repo"] for row in planned) != set(self.repositories.values())
                 or any(row["repo"] != self.repositories.get(row["style"]) for row in planned)):

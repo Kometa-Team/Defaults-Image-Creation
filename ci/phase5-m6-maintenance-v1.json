@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "baseline_commit": "463ba791b77c82c232aead1da218fc0ca0142868",
+  "baseline_commit": "9da96b0df12526daaee6156bc7778bbd57d9e8b6",
   "publication_authorized": false,
   "members": {
     ".github/workflows/phase5-m6-validation.yml": {
@@ -12,8 +12,8 @@
       "sha256": "107ebdfa93cfa78126c2517d95c04c73efeb0d79e7aae1124d3e152a5c7fb662"
     },
     "ci/dependency_tests/test_phase5_m5_maintenance.py": {
-      "before_sha256": "c52e04c1d57d4eccd48155a7da4c8404dc0dba7a9f7be2557e99c33bc092985c",
-      "sha256": "4eedc2312ac4a3662338eb33bf47c442c22a3f4807109efcc2267b582b90e423"
+      "before_sha256": "b24a74e41af88e3a81f27f0b7a2a58a69bccdea48075446a11bbe0bd876787fd",
+      "sha256": "2af3fe3303c86b8457d10c34553d0dbb9172071132449861026d78bf8fd19c4c"
     },
     "ci/dependency_tests/test_phase5_m6_maintenance.py": {
       "before_sha256": null,
@@ -24,8 +24,8 @@
       "sha256": "b10e1dc3baebf31c5cfc3b074b8d24ccaa83d296bb3a16588ea832c3bebd3407"
     },
     "ci/phase5_m5_maintenance.py": {
-      "before_sha256": "e58b0345ce0ee0102322480042cf6c6cf70b4cf7d0e826ed3318d9bcddd9baaa",
-      "sha256": "efca0ce6bf35d4fb2e13bf151839711c97b92cfc37c61ccf6bc549bc6da39828"
+      "before_sha256": "9b1ff0afce7318f6eaa08bb098b24444401bb49692211f2c432ac3d7a3a77c74",
+      "sha256": "f2310e95fd4d773d70cb040e05b2395ed83f07b97bb2d0519b85ca1acd05e00e"
     },
     "ci/phase5_m6.py": {
       "before_sha256": null,
@@ -57,7 +57,7 @@
     },
     "create_defaults/lifecycle/PHASE5_M6_ACCEPTANCE.json": {
       "before_sha256": null,
-      "sha256": "100aeed55f2913d1701ad638704ff01e9177b0ba77cc37c45a6410cd4218a849"
+      "sha256": "39ad2bb7303f7dde8d7897f446180d418ea1f1d69424a33a75903513cfcb540a"
     },
     "create_defaults/lifecycle/PHASE5_M6_CI_MAINTENANCE.md": {
       "before_sha256": null,
@@ -124,8 +124,8 @@
       "sha256": "f92610f30a5e67d5613c5f9f7e5a9b4272eb0afd2c12eac2a8ba2ec073ede9f9"
     },
     "ci/phase4.py": {
-      "before_sha256": "16e7c89d628f42d719a726b805b578483a76bc5f6183a6dbeed06e0609f24677",
-      "sha256": "5cb8258c49aaf66b79d755ece4235c35128d89b765d08f478c2a544185014bc1"
+      "before_sha256": "1ce5155558ffcfb4c6c9f28d0813658df52d4170a6af44022425460951ef7a1d",
+      "sha256": "2f24f810d3f7ea0e20c80df7a3a1b02a5a1c0e7a206e1603eabf04d87c2cab2e"
     },
     "ci/dependency_tests/test_people_job_retention_maintenance.py": {
       "before_sha256": "2955e546701a6cb6fc7fc2771952d44dbc9f26350dab21fc76b145e7eda88be6",

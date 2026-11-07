@@ -20,14 +20,29 @@ from PIL import Image, ImageDraw, ImageFont, ImageStat, __version__ as PILLOW_VE
 from fontTools import __version__ as FONTTOOLS_VERSION
 from fontTools.ttLib import TTLibError
 from poster_fonts import FontMetrics
+from unicode_labels import resolve_label, ReviewRequired, POLICY_SHA256, INTER_SHA256
 
 from people_workspaces import atomic_json, reject_links
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SIZE = (2000, 3000)
 STYLES = ("original", "bw", "diiivoy", "diiivoycolor", "rainier", "signature", "transparent")
-ARTWORK = ("@zbase-People.jpg", "@zbase-People-Clear2.png", "@zbase-Signature.png", "@zbase-People-Clear3.png")
-FONTS = ("Comfortaa-Medium.ttf", "Fuggles-Regular.ttf", "Jost-260.ttf", "Montserrat-SemiBold.ttf")
+COLLECTION_ARTWORK = {
+    "signature": "@zbase-Signature-no-text.png",
+    "rainier": "@zbase-People-Clear2-no-text.png",
+    "diiivoy": "@zbase-People-Clear3-no-text.png",
+    "diiivoycolor": "@zbase-People-Clear3-no-text.png",
+}
+# Keep the original resources for reference comparisons and their existing audit.
+ARTWORK = ("@zbase-People.jpg", "@zbase-People-Clear2.png", "@zbase-Signature.png", "@zbase-People-Clear3.png",
+           *dict.fromkeys(COLLECTION_ARTWORK.values()))
+FONTS = ("Comfortaa-Medium.ttf", "Fuggles-Regular.ttf", "Inter-Light.ttf", "Montserrat-SemiBold.ttf", "Montserrat-Light.ttf")
+COLLECTION_CONFIG = {
+    "signature": {"font": "Montserrat-SemiBold.ttf", "size": 92, "tracking": 12.5, "stroke": 0, "x": 643, "y": 2791},
+    "rainier": {"font": "Montserrat-Light.ttf", "size": 110, "tracking": 18.0, "stroke": 0, "x": 201, "y": 809},
+    "diiivoy": {"font": "Montserrat-SemiBold.ttf", "size": 100, "tracking": 83.0, "stroke": 1, "x": 309, "y": 2857},
+    "diiivoycolor": {"font": "Montserrat-SemiBold.ttf", "size": 100, "tracking": 83.0, "stroke": 1, "x": 309, "y": 2857},
+}
 DIIIVOY_POINT_SIZE = 190
 LOG = logging.getLogger("people.poster")
 
@@ -44,8 +59,12 @@ def resource_dirs():
 
 def renderer_fingerprint():
     assets, fonts = resource_dirs()
-    files = [Path(__file__), SCRIPT_DIR / "poster_fonts.py", *(assets / name for name in ARTWORK), *(fonts / name for name in FONTS)]
+    files = [Path(__file__), SCRIPT_DIR / "poster_fonts.py", SCRIPT_DIR / "unicode_labels.py",
+             *(assets / name for name in ARTWORK), *(fonts / name for name in FONTS),
+             *(fonts / name for name in ('OFL-Comfortaa.txt','OFL-Fuggles.txt','OFL-Inter.txt','OFL-Montserrat.txt'))]
+    import uharfbuzz
     return {"engine": "python", "pillow": PILLOW_VERSION, "fonttools": FONTTOOLS_VERSION,
+            "unicode_policy_sha256": POLICY_SHA256, "uharfbuzz": uharfbuzz.__version__,
             "files": {str(p.resolve()): digest(p) if p.is_file() else "missing" for p in files}}
 
 
@@ -99,6 +118,8 @@ class Renderer:
         for path in [*(asset_dir / n for n in ARTWORK), *(self.font_dir / n for n in FONTS)]:
             if not path.is_file():
                 raise ValueError(f"Required poster resource missing: {path}. Set POSTER_FONT_DIR/POSTER_ASSET_DIR or restore the repository assets.")
+        if digest(self.font_dir / 'Inter-Light.ttf') != INTER_SHA256:
+            raise ValueError('Inter Light differs from the approved official static weight 300 font')
         self.art = {}
         for name in ARTWORK:
             with Image.open(asset_dir / name) as image:
@@ -108,7 +129,7 @@ class Renderer:
                 self.art[name] = image.convert("RGBA")
         self.fonts = {}
         try:
-            self.metrics = {name: FontMetrics(self.font_dir / name) for name in FONTS}
+            self.metrics = {name: FontMetrics(self.font_dir / name, shaping=name == 'Inter-Light.ttf') for name in FONTS}
         except TTLibError as error:
             raise ValueError(f"Unreadable required font in {self.font_dir}: {error}") from error
         for name in FONTS:
@@ -122,6 +143,35 @@ class Renderer:
 
     def width(self, text, font, size):
         return max((self.metrics[font].positions(line, size)[1] for line in text.splitlines()), default=0)
+
+    def render_collection(self, poster, style):
+        """Composite one tracked white label, anchored by its visible ink bounds.
+
+        Keep fractional advances until Pillow rasterizes each character. Padding
+        accommodates font bearings and the artificial stroke before trimming;
+        no resizing, thresholding or filtering changes the antialiased lettering.
+        """
+        config = COLLECTION_CONFIG[style]
+        font = self.font(config["font"], config["size"])
+        text = "COLLECTION"
+        padding = config["size"] + config["stroke"]
+        advance = sum(font.getlength(character) for character in text) + config["tracking"] * (len(text) - 1)
+        layer = Image.new("RGBA", (math.ceil(advance) + padding * 2, padding * 4))
+        draw = ImageDraw.Draw(layer)
+        x = float(padding)
+        for character in text:
+            draw.text((x, padding), character, font=font, fill="white",
+                      stroke_width=config["stroke"], stroke_fill="white")
+            x += font.getlength(character) + config["tracking"]
+        ink = layer.getchannel("A").getbbox()
+        if ink is None or ink[0] == 0 or ink[1] == 0 or ink[2] == layer.width or ink[3] == layer.height:
+            raise ValueError(f"Clipped or empty COLLECTION lettering: {style}")
+        layer = layer.crop(ink)
+        x, y = config["x"], config["y"]
+        if x < 0 or y < 0 or x + layer.width > poster.width or y + layer.height > poster.height:
+            raise ValueError(f"COLLECTION lettering exceeds poster bounds: {style}")
+        poster.alpha_composite(layer, (x, y))
+        return (x, y, x + layer.width, y + layer.height)
 
     def label(self, text, font_name, box, pointsize=None, align="center", vertical="center"):
         lines = text.splitlines() or [""]
@@ -146,7 +196,7 @@ class Renderer:
             size = max(1, low - 1)
         font = self.font(font_name, size)
         ascent, descent = font.getmetrics()
-        layouts = [self.metrics[font_name].positions(line, size) for line in lines]
+        layouts = [self.metrics[font_name].layout(line, size) for line in lines]
         widths = [layout[1] for layout in layouts]
         line_height = font.font.height
         height = line_height * len(lines)
@@ -154,8 +204,8 @@ class Renderer:
         draw = ImageDraw.Draw(mask)
         for index, line in enumerate(lines):
             x = (max(widths) - widths[index]) / 2 if align == "center" else 0
-            for character, offset in layouts[index][0]:
-                draw.text((size + x + offset, size + ascent + index * line_height), character, font=font, fill="white", anchor="ls")
+            for character, offset, y_offset in layouts[index][0]:
+                draw.text((size + x + offset, size + ascent + index * line_height + y_offset), character, font=font, fill="white", anchor="ls")
         bounds = mask.getchannel("A").getbbox()
         if bounds is None:
             raise ValueError("Font produced no visible label")
@@ -166,8 +216,8 @@ class Renderer:
         result.alpha_composite(cropped, (x, y))
         return result
 
-    def bw_label(self, title):
-        font = FONTS[0]
+    def bw_label(self, title, font=None):
+        font = font or FONTS[0]
         if self.width(title, font, 183) <= 1900:
             return title, 183
         words = title.split(" ")
@@ -176,23 +226,24 @@ class Renderer:
             return title, 183 if self.width(" ".join(words[1:]), font, 183) <= 1900 else None
         return title, None
 
-    def rainier_label(self, title):
+    def rainier_label(self, title, font=None):
+        font = font or FONTS[0]
         # Match the reference's literal-space splitting and word-count cases.
         words = title.split(" ")
         if len(words) == 1:
-            return title, 183 if self.width(words[0], FONTS[0], 183) <= 1600 else None
+            return title, 183 if self.width(words[0], font, 183) <= 1600 else None
         if len(words) == 2:
-            return "\n".join(words), 183 if self.width(words[1], FONTS[0], 183) <= 1600 else None
+            return "\n".join(words), 183 if self.width(words[1], font, 183) <= 1600 else None
         if len(words) == 3:
             if "JR." in title:
                 text = words[0] + "\n" + " ".join(words[1:])
-                fitted = max(self.width(" ".join(words[1:]), FONTS[0], 183), self.width(words[0], FONTS[0], 183)) >= 1600
+                fitted = max(self.width(" ".join(words[1:]), font, 183), self.width(words[0], font, 183)) >= 1600
             else:
                 text = " ".join(words[:2]) + "\n" + words[2]
-                fitted = max(self.width(" ".join(words[:2]), FONTS[0], 183), self.width(words[2], FONTS[0], 183)) >= 1600
+                fitted = max(self.width(" ".join(words[:2]), font, 183), self.width(words[2], font, 183)) >= 1600
             return text, None if fitted else 183
         if len(words) == 4:
-            return " ".join(words[:2]) + "\n" + " ".join(words[2:]), 183 if self.width(" ".join(words[1:]), FONTS[0], 183) <= 1600 else None
+            return " ".join(words[:2]) + "\n" + " ".join(words[2:]), 183 if self.width(" ".join(words[1:]), font, 183) <= 1600 else None
         return title, None
 
     def prepare_cutout(self, source: Image.Image):
@@ -216,44 +267,78 @@ class Renderer:
         outputs = {}
         for style in styles:
             subject = gray_subject if style == "diiivoy" else color_subject
-            poster = Image.alpha_composite(Image.alpha_composite(self.art[ARTWORK[0]], subject), self.art[ARTWORK[3]])
+            poster = Image.alpha_composite(Image.alpha_composite(self.art[ARTWORK[0]], subject), self.art[COLLECTION_ARTWORK[style]])
+            self.render_collection(poster, style)
             size = DIIIVOY_POINT_SIZE if self.width(title, FONTS[2], DIIIVOY_POINT_SIZE) <= 1900 else None
             poster.alpha_composite(self.label(title, FONTS[2], (1900, 580), size), (50, 80))
             outputs[style] = poster.convert("RGB")
         return outputs
 
-    def render_styles(self, source: Image.Image, name: str, styles=("diiivoy", "diiivoycolor")):
-        styles = tuple(styles)
-        if not styles or len(set(styles)) != len(styles) or set(styles) - {"diiivoy", "diiivoycolor"}:
-            raise ValueError("Selective rendering supports only diiivoy and diiivoycolor")
-        cutout, warnings = self.prepare_cutout(source)
-        shifted = shifted_cutout(cutout)
-        return self.diiivoy_styles(cutout, shifted, label_name(name).upper(), styles), warnings
-
-    def render(self, source: Image.Image, name: str):
-        cutout, warnings = self.prepare_cutout(source)
+    def render_style(self, source, name, style, *, filename=None, prepared=None):
+        if style not in {'bw','signature','rainier','diiivoy','diiivoycolor','transparent'}:
+            raise ValueError('Unsupported poster style')
+        cutout, warnings = prepared if prepared is not None else self.prepare_cutout(source)
+        if style == 'transparent':
+            return cutout.copy(), warnings, None
+        resolution = resolve_label(name, filename or name, style, self.metrics, lettering=label_name(name.replace('_ccexpress','')))
+        text, font = resolution.display_label, resolution.font
         shifted = shifted_cutout(cutout)
         base = self.art[ARTWORK[0]]
-        color = Image.alpha_composite(base, shifted)
-        label = label_name(name)
-        title = label.upper()
-        bw_title, bw_size = self.bw_label(title)
-        outputs = {"transparent": cutout}
-        bw = gray(color).convert("RGBA")
-        bw.alpha_composite(self.label(bw_title, FONTS[0], (1900, 500), bw_size), (50, 0))
-        outputs["bw"] = bw.convert("L")
-        signature = Image.alpha_composite(Image.alpha_composite(base, cutout), self.art[ARTWORK[2]])
-        signature.alpha_composite(self.label(label, FONTS[1], (1900, 600), vertical="south"), (50, 2150))
-        outputs["signature"] = signature.convert("RGB")
-        # The reference reuses diiivoy's gray temporary when Push-Down makes
-        # no new image. Preserve that high-margin portrait quirk for parity.
-        later_subject = gray(shifted) if cutout.getchannel("A").getbbox()[1] >= 500 else shifted
-        outputs.update(self.diiivoy_styles(cutout, shifted, title, ("diiivoy", "diiivoycolor")))
-        rainier = Image.alpha_composite(Image.alpha_composite(base, later_subject), self.art[ARTWORK[1]])
-        rain_title, rain_size = self.rainier_label(title)
-        rainier.alpha_composite(self.label(rain_title, FONTS[0], (1600, 580), rain_size, align="west"), (200, 80))
-        outputs["rainier"] = rainier.convert("RGB")
-        return outputs, warnings
+        if style in {'diiivoy','diiivoycolor'}:
+            # Both styles resolve independently; original shared high-margin rule stays.
+            gray_subject = gray(shifted) if style == 'diiivoy' or cutout.getchannel('A').getbbox()[1] >= 500 else None
+            subject = gray_subject if style == 'diiivoy' or cutout.getchannel('A').getbbox()[1] >= 500 else shifted
+            image = Image.alpha_composite(Image.alpha_composite(base, subject), self.art[COLLECTION_ARTWORK[style]])
+            self.render_collection(image, style)
+            size = DIIIVOY_POINT_SIZE if self.width(text, font, DIIIVOY_POINT_SIZE) <= 1900 else None
+            image.alpha_composite(self.label(text, font, (1900,580), size), (50,80))
+            return image.convert('RGB'), warnings, resolution.record()
+        if style == 'bw':
+            title, size = self.bw_label(text,font)
+            image = gray(Image.alpha_composite(base,shifted)).convert('RGBA')
+            image.alpha_composite(self.label(title,font,(1900,500),size),(50,0))
+            return image.convert('L'), warnings, resolution.record()
+        if style == 'signature':
+            image = Image.alpha_composite(Image.alpha_composite(base,cutout),self.art[COLLECTION_ARTWORK[style]])
+            self.render_collection(image,style)
+            image.alpha_composite(self.label(text,font,(1900,600),vertical='south'),(50,2150))
+            return image.convert('RGB'), warnings, resolution.record()
+        subject = gray(shifted) if cutout.getchannel('A').getbbox()[1] >= 500 else shifted
+        image = Image.alpha_composite(Image.alpha_composite(base,subject),self.art[COLLECTION_ARTWORK[style]])
+        self.render_collection(image,style)
+        text,size = self.rainier_label(text,font)
+        image.alpha_composite(self.label(text,font,(1600,580),size,align='west'),(200,80))
+        return image.convert('RGB'), warnings, resolution.record()
+
+    def render_independent(self, source, name, styles=('bw','diiivoy','diiivoycolor','rainier','signature','transparent'), *, filename=None):
+        styles = tuple(styles)
+        if not styles or len(set(styles)) != len(styles) or set(styles)-{'bw','signature','rainier','diiivoy','diiivoycolor','transparent'}:
+            raise ValueError('Unknown or duplicate styles')
+        result = dict(outputs={}, errors={}, labels={}, warnings=[])
+        try:
+            prepared = self.prepare_cutout(source)
+        except (OSError,ValueError) as error:
+            result['errors'] = {s:dict(error=str(error),resolution_method='review-required') for s in styles}
+            return result
+        result['warnings'] = list(prepared[1])
+        for style in styles:
+            try:
+                image,warnings,label = self.render_style(source,name,style,filename=filename,prepared=prepared)
+                result['outputs'][style] = image
+                if label:result['labels'][style] = label
+            except (OSError,ValueError) as error:
+                result['errors'][style] = (error.record if isinstance(error,ReviewRequired) else dict(error=str(error),style=style))
+        return result
+
+    def render_styles(self, source, name, styles=('diiivoy','diiivoycolor')):
+        result = self.render_independent(source,name,styles)
+        if result['errors']:
+            for image in result['outputs'].values():image.close()
+            raise ValueError('Poster styles require review: '+str(result['errors']))
+        return result['outputs'],result['warnings']
+
+    def render(self, source, name):
+        return self.render_styles(source,name,('bw','signature','diiivoy','diiivoycolor','rainier','transparent'))
 
 
 def original_source(root, name):
@@ -308,7 +393,7 @@ def render_batch(config: Path, names=None):
             if (old.get("fingerprint") == fingerprint and old.get("original_hash") == native_hash
                     and source_hash in {old.get("source_hash"), old.get("transparent_hash")}
                     and all(Path(p).is_file() and digest(Path(p)) == sha for p, sha in old.get("outputs", {}).items())
-                    and len(old.get("outputs", {})) == 7):
+                    and len(old.get("outputs", {})) == 7 and not old.get("style_errors")):
                 report["skipped"] += 1
                 result["status"] = "unchanged"
             else:
@@ -316,55 +401,70 @@ def render_batch(config: Path, names=None):
                     if image.format != "PNG" or getattr(image, "n_frames", 1) != 1:
                         raise ValueError("Expected a single-frame PNG cutout")
                     image.load()
-                    outputs, warnings = renderer.render(image, clean)
-                scratch = root / "tmppeople"
-                scratch.mkdir(parents=True, exist_ok=True)
+                    rendered = renderer.render_independent(image,name,filename=name)
+                warnings = list(rendered['warnings'])
+                errors = dict(rendered['errors'])
+                if errors:
+                    from unicode_review import write_review
+                    from unicode_labels import STYLE_FONTS
+                    for style,error in errors.items():
+                        record=dict(error,original_name=name,filename=name,style=style,
+                                    font=error.get('font',STYLE_FONTS.get(style)))
+                        write_review(config/'logs/unicode-review'/hashlib.sha256(name.encode()).hexdigest()[:16]/style,record,renderer)
+                scratch = root / 'tmppeople'
+                scratch.mkdir(parents=True,exist_ok=True)
                 reject_links(scratch)
-                with tempfile.TemporaryDirectory(prefix=".poster-", dir=scratch) as temp:
-                    pending = []
-                    for style, image in outputs.items():
-                        filename = name if style == "transparent" else clean
-                        target = output_path(root, style, filename)
-                        reject_links(target)
-                        target.parent.mkdir(parents=True, exist_ok=True)
-                        staged = Path(temp) / (style + target.suffix)
-                        if style == "transparent":
-                            image.save(staged, "PNG")
-                        else:
-                            image.save(staged, "JPEG", quality=100, subsampling=0)
-                        pending.append((style, staged, target))
-                    original_target = output_path(root, "original", name, original.suffix.lower())
-                    reject_links(original_target)
-                    original_target.parent.mkdir(parents=True, exist_ok=True)
-                    staged = Path(temp) / ("original" + original.suffix.lower())
-                    shutil.copyfile(original, staged)
-                    pending.append(("original", staged, original_target))
-                    from sync_people_images import image_quality_findings
-                    for style, staged, _ in pending:
-                        blocking, notes = image_quality_findings(style, staged, allow_native_original=style == "original", allow_fixable_dimensions=style == "original")
-                        with Image.open(staged) as check:
-                            check.load()
-                            if style == "transparent" and (check.mode != "RGBA" or check.format != "PNG"):
-                                blocking.append("Transparent output must be RGBA PNG")
-                            if style not in {"transparent", "original"} and check.format != "JPEG":
-                                blocking.append("Expected JPEG output")
-                        if blocking:
-                            raise ValueError(f"{style}: {'; '.join(blocking)}")
-                        warnings.extend(notes)
-                    for _, staged, target in pending:
-                        staged.replace(target)
-                    hashes = {str(target): digest(target) for _, _, target in pending}
-                previous[name] = {"fingerprint": fingerprint, "source_hash": source_hash,
-                                  "original_hash": native_hash, "outputs": hashes,
-                                  "transparent_hash": digest(output_path(root, "transparent", name))}
-                atomic_json(state_path, previous)
-                if original != original_target:
-                    original.unlink()
-                report["processed"] += 1
-                result.update(status="rendered", warnings=sorted(set(warnings)))
-                for warning in result["warnings"]:
-                    LOG.warning("%s: %s", name, warning)
-            if source.parent in {root / "Downloads", root / "tmppeople"}:
+                original_target = output_path(root,'original',name,original.suffix.lower())
+                prior_valid = (old.get('fingerprint') == fingerprint and old.get('original_hash') == native_hash
+                    and source_hash in {old.get('source_hash'),old.get('transparent_hash')})
+                hashes = dict(old.get('outputs',{})) if prior_valid else {}
+                labels = dict(old.get('labels',{})) if prior_valid else {}
+                def persist():
+                    previous[name] = dict(fingerprint=fingerprint,source_hash=source_hash,
+                        original_hash=native_hash,outputs=hashes,labels=labels,style_errors=errors,
+                        transparent_hash=(digest(output_path(root,'transparent',name)) if output_path(root,'transparent',name).is_file() else None))
+                    atomic_json(state_path,previous)
+                from sync_people_images import image_quality_findings
+                try:
+                    with tempfile.TemporaryDirectory(prefix='.poster-',dir=scratch) as temp:
+                        candidates = [(style,image) for style,image in rendered['outputs'].items()]
+                        candidates.append(('original',None))
+                        for style,image in candidates:
+                            filename = name if style in {'transparent','original'} else clean
+                            target = output_path(root,style,filename,original.suffix.lower() if style=='original' else None)
+                            reject_links(target)
+                            if hashes.get(str(target)) and target.is_file() and digest(target)==hashes[str(target)]:
+                                continue
+                            try:
+                                staged = Path(temp)/(style+target.suffix)
+                                if style=='original':shutil.copyfile(original,staged)
+                                elif style=='transparent':image.save(staged,'PNG')
+                                else:image.save(staged,'JPEG',quality=100,subsampling=0)
+                                blocking,notes = image_quality_findings(style,staged,allow_native_original=style=='original',allow_fixable_dimensions=style=='original')
+                                with Image.open(staged) as check:
+                                    check.load()
+                                    if style=='transparent' and (check.mode!='RGBA' or check.format!='PNG'):blocking.append('Transparent output must be RGBA PNG')
+                                    if style not in {'transparent','original'} and check.format!='JPEG':blocking.append('Expected JPEG output')
+                                if blocking:raise ValueError('; '.join(blocking))
+                                target.parent.mkdir(parents=True,exist_ok=True)
+                                staged.replace(target)
+                                hashes[str(target)] = digest(target)
+                                if style in rendered['labels']:labels[style]=rendered['labels'][style]
+                                warnings.extend(notes)
+                                errors.pop(style,None)
+                            except (OSError,ValueError) as error:
+                                errors[style]=dict(style=style,error=str(error),resolution_method='review-required')
+                            persist()
+                finally:
+                    for image in rendered['outputs'].values():image.close()
+                persist()
+                result.update(status='partial' if errors else 'rendered',warnings=sorted(set(warnings)),style_errors=errors,labels=labels)
+                if errors:
+                    report['failed'] += 1
+                else:
+                    report['processed'] += 1
+                    if original != original_target:original.unlink()
+            if not result.get('style_errors') and source.parent in {root/'Downloads',root/'tmppeople'}:
                 source.unlink()
             LOG.info("%s: %s", name, result["status"])
         except (OSError, ValueError) as error:

@@ -2,7 +2,7 @@
   "version": 1,
   "kind": "phase5-m6-acceptance-contract",
   "status": "offline implementation; exact-head acceptance artifacts required",
-  "baseline": "463ba791b77c82c232aead1da218fc0ca0142868",
+  "baseline": "9da96b0df12526daaee6156bc7778bbd57d9e8b6",
   "original_baseline": "cd8d4eecd64f5bff201e8ecd7daccebd955f87af",
   "platform_groups": {
     "Windows": [
@@ -252,6 +252,7 @@
     "ci/dependency_tests/test_phase5_m5_maintenance.py",
     "ci/dependency_tests/test_phase5_m6_maintenance.py",
     "ci/people_storage_maintenance.py",
+    "ci/people_unicode_maintenance.py",
     "ci/phase4.py",
     "ci/phase5-m6-maintenance-v1.json",
     "ci/phase5-m6-test-ids.json",

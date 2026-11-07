@@ -69,3 +69,9 @@ output/
 output-orig/
 temp/
 @translations/
+
+# Private qualification evidence and local build/test artifacts are not public inputs.
+/artifacts/
+/create_people_posters/unraid/
+/create_people_posters/tests/test_unraid_bulk.py
+/people-bulk-work/

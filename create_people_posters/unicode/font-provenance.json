@@ -1,0 +1,19 @@
+{
+  "source_repository": "https://github.com/rsms/inter",
+  "source_tag": "v4.1",
+  "source_commit": "e3a3d4c57d5ecc01453a575621882a384c1995a3",
+  "archive_url": "https://github.com/rsms/inter/releases/download/v4.1/Inter-4.1.zip",
+  "archive_sha256": "9883fdd4a49d4fb66bd8177ba6625ef9a64aa45899767dde3d36aa425756b11e",
+  "archive_member": "extras/ttf/Inter-Light.ttf",
+  "font_sha256": "164414f0aacbe98a7e64addc43f7b3bfd2e32f7b90e101feeab227f14c371bda",
+  "license_sha256": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a",
+  "font_version": "Version 4.001;git-9221beed3",
+  "family": "Inter Light",
+  "subfamily": "Regular",
+  "postscript_name": "Inter-Light",
+  "weight": 300,
+  "static": true,
+  "conversion": "none; unmodified official static TTF",
+  "license": "SIL Open Font License 1.1",
+  "applied_to_repository": true
+}

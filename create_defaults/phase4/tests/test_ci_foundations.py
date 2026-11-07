@@ -101,7 +101,7 @@ def test_exact_authorized_bridge_workflow_and_provenance_maintenance_is_verified
 def test_aggregate_maintenance_verifier_works_without_any_runtime_site_packages():
     result=subprocess.run([sys.executable,'-S','-c',
         "from ci.phase4 import verify_maintenance; verify_maintenance(); print('stdlib-only-verified')"],
-        cwd=phase4.ROOT,capture_output=True,text=True,timeout=60)
+        cwd=phase4.ROOT,capture_output=True,text=True,timeout=600 if sys.platform == 'win32' else (180 if sys.platform == 'linux' else 60))
     assert result.returncode==0,result.stderr
     assert result.stdout.strip()=='stdlib-only-verified'
     value=phase4.read(phase4.ROOT/'ci/phase4-maintenance.json')

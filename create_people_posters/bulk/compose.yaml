@@ -1,0 +1,89 @@
+name: people-bulk
+x-common: &common
+  image: ${PEOPLE_IMAGE:-kometa-people-bulk:local}
+  user: "${PEOPLE_UID:-1000}:${PEOPLE_GID:-1000}"
+  read_only: true
+  restart: "no"
+  tmpfs:
+    - /tmp:rw,size=512m,mode=1777
+
+services:
+  render:
+    <<: *common
+    build:
+      context: ../..
+      dockerfile: create_people_posters/bulk/Dockerfile
+      target: release
+    network_mode: none
+    cpus: ${PEOPLE_CPUS:-4}
+    mem_limit: ${PEOPLE_MEMORY:-8g}
+    stop_grace_period: 120s
+    volumes:
+      - type: bind
+        source: ${PEOPLE_ROOT:?Set an absolute data directory outside the repository}/source/transparent
+        target: /source
+        read_only: true
+        bind: {create_host_path: false}
+      - type: bind
+        source: ${PEOPLE_ROOT}/staging
+        target: /batches
+        bind: {create_host_path: false}
+      - type: bind
+        source: ${PEOPLE_ROOT}/checkpoints/${PEOPLE_BATCH:?Set a unique batch name}
+        target: /batches/${PEOPLE_BATCH}/.bulk
+        bind: {create_host_path: false}
+    # Safe default is a bounded canary. Full mode must be requested explicitly.
+    command: ["--source", "/source", "--source-pin", "/source/.git/people-bulk-pins/${PEOPLE_PIN:?Set a registered pin ID}.json", "--output", "/batches/${PEOPLE_BATCH}", "--styles", "${PEOPLE_STYLES:-diiivoy}", "--workers", "${PEOPLE_WORKERS:-2}", "--canary", "20"]
+
+  source:
+    <<: *common
+    profiles: [tools]
+    entrypoint: [python, -B, /opt/people/create_people_posters/bulk_git_sync.py]
+    command: [status, --source, /source]
+    volumes:
+      - type: bind
+        source: ${PEOPLE_ROOT}/source
+        target: /workspace
+        bind: {create_host_path: false}
+      - type: bind
+        source: ${PEOPLE_ROOT}/source/transparent
+        target: /source
+        bind: {create_host_path: false}
+      - type: bind
+        source: ${PEOPLE_ROOT}/reports
+        target: /reports
+        bind: {create_host_path: false}
+
+  audit:
+    <<: *common
+    profiles: [tools]
+    network_mode: none
+    entrypoint: [python, -B, /opt/people/create_people_posters/bulk_source.py]
+    command: [audit, --source, /source]
+    volumes:
+      - type: bind
+        source: ${PEOPLE_ROOT}/source/transparent
+        target: /source
+        read_only: true
+        bind: {create_host_path: false}
+      - type: bind
+        source: ${PEOPLE_ROOT}/reports
+        target: /reports
+        bind: {create_host_path: false}
+
+  inspect:
+    <<: *common
+    profiles: [tools]
+    network_mode: none
+    command: ["--status", "--output", "/batches/${PEOPLE_BATCH}", "--json"]
+    volumes:
+      - type: bind
+        source: ${PEOPLE_ROOT}/staging
+        target: /batches
+        read_only: true
+        bind: {create_host_path: false}
+      - type: bind
+        source: ${PEOPLE_ROOT}/checkpoints/${PEOPLE_BATCH}
+        target: /batches/${PEOPLE_BATCH}/.bulk
+        read_only: true
+        bind: {create_host_path: false}

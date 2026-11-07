@@ -42,6 +42,74 @@ RETAINED={
 }
 
 
+# Exact additive COLLECTION adapter; the original M5 manifest stays unchanged.
+COLLECTION_ADAPTER_SHA256 = '6d858ad3f444f33da5fec7a719a5158c5d280aeda6c93f3757f6e341351b1630'
+# Independent additive delivery; no original COLLECTION/M5 receipt is resealed.
+BULK_ADAPTER_SHA256 = 'a8c435a6670d0e2e165569566b6bf079e1eba49a6f9e697462edcca8b880c40f'
+
+
+# Versioned Unicode successor pins; predecessor constants/receipts stay intact.
+UNICODE_ADAPTER_SHA256='90ca7363daca1755d9a711021d9d06023e5e8ff4a659010846e0db74ddfd3d55'
+UNICODE_COLLECTION_ADAPTER_SHA256 = '6c36970120b28bc37132466eb07c187e729b461d8c462c87bda26dea848c2696'
+UNICODE_BULK_ADAPTER_SHA256 = 'e6f0ed2e679194eb18fc93b0493daa69b6dd1170793efb3f02c96850e3afbe9c'
+
+
+@lru_cache(maxsize=8)
+def _unicode_module(raw):
+    from types import ModuleType
+    module = ModuleType('verified_people_unicode_maintenance')
+    module.__file__ = str(ROOT / 'ci/people_unicode_maintenance.py')
+    exec(compile(raw, module.__file__, 'exec'), module.__dict__)
+    return module
+
+
+def unicode_adapter():
+    raw = regular(ROOT, 'ci/people_unicode_maintenance.py').read_bytes()
+    if sha(raw) != UNICODE_ADAPTER_SHA256:
+        raise ValueError('Changed pinned Unicode successor adapter')
+    return _unicode_module(raw)
+
+
+@lru_cache(maxsize=8)
+def _collection_module(raw):
+    from types import ModuleType
+    module = ModuleType('verified_people_collection_maintenance')
+    module.__file__ = str(ROOT / 'ci/people_collection_maintenance.py')
+    exec(compile(raw, module.__file__, 'exec'), module.__dict__)
+    return module
+
+
+def collection_adapter():
+    raw = regular(ROOT, 'ci/people_collection_maintenance.py').read_bytes()
+    if sha(raw) != UNICODE_COLLECTION_ADAPTER_SHA256:
+        raise ValueError('Changed pinned COLLECTION adapter')
+    unicode_adapter().verify(ROOT)
+    return _collection_module(raw)
+
+
+def collection_view(root, name, current):
+    if name not in {'ci/people_job_retention_maintenance.py', 'ci/dependency_tests/test_phase5_m5_maintenance.py'}:
+        return current
+    return collection_adapter().m5_view(root, name, current)
+
+
+@lru_cache(maxsize=8)
+def _bulk_module(raw):
+    from types import ModuleType
+    module = ModuleType('verified_people_bulk_maintenance')
+    module.__file__ = str(ROOT / 'ci/people_bulk_maintenance.py')
+    exec(compile(raw, module.__file__, 'exec'), module.__dict__)
+    return module
+
+
+def bulk_adapter():
+    raw = regular(ROOT, 'ci/people_bulk_maintenance.py').read_bytes()
+    if sha(raw) != UNICODE_BULK_ADAPTER_SHA256:
+        raise ValueError('Changed pinned bulk adapter')
+    unicode_adapter().verify(ROOT)
+    return _bulk_module(raw)
+
+
 @lru_cache(maxsize=128)
 def sha(raw):return hashlib.sha256(raw.replace(b'\r\n',b'\n')).hexdigest()
 def fingerprint(v):return hashlib.sha256(json.dumps(v,sort_keys=True,ensure_ascii=True,allow_nan=False,separators=(',',':')).encode()).hexdigest()
@@ -141,8 +209,16 @@ def verify_checkout(root=None):
     value=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)
     from ci.people_colorize_maintenance import _head
     _ancestry(str(root),_head(root))
+    collection=collection_adapter().m5_bindings(root)
     for name,binding in value['members'].items():
-        if sha(m6_bytes(root,name,paths[name].read_bytes()))!=binding['sha256']:raise ValueError('Changed physical M5 successor: '+name)
+        actual=m6_bytes(root,name,paths[name].read_bytes())
+        if name=='.github/workflows/phase5-m5-validation.yml':
+            actual=unicode_adapter().historical_bytes(root,name,actual)
+        if name in collection:
+            approved,before=collection[name]
+            if sha(actual)!=approved:raise ValueError('Changed physical COLLECTION successor: '+name)
+            actual=before
+        if sha(actual)!=binding['sha256']:raise ValueError('Changed physical M5 successor: '+name)
         if binding['before_sha256'] is not None and sha(_old(name))!=binding['before_sha256']:raise ValueError('Changed M5 predecessor')
         if binding['before_sha256'] is None and _baseline_entry(name).strip():raise ValueError('M5 addition exists in predecessor')
     return value
@@ -151,12 +227,21 @@ def verify_checkout(root=None):
 def historical_bytes(root,name,current):
     from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
     current=m6_bytes(root,name,current)
+    current = unicode_adapter().historical_bytes(root, name, current)
     if name not in MEMBERS:return current
     root=Path(root)
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M5 historical projection')
     paths=_physical_paths(root,{name})
     binding=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)['members'][name]
+    collection=collection_adapter().m5_bindings(root) if name in {'ci/people_job_retention_maintenance.py','ci/dependency_tests/test_phase5_m5_maintenance.py'} else {}
     actual=m6_bytes(root,name,paths[name].read_bytes())
+    if name=='.github/workflows/phase5-m5-validation.yml':
+        actual=unicode_adapter().historical_bytes(root,name,actual)
+    if name in collection:
+        approved,before=collection[name]
+        if sha(actual)!=approved:raise ValueError('Changed physical COLLECTION successor: '+name)
+        actual=before
+        if sha(current)==approved:current=before
     if sha(actual)!=binding['sha256']:raise ValueError('Changed M5 physical successor: '+name)
     if binding['before_sha256'] is None:
         if sha(current)!=binding['sha256']:raise ValueError('Changed M5 new member')
@@ -181,7 +266,7 @@ def scope_members():
     from ci.phase4_m7 import ROOT as policy_root
     if Path(policy_root).resolve()!=ROOT.resolve():return frozenset()
     from ci.phase5_m6_maintenance import scope_members as m6_scope
-    return ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'})|m6_scope()
+    return ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}) | bulk_adapter().scope_members() | unicode_adapter().scope_members() | m6_scope()
 
 
 def verify_scope(root,baseline,names):
@@ -191,6 +276,14 @@ def verify_scope(root,baseline,names):
     if m6_names:verify_m6_scope(root,baseline,m6_names)
     names=names-m6_names
     if not names<=scope_members():raise ValueError('Unapproved M5 scope')
+    unicode_names = names & unicode_adapter().scope_members()
+    if unicode_names:
+        unicode_adapter().verify_scope(root, baseline, unicode_names)
+    names = names - unicode_names
+    bulk_names = names & bulk_adapter().scope_members()
+    if bulk_names:
+        bulk_adapter().verify_scope(root, baseline, bulk_names)
+    names = names - bulk_names
     if not names:return
     rows=_git(root,'diff','--raw','--no-abbrev','--no-renames','-z',baseline,'HEAD','--',*sorted(names)).split(b'\0')
     if rows[-1]!=b'' or len(rows)!=2*len(names)+1:raise ValueError('Incomplete M5 scope diff')
