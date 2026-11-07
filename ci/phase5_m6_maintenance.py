@@ -123,6 +123,48 @@ def _physical_paths(root,names):
     return {name:regular(root,name) for name in paths}
 
 
+RECOVERY_CI_RECEIPT='ci/people-publication-git-recovery-ci-v1.json'
+RECOVERY_CI_PIN='31eddeb4085ddd9f4fdf0449a675a5e6b607608fc159f680ae08b1684bf70f37'
+RECOVERY_CI_BASE='0ad49fbec9283387aacc0378f9d6a796839d981d'
+RECOVERY_CI_BEFORE={'ci/people_publication_maintenance.py': '028a7cd6e022c3e364455e8ba711729df81660aa9cbca4988723345c88e49b2d', 'ci/people_unicode_maintenance.py': 'a1195dc14fd14b5f157e8cd2282dc6cae258f4b0452a4e81f1fc16bd9a5ca97f', 'ci/phase5_m5_maintenance.py': 'b035c366441315115339a4b8cc12625d9934718de8f2718da2663b528e47b846', 'ci/dependency_tests/test_phase5_m6_maintenance.py': 'd8f7c0b16e9daceb91f9c32af0937e797ede60d24f1e50cb9d4a6e99bb3af2ee'}
+
+
+def recovery_ci_bindings(root=ROOT):
+    """Exact registration successor, never a rewrite of the historical cohort."""
+    if Path(root).resolve()!=ROOT.resolve():raise ValueError('Foreign recovery CI checkout')
+    v=json.loads(regular(ROOT,RECOVERY_CI_RECEIPT).read_bytes())
+    if (fingerprint(v)!=RECOVERY_CI_PIN or set(v)!={'version','baseline_commit','files','source_receipt_sha256','historical_m6_receipt_sha256','ci_authorized','publication_authorized'}
+            or v['version']!=1 or v['baseline_commit']!=RECOVERY_CI_BASE or set(v['files'])!=set(RECOVERY_CI_BEFORE)
+            or v['ci_authorized'] is not False or v['publication_authorized'] is not False
+            or sha(regular(ROOT,'ci/people-publication-git-recovery-v1.json').read_bytes())!=v['source_receipt_sha256']
+            or sha(regular(ROOT,MANIFEST.relative_to(ROOT).as_posix()).read_bytes())!=v['historical_m6_receipt_sha256']):
+        raise ValueError('Changed exact recovery CI receipt or authority')
+    for name,b in v['files'].items():
+        if (set(b)!={'before_sha256','predecessor_lf','sha256'} or b['before_sha256']!=RECOVERY_CI_BEFORE[name]
+                or type(b['predecessor_lf']) is not str or sha(b['predecessor_lf'].encode())!=b['before_sha256']
+                or sha(regular(ROOT,name).read_bytes())!=b['sha256']):
+            raise ValueError('Changed physical recovery CI successor: '+name)
+        if name in APPROVED and b['before_sha256']!=APPROVED[name][1]:raise ValueError('Changed M6 registered predecessor')
+        if name in MEMBERS and name not in APPROVED and b['before_sha256']!=manifest()['members'][name]['sha256']:
+            raise ValueError('Changed M6 addition predecessor')
+    return v['files']
+
+
+def recovery_ci_bytes(root,name,current):
+    if name not in RECOVERY_CI_BEFORE:return current
+    b=recovery_ci_bindings(root)[name]
+    return b['predecessor_lf'].encode() if sha(current)==b['sha256'] else current
+
+
+def verify_recovery_ci_scope(root,names):
+    bound=names & (set(RECOVERY_CI_BEFORE)|{RECOVERY_CI_RECEIPT})
+    if not bound:return
+    bindings=recovery_ci_bindings(root)
+    for name in bound:
+        expected=sha(regular(root,name).read_bytes()) if name==RECOVERY_CI_RECEIPT else bindings[name]['sha256']
+        if sha(_git(root,'show','HEAD:'+name))!=expected:raise ValueError('Changed committed recovery CI successor')
+
+
 def verify_checkout(root=None):
     root=Path(root or ROOT)
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M6 policy checkout')
@@ -131,7 +173,7 @@ def verify_checkout(root=None):
     from ci.people_colorize_maintenance import _head
     _ancestry(str(root),_head(root))
     for name,binding in value['members'].items():
-        if sha(paths[name].read_bytes())!=binding['sha256']:raise ValueError('Changed physical M6 successor: '+name)
+        if sha(recovery_ci_bytes(root,name,paths[name].read_bytes()))!=binding['sha256']:raise ValueError('Changed physical M6 successor: '+name)
         if binding['before_sha256'] is not None and sha(_old(name))!=binding['before_sha256']:raise ValueError('Changed M6 predecessor')
         if binding['before_sha256'] is None and _baseline_entry(name).strip():raise ValueError('M6 addition exists in predecessor')
     return value
@@ -144,9 +186,10 @@ def historical_bytes(root,name,current):
     paths=_physical_paths(root,MEMBERS|ANCHORS)
     value=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)
     for member,pin in value['members'].items():
-        if sha(paths[member].read_bytes())!=pin['sha256']:raise ValueError('Changed physical M6 successor: '+member)
+        if sha(recovery_ci_bytes(root,member,paths[member].read_bytes()))!=pin['sha256']:raise ValueError('Changed physical M6 successor: '+member)
     binding=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)['members'][name]
-    actual=paths[name].read_bytes()
+    actual=recovery_ci_bytes(root,name,paths[name].read_bytes())
+    current=recovery_ci_bytes(root,name,current)
     if sha(actual)!=binding['sha256']:raise ValueError('Changed M6 physical successor: '+name)
     if binding['before_sha256'] is None:
         if sha(current)!=binding['sha256']:raise ValueError('Changed M6 new member')
@@ -161,7 +204,7 @@ def historical_bytes(root,name,current):
 def scope_members():
     from ci.phase4_m7 import ROOT as policy_root
     if Path(policy_root).resolve()!=ROOT.resolve():return frozenset()
-    return (MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}
+    return ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}) | {RECOVERY_CI_RECEIPT}
 
 
 def verify_scope(root,baseline,names):
@@ -177,6 +220,7 @@ def verify_scope(root,baseline,names):
                 or fields[4]!=(b'A' if fields[0]==b':000000' else b'M')):raise ValueError('M6 requires regular-file additions/modifications')
         seen.add(name)
     _physical_paths(Path(root),seen)
+    verify_recovery_ci_scope(root,names)
 
 
 def selected_hash(name,expected):

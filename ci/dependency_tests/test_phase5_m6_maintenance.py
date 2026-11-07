@@ -14,7 +14,7 @@ class Phase5M6MaintenanceTests(unittest.TestCase):
         self.assertEqual(len(m6.MEMBERS|m6.ANCHORS),36)
         self.assertEqual(len(m6.APPROVED),14)
         for name,(old,new) in m6.APPROVED.items():
-            self.assertEqual(m6.sha((ROOT/name).read_bytes()),new)
+            self.assertEqual(m6.sha(m6.recovery_ci_bytes(ROOT,name,(ROOT/name).read_bytes())),new)
             self.assertEqual(m6.sha(m6._old(name)),old)
             self.assertEqual(value['members'][name],dict(before_sha256=old,sha256=new))
 
