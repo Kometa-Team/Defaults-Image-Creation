@@ -65,7 +65,8 @@ def selected_hash(name, expected):
         return PEOPLE_PROTECTION_SHA256
     from ci.people_storage_maintenance import selected_hash as storage_hash
     from ci.people_readme_maintenance import selected_hash as readme_hash
-    return readme_hash(name, storage_hash(name, expected))
+    from ci.phase5_m6_maintenance import selected_hash as m6_hash
+    return m6_hash(name, readme_hash(name, storage_hash(name, expected)))
 
 
 @lru_cache(maxsize=32)

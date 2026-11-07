@@ -119,7 +119,8 @@ class StartupRetentionMaintenanceTests(unittest.TestCase):
         for name in ('ci/dependabot_maintenance.py', 'ci/phase5_m3_maintenance.py'):
             current = (ROOT / name).read_bytes()
             self.assertEqual(retained['members'][name]['before_sha256'], previous['members'][name]['sha256'])
-            self.assertEqual(maintenance.sha(current), retained['members'][name]['sha256'])
+            from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
+            self.assertEqual(maintenance.sha(m6_bytes(ROOT, name, current)), retained['members'][name]['sha256'])
             projected = m4.historical_bytes(ROOT, name, current)
             self.assertEqual(m4.sha(projected), previous['members'][name]['before_sha256'])
             self.assertEqual(m4.historical_bytes(ROOT, name, projected), projected)

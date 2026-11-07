@@ -26,12 +26,21 @@ def namespace_key(namespace, path):
     return dict(kind="namespace", id="synthetic.namespace."+fingerprint(dict(namespace=namespace, path=path_key(path))))
 
 
-@lru_cache(maxsize=2)
-def validator(kind):
-    schema = decode_json((Path(__file__).parent/"schemas/operations-v1.schema.json").read_bytes())
+@lru_cache(maxsize=1)
+def _compiled_schema(raw):
+    # Only exact immutable bytes are memoized, never a path or file observation.
+    # All kinds share this schema; the existing two-entry validator cap stays.
+    schema = decode_json(raw)
     Draft202012Validator.check_schema(schema)
     registry = Registry().with_resource(schema["$id"], Resource.from_contents(schema))
-    return StrictValidator({"$ref":schema["$id"]+"#/$defs/"+kind}, registry=registry)
+    return schema["$id"], registry
+
+
+@lru_cache(maxsize=2)
+def validator(kind):
+    raw = (Path(__file__).parent/"schemas/operations-v1.schema.json").read_bytes()
+    schema_id, registry = _compiled_schema(raw)
+    return StrictValidator({"$ref":schema_id+"#/$defs/"+kind}, registry=registry)
 
 
 class Value(Document):

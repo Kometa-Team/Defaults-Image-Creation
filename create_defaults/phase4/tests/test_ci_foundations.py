@@ -13,8 +13,10 @@ from create_defaults.bulk.common import fingerprint
 
 
 def reports():
-    from ci.phase4_transactions import selections
-    transaction_ids=sorted(set().union(*map(set,selections().values())))
+    from ci.phase4_transactions import IDS as transaction_ids_path
+    # Synthetic report data only. The real verifier below still calls
+    # selections() and its fresh security proof on every invocation.
+    transaction_ids=sorted(set().union(*map(set,json.loads(transaction_ids_path.read_bytes()).values())))
     data=dict(nodes=['fixture.py::test_required'],exitstatus=0,reports=[
         dict(nodeid='fixture.py::test_required',when=phase,outcome='passed',seconds=0,wasxfail=False,skip_reason=None)
         for phase in ['setup','call','teardown']])

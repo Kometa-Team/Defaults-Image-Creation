@@ -92,14 +92,15 @@ def verify_checkout(root=None):
 
 def selected_hash(name, expected):
     from ci.people_job_retention_maintenance import selected_hash as retention_hash
+    from ci.phase5_m6_maintenance import selected_hash as m6_hash
     expected = retention_hash(name, expected)
     if name not in MEMBERS:
-        return expected
+        return m6_hash(name, expected)
     binding = manifest()['members'][name]
     if binding['before_sha256'] is None or expected != binding['before_sha256']:
-        return expected
+        return m6_hash(name, expected)
     verify_checkout()
-    return retention_hash(name, binding['sha256'])
+    return m6_hash(name, retention_hash(name, binding['sha256']))
 
 
 def historical_bytes(root, name, current):
