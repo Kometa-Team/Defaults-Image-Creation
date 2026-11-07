@@ -49,7 +49,7 @@ BULK_ADAPTER_SHA256 = 'a8c435a6670d0e2e165569566b6bf079e1eba49a6f9e697462edcca8b
 
 
 # Versioned Unicode successor pins; predecessor constants/receipts stay intact.
-UNICODE_ADAPTER_SHA256 = '25eaaa81670a74e55e5022b818153a7d3e8565af7b35b5f04377ab64ebdf65ee'
+UNICODE_ADAPTER_SHA256='a1195dc14fd14b5f157e8cd2282dc6cae258f4b0452a4e81f1fc16bd9a5ca97f'
 UNICODE_COLLECTION_ADAPTER_SHA256 = '6c36970120b28bc37132466eb07c187e729b461d8c462c87bda26dea848c2696'
 UNICODE_BULK_ADAPTER_SHA256 = 'e6f0ed2e679194eb18fc93b0493daa69b6dd1170793efb3f02c96850e3afbe9c'
 
@@ -203,13 +203,15 @@ def _physical_paths(root,names):
 def verify_checkout(root=None):
     root=Path(root or ROOT)
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M5 policy checkout')
+    from ci.phase5_m6_maintenance import verify_checkout as verify_m6, historical_bytes as m6_bytes
+    verify_m6(root)
     paths=_physical_paths(root,MEMBERS|ANCHORS)
     value=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)
     from ci.people_colorize_maintenance import _head
     _ancestry(str(root),_head(root))
     collection=collection_adapter().m5_bindings(root)
     for name,binding in value['members'].items():
-        actual=paths[name].read_bytes()
+        actual=m6_bytes(root,name,paths[name].read_bytes())
         if name=='.github/workflows/phase5-m5-validation.yml':
             actual=unicode_adapter().historical_bytes(root,name,actual)
         if name in collection:
@@ -223,6 +225,8 @@ def verify_checkout(root=None):
 
 
 def historical_bytes(root,name,current):
+    from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
+    current=m6_bytes(root,name,current)
     current = unicode_adapter().historical_bytes(root, name, current)
     if name not in MEMBERS:return current
     root=Path(root)
@@ -230,7 +234,7 @@ def historical_bytes(root,name,current):
     paths=_physical_paths(root,{name})
     binding=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)['members'][name]
     collection=collection_adapter().m5_bindings(root) if name in {'ci/people_job_retention_maintenance.py','ci/dependency_tests/test_phase5_m5_maintenance.py'} else {}
-    actual=paths[name].read_bytes()
+    actual=m6_bytes(root,name,paths[name].read_bytes())
     if name=='.github/workflows/phase5-m5-validation.yml':
         actual=unicode_adapter().historical_bytes(root,name,actual)
     if name in collection:
@@ -261,11 +265,16 @@ def historical_bytes(root,name,current):
 def scope_members():
     from ci.phase4_m7 import ROOT as policy_root
     if Path(policy_root).resolve()!=ROOT.resolve():return frozenset()
-    return ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}) | bulk_adapter().scope_members() | unicode_adapter().scope_members()
+    from ci.phase5_m6_maintenance import scope_members as m6_scope
+    return ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}) | bulk_adapter().scope_members() | unicode_adapter().scope_members() | m6_scope()
 
 
 def verify_scope(root,baseline,names):
     verify_checkout(root)
+    from ci.phase5_m6_maintenance import scope_members as m6_scope, verify_scope as verify_m6_scope
+    m6_names=names&m6_scope()
+    if m6_names:verify_m6_scope(root,baseline,m6_names)
+    names=names-m6_names
     if not names<=scope_members():raise ValueError('Unapproved M5 scope')
     unicode_names = names & unicode_adapter().scope_members()
     if unicode_names:

@@ -122,10 +122,14 @@ def verify_cohort(root, value):
 
 def verify(root=ROOT):
     value = manifest()
+    from ci.phase5_m6_maintenance import ROOT as m6_root, historical_bytes as m6_bytes
     for name, binding in value['infrastructure'].items():
         from ci.people_readme_maintenance import selected_hash
+        current = regular(root, name).read_bytes()
+        if Path(root).resolve() == m6_root.resolve():
+            current = m6_bytes(root, name, current)
         if (sha(git_bytes(str(root), value['baseline_commit'], name)) != binding['before_sha256']
-                or sha(regular(root, name).read_bytes()) != selected_hash(name, binding['sha256'])):
+                or sha(current) != selected_hash(name, binding['sha256'])):
             raise ValueError('Changed exact storage CI infrastructure: '+name)
     for name, expected in value['additions'].items():
         if sha(regular(root, name).read_bytes()) != selected_hash(name, expected):

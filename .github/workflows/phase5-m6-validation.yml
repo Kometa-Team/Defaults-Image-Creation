@@ -1,0 +1,68 @@
+name: Phase 5 M6 Offline Draft Transport
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  m6:
+    name: Phase 5 M6 ${{ matrix.group }} (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: ${{ matrix.os == 'windows-latest' && (matrix.group == 'current' || matrix.group == 'multi') && 60 || matrix.group == 'transport' && 30 || 15 }}
+    env:
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+      PYTHONDONTWRITEBYTECODE: '1'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        group: [test-m6-exact-binding-rejects-resealed-membership-and-context, test-m6-equal-required-members-produce-no-artwork-draft, protocol, test-m6-owned-draft-rejects-changed-context-closed, test-m6-owned-draft-rejects-changed-context-merged, test-m6-owned-draft-rejects-changed-context-wrong-head, test-m6-owned-draft-rejects-changed-context-wrong-base, test-m6-owned-draft-rejects-changed-context-not-draft, test-m6-owned-draft-rejects-changed-context-receipt, test-m6-owned-draft-rejects-changed-context-replayed-auth, test-m6-owned-draft-rejects-changed-context-foreign-target, test-m6-fresh-authority-is-required-before-transport-missing, test-m6-fresh-authority-is-required-before-transport-revoked, test-m6-fresh-authority-is-required-before-transport-role, test-m6-fresh-authority-is-required-before-transport-expired, test-m6-fresh-context-and-remote-tampering-blocks-resume-source, test-m6-fresh-context-and-remote-tampering-blocks-resume-artwork, test-m6-fresh-context-and-remote-tampering-blocks-resume-definition, test-m6-fresh-context-and-remote-tampering-blocks-resume-review, test-m6-fresh-context-and-remote-tampering-blocks-resume-destination, test-m6-fresh-context-and-remote-tampering-blocks-resume-foreign-ref, test-m6-fresh-context-and-remote-tampering-blocks-resume-unrelated-tree, test-m6-fresh-context-and-remote-tampering-blocks-resume-rollback, test-m6-fresh-context-and-remote-tampering-blocks-resume-draft-rollback, test-m6-interrupted-push-reconciles-exact-prefix-after-commit, test-m6-interrupted-push-reconciles-exact-prefix-after-push, test-m6-accepted-push-with-lost-ack-is-reobserved, test-m6-cold-replay-is-read-only-and-never-authority, test-m6-journal-cas-and-forged-progress-fail-closed, transport, multi, current]
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        fetch-depth: 0
+        persist-credentials: false
+        ref: ${{ github.event.pull_request.head.sha }}
+    - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+      with:
+        python-version: '3.13'
+    - run: python -m pip install -r create_defaults/requirements-bulk.txt
+    - run: python ci/phase5_m6.py run --group "${{ matrix.group }}"
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      if: ${{ always() }}
+      with:
+        name: phase5-m6-${{ matrix.group }}-${{ matrix.os }}
+        path: config/ci-validation/phase5-m6/**
+        if-no-files-found: error
+        retention-days: 14
+  acceptance:
+    name: Phase 5 M6 acceptance
+    if: ${{ always() }}
+    needs: [m6]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+      M6_JOB_RESULTS: ${{ toJSON(needs) }}
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        fetch-depth: 0
+        persist-credentials: false
+        ref: ${{ github.event.pull_request.head.sha }}
+    - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+      with:
+        python-version: '3.13'
+    - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+      with:
+        pattern: phase5-m6-*
+        path: config/m6-downloaded
+    - run: python -m pip install -r create_defaults/requirements-bulk.txt
+    - run: python ci/phase5_m6.py accept
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      with:
+        name: phase5-m6-acceptance
+        path: config/ci-validation/phase5-m6/acceptance.json
+        if-no-files-found: error
+        retention-days: 14

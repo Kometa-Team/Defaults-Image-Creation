@@ -107,13 +107,26 @@ def authorize(manifest, policy, receipt):
     publication = sealed({'kind': 'approved-library-publication-manifest', 'baseline': manifest['baseline'],
                           'members': members, 'approval_sha256': receipt['sha256'],
                           'candidate_manifest_sha256': manifest['sha256'], 'policy_sha256': fingerprint(policy)})
-    plan = batch_plan(publication)
+    offline = policy.get('mode') == 'phase5-m6-offline-draft-transport'
+    if offline:
+        limits = policy.get('technical_batch_limits')
+        if (not isinstance(limits, dict) or set(limits) != {'max_files', 'max_bytes'}
+                or type(limits['max_files']) is not int or not 1 <= limits['max_files'] <= 300
+                or type(limits['max_bytes']) is not int or not 1 <= limits['max_bytes'] <= 200 * 1024 ** 2
+                or any(m.get('kind') != 'poster' or not m['destination'].startswith('genre/')
+                       or m.get('rename_from') for m in members)):
+            raise BulkError('offline_scope', 'Offline lifecycle fixture requires bounded English Genre poster batches')
+        plan = batch_plan(publication, **limits)
+    else:
+        plan = batch_plan(publication)
     auth = sealed({'kind': 'approved-operator-draft-staging', 'repository': 'Kometa-Team/Default-Images',
                    'branch': 'migration/python-approved-' + manifest['sha256'][:8],
                    'baseline': manifest['baseline'], 'plan_sha256': plan['sha256'],
                    'publication_manifest_sha256': publication['sha256'], 'candidate_manifest': manifest,
                    'policy': policy, 'approval_receipt': receipt, 'draft_only': True,
                    'remote_writes_authorized': True, 'merge_authorized': False})
+    if offline:
+        auth = sealed(dict({k: v for k, v in auth.items() if k != 'sha256'}, test_only=True))
     return plan, auth
 
 
@@ -122,20 +135,26 @@ def gate(plan, auth):
     wanted_plan, wanted_auth = authorize(auth['candidate_manifest'], auth['policy'], auth['approval_receipt'])
     # Test-only authorizations remain incapable of writing the network remote.
     actual_auth = {k: v for k, v in auth.items() if k not in {'sha256', 'test_only'}}
-    if (check_seal(plan) != wanted_plan or sealed(actual_auth) != wanted_auth):
+    expected_auth = {k: v for k, v in wanted_auth.items() if k not in {'sha256', 'test_only'}}
+    if (check_seal(plan) != wanted_plan or sealed(actual_auth) != sealed(expected_auth)
+            or (wanted_auth.get('test_only') is True and auth.get('test_only') is not True)):
         raise BulkError('approval_binding', 'Transport differs from the exact approved candidate artifacts')
     return [m for b in plan['batches'] for m in b['members']]
 
 
-def stage(root, *, test_remote=None, fail_at=None):
-    from .library_stage import run, RemoteBytes, final_remote_diff
+def stage(root, *, test_remote=None, fail_at=None, write_guard=None, stop_after=None, offline=None):
+    from .library_stage import run, RemoteBytes, final_remote_diff, _offline_protocol
     root = Path(root)
     inventory = check_seal(load_json(root / 'inventory.json'))
     plan = check_seal(load_json(root / 'approved-git-batch-plan.json'))
     auth = check_seal(load_json(root / 'draft-staging-authorization.json'))
+    _offline_protocol(root, plan, auth, offline, test_remote=test_remote)
+    if auth.get('policy', {}).get('mode') == 'phase5-m6-offline-draft-transport' and (test_remote is None or write_guard is None):
+        raise BulkError('test_remote', 'Offline lifecycle staging requires its local fixture and fresh write guard')
     if auth['candidate_manifest']['inventory_sha256'] != inventory['sha256']:
         raise BulkError('stale_inventory', 'Approval inventory differs')
     def guard():
+        _offline_protocol(root, plan, auth, offline, test_remote=test_remote)
         if inventory.get('generation_report'):
             from .operations import validate_generation
             validate_generation(inventory['generation_report'])
@@ -153,28 +172,56 @@ def stage(root, *, test_remote=None, fail_at=None):
         if {k: current[k] for k in ('repository', 'branch', 'head', 'tree')} != plan['baseline']:
             raise BulkError('baseline_drift', 'Production changed; preserve review decisions and refresh membership before writes')
     result = run(plan, auth, root / 'transport', test_remote=test_remote, fail_at=fail_at, guard=guard,
+                 stop_after=stop_after, write_guard=write_guard, offline=offline,
                  verify_remote=None if test_remote else RemoteBytes(root / 'actual-remote-verification', plan))
     if result['complete'] and not test_remote:
+        from .library_stage import _before_write
+        _before_write(write_guard,'final_remote_diff',plan,auth,root / 'transport',
+                      expected_local_head=result['head'],expected_remote_head=result['head'])
         final_remote_diff(root, plan, auth, result)
     return result
 
 
-def draft(root, title):
-    from .library_stage import final_remote_diff, git
+def draft(root, title, *, write_guard=None, offline=None):
+    from .library_stage import final_remote_diff, git, _offline_protocol
     root = Path(root)
     plan = check_seal(load_json(root / 'approved-git-batch-plan.json'))
     auth = check_seal(load_json(root / 'draft-staging-authorization.json'))
     report = check_seal(load_json(root / 'transport/transport-report.json'))
     gate(plan, auth)
+    _offline_protocol(root, plan, auth, offline, report=report)
+    if auth.get('policy', {}).get('mode') == 'phase5-m6-offline-draft-transport' and (offline is None or write_guard is None):
+        raise BulkError('test_remote', 'Offline lifecycle draft requires its concrete protocol and fresh write guard')
+    if offline is not None:
+        from .lifecycle.draft_transport import OfflineProtocol
+        def observe(*args, **kwargs):
+            _offline_protocol(root, plan, auth, offline, report=report)
+            return OfflineProtocol.observe(offline, *args, **kwargs)
+        def execute(*args, **kwargs):
+            _offline_protocol(root, plan, auth, offline, report=report)
+            return OfflineProtocol.execute(offline, *args, **kwargs)
+    else:
+        observe, execute = subprocess.check_output, subprocess.run
     if not report['complete']:
         raise BulkError('incomplete_staging', 'Every batch and actual remote hash must be verified first')
-    final_remote_diff(root, plan, auth, report)
+    from .library_stage import _before_write
+    def checkpoint(phase):
+        _offline_protocol(root, plan, auth, offline, report=report)
+        _before_write(write_guard,phase,plan,auth,root / 'transport',
+                      expected_local_head=report['head'],expected_remote_head=report['head'])
+        _offline_protocol(root, plan, auth, offline, report=report)
+    checkpoint('draft_tree_verification')
+    if offline is None:
+        final_remote_diff(root, plan, auth, report)
+    else:
+        final_remote_diff(root, plan, auth, report, offline=offline)
     import json
     target = auth['repository']
     args = ['gh', 'pr', 'list', '-R', target, '--head', auth['branch'], '--state', 'all',
             '--json', 'number,url,isDraft,state,headRefOid,baseRefName']
-    existing = json.loads(subprocess.check_output(args, text=True))
+    existing = json.loads(observe(args, text=True))
     if not existing:
+        checkpoint('draft_body')
         body = root / 'pr-body.md'
         body.write_text(f"Stage {sum(len(b['members']) for b in plan['batches'])} exact approved Python outputs.\n\n"
                         f"Candidate manifest: `{auth['candidate_manifest']['sha256']}`.\n"
@@ -182,10 +229,11 @@ def draft(root, title):
                         f"All candidate SHA-256 responses and the complete remote tree were verified.\n"
                         f"{len(plan['batches'])} technical batches in one logical draft PR. Separate merge authorization required.\n",
                         encoding='utf-8')
-        result = subprocess.run(['gh', 'pr', 'create', '-R', target, '--head', auth['branch'],
+        checkpoint('draft_create')
+        result = execute(['gh', 'pr', 'create', '-R', target, '--head', auth['branch'],
                                 '--base', 'master', '--draft', '--title', title, '--body-file', str(body)],
                                 capture_output=True, text=True)
-        existing = json.loads(subprocess.check_output(args, text=True))
+        existing = json.loads(observe(args, text=True))
         if not existing:
             raise BulkError('draft_creation', result.stderr[-2000:])
     if (len(existing) != 1 or existing[0]['state'] != 'OPEN' or not existing[0]['isDraft']
@@ -193,12 +241,20 @@ def draft(root, title):
         raise BulkError('pr_drift', 'Expected exactly one unmerged draft with the verified head')
     pr = existing[0]
     work = root / 'transport/work'
+    checkpoint('draft_fetch')
     git(work, 'fetch', '--no-tags', 'origin', f"refs/pull/{pr['number']}/head", timeout=300)
     if git(work, 'rev-parse', 'FETCH_HEAD').decode().strip() != report['head']:
         raise BulkError('pr_drift', 'Fetched PR ref differs from the verified branch')
     from .library_stage import verify_diff
     verify_diff(work, plan['baseline']['head'], report['head'], gate(plan, auth))
-    save(root / 'draft-pr.json', sealed(pr))
+    checkpoint('draft_receipt')
+    if offline is None:
+        save(root / 'draft-pr.json', sealed(pr))
+    else:
+        from .library_stage import OFFLINE_DRAFT_RECEIPT
+        save(root / 'draft-pr.json', sealed(dict(pr, kind=OFFLINE_DRAFT_RECEIPT,
+             simulation=True, test_only=True, plan_sha256=plan['sha256'],
+             authorization_sha256=auth['sha256'])))
     return pr
 
 

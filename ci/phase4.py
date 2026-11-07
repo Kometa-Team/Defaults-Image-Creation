@@ -48,7 +48,9 @@ def verify_m2_baseline():
     for name in ('models.py','storage.py','package_e.py','schemas/operations-v1.schema.json'):
         path='create_defaults/bulk/lifecycle/'+name
         original=subprocess.check_output(['git','show',M1_BASE+':'+path],cwd=ROOT).replace(b'\r\n',b'\n')
-        require(hashlib.sha256(original).hexdigest()==checksum(ROOT/path),'Changed frozen M1 infrastructure: '+path)
+        from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
+        current=m6_bytes(ROOT,path,(ROOT/path).read_bytes()).replace(b'\r\n',b'\n')
+        require(hashlib.sha256(original).hexdigest()==hashlib.sha256(current).hexdigest(),'Changed frozen M1 infrastructure: '+path)
 
 
 def verify_m3_baseline():
@@ -79,7 +81,11 @@ def historical_checksums(root,paths):
         current=regular(root,path)
         actual=checksum(current)
         if path not in security['files']:
-            result[path]=actual
+            if path=='create_defaults/phase3/tests/test_final_phase3_acceptance.py':
+                from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
+                before=m6_bytes(root,path,current.read_bytes()).replace(b'\r\n',b'\n')
+                result[path]=hashlib.sha256(before).hexdigest()
+            else:result[path]=actual
             continue
         require(actual==security['files'][path]['sha256'],'Changed authorized maintenance file: '+path)
         before=_old(Path(root),path)

@@ -157,7 +157,89 @@ def verify_diff(repo,before,after,members):
     if offset!=len(content):raise BulkError('git_hash','Unexpected extra Git object data')
 
 
-def initialize(root,plan,auth,remote):
+OFFLINE_MODE = 'phase5-m6-offline-draft-transport'
+OFFLINE_DRAFT_RECEIPT = 'phase5-m6-offline-draft-receipt'
+
+
+def _offline_protocol(root, plan, auth, offline, *, report=None, test_remote=None):
+    """Admit simulation only for the exact sealed, current, owned M6 fixture."""
+    policy = auth.get('policy', {})
+    mode = isinstance(policy, dict) and policy.get('mode') == OFFLINE_MODE
+    # Check the authorization boundary BEFORE importing or invoking a protocol.
+    if offline is not None and (not mode or auth.get('test_only') is not True):
+        raise BulkError('offline_authorization', 'Simulation requires exact M6 offline policy and test_only=True')
+    root = reject_links(root).resolve()
+    receipt_path = reject_links(root / 'draft-pr.json')
+    if receipt_path.exists():
+        receipt = load_json(receipt_path)
+        simulated = (receipt.get('kind') == OFFLINE_DRAFT_RECEIPT
+                     or 'simulation' in receipt or 'test_only' in receipt)
+        if simulated:
+            check_seal(receipt)
+            if (not mode or auth.get('test_only') is not True
+                    or receipt.get('kind') != OFFLINE_DRAFT_RECEIPT
+                    or receipt.get('simulation') is not True or receipt.get('test_only') is not True
+                    or receipt.get('plan_sha256') != plan.get('sha256')
+                    or receipt.get('authorization_sha256') != auth.get('sha256')):
+                raise BulkError('offline_receipt', 'Simulated draft receipt cannot authorize another transport')
+    if not mode:
+        return None
+    check_seal(auth);check_seal(plan)
+    if auth.get('test_only') is not True:
+        raise BulkError('offline_authorization', 'M6 offline authorization must retain test_only=True')
+    if offline is None:
+        raise BulkError('test_remote', 'M6 offline authorization requires its owned concrete protocol')
+    gate(plan, auth)
+    from .lifecycle.draft_transport import OfflineProtocol
+    if type(offline) is not OfflineProtocol:
+        raise BulkError('test_remote', 'Concrete owned offline protocol required; subclasses are unsupported')
+    identity = (plan['sha256'], auth['sha256'])
+    def current():
+        try:
+            actual_plan = check_seal(load_json(reject_links(root / 'approved-git-batch-plan.json')))
+            actual_auth = check_seal(load_json(reject_links(root / 'draft-staging-authorization.json')))
+        except OSError:
+            raise BulkError('offline_binding', 'Current owned plan and authorization are required') from None
+        if actual_plan != plan or actual_auth != auth:
+            raise BulkError('offline_binding', 'Authorization changed since the owned stage was prepared')
+        marker = reject_links(root / 'transport/ownership.json')
+        if marker.exists():
+            owned = load_json(marker)
+            if (owned.get('plan_sha256'), owned.get('authorization_sha256')) != identity:
+                raise BulkError('offline_binding', 'Owned stage belongs to another exact authorization')
+        elif report is not None:
+            raise BulkError('offline_binding', 'A draft/report requires its original owned stage')
+    if report is not None:
+        check_seal(report)
+        if ((report.get('plan_sha256'), report.get('authorization_sha256')) != identity
+                or report.get('branch') != auth['branch']
+                or report.get('baseline') != plan['baseline']['head']):
+            raise BulkError('offline_binding', 'Transport report belongs to another exact authorization')
+    current()
+    # Dispatch on the independently imported concrete class, never an instance
+    # supplied verify callback. Its native/source/authority/ownership proof is
+    # fresh; an exact type alone is insufficient and a forged instance fails.
+    OfflineProtocol.verify(offline, root, plan, auth, report, test_remote=test_remote)
+    check_seal(plan);check_seal(auth);gate(plan, auth)
+    if (plan['sha256'], auth['sha256']) != identity:
+        raise BulkError('offline_binding', 'Protocol verification changed the exact authorization')
+    current()
+    return offline
+
+
+def _before_write(callback, phase, plan, auth, root, *, expected_local_head=None, expected_remote_head=None):
+    """Additional caller-owned freshness check; never a replacement authority."""
+    if callback is None:
+        return
+    identity = (plan['sha256'], auth['sha256'])
+    callback(phase=phase, plan=plan, authorization=auth, root=Path(root),
+             expected_local_head=expected_local_head, expected_remote_head=expected_remote_head)
+    gate(plan, auth)
+    if identity != (plan['sha256'], auth['sha256']):
+        raise BulkError('stale_plan', 'Write guard changed the exact authorized plan')
+
+
+def initialize(root,plan,auth,remote,*,write_guard=None):
     work=root/'work'
     if work.exists():
         if (not (work/'.git').is_dir()
@@ -165,37 +247,51 @@ def initialize(root,plan,auth,remote):
                 or git(work,'remote','get-url','origin').decode().strip()!=remote):
             raise BulkError('unsafe_workspace','Owned Git workspace identity differs')
         return work
+    _before_write(write_guard,'initialize',plan,auth,root)
     subprocess.run(['git','init',str(work)],check=True,capture_output=True)
     for key,value in {'core.autocrlf':'false','core.filemode':'false','core.longpaths':'true',
         'core.ignorecase':'false',
         'core.hooksPath':str(root/'no-hooks'),'gc.auto':'0','maintenance.auto':'false',
         'pack.window':'0','pack.threads':'2','pack.compression':'1',
         'user.name':'Kometa approved poster migration','user.email':'bullmoose20@users.noreply.github.com'}.items():
+        _before_write(write_guard,'configure',plan,auth,root)
         git(work,'config',key,value)
+    _before_write(write_guard,'remote_config',plan,auth,root)
     git(work,'remote','add','origin',remote)
     if remote==REMOTE:
+        _before_write(write_guard,'promisor_config',plan,auth,root)
         git(work,'config','remote.origin.promisor','true')
+        _before_write(write_guard,'filter_config',plan,auth,root)
         git(work,'config','remote.origin.partialclonefilter','blob:none')
+        _before_write(write_guard,'baseline_fetch',plan,auth,root)
         git(work,'fetch','--filter=blob:none','--depth=1','--no-tags','origin',plan['baseline']['head'],timeout=300)
     else:
+        _before_write(write_guard,'baseline_fetch',plan,auth,root)
         git(work,'fetch','--no-tags','origin',plan['baseline']['head'])
+    _before_write(write_guard,'local_branch',plan,auth,root)
     git(work,'symbolic-ref','HEAD','refs/heads/'+auth['branch'])
+    _before_write(write_guard,'local_head',plan,auth,root)
     git(work,'update-ref','refs/heads/'+auth['branch'],plan['baseline']['head'])
+    _before_write(write_guard,'baseline_index',plan,auth,root)
     git(work,'read-tree','--reset',plan['baseline']['head'])
     # Preserve all untouched entries without downloading/materializing their blobs.
     paths=git(work,'ls-files','-z')
+    _before_write(write_guard,'baseline_skip_worktree',plan,auth,root)
     git(work,'update-index','--skip-worktree','-z','--stdin',data=paths)
+    _before_write(write_guard,'local_attributes',plan,auth,root)
     (work/'.git/info/attributes').write_text('* -filter -text -ident\n',encoding='ascii')
     return work
 
 
-def run(plan,authorization,root,*,test_remote=None,verify_remote=None,guard=None,stop_after=None,fail_at=None,prepare_only=False):
+def run(plan,authorization,root,*,test_remote=None,verify_remote=None,guard=None,stop_after=None,fail_at=None,prepare_only=False,write_guard=None,offline=None):
     """Resume known commit prefixes; ambiguous failures are reconciled, never forced.
 
     test_remote is restricted to an existing local bare repository and used by
     isolated regression tests. Production always uses the fixed repository URL.
     """
     members=gate(plan,authorization)
+    root=reject_links(root).resolve()
+    _offline_protocol(root.parent,plan,authorization,offline,test_remote=test_remote)
     for m in members:
         if sha256(reject_links(m['source']))!=m['sha256']:
             raise BulkError('candidate_drift','Exact candidate bytes changed before staging or resume')
@@ -208,16 +304,33 @@ def run(plan,authorization,root,*,test_remote=None,verify_remote=None,guard=None
         remote=str(path)
     elif authorization.get('test_only'):
         raise BulkError('test_remote','Synthetic authorization cannot write GitHub')
+    def checkpoint(phase,*,expected_local_head=None,expected_remote_head=None):
+        # Offline admission is complete at run entry. Revalidate the complete
+        # owned protocol AFTER the caller's guard and BEFORE this mutation;
+        # no earlier observation is reused. Preserve legacy pre-guard checks.
+        if offline is None:
+            _offline_protocol(root.parent,plan,authorization,offline,test_remote=test_remote)
+        _before_write(write_guard,phase,plan,authorization,root,expected_local_head=expected_local_head,
+                      expected_remote_head=expected_remote_head)
+        _offline_protocol(root.parent,plan,authorization,offline,test_remote=test_remote)
     marker=root/'ownership.json'
     identity={'plan_sha256':plan['sha256'],'authorization_sha256':authorization['sha256'],'remote':remote}
     if root.exists() and not marker.exists():
         raise BulkError('unowned_workspace','Transport root exists without its exact ownership marker')
     if not root.exists():
+        checkpoint('workspace')
         root.mkdir(parents=True)
+        checkpoint('ownership')
         save(marker,identity)
     elif load_json(marker)!=identity:
         raise BulkError('stale_plan','Transport belongs to another exact approved plan')
-    repo=initialize(root,plan,authorization,remote)
+    def initialize_guard(**context):
+        # The same fresh post-guard proof applies to every initialization write.
+        if offline is None:
+            _offline_protocol(root.parent,plan,authorization,offline,test_remote=test_remote)
+        if write_guard is not None:write_guard(**context)
+        _offline_protocol(root.parent,plan,authorization,offline,test_remote=test_remote)
+    repo=initialize(root,plan,authorization,remote,write_guard=initialize_guard if offline is not None else write_guard)
     branch=authorization['branch'];baseline=plan['baseline']['head']
     if remote_head(repo,'master')!=baseline:
         raise BulkError('baseline_drift','Production master changed before staging')
@@ -257,12 +370,14 @@ def run(plan,authorization,root,*,test_remote=None,verify_remote=None,guard=None
                 raise BulkError('unexpected_worktree','Unrelated or unjournalled worktree changes')
             if shutil.disk_usage(root).free<8*1024**3+batch['bytes']*3:
                 raise BulkError('disk_floor','Insufficient reserved disk space before batch')
+            checkpoint('batch_intent',expected_local_head=before)
             state.update(phase='copying',active_batch=n+1);save(journal_path,state)
             for m in batch['members']:
                 source=reject_links(m['source'])
                 if sha256(source)!=m['sha256'] or source.stat().st_size!=m['size']:
                     raise BulkError('candidate_drift','Approved Python bytes changed')
             sources=b''.join((Path(m['source']).as_posix()+'\n').encode('utf-8') for m in batch['members'])
+            checkpoint('candidate_objects',expected_local_head=before)
             objects=git(repo,'hash-object','-w','--no-filters','--stdin-paths',data=sources).decode().splitlines()
             if objects!=[m['git_blob'] for m in batch['members']]:
                 raise BulkError('copy_hash','Stored Git bytes differ from exact approved candidate blobs')
@@ -271,16 +386,23 @@ def run(plan,authorization,root,*,test_remote=None,verify_remote=None,guard=None
             removals = b''.join(('0 ' + '0' * 40 + '\t' + m['rename_from']).encode('utf-8') + b'\0'
                                 for m in batch['members'] if m.get('rename_from'))
             if removals:
+                checkpoint('rename_index',expected_local_head=before)
                 git(repo,'update-index','-z','--index-info',data=removals)
             index=b''.join(('100644 '+m['git_blob']+'\t'+m['destination']).encode('utf-8')+b'\0' for m in batch['members'])
+            checkpoint('candidate_index',expected_local_head=before)
             git(repo,'update-index','-z','--index-info',data=index)
             paths=b''.join(m['destination'].encode('utf-8')+b'\0' for m in batch['members'])
+            checkpoint('candidate_skip_worktree',expected_local_head=before)
             git(repo,'update-index','--skip-worktree','-z','--stdin',data=paths)
+            checkpoint('commit',expected_local_head=before)
+            if write_guard is not None and git(repo,'rev-parse','HEAD').decode().strip()!=before:
+                raise BulkError('local_head_drift','Expected old local head changed before commit')
             git(repo,'commit','--quiet','-m',f"Approved Python artwork batch {n+1}/{len(plan['batches'])}: {batch['membership_sha256']}")
             commit=git(repo,'rev-parse','HEAD').decode().strip();chain.append(commit)
             verify_diff(repo,before,commit,batch['members'])
             if fail_at=='after_commit':raise BulkError('injected_interruption','After commit before checkpoint')
         commit=chain[n];entry['commit']=commit
+        checkpoint('pack_directory',expected_local_head=chain[-1])
         measurement=root/'packs'/(commit+'.json');measurement.parent.mkdir(exist_ok=True)
         if measurement.exists():
             pack=check_seal(load_json(measurement))
@@ -298,13 +420,16 @@ def run(plan,authorization,root,*,test_remote=None,verify_remote=None,guard=None
             pack=sealed({'commit':commit,'before':before,'plan_sha256':plan['sha256'],
                 'bytes':size,'sha256_pack_stream':digest.hexdigest(),'measurement':'complete_actual_git_pack_stream',
                 'pack_window':0,'pack_compression':1})
+            checkpoint('pack_receipt',expected_local_head=chain[-1])
             save(measurement,pack)
         entry.update(pack_bytes=pack['bytes'],pack_sha256=pack['sha256_pack_stream'],artifact_bytes=batch['bytes'])
         if entry['pack_bytes']>plan['max_pack_bytes']:
             raise BulkError('pack_limit','Measured incremental pack exceeds approved technical cap')
+        checkpoint('local_verified',expected_local_head=chain[-1])
         state.update(commits=chain,phase='local_verified');save(journal_path,state)
         print(f"[BATCH {n+1}/{len(plan['batches'])}] {len(batch['members'])} images; pack {entry['pack_bytes']} bytes; local diff/hash verified",flush=True)
         if prepare_only:
+            checkpoint('prepared',expected_local_head=chain[-1])
             entry['state']='local_verified';state['phase']='prepared';save(journal_path,state)
             if stop_after and n+1>=stop_after:break
             continue
@@ -315,12 +440,22 @@ def run(plan,authorization,root,*,test_remote=None,verify_remote=None,guard=None
             if remote_head(repo,'master')!=baseline:raise BulkError('baseline_drift','Production master moved')
             push_started=time.monotonic()
             for attempt in range(3):
+                push_sent=False
                 try:
+                    if write_guard is not None:
+                        if remote_head(repo,'master')!=baseline or remote_head(repo,branch)!=observed:
+                            raise BulkError('remote_drift','Expected old remote heads changed before push')
+                        checkpoint('push',expected_local_head=chain[-1],expected_remote_head=observed)
+                        if remote_head(repo,'master')!=baseline or remote_head(repo,branch)!=observed:
+                            raise BulkError('remote_drift','Expected old remote heads changed during write guard')
+                    push_sent=True
                     git(repo,'push','--porcelain','origin',commit+':refs/heads/'+branch,timeout=1200)
                     break
                 except BulkError as error:
+                    if not push_sent:raise
                     after=remote_head(repo,branch)
                     state['events'].append({'batch':n+1,'event':'ambiguous_push','remote_head':after,'error':str(error)})
+                    checkpoint('ambiguous_push',expected_local_head=chain[-1],expected_remote_head=after)
                     save(journal_path,state)
                     if after==commit:break
                     if after not in [None,before] or attempt==2:raise
@@ -328,12 +463,14 @@ def run(plan,authorization,root,*,test_remote=None,verify_remote=None,guard=None
             entry['push_seconds']=time.monotonic()-push_started
             if remote_head(repo,branch)!=commit:raise BulkError('remote_drift','Push was not reconciled to intended commit')
             if fail_at=='after_push':raise BulkError('injected_interruption','After push before checkpoint')
+        checkpoint('pushed_pending_verification',expected_local_head=chain[-1],expected_remote_head=commit)
         state['phase']='pushed_pending_hash_verification';save(journal_path,state)
         verify_started=time.monotonic()
         if verify_remote:verify_remote(commit,batch['members'])
         elif test_remote is not None:verify_diff(Path(test_remote),before,commit,batch['members'])
         else:raise BulkError('verification_required','Actual remote byte verification adapter required')
         entry.update(remote_hash_verified=len(batch['members']),verification_seconds=time.monotonic()-verify_started,state='remote_verified')
+        checkpoint('remote_verified',expected_local_head=chain[-1],expected_remote_head=commit)
         state.update(phase='idle');save(journal_path,state)
         print(f"[BATCH {n+1}] remote commit and all {len(batch['members'])} actual image hashes verified",flush=True)
         if stop_after and n+1>=stop_after:break
@@ -343,6 +480,8 @@ def run(plan,authorization,root,*,test_remote=None,verify_remote=None,guard=None
         'batches':state['batches'],'events':state['events'],
         'network_artwork_push_batches':sum('push_seconds' in b for b in state['batches']) if test_remote is None else 0,
         'elapsed_seconds':time.monotonic()-started,'master_unchanged':remote_head(repo,'master')==baseline})
+    checkpoint('transport_report',expected_local_head=chain[-1] if chain else baseline,
+               expected_remote_head=remote_head(repo,branch))
     save(root/'transport-report.json',report)
     return report
 
@@ -391,10 +530,15 @@ class RemoteBytes:
                 if n%75==0:print(f'[REMOTE BYTES] {n}/{len(members)} actual SHA-256 verified',flush=True)
 
 
-def final_remote_diff(root,plan,auth,report):
-    from .remote import ReadOnlyGitHub
-    token=subprocess.check_output(['gh','auth','token'],text=True).strip()
-    client=ReadOnlyGitHub(REPOSITORY,token=token)
+def final_remote_diff(root,plan,auth,report,*,offline=None):
+    _offline_protocol(root,plan,auth,offline,report=report)
+    if offline is None:
+        from .remote import ReadOnlyGitHub
+        token=subprocess.check_output(['gh','auth','token'],text=True).strip()
+        client=ReadOnlyGitHub(REPOSITORY,token=token)
+    else:
+        from .lifecycle.draft_transport import OfflineProtocol
+        client=OfflineProtocol.client(offline,root,plan,auth,report)
     head,tree=client.head(auth['branch'])
     if head!=report['head'] or client.head('master')[0]!=plan['baseline']['head']:
         raise BulkError('remote_drift','Remote head/master changed before complete diff verification')
@@ -420,6 +564,7 @@ def final_remote_diff(root,plan,auth,report):
     result=sealed({'baseline':plan['baseline'],'head':head,'tree':tree,'modified':len(changes)-additions-renames,
         'additions':additions,'deletions':0,'renames':renames,'unexpected_paths':[],
         'all_remote_blob_identities_match':True,'actual_response_hash_receipts':len(members)})
+    _offline_protocol(root,plan,auth,offline,report=report)
     save(Path(root)/'complete-remote-diff.json',result)
     return result
 

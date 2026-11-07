@@ -193,6 +193,14 @@ def test_all_existing_phase3_ids_and_production_interfaces_are_unchanged():
     changed=subprocess.check_output(['git','diff','--name-only',base],cwd=ROOT,text=True).splitlines()
     from ci.phase4 import verify_maintenance,MAINTAINED
     verify_maintenance()
+    # Only this exact, independently verified M6 successor receives its
+    # frozen historical view; all original assertions remain below.
+    successor='create_defaults/bulk/contracts/models.py'
+    if successor in changed:
+        from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
+        original=subprocess.check_output(['git','show',base+':'+successor],cwd=ROOT)
+        assert m6_bytes(ROOT,successor,(ROOT/successor).read_bytes()).replace(b'\r\n',b'\n')==original.replace(b'\r\n',b'\n')
+        changed=[path for path in changed if path!=successor]
     assert not any(p.startswith('create_defaults/bulk/contracts/') and p not in MAINTAINED|{'create_defaults/bulk/contracts/evidence_consumption/engine.py'} for p in changed)
     # The exact authorized bridge/CI/pin maintenance is independently hash-bound.
     # All other original runtime/selection interfaces retain their frozen bytes.

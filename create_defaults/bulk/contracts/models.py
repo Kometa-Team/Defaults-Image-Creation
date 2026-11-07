@@ -47,7 +47,7 @@ def _json_value(value, depth=0):
         for child in value:
             _json_value(child, depth + 1)
     elif type(value) is str:
-        if any(0xD800 <= ord(c) <= 0xDFFF for c in value):
+        if not value.isascii() and any(0xD800 <= ord(c) <= 0xDFFF for c in value):
             raise BulkError("invalid_contract_json", "Unpaired Unicode surrogate")
     elif value is None or type(value) in (bool, int):
         pass
