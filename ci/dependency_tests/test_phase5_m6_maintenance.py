@@ -11,8 +11,8 @@ ROOT=m6.ROOT
 class Phase5M6MaintenanceTests(unittest.TestCase):
     def test_eight_exact_successors_and_30_paths(self):
         value=m6.verify_checkout()
-        self.assertEqual(len(m6.MEMBERS|m6.ANCHORS),35)
-        self.assertEqual(len(m6.APPROVED),13)
+        self.assertEqual(len(m6.MEMBERS|m6.ANCHORS),36)
+        self.assertEqual(len(m6.APPROVED),14)
         for name,(old,new) in m6.APPROVED.items():
             self.assertEqual(m6.sha((ROOT/name).read_bytes()),new)
             self.assertEqual(m6.sha(m6._old(name)),old)
@@ -252,6 +252,71 @@ class Phase5M6MaintenanceTests(unittest.TestCase):
             return original(path)
         with patch.object(Path,'read_bytes',missing),self.assertRaises(OSError):
             phase4.historical_checksum(ROOT,target)
+
+    def test_exact_collection_views_preserve_receipts_and_reject_physical_tamper(self):
+        from ci import phase5_m5_maintenance as m5,people_storage_maintenance as storage
+        adapter=m5.collection_adapter();value=adapter.verify()
+        pins={'ci/phase4.py':'16e7c89d628f42d719a726b805b578483a76bc5f6183a6dbeed06e0609f24677',
+              'ci/dependency_tests/test_phase5_m5_maintenance.py':'c52e04c1d57d4eccd48155a7da4c8404dc0dba7a9f7be2557e99c33bc092985c'}
+        original=Path.read_bytes
+        for name,pin in pins.items():
+            binding=value['files'][name];before=adapter._committed(binding['before_commit'],name)
+            self.assertEqual(binding['before_sha256'],pin)
+            self.assertEqual(m6.sha(before),pin)
+            self.assertEqual(m6.RETAINED[name],[pin])
+            self.assertEqual(m6.historical_bytes(ROOT,name,before),before)
+            self.assertEqual(adapter.historical_bytes(ROOT,name,before),before)
+            for forged in (b'forged',before+b'\n'):
+                with self.assertRaises(ValueError):m6.historical_bytes(ROOT,name,forged)
+            with self.assertRaises(ValueError):m6.historical_bytes(ROOT/'foreign',name,before)
+            for replacement in (before,m6._old(name),original(ROOT/name)+b'\n# tampered'):
+                def read(path):return replacement if path==ROOT/name else original(path)
+                with patch.object(Path,'read_bytes',read),self.assertRaises(ValueError):
+                    m6.historical_bytes(ROOT,name,before)
+            def missing(path):
+                if path==ROOT/name:raise FileNotFoundError(name)
+                return original(path)
+            with patch.object(Path,'read_bytes',missing),self.assertRaises(OSError):
+                m6.historical_bytes(ROOT,name,before)
+            other=ROOT/'create_defaults/bulk/lifecycle/draft_models.py'
+            def tamper(path):return b'changed' if path==other else original(path)
+            with patch.object(Path,'read_bytes',tamper),self.assertRaises(ValueError):
+                m6.historical_bytes(ROOT,name,before)
+        name='ci/phase4.py'
+        expected=m6._git(ROOT,'show','68179d1c568449375ca72b23239b57770dfc229e:'+name)
+        self.assertEqual(storage.historical_bytes(ROOT,name,(ROOT/name).read_bytes()),expected)
+        from ci import people_unicode_maintenance as unicode
+        name='create_defaults/phase4/tests/test_ci_foundations.py'
+        before=unicode.predecessor(name);pin='54f37e811ceebc40d82f12106e52ef5fd02d98d5369b3d1f73f5118da0c53347'
+        self.assertEqual(unicode.receipts()[1]['files'][name]['before_sha256'],pin)
+        self.assertEqual(m6.sha(before),pin)
+        self.assertEqual(m6.RETAINED[name],[pin])
+        self.assertEqual(m6.historical_bytes(ROOT,name,before),before)
+        with self.assertRaises(ValueError):m6.historical_bytes(ROOT,name,before+b'\n')
+        with self.assertRaises(ValueError):m6.historical_bytes(ROOT/'foreign',name,before)
+        for replacement in (before,m6._old(name),original(ROOT/name)+b'\n# tampered'):
+            def read(path):return replacement if path==ROOT/name else original(path)
+            with patch.object(Path,'read_bytes',read),self.assertRaises(ValueError):
+                m6.historical_bytes(ROOT,name,before)
+
+    def test_synthetic_foundation_ids_keep_real_verifier_and_all_190_sources(self):
+        from ci import phase4_transactions as tx,people_security_maintenance as security
+        from create_defaults.phase4.tests import test_ci_foundations as fixtures
+        groups=json.loads(m6._git(ROOT,'show',m6.BASE+':ci/phase4-transaction-test-ids.json'))
+        self.assertEqual(json.loads(tx.IDS.read_bytes()),groups)
+        with patch.object(tx,'selections',side_effect=AssertionError('fixture must not invoke live verification')):
+            rows=fixtures.reports()
+        expected=set().union(*map(set,groups.values()))
+        for row in rows:
+            self.assertEqual(set(row['all_collection']['nodes'])-{'fixture.py::test_required','composition.py::test_pixels','composition.py::test_security'},expected)
+        seen=set();original=Path.read_bytes
+        def read(path):seen.add(path);return original(path)
+        with patch.object(Path,'read_bytes',read),patch.object(tx,'selections',wraps=tx.selections) as selected,patch.object(security,'verify',wraps=security.verify) as proof:
+            self.assertEqual(set(fixtures.verify(rows)),{'Windows','Linux','composition','reviews'})
+            self.assertEqual(selected.call_count,1)
+            self.assertEqual(proof.call_count,1)
+        pins=json.loads((ROOT/security.PINS).read_bytes())
+        self.assertTrue({ROOT/n for n in pins['files']}<=seen)
 
     def test_actual_report_requires_every_ID_phase_and_no_authority(self):
         from ci import phase5_m6 as runner

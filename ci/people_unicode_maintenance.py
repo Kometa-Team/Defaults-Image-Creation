@@ -107,9 +107,13 @@ def verify(root=ROOT):
         if set(binding) != {'operation', 'text_lf', 'before_sha256', 'sha256'}:
             raise ValueError('Changed Unicode binding schema')
         before = predecessor(name)
+        current = paths[name].read_bytes()
+        if name == 'create_defaults/phase4/tests/test_ci_foundations.py':
+            from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
+            current = m6_bytes(root, name, current)
         if (binding['operation'] != ('A' if before is None else 'M')
                 or binding['before_sha256'] != (None if before is None else digest(before, binding['text_lf']))
-                or digest(publication.historical_bytes(root, name, paths[name].read_bytes()), binding['text_lf']) != binding['sha256']):
+                or digest(publication.historical_bytes(root, name, current), binding['text_lf']) != binding['sha256']):
             raise ValueError('Changed Unicode predecessor/successor: '+name)
     return bindings
 
