@@ -338,6 +338,34 @@ class Phase5M6MaintenanceTests(unittest.TestCase):
             else:value['native_artifacts']={}
             with self.subTest(attack=attack),self.assertRaises(ValueError):runner.verify(value,expected)
 
+    def test_independent_cohort_checker_rechecks_paths_and_rejects_links(self):
+        import stat
+        from types import SimpleNamespace
+        from ci import people_readme_maintenance as readme
+        names=m6.MEMBERS|m6.ANCHORS
+        with patch.object(readme,'_regular_files',side_effect=AssertionError('unverified helper used')):
+            with patch.object(m6,'regular',wraps=m6.regular) as checker:
+                first=m6._physical_paths(ROOT,names)
+                second=m6._physical_paths(ROOT,names)
+            self.assertEqual(first,second)
+            self.assertEqual(set(first),names)
+            self.assertEqual(checker.call_count,2*len(names))
+            self.assertEqual({c.args[1] for c in checker.call_args_list},names)
+        target=ROOT/'.github/workflows/phase5-m6-validation.yml'
+        original=Path.lstat
+        for label,changed,mode,attributes in (
+                ('leaf link',target,stat.S_IFLNK,0),
+                ('parent link',target.parent,stat.S_IFLNK,0),
+                ('root reparse',ROOT,stat.S_IFDIR,0x400),
+                ('leaf reparse',target,stat.S_IFREG,0x400),
+                ('nonregular leaf',target,stat.S_IFDIR,0)):
+            def altered(path,*args,**kwargs):
+                return SimpleNamespace(st_mode=mode,st_file_attributes=attributes) if path==changed else original(path,*args,**kwargs)
+            with self.subTest(attack=label),patch.object(Path,'lstat',altered):
+                with self.assertRaises(ValueError):m6._physical_paths(ROOT,names)
+        for name in ('../foreign.py',str(ROOT/'ci/phase5_m6_maintenance.py')):
+            with self.subTest(escape=name),self.assertRaises(ValueError):m6._physical_paths(ROOT,{name})
+
     def test_new_workflow_exact_ID_matrix_readonly_and_bounded(self):
         import yaml
         from ci import phase5_m6 as runner
@@ -346,7 +374,7 @@ class Phase5M6MaintenanceTests(unittest.TestCase):
         self.assertEqual(set(value['jobs']['m6']['strategy']['matrix']['os']),{'windows-latest','ubuntu-latest'})
         self.assertEqual(set(value['jobs']['m6']['strategy']['matrix']['group']),set(runner.GROUPS))
         for name,job in value['jobs'].items():
-            timeout="${{ matrix.os == 'windows-latest' && matrix.group == 'current' && 60 || matrix.group == 'transport' && 30 || 15 }}" if name=='m6' else 15
+            timeout="${{ matrix.os == 'windows-latest' && (matrix.group == 'current' || matrix.group == 'multi') && 60 || matrix.group == 'transport' && 30 || 15 }}" if name=='m6' else 15
             self.assertEqual(job['timeout-minutes'],timeout)
             for step in job['steps']:
                 if 'uses' in step:self.assertRegex(step['uses'],r'@[0-9a-f]{40}$')
@@ -357,6 +385,7 @@ class Phase5M6MaintenanceTests(unittest.TestCase):
         self.assertEqual(contract['platform_groups'],{p:list(runner.GROUPS) for p in ('Windows','Linux')})
         self.assertEqual(contract['budgets']['job_timeout_minutes'],15)
         self.assertEqual(contract['budgets']['windows_current_integration_timeout_minutes'],60)
+        self.assertEqual(contract['budgets']['windows_multi_integration_timeout_minutes'],60)
         self.assertEqual(contract['budgets']['native_transport_integration_timeout_seconds'],1800)
         self.assertEqual(contract['budgets']['native_transport_integration_job_timeout_minutes'],30)
         self.assertEqual(contract['budgets']['native_transport_integration_group'],'transport')

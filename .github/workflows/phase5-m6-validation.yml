@@ -8,7 +8,7 @@ jobs:
   m6:
     name: Phase 5 M6 ${{ matrix.group }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: ${{ matrix.os == 'windows-latest' && matrix.group == 'current' && 60 || matrix.group == 'transport' && 30 || 15 }}
+    timeout-minutes: ${{ matrix.os == 'windows-latest' && (matrix.group == 'current' || matrix.group == 'multi') && 60 || matrix.group == 'transport' && 30 || 15 }}
     env:
       EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
       PYTHONDONTWRITEBYTECODE: '1'

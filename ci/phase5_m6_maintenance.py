@@ -10,7 +10,7 @@ from ci.people_storage_maintenance import regular
 ROOT=Path(__file__).resolve().parents[1]
 BASE='9da96b0df12526daaee6156bc7778bbd57d9e8b6'
 MANIFEST=ROOT/'ci/phase5-m6-maintenance-v1.json'
-PIN='23db82401a8fea8ae09564b4e3c3c8056abc1dde4e42607af1416e1bff5b74db'
+PIN='027e7d968a01fb8c068dff578bbc202bb112c4bdedc79255f183cc62b1777ba7'
 INTERSECTIONS={'production_intersection': ['create_defaults/bulk/library_stage.py', 'create_defaults/bulk/operator_publication.py'], 'adoption_intersection': ['create_defaults/bulk/contracts/models.py', 'create_defaults/bulk/library_stage.py', 'create_defaults/bulk/operator_publication.py'], 'frozen_m7_intersection': ['ci/dependency_maintenance.py', 'ci/phase4.py', 'create_defaults/bulk/contracts/models.py', 'create_defaults/bulk/library_stage.py', 'create_defaults/bulk/lifecycle/models.py', 'create_defaults/bulk/operator_publication.py', 'create_defaults/phase3/tests/test_final_phase3_acceptance.py', 'create_defaults/phase4/tests/test_ci_foundations.py']}
 MEMBERS=frozenset(['.github/workflows/phase5-m6-validation.yml', 'ci/dependency_maintenance.py', 'ci/dependency_tests/test_phase5_m5_maintenance.py', 'ci/dependency_tests/test_phase5_m6_maintenance.py', 'ci/phase5-m6-test-ids.json', 'ci/phase5_m5_maintenance.py', 'ci/phase5_m6.py', 'create_defaults/bulk/library_stage.py', 'create_defaults/bulk/lifecycle/draft_models.py', 'create_defaults/bulk/lifecycle/draft_progress.py', 'create_defaults/bulk/lifecycle/draft_transport.py', 'create_defaults/bulk/lifecycle/schemas/draft-transport-v1.schema.json', 'create_defaults/bulk/operator_publication.py', 'create_defaults/lifecycle/PHASE5_M6_ACCEPTANCE.json', 'create_defaults/lifecycle/PHASE5_M6_CI_MAINTENANCE.md', 'create_defaults/lifecycle/PHASE5_M6_COVERAGE.json', 'create_defaults/lifecycle/PHASE5_M6_IMPLEMENTATION.md', 'create_defaults/lifecycle/ROADMAP.md', 'create_defaults/phase5/m6_tests/conftest.py', 'create_defaults/phase5/m6_tests/helpers.py', 'create_defaults/phase5/m6_tests/test_binding.py', 'create_defaults/phase5/m6_tests/test_boundaries.py', 'create_defaults/phase5/m6_tests/test_draft.py', 'create_defaults/phase5/m6_tests/test_preservation.py', 'create_defaults/phase5/m6_tests/test_recovery.py', 'create_defaults/phase5/m6_tests/test_transport.py', 'create_defaults/bulk/contracts/models.py', 'ci/people_storage_maintenance.py', 'ci/dependabot_maintenance.py', 'create_defaults/bulk/lifecycle/models.py', 'ci/phase4.py', 'ci/dependency_tests/test_people_job_retention_maintenance.py', 'create_defaults/phase3/tests/test_final_phase3_acceptance.py', 'create_defaults/phase4/tests/test_ci_foundations.py'])
 ANCHORS=frozenset(['ci/phase5-m6-maintenance-v1.json', 'ci/phase5_m6_maintenance.py'])
@@ -115,10 +115,12 @@ def _ancestry(root,head):_git(root,'merge-base','--is-ancestor',BASE,head)
 
 
 def _physical_paths(root,names):
-    from ci.people_readme_maintenance import _regular_files
-    # A new lstat of every leaf and shared ancestor on EVERY call. The inherited
-    # helper caches path arithmetic only, never filesystem or permission facts.
-    return _regular_files(root,names|{MANIFEST.relative_to(ROOT).as_posix()})
+    # The README helper is a Unicode successor; it cannot authenticate itself.
+    # Use the independent checker, with fresh leaf/ancestor checks on every call.
+    paths={name:root/name for name in names|{MANIFEST.relative_to(ROOT).as_posix()}}
+    if any(Path(name).is_absolute() or root not in path.parents or '..' in path.relative_to(root).parts for name,path in paths.items()):
+        raise ValueError('M6 policy path escaped root')
+    return {name:regular(root,name) for name in paths}
 
 
 def verify_checkout(root=None):

@@ -243,7 +243,8 @@
     "native_transport_integration_group": "transport",
     "native_transport_integration_test": "create_defaults/phase5/m6_tests/test_transport.py::test_M6_complete_native_operator_transport",
     "native_transport_integration_job_timeout_minutes": 30,
-    "windows_current_integration_timeout_minutes": 60
+    "windows_current_integration_timeout_minutes": 60,
+    "windows_multi_integration_timeout_minutes": 60
   },
   "reviewed_paths": [
     ".github/workflows/phase5-m6-validation.yml",
