@@ -38,6 +38,16 @@ RECOVERY_PIN = 'ae385b405aafee29acd43993f8352da926ba95a396360266b802023275aa28df
 RECOVERY_MEMBERS = frozenset(('ci/publication_tests/test_git_recovery_maintenance.py', 'create_people_posters/people_git_recovery.py', 'create_people_posters/people_git_transport.py', 'create_people_posters/people_publication_state.py', 'create_people_posters/reliability_tests/test_git_recovery.py'))
 
 
+def timeout_bytes(root, name, current):
+    from ci.phase5_m6_maintenance import timeout_bytes as project
+    return project(root, name, current)
+
+
+def timeout_hash(name, expected):
+    from ci.phase5_m6_maintenance import timeout_selected_hash
+    return timeout_selected_hash(name, expected)
+
+
 def recovery_bindings(root=ROOT):
     """Versioned exact recovery successor; historical native receipt stays intact."""
     if Path(root).resolve()!=ROOT.resolve():raise ValueError('Foreign recovery policy checkout')
@@ -53,7 +63,7 @@ def recovery_bindings(root=ROOT):
     _recovery_ancestry(_head(ROOT))
     for name,b in value['files'].items():
         if (set(b)!={'operation','text_lf','before_sha256','predecessor_lf','sha256'} or b['text_lf'] is not True
-                or digest(regular(ROOT,name).read_bytes())!=b['sha256']):raise ValueError('Changed physical recovery successor: '+name)
+                or digest(timeout_bytes(root,name,regular(ROOT,name).read_bytes()))!=b['sha256']):raise ValueError('Changed physical recovery successor: '+name)
         before=_recovery_predecessor(name)
         if before is None:
             if b['operation']!='A' or b['before_sha256'] is not None or b['predecessor_lf'] is not None:raise ValueError('Expanded recovery addition')
@@ -152,34 +162,35 @@ def verify(root=ROOT):
     effective = {}
     for name, binding in value['files'].items():
         before = predecessor(name)
-        physical = regular(ROOT, name).read_bytes()
+        physical = timeout_bytes(root, name, regular(ROOT, name).read_bytes())
         historical_current = successors[name]['predecessor_lf'].encode() if name in successors else physical
         if (set(binding) != {'operation', 'before_sha256', 'sha256', 'text_lf'} or binding['text_lf'] is not True
                 or binding['operation'] != ('A' if before is None else 'M')
                 or binding['before_sha256'] != (None if before is None else digest(before))
                 or digest(historical_current) != binding['sha256']):
             raise ValueError('Changed physical publication successor: ' + name)
-        effective[name] = dict(binding, sha256=successors[name]['sha256']) if name in successors else binding
+        effective[name] = dict(binding, sha256=timeout_hash(name, successors[name]['sha256'] if name in successors else binding['sha256']))
     return effective
 
 
 def historical_bytes(root, name, current):
+    current = timeout_bytes(root, name, current)
     if name == CI_TEST_LOCK:
         verify(root)
         return predecessor(name) if digest(current) == CI_TEST_LOCK_SHA else current
     if name not in MEMBERS:
         return current
     bindings = verify(root)
-    if name in bindings and bindings[name]['before_sha256'] is not None and digest(current) == bindings[name]['sha256']:
+    if name in bindings and bindings[name]['before_sha256'] is not None and digest(current) == digest(timeout_bytes(root, name, regular(root, name).read_bytes())):
         return predecessor(name)
     return current
 
 
 def selected_hash(name, expected):
     if name not in MEMBERS:
-        return expected
+        return timeout_hash(name, expected)
     binding = verify().get(name)
-    return binding['sha256'] if binding and binding['before_sha256'] is not None and expected == binding['before_sha256'] else expected
+    return timeout_hash(name, binding['sha256'] if binding and binding['before_sha256'] is not None and expected == binding['before_sha256'] else expected)
 
 
 def scope_members():

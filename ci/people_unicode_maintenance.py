@@ -24,7 +24,7 @@ CI_MEMBERS = frozenset(('.github/workflows/default-poster-validation.yml', '.git
 ANCHORS = frozenset((SOURCE, DELIVERY, 'ci/people_unicode_maintenance.py',
                      'ci/phase5_m5_maintenance.py'))
 
-PUBLICATION_ADAPTER_SHA256 = 'f210c17b1a27d68fcec5371d380077ed01ebc507867123e674edea6fda06482c'
+PUBLICATION_ADAPTER_SHA256 = '39df495fe7d249113a5fd074a71c2696bc8a4602095ce2e554579a371fedd15e'
 
 
 @lru_cache(maxsize=8)
@@ -107,7 +107,7 @@ def verify(root=ROOT):
         if set(binding) != {'operation', 'text_lf', 'before_sha256', 'sha256'}:
             raise ValueError('Changed Unicode binding schema')
         before = predecessor(name)
-        current = paths[name].read_bytes()
+        current = publication.timeout_bytes(root, name, paths[name].read_bytes())
         if name == 'create_defaults/phase4/tests/test_ci_foundations.py':
             from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
             current = m6_bytes(root, name, current)
@@ -135,9 +135,9 @@ def historical_bytes(root, name, current):
 def selected_hash(name, expected):
     expected = publication_adapter().selected_hash(name, expected)
     if name not in SOURCE_MEMBERS | CI_MEMBERS:
-        return expected
+        return publication_adapter().timeout_hash(name, expected)
     binding = verify()[name]
-    return binding['sha256'] if binding['before_sha256'] is not None and expected == binding['before_sha256'] else expected
+    return publication_adapter().timeout_hash(name, binding['sha256'] if binding['before_sha256'] is not None and expected == binding['before_sha256'] else expected)
 
 
 def scope_members():
@@ -168,6 +168,7 @@ def verify_scope(root, baseline, names):
         else:
             expected = digest(regular(ROOT, name).read_bytes())
             text = True
+        expected = publication_adapter().timeout_hash(name, expected)
         if digest(committed, text) != expected:
             raise ValueError('Unapproved committed Unicode successor: '+name)
         seen.add(name)

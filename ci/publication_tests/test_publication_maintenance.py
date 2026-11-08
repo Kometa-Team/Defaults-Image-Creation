@@ -74,7 +74,8 @@ class PublicationMaintenanceTests(unittest.TestCase):
 
     def test_independent_current_jobs_and_existing_workflow_unchanged(self):
         name='.github/workflows/people-bulk-validation.yml'
-        current=(ROOT/name).read_bytes().replace(b'\r\n',b'\n')
+        from ci.phase5_m6_maintenance import timeout_bytes
+        current=timeout_bytes(ROOT,name,(ROOT/name).read_bytes()).replace(b'\r\n',b'\n')
         old=self.adapter().predecessor(name).replace(b'\r\n',b'\n')
         start=current.index(b'  publication:\n');end=current.index(b'  docker:\n',start)
         job=current[start:end].decode()

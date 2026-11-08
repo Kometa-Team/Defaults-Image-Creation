@@ -21,10 +21,10 @@ class RecoveryRegistrationTests(unittest.TestCase):
         self.assertEqual(len(recovery),5);self.assertEqual(len(native),7);self.assertEqual(len(ci),4)
         self.assertEqual(set(recovery),p.RECOVERY_MEMBERS)
         for name,b in recovery.items():
-            self.assertEqual(p.digest((ROOT/name).read_bytes()),b['sha256'])
+            self.assertEqual(p.digest(m6.timeout_bytes(ROOT,name,(ROOT/name).read_bytes())),b['sha256'])
             if name in native:self.assertEqual(native[name]['sha256'],b['sha256'])
         for name,b in ci.items():
-            self.assertEqual(m6.sha((ROOT/name).read_bytes()),b['sha256'])
+            self.assertEqual(m6.sha(m6.timeout_bytes(ROOT,name,(ROOT/name).read_bytes())),b['sha256'])
             self.assertEqual(m6.sha(m6.recovery_ci_bytes(ROOT,name,(ROOT/name).read_bytes())),b['before_sha256'])
             for forged in (b'forged',b['predecessor_lf'].encode()+b'\n'):
                 self.assertEqual(m6.recovery_ci_bytes(ROOT,name,forged),forged)

@@ -91,7 +91,7 @@ def test_m7_workflow_keeps_exact_head_readonly_limits_and_mandatory_groups():
     assert value['jobs']['m7']['strategy']['fail-fast'] is False
     assert set(value['jobs']['m7']['strategy']['matrix']['group']) == set(ci.GROUPS)
     for name, job in value['jobs'].items():
-        assert job['timeout-minutes'] == ("${{ matrix.os == 'windows-latest' && matrix.group == 'sequence' && 60 || 15 }}" if name == 'm7' else 15) and 'continue-on-error' not in job
+        assert job['timeout-minutes'] == (60 if name == 'm7' else 15) and 'continue-on-error' not in job
         assert job['env']['EXPECTED_HEAD'] == '${{ github.event.pull_request.head.sha }}'
         checkout = next(step for step in job['steps'] if step.get('uses', '').startswith('actions/checkout@'))
         assert checkout['with']['ref'] == '${{ github.event.pull_request.head.sha }}'

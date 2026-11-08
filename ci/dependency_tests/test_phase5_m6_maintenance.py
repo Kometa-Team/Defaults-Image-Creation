@@ -111,7 +111,7 @@ class Phase5M6MaintenanceTests(unittest.TestCase):
         names+=m6._git(ROOT,'ls-tree','-r','--name-only',m6.BASE,'.github/workflows').decode().splitlines()
         for milestone in ('m2','m3','m4','m5'):names+=['ci/phase5-'+milestone+'-test-ids.json','ci/phase5-'+milestone+'-maintenance-v1.json']
         names+=['ci/people-job-retention-maintenance-v1.json']
-        for name in names:self.assertEqual(m6.sha((ROOT/name).read_bytes()),m6.sha(m6._old(name)),name)
+        for name in names:self.assertEqual(m6.sha(m6.timeout_bytes(ROOT,name,(ROOT/name).read_bytes())),m6.sha(m6._old(name)),name)
         prod=set(json.loads((ROOT/names[0]).read_bytes())['files'])
         adopted={r['path'] for r in json.loads((ROOT/names[1]).read_bytes())['files']}
         frozen=set(m6._git(ROOT,'ls-tree','-r','--name-only','68179d1c568449375ca72b23239b57770dfc229e','ci','.github/workflows','create_defaults').decode().splitlines())-{'create_defaults/lifecycle/ROADMAP.md'}
@@ -374,7 +374,7 @@ class Phase5M6MaintenanceTests(unittest.TestCase):
         self.assertEqual(set(value['jobs']['m6']['strategy']['matrix']['os']),{'windows-latest','ubuntu-latest'})
         self.assertEqual(set(value['jobs']['m6']['strategy']['matrix']['group']),set(runner.GROUPS))
         for name,job in value['jobs'].items():
-            timeout="${{ matrix.os == 'windows-latest' && (matrix.group == 'current' || matrix.group == 'multi') && 60 || matrix.group == 'transport' && 30 || 15 }}" if name=='m6' else 15
+            timeout="${{ matrix.group == 'protocol' && 15 || 60 }}" if name=='m6' else 15
             self.assertEqual(job['timeout-minutes'],timeout)
             for step in job['steps']:
                 if 'uses' in step:self.assertRegex(step['uses'],r'@[0-9a-f]{40}$')

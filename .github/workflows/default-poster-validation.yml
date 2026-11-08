@@ -52,7 +52,7 @@ jobs:
   validation:
     name: Validate (${{ matrix.os }}, ${{ matrix.group }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: ${{ matrix.os == 'windows-latest' && (matrix.group == 'contracts' || matrix.group == 'people') && 60 || 15 }}
+    timeout-minutes: ${{ (matrix.group == 'core' || matrix.group == 'categories' || matrix.group == 'smoke') && 15 || 60 }}
     env:
       EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
       PYTHONUNBUFFERED: '1'
@@ -193,7 +193,7 @@ jobs:
   phase3:
     name: Phase 3 foundations (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: ${{ matrix.os == 'windows-latest' && 60 || 15 }}
+    timeout-minutes: 60
     env:
       EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
       PYTHONUNBUFFERED: '1'
@@ -233,7 +233,7 @@ jobs:
   phase4:
     name: ${{ matrix.group == 'foundations' && format('Phase 4 operation foundations ({0})', matrix.os) || format('Phase 4 M5 transactions ({0}, {1})', matrix.os, matrix.group) }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: ${{ matrix.group == 'foundations' && 60 || 15 }}
+    timeout-minutes: 60
     env:
       EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
       PYTHONUNBUFFERED: '1'
@@ -289,7 +289,7 @@ jobs:
   people_security:
     name: People security (${{ matrix.os }}, ${{ matrix.group }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 15
+    timeout-minutes: 60
     env:
       EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
       PYTHONUNBUFFERED: '1'

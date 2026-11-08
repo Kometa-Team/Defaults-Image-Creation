@@ -123,6 +123,79 @@ def _physical_paths(root,names):
     return {name:regular(root,name) for name in paths}
 
 
+# CI timeout-only successor. Historical receipts and assertions are immutable.
+TIMEOUT_RECEIPT='ci/validation-timeouts-v1.json'
+TIMEOUT_BASE='8b90be3a2d72b9c11acd2aa51eb9f75d80d964a4'
+TIMEOUT_PIN='e22ef862060955910e270519cc7ee613475f99e8a9de7c203315723c7336a0f5'
+TIMEOUT_MEMBERS=frozenset(['.github/workflows/default-poster-validation.yml', '.github/workflows/lifecycle-m6-validation.yml', '.github/workflows/lifecycle-m7-validation.yml', '.github/workflows/people-bulk-validation.yml', '.github/workflows/people-storage-validation.yml', '.github/workflows/phase5-m3-validation.yml', '.github/workflows/phase5-m4-validation.yml', '.github/workflows/phase5-m5-validation.yml', '.github/workflows/phase5-m6-validation.yml', 'ci/dependency_tests/test_phase5_m6_maintenance.py', 'ci/people_publication_maintenance.py', 'ci/people_unicode_maintenance.py', 'ci/phase5_m5_maintenance.py', 'ci/publication_tests/test_git_recovery_maintenance.py', 'ci/publication_tests/test_publication_maintenance.py', 'ci/publication_tests/test_validation_timeouts.py', 'ci/tests/test_validation.py', 'ci/unicode_tests/test_people_unicode_maintenance.py', 'create_defaults/phase4/m7_tests/test_ci.py'])
+
+
+@lru_cache(maxsize=4)
+def _timeout_decode(raw,pin):
+    v=json.loads(raw)
+    if (fingerprint(v)!=pin or set(v)!={'version','baseline_commit','files','ci_authorized','publication_authorized'}
+            or v['version']!=1 or v['baseline_commit']!=TIMEOUT_BASE or set(v['files'])!=TIMEOUT_MEMBERS
+            or v['ci_authorized'] is not False or v['publication_authorized'] is not False):
+        raise ValueError('Changed exact validation timeout registration')
+    for name,b in v['files'].items():
+        if set(b)!={'before_sha256','predecessor_lf','sha256'}:raise ValueError('Changed timeout binding schema')
+        before=_timeout_predecessor(name)
+        if ((before is None and (b['before_sha256'] is not None or b['predecessor_lf'] is not None))
+                or (before is not None and (type(b['predecessor_lf']) is not str or b['predecessor_lf'].encode()!=before
+                    or sha(before)!=b['before_sha256']))):raise ValueError('Changed timeout predecessor')
+    return v['files']
+
+
+@lru_cache(maxsize=64)
+def _timeout_predecessor(name):
+    if name not in TIMEOUT_MEMBERS:raise ValueError('Unapproved timeout predecessor')
+    entry=_git(ROOT,'ls-tree','-z',TIMEOUT_BASE,'--',name)
+    if not entry:return None
+    if not entry.startswith(b'100644 blob '):raise ValueError('Timeout predecessor is not regular')
+    return _git(ROOT,'show',TIMEOUT_BASE+':'+name)
+
+
+@lru_cache(maxsize=32)
+def _timeout_ancestry(head):_git(ROOT,'merge-base','--is-ancestor',TIMEOUT_BASE,head)
+
+
+def timeout_bindings(root=ROOT):
+    if Path(root).resolve()!=ROOT.resolve():raise ValueError('Foreign validation timeout checkout')
+    from ci.people_colorize_maintenance import _head
+    _timeout_ancestry(_head(ROOT))
+    return _timeout_decode(regular(ROOT,TIMEOUT_RECEIPT).read_bytes(),TIMEOUT_PIN)
+
+
+def timeout_bytes(root,name,current):
+    if name not in TIMEOUT_MEMBERS:return current
+    b=timeout_bindings(root)[name]
+    # Fresh physical bytes are mandatory, including when a caller supplies an
+    # already historical view. Never accept rollback, deletion or a forged view.
+    if sha(regular(ROOT,name).read_bytes())!=b['sha256']:raise ValueError('Changed physical timeout successor: '+name)
+    return b['predecessor_lf'].encode() if b['predecessor_lf'] is not None and sha(current)==b['sha256'] else current
+
+
+def timeout_selected_hash(name,expected):
+    if name not in TIMEOUT_MEMBERS:return expected
+    b=timeout_bindings()[name]
+    timeout_bytes(ROOT,name,regular(ROOT,name).read_bytes())
+    return b['sha256'] if expected==b['before_sha256'] and expected is not None else expected
+
+
+def verify_timeouts(root=ROOT):
+    bindings=timeout_bindings(root)
+    for name in bindings:timeout_bytes(root,name,regular(root,name).read_bytes())
+    return bindings
+
+
+def verify_timeout_scope(root,names):
+    if not names<=TIMEOUT_MEMBERS|{TIMEOUT_RECEIPT}:raise ValueError('Unapproved timeout scope')
+    bindings=verify_timeouts(root)
+    for name in names:
+        expected=sha(regular(root,name).read_bytes()) if name==TIMEOUT_RECEIPT else bindings[name]['sha256']
+        if sha(_git(root,'show','HEAD:'+name))!=expected:raise ValueError('Changed committed timeout successor: '+name)
+
+
 RECOVERY_CI_RECEIPT='ci/people-publication-git-recovery-ci-v1.json'
 RECOVERY_CI_PIN='31eddeb4085ddd9f4fdf0449a675a5e6b607608fc159f680ae08b1684bf70f37'
 RECOVERY_CI_BASE='0ad49fbec9283387aacc0378f9d6a796839d981d'
@@ -142,7 +215,7 @@ def recovery_ci_bindings(root=ROOT):
     for name,b in v['files'].items():
         if (set(b)!={'before_sha256','predecessor_lf','sha256'} or b['before_sha256']!=RECOVERY_CI_BEFORE[name]
                 or type(b['predecessor_lf']) is not str or sha(b['predecessor_lf'].encode())!=b['before_sha256']
-                or sha(regular(ROOT,name).read_bytes())!=b['sha256']):
+                or sha(timeout_bytes(root,name,regular(ROOT,name).read_bytes()))!=b['sha256']):
             raise ValueError('Changed physical recovery CI successor: '+name)
         if name in APPROVED and b['before_sha256']!=APPROVED[name][1]:raise ValueError('Changed M6 registered predecessor')
         if name in MEMBERS and name not in APPROVED and b['before_sha256']!=manifest()['members'][name]['sha256']:
@@ -151,6 +224,7 @@ def recovery_ci_bindings(root=ROOT):
 
 
 def recovery_ci_bytes(root,name,current):
+    current=timeout_bytes(root,name,current)
     if name not in RECOVERY_CI_BEFORE:return current
     b=recovery_ci_bindings(root)[name]
     return b['predecessor_lf'].encode() if sha(current)==b['sha256'] else current
@@ -161,13 +235,14 @@ def verify_recovery_ci_scope(root,names):
     if not bound:return
     bindings=recovery_ci_bindings(root)
     for name in bound:
-        expected=sha(regular(root,name).read_bytes()) if name==RECOVERY_CI_RECEIPT else bindings[name]['sha256']
+        expected=sha(regular(root,name).read_bytes()) if name==RECOVERY_CI_RECEIPT else timeout_selected_hash(name,bindings[name]['sha256'])
         if sha(_git(root,'show','HEAD:'+name))!=expected:raise ValueError('Changed committed recovery CI successor')
 
 
 def verify_checkout(root=None):
     root=Path(root or ROOT)
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M6 policy checkout')
+    verify_timeouts(root)
     paths=_physical_paths(root,MEMBERS|ANCHORS)
     value=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)
     from ci.people_colorize_maintenance import _head
@@ -180,6 +255,7 @@ def verify_checkout(root=None):
 
 
 def historical_bytes(root,name,current):
+    current=timeout_bytes(root,name,current)
     if name not in APPROVED:return current
     root=Path(root)
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M6 historical projection')
@@ -204,7 +280,7 @@ def historical_bytes(root,name,current):
 def scope_members():
     from ci.phase4_m7 import ROOT as policy_root
     if Path(policy_root).resolve()!=ROOT.resolve():return frozenset()
-    return ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}) | {RECOVERY_CI_RECEIPT}
+    return ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}) | {RECOVERY_CI_RECEIPT,TIMEOUT_RECEIPT} | TIMEOUT_MEMBERS
 
 
 def verify_scope(root,baseline,names):
@@ -221,6 +297,7 @@ def verify_scope(root,baseline,names):
         seen.add(name)
     _physical_paths(Path(root),seen)
     verify_recovery_ci_scope(root,names)
+    verify_timeout_scope(root,names & (TIMEOUT_MEMBERS|{TIMEOUT_RECEIPT}))
 
 
 def selected_hash(name,expected):
