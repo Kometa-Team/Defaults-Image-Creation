@@ -114,13 +114,22 @@ def _baseline_entry(name):
 def _ancestry(root,head):_git(root,'merge-base','--is-ancestor',BASE,head)
 
 
+@lru_cache(maxsize=32)
+def _physical_plan(root,names):
+    # Pure path arithmetic only: never cache lstat, bytes, HEAD or acceptance.
+    root=Path(root)
+    paths=tuple((name,root/name) for name in names)
+    for name,path in paths:
+        if Path(name).is_absolute() or root not in path.parents or '..' in path.relative_to(root).parts:
+            raise ValueError('M6 policy path escaped root')
+    return paths
+
+
 def _physical_paths(root,names):
-    # The README helper is a Unicode successor; it cannot authenticate itself.
-    # Use the independent checker, with fresh leaf/ancestor checks on every call.
-    paths={name:root/name for name in names|{MANIFEST.relative_to(ROOT).as_posix()}}
-    if any(Path(name).is_absolute() or root not in path.parents or '..' in path.relative_to(root).parts for name,path in paths.items()):
-        raise ValueError('M6 policy path escaped root')
-    return {name:regular(root,name) for name in paths}
+    # The independent checker still rechecks every leaf and ancestor on every
+    # invocation; only the policy path arithmetic above is reused.
+    paths=_physical_plan(str(root),tuple(sorted(names|{MANIFEST.relative_to(ROOT).as_posix()})))
+    return {name:regular(root,name) for name,path in paths}
 
 
 # CI timeout-only successor. Historical receipts and assertions are immutable.
@@ -160,31 +169,41 @@ def _timeout_ancestry(head):_git(ROOT,'merge-base','--is-ancestor',TIMEOUT_BASE,
 
 
 def timeout_bindings(root=ROOT):
-    if Path(root).resolve()!=ROOT.resolve():raise ValueError('Foreign validation timeout checkout')
+    if Path(root)!=ROOT and Path(root).resolve()!=ROOT.resolve():raise ValueError('Foreign validation timeout checkout')
     from ci.people_colorize_maintenance import _head
     _timeout_ancestry(_head(ROOT))
     return _timeout_decode(regular(ROOT,TIMEOUT_RECEIPT).read_bytes(),TIMEOUT_PIN)
 
 
+def _timeout_physical(name,binding):
+    # Invocation-local binding metadata only. Every use still checks the leaf,
+    # ancestors and physical bytes; no path, HEAD or acceptance result is cached.
+    if sha(regular(ROOT,name).read_bytes())!=binding['sha256']:
+        raise ValueError('Changed physical timeout successor: '+name)
+
+
 def timeout_bytes(root,name,current):
     if name not in TIMEOUT_MEMBERS:return current
     b=timeout_bindings(root)[name]
-    # Fresh physical bytes are mandatory, including when a caller supplies an
-    # already historical view. Never accept rollback, deletion or a forged view.
-    if sha(regular(ROOT,name).read_bytes())!=b['sha256']:raise ValueError('Changed physical timeout successor: '+name)
+    # Caller-supplied historical bytes never replace independent physical proof.
+    _timeout_physical(name,b)
     return b['predecessor_lf'].encode() if b['predecessor_lf'] is not None and sha(current)==b['sha256'] else current
 
 
 def timeout_selected_hash(name,expected):
     if name not in TIMEOUT_MEMBERS:return expected
     b=timeout_bindings()[name]
-    timeout_bytes(ROOT,name,regular(ROOT,name).read_bytes())
+    _timeout_physical(name,b)
     return b['sha256'] if expected==b['before_sha256'] and expected is not None else expected
 
 
 def verify_timeouts(root=ROOT):
+    # Authenticate the receipt/HEAD at both ends of this explicit cohort.
+    # Reuse only its immutable bindings, never prior physical verification.
     bindings=timeout_bindings(root)
-    for name in bindings:timeout_bytes(root,name,regular(root,name).read_bytes())
+    for name,b in bindings.items():_timeout_physical(name,b)
+    # Detect changed receipt/ancestry before returning the cohort proof.
+    timeout_bindings(root)
     return bindings
 
 
@@ -239,6 +258,32 @@ def verify_recovery_ci_scope(root,names):
         if sha(_git(root,'show','HEAD:'+name))!=expected:raise ValueError('Changed committed recovery CI successor')
 
 
+def _cohort_views(root,paths):
+    # One explicit M6 invocation owns these immutable receipt bindings. Physical
+    # member bytes are read here, never supplied by a caller or retained later.
+    timeouts=timeout_bindings(root)
+    recovery=recovery_ci_bindings(root)
+    views={}
+    for name,path in paths.items():
+        # Timeout successors retain their independent, immediately fresh mode
+        # check; the bytes below are read by this owner, never caller supplied.
+        current=(regular(root,name) if name in timeouts else path).read_bytes()
+        if name in timeouts:
+            b=timeouts[name]
+            if sha(current)!=b['sha256']:raise ValueError('Changed physical timeout successor: '+name)
+            if b['predecessor_lf'] is not None:current=b['predecessor_lf'].encode()
+        if name in recovery:
+            b=recovery[name]
+            if sha(current)!=b['sha256']:raise ValueError('Changed physical recovery CI successor: '+name)
+            current=b['predecessor_lf'].encode()
+        views[name]=current
+    # Reauthenticate both receipts and their independent physical CI members
+    # before returning. No proof survives this invocation, including exceptions.
+    recovery_ci_bindings(root)
+    timeout_bindings(root)
+    return views
+
+
 def verify_checkout(root=None):
     root=Path(root or ROOT)
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M6 policy checkout')
@@ -247,8 +292,9 @@ def verify_checkout(root=None):
     value=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)
     from ci.people_colorize_maintenance import _head
     _ancestry(str(root),_head(root))
+    views=_cohort_views(root,paths)
     for name,binding in value['members'].items():
-        if sha(recovery_ci_bytes(root,name,paths[name].read_bytes()))!=binding['sha256']:raise ValueError('Changed physical M6 successor: '+name)
+        if sha(views[name])!=binding['sha256']:raise ValueError('Changed physical M6 successor: '+name)
         if binding['before_sha256'] is not None and sha(_old(name))!=binding['before_sha256']:raise ValueError('Changed M6 predecessor')
         if binding['before_sha256'] is None and _baseline_entry(name).strip():raise ValueError('M6 addition exists in predecessor')
     return value
@@ -261,8 +307,9 @@ def historical_bytes(root,name,current):
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M6 historical projection')
     paths=_physical_paths(root,MEMBERS|ANCHORS)
     value=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)
+    views=_cohort_views(root,paths)
     for member,pin in value['members'].items():
-        if sha(recovery_ci_bytes(root,member,paths[member].read_bytes()))!=pin['sha256']:raise ValueError('Changed physical M6 successor: '+member)
+        if sha(views[member])!=pin['sha256']:raise ValueError('Changed physical M6 successor: '+member)
     binding=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)['members'][name]
     actual=recovery_ci_bytes(root,name,paths[name].read_bytes())
     current=recovery_ci_bytes(root,name,current)
