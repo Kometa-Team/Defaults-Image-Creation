@@ -1,5 +1,5 @@
 # Tested standalone runtime; no acquisition/model dependencies.
-Pillow==12.0.0
+Pillow==13.0.0
 fonttools==4.60.1
 uharfbuzz==0.56.3
 requests==2.34.2
