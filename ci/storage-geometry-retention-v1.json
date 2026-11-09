@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "baseline_commit": "d7a6dd976b45729ed63678f0dcc3d50c5da0979d",
+  "files": {
+    "ci/people_retention_maintenance.py": {
+      "before_sha256": "2a13d6fc1c700f000c55862cd57ab32b6f38d0fefd8d81f114dccc45b0d70f42",
+      "sha256": "d4e9400d0ec35c09711a57afb33cc017b3a50055860ba3413a1d0b45ba81380b"
+    }
+  },
+  "ci_authorized": false,
+  "publication_authorized": false
+}

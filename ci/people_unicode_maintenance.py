@@ -43,7 +43,15 @@ def publication_adapter():
     return _publication_module(raw)
 
 
+@lru_cache(maxsize=128)
+def _digest_bytes(raw, text_lf):
+    # Only immutable byte arithmetic is cached, never paths or verification.
+    return hashlib.sha256(raw.replace(b'\r\n', b'\n') if text_lf else raw).hexdigest()
+
+
 def digest(raw, text_lf=True):
+    if type(raw) is bytes:
+        return _digest_bytes(raw, bool(text_lf))
     return hashlib.sha256(raw.replace(b'\r\n', b'\n') if text_lf else raw).hexdigest()
 
 
@@ -88,15 +96,112 @@ def ancestry(head):
     git('merge-base', '--is-ancestor', BASE, head)
 
 
+def _publication_identity(root, publication):
+    # Reauthenticate immutable metadata at both ends of this one owner call.
+    # No proof or physical input survives a later invocation.
+    for name, pin in ((publication.RECEIPT, publication.PIN),
+                      (publication.GIT_RECEIPT, publication.GIT_PIN),
+                      (publication.RECOVERY_RECEIPT, publication.RECOVERY_PIN)):
+        if publication.fingerprint(json.loads(regular(root, name).read_bytes())) != pin:
+            raise ValueError('Changed invocation-local publication receipt: '+name)
+    if digest(regular(root, 'ci/people_publication_maintenance.py').read_bytes()) != PUBLICATION_ADAPTER_SHA256:
+        raise ValueError('Changed invocation-local publication adapter')
+
+
+def _publication_close(root, publication, timeouts):
+    _publication_identity(root, publication)
+    # Preserve the closing full physical cohort check. Only repeated immutable
+    # predecessor/schema computations from the earlier full proof are reused.
+    current = {}
+    for receipt in (publication.RECEIPT, publication.GIT_RECEIPT, publication.RECOVERY_RECEIPT):
+        current.update(json.loads(regular(root, receipt).read_bytes())['files'])
+    for name, binding in current.items():
+        expected = binding['sha256']
+        if name in timeouts and expected == timeouts[name]['before_sha256']:
+            expected = timeouts[name]['sha256']
+        if digest(regular(root, name).read_bytes()) != expected:
+            raise ValueError('Changed closing publication member: '+name)
+    if digest(regular(root, publication.CI_TEST_LOCK).read_bytes()) != publication.CI_TEST_LOCK_SHA:
+        raise ValueError('Changed closing publication dependency')
+    _publication_identity(root, publication)
+
+
+def _owned_headers(root, publication):
+    from ci import phase5_m6_maintenance as m6
+    from ci.people_collection_maintenance import _head
+    names = set(ANCHORS) | {
+        'ci/phase5_m6_maintenance.py', m6.MANIFEST.relative_to(m6.ROOT).as_posix(),
+        m6.TIMEOUT_RECEIPT, m6.RECOVERY_CI_RECEIPT, m6.GEOMETRY_RECEIPT,
+        m6.RETENTION_GEOMETRY_RECEIPT, m6.COMPUTATION_RECEIPT,
+        publication.RECEIPT, publication.GIT_RECEIPT, publication.RECOVERY_RECEIPT,
+        'ci/people_publication_maintenance.py', publication.CI_TEST_LOCK}
+    return _head(root), {name:(digest(regular(root,name).read_bytes()),True) for name in names}
+
+
+def _owned_inputs(root, publication, physical, headers):
+    from ci import phase5_m6_maintenance as m6
+    expected=dict(physical)
+    timeouts=m6.timeout_bindings(root)
+    for name,binding in m6.manifest()['members'].items():
+        expected[name]=(timeouts[name]['sha256'] if name in timeouts else binding['sha256'],True)
+    expected[m6.GEOMETRY_SOURCE]=(m6.GEOMETRY_SHA,True)
+    expected[m6.RETENTION_GEOMETRY_SOURCE]=(m6.RETENTION_GEOMETRY_SHA,True)
+    expected.update({name:(value,True) for name,value in m6.COMPUTATION_AFTER.items()})
+    for name,binding in timeouts.items():expected[name]=(binding['sha256'],True)
+    current={}
+    for receipt in (publication.RECEIPT,publication.GIT_RECEIPT,publication.RECOVERY_RECEIPT):
+        current.update(json.loads(regular(root,receipt).read_bytes())['files'])
+    for name,binding in current.items():
+        selected=binding['sha256']
+        if name in timeouts and selected==timeouts[name]['before_sha256']:selected=timeouts[name]['sha256']
+        expected[name]=(selected,True)
+    # Headers were captured before the proof; changed policy bytes cannot enter
+    # this private owner witness after verification. Every path is reread below.
+    expected.update(headers[1])
+    return headers[0],tuple((name,*value) for name,value in sorted(expected.items()))
+
+
+def _close_owned(root, owned):
+    from ci.people_collection_maintenance import _head
+    if _head(root)!=owned[0]:raise ValueError('Changed owner HEAD')
+    for name,expected,text_lf in owned[1]:
+        if digest(regular(root,name).read_bytes(),text_lf)!=expected:
+            raise ValueError('Changed closing owner input: '+name)
+
+
+def _historical_owned(root,name,current,bindings,owned):
+    if name not in bindings:return historical_bytes(root,name,current)
+    expected,text_lf=next(row[1:] for row in owned[1] if row[0]==name)
+    actual=regular(root,name).read_bytes()
+    if digest(actual,text_lf)!=expected or digest(current,text_lf)!=expected:
+        raise ValueError('Changed owner projection input: '+name)
+    binding=bindings[name]
+    return predecessor(name) if binding['before_sha256'] is not None else current
+
+
 def verify(root=ROOT):
+    return _verify(root,False)[0]
+
+
+def _verify_owned(root):
+    return _verify(root,True)
+
+
+def _verify(root, owned):
     if Path(root).resolve() != ROOT.resolve():
         raise ValueError('Foreign Unicode policy checkout')
     from ci.phase5_m5_maintenance import UNICODE_ADAPTER_SHA256
     if digest(regular(ROOT, 'ci/people_unicode_maintenance.py').read_bytes()) != UNICODE_ADAPTER_SHA256:
         raise ValueError('Changed independently pinned Unicode adapter')
+    publication = publication_adapter()
+    headers = _owned_headers(root,publication) if owned else None
+    physical_hashes = {}
     source, ci = receipts()
     publication = publication_adapter()
-    publication.verify(root)
+    from ci import phase5_m6_maintenance as m6
+    timeouts = m6.timeout_bindings(root)
+    publication_bindings = publication.verify(root)
+    _publication_identity(root, publication)
     from ci.people_collection_maintenance import _head
     ancestry(_head(ROOT))
     bindings = {**source['files'], **ci['files']}
@@ -107,15 +212,38 @@ def verify(root=ROOT):
         if set(binding) != {'operation', 'text_lf', 'before_sha256', 'sha256'}:
             raise ValueError('Changed Unicode binding schema')
         before = predecessor(name)
-        current = publication.timeout_bytes(root, name, paths[name].read_bytes())
+        # Read independently after the full publication proof, at the point of use.
+        physical = regular(root, name).read_bytes()
+        current = physical
+        if owned:physical_hashes[name]=(digest(physical,binding['text_lf']),binding['text_lf'])
         if name == 'create_defaults/phase4/tests/test_ci_foundations.py':
             from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
             current = m6_bytes(root, name, current)
+        if name in publication_bindings:
+            # Reuse only this invocation's verified metadata, never its old bytes.
+            # A post-proof mutation cannot be relabelled as historical artwork.
+            approved = publication_bindings[name]
+            if digest(physical) != approved['sha256']:
+                raise ValueError('Changed post-proof publication member: '+name)
+            if approved['before_sha256'] is not None:
+                current = publication.predecessor(name)
+        elif name in timeouts:
+            timeout = timeouts[name]
+            if digest(physical) != timeout['sha256']:
+                raise ValueError('Changed owned timeout member: '+name)
+            current = timeout['predecessor_lf'].encode() if timeout['predecessor_lf'] is not None else physical
+        elif name in m6.COMPUTATION_BEFORE:
+            if digest(physical) != m6.COMPUTATION_AFTER[name]:
+                raise ValueError('Changed owned computation member: '+name)
+            current = m6._computation_before(name)
         if (binding['operation'] != ('A' if before is None else 'M')
                 or binding['before_sha256'] != (None if before is None else digest(before, binding['text_lf']))
-                or digest(publication.historical_bytes(root, name, current), binding['text_lf']) != binding['sha256']):
+                or digest(current, binding['text_lf']) != binding['sha256']):
             raise ValueError('Changed Unicode predecessor/successor: '+name)
-    return bindings
+    _publication_close(root, publication, timeouts)
+    if m6.timeout_bindings(root) != timeouts:
+        raise ValueError('Changed closing timeout metadata')
+    return bindings,_owned_inputs(root,publication,physical_hashes,headers) if owned else None
 
 
 def historical_bytes(root, name, current):

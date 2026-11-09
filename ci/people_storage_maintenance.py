@@ -6,6 +6,7 @@ allowance. Old manifests and their digests remain authoritative predecessors.
 from functools import lru_cache
 import hashlib
 import json
+import os
 from pathlib import Path
 import stat
 import subprocess
@@ -53,10 +54,18 @@ def manifest():
     return value
 
 
+@lru_cache(maxsize=256)
+def _regular_plan(root, name):
+    # Pure path arithmetic only; no filesystem metadata or proof is cached.
+    path = Path(root)/name
+    return path, (path, *path.parents)
+
+
 def regular(root, name):
+    # Resolve a relative root against the current CWD on every invocation.
     root = Path(root).absolute()
-    path = root/name
-    for part in (path, *path.parents):
+    path, parts = _regular_plan(str(root), os.fspath(name))
+    for part in parts:
         info = part.lstat()
         if stat.S_ISLNK(info.st_mode) or getattr(info, 'st_file_attributes', 0) & 0x400:
             raise ValueError('Storage transition rejects links or reparse points: '+name)
