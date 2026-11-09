@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "baseline_commit": "d7a6dd976b45729ed63678f0dcc3d50c5da0979d",
+  "files": {
+    "ci/people_storage_maintenance.py": {
+      "before_sha256": "8e2420d6d6868781acea9a9a0806b2bf904ea4027095a1fd61db3885fe8394f7",
+      "sha256": "e91f07dbe89530211b95190f318b5f239cc3da59ad83355053764a0ae4daf817"
+    }
+  },
+  "ci_authorized": false,
+  "publication_authorized": false
+}

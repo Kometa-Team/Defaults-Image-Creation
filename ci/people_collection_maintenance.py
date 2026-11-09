@@ -146,9 +146,9 @@ def verify(root=ROOT):
     paths = _regular_files(root, MEMBERS | DELIVERY | set(value['frozen_files']))
     from ci.phase5_m5_maintenance import unicode_adapter
     successor = unicode_adapter()
-    successor.verify(root)
+    unicode_bindings,owned=successor._verify_owned(root)
     for name, binding in value['files'].items():
-        current = successor.historical_bytes(root, name, paths[name].read_bytes())
+        current = successor._historical_owned(root,name,regular(root,name).read_bytes(),unicode_bindings,owned)
         if sha(current) != binding['sha256']:
             raise ValueError('Changed physical COLLECTION successor: ' + name)
         if sha(_committed(binding['before_commit'], name)) != binding['before_sha256']:
@@ -162,6 +162,7 @@ def verify(root=ROOT):
     for name, expected in value['frozen_files'].items():
         if sha(paths[name].read_bytes()) != expected:
             raise ValueError('Changed frozen COLLECTION predecessor evidence: ' + name)
+    successor._close_owned(root,owned)
     return value
 
 

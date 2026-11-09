@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "baseline_commit": "d7a6dd976b45729ed63678f0dcc3d50c5da0979d",
+  "files": {
+    "ci/people_unicode_maintenance.py": {
+      "before_sha256": "7fa21b1520a987d118a58627fecf55a9669f4e553c90c647728ac88c17206fcb",
+      "sha256": "c6f5cee504aa40e3a3cacdcd3c2f60824257945502f0ec52f3509b8f0e923935"
+    },
+    "ci/phase5_m5_maintenance.py": {
+      "before_sha256": "3471c5a2a611e4f2896302d8a778f632de6a9d3f8401bddddd4bb1d6cf7a7f04",
+      "sha256": "9cbcd30c2a4de2475562eb96c1a9ff56ded269a51f545ba21d61759b1fbcaf2c"
+    },
+    "ci/people_collection_maintenance.py": {
+      "before_sha256": "6c36970120b28bc37132466eb07c187e729b461d8c462c87bda26dea848c2696",
+      "sha256": "6c985c6f970b23d4515379d36cdbfa38d1f168bed02831f1c2a2ead2e5cdb61e"
+    }
+  },
+  "ci_authorized": false,
+  "publication_authorized": false
+}

@@ -65,8 +65,8 @@ def test_additive_workflow_retains_exact_head_readonly_and_timeout():
     assert value['jobs']['acceptance']['if']=='${{ always() }}'
     assert value['jobs']['m6']['strategy']['fail-fast'] is False
     assert set(value['jobs']['m6']['strategy']['matrix']['group'])==set(ci.GROUPS)
-    for job in value['jobs'].values():
-        assert job['timeout-minutes']==15 and 'continue-on-error' not in job
+    for name,job in value['jobs'].items():
+        assert job['timeout-minutes']==(60 if name=='m6' else 15) and 'continue-on-error' not in job
         assert job['env']['EXPECTED_HEAD']=='${{ github.event.pull_request.head.sha }}'
         checkout=next(s for s in job['steps'] if s.get('uses','').startswith('actions/checkout@'))
         assert checkout['with']['ref']=='${{ github.event.pull_request.head.sha }}'

@@ -64,7 +64,13 @@ def verify_checkout(root=None):
     _ancestry(str(root),value['audit_ancestor'],_head(root))
     for name,binding in value['members'].items():
         from ci.people_readme_maintenance import selected_hash
-        if sha(regular(root,name).read_bytes())!=selected_hash(name,binding['sha256']):
+        current=regular(root,name).read_bytes()
+        if name=='ci/people_storage_maintenance.py':
+            from ci.phase5_m6_maintenance import ROOT as policy_root, geometry_bytes
+            # Authenticate the real policy checkout and exact supplied bytes;
+            # copied fixtures retain their own independent mode/hash checks.
+            current=geometry_bytes(policy_root,name,current)
+        if sha(current)!=selected_hash(name,binding['sha256']):
             raise ValueError('Unreviewed retention successor: '+name)
         if binding['before_sha256'] is not None:
             # Reuse the existing cache ONLY for immutable Git objects. Current

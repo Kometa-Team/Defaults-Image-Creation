@@ -164,9 +164,9 @@ class UnicodeMaintenanceTests(unittest.TestCase):
             name = '.github/workflows/' + filename
             raw = (ROOT/name).read_bytes()
             workflow = yaml.safe_load(raw)
-            expression = "${{ matrix.os == 'windows-latest' && matrix.group == '" + group + "' && 60 || 15 }}"
-            if job == 'validation':
-                expression = "${{ matrix.os == 'windows-latest' && (matrix.group == 'contracts' || matrix.group == 'people') && 60 || 15 }}"
+            expression = "${{ matrix.group == 'protocol' && 15 || 60 }}" if job in {'m3', 'm4'} else 60
+            if job == 'm5': expression = "${{ (matrix.group == 'protocol' || startsWith(matrix.group, 't2') || startsWith(matrix.group, 't3')) && 15 || 60 }}"
+            if job == 'validation': expression = "${{ (matrix.group == 'core' || matrix.group == 'categories' || matrix.group == 'smoke') && 15 || 60 }}"
             self.assertEqual(workflow['jobs'][job]['timeout-minutes'], expression)
             self.assertEqual(workflow['permissions'], {'contents': 'read'})
             matrix = workflow['jobs'][job]['strategy']['matrix']

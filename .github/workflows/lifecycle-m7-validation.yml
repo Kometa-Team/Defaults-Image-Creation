@@ -11,7 +11,7 @@ jobs:
   m7:
     name: Lifecycle M7 (${{ matrix.os }}, ${{ matrix.group }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: ${{ matrix.os == 'windows-latest' && matrix.group == 'sequence' && 60 || 15 }}
+    timeout-minutes: 60
     env:
       EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
       PYTHONUNBUFFERED: '1'

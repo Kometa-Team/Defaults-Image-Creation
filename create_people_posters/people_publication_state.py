@@ -25,6 +25,39 @@ from people_workspaces import ID_PATTERN, atomic_json, reject_links
 
 
 class PublicationState:
+    def git_recovery(self,batch,repo,approval):
+        if not self.db.execute("SELECT 1 FROM sqlite_master WHERE name='publication_git_recoveries'").fetchone():return None
+        row=self.db.execute('SELECT request,before_window,state FROM publication_git_recoveries WHERE batch=? AND repo=? AND approval=?',(batch,repo,approval)).fetchone()
+        return dict(request=json.loads(row[0]),before=json.loads(row[1]),state=row[2]) if row else None
+
+    def arm_git_recovery(self,batch,repo,approval,request,window):
+        """Additive immutable request/before-image plus CAS transition, atomically."""
+        if sanitize_data(request)!=request or sanitize_data(window)!=window:raise ValueError('Unsafe recovery metadata')
+        raw=lambda v:json.dumps(v,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False)
+        with self.db:
+            self.db.execute('BEGIN IMMEDIATE')
+            self.db.execute('CREATE TABLE IF NOT EXISTS publication_git_recoveries (batch TEXT,repo TEXT,approval TEXT,request TEXT,before_window TEXT,state TEXT,PRIMARY KEY(batch,repo,approval))')
+            previous=self.git_recovery(batch,repo,approval)
+            if previous:
+                if previous['request']!=request:raise ValueError('Recovery ownership changed')
+                return False
+            found=self.db.execute('SELECT data FROM publication_git_windows WHERE batch=? AND repo=? AND number=?',(batch,repo,request['number'])).fetchone()
+            if not found or json.loads(found[0])!=window or window['status']!='blocked':raise ValueError('Recovery window changed')
+            control=self.db.execute('SELECT head FROM publication_controls WHERE batch=? AND repo=?',(batch,repo)).fetchone()
+            if not control or control[0]!=request['parent']:raise ValueError('Recovery HEAD changed')
+            self.db.execute('INSERT INTO publication_git_recoveries VALUES (?,?,?,?,?,?)',(batch,repo,approval,raw(request),raw(window),'armed'))
+            # Version fence: predecessor writers must reject this checkpoint,
+            # even after a crash has released the kernel lease.
+            ready=dict(window,version=3,status='pending',error={},write_error=None)
+            changed=self.db.execute('UPDATE publication_git_windows SET data=? WHERE batch=? AND repo=? AND number=? AND data=?',(raw(ready),batch,repo,request['number'],found[0]))
+            if changed.rowcount!=1:raise ValueError('Recovery CAS conflict')
+        return True
+
+    def claim_git_recovery(self,batch,repo,approval):
+        with self.db:
+            changed=self.db.execute("UPDATE publication_git_recoveries SET state='claimed' WHERE batch=? AND repo=? AND approval=? AND state='armed'",(batch,repo,approval))
+            if changed.rowcount!=1:raise ValueError('Recovery replay requires renewed authorization')
+
     def git_schema(self):
         """Versioned, additive transport journal; legacy receipts/settings stay exact."""
         self.db.execute("PRAGMA synchronous=FULL")

@@ -40,6 +40,38 @@ def failure(category, retryable=False, ambiguous=False):
     return GitHubClient.reliability_error(category, 0, retryable, ambiguous)
 
 
+def git_diagnostic(args, code, stderr, stdout=b''):
+    """Return closed facts only; provider text and refs never leave RAM."""
+    operation={'push':'push','fetch':'fetch','ls-remote':'ls_remote','pack-objects':'pack_objects'}.get(args[0] if args else '', 'other')
+    raw=(stderr[:65536]+b'\n'+stdout[:65536]).lower()
+    patterns={
+        'pack_limit':(b'pack exceeds maximum allowed size', b'pack exceeds maximum size'),
+        'object_limit':(b'exceeds github', b'large files detected'),
+        'authentication':(b'authentication failed', b'could not read password', b'permission denied'),
+        'policy':(b'gh006:', b'gh013:', b'protected branch hook declined'),
+        'non_fast_forward':(b'(non-fast-forward)', b'(fetch first)'),
+        'hook':(b'pre-push hook declined',),
+        'unpack':(b'(unpacker error)', b'unpack failed'),
+        'network':(b'connection reset', b'connection timed out', b'could not resolve host'),
+    }
+    reasons={name for name, markers in patterns.items() if any(marker in raw for marker in markers)}
+    statuses={int(v) for v in re.findall(rb'(?:http(?:/[0-9.]+)?|returned error:)\s+([1-5][0-9]{2})\b',raw)}
+    return dict(operation=operation,exit_code=code if type(code) is int and -255<=code<=255 else 0,
+                http_status=next(iter(statuses)) if len(statuses)==1 else 0,
+                reason=next(iter(reasons)) if len(reasons)==1 else 'unknown')
+
+
+def safe_git_diagnostic(value):
+    if (type(value) is dict and set(value)=={'operation','exit_code','http_status','reason'}
+            and type(value['operation']) is str and type(value['reason']) is str
+            and value['operation'] in {'push','fetch','ls_remote','pack_objects','other'}
+            and type(value['exit_code']) is int and -255<=value['exit_code']<=255
+            and type(value['http_status']) is int and (value['http_status']==0 or 100<=value['http_status']<=599)
+            and value['reason'] in {'pack_limit','object_limit','authentication','policy','non_fast_forward','hook','unpack','network','unknown'}):
+        return dict(value)
+    return {}
+
+
 ASKPASS = '''import os,sys
 url=os.environ["PEOPLE_GIT_URL"]
 prompt=sys.argv[1] if len(sys.argv)==2 else ""
@@ -199,6 +231,7 @@ class GitTransport:
             category = "git_validation" if status == 422 else "git_network" if transient else "git_rejected"
             # Never include raw Git output, remote messages, command or environment.
             error = failure(category, transient, write);error.status = status
+            error.git_diagnostic = git_diagnostic(args,process.returncode,bytes(errors),out or b'')
             raise error from None
         need(out is None or len(out) <= 64*1024**2)
         return out or b""
@@ -328,7 +361,7 @@ class NativePublication:
             need(hashlib.sha256(raw).hexdigest()==approval);contract=json.loads(raw)
         self.a,self.approval=contract,approval
 
-    def validate(self,batch):
+    def validate(self,batch,recovery=None,review=False):
         a=self.a;p=self.p
         expected={"version","backend","batch","repo","branch","origin_head","origin_review_sha256",
             "reconciliation_sha256","rows_binding","initial_head","initial_published_paths","published_rows_sha256",
@@ -343,7 +376,8 @@ class NativePublication:
         need(1<=a["target_source_bytes"]<=1_500_000_000 and 1024<=a["max_pack_bytes"]<=1_850_000_000)
         need(0<=a["max_posters"]<=100000 and 60<=a["git_timeout"]<=86400)
         need(set(a["source_bindings"])==set(SOURCE_MEMBERS))
-        for name,sha in a["source_bindings"].items():need(hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()==sha)
+        bindings=self._recovery_check(batch,recovery,review=review) if recovery is not None else a["source_bindings"]
+        for name,sha in bindings.items():need(hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()==sha)
         reconciliation=self.ledger.state.parent/"reconciliation.json";reject_links(reconciliation)
         raw=reconciliation.read_bytes();need(hashlib.sha256(raw).hexdigest()==a["reconciliation_sha256"])
         plan=json.loads(raw)["styles"][next(iter(p.repositories))]
@@ -393,7 +427,8 @@ class NativePublication:
         windows=[(n,json.loads(raw)) for n,raw in self.ledger.db.execute("SELECT number,data FROM publication_git_windows WHERE batch=? AND repo=? ORDER BY number",(batch,a["repo"]))]
         head=(contracts[0][1] if contracts else a)["initial_head"];active=0
         for n,w in windows:
-            need(w["version"]==2 and w["number"]==n and w["stage"] in {"preparing","prepared","push_intent","pushed","remote_verified","completed"})
+            need((w["version"]==2 or recovery is not None and w['version']==3 and n==recovery['number']
+                  and self.ledger.git_recovery(batch,a['repo'],digest(recovery)) is not None) and w["number"]==n and w["stage"] in {"preparing","prepared","push_intent","pushed","remote_verified","completed"})
             need(w["parent"]==head and w["approval"] in {self.approval}|{sha for sha,c in contracts})
             members=self.ledger.git_members(batch,a["repo"],n);need(self.ledger.unit_binding(members)==w["binding"])
             if w["stage"]!="preparing":self.verify_intent(w)
@@ -403,19 +438,102 @@ class NativePublication:
         need(active<=1 and head==control["head"])
         return rows,dict(control),windows
 
+    def recovery_review(self,batch,number,backup_sha256):
+        need(type(number) is int and number>=0 and re.fullmatch('[0-9a-f]{64}',backup_sha256 or ''))
+        window=self.ledger.git_window(batch,self.a['repo'],number);need(window is not None)
+        rows=self.ledger.rows(batch,self.a['repo']);published=[r for r in rows if r['status']=='published']
+        value=dict(version=1,kind='native-git-prepared-window-recovery',batch=batch,repo=self.a['repo'],branch=self.a['branch'],
+            original_approval=self.approval,reconciliation_sha256=self.a['reconciliation_sha256'],number=number,
+            parent=window['parent'],tip=window['tip'],tree=window['tree'],binding=window['binding'],window_sha256=digest(window),
+            published_count=len(published),published_paths_sha256=digest([r['path'] for r in published]),published_receipts_sha256=digest(published),
+            predecessor_source_bindings=self.a['source_bindings'],source_bindings={n:hashlib.sha256(Path(__file__).with_name(n).read_bytes()).hexdigest() for n in SOURCE_MEMBERS},
+            backup_sha256=backup_sha256,action='retry_prepared_once_or_reconcile',max_replays=1)
+        self.validate(batch,recovery=value,review=True)
+        return value
+
+    def _recovery_check(self,batch,value,review=False):
+        keys={'version','kind','batch','repo','branch','original_approval','reconciliation_sha256','number','parent','tip','tree','binding',
+              'window_sha256','published_count','published_paths_sha256','published_receipts_sha256','predecessor_source_bindings','source_bindings','backup_sha256','action','max_replays'}
+        need(type(value) is dict and set(value)==keys and type(value['version']) is int and value['version']==1
+             and value['kind']=='native-git-prepared-window-recovery' and value['action']=='retry_prepared_once_or_reconcile'
+             and type(value['max_replays']) is int and value['max_replays']==1 and type(value['number']) is int and value['number']>=0)
+        need((value['batch'],value['repo'],value['branch'])==(batch,self.a['repo'],'master'))
+        need(value['original_approval']==self.approval==digest(self.a) and value['reconciliation_sha256']==self.a['reconciliation_sha256'])
+        need(value['predecessor_source_bindings']==self.a['source_bindings'] and set(value['source_bindings'])==set(SOURCE_MEMBERS))
+        for field in ('binding','window_sha256','published_paths_sha256','published_receipts_sha256','backup_sha256'):need(re.fullmatch('[0-9a-f]{64}',value[field] or ''))
+        for field in ('parent','tip','tree'):need(re.fullmatch('[0-9a-f]{40}',value[field] or ''))
+        if not review:need(os.getenv('PEOPLE_GIT_RECOVERY_SHA256','')==digest(value))
+        owned=self.ledger.db.execute('SELECT contract FROM publication_git_controls WHERE batch=? AND repo=? AND approval=?',(batch,self.a['repo'],self.approval)).fetchone()
+        need(owned and canonical(json.loads(owned[0]))==canonical(self.a))
+        current=self.ledger.git_window(batch,self.a['repo'],value['number']);need(current is not None)
+        record=self.ledger.git_recovery(batch,self.a['repo'],digest(value))
+        before=record['before'] if record else current
+        need(digest(before)==value['window_sha256'] and before['version']==2 and before['status']=='blocked' and before['stage']=='push_intent'
+             and before['error'].get('category')=='git_rejected' and before['write_error']==dict(category='git_rejected',retryable=False))
+        for key in ('parent','tip','tree','binding'):need(current[key]==before[key]==value[key])
+        need(current['approval']==before['approval']==self.approval)
+        if record:need(record['request']==value and record['state'] in {'armed','claimed'} and current['version']==3)
+        else:need(current==before)
+        members=self.ledger.git_members(batch,self.a['repo'],value['number'])
+        need(members and self.ledger.unit_binding(members)==value['binding'])
+        objects=self.ledger.db.execute('SELECT position,path,object_sha FROM publication_git_members WHERE batch=? AND repo=? AND number=? ORDER BY position',(batch,self.a['repo'],value['number'])).fetchall()
+        need([(r[0],r[1],r[2]) for r in objects]==[(i,r['path'],r['blob']) for i,r in enumerate(members)])
+        rows=self.ledger.rows(batch,self.a['repo'])
+        paths=set()
+        for (raw,) in self.ledger.db.execute('SELECT contract FROM publication_git_controls WHERE batch=? AND repo=?',(batch,self.a['repo'])):
+            paths.update(json.loads(raw)['initial_published_paths'])
+        paths.update(r[0] for r in self.ledger.db.execute('SELECT path FROM publication_git_members WHERE batch=? AND repo=? AND number<?',(batch,self.a['repo'],value['number'])))
+        preserved=[r for r in rows if r['path'] in paths]
+        need(type(value['published_count']) is int and len(preserved)==value['published_count'] and len(preserved)==len(paths)
+             and digest([r['path'] for r in preserved])==value['published_paths_sha256']
+             and all(r['status']=='published' for r in preserved) and digest(preserved)==value['published_receipts_sha256'])
+        if not record:need({r['path'] for r in rows if r['status']=='published'}==paths)
+        return value['source_bindings']
+
+    def _recovery_prepare(self,batch,value):
+        self._recovery_check(batch,value)
+        window=self.ledger.git_window(batch,self.a['repo'],value['number'])
+        # A successful prior attempt is reconciled by the normal backend, never replayed.
+        head=self.transport.remote_head();api_head,api_tree=self.p.client.head(self.a['repo'],self.a['branch'])
+        need(head==api_head and head in {value['parent'],value['tip']})
+        if head==value['tip']:need(api_tree==value['tree'])
+        self.verify_local(window,self.ledger.git_members(batch,self.a['repo'],value['number']))
+        baseline=self.transport.tree(value['parent'])
+        original_paths={r['path'] for r in self.ledger.rows(batch,self.a['repo']) if r['status']=='published' and r['commit_sha']!=value['tip']}
+        for row in self.ledger.rows(batch,self.a['repo']):
+            if row['path'] in original_paths:need(baseline.get(row['path'])==dict(sha=row['blob'],mode='100644',type='blob'))
+        for row in self.ledger.git_members(batch,self.a['repo'],value['number']):
+            path=Path(row['prepared']);reject_links(path);need(path.is_file())
+            size=path.stat().st_size;content=hashlib.sha256();blob=hashlib.sha1(b'blob '+str(size).encode()+b'\0')
+            with path.open('rb') as stream:
+                while True:
+                    chunk=stream.read(1024*1024)
+                    if not chunk:break
+                    content.update(chunk);blob.update(chunk)
+            need(content.hexdigest()==row['published_hash'] and blob.hexdigest()==row['blob'] and path.stat().st_size==size)
+            stored=self.transport.git('cat-file','blob',row['blob'])
+            need(blob_sha(stored)==row['blob'] and hashlib.sha256(stored).hexdigest()==row['published_hash'])
+        need(self.transport.pack_size(value['tip'],value['parent'])==window['pack_bytes'])
+        need(self.transport.remote_head()==self.p.client.head(self.a['repo'],self.a['branch'])[0]==head)
+        if self.ledger.arm_git_recovery(batch,self.a['repo'],digest(value),value,window):self.p.checkpoint_hook('git_recovery_armed')
+
     def _save(self,batch,window,stage=None):
         if stage:window["stage"]=stage
         self.ledger.git_window(batch,self.a["repo"],window["number"],window)
         self.p.checkpoint_hook("git_"+window["stage"])
 
-    def publish(self,batch):
+    def publish(self,batch,recovery=None):
+        if recovery is not None:need(os.getenv('PEOPLE_GIT_RECOVERY_SHA256','')==digest(recovery))
         p=self.p;a=self.a
         with self.ledger.publication_lock():
             self.ledger.reliability_schema();self.ledger.git_schema()
-            rows,control,windows=self.validate(batch)
+            rows,control,windows=self.validate(batch,recovery=recovery)
             if getattr(p.client,"sandbox",None):p.validate()
             t=self.transport or GitTransport(self.ledger.state/"native-git-v2",a["repo"],a["branch"],p.client.token,timeout=a["git_timeout"])
             self.transport=t
+            if recovery is not None:
+                if self.ledger.git_window(batch,a['repo'],recovery['number'])['stage']!='completed':self._recovery_prepare(batch,recovery)
+                rows,control,windows=self.validate(batch,recovery=recovery)
             while True:
                 rows=self.ledger.rows(batch,a["repo"])
                 window=next((w for n,w in windows if w["stage"]!="completed"),None)
@@ -483,6 +601,9 @@ class NativePublication:
                         head=t.remote_head();need(head in {window["parent"],window["tip"]})
                         if head!=window["tip"]:
                             if window["write_error"]:need(window["write_error"]["retryable"])
+                            if recovery is not None and window['number']==recovery['number']:
+                                self.ledger.claim_git_recovery(batch,a['repo'],digest(recovery))
+                                p.checkpoint_hook('git_recovery_claimed')
                             t.push(window["parent"],window["tip"]);p.checkpoint_hook("git_push_ack")
                         self._save(batch,window,"pushed")
                     t.fetch(window["tip"])
@@ -507,7 +628,8 @@ class NativePublication:
                             elif head==window["tip"] and window["stage"]=="push_intent":
                                 self._save(batch,window,"pushed");continue
                     if not getattr(error,"retryable",False):
-                        window.update(status="blocked",error=dict(category=getattr(error,"category","unclassified")))
+                        diagnostic=safe_git_diagnostic(getattr(error,'git_diagnostic',{}))
+                        window.update(status="blocked",error=dict(category=getattr(error,"category","unclassified"),**({'diagnostic':diagnostic} if diagnostic else {})))
                         self._save(batch,window);raise error
                     p._schedule_retry(batch,a["repo"],window["number"],window,error,p.reliable_settings(),persist=lambda value:self._save(batch,value))
                 except (ValueError,OSError):
