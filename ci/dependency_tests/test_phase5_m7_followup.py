@@ -256,6 +256,9 @@ class Phase5M7FollowupTests(unittest.TestCase):
         folder.mkdir(parents=True)
         texts = {'PHASE5_M7_ACCEPTANCE_REPORT.md': acceptance.support_document(dossier, coverage),
                  'PHASE5_HANDOFF.md': acceptance.handoff_document()}
+        labels = ('avp', 'babylon', 'bsg', 'gundam', 'jrrt', 'sao', 'stargate', 'wdu')
+        for label in labels:
+            self.assertEqual(texts['PHASE5_HANDOFF.md'].count(f'| {label} | {label}.png |'), 1)
         release = {'entries': [{'approval': 'missing_exact_maintainer_decision'} for _ in range(22)]}
         def bind():
             for name, key in (('PHASE5_M7_ACCEPTANCE_REPORT.md', 'support_sha256'), ('PHASE5_HANDOFF.md', 'handoff_sha256')):
@@ -273,6 +276,9 @@ class Phase5M7FollowupTests(unittest.TestCase):
             for name, bad in (('PHASE5_M7_ACCEPTANCE_REPORT.md', texts['PHASE5_M7_ACCEPTANCE_REPORT.md'].replace('| Genre / poster | 28 | 27 | 1 |', '')),
                               ('PHASE5_M7_ACCEPTANCE_REPORT.md', texts['PHASE5_M7_ACCEPTANCE_REPORT.md'].replace('251 blocked', '0 blocked')),
                               ('PHASE5_HANDOFF.md', texts['PHASE5_HANDOFF.md'].replace('NOT STARTED', 'READY')),
+                              ('PHASE5_HANDOFF.md', texts['PHASE5_HANDOFF.md'].replace('| wdu | wdu.png |', '')),
+                              ('PHASE5_HANDOFF.md', texts['PHASE5_HANDOFF.md'].replace('| avp | avp.png |', '| alien | alien.png |')),
+                              ('PHASE5_HANDOFF.md', texts['PHASE5_HANDOFF.md'].replace('all eight listed', 'all six listed')),
                               ('PHASE5_HANDOFF.md', texts['PHASE5_HANDOFF.md'].replace('Assess reuse of', 'Bypass')),
                               ('PHASE5_HANDOFF.md', texts['PHASE5_HANDOFF.md'].replace('Genre only', 'Genre and Playlist')),
                               ('PHASE5_HANDOFF.md', texts['PHASE5_HANDOFF.md'].replace('Obtain each selected exact package approval', 'All packages are approved'))):

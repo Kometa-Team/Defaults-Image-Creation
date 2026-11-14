@@ -8,7 +8,7 @@
     },
     "ci/dependency_tests/test_phase5_m7_followup.py": {
       "before_sha256": null,
-      "sha256": "44b1c513dbd9180337c169949cbbde42b77c7040a156506417b56e3db6e98b15"
+      "sha256": "8394a840c5aa41fc74f9365cbe37f46230c2b3145b9be82c4b25a4fd2726146e"
     },
     "ci/people_storage_maintenance.py": {
       "before_sha256": "e91f07dbe89530211b95190f318b5f239cc3da59ad83355053764a0ae4daf817",
@@ -24,7 +24,7 @@
     },
     "ci/phase5_m7_acceptance.py": {
       "before_sha256": null,
-      "sha256": "967f0f5e3393512f65331c7f6f41c856aba67a19ba9814866004d07426e1d9ad"
+      "sha256": "5f9b6b1a774c684a21e677881496452c48a26d7af82d2a35f7008141173bb3de"
     },
     "ci/phase5_m7_provenance.py": {
       "before_sha256": null,
