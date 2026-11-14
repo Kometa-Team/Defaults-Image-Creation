@@ -1,0 +1,33 @@
+{
+  "baseline_commit": "3e48768b8dbf58fe1ca550b54207ae821de09626",
+  "ci_authorized": false,
+  "files": {
+    "ci/dependency_tests/test_phase5_m6_maintenance.py": {
+      "before_sha256": "8816f0b5d3d28951ae95af39e10d314a12a320f91b719a3b3d43dfa2a3db4bfd",
+      "sha256": "6a7728221396cbbc6a415c6b42f4f46bf9888add86d8fba2a4b72167b93be2ba"
+    },
+    "ci/people_unicode_maintenance.py": {
+      "before_sha256": "c6f5cee504aa40e3a3cacdcd3c2f60824257945502f0ec52f3509b8f0e923935",
+      "sha256": "16dd198f29d647d3186cad052c1d9b5c0195fa29ae31330701524c861c6c48b1"
+    },
+    "ci/phase5_m5_maintenance.py": {
+      "before_sha256": "9cbcd30c2a4de2475562eb96c1a9ff56ded269a51f545ba21d61759b1fbcaf2c",
+      "sha256": "4aea457a5cbb597fb715d10929118c602bcbe7e5b390ca508cc8d976f07324db"
+    },
+    "ci/publication_tests/test_git_recovery_maintenance.py": {
+      "before_sha256": "65b658e31a033e699f7528c6b29429823795da4f520e4b6874693869469171a9",
+      "sha256": "15348052dc368c05d47a59612766ffb74ed2ccaf540c25ac9773494370b99b89"
+    },
+    "ci/unicode_tests/test_people_pr65_maintenance.py": {
+      "before_sha256": null,
+      "sha256": "a51025478bd73fee68dd5eea68035922100e795c17bc2c6c8def3483849519be"
+    },
+    "create_people_posters/requirements-bulk-regenerate.txt": {
+      "before_sha256": "0bca8670b69c36c0e45a58a39bf5932f93fc0ba8fb023906c6a6234b82e207e0",
+      "sha256": "424d2c645c5fb7704ccddd6af6062dadf6023e5fec8d2a4305505de279775f47"
+    }
+  },
+  "parent_commit": "9ba3256a09220b3633fb7986cf2ed53448f7481a",
+  "publication_authorized": false,
+  "version": 1
+}
