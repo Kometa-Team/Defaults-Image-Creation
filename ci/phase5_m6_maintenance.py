@@ -132,6 +132,78 @@ def _physical_paths(root,names):
     return {name:regular(root,name) for name,path in paths}
 
 
+# Exact post-PR65 People dependency successor; prior receipts remain sealed.
+PEOPLE_PR65_RECEIPT='ci/people-pr65-maintenance-v1.json'
+PEOPLE_PR65_PIN='2857042b6a62a55217cdb82a4bbefe3c35f80feba1686f11614977c074a68631'
+PEOPLE_PR65_BASE='3e48768b8dbf58fe1ca550b54207ae821de09626'
+PEOPLE_PR65_PARENT='9ba3256a09220b3633fb7986cf2ed53448f7481a'
+PEOPLE_PR65_REQUIREMENTS='create_people_posters/requirements-bulk-regenerate.txt'
+PEOPLE_PR65_TEST='ci/unicode_tests/test_people_pr65_maintenance.py'
+PEOPLE_PR65_BEFORE={'create_people_posters/requirements-bulk-regenerate.txt': '0bca8670b69c36c0e45a58a39bf5932f93fc0ba8fb023906c6a6234b82e207e0', 'ci/people_unicode_maintenance.py': 'c6f5cee504aa40e3a3cacdcd3c2f60824257945502f0ec52f3509b8f0e923935', 'ci/phase5_m5_maintenance.py': '9cbcd30c2a4de2475562eb96c1a9ff56ded269a51f545ba21d61759b1fbcaf2c', 'ci/unicode_tests/test_people_pr65_maintenance.py': None}
+
+
+@lru_cache(maxsize=3)
+def _people_pr65_before(name):
+    if name not in PEOPLE_PR65_BEFORE or PEOPLE_PR65_BEFORE[name] is None:
+        raise ValueError('Unapproved People PR65 predecessor')
+    commit=PEOPLE_PR65_PARENT if name==PEOPLE_PR65_REQUIREMENTS else PEOPLE_PR65_BASE
+    entry=_git(ROOT,'ls-tree','-z',commit,'--',name)
+    if not entry.startswith(b'100644 blob '):raise ValueError('People PR65 predecessor is not regular')
+    raw=_git(ROOT,'show',commit+':'+name)
+    if sha(raw)!=PEOPLE_PR65_BEFORE[name]:raise ValueError('Changed People PR65 predecessor')
+    return raw
+
+
+@lru_cache(maxsize=32)
+def _people_pr65_ancestry(head):_git(ROOT,'merge-base','--is-ancestor',PEOPLE_PR65_BASE,head)
+
+
+def people_pr65_bindings(root=ROOT):
+    if Path(root).resolve()!=ROOT.resolve():raise ValueError('Foreign People PR65 checkout')
+    from ci.people_colorize_maintenance import _head
+    head=_head(ROOT)
+    _people_pr65_ancestry(head)
+    raw=regular(root,PEOPLE_PR65_RECEIPT).read_bytes()
+    v=json.loads(raw)
+    if (fingerprint(v)!=PEOPLE_PR65_PIN or set(v)!={'version','baseline_commit','parent_commit','files','ci_authorized','publication_authorized'}
+            or v['version']!=1 or v['baseline_commit']!=PEOPLE_PR65_BASE or v['parent_commit']!=PEOPLE_PR65_PARENT
+            or set(v['files'])!=set(PEOPLE_PR65_BEFORE)
+            or v['ci_authorized'] is not False or v['publication_authorized'] is not False):
+        raise ValueError('Changed exact People PR65 receipt or authority')
+    for name,b in v['files'].items():
+        if set(b)!={'before_sha256','sha256'} or b['before_sha256']!=PEOPLE_PR65_BEFORE[name]:
+            raise ValueError('Changed People PR65 binding')
+        if b['before_sha256'] is not None:_people_pr65_before(name)
+        if sha(regular(root,name).read_bytes())!=b['sha256']:
+            raise ValueError('Changed physical People PR65 successor: '+name)
+    if _head(ROOT)!=head or regular(root,PEOPLE_PR65_RECEIPT).read_bytes()!=raw:
+        raise ValueError('Changed closing People PR65 provenance')
+    return v['files']
+
+
+def people_pr65_bytes(root,name,current):
+    if name not in PEOPLE_PR65_BEFORE:return current
+    binding=people_pr65_bindings(root)[name]
+    return _people_pr65_before(name) if binding['before_sha256'] is not None and sha(current)==binding['sha256'] else current
+
+
+def _people_pr65_timeouts(root,bindings):
+    effective={name:dict(binding) for name,binding in bindings.items()}
+    for name,binding in people_pr65_bindings(root).items():
+        if name not in bindings:continue
+        if bindings[name]['sha256']!=binding['before_sha256']:
+            raise ValueError('Changed People PR65 CI predecessor')
+        effective[name]=dict(bindings[name],sha256=binding['sha256'])
+    return effective
+
+
+def verify_people_pr65_scope(root,names):
+    bindings=people_pr65_bindings(root)
+    for name in names & (set(PEOPLE_PR65_BEFORE)|{PEOPLE_PR65_RECEIPT}):
+        expected=sha(regular(root,name).read_bytes()) if name==PEOPLE_PR65_RECEIPT else bindings[name]['sha256']
+        if sha(_git(root,'show','HEAD:'+name))!=expected:raise ValueError('Changed committed People PR65 successor: '+name)
+
+
 # CI timeout-only successor. Historical receipts and assertions are immutable.
 TIMEOUT_RECEIPT='ci/validation-timeouts-v1.json'
 TIMEOUT_BASE='8b90be3a2d72b9c11acd2aa51eb9f75d80d964a4'
@@ -232,6 +304,7 @@ def verify_computation_scope(root,names):
     for name in bound:
         current=regular(root,name).read_bytes()
         expected=sha(current) if name==COMPUTATION_RECEIPT else COMPUTATION_AFTER[name]
+        if name in PEOPLE_PR65_BEFORE:expected=people_pr65_bindings(root)[name]['sha256']
         if sha(current)!=expected or sha(_git(root,'show','HEAD:'+name))!=expected:
             raise ValueError('Changed committed computation successor')
 
@@ -242,7 +315,7 @@ def timeout_bindings(root=ROOT):
     head=_head(ROOT)
     _timeout_ancestry(head)
     _geometry_ancestry(head)
-    return _computation_timeouts(root,_timeout_decode(regular(ROOT,TIMEOUT_RECEIPT).read_bytes(),TIMEOUT_PIN))
+    return _people_pr65_timeouts(root,_computation_timeouts(root,_timeout_decode(regular(ROOT,TIMEOUT_RECEIPT).read_bytes(),TIMEOUT_PIN)))
 
 
 def _timeout_physical(name,binding):
@@ -512,7 +585,7 @@ def historical_bytes(root,name,current):
 def scope_members():
     from ci.phase4_m7 import ROOT as policy_root
     if Path(policy_root).resolve()!=ROOT.resolve():return frozenset()
-    return ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}) | {RECOVERY_CI_RECEIPT,TIMEOUT_RECEIPT,GEOMETRY_RECEIPT,RETENTION_GEOMETRY_SOURCE,RETENTION_GEOMETRY_RECEIPT,COMPUTATION_RECEIPT} | TIMEOUT_MEMBERS | set(COMPUTATION_BEFORE)
+    return ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}) | {RECOVERY_CI_RECEIPT,TIMEOUT_RECEIPT,GEOMETRY_RECEIPT,RETENTION_GEOMETRY_SOURCE,RETENTION_GEOMETRY_RECEIPT,COMPUTATION_RECEIPT} | TIMEOUT_MEMBERS | set(COMPUTATION_BEFORE) | set(PEOPLE_PR65_BEFORE) | {PEOPLE_PR65_RECEIPT}
 
 
 def verify_scope(root,baseline,names):
@@ -532,6 +605,7 @@ def verify_scope(root,baseline,names):
     verify_geometry_scope(root,names)
     verify_retention_geometry_scope(root,names)
     verify_computation_scope(root,names)
+    verify_people_pr65_scope(root,names)
     verify_timeout_scope(root,names & (TIMEOUT_MEMBERS|{TIMEOUT_RECEIPT}))
 
 
