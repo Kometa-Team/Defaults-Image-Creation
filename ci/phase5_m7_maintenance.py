@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = '3e48768b8dbf58fe1ca550b54207ae821de09626'
 OWNER = 'ci/phase5_m7_maintenance.py'
 RECEIPT = 'ci/phase5-m7-maintenance-v1.json'
-PIN = 'be6c017829cd1f15584cc4a2b09cb929124c0b68bab93d985f6e2ab10a6d2ce2'
+PIN = 'c8221f183a75036ad10458c727b081a2f372c66d23f5aaf80e2393b5108c99d8'
 MODIFIED = frozenset(('ci/phase4_m7.py', 'ci/people_storage_maintenance.py',
                       'ci/phase5_m6_maintenance.py', 'create_defaults/lifecycle/ROADMAP.md'))
 ADDED = frozenset(('ci/phase5_m7_acceptance.py',
@@ -19,6 +19,7 @@ ADDED = frozenset(('ci/phase5_m7_acceptance.py',
                    'ci/dependency_tests/test_phase5_m7_admission.py',
                    'ci/dependency_tests/test_phase5_m7_followup.py'))
 ROADMAP_VIEWS = ('359d467f601787c4fdf6e369e0971f6fe0a7c49df65114f7aca8c82de0514f82', '4a1fa20153c3926a2ae06cf544629b7208ceb94fe80af9fa7106fa032180286d', '79a722ebfd77be147b9375673ea77dbb44e6ef62ac325b6299bd77ec24a690e9', '8d15de091e0ff4a75f131b13ff7bce0063eadda8525e895497d190746c32a8fa', 'c830b33101d202e6118c84c7d63ccf40b0a7639eefcaa6687d73e2c9469d87fc', 'f776dea7e1d719439df2fb1f6c8ddea30297eda6bf63f30e9f93cea7f502ca96')
+STORAGE_VIEWS = ('8e2420d6d6868781acea9a9a0806b2bf904ea4027095a1fd61db3885fe8394f7', 'af3e037f8b4af95d5c8d096c501b8b8f2b4a9023a7b4a1519a6fd4b46fbd4e3c')
 
 
 def sha(raw):
@@ -99,6 +100,10 @@ def historical_bytes(root, name, current):
         # Preserve only already sealed older views. The actual physical successor
         # was independently authenticated above; original consumers still decide
         # which prior view they accept. Never allow a physical rollback.
+        return current
+    if name == 'ci/people_storage_maintenance.py' and digest in STORAGE_VIEWS:
+        # Geometry/M6 consumers may already have projected these exact sealed
+        # views. Physical rollback is still rejected by verify_checkout above.
         return current
     raise ValueError('Forged M7 historical view: '+name)
 

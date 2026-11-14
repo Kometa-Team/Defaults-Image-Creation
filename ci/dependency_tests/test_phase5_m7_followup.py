@@ -64,6 +64,14 @@ class Phase5M7FollowupTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 maintenance.historical_bytes(self.root, name, b'forged')
         self.assertEqual(maintenance.historical_bytes(self.root, 'unlisted', b'opaque'), b'opaque')
+        storage = 'ci/people_storage_maintenance.py'
+        prior = b'already sealed geometry view'
+        with patch.object(maintenance, 'STORAGE_VIEWS', (maintenance.sha(prior),)):
+            self.assertEqual(maintenance.historical_bytes(self.root, storage, prior), prior)
+            (self.root/storage).write_bytes(prior)
+            with self.assertRaises(ValueError):
+                maintenance.historical_bytes(self.root, storage, prior)
+            (self.root/storage).write_bytes(current[storage])
 
     def test_every_physical_member_tamper_delete_and_rollback_rejects(self):
         current, before, receipt = self.cohort()
@@ -265,6 +273,8 @@ class Phase5M7FollowupTests(unittest.TestCase):
             for name, bad in (('PHASE5_M7_ACCEPTANCE_REPORT.md', texts['PHASE5_M7_ACCEPTANCE_REPORT.md'].replace('| Genre / poster | 28 | 27 | 1 |', '')),
                               ('PHASE5_M7_ACCEPTANCE_REPORT.md', texts['PHASE5_M7_ACCEPTANCE_REPORT.md'].replace('251 blocked', '0 blocked')),
                               ('PHASE5_HANDOFF.md', texts['PHASE5_HANDOFF.md'].replace('NOT STARTED', 'READY')),
+                              ('PHASE5_HANDOFF.md', texts['PHASE5_HANDOFF.md'].replace('Assess reuse of', 'Bypass')),
+                              ('PHASE5_HANDOFF.md', texts['PHASE5_HANDOFF.md'].replace('Genre only', 'Genre and Playlist')),
                               ('PHASE5_HANDOFF.md', texts['PHASE5_HANDOFF.md'].replace('Obtain each selected exact package approval', 'All packages are approved'))):
                 with self.subTest(name=name, bad=bad[:30]):
                     (folder/name).write_bytes(bad.encode())
