@@ -110,8 +110,13 @@ class RecoveryRegistrationTests(unittest.TestCase):
                'ci/phase5-m5-maintenance-v1.json','ci/phase5-m6-maintenance-v1.json']
         for name in names:self.assertEqual(p.git('show',p.RECOVERY_BASE+':'+name).replace(b'\r\n',b'\n'),(ROOT/name).read_bytes().replace(b'\r\n',b'\n'))
         self.assertEqual(len(json.loads((ROOT/names[0]).read_bytes())['files']),190)
-        source=json.loads((ROOT/u.SOURCE).read_bytes());self.assertEqual(len(source['files']),22)
-        for name,b in source['files'].items():self.assertEqual(u.digest((ROOT/name).read_bytes(),b['text_lf']),b['sha256'])
+        source,_=u.receipts();self.assertEqual(len(source['files']),22)
+        for name,b in source['files'].items():
+            current=(ROOT/name).read_bytes()
+            if name==m6.PEOPLE_PR65_REQUIREMENTS:
+                self.assertEqual(b['sha256'],m6.PEOPLE_PR65_BEFORE[name])
+                current=m6.people_pr65_bytes(ROOT,name,current)
+            self.assertEqual(u.digest(current,b['text_lf']),b['sha256'])
         for name in (p.RECOVERY_RECEIPT,m6.RECOVERY_CI_RECEIPT):
             v=json.loads((ROOT/name).read_bytes());self.assertIs(v['ci_authorized'],False);self.assertIs(v['publication_authorized'],False)
 

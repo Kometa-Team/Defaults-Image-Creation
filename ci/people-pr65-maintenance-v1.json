@@ -14,6 +14,10 @@
       "before_sha256": "9cbcd30c2a4de2475562eb96c1a9ff56ded269a51f545ba21d61759b1fbcaf2c",
       "sha256": "4aea457a5cbb597fb715d10929118c602bcbe7e5b390ca508cc8d976f07324db"
     },
+    "ci/publication_tests/test_git_recovery_maintenance.py": {
+      "before_sha256": "65b658e31a033e699f7528c6b29429823795da4f520e4b6874693869469171a9",
+      "sha256": "15348052dc368c05d47a59612766ffb74ed2ccaf540c25ac9773494370b99b89"
+    },
     "ci/unicode_tests/test_people_pr65_maintenance.py": {
       "before_sha256": null,
       "sha256": "a51025478bd73fee68dd5eea68035922100e795c17bc2c6c8def3483849519be"

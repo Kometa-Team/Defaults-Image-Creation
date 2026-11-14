@@ -134,15 +134,15 @@ def _physical_paths(root,names):
 
 # Exact post-PR65 People dependency successor; prior receipts remain sealed.
 PEOPLE_PR65_RECEIPT='ci/people-pr65-maintenance-v1.json'
-PEOPLE_PR65_PIN='4eb1f308c7dd0e5ff22b01d5208bccd37047dbb258bda6ea696c1b3a30df6b6b'
+PEOPLE_PR65_PIN='4f85dc5ad1fcbdcf5f4132c73275c73dde100c0a071f3f2cace3e32354c94604'
 PEOPLE_PR65_BASE='3e48768b8dbf58fe1ca550b54207ae821de09626'
 PEOPLE_PR65_PARENT='9ba3256a09220b3633fb7986cf2ed53448f7481a'
 PEOPLE_PR65_REQUIREMENTS='create_people_posters/requirements-bulk-regenerate.txt'
 PEOPLE_PR65_TEST='ci/unicode_tests/test_people_pr65_maintenance.py'
-PEOPLE_PR65_BEFORE={'create_people_posters/requirements-bulk-regenerate.txt': '0bca8670b69c36c0e45a58a39bf5932f93fc0ba8fb023906c6a6234b82e207e0', 'ci/people_unicode_maintenance.py': 'c6f5cee504aa40e3a3cacdcd3c2f60824257945502f0ec52f3509b8f0e923935', 'ci/phase5_m5_maintenance.py': '9cbcd30c2a4de2475562eb96c1a9ff56ded269a51f545ba21d61759b1fbcaf2c', 'ci/unicode_tests/test_people_pr65_maintenance.py': None, 'ci/dependency_tests/test_phase5_m6_maintenance.py': '8816f0b5d3d28951ae95af39e10d314a12a320f91b719a3b3d43dfa2a3db4bfd'}
+PEOPLE_PR65_BEFORE={'create_people_posters/requirements-bulk-regenerate.txt': '0bca8670b69c36c0e45a58a39bf5932f93fc0ba8fb023906c6a6234b82e207e0', 'ci/people_unicode_maintenance.py': 'c6f5cee504aa40e3a3cacdcd3c2f60824257945502f0ec52f3509b8f0e923935', 'ci/phase5_m5_maintenance.py': '9cbcd30c2a4de2475562eb96c1a9ff56ded269a51f545ba21d61759b1fbcaf2c', 'ci/unicode_tests/test_people_pr65_maintenance.py': None, 'ci/dependency_tests/test_phase5_m6_maintenance.py': '8816f0b5d3d28951ae95af39e10d314a12a320f91b719a3b3d43dfa2a3db4bfd', 'ci/publication_tests/test_git_recovery_maintenance.py': '65b658e31a033e699f7528c6b29429823795da4f520e4b6874693869469171a9'}
 
 
-@lru_cache(maxsize=4)
+@lru_cache(maxsize=5)
 def _people_pr65_before(name):
     if name not in PEOPLE_PR65_BEFORE or PEOPLE_PR65_BEFORE[name] is None:
         raise ValueError('Unapproved People PR65 predecessor')
