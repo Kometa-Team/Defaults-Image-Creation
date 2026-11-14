@@ -84,13 +84,42 @@ class Phase5M6MaintenanceTests(unittest.TestCase):
         with patch.object(Path,'read_bytes',tampered_cohort),self.assertRaises(ValueError):m6.historical_bytes(ROOT,name,before)
 
     def test_immutable_batching_and_fresh_head_observations(self):
+        import sys
+        from collections import Counter
         from ci import people_colorize_maintenance as color
         m6._baseline_tree.cache_clear();m6._predecessors.cache_clear();m6._old.cache_clear();m6._baseline_entry.cache_clear()
-        with patch.object(m6,'_git_raw',wraps=m6._git_raw) as git,patch.object(color,'_head',wraps=color._head) as head:
-            m6.verify_checkout();m6.verify_checkout()
-        commands=[call.args[1] for call in git.call_args_list]
+        m6._people_pr65_before.cache_clear()
+        lookups=[];heads=[];read_git=m6._git_raw;read_head=color._head
+        def caller():
+            frame=sys._getframe(2)
+            while frame.f_globals.get('__name__')=='unittest.mock' or frame.f_code.co_name=='_git':frame=frame.f_back
+            self.assertEqual(frame.f_globals.get('__name__'),m6.__name__)
+            return frame.f_code.co_name
+        def git(root,*args,**kwargs):
+            lookups.append((caller(),args[0]))
+            return read_git(root,*args,**kwargs)
+        def head(root):
+            heads.append(caller())
+            return read_head(root)
+        with patch.object(m6,'_git_raw',side_effect=git),patch.object(color,'_head',side_effect=head), \
+             patch.object(m6,'people_pr65_bindings',wraps=m6.people_pr65_bindings) as people, \
+             patch.object(m6,'timeout_bindings',wraps=m6.timeout_bindings) as timeouts, \
+             patch.object(m6,'geometry_binding',wraps=m6.geometry_binding) as geometry:
+            m6.verify_checkout();cold_end=len(lookups);m6.verify_checkout()
+        batching={'_baseline_tree','_predecessors','_old','_baseline_entry'}
+        commands=[command for owner,command in lookups if owner in batching]
         self.assertEqual(commands.count('ls-tree'),1);self.assertEqual(commands.count('cat-file'),1)
-        self.assertEqual(commands.count('show'),0);self.assertEqual(head.call_count,2)
+        self.assertEqual(commands.count('show'),0)
+        self.assertEqual(Counter(commands),{'ls-tree':1,'cat-file':1})
+        # Keep the new cohort cold too: one immutable tree/blob lookup per
+        # registered predecessor, with no repeated reads on the second proof.
+        predecessors=sum(value is not None for value in m6.PEOPLE_PR65_BEFORE.values())
+        self.assertEqual(Counter(command for owner,command in lookups if owner=='_people_pr65_before'),
+                         {'ls-tree':predecessors,'show':predecessors})
+        self.assertFalse([row for row in lookups[cold_end:] if row[0] in batching|{'_people_pr65_before'}])
+        self.assertGreater(people.call_count,0)
+        self.assertEqual(Counter(heads),{'verify_checkout':2,'timeout_bindings':timeouts.call_count,
+                         'geometry_binding':geometry.call_count,'people_pr65_bindings':2*people.call_count})
 
     def test_foreign_checkout_and_scope_fail_closed(self):
         with self.assertRaises(ValueError):m6.verify_checkout(ROOT/'foreign')

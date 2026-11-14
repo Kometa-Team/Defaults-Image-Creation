@@ -135,6 +135,7 @@ def _owned_headers(root, publication):
         m6.RETENTION_GEOMETRY_RECEIPT, m6.COMPUTATION_RECEIPT,
         publication.RECEIPT, publication.GIT_RECEIPT, publication.RECOVERY_RECEIPT,
         'ci/people_publication_maintenance.py', publication.CI_TEST_LOCK}
+    names |= {m6.PEOPLE_PR65_RECEIPT, m6.PEOPLE_PR65_TEST}
     return _head(root), {name:(digest(regular(root,name).read_bytes()),True) for name in names}
 
 
@@ -219,6 +220,8 @@ def _verify(root, owned):
         if name == 'create_defaults/phase4/tests/test_ci_foundations.py':
             from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
             current = m6_bytes(root, name, current)
+        if name == m6.PEOPLE_PR65_REQUIREMENTS:
+            current = m6.people_pr65_bytes(root, name, current)
         if name in publication_bindings:
             # Reuse only this invocation's verified metadata, never its old bytes.
             # A post-proof mutation cannot be relabelled as historical artwork.
@@ -253,6 +256,8 @@ def historical_bytes(root, name, current):
     if name not in SOURCE_MEMBERS | CI_MEMBERS:
         return current
     binding = verify(root)[name]
+    from ci.phase5_m6_maintenance import people_pr65_bytes
+    current = people_pr65_bytes(root, name, current)
     if binding['before_sha256'] is not None and digest(current, binding['text_lf']) == binding['sha256']:
         return predecessor(name)
     # Earlier projections and forged inputs remain subject to the original
@@ -265,7 +270,11 @@ def selected_hash(name, expected):
     if name not in SOURCE_MEMBERS | CI_MEMBERS:
         return publication_adapter().timeout_hash(name, expected)
     binding = verify()[name]
-    return publication_adapter().timeout_hash(name, binding['sha256'] if binding['before_sha256'] is not None and expected == binding['before_sha256'] else expected)
+    selected = binding['sha256'] if binding['before_sha256'] is not None and expected == binding['before_sha256'] else expected
+    from ci.phase5_m6_maintenance import people_pr65_bindings, PEOPLE_PR65_REQUIREMENTS
+    if name == PEOPLE_PR65_REQUIREMENTS and selected == binding['sha256']:
+        selected = people_pr65_bindings()[name]['sha256']
+    return publication_adapter().timeout_hash(name, selected)
 
 
 def scope_members():
@@ -296,6 +305,9 @@ def verify_scope(root, baseline, names):
         else:
             expected = digest(regular(ROOT, name).read_bytes())
             text = True
+        from ci.phase5_m6_maintenance import PEOPLE_PR65_REQUIREMENTS, people_pr65_bindings
+        if name == PEOPLE_PR65_REQUIREMENTS:
+            expected = people_pr65_bindings(root)[name]['sha256']
         expected = publication_adapter().timeout_hash(name, expected)
         if digest(committed, text) != expected:
             raise ValueError('Unapproved committed Unicode successor: '+name)
