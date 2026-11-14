@@ -48,6 +48,15 @@ PLANNING_DOCUMENTS = frozenset((
 ))
 
 
+# Exact Phase 5 M7 dossier additions; reuse every existing addition/mode/link guard.
+M7_DOSSIER_DOCUMENTS = frozenset((
+    'create_defaults/lifecycle/PHASE5_M7_ACCEPTANCE_REPORT.md',
+    'create_defaults/lifecycle/PHASE5_M7_ACCEPTANCE.json',
+    'create_defaults/lifecycle/PHASE5_M7_COVERAGE.json',
+    'create_defaults/lifecycle/PHASE5_HANDOFF.md',
+))
+
+
 def changed_scope():
     """Retain M7 scope; permit only exact regular-file planning additions."""
     changed = set(filter(None, subprocess.check_output([
@@ -58,7 +67,7 @@ def changed_scope():
     if storage:
         verify_scope(ROOT, BASE, storage)
     planning = changed - ALLOWED - storage
-    require(planning <= PLANNING_DOCUMENTS,
+    require(planning <= PLANNING_DOCUMENTS | M7_DOSSIER_DOCUMENTS,
             'M7 changed an existing runtime, policy, workflow or evidence boundary')
     if planning:
         rows = subprocess.check_output(['git', 'diff', '--raw', '--no-abbrev',

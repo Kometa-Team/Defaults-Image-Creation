@@ -175,6 +175,8 @@ def extra_ids(root=ROOT):
 def historical_bytes(root, name, current):
     """Project ONLY verified CI successors onto their exact frozen predecessors."""
     from ci.people_readme_maintenance import historical_bytes as readme_history
+    from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+    current = m7_bytes(root, name, current)
     current = readme_history(root, name, current)
     if name not in INFRASTRUCTURE:
         return current

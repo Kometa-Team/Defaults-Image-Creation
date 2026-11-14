@@ -326,6 +326,8 @@ def _timeout_physical(name,binding):
 
 
 def timeout_bytes(root,name,current):
+    from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+    current=m7_bytes(root,name,current)
     if name in COMPUTATION_BEFORE and name not in TIMEOUT_MEMBERS:return computation_bytes(root,name,current)
     if name not in TIMEOUT_MEMBERS:return current
     b=timeout_bindings(root)[name]
@@ -431,12 +433,15 @@ def geometry_binding(root=ROOT):
             or value['version']!=1 or value['baseline_commit']!=GEOMETRY_BASE or value['files']!=expected
             or value['ci_authorized'] is not False or value['publication_authorized'] is not False):
         raise ValueError('Changed exact geometry registration')
-    if sha(regular(ROOT,GEOMETRY_SOURCE).read_bytes())!=GEOMETRY_SHA:raise ValueError('Changed physical geometry successor')
+    from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+    if sha(m7_bytes(root,GEOMETRY_SOURCE,regular(ROOT,GEOMETRY_SOURCE).read_bytes()))!=GEOMETRY_SHA:raise ValueError('Changed physical geometry successor')
     _geometry_before()
     return value['files'][GEOMETRY_SOURCE]
 
 
 def geometry_bytes(root,name,current):
+    from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+    current=m7_bytes(root,name,current)
     if name!=GEOMETRY_SOURCE:return current
     binding=geometry_binding(root)
     return _geometry_before() if sha(current)==binding['sha256'] else current
@@ -542,6 +547,8 @@ def _cohort_views(root,paths):
 
 def verify_checkout(root=None):
     root=Path(root or ROOT)
+    from ci.phase5_m7_maintenance import verify_checkout as verify_m7
+    verify_m7(root)
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M6 policy checkout')
     verify_timeouts(root)
     paths=_physical_paths(root,MEMBERS|ANCHORS)
@@ -557,6 +564,8 @@ def verify_checkout(root=None):
 
 
 def historical_bytes(root,name,current):
+    from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+    current=m7_bytes(root,name,current)
     current=retention_geometry_bytes(root,name,current)
     current=geometry_bytes(root,name,current)
     current=timeout_bytes(root,name,current)
@@ -585,11 +594,14 @@ def historical_bytes(root,name,current):
 def scope_members():
     from ci.phase4_m7 import ROOT as policy_root
     if Path(policy_root).resolve()!=ROOT.resolve():return frozenset()
-    return ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}) | {RECOVERY_CI_RECEIPT,TIMEOUT_RECEIPT,GEOMETRY_RECEIPT,RETENTION_GEOMETRY_SOURCE,RETENTION_GEOMETRY_RECEIPT,COMPUTATION_RECEIPT} | TIMEOUT_MEMBERS | set(COMPUTATION_BEFORE) | set(PEOPLE_PR65_BEFORE) | {PEOPLE_PR65_RECEIPT}
+    from ci.phase5_m7_maintenance import scope_members as m7_scope
+    return m7_scope() | ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}) | {RECOVERY_CI_RECEIPT,TIMEOUT_RECEIPT,GEOMETRY_RECEIPT,RETENTION_GEOMETRY_SOURCE,RETENTION_GEOMETRY_RECEIPT,COMPUTATION_RECEIPT} | TIMEOUT_MEMBERS | set(COMPUTATION_BEFORE) | set(PEOPLE_PR65_BEFORE) | {PEOPLE_PR65_RECEIPT}
 
 
 def verify_scope(root,baseline,names):
     verify_checkout(root)
+    from ci.phase5_m7_maintenance import verify_scope as verify_m7_scope
+    verify_m7_scope(root,names)
     if not names<=scope_members():raise ValueError('Unapproved M6 scope')
     if not names:return
     rows=_git(root,'diff','--raw','--no-abbrev','--no-renames','-z',baseline,'HEAD','--',*sorted(names)).split(b'\0')

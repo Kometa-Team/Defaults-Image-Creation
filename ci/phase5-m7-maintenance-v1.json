@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "baseline_commit": "3e48768b8dbf58fe1ca550b54207ae821de09626",
+  "members": {
+    "ci/dependency_tests/test_phase5_m7_admission.py": {
+      "before_sha256": null,
+      "sha256": "fda516f2f81a4bf7469066abbf6aa37832a1885c409af83577b6ed8c6d8ed0ef"
+    },
+    "ci/dependency_tests/test_phase5_m7_followup.py": {
+      "before_sha256": null,
+      "sha256": "dcd20f086743ebb573c23cd4c4ebe3ee5bc8ce0c88c8584ab0b6a5c4c92334cf"
+    },
+    "ci/people_storage_maintenance.py": {
+      "before_sha256": "e91f07dbe89530211b95190f318b5f239cc3da59ad83355053764a0ae4daf817",
+      "sha256": "21abde73f86dafce596e6669d947e208483aced13d14c16cc49d34b23a701913"
+    },
+    "ci/phase4_m7.py": {
+      "before_sha256": "c1526d267fb8f52d076badc44ed95172e66c7795129c43c0dc91405bc2c95c58",
+      "sha256": "f940864a43950912092fb30a622daae2d9ebfc1eddeedabc5678217f190dd4ef"
+    },
+    "ci/phase5_m6_maintenance.py": {
+      "before_sha256": "62413538c5288bdcf3cbf32438a245279c01e23b641506dc12c698609a1063df",
+      "sha256": "cf96498c87681507ef0a96277327e4188bb334991a529df7f374ebb1b3541b34"
+    },
+    "ci/phase5_m7_acceptance.py": {
+      "before_sha256": null,
+      "sha256": "8a99c4afe47545759eb9f9aafe14fff22989868b00e2d35874d9afaa16066eeb"
+    },
+    "ci/phase5_m7_provenance.py": {
+      "before_sha256": null,
+      "sha256": "7c68653394d3f3dce2958e92b762e002060b06cffe11c5560af503d1a8d53ba6"
+    },
+    "create_defaults/lifecycle/ROADMAP.md": {
+      "before_sha256": "359d467f601787c4fdf6e369e0971f6fe0a7c49df65114f7aca8c82de0514f82",
+      "sha256": "148a0e5c1d6618f32982de4a9168a9d01c3f0ef042617024dd31ac0c0236a81e"
+    }
+  },
+  "ci_only": true,
+  "publication_authorized": false
+}
