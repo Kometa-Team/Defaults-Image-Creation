@@ -182,6 +182,63 @@ class Phase5M7FollowupTests(unittest.TestCase):
         with patch.object(helper, '_head', side_effect=['f'*40, 'e'*40]), self.assertRaises(ValueError):
             maintenance.verify_checkout()
 
+    def test_one_invocation_reuses_entry_metadata_and_always_proves_a_fresh_close(self):
+        from contextvars import copy_context
+        current, before, receipt = self.cohort()
+        self.owner(before, receipt)
+        captured = []
+        @maintenance.owned_call
+        def nested(root, name):
+            return maintenance.historical_bytes(root, name, current[name])
+        @maintenance.owned_call
+        def public(root):
+            captured.append(copy_context())
+            for _ in range(2):
+                for name in maintenance.MODIFIED:
+                    self.assertEqual(nested(root, name), before[name])
+        with patch.object(maintenance, 'verify_checkout', wraps=maintenance.verify_checkout) as verify:
+            public(self.root)
+            self.assertEqual(verify.call_count, 2)
+            public(self.root)
+            self.assertEqual(verify.call_count, 4)
+        # A copied context cannot retain the completed invocation's acceptance.
+        name = next(iter(maintenance.MODIFIED))
+        (self.root/name).write_bytes(before[name])
+        with self.assertRaises(ValueError):
+            captured[0].run(maintenance.historical_bytes, self.root, name, current[name])
+        (self.root/name).write_bytes(current[name])
+        public(self.root)
+
+    def test_owned_views_reject_point_of_use_and_closing_changes_without_leaking_proofs(self):
+        current, before, receipt = self.cohort()
+        helper = self.owner(before, receipt)
+        names = sorted(maintenance.MODIFIED)
+        target, other = names[:2]
+        @maintenance.owned_call
+        def public(root, action=lambda: None):
+            action()
+            return maintenance.historical_bytes(root, target, current[target])
+        for bad in (b'tampered', before[target], None):
+            def attack():
+                path = self.root/target
+                path.unlink() if bad is None else path.write_bytes(bad)
+            with self.subTest(bad=bad), self.assertRaises((ValueError, OSError)):
+                public(self.root, attack)
+            (self.root/target).write_bytes(current[target])
+            self.assertEqual(public(self.root), before[target])
+        # A member that was not projected must still fail the full closing proof.
+        with self.assertRaises(ValueError):
+            public(self.root, lambda: (self.root/other).write_bytes(before[other]))
+        (self.root/other).write_bytes(current[other])
+        raw = (self.root/maintenance.RECEIPT).read_bytes()
+        with self.assertRaises(ValueError):
+            public(self.root, lambda: (self.root/maintenance.RECEIPT).write_bytes(b'{}'))
+        (self.root/maintenance.RECEIPT).write_bytes(raw)
+        with patch.object(helper, '_head', side_effect=['f'*40, 'f'*40, 'e'*40, 'e'*40]), \
+             self.assertRaisesRegex(ValueError, 'HEAD'):
+            public(self.root)
+        self.assertEqual(public(self.root), before[target])
+
     def test_scope_modes_are_exact_and_dossiers_are_not_maintenance_members(self):
         current, before, receipt = self.cohort()
         self.owner(before, receipt)

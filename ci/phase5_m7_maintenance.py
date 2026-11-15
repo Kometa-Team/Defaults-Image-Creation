@@ -1,9 +1,12 @@
 """Exact M7 CI successor, independently sealed from all prior receipts."""
-from functools import lru_cache
+from contextlib import contextmanager
+from contextvars import ContextVar
+from functools import lru_cache, wraps
 import hashlib
 import json
 from pathlib import Path
 import subprocess
+from threading import get_ident
 
 from ci.people_storage_maintenance import regular
 
@@ -11,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = '1a367cda9c8e2c07cdcab2f3d4684b0cf03130e7'
 OWNER = 'ci/phase5_m7_maintenance.py'
 RECEIPT = 'ci/phase5-m7-maintenance-v1.json'
-PIN = '7331f21c0425ce9925606b34918e798eea7c5a22cccfee8471da4e6f77a00f0c'
+PIN = '105ad962e210c87ae60e3868c0b80d270d2f44f1fbbeb125902389af6897b45f'
 MODIFIED = frozenset(('ci/phase4_m7.py', 'ci/people_storage_maintenance.py',
                       'ci/phase5_m6_maintenance.py', 'create_defaults/lifecycle/ROADMAP.md',
                       'ci/dependency_tests/test_phase5_m6_maintenance.py',
@@ -24,6 +27,7 @@ ADDED = frozenset(('ci/phase5_m7_acceptance.py',
 ROADMAP_VIEWS = ('359d467f601787c4fdf6e369e0971f6fe0a7c49df65114f7aca8c82de0514f82', '4a1fa20153c3926a2ae06cf544629b7208ceb94fe80af9fa7106fa032180286d', '79a722ebfd77be147b9375673ea77dbb44e6ef62ac325b6299bd77ec24a690e9', '8d15de091e0ff4a75f131b13ff7bce0063eadda8525e895497d190746c32a8fa', 'c830b33101d202e6118c84c7d63ccf40b0a7639eefcaa6687d73e2c9469d87fc', 'f776dea7e1d719439df2fb1f6c8ddea30297eda6bf63f30e9f93cea7f502ca96')
 STORAGE_VIEWS = ('8e2420d6d6868781acea9a9a0806b2bf904ea4027095a1fd61db3885fe8394f7', 'af3e037f8b4af95d5c8d096c501b8b8f2b4a9023a7b4a1519a6fd4b46fbd4e3c')
 TEST_VIEWS = ('8816f0b5d3d28951ae95af39e10d314a12a320f91b719a3b3d43dfa2a3db4bfd', 'd8f7c0b16e9daceb91f9c32af0937e797ede60d24f1e50cb9d4a6e99bb3af2ee', 'fbde4457701713547eff0ce7d5b76596f6dcfbea5ab0cdddad516cf17553f254')
+_ACTIVE = ContextVar('m7_verification_owner', default=None)
 
 
 @lru_cache(maxsize=128)
@@ -87,7 +91,7 @@ def _decode(raw, pin, base, modified, added):
     return tuple(rows)
 
 
-def verify_checkout(root=None):
+def verify_checkout(root=None, *, _witness=False):
     root = Path(root or ROOT)
     if root != ROOT and root.resolve() != ROOT.resolve():
         raise ValueError('Foreign M7 checkout')
@@ -111,20 +115,74 @@ def verify_checkout(root=None):
             raise ValueError('M7 addition exists in predecessor')
     # The new owner is an explicit reviewed trust anchor, not a self-hash cycle.
     # Its physical source must still equal its immutable committed exact-head blob.
-    if sha(regular(ROOT, OWNER).read_bytes()) != sha(_owner_bytes(str(ROOT), head)):
+    owner = sha(regular(ROOT, OWNER).read_bytes())
+    if owner != sha(_owner_bytes(str(ROOT), head)):
         raise ValueError('Changed uncommitted M7 owner')
     if regular(ROOT, RECEIPT).read_bytes() != raw or _head(ROOT) != head:
         raise ValueError('M7 receipt or HEAD moved during verification')
+    if _witness:
+        return head, raw, owner, rows
     return dict(version=1, baseline_commit=BASE, ci_only=True,
                 publication_authorized=False, members={
                     name: dict(before_sha256=before, sha256=after)
                     for name, before, after in rows})
 
 
+@contextmanager
+def _invocation(root):
+    root = Path(root or ROOT)
+    if root != ROOT and root.resolve() != ROOT.resolve():
+        raise ValueError('Foreign M7 checkout')
+    key = str(ROOT.absolute()), get_ident()
+    active = _ACTIVE.get()
+    if active is not None and active[1][0] and active[2] == key:
+        yield
+        return
+    entry = verify_checkout(root, _witness=True)
+    alive = [True]
+    token = _ACTIVE.set((entry, alive, key))
+    try:
+        yield
+        # Reread the entire cohort, its modes, owner, receipt and fresh HEAD.
+        # A stable proof at a different HEAD must not close this invocation.
+        if verify_checkout(root, _witness=True) != entry:
+            raise ValueError('Changed closing M7 owner receipt or HEAD')
+    finally:
+        # Copied contexts cannot keep an approval alive after its owner returns.
+        alive[0] = False
+        _ACTIVE.reset(token)
+
+
+def owned_call(function=None, *, when=None):
+    """Private invocation boundary: never reuse a proof across public calls."""
+    if function is None:
+        return lambda fn: owned_call(fn, when=when)
+    @wraps(function)
+    def invoke(*args, **kwargs):
+        if when is not None and not when(*args, **kwargs):
+            return function(*args, **kwargs)
+        root = kwargs.get('root', args[0] if args else None)
+        with _invocation(root):
+            return function(*args, **kwargs)
+    return invoke
+
+
 def historical_bytes(root, name, current, *, opaque=False):
     if name not in MODIFIED:
         return current
-    binding = verify_checkout(root)['members'][name]
+    active = _ACTIVE.get()
+    if active is not None and active[1][0] and active[2] == (str(ROOT.absolute()), get_ident()):
+        if Path(root) != ROOT and Path(root).resolve() != ROOT.resolve():
+            raise ValueError('Foreign M7 historical projection')
+        _, before, after = next(row for row in active[0][3] if row[0] == name)
+        # Entry/closing proofs cover every member. Each actual view additionally
+        # rereads its own leaf and ancestors at the point of use, independently
+        # of caller bytes. Metadata lives only in this synchronous invocation.
+        if sha(regular(ROOT, name).read_bytes()) != after:
+            raise ValueError('Changed physical M7 successor: '+name)
+        binding = dict(before_sha256=before, sha256=after)
+    else:
+        binding = verify_checkout(root)['members'][name]
     digest = sha(current)
     if digest == binding['sha256']:
         return predecessor(name)

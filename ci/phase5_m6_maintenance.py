@@ -6,6 +6,7 @@ from pathlib import Path
 import subprocess
 
 from ci.people_storage_maintenance import regular
+from ci.phase5_m7_maintenance import owned_call as _m7_owned_call, MODIFIED as _M7_MODIFIED
 
 ROOT=Path(__file__).resolve().parents[1]
 BASE='9da96b0df12526daaee6156bc7778bbd57d9e8b6'
@@ -158,6 +159,7 @@ def _people_pr65_before(name):
 def _people_pr65_ancestry(head):_git(ROOT,'merge-base','--is-ancestor',PEOPLE_PR65_BASE,head)
 
 
+@_m7_owned_call
 def people_pr65_bindings(root=ROOT):
     if Path(root).resolve()!=ROOT.resolve():raise ValueError('Foreign People PR65 checkout')
     from ci.people_colorize_maintenance import _head
@@ -317,6 +319,7 @@ def verify_computation_scope(root,names):
             raise ValueError('Changed committed computation successor')
 
 
+@_m7_owned_call
 def timeout_bindings(root=ROOT):
     if Path(root)!=ROOT and Path(root).resolve()!=ROOT.resolve():raise ValueError('Foreign validation timeout checkout')
     from ci.people_colorize_maintenance import _head
@@ -334,6 +337,7 @@ def _timeout_physical(name,binding):
         raise ValueError('Changed physical timeout successor: '+name)
 
 
+@_m7_owned_call(when=lambda root,name,current: name in TIMEOUT_MEMBERS or name in COMPUTATION_BEFORE or name in _M7_MODIFIED)
 def timeout_bytes(root,name,current):
     from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
     current=m7_bytes(root,name,current,opaque=True)
@@ -353,6 +357,7 @@ def timeout_selected_hash(name,expected):
     return b['sha256'] if expected==b['before_sha256'] and expected is not None else expected
 
 
+@_m7_owned_call
 def verify_timeouts(root=ROOT):
     # Authenticate the receipt/HEAD at both ends of this explicit cohort.
     # Reuse only its immutable bindings, never prior physical verification.
@@ -378,6 +383,7 @@ RECOVERY_CI_BASE='0ad49fbec9283387aacc0378f9d6a796839d981d'
 RECOVERY_CI_BEFORE={'ci/people_publication_maintenance.py': '028a7cd6e022c3e364455e8ba711729df81660aa9cbca4988723345c88e49b2d', 'ci/people_unicode_maintenance.py': 'a1195dc14fd14b5f157e8cd2282dc6cae258f4b0452a4e81f1fc16bd9a5ca97f', 'ci/phase5_m5_maintenance.py': 'b035c366441315115339a4b8cc12625d9934718de8f2718da2663b528e47b846', 'ci/dependency_tests/test_phase5_m6_maintenance.py': 'd8f7c0b16e9daceb91f9c32af0937e797ede60d24f1e50cb9d4a6e99bb3af2ee'}
 
 
+@_m7_owned_call
 def recovery_ci_bindings(root=ROOT):
     timeouts=timeout_bindings(root)
     value=_recovery_ci_owned(root,timeouts)
@@ -435,6 +441,7 @@ def _geometry_before():
 def _geometry_ancestry(head):_git(ROOT,'merge-base','--is-ancestor',GEOMETRY_BASE,head)
 
 
+@_m7_owned_call
 def geometry_binding(root=ROOT):
     if Path(root).resolve()!=ROOT.resolve():raise ValueError('Foreign geometry checkout')
     from ci.people_colorize_maintenance import _head
@@ -451,6 +458,7 @@ def geometry_binding(root=ROOT):
     return value['files'][GEOMETRY_SOURCE]
 
 
+@_m7_owned_call(when=lambda root,name,current: name == GEOMETRY_SOURCE or name in _M7_MODIFIED)
 def geometry_bytes(root,name,current):
     from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
     current=m7_bytes(root,name,current,opaque=True)
@@ -483,6 +491,7 @@ def _retention_geometry_before():
     return raw
 
 
+@_m7_owned_call
 def retention_geometry_binding(root=ROOT):
     geometry_binding(root)
     value=json.loads(regular(root,RETENTION_GEOMETRY_RECEIPT).read_bytes())
@@ -558,10 +567,9 @@ def _cohort_views(root,paths):
     return views
 
 
+@_m7_owned_call
 def verify_checkout(root=None):
     root=Path(root or ROOT)
-    from ci.phase5_m7_maintenance import verify_checkout as verify_m7
-    verify_m7(root)
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M6 policy checkout')
     verify_timeouts(root)
     paths=_physical_paths(root,MEMBERS|ANCHORS)
@@ -576,6 +584,7 @@ def verify_checkout(root=None):
     return value
 
 
+@_m7_owned_call(when=lambda root,name,current: name in APPROVED or name in TIMEOUT_MEMBERS or name in COMPUTATION_BEFORE or name == RETENTION_GEOMETRY_SOURCE or name in _M7_MODIFIED)
 def historical_bytes(root,name,current):
     from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
     current=m7_bytes(root,name,current)
