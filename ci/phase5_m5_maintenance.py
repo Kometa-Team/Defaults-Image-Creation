@@ -6,6 +6,7 @@ from pathlib import Path
 import subprocess
 
 from ci.people_storage_maintenance import regular
+from ci.phase5_m7_maintenance import owned_call as _m7_owned_call
 
 ROOT=Path(__file__).resolve().parents[1]
 BASE='3c15fb56b63bababa5d216b8d885e7dee257c11d'
@@ -49,7 +50,7 @@ BULK_ADAPTER_SHA256 = 'a8c435a6670d0e2e165569566b6bf079e1eba49a6f9e697462edcca8b
 
 
 # Versioned Unicode successor pins; predecessor constants/receipts stay intact.
-UNICODE_ADAPTER_SHA256='fe06b997be3f21dcb4734396b17ff538f34254daa2a77f68d9dcbeefa2ab1472'
+UNICODE_ADAPTER_SHA256='c8e45bbb575edbbe21a6fdc0e2c1fb7b0c69b5ca4012a9d11057bbec5a8d7a78'
 UNICODE_COLLECTION_ADAPTER_SHA256 = '6c985c6f970b23d4515379d36cdbfa38d1f168bed02831f1c2a2ead2e5cdb61e'
 UNICODE_BULK_ADAPTER_SHA256 = 'e6f0ed2e679194eb18fc93b0493daa69b6dd1170793efb3f02c96850e3afbe9c'
 
@@ -200,6 +201,7 @@ def _physical_paths(root,names):
     return _regular_files(root,names|{MANIFEST.relative_to(ROOT).as_posix()})
 
 
+@_m7_owned_call
 def verify_checkout(root=None):
     root=Path(root or ROOT)
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M5 policy checkout')
@@ -224,6 +226,7 @@ def verify_checkout(root=None):
     return value
 
 
+@_m7_owned_call(when=lambda root,name,current: name in MEMBERS)
 def historical_bytes(root,name,current):
     from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
     current=m6_bytes(root,name,current)

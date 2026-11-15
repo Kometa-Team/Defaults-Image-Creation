@@ -11,6 +11,7 @@ from pathlib import Path
 import subprocess
 
 from ci.people_storage_maintenance import regular
+from ci.phase5_m7_maintenance import owned_call as _m7_owned_call
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = '05ea93ba4b75a6c8fbd3755bdf817cb6c8485338'
@@ -192,6 +193,7 @@ def _verify_owned(root):
     return _verify(root,True)
 
 
+@_m7_owned_call
 def _verify(root, owned):
     if Path(root).resolve() != ROOT.resolve():
         raise ValueError('Foreign Unicode policy checkout')
@@ -253,6 +255,7 @@ def _verify(root, owned):
     return bindings,_owned_inputs(root,publication,physical_hashes,headers) if owned else None
 
 
+@_m7_owned_call(when=lambda root,name,current: name in SOURCE_MEMBERS | CI_MEMBERS)
 def historical_bytes(root, name, current):
     from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
     current = m6_bytes(root, name, current)
