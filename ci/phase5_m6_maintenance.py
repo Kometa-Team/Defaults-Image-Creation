@@ -312,7 +312,8 @@ def verify_computation_scope(root,names):
         current=regular(root,name).read_bytes()
         expected=sha(current) if name==COMPUTATION_RECEIPT else COMPUTATION_AFTER[name]
         if name in PEOPLE_PR65_BEFORE:expected=people_pr65_bindings(root)[name]['sha256']
-        if sha(current)!=expected or sha(_git(root,'show','HEAD:'+name))!=expected:
+        from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+        if sha(m7_bytes(root,name,current))!=expected or sha(m7_bytes(root,name,_git(root,'show','HEAD:'+name)))!=expected:
             raise ValueError('Changed committed computation successor')
 
 

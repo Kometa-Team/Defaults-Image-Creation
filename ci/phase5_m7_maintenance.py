@@ -11,11 +11,12 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = '1a367cda9c8e2c07cdcab2f3d4684b0cf03130e7'
 OWNER = 'ci/phase5_m7_maintenance.py'
 RECEIPT = 'ci/phase5-m7-maintenance-v1.json'
-PIN = '51064e5202d84fd24cbf4695fdc4cf629310d3c515bd69ad6d43280a60c14332'
+PIN = 'cd3719a979ac6d39ca32bc1bb0c8df62b5e8964683dd62ecef33ab2415edba14'
 MODIFIED = frozenset(('ci/phase4_m7.py', 'ci/people_storage_maintenance.py',
                       'ci/phase5_m6_maintenance.py', 'create_defaults/lifecycle/ROADMAP.md',
                       'ci/dependency_tests/test_phase5_m6_maintenance.py',
-                      'ci/publication_tests/test_validation_timeouts.py'))
+                      'ci/publication_tests/test_validation_timeouts.py',
+                      'ci/people_unicode_maintenance.py', 'ci/phase5_m5_maintenance.py'))
 ADDED = frozenset(('ci/phase5_m7_acceptance.py',
                    'ci/phase5_m7_provenance.py',
                    'ci/dependency_tests/test_phase5_m7_admission.py',

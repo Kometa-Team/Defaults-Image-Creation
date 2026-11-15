@@ -18,13 +18,21 @@
       "before_sha256": "e91f07dbe89530211b95190f318b5f239cc3da59ad83355053764a0ae4daf817",
       "sha256": "21abde73f86dafce596e6669d947e208483aced13d14c16cc49d34b23a701913"
     },
+    "ci/people_unicode_maintenance.py": {
+      "before_sha256": "16dd198f29d647d3186cad052c1d9b5c0195fa29ae31330701524c861c6c48b1",
+      "sha256": "fe06b997be3f21dcb4734396b17ff538f34254daa2a77f68d9dcbeefa2ab1472"
+    },
     "ci/phase4_m7.py": {
       "before_sha256": "c1526d267fb8f52d076badc44ed95172e66c7795129c43c0dc91405bc2c95c58",
       "sha256": "f940864a43950912092fb30a622daae2d9ebfc1eddeedabc5678217f190dd4ef"
     },
+    "ci/phase5_m5_maintenance.py": {
+      "before_sha256": "4aea457a5cbb597fb715d10929118c602bcbe7e5b390ca508cc8d976f07324db",
+      "sha256": "afb92a46a9ee4cb6cb9ac69d20aa4698498d8b6e9611166608add985071789b5"
+    },
     "ci/phase5_m6_maintenance.py": {
       "before_sha256": "575976f25f41fd8eacb25b626504ba8f380f97d7b29cd3a07afa1c31c4e66e07",
-      "sha256": "944eced27006d546a128421a456433ab118c4e8f261a5ce8f823bcb5b4ab6f5b"
+      "sha256": "da2e3234d778950b2e3d7d685dfaf8b0a7f7eb6dfe91e3644fb3e80726fafdfe"
     },
     "ci/phase5_m7_acceptance.py": {
       "before_sha256": null,

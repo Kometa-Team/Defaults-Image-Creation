@@ -136,6 +136,7 @@ def _owned_headers(root, publication):
         publication.RECEIPT, publication.GIT_RECEIPT, publication.RECOVERY_RECEIPT,
         'ci/people_publication_maintenance.py', publication.CI_TEST_LOCK}
     names |= {m6.PEOPLE_PR65_RECEIPT, m6.PEOPLE_PR65_TEST}
+    names |= {'ci/phase5_m7_maintenance.py', 'ci/phase5-m7-maintenance-v1.json'}
     return _head(root), {name:(digest(regular(root,name).read_bytes()),True) for name in names}
 
 
@@ -156,6 +157,9 @@ def _owned_inputs(root, publication, physical, headers):
         selected=binding['sha256']
         if name in timeouts and selected==timeouts[name]['before_sha256']:selected=timeouts[name]['sha256']
         expected[name]=(selected,True)
+    from ci.phase5_m7_maintenance import verify_checkout as verify_m7
+    for name,binding in verify_m7(root)['members'].items():
+        expected[name]=(binding['sha256'],True)
     # Headers were captured before the proof; changed policy bytes cannot enter
     # this private owner witness after verification. Every path is reread below.
     expected.update(headers[1])
