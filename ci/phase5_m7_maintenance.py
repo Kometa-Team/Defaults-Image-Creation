@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = '1a367cda9c8e2c07cdcab2f3d4684b0cf03130e7'
 OWNER = 'ci/phase5_m7_maintenance.py'
 RECEIPT = 'ci/phase5-m7-maintenance-v1.json'
-PIN = '971146cc541ee21f1a1d7ee70ad7f4afd90c2a3af4ed62a051918fbebdc4dd11'
+PIN = 'a8302e4933a23d374c150172400a440f3614f753fc27eb58116475c59296ed75'
 MODIFIED = frozenset(('ci/phase4_m7.py', 'ci/people_storage_maintenance.py',
                       'ci/phase5_m6_maintenance.py', 'create_defaults/lifecycle/ROADMAP.md',
                       'ci/dependency_tests/test_phase5_m6_maintenance.py',
@@ -153,17 +153,22 @@ def _invocation(root):
         _ACTIVE.reset(token)
 
 
-def owned_call(function=None, *, when=None):
+def owned_call(function=None, *, when=None, error_prefix=None):
     """Private invocation boundary: never reuse a proof across public calls."""
     if function is None:
-        return lambda fn: owned_call(fn, when=when)
+        return lambda fn: owned_call(fn, when=when, error_prefix=error_prefix)
     @wraps(function)
     def invoke(*args, **kwargs):
         if when is not None and not when(*args, **kwargs):
             return function(*args, **kwargs)
         root = kwargs.get('root', args[0] if args else None)
-        with _invocation(root):
-            return function(*args, **kwargs)
+        try:
+            with _invocation(root):
+                return function(*args, **kwargs)
+        except ValueError as error:
+            if error_prefix is None or str(error).startswith(error_prefix):
+                raise
+            raise ValueError(error_prefix+': '+str(error)) from error
     return invoke
 
 

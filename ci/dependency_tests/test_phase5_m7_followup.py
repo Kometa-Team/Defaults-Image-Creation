@@ -244,13 +244,15 @@ class Phase5M7FollowupTests(unittest.TestCase):
             public(self.root)
         self.assertEqual(public(self.root), before[target])
 
-    def test_actual_public_m6_calls_each_prove_their_own_entry_and_close(self):
-        from ci import phase5_m6_maintenance as m6
-        with patch.object(maintenance, 'verify_checkout', wraps=maintenance.verify_checkout) as verify:
-            self.assertFalse(m6.verify_checkout()['publication_authorized'])
-            self.assertEqual(verify.call_count, 2)
-            self.assertFalse(m6.verify_checkout()['publication_authorized'])
-            self.assertEqual(verify.call_count, 4)
+    def test_actual_public_m5_and_m6_calls_each_prove_their_own_entry_and_close(self):
+        from ci import phase5_m5_maintenance as m5, phase5_m6_maintenance as m6
+        for module in (m5, m6):
+            with self.subTest(module=module.__name__), \
+                 patch.object(maintenance, 'verify_checkout', wraps=maintenance.verify_checkout) as verify:
+                self.assertFalse(module.verify_checkout()['publication_authorized'])
+                self.assertEqual(verify.call_count, 2)
+                self.assertFalse(module.verify_checkout()['publication_authorized'])
+                self.assertEqual(verify.call_count, 4)
 
     def test_scope_modes_are_exact_and_dossiers_are_not_maintenance_members(self):
         current, before, receipt = self.cohort()

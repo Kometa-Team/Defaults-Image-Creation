@@ -159,7 +159,7 @@ def _people_pr65_before(name):
 def _people_pr65_ancestry(head):_git(ROOT,'merge-base','--is-ancestor',PEOPLE_PR65_BASE,head)
 
 
-@_m7_owned_call
+@_m7_owned_call(error_prefix='Changed closing People PR65 provenance')
 def people_pr65_bindings(root=ROOT):
     if Path(root).resolve()!=ROOT.resolve():raise ValueError('Foreign People PR65 checkout')
     from ci.people_colorize_maintenance import _head
