@@ -8,6 +8,7 @@ import unittest
 from unittest.mock import patch
 
 from ci import phase5_m6_maintenance as m6
+from ci import phase5_m7_maintenance as m7
 
 ROOT=m6.ROOT
 
@@ -82,7 +83,7 @@ class ValidationTimeoutTests(unittest.TestCase):
 
     def test_exact_physical_bindings_and_history(self):
         for name,b in m6.verify_timeouts().items():
-            raw=(ROOT/name).read_bytes()
+            raw=m7.historical_bytes(ROOT,name,(ROOT/name).read_bytes())
             self.assertEqual(m6.sha(raw),b['sha256'])
             self.assertEqual(m6.timeout_bytes(ROOT,name,raw),
                              b['predecessor_lf'].encode() if b['predecessor_lf'] is not None else raw)

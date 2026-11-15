@@ -63,6 +63,7 @@ class Phase5M7FollowupTests(unittest.TestCase):
             self.assertEqual(maintenance.historical_bytes(self.root, name, before[name]), before[name])
             with self.assertRaises(ValueError):
                 maintenance.historical_bytes(self.root, name, b'forged')
+            self.assertEqual(maintenance.historical_bytes(self.root, name, b'opaque', opaque=True), b'opaque')
         self.assertEqual(maintenance.historical_bytes(self.root, 'unlisted', b'opaque'), b'opaque')
         storage = 'ci/people_storage_maintenance.py'
         prior = b'already sealed geometry view'
@@ -83,6 +84,9 @@ class Phase5M7FollowupTests(unittest.TestCase):
                     path.write_bytes(bad)
                     with self.assertRaises(ValueError):
                         maintenance.verify_checkout()
+                    if name in maintenance.MODIFIED:
+                        with self.assertRaises(ValueError):
+                            maintenance.historical_bytes(self.root, name, b'opaque', opaque=True)
                     path.write_bytes(good)
             path.unlink()
             with self.assertRaises(OSError):

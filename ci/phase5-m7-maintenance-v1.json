@@ -12,7 +12,7 @@
     },
     "ci/dependency_tests/test_phase5_m7_followup.py": {
       "before_sha256": null,
-      "sha256": "8394a840c5aa41fc74f9365cbe37f46230c2b3145b9be82c4b25a4fd2726146e"
+      "sha256": "3fd7b8a0951a01f02ed05893eed37f7bd511ed9a75bc7a3da9754ad228dcd2ea"
     },
     "ci/people_storage_maintenance.py": {
       "before_sha256": "e91f07dbe89530211b95190f318b5f239cc3da59ad83355053764a0ae4daf817",
@@ -24,7 +24,7 @@
     },
     "ci/phase5_m6_maintenance.py": {
       "before_sha256": "575976f25f41fd8eacb25b626504ba8f380f97d7b29cd3a07afa1c31c4e66e07",
-      "sha256": "8d5e2b4d50a82cfe4cf94c1919aa7471da469557d846b5b835863c63da3d7ece"
+      "sha256": "944eced27006d546a128421a456433ab118c4e8f261a5ce8f823bcb5b4ab6f5b"
     },
     "ci/phase5_m7_acceptance.py": {
       "before_sha256": null,
@@ -33,6 +33,10 @@
     "ci/phase5_m7_provenance.py": {
       "before_sha256": null,
       "sha256": "7c68653394d3f3dce2958e92b762e002060b06cffe11c5560af503d1a8d53ba6"
+    },
+    "ci/publication_tests/test_validation_timeouts.py": {
+      "before_sha256": "435cfa0306bc74c227ebc011ffd37c28109bcf51ec3240cd03a717ec42049a69",
+      "sha256": "dcffe8f4f6d57b47a88048ec5171b9008c1e8159bdd97be624ddfb3cb5a00516"
     },
     "create_defaults/lifecycle/ROADMAP.md": {
       "before_sha256": "359d467f601787c4fdf6e369e0971f6fe0a7c49df65114f7aca8c82de0514f82",

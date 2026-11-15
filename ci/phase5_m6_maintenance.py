@@ -175,7 +175,12 @@ def people_pr65_bindings(root=ROOT):
             raise ValueError('Changed People PR65 binding')
         if b['before_sha256'] is not None:_people_pr65_before(name)
         from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
-        if sha(m7_bytes(root,name,regular(root,name).read_bytes()))!=b['sha256']:
+        current=regular(root,name).read_bytes()
+        try:current=m7_bytes(root,name,current)
+        except ValueError as error:
+            # A failed nested M7 proof also prevents closing People provenance.
+            raise ValueError('Changed closing People PR65 provenance: '+str(error)) from error
+        if sha(current)!=b['sha256']:
             raise ValueError('Changed physical People PR65 successor: '+name)
     if _head(ROOT)!=head or regular(root,PEOPLE_PR65_RECEIPT).read_bytes()!=raw:
         raise ValueError('Changed closing People PR65 provenance')
@@ -330,7 +335,7 @@ def _timeout_physical(name,binding):
 
 def timeout_bytes(root,name,current):
     from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
-    current=m7_bytes(root,name,current)
+    current=m7_bytes(root,name,current,opaque=True)
     if name in COMPUTATION_BEFORE and name not in TIMEOUT_MEMBERS:return computation_bytes(root,name,current)
     if name not in TIMEOUT_MEMBERS:return current
     b=timeout_bindings(root)[name]
@@ -447,7 +452,7 @@ def geometry_binding(root=ROOT):
 
 def geometry_bytes(root,name,current):
     from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
-    current=m7_bytes(root,name,current)
+    current=m7_bytes(root,name,current,opaque=True)
     if name!=GEOMETRY_SOURCE:return current
     binding=geometry_binding(root)
     return _geometry_before() if sha(current)==binding['sha256'] else current

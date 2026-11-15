@@ -11,10 +11,11 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = '1a367cda9c8e2c07cdcab2f3d4684b0cf03130e7'
 OWNER = 'ci/phase5_m7_maintenance.py'
 RECEIPT = 'ci/phase5-m7-maintenance-v1.json'
-PIN = '5878217b1d7000b2706357f63a24cbd9de8a09f7e7d03f509ca2486c9ff16fb3'
+PIN = '51064e5202d84fd24cbf4695fdc4cf629310d3c515bd69ad6d43280a60c14332'
 MODIFIED = frozenset(('ci/phase4_m7.py', 'ci/people_storage_maintenance.py',
                       'ci/phase5_m6_maintenance.py', 'create_defaults/lifecycle/ROADMAP.md',
-                      'ci/dependency_tests/test_phase5_m6_maintenance.py'))
+                      'ci/dependency_tests/test_phase5_m6_maintenance.py',
+                      'ci/publication_tests/test_validation_timeouts.py'))
 ADDED = frozenset(('ci/phase5_m7_acceptance.py',
                    'ci/phase5_m7_provenance.py',
                    'ci/dependency_tests/test_phase5_m7_admission.py',
@@ -89,7 +90,7 @@ def verify_checkout(root=None):
     return value
 
 
-def historical_bytes(root, name, current):
+def historical_bytes(root, name, current, *, opaque=False):
     if name not in MODIFIED:
         return current
     binding = verify_checkout(root)['members'][name]
@@ -108,6 +109,10 @@ def historical_bytes(root, name, current):
         # views. Physical rollback is still rejected by verify_checkout above.
         return current
     if name == 'ci/dependency_tests/test_phase5_m6_maintenance.py' and digest in TEST_VIEWS:
+        return current
+    if opaque:
+        # Legacy projection APIs leave unknown caller bytes untouched. This is
+        # never physical acceptance: the complete current cohort was proved above.
         return current
     raise ValueError('Forged M7 historical view: '+name)
 
