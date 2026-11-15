@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = '1a367cda9c8e2c07cdcab2f3d4684b0cf03130e7'
 OWNER = 'ci/phase5_m7_maintenance.py'
 RECEIPT = 'ci/phase5-m7-maintenance-v1.json'
-PIN = 'fc9b9a34cd2e0e03686ba0246b3d8fee368e926229e9e22412e125ebd4e21198'
+PIN = '971146cc541ee21f1a1d7ee70ad7f4afd90c2a3af4ed62a051918fbebdc4dd11'
 MODIFIED = frozenset(('ci/phase4_m7.py', 'ci/people_storage_maintenance.py',
                       'ci/phase5_m6_maintenance.py', 'create_defaults/lifecycle/ROADMAP.md',
                       'ci/dependency_tests/test_phase5_m6_maintenance.py',
@@ -165,6 +165,18 @@ def owned_call(function=None, *, when=None):
         with _invocation(root):
             return function(*args, **kwargs)
     return invoke
+
+
+def _owned_members(root):
+    """Copy authenticated metadata for an existing, still-live private owner."""
+    if Path(root) != ROOT and Path(root).resolve() != ROOT.resolve():
+        raise ValueError('Foreign M7 owner')
+    active = _ACTIVE.get()
+    if (active is None or not active[1][0]
+            or active[2] != (str(ROOT.absolute()), get_ident())):
+        raise ValueError('No live M7 verification owner')
+    return {name: dict(before_sha256=before, sha256=after)
+            for name, before, after in active[0][3]}
 
 
 def historical_bytes(root, name, current, *, opaque=False):

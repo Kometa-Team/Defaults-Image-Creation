@@ -193,6 +193,9 @@ class Phase5M7FollowupTests(unittest.TestCase):
         @maintenance.owned_call
         def public(root):
             captured.append(copy_context())
+            metadata = maintenance._owned_members(root)
+            self.assertEqual(metadata, receipt['members'])
+            metadata[next(iter(current))]['sha256'] = '0'*64
             for _ in range(2):
                 for name in maintenance.MODIFIED:
                     self.assertEqual(nested(root, name), before[name])
@@ -201,6 +204,8 @@ class Phase5M7FollowupTests(unittest.TestCase):
             self.assertEqual(verify.call_count, 2)
             public(self.root)
             self.assertEqual(verify.call_count, 4)
+        with self.assertRaises(ValueError):
+            maintenance._owned_members(self.root)
         # A copied context cannot retain the completed invocation's acceptance.
         name = next(iter(maintenance.MODIFIED))
         (self.root/name).write_bytes(before[name])

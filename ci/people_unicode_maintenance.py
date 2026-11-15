@@ -158,8 +158,8 @@ def _owned_inputs(root, publication, physical, headers):
         selected=binding['sha256']
         if name in timeouts and selected==timeouts[name]['before_sha256']:selected=timeouts[name]['sha256']
         expected[name]=(selected,True)
-    from ci.phase5_m7_maintenance import verify_checkout as verify_m7
-    for name,binding in verify_m7(root)['members'].items():
+    from ci.phase5_m7_maintenance import _owned_members
+    for name,binding in _owned_members(root).items():
         expected[name]=(binding['sha256'],True)
     # Headers were captured before the proof; changed policy bytes cannot enter
     # this private owner witness after verification. Every path is reread below.
