@@ -8,10 +8,10 @@ import subprocess
 from ci.people_storage_maintenance import regular
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = '3e48768b8dbf58fe1ca550b54207ae821de09626'
+BASE = '1a367cda9c8e2c07cdcab2f3d4684b0cf03130e7'
 OWNER = 'ci/phase5_m7_maintenance.py'
 RECEIPT = 'ci/phase5-m7-maintenance-v1.json'
-PIN = 'b5a77ff4e6f5d27554eb21aea64b72f12b7122b129af8f44fc393ddfbc36e396'
+PIN = 'f8f9dba525ba1030cc1b5368dab056e424047f943cb2dc8dd82cfd78ff03b81d'
 MODIFIED = frozenset(('ci/phase4_m7.py', 'ci/people_storage_maintenance.py',
                       'ci/phase5_m6_maintenance.py', 'create_defaults/lifecycle/ROADMAP.md'))
 ADDED = frozenset(('ci/phase5_m7_acceptance.py',
