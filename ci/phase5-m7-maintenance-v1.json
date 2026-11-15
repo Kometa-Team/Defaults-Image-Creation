@@ -2,6 +2,10 @@
   "version": 1,
   "baseline_commit": "1a367cda9c8e2c07cdcab2f3d4684b0cf03130e7",
   "members": {
+    "ci/dependency_tests/test_phase5_m6_maintenance.py": {
+      "before_sha256": "6a7728221396cbbc6a415c6b42f4f46bf9888add86d8fba2a4b72167b93be2ba",
+      "sha256": "72082a98abbb0b402e563ca84fa009d1f40639cfca569aad466d1b02f68b5167"
+    },
     "ci/dependency_tests/test_phase5_m7_admission.py": {
       "before_sha256": null,
       "sha256": "fda516f2f81a4bf7469066abbf6aa37832a1885c409af83577b6ed8c6d8ed0ef"
@@ -20,7 +24,7 @@
     },
     "ci/phase5_m6_maintenance.py": {
       "before_sha256": "575976f25f41fd8eacb25b626504ba8f380f97d7b29cd3a07afa1c31c4e66e07",
-      "sha256": "cf11785ddf0d3030e44c4cf656640142f7d8b43226f0e5b9372bed61e7e7e004"
+      "sha256": "8d5e2b4d50a82cfe4cf94c1919aa7471da469557d846b5b835863c63da3d7ece"
     },
     "ci/phase5_m7_acceptance.py": {
       "before_sha256": null,

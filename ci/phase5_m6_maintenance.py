@@ -174,7 +174,8 @@ def people_pr65_bindings(root=ROOT):
         if set(b)!={'before_sha256','sha256'} or b['before_sha256']!=PEOPLE_PR65_BEFORE[name]:
             raise ValueError('Changed People PR65 binding')
         if b['before_sha256'] is not None:_people_pr65_before(name)
-        if sha(regular(root,name).read_bytes())!=b['sha256']:
+        from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+        if sha(m7_bytes(root,name,regular(root,name).read_bytes()))!=b['sha256']:
             raise ValueError('Changed physical People PR65 successor: '+name)
     if _head(ROOT)!=head or regular(root,PEOPLE_PR65_RECEIPT).read_bytes()!=raw:
         raise ValueError('Changed closing People PR65 provenance')
@@ -201,7 +202,8 @@ def verify_people_pr65_scope(root,names):
     bindings=people_pr65_bindings(root)
     for name in names & (set(PEOPLE_PR65_BEFORE)|{PEOPLE_PR65_RECEIPT}):
         expected=sha(regular(root,name).read_bytes()) if name==PEOPLE_PR65_RECEIPT else bindings[name]['sha256']
-        if sha(_git(root,'show','HEAD:'+name))!=expected:raise ValueError('Changed committed People PR65 successor: '+name)
+        from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+        if sha(m7_bytes(root,name,_git(root,'show','HEAD:'+name)))!=expected:raise ValueError('Changed committed People PR65 successor: '+name)
 
 
 # CI timeout-only successor. Historical receipts and assertions are immutable.
@@ -321,7 +323,8 @@ def timeout_bindings(root=ROOT):
 def _timeout_physical(name,binding):
     # Invocation-local binding metadata only. Every use still checks the leaf,
     # ancestors and physical bytes; no path, HEAD or acceptance result is cached.
-    if sha(regular(ROOT,name).read_bytes())!=binding['sha256']:
+    from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+    if sha(m7_bytes(ROOT,name,regular(ROOT,name).read_bytes()))!=binding['sha256']:
         raise ValueError('Changed physical timeout successor: '+name)
 
 
@@ -359,7 +362,8 @@ def verify_timeout_scope(root,names):
     bindings=verify_timeouts(root)
     for name in names:
         expected=sha(regular(root,name).read_bytes()) if name==TIMEOUT_RECEIPT else bindings[name]['sha256']
-        if sha(_git(root,'show','HEAD:'+name))!=expected:raise ValueError('Changed committed timeout successor: '+name)
+        from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+        if sha(m7_bytes(root,name,_git(root,'show','HEAD:'+name)))!=expected:raise ValueError('Changed committed timeout successor: '+name)
 
 
 RECOVERY_CI_RECEIPT='ci/people-publication-git-recovery-ci-v1.json'
@@ -389,6 +393,8 @@ def _recovery_ci_owned(root,timeouts):
     # verify every current member independently at its point of use.
     for name,b in v['files'].items():
         current=regular(root,name).read_bytes()
+        from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+        current=m7_bytes(root,name,current)
         if name in timeouts:
             timeout=timeouts[name]
             if sha(current)!=timeout['sha256']:
@@ -515,7 +521,8 @@ def verify_recovery_ci_scope(root,names):
     bindings=recovery_ci_bindings(root)
     for name in bound:
         expected=sha(regular(root,name).read_bytes()) if name==RECOVERY_CI_RECEIPT else timeout_selected_hash(name,bindings[name]['sha256'])
-        if sha(_git(root,'show','HEAD:'+name))!=expected:raise ValueError('Changed committed recovery CI successor')
+        from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+        if sha(m7_bytes(root,name,_git(root,'show','HEAD:'+name)))!=expected:raise ValueError('Changed committed recovery CI successor')
 
 
 def _cohort_views(root,paths):
