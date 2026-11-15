@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = '1a367cda9c8e2c07cdcab2f3d4684b0cf03130e7'
 OWNER = 'ci/phase5_m7_maintenance.py'
 RECEIPT = 'ci/phase5-m7-maintenance-v1.json'
-PIN = '22318ea6538e7f8f5335c81fa0644e2b0c3a5cd824d47dbbe620641bd8768c26'
+PIN = '7331f21c0425ce9925606b34918e798eea7c5a22cccfee8471da4e6f77a00f0c'
 MODIFIED = frozenset(('ci/phase4_m7.py', 'ci/people_storage_maintenance.py',
                       'ci/phase5_m6_maintenance.py', 'create_defaults/lifecycle/ROADMAP.md',
                       'ci/dependency_tests/test_phase5_m6_maintenance.py',
@@ -26,7 +26,9 @@ STORAGE_VIEWS = ('8e2420d6d6868781acea9a9a0806b2bf904ea4027095a1fd61db3885fe8394
 TEST_VIEWS = ('8816f0b5d3d28951ae95af39e10d314a12a320f91b719a3b3d43dfa2a3db4bfd', 'd8f7c0b16e9daceb91f9c32af0937e797ede60d24f1e50cb9d4a6e99bb3af2ee', 'fbde4457701713547eff0ce7d5b76596f6dcfbea5ab0cdddad516cf17553f254')
 
 
+@lru_cache(maxsize=128)
 def sha(raw):
+    # Pure byte computation only. Every physical input is still reread.
     return hashlib.sha256(raw.replace(b'\r\n', b'\n')).hexdigest()
 
 
@@ -67,30 +69,45 @@ def scope_members():
     return MODIFIED | ADDED | {OWNER, RECEIPT}
 
 
+@lru_cache(maxsize=4)
+def _decode(raw, pin, base, modified, added):
+    # Return immutable metadata, never a shared mutable receipt or checkout proof.
+    value = json.loads(raw)
+    if (fingerprint(value) != pin or set(value) != {
+            'version', 'baseline_commit', 'members', 'ci_only', 'publication_authorized'}
+            or value['version'] != 1 or value['baseline_commit'] != base
+            or value['ci_only'] is not True or value['publication_authorized'] is not False
+            or set(value['members']) != modified | added):
+        raise ValueError('Changed exact M7 receipt')
+    rows = []
+    for name, binding in value['members'].items():
+        if set(binding) != {'before_sha256', 'sha256'}:
+            raise ValueError('Changed M7 binding')
+        rows.append((name, binding['before_sha256'], binding['sha256']))
+    return tuple(rows)
+
+
 def verify_checkout(root=None):
     root = Path(root or ROOT)
-    if root.resolve() != ROOT.resolve():
+    if root != ROOT and root.resolve() != ROOT.resolve():
         raise ValueError('Foreign M7 checkout')
     from ci.people_colorize_maintenance import _head
     head = _head(ROOT)
     ancestry(head)
-    raw = regular(ROOT, RECEIPT).read_bytes()
-    value = json.loads(raw)
-    if (fingerprint(value) != PIN or set(value) != {
-            'version', 'baseline_commit', 'members', 'ci_only', 'publication_authorized'}
-            or value['version'] != 1 or value['baseline_commit'] != BASE
-            or value['ci_only'] is not True or value['publication_authorized'] is not False
-            or set(value['members']) != MODIFIED | ADDED):
-        raise ValueError('Changed exact M7 receipt')
-    for name, binding in value['members'].items():
-        if set(binding) != {'before_sha256', 'sha256'}:
-            raise ValueError('Changed M7 binding')
-        if sha(regular(ROOT, name).read_bytes()) != binding['sha256']:
+    # The existing checker rereads every leaf and shared ancestor's mode on
+    # every invocation. Only duplicate parent checks within this cohort are
+    # batched; no filesystem metadata, HEAD or acceptance result is retained.
+    from ci.people_readme_maintenance import _regular_files
+    paths = _regular_files(ROOT, scope_members())
+    raw = paths[RECEIPT].read_bytes()
+    rows = _decode(raw, PIN, BASE, MODIFIED, ADDED)
+    for name, before, after in rows:
+        if sha(paths[name].read_bytes()) != after:
             raise ValueError('Changed physical M7 successor: '+name)
         if name in MODIFIED:
-            if sha(predecessor(name)) != binding['before_sha256']:
+            if sha(predecessor(name)) != before:
                 raise ValueError('Changed M7 predecessor: '+name)
-        elif binding['before_sha256'] is not None or _baseline_entry(str(ROOT), BASE, name).strip():
+        elif before is not None or _baseline_entry(str(ROOT), BASE, name).strip():
             raise ValueError('M7 addition exists in predecessor')
     # The new owner is an explicit reviewed trust anchor, not a self-hash cycle.
     # Its physical source must still equal its immutable committed exact-head blob.
@@ -98,7 +115,10 @@ def verify_checkout(root=None):
         raise ValueError('Changed uncommitted M7 owner')
     if regular(ROOT, RECEIPT).read_bytes() != raw or _head(ROOT) != head:
         raise ValueError('M7 receipt or HEAD moved during verification')
-    return value
+    return dict(version=1, baseline_commit=BASE, ci_only=True,
+                publication_authorized=False, members={
+                    name: dict(before_sha256=before, sha256=after)
+                    for name, before, after in rows})
 
 
 def historical_bytes(root, name, current, *, opaque=False):

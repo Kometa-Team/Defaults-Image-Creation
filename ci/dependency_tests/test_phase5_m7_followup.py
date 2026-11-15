@@ -1,5 +1,6 @@
 """Focused M7 provenance/dossier controls; no native M6 execution."""
 import copy
+from collections import Counter
 import hashlib
 import io
 import json
@@ -137,6 +138,39 @@ class Phase5M7FollowupTests(unittest.TestCase):
                 with patch.object(maintenance, 'PIN', maintenance.fingerprint(bad)), self.assertRaises(ValueError):
                     maintenance.verify_checkout()
         (self.root/maintenance.RECEIPT).write_text(json.dumps(receipt))
+
+    def test_batched_parent_modes_and_byte_caches_keep_every_input_fresh(self):
+        current, before, receipt = self.cohort()
+        self.owner(before, receipt)
+        maintenance.verify_checkout()  # Warm immutable metadata/Git objects only.
+        reads, modes = Counter(), Counter()
+        original_read, original_stat = Path.read_bytes, Path.lstat
+        def read(path):
+            reads[path] += 1
+            return original_read(path)
+        def lstat(path):
+            modes[path] += 1
+            return original_stat(path)
+        with patch.object(Path, 'read_bytes', read), patch.object(Path, 'lstat', lstat):
+            value = maintenance.verify_checkout()
+            value['members'][next(iter(current))]['sha256'] = '0'*64
+            self.assertEqual(maintenance.verify_checkout()['members'], receipt['members'])
+        for name in current:
+            self.assertEqual(reads[self.root/name], 2)
+            self.assertEqual(modes[self.root/name], 2)
+        self.assertEqual(reads[self.root/maintenance.RECEIPT], 4)
+        self.assertEqual(reads[self.root/maintenance.OWNER], 2)
+        # One shared-parent batch plus fresh owner/closing-receipt mode checks
+        # per invocation, rather than one parent walk for each member.
+        self.assertEqual(modes[self.root], 6)
+        self.assertEqual(maintenance.sha.cache_info().maxsize, 128)
+        self.assertEqual(maintenance._decode.cache_info().maxsize, 4)
+        for target in (self.root/'ci', self.root/next(iter(current))):
+            def reparse(path):
+                info = original_stat(path)
+                return SimpleNamespace(st_mode=info.st_mode, st_file_attributes=0x400) if path == target else info
+            with self.subTest(path=target), patch.object(Path, 'lstat', reparse), self.assertRaises(ValueError):
+                maintenance.verify_checkout()
 
     def test_foreign_checkout_dirty_owner_and_changed_head_reject(self):
         current, before, receipt = self.cohort()
