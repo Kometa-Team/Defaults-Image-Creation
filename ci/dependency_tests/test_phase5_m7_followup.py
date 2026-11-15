@@ -246,6 +246,9 @@ class Phase5M7FollowupTests(unittest.TestCase):
 
     def test_actual_public_m5_and_m6_calls_each_prove_their_own_entry_and_close(self):
         from ci import phase5_m5_maintenance as m5, phase5_m6_maintenance as m6
+        self.assertEqual(maintenance.PHASE4_BEFORE, m6.APPROVED['ci/phase4.py'][1])
+        self.assertEqual(maintenance.PHASE4_VIEWS,
+                         (m6.APPROVED['ci/phase4.py'][0], *m6.RETAINED['ci/phase4.py']))
         for module in (m5, m6):
             with self.subTest(module=module.__name__), \
                  patch.object(maintenance, 'verify_checkout', wraps=maintenance.verify_checkout) as verify:
@@ -253,6 +256,26 @@ class Phase5M7FollowupTests(unittest.TestCase):
                 self.assertEqual(verify.call_count, 2)
                 self.assertFalse(module.verify_checkout()['publication_authorized'])
                 self.assertEqual(verify.call_count, 4)
+
+    def test_phase4_hash_bridge_preserves_exact_views_and_rejects_physical_rollback(self):
+        current, before, receipt = self.cohort()
+        self.owner(before, receipt)
+        name = 'ci/phase4.py'
+        pin = maintenance.sha(before[name])
+        prior = b'already sealed Phase 4 view'
+        with patch.object(maintenance, 'PHASE4_BEFORE', pin), \
+             patch.object(maintenance, 'PHASE4_VIEWS', (maintenance.sha(prior),)):
+            self.assertEqual(maintenance.selected_hash(self.root, name, pin), maintenance.sha(current[name]))
+            self.assertEqual(maintenance.selected_hash(self.root, name, '0'*64), '0'*64)
+            self.assertEqual(maintenance.selected_hash(self.root, 'unlisted', pin), pin)
+            self.assertEqual(maintenance.historical_bytes(self.root, name, prior), prior)
+            with self.assertRaises(ValueError):
+                maintenance.historical_bytes(self.root, name, prior+b'forged')
+            for bad in (before[name], prior, b'tampered'):
+                (self.root/name).write_bytes(bad)
+                with self.subTest(bad=bad), self.assertRaises(ValueError):
+                    maintenance.selected_hash(self.root, name, pin)
+                (self.root/name).write_bytes(current[name])
 
     def test_scope_modes_are_exact_and_dossiers_are_not_maintenance_members(self):
         current, before, receipt = self.cohort()

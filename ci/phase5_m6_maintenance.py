@@ -646,6 +646,12 @@ def verify_scope(root,baseline,names):
 def selected_hash(name,expected):
     if name==RETENTION_GEOMETRY_SOURCE and expected==RETENTION_GEOMETRY_BEFORE:
         return retention_geometry_binding()['sha256']
+    if name=='ci/phase4.py':
+        if expected==APPROVED[name][0]:
+            verify_checkout()
+            expected=APPROVED[name][1]
+        from ci.phase5_m7_maintenance import selected_hash as m7_hash
+        return m7_hash(ROOT,name,expected)
     if name not in {'create_defaults/bulk/library_stage.py','create_defaults/bulk/operator_publication.py','create_defaults/bulk/contracts/models.py','ci/people_storage_maintenance.py','ci/phase4.py','create_defaults/bulk/lifecycle/models.py'}:return expected
     if expected!=APPROVED[name][0]:return expected
     verify_checkout()
