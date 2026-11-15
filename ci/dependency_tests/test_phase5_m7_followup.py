@@ -235,6 +235,113 @@ class Phase5M7FollowupTests(unittest.TestCase):
             self.assertEqual(reads[(name, '_read_owned_predecessor')], 2)
             self.assertEqual(sum(n for (path,fn),n in reads.items() if path == name), 6)
 
+    def test_aggregate_proofs_close_dependencies_and_expire_between_calls(self):
+        from contextvars import copy_context
+        current, before, receipt = self.cohort()
+        self.owner(before, receipt)
+        events, captured = [], []
+        version = [0]
+        def dependency(root):
+            events.append('dependency')
+            return (version[0],)
+        def consumer(root):
+            events.append('consumer')
+            return maintenance._cohort_proof(root, dependency)
+        @maintenance.owned_call(cohorts=True)
+        def public(root, move=False):
+            captured.append(copy_context())
+            self.assertEqual(maintenance._cohort_proof(root, consumer), (version[0],))
+            self.assertEqual(maintenance._cohort_proof(root, consumer), (version[0],))
+            with self.assertRaises(ValueError):
+                maintenance._cohort_proof(root/'foreign', consumer)
+            if move:
+                version[0] += 1
+        for _ in range(2):
+            public(self.root)
+        self.assertEqual(events, ['consumer','dependency','consumer','dependency']*2)
+        self.assertIsNone(maintenance._cohort_proof(self.root, consumer))
+        with self.assertRaises(ValueError):
+            captured[0].run(maintenance._cohort_proof, self.root, consumer)
+        with self.assertRaisesRegex(ValueError, 'closing aggregate cohort'):
+            public(self.root, move=True)
+        public(self.root)
+
+    def test_aggregate_m6_and_people_reuse_entry_keep_projection_reads_and_close(self):
+        from ci import phase5_m6_maintenance as m6
+        root = maintenance.ROOT
+        name = 'ci/dependency_maintenance.py'
+        other = 'create_defaults/bulk/lifecycle/draft_models.py'
+        before = m6._old(name)
+        reads, original = Counter(), Path.read_bytes
+        def read(path):
+            reads[path] += 1
+            return original(path)
+        @maintenance.owned_call(cohorts=True)
+        def public(root):
+            metadata = m6.verify_checkout(root)
+            metadata['members'][name]['sha256'] = '0'*64
+            for _ in range(2):
+                self.assertEqual(m6.historical_bytes(root,name,before), before)
+                physical = (root/m6.PEOPLE_PR65_REQUIREMENTS).read_bytes()
+                self.assertEqual(m6.people_pr65_bytes(root,m6.PEOPLE_PR65_REQUIREMENTS,physical),
+                                 m6._people_pr65_before(m6.PEOPLE_PR65_REQUIREMENTS))
+        with patch.object(Path, 'read_bytes', read), \
+                patch.object(m6, '_cohort_views', wraps=m6._cohort_views) as cohort, \
+                patch.object(m6, '_people_cohort_proof', wraps=m6._people_cohort_proof) as people:
+            public(root)
+            self.assertEqual(cohort.call_count, 2)
+            self.assertEqual(people.call_count, 2)
+            self.assertEqual(reads[root/other], 2)
+            self.assertGreaterEqual(reads[root/name], 4)
+            public(root)
+            self.assertEqual(cohort.call_count, 4)
+            self.assertEqual(people.call_count, 4)
+            self.assertEqual(reads[root/other], 4)
+
+    def test_aggregate_m6_and_people_reject_projection_and_closing_changes(self):
+        import stat
+        from ci import phase5_m6_maintenance as m6, people_colorize_maintenance as color
+        root = maintenance.ROOT
+        name = 'ci/dependency_maintenance.py'
+        other = 'create_defaults/bulk/lifecycle/draft_models.py'
+        before, physical = m6._old(name), (root/name).read_bytes()
+        original, lstat, head = Path.read_bytes, Path.lstat, color._head
+        attacks = [(name,b'forged'), (name,before), (name,None), (other,b'forged'),
+            (m6.MANIFEST.relative_to(root).as_posix(),b'{}'),
+            (m6.PEOPLE_PR65_RECEIPT,b'{}'), (m6.PEOPLE_PR65_REQUIREMENTS,b'Pillow==12.0.0\n')]
+        @maintenance.owned_call(cohorts=True)
+        def public(root, activate, project_people=False):
+            m6.verify_checkout(root)
+            activate()
+            if project_people:
+                m6.people_pr65_bytes(root,m6.PEOPLE_PR65_REQUIREMENTS,b'caller bytes')
+            return m6.historical_bytes(root,name,before)
+        for target,bad in attacks:
+            for project in (False,True) if target == m6.PEOPLE_PR65_REQUIREMENTS else (False,):
+                active = [False]
+                def read(path):
+                    if active[0] and path == root/target:
+                        if bad is None:raise FileNotFoundError(target)
+                        return bad
+                    return original(path)
+                with self.subTest(target=target, bad=bad, project=project), \
+                        patch.object(Path,'read_bytes',read), self.assertRaises((ValueError,OSError)):
+                    public(root,lambda: active.__setitem__(0,True),project)
+        for target in (root/name, (root/name).parent):
+            active = [False]
+            def replaced(path):
+                info = lstat(path)
+                return SimpleNamespace(st_mode=stat.S_IFDIR, st_file_attributes=0x400) if active[0] and path == target else info
+            with self.subTest(replaced=target), patch.object(Path,'lstat',replaced), self.assertRaises(ValueError):
+                public(root,lambda: active.__setitem__(0,True))
+        active = [False]
+        with patch.object(color,'_head',lambda path: 'f'*40 if active[0] else head(path)), \
+                patch.object(m6,'_ancestry'), patch.object(m6,'_timeout_ancestry'), \
+                patch.object(m6,'_geometry_ancestry'), self.assertRaises(ValueError):
+            public(root,lambda: active.__setitem__(0,True))
+        self.assertEqual((root/name).read_bytes(), physical)
+        public(root,lambda: None)
+
     def test_foreign_checkout_dirty_owner_and_changed_head_reject(self):
         current, before, receipt = self.cohort()
         helper = self.owner(before, receipt)

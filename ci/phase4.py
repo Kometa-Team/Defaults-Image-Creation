@@ -140,7 +140,7 @@ def verify_original_plan(original,*,root=ROOT):
     verify_plan(expected,root=root,current=read(root/'ci/validation-plan.json'))
 
 
-@_m7_owned_call(when=lambda root=ROOT: Path(root) == ROOT or Path(root).resolve() == ROOT.resolve())
+@_m7_owned_call(when=lambda root=ROOT: Path(root) == ROOT or Path(root).resolve() == ROOT.resolve(), cohorts=True)
 def verify_maintenance(root=ROOT):
     dependency=verify_infrastructure(root)
     value=read(root/'ci/phase4-maintenance.json')

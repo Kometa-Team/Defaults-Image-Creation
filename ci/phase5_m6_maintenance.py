@@ -6,7 +6,7 @@ from pathlib import Path
 import subprocess
 
 from ci.people_storage_maintenance import regular
-from ci.phase5_m7_maintenance import owned_call as _m7_owned_call, MODIFIED as _M7_MODIFIED
+from ci.phase5_m7_maintenance import owned_call as _m7_owned_call, MODIFIED as _M7_MODIFIED, _cohort_proof
 
 ROOT=Path(__file__).resolve().parents[1]
 BASE='9da96b0df12526daaee6156bc7778bbd57d9e8b6'
@@ -160,8 +160,11 @@ def _people_pr65_ancestry(head):_git(ROOT,'merge-base','--is-ancestor',PEOPLE_PR
 
 
 @_m7_owned_call(error_prefix='Changed closing People PR65 provenance')
-def people_pr65_bindings(root=ROOT):
+def people_pr65_bindings(root=ROOT, *, _witness=False):
     if Path(root).resolve()!=ROOT.resolve():raise ValueError('Foreign People PR65 checkout')
+    if not _witness:
+        proof=_cohort_proof(root,_people_cohort_proof)
+        if proof is not None:return _binding_copy(proof[2])
     from ci.people_colorize_maintenance import _head
     head=_head(ROOT)
     _people_pr65_ancestry(head)
@@ -176,25 +179,40 @@ def people_pr65_bindings(root=ROOT):
         if set(b)!={'before_sha256','sha256'} or b['before_sha256']!=PEOPLE_PR65_BEFORE[name]:
             raise ValueError('Changed People PR65 binding')
         if b['before_sha256'] is not None:_people_pr65_before(name)
-        from ci.phase5_m7_maintenance import _read_owned_predecessor
-        try:
-            # The private M7 reader validates these same fresh physical bytes
-            # before projecting them; no caller bytes or checkout proof enter.
-            current=(_read_owned_predecessor(root,name) if name in _M7_MODIFIED
-                     else regular(root,name).read_bytes())
-        except ValueError as error:
-            # A failed nested M7 proof also prevents closing People provenance.
-            raise ValueError('Changed closing People PR65 provenance: '+str(error)) from error
-        if sha(current)!=b['sha256']:
-            raise ValueError('Changed physical People PR65 successor: '+name)
+        _people_physical(root,name,b)
     if _head(ROOT)!=head or regular(root,PEOPLE_PR65_RECEIPT).read_bytes()!=raw:
         raise ValueError('Changed closing People PR65 provenance')
-    return v['files']
+    return (head,raw,_binding_rows(v['files'])) if _witness else v['files']
+
+
+def _binding_rows(bindings):
+    return tuple((name,b['before_sha256'],b['sha256']) for name,b in sorted(bindings.items()))
+
+
+def _binding_copy(rows):
+    return {name:dict(before_sha256=before,sha256=after) for name,before,after in rows}
+
+
+def _people_cohort_proof(root):
+    return people_pr65_bindings(root,_witness=True)
+
+
+def _people_physical(root,name,binding):
+    from ci.phase5_m7_maintenance import _read_owned_predecessor
+    try:
+        current=(_read_owned_predecessor(root,name) if name in _M7_MODIFIED
+                 else regular(root,name).read_bytes())
+    except ValueError as error:
+        raise ValueError('Changed closing People PR65 provenance: '+str(error)) from error
+    if sha(current)!=binding['sha256']:
+        raise ValueError('Changed physical People PR65 successor: '+name)
 
 
 def people_pr65_bytes(root,name,current):
     if name not in PEOPLE_PR65_BEFORE:return current
     binding=people_pr65_bindings(root)[name]
+    if _cohort_proof(root,_people_cohort_proof) is not None:
+        _people_physical(root,name,binding)
     return _people_pr65_before(name) if binding['before_sha256'] is not None and sha(current)==binding['sha256'] else current
 
 
@@ -571,20 +589,33 @@ def _cohort_views(root,paths):
 
 
 @_m7_owned_call
-def verify_checkout(root=None):
+def verify_checkout(root=None, *, _witness=False):
     root=Path(root or ROOT)
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M6 policy checkout')
+    if not _witness:
+        proof=_cohort_proof(root,_m6_cohort_proof)
+        if proof is not None:
+            return dict(_decode(regular(ROOT,MANIFEST.relative_to(ROOT).as_posix()).read_bytes(),PIN),
+                        members=_binding_copy(proof[1]))
     verify_timeouts(root)
     paths=_physical_paths(root,MEMBERS|ANCHORS)
     value=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)
     from ci.people_colorize_maintenance import _head
-    _ancestry(str(root),_head(root))
+    head=_head(root)
+    _ancestry(str(root),head)
     views=_cohort_views(root,paths)
     for name,binding in value['members'].items():
         if sha(views[name])!=binding['sha256']:raise ValueError('Changed physical M6 successor: '+name)
         if binding['before_sha256'] is not None and sha(_old(name))!=binding['before_sha256']:raise ValueError('Changed M6 predecessor')
         if binding['before_sha256'] is None and _baseline_entry(name).strip():raise ValueError('M6 addition exists in predecessor')
+    if _witness:
+        if _head(root)!=head:raise ValueError('Changed closing M6 cohort HEAD')
+        return head,_binding_rows(value['members'])
     return value
+
+
+def _m6_cohort_proof(root):
+    return verify_checkout(root,_witness=True)
 
 
 @_m7_owned_call(when=lambda root,name,current: name in APPROVED or name in TIMEOUT_MEMBERS or name in COMPUTATION_BEFORE or name == RETENTION_GEOMETRY_SOURCE or name in _M7_MODIFIED)
@@ -597,13 +628,19 @@ def historical_bytes(root,name,current):
     if name not in APPROVED:return current
     root=Path(root)
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M6 historical projection')
-    paths=_physical_paths(root,MEMBERS|ANCHORS)
-    value=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)
-    views=_cohort_views(root,paths)
-    for member,pin in value['members'].items():
-        if sha(views[member])!=pin['sha256']:raise ValueError('Changed physical M6 successor: '+member)
-    binding=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)['members'][name]
-    actual=recovery_ci_bytes(root,name,paths[name].read_bytes())
+    proof=_cohort_proof(root,_m6_cohort_proof)
+    if proof is None:
+        paths=_physical_paths(root,MEMBERS|ANCHORS)
+        value=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)
+        views=_cohort_views(root,paths)
+        for member,pin in value['members'].items():
+            if sha(views[member])!=pin['sha256']:raise ValueError('Changed physical M6 successor: '+member)
+        binding=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)['members'][name]
+        physical=paths[name]
+    else:
+        binding=_binding_copy(proof[1])[name]
+        physical=regular(root,name)
+    actual=recovery_ci_bytes(root,name,physical.read_bytes())
     current=recovery_ci_bytes(root,name,current)
     if sha(actual)!=binding['sha256']:raise ValueError('Changed M6 physical successor: '+name)
     if binding['before_sha256'] is None:

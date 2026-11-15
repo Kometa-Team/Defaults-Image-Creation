@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = '1a367cda9c8e2c07cdcab2f3d4684b0cf03130e7'
 OWNER = 'ci/phase5_m7_maintenance.py'
 RECEIPT = 'ci/phase5-m7-maintenance-v1.json'
-PIN = '01ba3a910ff438f9add49f1d490e1aaa0165b59bce716d3a0ee0d81bc05d0aae'
+PIN = '43e583a6ad8dacf43dd8006db8011c06bbb32178f488eea1b7ffd5eeccc27b4a'
 MODIFIED = frozenset(('ci/phase4_m7.py', 'ci/phase4.py', 'ci/people_storage_maintenance.py',
                       'ci/phase5_m6_maintenance.py', 'create_defaults/lifecycle/ROADMAP.md',
                       'ci/dependency_tests/test_phase5_m6_maintenance.py',
@@ -31,6 +31,7 @@ PHASE4_BEFORE = 'dae564e48195a0fe9d124ab5c12ac19e4bc61062dea823f8dbdd55b6f2506dc
 PHASE4_VIEWS = ('1ce5155558ffcfb4c6c9f28d0813658df52d4170a6af44022425460951ef7a1d',
                 '16e7c89d628f42d719a726b805b578483a76bc5f6183a6dbeed06e0609f24677')
 _ACTIVE = ContextVar('m7_verification_owner', default=None)
+_COHORTS = ContextVar('m7_aggregate_cohorts', default=None)
 
 
 @lru_cache(maxsize=128)
@@ -154,10 +155,52 @@ def _invocation(root):
         _ACTIVE.reset(token)
 
 
-def owned_call(function=None, *, when=None, error_prefix=None):
+@contextmanager
+def _cohort_invocation(root):
+    # The aggregate owns these proofs only until its synchronous return. The
+    # callable itself is the key: callers cannot inject a witness for a verifier.
+    _owned_members(root)
+    owner = _ACTIVE.get()
+    active = _COHORTS.get()
+    if active is not None and active[0] is owner and active[1][0]:
+        yield
+        return
+    proofs, alive, closing = {}, [True], [False]
+    token = _COHORTS.set((owner, alive, proofs, closing))
+    try:
+        yield
+        closing[0] = True
+        # Dependencies register first; prove their consumers before closing
+        # those dependencies. Each verifier rereads its complete physical cohort.
+        for prove, entry in reversed(tuple(proofs.items())):
+            if prove(root) != entry:
+                raise ValueError('Changed closing aggregate cohort: '+prove.__name__)
+    finally:
+        alive[0] = False
+        _COHORTS.reset(token)
+
+
+def _cohort_proof(root, prove):
+    active = _COHORTS.get()
+    if active is None:
+        return None
+    owner = _ACTIVE.get()
+    if (not active[1][0] or active[0] is not owner or owner is None
+            or not owner[1][0] or owner[2] != (str(ROOT.absolute()), get_ident())
+            or (Path(root) != ROOT and Path(root).resolve() != ROOT.resolve())):
+        raise ValueError('Expired or foreign aggregate cohort')
+    proofs = active[2]
+    if prove not in proofs:
+        if active[3][0]:
+            raise ValueError('New aggregate cohort during closing proof')
+        proofs[prove] = prove(root)
+    return proofs[prove]
+
+
+def owned_call(function=None, *, when=None, error_prefix=None, cohorts=False):
     """Private invocation boundary: never reuse a proof across public calls."""
     if function is None:
-        return lambda fn: owned_call(fn, when=when, error_prefix=error_prefix)
+        return lambda fn: owned_call(fn, when=when, error_prefix=error_prefix, cohorts=cohorts)
     @wraps(function)
     def invoke(*args, **kwargs):
         if when is not None and not when(*args, **kwargs):
@@ -165,6 +208,9 @@ def owned_call(function=None, *, when=None, error_prefix=None):
         root = kwargs.get('root', args[0] if args else None)
         try:
             with _invocation(root):
+                if cohorts:
+                    with _cohort_invocation(Path(root or ROOT)):
+                        return function(*args, **kwargs)
                 return function(*args, **kwargs)
         except ValueError as error:
             if error_prefix is None or str(error).startswith(error_prefix):
