@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import tempfile
 import subprocess
+import sys
 from types import ModuleType, SimpleNamespace
 import unittest
 import zipfile
@@ -171,6 +172,68 @@ class Phase5M7FollowupTests(unittest.TestCase):
                 return SimpleNamespace(st_mode=info.st_mode, st_file_attributes=0x400) if path == target else info
             with self.subTest(path=target), patch.object(Path, 'lstat', reparse), self.assertRaises(ValueError):
                 maintenance.verify_checkout()
+
+    def test_private_reader_rejects_changed_missing_and_replaced_inputs(self):
+        current, before, receipt = self.cohort()
+        self.owner(before, receipt)
+        name = 'ci/people_unicode_maintenance.py'
+        path = self.root/name
+        with self.assertRaises(ValueError):
+            maintenance._read_owned_predecessor(self.root, name)
+        @maintenance.owned_call
+        def public(root, action=lambda: None, mode_target=None):
+            action()
+            if mode_target is not None:
+                original = Path.lstat
+                def reparse(part):
+                    info = original(part)
+                    return SimpleNamespace(st_mode=info.st_mode, st_file_attributes=0x400) if part == mode_target else info
+                with patch.object(Path, 'lstat', reparse):
+                    return maintenance._read_owned_predecessor(root, name)
+            return maintenance._read_owned_predecessor(root, name)
+        self.assertEqual(public(self.root), before[name])
+        for bad in (b'tampered', before[name], None):
+            def attack():
+                path.unlink() if bad is None else path.write_bytes(bad)
+            with self.subTest(bad=bad), self.assertRaises((ValueError, OSError)):
+                public(self.root, attack)
+            path.write_bytes(current[name])
+            self.assertEqual(public(self.root), before[name])
+        def replace():
+            path.unlink()
+            path.mkdir()
+        with self.assertRaises(ValueError):
+            public(self.root, replace)
+        path.rmdir()
+        path.write_bytes(current[name])
+        for target in (path, path.parent):
+            with self.subTest(reparse=target), self.assertRaises(ValueError):
+                public(self.root, mode_target=target)
+        with self.assertRaises(ValueError):
+            public(self.root/'foreign')
+        with maintenance._invocation(self.root), self.assertRaises(ValueError):
+            maintenance._read_owned_predecessor(self.root, 'unapproved.py')
+        self.assertEqual(public(self.root), before[name])
+
+    def test_people_overlap_uses_one_fresh_body_read_on_each_call(self):
+        from ci import phase5_m6_maintenance as m6
+        targets = set(m6.PEOPLE_PR65_BEFORE) & maintenance.MODIFIED
+        self.assertEqual(targets, {'ci/people_unicode_maintenance.py',
+            'ci/phase5_m5_maintenance.py', 'ci/dependency_tests/test_phase5_m6_maintenance.py'})
+        original, reads = Path.read_bytes, Counter()
+        def read(path):
+            if path in {maintenance.ROOT/name for name in targets}:
+                reads[(path.relative_to(maintenance.ROOT).as_posix(), sys._getframe(1).f_code.co_name)] += 1
+            return original(path)
+        with patch.object(Path, 'read_bytes', read), \
+                patch.object(maintenance, 'verify_checkout', wraps=maintenance.verify_checkout) as verify:
+            for _ in range(2):
+                m6.people_pr65_bindings()
+            self.assertEqual(verify.call_count, 4)
+        for name in targets:
+            self.assertEqual(reads[(name, 'verify_checkout')], 4)
+            self.assertEqual(reads[(name, '_read_owned_predecessor')], 2)
+            self.assertEqual(sum(n for (path,fn),n in reads.items() if path == name), 6)
 
     def test_foreign_checkout_dirty_owner_and_changed_head_reject(self):
         current, before, receipt = self.cohort()

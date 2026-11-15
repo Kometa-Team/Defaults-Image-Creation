@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = '1a367cda9c8e2c07cdcab2f3d4684b0cf03130e7'
 OWNER = 'ci/phase5_m7_maintenance.py'
 RECEIPT = 'ci/phase5-m7-maintenance-v1.json'
-PIN = '1ba18fc14fab82e89627c8a6781ea1387cd086f449d7500029e4d646a36c4a0e'
+PIN = '01ba3a910ff438f9add49f1d490e1aaa0165b59bce716d3a0ee0d81bc05d0aae'
 MODIFIED = frozenset(('ci/phase4_m7.py', 'ci/phase4.py', 'ci/people_storage_maintenance.py',
                       'ci/phase5_m6_maintenance.py', 'create_defaults/lifecycle/ROADMAP.md',
                       'ci/dependency_tests/test_phase5_m6_maintenance.py',
@@ -183,6 +183,20 @@ def _owned_members(root):
         raise ValueError('No live M7 verification owner')
     return {name: dict(before_sha256=before, sha256=after)
             for name, before, after in active[0][3]}
+
+
+def _read_owned_predecessor(root, name):
+    """Read and project one physical successor inside a live private owner."""
+    if name not in MODIFIED:
+        raise ValueError('No M7 predecessor for: '+name)
+    binding = _owned_members(root)[name]
+    current = regular(ROOT, name).read_bytes()
+    if sha(current) != binding['sha256']:
+        raise ValueError('Changed physical M7 successor: '+name)
+    before = predecessor(name)
+    if sha(before) != binding['before_sha256']:
+        raise ValueError('Changed M7 predecessor: '+name)
+    return before
 
 
 def historical_bytes(root, name, current, *, opaque=False):

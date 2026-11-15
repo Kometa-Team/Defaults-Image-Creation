@@ -176,9 +176,12 @@ def people_pr65_bindings(root=ROOT):
         if set(b)!={'before_sha256','sha256'} or b['before_sha256']!=PEOPLE_PR65_BEFORE[name]:
             raise ValueError('Changed People PR65 binding')
         if b['before_sha256'] is not None:_people_pr65_before(name)
-        from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
-        current=regular(root,name).read_bytes()
-        try:current=m7_bytes(root,name,current)
+        from ci.phase5_m7_maintenance import _read_owned_predecessor
+        try:
+            # The private M7 reader validates these same fresh physical bytes
+            # before projecting them; no caller bytes or checkout proof enter.
+            current=(_read_owned_predecessor(root,name) if name in _M7_MODIFIED
+                     else regular(root,name).read_bytes())
         except ValueError as error:
             # A failed nested M7 proof also prevents closing People provenance.
             raise ValueError('Changed closing People PR65 provenance: '+str(error)) from error
