@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = '1a367cda9c8e2c07cdcab2f3d4684b0cf03130e7'
 OWNER = 'ci/phase5_m7_maintenance.py'
 RECEIPT = 'ci/phase5-m7-maintenance-v1.json'
-PIN = '283989eb5cd4b407be752658716b35e4ca14420ce9c4fe5881fa85b17f873662'
+PIN = '1ba18fc14fab82e89627c8a6781ea1387cd086f449d7500029e4d646a36c4a0e'
 MODIFIED = frozenset(('ci/phase4_m7.py', 'ci/phase4.py', 'ci/people_storage_maintenance.py',
                       'ci/phase5_m6_maintenance.py', 'create_defaults/lifecycle/ROADMAP.md',
                       'ci/dependency_tests/test_phase5_m6_maintenance.py',
@@ -101,11 +101,9 @@ def verify_checkout(root=None, *, _witness=False):
     from ci.people_colorize_maintenance import _head
     head = _head(ROOT)
     ancestry(head)
-    # The existing checker rereads every leaf and shared ancestor's mode on
-    # every invocation. Only duplicate parent checks within this cohort are
-    # batched; no filesystem metadata, HEAD or acceptance result is retained.
-    from ci.people_readme_maintenance import _regular_files
-    paths = _regular_files(ROOT, scope_members())
+    # Keep the independent checker: the README helper is itself an input of
+    # inherited Unicode verification and cannot authenticate its own caller.
+    paths = {name: regular(ROOT, name) for name in scope_members()}
     raw = paths[RECEIPT].read_bytes()
     rows = _decode(raw, PIN, BASE, MODIFIED, ADDED)
     for name, before, after in rows:

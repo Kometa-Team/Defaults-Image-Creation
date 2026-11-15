@@ -12,7 +12,7 @@
     },
     "ci/dependency_tests/test_phase5_m7_followup.py": {
       "before_sha256": null,
-      "sha256": "6a5fd0b34934ff179cd20ebd151fed041be5650c16c4bee5aa389fa856526ed2"
+      "sha256": "5219adeb488993655182d1e87153cf025e6289c0e522b62a3a8226bc0781f978"
     },
     "ci/people_storage_maintenance.py": {
       "before_sha256": "e91f07dbe89530211b95190f318b5f239cc3da59ad83355053764a0ae4daf817",

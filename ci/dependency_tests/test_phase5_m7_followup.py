@@ -139,7 +139,7 @@ class Phase5M7FollowupTests(unittest.TestCase):
                     maintenance.verify_checkout()
         (self.root/maintenance.RECEIPT).write_text(json.dumps(receipt))
 
-    def test_batched_parent_modes_and_byte_caches_keep_every_input_fresh(self):
+    def test_byte_caches_keep_every_input_and_mode_fresh(self):
         current, before, receipt = self.cohort()
         self.owner(before, receipt)
         maintenance.verify_checkout()  # Warm immutable metadata/Git objects only.
@@ -160,9 +160,9 @@ class Phase5M7FollowupTests(unittest.TestCase):
             self.assertEqual(modes[self.root/name], 2)
         self.assertEqual(reads[self.root/maintenance.RECEIPT], 4)
         self.assertEqual(reads[self.root/maintenance.OWNER], 2)
-        # One shared-parent batch plus fresh owner/closing-receipt mode checks
-        # per invocation, rather than one parent walk for each member.
-        self.assertEqual(modes[self.root], 6)
+        # Every path keeps its independent parent walk, including the fresh
+        # owner and closing-receipt checks, on both public invocations.
+        self.assertEqual(modes[self.root], 2*(len(maintenance.scope_members())+2))
         self.assertEqual(maintenance.sha.cache_info().maxsize, 128)
         self.assertEqual(maintenance._decode.cache_info().maxsize, 4)
         for target in (self.root/'ci', self.root/next(iter(current))):
