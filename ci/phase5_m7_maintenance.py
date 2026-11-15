@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = '1a367cda9c8e2c07cdcab2f3d4684b0cf03130e7'
 OWNER = 'ci/phase5_m7_maintenance.py'
 RECEIPT = 'ci/phase5-m7-maintenance-v1.json'
-PIN = 'cd3719a979ac6d39ca32bc1bb0c8df62b5e8964683dd62ecef33ab2415edba14'
+PIN = '22318ea6538e7f8f5335c81fa0644e2b0c3a5cd824d47dbbe620641bd8768c26'
 MODIFIED = frozenset(('ci/phase4_m7.py', 'ci/people_storage_maintenance.py',
                       'ci/phase5_m6_maintenance.py', 'create_defaults/lifecycle/ROADMAP.md',
                       'ci/dependency_tests/test_phase5_m6_maintenance.py',
@@ -53,6 +53,16 @@ def ancestry(head):
     git(ROOT, 'merge-base', '--is-ancestor', BASE, head)
 
 
+@lru_cache(maxsize=64)
+def _baseline_entry(root, base, name):
+    return git(Path(root), 'ls-tree', base, '--', name)
+
+
+@lru_cache(maxsize=64)
+def _owner_bytes(root, head):
+    return git(Path(root), 'show', head+':'+OWNER)
+
+
 def scope_members():
     return MODIFIED | ADDED | {OWNER, RECEIPT}
 
@@ -80,11 +90,11 @@ def verify_checkout(root=None):
         if name in MODIFIED:
             if sha(predecessor(name)) != binding['before_sha256']:
                 raise ValueError('Changed M7 predecessor: '+name)
-        elif binding['before_sha256'] is not None or git(ROOT, 'ls-tree', BASE, '--', name).strip():
+        elif binding['before_sha256'] is not None or _baseline_entry(str(ROOT), BASE, name).strip():
             raise ValueError('M7 addition exists in predecessor')
     # The new owner is an explicit reviewed trust anchor, not a self-hash cycle.
     # Its physical source must still equal its immutable committed exact-head blob.
-    if sha(regular(ROOT, OWNER).read_bytes()) != sha(git(ROOT, 'show', head+':'+OWNER)):
+    if sha(regular(ROOT, OWNER).read_bytes()) != sha(_owner_bytes(str(ROOT), head)):
         raise ValueError('Changed uncommitted M7 owner')
     if regular(ROOT, RECEIPT).read_bytes() != raw or _head(ROOT) != head:
         raise ValueError('M7 receipt or HEAD moved during verification')

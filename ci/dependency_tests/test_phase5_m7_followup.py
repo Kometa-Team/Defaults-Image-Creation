@@ -93,6 +93,32 @@ class Phase5M7FollowupTests(unittest.TestCase):
                 maintenance.verify_checkout()
             path.write_bytes(good)
 
+    def test_immutable_git_objects_never_cache_current_owner_head_or_files(self):
+        current, before, receipt = self.cohort()
+        helper = self.owner(before, receipt)
+        maintenance._baseline_entry.cache_clear()
+        maintenance._owner_bytes.cache_clear()
+        with patch.object(maintenance, 'git', wraps=maintenance.git) as git, \
+             patch.object(helper, '_head', wraps=helper._head) as head:
+            maintenance.verify_checkout()
+            cold = git.call_count
+            maintenance.verify_checkout()
+        self.assertEqual(cold, len(maintenance.ADDED)+1)
+        self.assertEqual(git.call_count, cold)
+        self.assertEqual(head.call_count, 4)
+        owner = self.root/maintenance.OWNER
+        owner.write_bytes(b'uncommitted owner')
+        with self.assertRaisesRegex(ValueError, 'uncommitted M7 owner'):
+            maintenance.verify_checkout()
+        owner.write_bytes(b'owner')
+        with patch.object(helper, '_head', side_effect=['f'*40, 'e'*40]), \
+             self.assertRaisesRegex(ValueError, 'HEAD moved'):
+            maintenance.verify_checkout()
+        name = next(iter(maintenance.MODIFIED))
+        (self.root/name).write_bytes(before[name])
+        with self.assertRaises(ValueError):
+            maintenance.verify_checkout()
+
     def test_resealed_membership_authority_and_predecessor_fail_closed(self):
         current, before, receipt = self.cohort()
         self.owner(before, receipt)
