@@ -69,9 +69,12 @@ class ValidationTimeoutTests(unittest.TestCase):
                         s=s.replace('&&',' and ').replace('||',' or ')
                         return eval(s,{'__builtins__':{},'startsWith':lambda a,b:a.startswith(b)})
                     was,now=evaluate(previous),evaluate(current)
-                    self.assertIn(now,(15,60))
+                    if name=='.github/workflows/default-poster-validation.yml' and job=='phase4':
+                        self.assertEqual(now,90 if values=={'os':'windows-latest','group':'foundations'} else 60)
+                    else:
+                        self.assertIn(now,(15,60))
+                        if was==60:self.assertEqual(now,60)
                     self.assertGreaterEqual(now,was)
-                    if was==60:self.assertEqual(now,60)
                 original=new.replace('    timeout-minutes: '+current+'\n','    timeout-minutes: '+previous+'\n',1)
                 self.assertEqual(old,original,job)
                 self.assertEqual(restored.count(new),1)

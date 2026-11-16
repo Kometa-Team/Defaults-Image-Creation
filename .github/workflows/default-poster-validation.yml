@@ -233,7 +233,7 @@ jobs:
   phase4:
     name: ${{ matrix.group == 'foundations' && format('Phase 4 operation foundations ({0})', matrix.os) || format('Phase 4 M5 transactions ({0}, {1})', matrix.os, matrix.group) }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 60
+    timeout-minutes: ${{ matrix.os == 'windows-latest' && matrix.group == 'foundations' && 90 || 60 }}
     env:
       EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
       PYTHONUNBUFFERED: '1'

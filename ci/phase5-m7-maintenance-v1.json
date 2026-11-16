@@ -36,7 +36,7 @@
     },
     "ci/phase5_m6_maintenance.py": {
       "before_sha256": "575976f25f41fd8eacb25b626504ba8f380f97d7b29cd3a07afa1c31c4e66e07",
-      "sha256": "653dac9bc6b9d697d68c7244c6f415d57f171bc76d936d5cb185895aac42d2d1"
+      "sha256": "5c04e1d386f3c6155643d1cf4fe2cfb11c050a13ae8a6c8d76b7d25a7458d1a0"
     },
     "ci/phase5_m7_acceptance.py": {
       "before_sha256": null,
@@ -48,7 +48,11 @@
     },
     "ci/publication_tests/test_validation_timeouts.py": {
       "before_sha256": "435cfa0306bc74c227ebc011ffd37c28109bcf51ec3240cd03a717ec42049a69",
-      "sha256": "dcffe8f4f6d57b47a88048ec5171b9008c1e8159bdd97be624ddfb3cb5a00516"
+      "sha256": "a2fdfe006ea58dafc29a6b7d04d10a9aa9642007628dea24271835cf632c08f4"
+    },
+    "ci/validation-timeouts-windows-phase4-v1.json": {
+      "before_sha256": null,
+      "sha256": "bb56a8282f0f289fe9908102cf4c0b0095da0adf0117872e1195b2e50f68d9fc"
     },
     "create_defaults/lifecycle/ROADMAP.md": {
       "before_sha256": "359d467f601787c4fdf6e369e0971f6fe0a7c49df65114f7aca8c82de0514f82",
