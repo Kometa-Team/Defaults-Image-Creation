@@ -1,6 +1,17 @@
 """Explicit composition geometry; future styles define their own constraints."""
 from dataclasses import dataclass
 
+# The historical contract pins the whole module for its white-wash transform.
+# This exact successor retains the legacy path; bounded layout is separately
+# selected and fingerprinted. No unknown implementation/encoding is admitted.
+LEGACY_RENDERER_SOURCE = 'ff748c9c8422a46f662f36a094a3ef523d2f9c4c23d622729f18c1f1894e0717'
+BOUNDED_RENDERER_SOURCE = '279c955e5ccd90ab0be7fdf199bb5876c888f42d7bb93aa47f1cf930e920ff1a'
+
+
+def compatible_renderer_source(observed, recorded):
+    return observed == recorded or (recorded == LEGACY_RENDERER_SOURCE
+                                    and observed == BOUNDED_RENDERER_SOURCE)
+
 
 @dataclass(frozen=True)
 class PosterStyle:

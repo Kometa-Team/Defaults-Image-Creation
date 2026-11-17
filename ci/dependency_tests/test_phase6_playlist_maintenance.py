@@ -24,7 +24,8 @@ class Phase6PlaylistMaintenanceTests(unittest.TestCase):
         before = dict(pilot._blobs(pilot.BASE))
         original = Path.read_bytes
         names = ('create_defaults/create_poster.py', 'create_defaults/bulk/planner.py',
-                 'create_defaults/bulk/workers.py', 'create_defaults/bulk/schemas/manifest-v1.json')
+                 'create_defaults/bulk/workers.py', 'create_defaults/bulk/schemas/manifest-v1.json',
+                 'create_defaults/bulk/contracts/expanded/validation.py')
         with m7._invocation(pilot.ROOT), m7._cohort_invocation(pilot.ROOT):
             pilot.verify_scope(pilot.ROOT, pilot.scope_members())
             for name in names:

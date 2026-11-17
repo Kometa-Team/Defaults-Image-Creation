@@ -136,3 +136,26 @@ def test_normal_playlist_plan_and_worker_bind_and_use_the_style(tmp_path):
     with pytest.raises(BulkError) as error:
         validate_manifest(altered)
     assert error.value.code == 'composition_style'
+
+
+def test_exact_renderer_successor_keeps_historical_pin_and_rejects_unknown_changes():
+    from unittest.mock import patch
+    from create_defaults.bulk.common import BulkError
+    from create_defaults.bulk.contracts.models import Contract
+    from create_defaults.bulk.contracts.expanded.validation import check_renderer
+    from create_defaults.bulk.planner import renderer_identity
+    from create_defaults.poster_styles import LEGACY_RENDERER_SOURCE, BOUNDED_RENDERER_SOURCE
+    contract = Contract.from_bytes((ROOT/'bulk/contracts/playlist/contract-v1.json').read_bytes())
+    assert contract.to_dict()['variants'][0]['design']['logo']['transformation']['sha256'] == LEGACY_RENDERER_SOURCE
+    current = renderer_identity()
+    assert current['sources']['create_poster.py'] == BOUNDED_RENDERER_SOURCE
+    check_renderer(contract)
+    for field in ('source', 'encoding', 'canvas'):
+        bad = deepcopy(current)
+        if field == 'source':bad['sources']['create_poster.py'] = '0'*64
+        elif field == 'encoding':bad['encoding']['quality'] = 90
+        else:bad['canvas'] = [1999, 3000]
+        with patch('create_defaults.bulk.contracts.expanded.validation.renderer_identity', return_value=bad):
+            with pytest.raises(BulkError) as error:
+                check_renderer(contract)
+            assert error.value.code == 'm5_renderer'

@@ -38,7 +38,8 @@ def approved_english():
 def check_renderer(contract):
     current=renderer_identity()
     design=contract.to_dict()["variants"][0]["design"]
-    if (current["sources"]["create_poster.py"] != design["logo"]["transformation"]["sha256"]
+    from create_defaults.poster_styles import compatible_renderer_source
+    if (not compatible_renderer_source(current["sources"]["create_poster.py"], design["logo"]["transformation"]["sha256"])
             or fingerprint(current["encoding"]) != design["output"]["encoding_sha256"]
             or current["canvas"] != [design["output"]["width"],design["output"]["height"]]):
         raise BulkError("m5_renderer","Actual transformation/encoding/canvas differs from the selected contract")

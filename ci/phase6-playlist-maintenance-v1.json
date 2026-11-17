@@ -14,12 +14,17 @@
     },
     "ci/dependency_tests/test_phase6_playlist_maintenance.py": {
       "before_sha256": null,
-      "sha256": "5677ec2f6ccba56c0deeabb3315e61df4a643617f4069d92808dc387d1201947",
+      "sha256": "ae2aaf9bdf165e8b14cfcf4cc70f28c2fb7d485ddaebcf7e513793712982edef",
       "text_lf": true
     },
     "ci/phase5_m7_maintenance.py": {
       "before_sha256": "6549260f014d35302d641909f577d5a51f89f638731ae10d380f8193c1549a40",
       "sha256": "8f56a8bd69b8c34c830197436b4e04f01fb155d66699150dbadcfeb07a688be5",
+      "text_lf": true
+    },
+    "create_defaults/bulk/contracts/expanded/validation.py": {
+      "before_sha256": "5a657072935d4fa37e0a01a341d2de28f36ad39363bbcc6bc7b669b02c9060fb",
+      "sha256": "aa063c76c0046fcc8cbf45203f14341deee14911cf7308ae45a762bd9a8fea3a",
       "text_lf": true
     },
     "create_defaults/bulk/contracts/translation_preflight/adapters.py": {
@@ -174,12 +179,12 @@
     },
     "create_defaults/poster_styles.py": {
       "before_sha256": null,
-      "sha256": "0b1f5278ddd3d8c473435b1d9816d89ed70e645147968b7d865fd8e05c088695",
+      "sha256": "3fb3f0896e76223545572ae74bb3261eeb467cdd824a4ee6f0139813acce10ad",
       "text_lf": true
     },
     "create_defaults/tests/test_playlist_layout.py": {
       "before_sha256": null,
-      "sha256": "0884cf436493ccab6fec54a50626b2f91096c051e568117d2192f65c795e5be1",
+      "sha256": "74e14cdc53fb24d761a7b53ac0b89c5df5923c401461cffe84194b01b92ffcb4",
       "text_lf": true
     }
   },
