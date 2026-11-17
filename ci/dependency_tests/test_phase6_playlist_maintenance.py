@@ -74,6 +74,20 @@ class Phase6PlaylistMaintenanceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'full SHA'):
             pilot.proof(pilot.ROOT, 'HEAD')
 
+    def test_physical_closing_bindings_and_historical_views_are_separate(self):
+        from ci import phase5_m7_maintenance as m7
+        with m7._invocation(pilot.ROOT):
+            physical=m7._owned_members(pilot.ROOT)
+            legacy=m7._owned_members(pilot.ROOT, physical=False)
+            for name, before, after in pilot._decode((pilot.ROOT/pilot.RECEIPT).read_bytes()):
+                if name in pilot.MODIFIED:
+                    self.assertEqual(physical[name]['sha256'], after)
+            name='create_defaults/lifecycle/ROADMAP.md'
+            self.assertNotEqual(physical[name]['sha256'], legacy[name]['sha256'])
+            name='create_defaults/bulk/operator_publication.py'
+            current=(pilot.ROOT/name).read_bytes()
+            self.assertEqual(m7.historical_bytes(pilot.ROOT,name,current),dict(pilot._blobs(pilot.BASE))[name])
+
     def test_aggregate_closing_proof_rechecks_the_full_pilot_cohort(self):
         from ci import phase5_m7_maintenance as m7
         target=pilot.ROOT/'create_defaults/phase6/assets/avp.png'

@@ -243,7 +243,7 @@ def owned_call(function=None, *, when=None, error_prefix=None, cohorts=False):
     return invoke
 
 
-def _owned_members(root):
+def _owned_members(root, *, physical=True):
     """Copy authenticated metadata for an existing, still-live private owner."""
     if Path(root) != ROOT and Path(root).resolve() != ROOT.resolve():
         raise ValueError('Foreign M7 owner')
@@ -251,15 +251,23 @@ def _owned_members(root):
     if (active is None or not active[1][0]
             or active[2] != (str(ROOT.absolute()), get_ident())):
         raise ValueError('No live M7 verification owner')
-    return {name: dict(before_sha256=before, sha256=after)
-            for name, before, after in active[0][3]}
+    bindings = {name: dict(before_sha256=before, sha256=after)
+                for name, before, after in active[0][3]}
+    if physical and len(active[0]) == 5:
+        from ci.phase6_playlist_maintenance import MODIFIED as pilot_modified
+        # Closing consumers compare actual current bytes. Historical projection
+        # consumers below explicitly retain the original sealed M7 bindings.
+        for name, before, after in active[0][4].rows:
+            if name in pilot_modified:
+                bindings[name] = dict(before_sha256=before, sha256=after)
+    return bindings
 
 
 def _read_owned_predecessor(root, name):
     """Read and project one physical successor inside a live private owner."""
     if name not in MODIFIED:
         raise ValueError('No M7 predecessor for: '+name)
-    binding = _owned_members(root)[name]
+    binding = _owned_members(root, physical=False)[name]
     current = regular(ROOT, name).read_bytes()
     current = _pilot_history(root, name, current)
     if sha(current) != binding['sha256']:
@@ -317,7 +325,7 @@ def selected_hash(root, name, expected):
     if name != 'ci/phase4.py' or expected != PHASE4_BEFORE:
         return expected
     with _invocation(root):
-        binding = _owned_members(root)[name]
+        binding = _owned_members(root, physical=False)[name]
         if binding['before_sha256'] != expected:
             raise ValueError('Changed M7 Phase 4 predecessor')
         historical_bytes(root, name, regular(ROOT, name).read_bytes())
