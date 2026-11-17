@@ -4,7 +4,7 @@
   "members": {
     ".github/workflows/phase6-playlist-validation.yml": {
       "before_sha256": null,
-      "sha256": "ce9b2f105c1b4d79b9700008d71fe84baec2e923d42ce26b82d18df672f2f74d",
+      "sha256": "835428d1dfca94f57ecf0499e2eb0e7430f7e0f8874ecf17dae8b54a5949558d",
       "text_lf": true
     },
     "ci/dependabot_maintenance.py": {
@@ -99,7 +99,7 @@
     },
     "create_defaults/lifecycle/PHASE6_PLAYLIST_PILOT.md": {
       "before_sha256": null,
-      "sha256": "892afc1dcfa3cfb9db9c40674bb140ef27343fc14af63675410af5a70f48fbd1",
+      "sha256": "c56cc7202854e0a92a2fad792cdd56030660f6f3c2ea9e2d01ef71c421f45351",
       "text_lf": true
     },
     "create_defaults/lifecycle/ROADMAP.md": {
@@ -165,6 +165,11 @@
     "create_defaults/phase6/playlist.py": {
       "before_sha256": null,
       "sha256": "d79ad993eff6f645b53f06e4a0bf9a62c9acda1622e15d938e92c342e7936acf",
+      "text_lf": true
+    },
+    "create_defaults/phase6/render_review.py": {
+      "before_sha256": null,
+      "sha256": "3af5602c9f81d2dd33c5743603d03d6e70eb5107ffb51aa87223cbe71166fde8",
       "text_lf": true
     },
     "create_defaults/phase6/tests/conftest.py": {

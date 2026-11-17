@@ -45,6 +45,8 @@ The source fixture copies the actual Genre/Playlist catalogs, profiles and full 
 
 The production Python path now has an explicit `playlist-contained-v1` style in `create_defaults/poster_styles.py` and reusable alpha-aware containment in `create_defaults/image_layout.py`. Normal Playlist plans select this style, include it in their render fingerprint, and pass it through the existing worker to `create_poster`. Direct Python/CLI callers adopt it explicitly with `style=` / `--style`. Callers without bounds retain their original behavior. The original PNGs, historical catalog definitions, captured measurements and prior receipts are not rewritten. This new style is an offline proposal and grants no package or artwork approval.
 
+The historical whole-module transformation pin `ff748c9c8422a46f662f36a094a3ef523d2f9c4c23d622729f18c1f1894e0717` remains recorded in every original contract. The implementation registers only the exact renderer successor `ecf84c06bfeb5a7ee54b9f976d9fcd1de0dabb0680558e48cd975126d19af472`, whose unbounded path remains pixel-identical to the immutable main renderer. Unknown source hashes, changed encoding and changed canvas remain rejected. This compatibility registration preserves the old white-wash implementation evidence; it is not approval of the new bounded design. The new source files, style policy and candidate/P3 dependency fingerprints bind the proposed geometry separately.
+
 On the unchanged 2000 x 3000 canvas, the logo box is `(200, 850, 1800, 1750)` (1600 x 900), centered on the old logo anchor `(1000, 1300)`. The caption box is `(50, 1850, 1950, 2050)` (1900 x 200), centered at the existing `(1000, 1950)` with 154pt typography. Its upper bound minus the explicit 100px gap determines the logo box's lower edge, 1750. The original 1600 x 1000 captured-fit box remains caption measurement evidence; it is not a logo-height limit. The existing native caption helper still uses its original 1900 x 1000 rasterization canvas and placement.
 
 Each render crops to the source's visible alpha bounds, uniformly contains those pixels within both logo dimensions, and centers the final visible layer at the style anchor. Transparent padding has no influence on scale or centering. The renderer checks the actual fitted-logo and caption-layer bounds and their minimum gap. Caption overflow is rejected; new text fitting, font shrinking and Genre compositing are outside this patch. A whole-composition border resize is rejected for this style because it would invalidate these coordinates. Before/after comparison copies and the contact sheet are separate offline outputs; stored historical baselines and live outputs are never overwritten.
@@ -53,6 +55,8 @@ The pilot proves one real addition first, then all eight in a separate native fi
 
 ```text
 python -B -m unittest ci.dependency_tests.test_phase6_playlist_maintenance -v
+python -B -m pytest create_defaults/tests/test_create_poster.py create_defaults/tests/test_playlist_layout.py -q
+python -B -m create_defaults.phase6.render_review --output-dir config/phase6-playlist-evidence/artwork-review
 python -B -m pytest create_defaults/phase6/tests/test_playlist_pilot.py::test_one_playlist_add_reaches_local_draft -v --maxfail=1
 python -B -m pytest create_defaults/phase6/tests -k preflight -q --maxfail=1
 python -B -m pytest create_defaults/phase6/tests -m cohort -v --maxfail=1 --junitxml=config/phase6-playlist-evidence/cohort-tests.xml
