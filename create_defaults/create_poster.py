@@ -167,6 +167,8 @@ def render_poster(options=None, *, asset_dir=ROOT, font_dir=None, style=None, **
         selected_style = get_style(style)
         if selected_style.canvas != SIZE or not options.text:
             raise ValueError('Playlist style requires its fixed canvas and caption')
+        if selected_style.logo_fit_policy != 'contain-visible-alpha':
+            raise ValueError('Unsupported style image fitting policy')
         if options.border:
             raise ValueError('Playlist bounds do not admit a whole-composition border resize')
         options = replace(options, font_size=selected_style.caption_font_size,
@@ -251,6 +253,7 @@ def render_poster(options=None, *, asset_dir=ROOT, font_dir=None, style=None, **
             if gap < selected_style.minimum_vertical_gap:
                 raise ValueError('Logo and caption violate the selected style gap')
             metadata['composition_style'] = dict(id=selected_style.id,
+                fit_policy=selected_style.logo_fit_policy,
                 logo=logo_fit, caption_box=list(selected_style.caption_box),
                 caption_visible_bounds=list(actual),
                 minimum_vertical_gap=selected_style.minimum_vertical_gap, measured_gap=gap)

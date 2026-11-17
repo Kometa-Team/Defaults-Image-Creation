@@ -42,6 +42,7 @@ def test_playlist_boxes_preserve_anchors_and_separate_caption_measurement():
     assert PLAYLIST.caption_box[1]-PLAYLIST.logo_box[3] == PLAYLIST.minimum_vertical_gap
     assert PLAYLIST.caption_measurement == (1900, 1000)
     assert PLAYLIST.caption_offset == 450
+    assert PLAYLIST.logo_fit_policy == 'contain-visible-alpha'
 
 
 @pytest.mark.parametrize('label', ['wdu', 'avp'])

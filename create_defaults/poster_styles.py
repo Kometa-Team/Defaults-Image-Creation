@@ -5,7 +5,7 @@ from dataclasses import dataclass
 # This exact successor retains the legacy path; bounded layout is separately
 # selected and fingerprinted. No unknown implementation/encoding is admitted.
 LEGACY_RENDERER_SOURCE = 'ff748c9c8422a46f662f36a094a3ef523d2f9c4c23d622729f18c1f1894e0717'
-BOUNDED_RENDERER_SOURCE = '279c955e5ccd90ab0be7fdf199bb5876c888f42d7bb93aa47f1cf930e920ff1a'
+BOUNDED_RENDERER_SOURCE = 'ecf84c06bfeb5a7ee54b9f976d9fcd1de0dabb0680558e48cd975126d19af472'
 
 
 def compatible_renderer_source(observed, recorded):
@@ -20,6 +20,7 @@ class PosterStyle:
     logo_box: tuple[int, int, int, int]
     caption_box: tuple[int, int, int, int]
     minimum_vertical_gap: int
+    logo_fit_policy: str
     logo_vertical_alignment: str
     caption_measurement: tuple[int, int]
     caption_offset: int
@@ -37,7 +38,7 @@ _CAPTION_TOP = _CAPTION_Y-100
 _LOGO_BOTTOM = _CAPTION_TOP-100
 PLAYLIST = PosterStyle('playlist-contained-v1', _CANVAS,
     (200, 2*_LOGO_Y-_LOGO_BOTTOM, 1800, _LOGO_BOTTOM),
-    (50, _CAPTION_TOP, 1950, _CAPTION_Y+100), 100, 'center',
+    (50, _CAPTION_TOP, 1950, _CAPTION_Y+100), 100, 'contain-visible-alpha', 'center',
     (1900, 1000), 450, 154)
 
 
