@@ -18,6 +18,29 @@ class Phase6PlaylistMaintenanceTests(unittest.TestCase):
         self.assertFalse(result['production_authorized'])
         self.assertFalse(result['publication_authorized'])
 
+    def test_renderer_successors_preserve_history_and_reject_unapproved_physical_bytes(self):
+        from pathlib import Path
+        from ci import phase5_m7_maintenance as m7
+        before = dict(pilot._blobs(pilot.BASE))
+        original = Path.read_bytes
+        names = ('create_defaults/create_poster.py', 'create_defaults/bulk/planner.py',
+                 'create_defaults/bulk/workers.py', 'create_defaults/bulk/schemas/manifest-v1.json')
+        with m7._invocation(pilot.ROOT), m7._cohort_invocation(pilot.ROOT):
+            pilot.verify_scope(pilot.ROOT, pilot.scope_members())
+            for name in names:
+                target = pilot.ROOT/name
+                current = target.read_bytes()
+                self.assertEqual(m7.historical_bytes(pilot.ROOT, name, current), before[name])
+                for bad in (current+b'changed', before[name], None):
+                    def read(path):
+                        if path == target:
+                            if bad is None:raise FileNotFoundError(name)
+                            return bad
+                        return original(path)
+                    with self.subTest(path=name, missing=bad is None), patch.object(Path, 'read_bytes', read):
+                        with self.assertRaises((ValueError, OSError)):
+                            m7.historical_bytes(pilot.ROOT, name, current)
+
     def test_immutable_objects_are_batched_but_physical_files_stay_fresh(self):
         for method in (pilot._tree, pilot._blobs, pilot._ancestry, pilot._diff, pilot._immutable_checked):
             method.cache_clear()
