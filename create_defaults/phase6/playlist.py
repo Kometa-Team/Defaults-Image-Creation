@@ -217,6 +217,22 @@ def require_phase3(pilot, request, definition):
     return pilot.require_request(request, definition)
 
 
+def preparation_membership(value):
+    """Closed read-only DTO shape; live capability checks remain in planning.
+
+    Parsing an immutable value never creates an owner, decision or destination.
+    NativeSelection and the original transport must still revalidate the live
+    owned trial and exact review before any local fixture write.
+    """
+    rows = {r['proposed']['persistent_identity']:r for r in manifest()['requests']}
+    if (not set(value['required_members']) <= set(rows)
+            or set(value['source']['files']) != {'genre.yml','playlist.yml','profiles.yml','index-v1.json'}
+            or value['source']['simulation'] is not True or value['source']['production_authorized'] is not False):
+        return False
+    return all(m['destination'] == rows[m['identity']]['proposed']['public_path']
+        and m['previous_sha256'] is None and m['previous_git_blob'] == '0'*40 for m in value['members'])
+
+
 def source_quality_fixture(config, view, entry, report):
     """Acknowledge only recorded findings on exact owned fixture bytes.
 
@@ -228,7 +244,12 @@ def source_quality_fixture(config, view, entry, report):
                 or config.cache_dir != context.trial.config.cache_dir):
             continue
         context = _context(pilot)
-        for name in ('workspace_dir', 'output_dir'):
+        # This read-only check does not adopt or write outputs. The existing
+        # archive verifier mints its own separate replay output temporary root;
+        # actual render output confinement remains CompositionTrial's job.
+        if not config.offline:
+            fail('foreign_quality_root')
+        for name in ('workspace_dir',):
             if not reject_links(getattr(config, name)).resolve().is_relative_to(context.trial.root):
                 fail('foreign_quality_root')
         identity = entry['id']
