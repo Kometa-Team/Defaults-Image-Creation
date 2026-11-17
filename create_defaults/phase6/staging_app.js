@@ -22,7 +22,7 @@ async function refresh() {
   for (const item of state.submissions) {
     const card = text('article', '', 'card'); card.dataset.id = item.id; card.dataset.identity = item.identity; card.dataset.status = item.status;
     card.append(text('h3', item.display_name), text('p', `${item.action} · ${item.status}`, 'status'));
-    const image = document.createElement('img'); image.src = '/preview/' + item.id; image.alt = item.display_name; card.append(image);
+    const image = document.createElement('img'); image.width = 2000; image.height = 3000; image.loading = 'lazy'; image.src = '/preview/' + item.id; image.alt = item.display_name; card.append(image);
     card.append(text('p', item.destination), text('p', 'SHA-256 ' + item.sha256, 'hash'));
     const actions = text('div', '', 'actions');
     if (state.role === 'maintainer' && ['preview', 'approved'].includes(item.status)) {

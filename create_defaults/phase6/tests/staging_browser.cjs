@@ -62,9 +62,17 @@ const check = (condition, message) => { if (!condition) throw new Error(message)
           rejections.push({case:test.csrf ? 'unapproved or wrong-hash action' : 'missing CSRF',...rejected});
         }
       }
+      await maintainer.locator(selector + ' img').scrollIntoViewIfNeeded();
+      await maintainer.locator(selector + ' img').evaluate(image => image.decode());
+      const approving = maintainer.waitForResponse(response => response.url().endsWith('/api/approve') && response.request().method() === 'POST');
       await maintainer.locator(selector + ' [data-action="approve"]').click();
+      const approved = await approving;
+      check(approved.ok(), 'Approval failed: ' + await approved.text());
       await maintainer.locator(selector + '[data-status="approved"]').waitFor();
+      const staging = maintainer.waitForResponse(response => response.url().endsWith('/api/stage') && response.request().method() === 'POST');
       await maintainer.locator(selector + ' [data-action="stage"]').click();
+      const staged = await staging;
+      check(staged.ok(), 'Staging failed: ' + await staged.text());
       await maintainer.locator(selector + '[data-status="staged"]').waitFor();
       await maintainer.locator(selector + ' [data-receipt="matched"]').waitFor();
       const destination = path.join(stateDir, 'destination', entry.destination);
