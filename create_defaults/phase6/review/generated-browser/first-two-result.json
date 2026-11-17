@@ -1,0 +1,63 @@
+{
+  "candidate_commit": "33f4d0ea4fe5b4262319f5eec1aeaab221c8780d",
+  "results": [
+    {
+      "identity": "playlist.feec6426d0134e93973e8a2b36bd1ebe",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Alien & Predator (Timeline Order).jpg",
+      "sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+      "receipt": {
+        "identity": "playlist.feec6426d0134e93973e8a2b36bd1ebe",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Alien & Predator (Timeline Order).jpg",
+        "relative_path": "playlist/Alien & Predator (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.feec6426d0134e93973e8a2b36bd1ebe",
+          "destination": "playlist/Alien & Predator (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+          "revision": 1,
+          "references": []
+        },
+        "catalog_sha256": "1be31bc36ed82093a5c04c82236c95cc507f1019f4f6a9c51c25b1587bc1cd24",
+        "review_digest": "0e00f65a583a07878e01646daa9f7904fdd921eb29eaf95ed459f375096f60fe",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.playlist-x-men-timeline-order.627ce505",
+      "action": "REPLACE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\X-Men (Timeline Order).jpg",
+      "sha256": "5e513164bb873d739b2df9cc500521c7449060ce0bce98e3a5786cf002f8f63f",
+      "receipt": {
+        "identity": "playlist.playlist-x-men-timeline-order.627ce505",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\X-Men (Timeline Order).jpg",
+        "relative_path": "playlist/X-Men (Timeline Order).jpg",
+        "action": "REPLACE",
+        "previous_sha256": "e1c2011e710fd4d0192226ae9df841249c9f0dd0eeefee193504f749bcb36832",
+        "destination_sha256": "5e513164bb873d739b2df9cc500521c7449060ce0bce98e3a5786cf002f8f63f",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.playlist-x-men-timeline-order.627ce505",
+          "destination": "playlist/X-Men (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "5e513164bb873d739b2df9cc500521c7449060ce0bce98e3a5786cf002f8f63f",
+          "revision": 2,
+          "references": []
+        },
+        "catalog_sha256": "0fb59e923c83265d36ce4f03eb26d35e044de1cf96c15cdd929129d3fda2545a",
+        "review_digest": "37a0f957a3df895029aef94d2764257c0c9e9594b660671ccaa9e22965108eb7",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    }
+  ]
+}
