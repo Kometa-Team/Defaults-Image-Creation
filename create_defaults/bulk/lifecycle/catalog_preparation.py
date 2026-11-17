@@ -70,6 +70,10 @@ class OwnedCatalog:
         git(self.root,'commit','-m','Owned offline catalog preimage')
 
     def require(self):
+        expected_files=FILES if self.category=='Genre' else (*FILES,'playlist.yml')
+        if (self.category not in {'Genre','Playlist'} or self.files!=expected_files
+                or self.catalog_name!=self.category.lower()+'.yml'
+                or (self.pilot is None)!=(self.category=='Genre')):fail('source_ownership')
         if type(self.trial) is not CompositionTrial or self.trial._closed:fail('closed_source')
         if not self.root.is_relative_to(self.trial.root) or not self.root.name.startswith('m5-source-') or decode_json((self.root/'ownership.json').read_bytes())!=MARKER:fail('source_ownership')
         if git(self.root,'remote').strip() or git(self.root,'branch','--show-current').decode().strip()!='main':fail('source_ownership')

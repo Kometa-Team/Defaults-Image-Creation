@@ -90,6 +90,19 @@ def test_playlist_update_stays_blocked(single):
             identity='synthetic.operation.forbidden-update', operation='UPDATE')
 
 
+def test_unrecorded_quality_findings_stay_blocked(single):
+    from copy import deepcopy
+    from create_defaults.phase6.playlist import source_quality_fixture
+    context=single['row'][1]
+    identity=single['snapshot'].to_dict()['members'][0]
+    row=single['pilot'].rows()[identity]
+    report=deepcopy(row['fixture_quality_review']['report'])
+    report['diagnostics'].append('unreviewed_new_finding')
+    with pytest.raises(BulkError, match='unreviewed_fixture_quality'):
+        source_quality_fixture(single['row'][0].config, context.registry.view(),
+            context.registry.view().entry(identity), report)
+
+
 def test_closed_pilot_cannot_be_reused():
     from create_defaults.bulk.lifecycle.previews import CompositionTrial
     from create_defaults.phase4.tests.composition_samples import registry

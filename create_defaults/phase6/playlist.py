@@ -69,6 +69,7 @@ class _Context:
     trial: object
     registry: object
     manifest_sha256: str
+    manifest_json: str
 
 
 def _context(pilot):
@@ -90,6 +91,58 @@ def _context(pilot):
     return context
 
 
+def _rows(context):
+    # Pure projection of this invocation's freshly authenticated manifest.
+    value = json.loads(context.manifest_json)
+    return {r['proposed']['persistent_identity']: r for r in value['requests']}
+
+
+def _content(context, identity):
+    rows = _rows(context)
+    if identity not in rows:
+        fail('unselected_identity')
+    row = rows[identity]
+    p = row['proposed']
+    source = dict(path='logos_playlist/Fixture '+row['request']+'.png', sha256=row['logo']['sha256'])
+    actual = confined(context.trial.config.asset_dir, source['path'], must_exist=True)
+    reject_links(actual)
+    if hashlib.sha256(actual.read_bytes()).hexdigest() != source['sha256']:
+        fail('staged_logo_bytes')
+    return dict(display_name=p['display_name'], source=source,
+        background_proposal=p['fixture_background'], content_type='timeline-order')
+
+
+def _entry(context, identity):
+    row = _rows(context).get(identity)
+    if row is None:
+        fail('unselected_identity')
+    p = row['proposed']
+    entry = context.registry.view().entry(identity)
+    content = _content(context, identity)
+    names = dict(display_name=p['display_name'], rendered_caption='TIMELINE ORDER', source=content['source'],
+        local_path=p['local_path'], public_path=p['public_path'])
+    if (entry['category'] != 'Playlist' or entry['variant'] != 'timeline-order'
+            or entry['origin'] != 'assigned' or entry['revision'] != 1 or entry['tombstone_sha256'] is not None
+            or entry['semantic'] != dict(parent=None, key=p['semantic_key'], role='single', language='en')
+            or entry['names'] != names or entry['original_names'] != names or entry['aliases']):
+        fail('identity_mapping')
+    return entry
+
+
+def _definitions(context, definitions):
+    if not definitions or not set(definitions) <= set(_rows(context)):
+        fail('definition_membership')
+    from create_defaults.bulk.contracts.playlist.validation import PlaylistBoundary, CONTRACT_SHA256, REGISTRY_SHA256, M2_SHA256
+    from create_defaults.bulk.contracts.models import Identity
+    boundary = PlaylistBoundary.load(contract_sha256=CONTRACT_SHA256, registry_sha256=REGISTRY_SHA256, adoption_sha256=M2_SHA256)
+    for identity, definition in definitions.items():
+        entry = _entry(context, identity)
+        assigned = Identity.from_dict(dict(schema_version=1, kind='item-identity', id=identity,
+            category='Playlist', semantic_member=None, **entry['names']))
+        boundary.validate_proposed_definition(assigned, _content(context, identity), definition,
+            source_root=context.trial.config.asset_dir)
+
+
 class OfflinePlaylistPilot:
     __slots__ = ('__weakref__',)
 
@@ -101,7 +154,8 @@ class OfflinePlaylistPilot:
             fail('owned_capability')
         if any(c.registry.operations.root == registry.operations.root for c in _OWNED.values()):
             fail('duplicate_owner')
-        _OWNED[self] = _Context(trial, registry, fingerprint(manifest()))
+        value = manifest()
+        _OWNED[self] = _Context(trial, registry, fingerprint(value), canonical(value).decode())
         _context(self)
 
     @property
@@ -113,67 +167,29 @@ class OfflinePlaylistPilot:
             fail('foreign_trial')
 
     def rows(self):
-        _context(self)
-        return {r['proposed']['persistent_identity']: r for r in manifest()['requests']}
+        return _rows(_context(self))
 
     def content(self, identity):
-        context = _context(self)
-        rows = self.rows()
-        if identity not in rows:
-            fail('unselected_identity')
-        row = rows[identity]
-        p = row['proposed']
-        source = dict(path='logos_playlist/Fixture '+row['request']+'.png', sha256=row['logo']['sha256'])
-        actual = confined(context.trial.config.asset_dir, source['path'], must_exist=True)
-        reject_links(actual)
-        if hashlib.sha256(actual.read_bytes()).hexdigest() != source['sha256']:
-            fail('staged_logo_bytes')
-        return dict(display_name=p['display_name'], source=source,
-            background_proposal=p['fixture_background'], content_type='timeline-order')
+        return _content(_context(self), identity)
 
     def entry(self, identity):
-        context = _context(self)
-        row = self.rows().get(identity)
-        if row is None:
-            fail('unselected_identity')
-        p = row['proposed']
-        entry = context.registry.view().entry(identity)
-        content = self.content(identity)
-        names = dict(display_name=p['display_name'], rendered_caption='TIMELINE ORDER', source=content['source'],
-            local_path=p['local_path'], public_path=p['public_path'])
-        if (entry['category'] != 'Playlist' or entry['variant'] != 'timeline-order'
-                or entry['origin'] != 'assigned' or entry['revision'] != 1 or entry['tombstone_sha256'] is not None
-                or entry['semantic'] != dict(parent=None, key=p['semantic_key'], role='single', language='en')
-                or entry['names'] != names or entry['original_names'] != names or entry['aliases']):
-            fail('identity_mapping')
-        return entry
+        return _entry(_context(self), identity)
 
     def require_definitions(self, definitions):
-        context = _context(self)
-        if not definitions or not set(definitions) <= set(self.rows()):
-            fail('definition_membership')
-        from create_defaults.bulk.contracts.playlist.validation import PlaylistBoundary, CONTRACT_SHA256, REGISTRY_SHA256, M2_SHA256
-        from create_defaults.bulk.contracts.models import Identity
-        boundary = PlaylistBoundary.load(contract_sha256=CONTRACT_SHA256, registry_sha256=REGISTRY_SHA256, adoption_sha256=M2_SHA256)
-        for identity, definition in definitions.items():
-            entry = self.entry(identity)
-            assigned = Identity.from_dict(dict(schema_version=1, kind='item-identity', id=identity,
-                category='Playlist', semantic_member=None, **entry['names']))
-            boundary.validate_proposed_definition(assigned, self.content(identity), definition,
-                source_root=context.trial.config.asset_dir)
+        _definitions(_context(self), definitions)
 
     def require_request(self, request, definition):
         context = _context(self)
         if (request.package.contract.to_dict()['category'] != 'Playlist' or request.variant != 'timeline-order'
-                or definition['languages'] != ['en'] or request.identity not in self.rows()):
+                or definition['languages'] != ['en'] or request.identity not in _rows(context)):
             fail('phase3_scope')
-        self.require_definitions({request.identity: definition})
+        _definitions(context, {request.identity: definition})
         # The resolver still proves real current file bytes. Its files must be
         # owned by this same temporary trial, not a caller-supplied live root.
         for _, path, _ in request.resolution.source_pins:
             if not reject_links(path).resolve().is_relative_to(context.trial.root):
                 fail('phase3_source_root')
-        return self.manifest_sha256
+        return context.manifest_sha256
 
 
 def for_candidate(candidate):
@@ -182,19 +198,55 @@ def for_candidate(candidate):
         return None
     for pilot, context in tuple(_OWNED.items()):
         if context.registry is candidate.registry:
-            _context(pilot)
+            context = _context(pilot)
             if candidate.config != context.trial.config:
                 fail('candidate_root')
             context.trial.require(candidate)
             definitions = candidate.data()['effective_definitions']
             if (set(definitions) != set(candidate.graph.index().outputs) or candidate.data()['families']
-                    or json.loads(candidate.content_json) != {i:pilot.content(i) for i in definitions}):
+                    or json.loads(candidate.content_json) != {i:_content(context, i) for i in definitions}):
                 fail('candidate_membership')
-            pilot.require_definitions(definitions)
+            _definitions(context, definitions)
             return pilot
     return None
 
 
 def require_phase3(pilot, request, definition):
-    _context(pilot)
+    if type(pilot) is not OfflinePlaylistPilot or pilot not in _OWNED:
+        fail('owned_capability')
     return pilot.require_request(request, definition)
+
+
+def source_quality_fixture(config, view, entry, report):
+    """Acknowledge only recorded findings on exact owned fixture bytes.
+
+    Findings stay in native evidence. This cannot establish real transparency,
+    quality, intentional-background approval or publication authority.
+    """
+    for pilot, context in tuple(_OWNED.items()):
+        if (config.asset_dir != context.trial.config.asset_dir
+                or config.cache_dir != context.trial.config.cache_dir):
+            continue
+        context = _context(pilot)
+        for name in ('workspace_dir', 'output_dir'):
+            if not reject_links(getattr(config, name)).resolve().is_relative_to(context.trial.root):
+                fail('foreign_quality_root')
+        identity = entry['id']
+        if entry != _entry(context, identity) or view.snapshot.sha256 != context.registry.view().snapshot.sha256:
+            fail('quality_identity')
+        row = _rows(context)[identity]
+        review = row['fixture_quality_review']
+        if (set(review) != {'kind', 'reviewer', 'decision', 'report', 'report_sha256', 'simulation',
+                'real_approval', 'production_authorized', 'publication_authorized'}
+                or review['kind'] != 'offline-source-quality-fixture'
+                or review['reviewer'] != 'synthetic.actor.source-quality'
+                or review['decision'] != 'ACKNOWLEDGED_FOR_FIXTURE_ONLY'
+                or review['simulation'] is not True
+                or any(review[k] is not False for k in ('real_approval','production_authorized','publication_authorized'))
+                or report != review['report'] or fingerprint(report) != review['report_sha256']
+                or report['sha256'] != row['logo']['sha256'] or report['integrity'] != 'valid'
+                or report['mode'] != 'RGBA' or report['alpha_min'] != 0 or not report['clear_pixels']
+                or set(report['default_transparency_blockers']) - {'rectangular_alpha_background_not_proven_transparent'}):
+            fail('unreviewed_fixture_quality')
+        return {k:v for k,v in review.items() if k != 'report'}
+    return None

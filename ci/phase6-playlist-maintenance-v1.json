@@ -24,7 +24,12 @@
     },
     "create_defaults/bulk/lifecycle/catalog_preparation.py": {
       "before_sha256": "89c5e3fdadce53d807f9af51791885bc386d813e4d0553e3f2aad0e68c803492",
-      "sha256": "504807916a9553de05d126a790074b80fe11ceb37ce6bad27dc849dc3369e71a",
+      "sha256": "04d022f4be9adb58b5da51f1677950cb48ff252eae69d01587b135e6890e0246",
+      "text_lf": true
+    },
+    "create_defaults/bulk/lifecycle/composition.py": {
+      "before_sha256": "d2f48077836634e86dcb22ebe7b8e20b870852122e256e5fed8c86ac79070691",
+      "sha256": "8fb6b43eb355e71cfd43b95a8ac9f0e429d93673831108f0d029e3cb46114dbf",
       "text_lf": true
     },
     "create_defaults/bulk/lifecycle/operations.py": {
@@ -39,7 +44,7 @@
     },
     "create_defaults/lifecycle/PHASE6_PLAYLIST_PILOT.md": {
       "before_sha256": null,
-      "sha256": "07e53542ce9f172f15a88944418eadc5f25c9d9cef2e6e71ae7f1743b999a61a",
+      "sha256": "408e8adfac8b461364dbf9eb50da1110471a2346245fba9d683e6462f3c69a49",
       "text_lf": true
     },
     "create_defaults/lifecycle/ROADMAP.md": {
@@ -49,7 +54,7 @@
     },
     "create_defaults/phase6/PLAYLIST_PILOT_MANIFEST.json": {
       "before_sha256": null,
-      "sha256": "556744e0f8af02861a70218036c34b1e9165cd4112604b221a7da72aea6be35d",
+      "sha256": "ae1398bcf579d6fc506a104bd537d5e0f6f32853b5ea3e0e235d6c941f10f084",
       "text_lf": true
     },
     "create_defaults/phase6/__init__.py": {
@@ -104,7 +109,7 @@
     },
     "create_defaults/phase6/playlist.py": {
       "before_sha256": null,
-      "sha256": "630e35df765485f09cd153cbecb120531b50c2ce4ed535d808f9f118d74908f5",
+      "sha256": "17e48c9a1217b59bcbb209049f3c4321f6643be638f198c15911cb6986bf847a",
       "text_lf": true
     },
     "create_defaults/phase6/tests/conftest.py": {
@@ -114,7 +119,7 @@
     },
     "create_defaults/phase6/tests/test_playlist_pilot.py": {
       "before_sha256": null,
-      "sha256": "097ac7c2ba6f23ce22837785df1ac87a06eb55fe9ae97e6853791fff89956b1d",
+      "sha256": "aed8314110f7a98c3a5026f0a3be2e5366e35e8a46ff06940dbaf1a7272c0011",
       "text_lf": true
     }
   },
