@@ -27,7 +27,20 @@ The merged [Phase 5 handoff](PHASE5_HANDOFF.md) and M2-M7 evidence remain immuta
 
 Every proposed local output is `defaults-en/` plus its public path. Logos retain their exact supplied basenames in the manifest; the temporary native asset tree uses `logos_playlist/Fixture <label>.png` to satisfy CompositionTrial's existing isolation rule. The original PNG bytes are copied unchanged. Every logo is RGBA with transparent and opaque pixels. The manifest records raw SHA-256, dimensions and byte length; binary image digests are never newline-normalized.
 
-All eight display names and filename conventions above are confirmed. `#123456` is the explicit shared offline fixture background for every title, with gradient 1 (`fades/@center-out-fade.png`); it is not an intended artwork assignment or an automatically selected color. No per-title backgrounds have been approved. Source-preserving treatment or intentional background exceptions require their own exact review; the fixture uses the existing default white treatment.
+All eight display names and filename conventions above are confirmed. The original shared `#123456` renders are retained as historical fixture evidence. The maintainer approved the revised eight-poster colour contact sheet for the offline pilot; [visual-approval.json](../phase6/review/visual-approval.json) binds its exact SHA-256 and all eight JPEG hashes. This visual review grants no real operational/package/source-quality authority. Gradient 1 (`fades/@center-out-fade.png`) and the existing default white logo treatment remain unchanged. Live registry reservations and catalog mappings remain pending.
+
+| Playlist | Approved offline colour | Colour origin |
+| --- | --- | --- |
+| Alien & Predator | `#1EAC1B` | Existing Alien Predator Franchise colour |
+| Babylon 5 | `#5B4A86` | New proposal approved for this offline set |
+| Battlestar Galactica | `#3C6382` | New proposal approved for this offline set |
+| Mobile Suit Gundam | `#285DA8` | New proposal approved for this offline set |
+| Middle-earth | `#C28A25` | Existing Middle Earth Franchise colour |
+| Sword Art Online | `#25A6B2` | New proposal approved for this offline set |
+| Stargate | `#6C73A1` | Existing Stargate Franchise colour |
+| The Walking Dead Universe | `#797F48` | Existing The Walking Dead Franchise colour |
+
+[Approved contact sheet](../phase6/review/eight-poster-colour-proposals.png) · [Nine-poster historical comparison](../phase6/review/nine-poster-historical-comparison.png). Source line references and render hashes remain in [colour-review.json](../phase6/review/colour-review.json); original before/after measurements remain in [historical-comparison.json](../phase6/review/historical-comparison.json).
 
 The first real-source fixture stopped at the unchanged native PNG quality gate (`source_transparency_or_quality_review_required`, 125.18s). All eight logos have edge-contact/clean-background diagnostics; avp/jrrt also have embedded ICC diagnostics. Babylon, Gundam, SAO and WDU additionally have `rectangular_alpha_background_not_proven_transparent`. The manifest preserves every complete source-quality report and its digest, with a separate explicit synthetic-only acknowledgement. The owned fixture capability admits only those exact reports on the exact original PNG bytes, keeps all findings in native evidence, rejects new findings/opaque sources, and grants no real quality or intentional-background approval. All eight require separate real source/artwork quality decisions before live use. No pixels were repaired or edited.
 
@@ -43,7 +56,7 @@ The source fixture copies the actual Genre/Playlist catalogs, profiles and full 
 
 ## Validation and retained evidence
 
-The production Python path now has an explicit `playlist-contained-v1` style in `create_defaults/poster_styles.py` and reusable alpha-aware containment in `create_defaults/image_layout.py`. Normal Playlist plans select this style, include it in their render fingerprint, and pass it through the existing worker to `create_poster`. Direct Python/CLI callers adopt it explicitly with `style=` / `--style`. Callers without bounds retain their original behavior. The original PNGs, historical catalog definitions, captured measurements and prior receipts are not rewritten. This new style is an offline proposal and grants no package or artwork approval.
+The production Python path now has an explicit `playlist-contained-v1` style in `create_defaults/poster_styles.py` and reusable alpha-aware containment in `create_defaults/image_layout.py`. Normal Playlist plans select this style, include it in their render fingerprint, and pass it through the existing worker to `create_poster`. Direct Python/CLI callers adopt it explicitly with `style=` / `--style`. Callers without bounds retain their original behavior. The original PNGs, historical catalog definitions, captured measurements and prior receipts are not rewritten. The maintainer approved the WDU, Clone Wars and X-Men layouts and then the eight-colour visual set for the offline pilot; this grants no operational or package approval.
 
 The historical whole-module transformation pin `ff748c9c8422a46f662f36a094a3ef523d2f9c4c23d622729f18c1f1894e0717` remains recorded in every original contract. The implementation registers only the exact renderer successor `ecf84c06bfeb5a7ee54b9f976d9fcd1de0dabb0680558e48cd975126d19af472`, whose unbounded path remains pixel-identical to the immutable main renderer. Unknown source hashes, changed encoding and changed canvas remain rejected. This compatibility registration preserves the old white-wash implementation evidence; it is not approval of the new bounded design. The new source files, style policy and candidate/P3 dependency fingerprints bind the proposed geometry separately.
 
@@ -75,3 +88,11 @@ Native JPEGs, worker receipts, exact snapshots/catalog pre/postimages, measured 
 - Accept final-head Windows/Linux pilot evidence and independent artifact replay before considering further Phase 6 work. Other operations/categories, live recovery and final production acceptance remain outside this fixture pilot.
 
 No live catalog write, public artwork publication, activation, automatic merge or deletion is authorized by this document.
+
+## Local evidence checkpoints
+
+Renderer/artwork checkpoint `5503ea2481ca675c3c38d3e6e8472df0efe6a1e8`: 56 renderer tests and 114 subtests passed (44.216s wall), plus all 14 focused Phase 6 provenance / inherited M6 batching checks (19.146s). Fresh bounded WDU candidate/composition/Phase 3 consumption passed in 212.001s; ordinary callers retain the legacy renderer. All eight colour renders reproduced direct-renderer JPEG bytes, kept the exact reviewed visible bounds and caption placement, and passed entry/closing checkout proofs (18.459s).
+
+The nine historical comparisons preserve their original catalog artwork/backgrounds and immutable baseline: seven JPEGs are byte-identical. Clone Wars changes from 1600 x 967 to 1490 x 900; X-Men changes from 1600 x 979 to 1471 x 900. Both remain centered at the original anchor and fit the 900px safe height. WDU has a measured 145px caption gap.
+
+Original shared-colour transport checkpoint `36082218ccae11fdeca8f06f953bf2870cb44715`: all nine native cohort/negative tests passed in 6556.177s wall, adding eight and preserving all 284 synthetic baseline posters. That proof remains archived separately and does not certify the new approved JPEGs. A final approved-byte transport run is required and will be recorded separately in the PR evidence index. Windows local evidence is available; Linux pilot execution and hosted final-head results remain pending. No repeated M7 replay or M6 hosted rerun was performed.

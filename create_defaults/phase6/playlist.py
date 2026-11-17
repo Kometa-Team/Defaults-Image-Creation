@@ -17,6 +17,9 @@ from create_defaults.bulk.common import BulkError, canonical, confined, fingerpr
 
 HERE = Path(__file__).resolve().parent
 REQUESTS = ('avp', 'babylon', 'bsg', 'gundam', 'jrrt', 'sao', 'stargate', 'wdu')
+# Maintainer-approved visual review colours, still restricted to owned fixtures.
+BACKGROUNDS = dict(avp='#1EAC1B', babylon='#5B4A86', bsg='#3C6382',
+    gundam='#285DA8', jrrt='#C28A25', sao='#25A6B2', stargate='#6C73A1', wdu='#797F48')
 _OWNED = weakref.WeakKeyDictionary()
 _PREPARED = weakref.WeakKeyDictionary()
 _VERIFICATION = ContextVar('offline_playlist_verification', default=None)
@@ -48,7 +51,7 @@ def manifest():
                 or proposed['semantic_key'] != 'pilot-'+label
                 or proposed['source_path'] != 'logos_playlist/'+label+'.png'
                 or proposed['rendered_caption'] != 'TIMELINE ORDER'
-                or proposed['fixture_background'] != '#123456'):
+                or proposed['fixture_background'] != BACKGROUNDS[label]):
             fail('manifest_mapping')
         identity = proposed['persistent_identity']
         if re.fullmatch(r'playlist\.[0-9a-f]{32}', identity) is None or UUID(identity.split('.')[1]).version != 4 or identity in ids:

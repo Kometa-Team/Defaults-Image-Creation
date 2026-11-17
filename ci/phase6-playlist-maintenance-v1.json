@@ -99,7 +99,7 @@
     },
     "create_defaults/lifecycle/PHASE6_PLAYLIST_PILOT.md": {
       "before_sha256": null,
-      "sha256": "c56cc7202854e0a92a2fad792cdd56030660f6f3c2ea9e2d01ef71c421f45351",
+      "sha256": "036bbef1a7e4a4418618250bf89462ac99127ce11ea7ef7681981cfde7d133e1",
       "text_lf": true
     },
     "create_defaults/lifecycle/ROADMAP.md": {
@@ -109,7 +109,7 @@
     },
     "create_defaults/phase6/PLAYLIST_PILOT_MANIFEST.json": {
       "before_sha256": null,
-      "sha256": "ae1398bcf579d6fc506a104bd537d5e0f6f32853b5ea3e0e235d6c941f10f084",
+      "sha256": "356deb472bb5b9e37bf27839cf847afd5fc9b3dfdaddb2f3dc25ac9a68a20b58",
       "text_lf": true
     },
     "create_defaults/phase6/__init__.py": {
@@ -164,12 +164,37 @@
     },
     "create_defaults/phase6/playlist.py": {
       "before_sha256": null,
-      "sha256": "d79ad993eff6f645b53f06e4a0bf9a62c9acda1622e15d938e92c342e7936acf",
+      "sha256": "9c06df38cbc78262501082db4838d84462121a7df3ad1957033ef187355e34a0",
       "text_lf": true
     },
     "create_defaults/phase6/render_review.py": {
       "before_sha256": null,
-      "sha256": "3af5602c9f81d2dd33c5743603d03d6e70eb5107ffb51aa87223cbe71166fde8",
+      "sha256": "68443877ccc7f6c8188cacff53b1556a5cc141c4ea025453eaa0edb812337454",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/colour-review.json": {
+      "before_sha256": null,
+      "sha256": "0a238b8c5fd47f696bb0bd9d95a058951893b8a7e7bac39f6bcf18ffccf44b06",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/eight-poster-colour-proposals.png": {
+      "before_sha256": null,
+      "sha256": "e4abeac2d62c028ce809824eb1311b7b3758383a36ce1fc7b1a0ab40d544b87e",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/historical-comparison.json": {
+      "before_sha256": null,
+      "sha256": "9389df55ef3f7af3c2eefef65dba85aab796d49a8ee809ca3198721e87360b48",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/nine-poster-historical-comparison.png": {
+      "before_sha256": null,
+      "sha256": "930bc0a0d0278e23569650398a4b1e69606e608f3469230af292bd0232a255a4",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/visual-approval.json": {
+      "before_sha256": null,
+      "sha256": "d21036c21ffbd01e86357327ecaa37d9d36f3d9e0ac6525aa8e91577a4f86360",
       "text_lf": true
     },
     "create_defaults/phase6/tests/conftest.py": {
@@ -180,6 +205,11 @@
     "create_defaults/phase6/tests/test_playlist_pilot.py": {
       "before_sha256": null,
       "sha256": "d6b10c2aaf8ea424d1b6646ef522939e15d3718e398dd4def2a20c569cecdf17",
+      "text_lf": true
+    },
+    "create_defaults/phase6/verify_approved_transport.py": {
+      "before_sha256": null,
+      "sha256": "5a82e05279f69f6a24448c7791af19b836f9f4d2d345c7c7a67dd8ace8fccff5",
       "text_lf": true
     },
     "create_defaults/poster_styles.py": {

@@ -36,14 +36,13 @@
         "public_path": "playlist/Alien & Predator (Timeline Order).jpg",
         "source_path": "logos_playlist/avp.png",
         "rendered_caption": "TIMELINE ORDER",
-        "fixture_background": "#123456"
+        "fixture_background": "#1EAC1B"
       },
       "status": "PROVISIONAL_FIXTURE_ONLY",
       "pending_decisions": [
-        "Confirm final display name, persistent registry reservation and output mappings.",
         "Approve exact logo treatment, complete artwork and assigned background separately.",
-        "Confirm Alien & Predator versus Alien vs. Predator naming.",
-        "Resolve the recorded edge/clipping, transparency and ICC diagnostics through separate real quality/background review."
+        "Resolve the recorded edge/clipping, transparency and ICC diagnostics through separate real quality/background review.",
+        "Live identity reservation and catalog mappings remain pending; approved visual preview grants no operational authority."
       ],
       "fixture_quality_review": {
         "kind": "offline-source-quality-fixture",
@@ -135,13 +134,13 @@
         "public_path": "playlist/Babylon 5 (Timeline Order).jpg",
         "source_path": "logos_playlist/babylon.png",
         "rendered_caption": "TIMELINE ORDER",
-        "fixture_background": "#123456"
+        "fixture_background": "#5B4A86"
       },
       "status": "PROVISIONAL_FIXTURE_ONLY",
       "pending_decisions": [
-        "Confirm final display name, persistent registry reservation and output mappings.",
         "Approve exact logo treatment, complete artwork and assigned background separately.",
-        "Resolve the recorded edge/clipping, transparency and ICC diagnostics through separate real quality/background review."
+        "Resolve the recorded edge/clipping, transparency and ICC diagnostics through separate real quality/background review.",
+        "Live identity reservation and catalog mappings remain pending; approved visual preview grants no operational authority."
       ],
       "fixture_quality_review": {
         "kind": "offline-source-quality-fixture",
@@ -235,13 +234,13 @@
         "public_path": "playlist/Battlestar Galactica (Timeline Order).jpg",
         "source_path": "logos_playlist/bsg.png",
         "rendered_caption": "TIMELINE ORDER",
-        "fixture_background": "#123456"
+        "fixture_background": "#3C6382"
       },
       "status": "PROVISIONAL_FIXTURE_ONLY",
       "pending_decisions": [
-        "Confirm final display name, persistent registry reservation and output mappings.",
         "Approve exact logo treatment, complete artwork and assigned background separately.",
-        "Resolve the recorded edge/clipping, transparency and ICC diagnostics through separate real quality/background review."
+        "Resolve the recorded edge/clipping, transparency and ICC diagnostics through separate real quality/background review.",
+        "Live identity reservation and catalog mappings remain pending; approved visual preview grants no operational authority."
       ],
       "fixture_quality_review": {
         "kind": "offline-source-quality-fixture",
@@ -332,14 +331,14 @@
         "public_path": "playlist/Mobile Suit Gundam (Timeline Order).jpg",
         "source_path": "logos_playlist/gundam.png",
         "rendered_caption": "TIMELINE ORDER",
-        "fixture_background": "#123456"
+        "fixture_background": "#285DA8"
       },
       "status": "PROVISIONAL_FIXTURE_ONLY",
       "pending_decisions": [
-        "Confirm final display name, persistent registry reservation and output mappings.",
         "Approve exact logo treatment, complete artwork and assigned background separately.",
         "Confirm Universal Century or another Gundam timeline.",
-        "Resolve the recorded edge/clipping, transparency and ICC diagnostics through separate real quality/background review."
+        "Resolve the recorded edge/clipping, transparency and ICC diagnostics through separate real quality/background review.",
+        "Live identity reservation and catalog mappings remain pending; approved visual preview grants no operational authority."
       ],
       "fixture_quality_review": {
         "kind": "offline-source-quality-fixture",
@@ -433,14 +432,14 @@
         "public_path": "playlist/Middle-earth (Timeline Order).jpg",
         "source_path": "logos_playlist/jrrt.png",
         "rendered_caption": "TIMELINE ORDER",
-        "fixture_background": "#123456"
+        "fixture_background": "#C28A25"
       },
       "status": "PROVISIONAL_FIXTURE_ONLY",
       "pending_decisions": [
-        "Confirm final display name, persistent registry reservation and output mappings.",
         "Approve exact logo treatment, complete artwork and assigned background separately.",
         "Confirm Middle-earth versus supplied Middle Earth Collection wording.",
-        "Resolve the recorded edge/clipping, transparency and ICC diagnostics through separate real quality/background review."
+        "Resolve the recorded edge/clipping, transparency and ICC diagnostics through separate real quality/background review.",
+        "Live identity reservation and catalog mappings remain pending; approved visual preview grants no operational authority."
       ],
       "fixture_quality_review": {
         "kind": "offline-source-quality-fixture",
@@ -532,13 +531,13 @@
         "public_path": "playlist/Sword Art Online (Timeline Order).jpg",
         "source_path": "logos_playlist/sao.png",
         "rendered_caption": "TIMELINE ORDER",
-        "fixture_background": "#123456"
+        "fixture_background": "#25A6B2"
       },
       "status": "PROVISIONAL_FIXTURE_ONLY",
       "pending_decisions": [
-        "Confirm final display name, persistent registry reservation and output mappings.",
         "Approve exact logo treatment, complete artwork and assigned background separately.",
-        "Resolve the recorded edge/clipping, transparency and ICC diagnostics through separate real quality/background review."
+        "Resolve the recorded edge/clipping, transparency and ICC diagnostics through separate real quality/background review.",
+        "Live identity reservation and catalog mappings remain pending; approved visual preview grants no operational authority."
       ],
       "fixture_quality_review": {
         "kind": "offline-source-quality-fixture",
@@ -632,13 +631,13 @@
         "public_path": "playlist/Stargate (Timeline Order).jpg",
         "source_path": "logos_playlist/stargate.png",
         "rendered_caption": "TIMELINE ORDER",
-        "fixture_background": "#123456"
+        "fixture_background": "#6C73A1"
       },
       "status": "PROVISIONAL_FIXTURE_ONLY",
       "pending_decisions": [
-        "Confirm final display name, persistent registry reservation and output mappings.",
         "Approve exact logo treatment, complete artwork and assigned background separately.",
-        "Resolve the recorded edge/clipping, transparency and ICC diagnostics through separate real quality/background review."
+        "Resolve the recorded edge/clipping, transparency and ICC diagnostics through separate real quality/background review.",
+        "Live identity reservation and catalog mappings remain pending; approved visual preview grants no operational authority."
       ],
       "fixture_quality_review": {
         "kind": "offline-source-quality-fixture",
@@ -729,13 +728,13 @@
         "public_path": "playlist/The Walking Dead Universe (Timeline Order).jpg",
         "source_path": "logos_playlist/wdu.png",
         "rendered_caption": "TIMELINE ORDER",
-        "fixture_background": "#123456"
+        "fixture_background": "#797F48"
       },
       "status": "PROVISIONAL_FIXTURE_ONLY",
       "pending_decisions": [
-        "Confirm final display name, persistent registry reservation and output mappings.",
         "Approve exact logo treatment, complete artwork and assigned background separately.",
-        "Resolve the recorded edge/clipping, transparency and ICC diagnostics through separate real quality/background review."
+        "Resolve the recorded edge/clipping, transparency and ICC diagnostics through separate real quality/background review.",
+        "Live identity reservation and catalog mappings remain pending; approved visual preview grants no operational authority."
       ],
       "fixture_quality_review": {
         "kind": "offline-source-quality-fixture",

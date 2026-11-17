@@ -1,0 +1,1431 @@
+{
+  "kind": "offline-playlist-style-artwork-review",
+  "head": "5503ea2481ca675c3c38d3e6e8472df0efe6a1e8",
+  "baseline": "dcbfa072dbedcb0069dd27be920ef3103687b5a4",
+  "baseline_renderer_raw_sha256": "51cfae66a3f0feb265a46e5d4c3024fc6daa66abefe453e21ba977fd21953305",
+  "style": {
+    "id": "playlist-contained-v1",
+    "canvas": [
+      2000,
+      3000
+    ],
+    "logo_box": [
+      200,
+      850,
+      1800,
+      1750
+    ],
+    "caption_box": [
+      50,
+      1850,
+      1950,
+      2050
+    ],
+    "minimum_vertical_gap": 100,
+    "logo_fit_policy": "contain-visible-alpha",
+    "logo_vertical_alignment": "center",
+    "caption_measurement": [
+      1900,
+      1000
+    ],
+    "caption_offset": 450,
+    "caption_font_size": 154
+  },
+  "fixture_background": "#123456",
+  "background_assignment_approved": false,
+  "pilot": [
+    {
+      "identity": "playlist.feec6426d0134e93973e8a2b36bd1ebe",
+      "filename": "Alien & Predator (Timeline Order).jpg",
+      "before": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\pilot\\before\\playlist\\Alien & Predator (Timeline Order).jpg",
+      "after": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\pilot\\after\\playlist\\Alien & Predator (Timeline Order).jpg",
+      "before_sha256": "41ee8950d9f312365f41d59f0fb4c96ffdb333c5f661cd24149741f49a9ce5b8",
+      "after_sha256": "41ee8950d9f312365f41d59f0fb4c96ffdb333c5f661cd24149741f49a9ce5b8",
+      "changed": false,
+      "before_logo_size": [
+        1600,
+        543
+      ],
+      "after_logo_size": [
+        1600,
+        543
+      ],
+      "before_visible_bounds": [
+        200,
+        1028,
+        1800,
+        1571
+      ],
+      "after_visible_bounds": [
+        200,
+        1028,
+        1800,
+        1571
+      ],
+      "logo_size_or_position_changed": false,
+      "reasons": [
+        "identical JPEG; source already fits at the original anchor"
+      ],
+      "base_color": "#123456",
+      "gradient": 1,
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            1592,
+            540
+          ],
+          "fitted_size": [
+            1600,
+            543
+          ],
+          "visible_bounds": [
+            200,
+            1028,
+            1800,
+            1571
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.0050251256281406,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 324
+      },
+      "caption_unchanged": true
+    },
+    {
+      "identity": "playlist.2d41498dd84b47a58ffd8f1728bfa32f",
+      "filename": "Babylon 5 (Timeline Order).jpg",
+      "before": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\pilot\\before\\playlist\\Babylon 5 (Timeline Order).jpg",
+      "after": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\pilot\\after\\playlist\\Babylon 5 (Timeline Order).jpg",
+      "before_sha256": "f087058e088da72fd945c4ce08adf0bbe9976ac9b6d6ce610dc8c229734a8fbe",
+      "after_sha256": "f087058e088da72fd945c4ce08adf0bbe9976ac9b6d6ce610dc8c229734a8fbe",
+      "changed": false,
+      "before_logo_size": [
+        1600,
+        771
+      ],
+      "after_logo_size": [
+        1600,
+        771
+      ],
+      "before_visible_bounds": [
+        200,
+        914,
+        1800,
+        1685
+      ],
+      "after_visible_bounds": [
+        200,
+        914,
+        1800,
+        1685
+      ],
+      "logo_size_or_position_changed": false,
+      "reasons": [
+        "identical JPEG; source already fits at the original anchor"
+      ],
+      "base_color": "#123456",
+      "gradient": 1,
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            521,
+            251
+          ],
+          "fitted_size": [
+            1600,
+            771
+          ],
+          "visible_bounds": [
+            200,
+            914,
+            1800,
+            1685
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 3.071017274472169,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 210
+      },
+      "caption_unchanged": true
+    },
+    {
+      "identity": "playlist.ca5bf3fafc7a4f888dbee738fc6fea09",
+      "filename": "Battlestar Galactica (Timeline Order).jpg",
+      "before": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\pilot\\before\\playlist\\Battlestar Galactica (Timeline Order).jpg",
+      "after": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\pilot\\after\\playlist\\Battlestar Galactica (Timeline Order).jpg",
+      "before_sha256": "7701267c74d0b8737bb8657ce77bc70938462bcb08fe95110cba9d4542716da1",
+      "after_sha256": "7701267c74d0b8737bb8657ce77bc70938462bcb08fe95110cba9d4542716da1",
+      "changed": false,
+      "before_logo_size": [
+        1600,
+        301
+      ],
+      "after_logo_size": [
+        1600,
+        301
+      ],
+      "before_visible_bounds": [
+        200,
+        1149,
+        1800,
+        1450
+      ],
+      "after_visible_bounds": [
+        200,
+        1149,
+        1800,
+        1450
+      ],
+      "logo_size_or_position_changed": false,
+      "reasons": [
+        "identical JPEG; source already fits at the original anchor"
+      ],
+      "base_color": "#123456",
+      "gradient": 1,
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            894,
+            168
+          ],
+          "fitted_size": [
+            1600,
+            301
+          ],
+          "visible_bounds": [
+            200,
+            1149,
+            1800,
+            1450
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.7897091722595078,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 445
+      },
+      "caption_unchanged": true
+    },
+    {
+      "identity": "playlist.70487260288d489fa6e4d06672990a67",
+      "filename": "Mobile Suit Gundam (Timeline Order).jpg",
+      "before": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\pilot\\before\\playlist\\Mobile Suit Gundam (Timeline Order).jpg",
+      "after": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\pilot\\after\\playlist\\Mobile Suit Gundam (Timeline Order).jpg",
+      "before_sha256": "d7477e1435ebdf4c1e16db03ebf353d05021b06b3be1b9b2279b72927ed7ebac",
+      "after_sha256": "d7477e1435ebdf4c1e16db03ebf353d05021b06b3be1b9b2279b72927ed7ebac",
+      "changed": false,
+      "before_logo_size": [
+        1600,
+        468
+      ],
+      "after_logo_size": [
+        1600,
+        468
+      ],
+      "before_visible_bounds": [
+        200,
+        1066,
+        1800,
+        1534
+      ],
+      "after_visible_bounds": [
+        200,
+        1066,
+        1800,
+        1534
+      ],
+      "logo_size_or_position_changed": false,
+      "reasons": [
+        "identical JPEG; source already fits at the original anchor"
+      ],
+      "base_color": "#123456",
+      "gradient": 1,
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            1090,
+            319
+          ],
+          "fitted_size": [
+            1600,
+            468
+          ],
+          "visible_bounds": [
+            200,
+            1066,
+            1800,
+            1534
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.4678899082568808,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 361
+      },
+      "caption_unchanged": true
+    },
+    {
+      "identity": "playlist.5eba47e8c0a04c2e9914f6618b621f2c",
+      "filename": "Middle-earth (Timeline Order).jpg",
+      "before": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\pilot\\before\\playlist\\Middle-earth (Timeline Order).jpg",
+      "after": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\pilot\\after\\playlist\\Middle-earth (Timeline Order).jpg",
+      "before_sha256": "69612f43433c270f4770b4dcac00bc9b34ff8d7f856439ed44d0a906ecc6dccb",
+      "after_sha256": "69612f43433c270f4770b4dcac00bc9b34ff8d7f856439ed44d0a906ecc6dccb",
+      "changed": false,
+      "before_logo_size": [
+        1600,
+        347
+      ],
+      "after_logo_size": [
+        1600,
+        347
+      ],
+      "before_visible_bounds": [
+        200,
+        1126,
+        1800,
+        1473
+      ],
+      "after_visible_bounds": [
+        200,
+        1126,
+        1800,
+        1473
+      ],
+      "logo_size_or_position_changed": false,
+      "reasons": [
+        "identical JPEG; source already fits at the original anchor"
+      ],
+      "base_color": "#123456",
+      "gradient": 1,
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            1593,
+            345
+          ],
+          "fitted_size": [
+            1600,
+            347
+          ],
+          "visible_bounds": [
+            200,
+            1126,
+            1800,
+            1473
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.0043942247332078,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 422
+      },
+      "caption_unchanged": true
+    },
+    {
+      "identity": "playlist.c48a75120f4f4a8aa290c3683b2dc1d2",
+      "filename": "Sword Art Online (Timeline Order).jpg",
+      "before": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\pilot\\before\\playlist\\Sword Art Online (Timeline Order).jpg",
+      "after": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\pilot\\after\\playlist\\Sword Art Online (Timeline Order).jpg",
+      "before_sha256": "db12373fb04dbee6c65b70772b6730de4b10684309a13ba85cfc3e899f65eaf2",
+      "after_sha256": "db12373fb04dbee6c65b70772b6730de4b10684309a13ba85cfc3e899f65eaf2",
+      "changed": false,
+      "before_logo_size": [
+        1600,
+        245
+      ],
+      "after_logo_size": [
+        1600,
+        245
+      ],
+      "before_visible_bounds": [
+        200,
+        1177,
+        1800,
+        1422
+      ],
+      "after_visible_bounds": [
+        200,
+        1177,
+        1800,
+        1422
+      ],
+      "logo_size_or_position_changed": false,
+      "reasons": [
+        "identical JPEG; source already fits at the original anchor"
+      ],
+      "base_color": "#123456",
+      "gradient": 1,
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            1280,
+            196
+          ],
+          "fitted_size": [
+            1600,
+            245
+          ],
+          "visible_bounds": [
+            200,
+            1177,
+            1800,
+            1422
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.25,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 473
+      },
+      "caption_unchanged": true
+    },
+    {
+      "identity": "playlist.11d52d3953a64d0faabcd7a692fbb87f",
+      "filename": "Stargate (Timeline Order).jpg",
+      "before": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\pilot\\before\\playlist\\Stargate (Timeline Order).jpg",
+      "after": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\pilot\\after\\playlist\\Stargate (Timeline Order).jpg",
+      "before_sha256": "d85393499ffe04bef1f147afb8cd68b2f8d1d9136f4fde0674c96d512c58346b",
+      "after_sha256": "d85393499ffe04bef1f147afb8cd68b2f8d1d9136f4fde0674c96d512c58346b",
+      "changed": false,
+      "before_logo_size": [
+        1600,
+        206
+      ],
+      "after_logo_size": [
+        1600,
+        206
+      ],
+      "before_visible_bounds": [
+        200,
+        1197,
+        1800,
+        1403
+      ],
+      "after_visible_bounds": [
+        200,
+        1197,
+        1800,
+        1403
+      ],
+      "logo_size_or_position_changed": false,
+      "reasons": [
+        "identical JPEG; source already fits at the original anchor"
+      ],
+      "base_color": "#123456",
+      "gradient": 1,
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            2000,
+            258
+          ],
+          "fitted_size": [
+            1600,
+            206
+          ],
+          "visible_bounds": [
+            200,
+            1197,
+            1800,
+            1403
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 0.8,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 492
+      },
+      "caption_unchanged": true
+    },
+    {
+      "identity": "playlist.0aabd1b1c7d44b198858057648ba9514",
+      "filename": "The Walking Dead Universe (Timeline Order).jpg",
+      "before": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\pilot\\before\\playlist\\The Walking Dead Universe (Timeline Order).jpg",
+      "after": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\pilot\\after\\playlist\\The Walking Dead Universe (Timeline Order).jpg",
+      "before_sha256": "74cfdf0c071fd8115454090526362d262c72b611554f5260170b756e4000263e",
+      "after_sha256": "9249b2908d56cc7ab3fb1c50696412a250557e1f2dbbf698c9532588436b66c8",
+      "changed": true,
+      "before_logo_size": [
+        1600,
+        1756
+      ],
+      "after_logo_size": [
+        820,
+        900
+      ],
+      "before_visible_bounds": [
+        200,
+        422,
+        1800,
+        2178
+      ],
+      "after_visible_bounds": [
+        590,
+        850,
+        1410,
+        1750
+      ],
+      "logo_size_or_position_changed": true,
+      "reasons": [
+        "full-canvas target-width height exceeded the new safe height"
+      ],
+      "base_color": "#123456",
+      "gradient": 1,
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            647,
+            710
+          ],
+          "fitted_size": [
+            820,
+            900
+          ],
+          "visible_bounds": [
+            590,
+            850,
+            1410,
+            1750
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.267605633802817,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 145
+      },
+      "caption_unchanged": true
+    }
+  ],
+  "historical": [
+    {
+      "identity": "playlist.playlist-arrowverse-timeline-order.09b7e4b8",
+      "filename": "Arrowverse (Timeline Order).jpg",
+      "before": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\historical\\before\\playlist\\Arrowverse (Timeline Order).jpg",
+      "after": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\historical\\after\\playlist\\Arrowverse (Timeline Order).jpg",
+      "before_sha256": "c793c1320b66f94d445828c5709f806c935739679b5d1c35d04de65dd758d8d3",
+      "after_sha256": "c793c1320b66f94d445828c5709f806c935739679b5d1c35d04de65dd758d8d3",
+      "changed": false,
+      "before_logo_size": [
+        1600,
+        330
+      ],
+      "after_logo_size": [
+        1600,
+        330
+      ],
+      "before_visible_bounds": [
+        200,
+        1135,
+        1800,
+        1465
+      ],
+      "after_visible_bounds": [
+        200,
+        1135,
+        1800,
+        1465
+      ],
+      "logo_size_or_position_changed": false,
+      "reasons": [
+        "identical JPEG; source already fits at the original anchor"
+      ],
+      "base_color": "#2B8F40",
+      "gradient": 1,
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            1592,
+            328
+          ],
+          "fitted_size": [
+            1600,
+            330
+          ],
+          "visible_bounds": [
+            200,
+            1135,
+            1800,
+            1465
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.0050251256281406,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 430
+      },
+      "caption_unchanged": true
+    },
+    {
+      "identity": "playlist.playlist-dc-animated-universe-timeline-order.66af9f87",
+      "filename": "DC Animated Universe (Timeline Order).jpg",
+      "before": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\historical\\before\\playlist\\DC Animated Universe (Timeline Order).jpg",
+      "after": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\historical\\after\\playlist\\DC Animated Universe (Timeline Order).jpg",
+      "before_sha256": "172552814739e0585b793945e7eec0e4942f540ab6a33842a1349289167c28e3",
+      "after_sha256": "172552814739e0585b793945e7eec0e4942f540ab6a33842a1349289167c28e3",
+      "changed": false,
+      "before_logo_size": [
+        1600,
+        496
+      ],
+      "after_logo_size": [
+        1600,
+        496
+      ],
+      "before_visible_bounds": [
+        200,
+        1052,
+        1800,
+        1548
+      ],
+      "after_visible_bounds": [
+        200,
+        1052,
+        1800,
+        1548
+      ],
+      "logo_size_or_position_changed": false,
+      "reasons": [
+        "identical JPEG; source already fits at the original anchor"
+      ],
+      "base_color": "#2832C4",
+      "gradient": 1,
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            1136,
+            352
+          ],
+          "fitted_size": [
+            1600,
+            496
+          ],
+          "visible_bounds": [
+            200,
+            1052,
+            1800,
+            1548
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.408450704225352,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 347
+      },
+      "caption_unchanged": true
+    },
+    {
+      "identity": "playlist.playlist-dragon-ball-timeline-order.24c7063f",
+      "filename": "Dragon Ball (Timeline Order).jpg",
+      "before": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\historical\\before\\playlist\\Dragon Ball (Timeline Order).jpg",
+      "after": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\historical\\after\\playlist\\Dragon Ball (Timeline Order).jpg",
+      "before_sha256": "538bd8fda6fbacf5a2f3ee8d9b5d094840b85a6f4b670735b4dcf0c2cc85d703",
+      "after_sha256": "538bd8fda6fbacf5a2f3ee8d9b5d094840b85a6f4b670735b4dcf0c2cc85d703",
+      "changed": false,
+      "before_logo_size": [
+        1600,
+        607
+      ],
+      "after_logo_size": [
+        1600,
+        607
+      ],
+      "before_visible_bounds": [
+        200,
+        996,
+        1800,
+        1603
+      ],
+      "after_visible_bounds": [
+        200,
+        996,
+        1800,
+        1603
+      ],
+      "logo_size_or_position_changed": false,
+      "reasons": [
+        "identical JPEG; source already fits at the original anchor"
+      ],
+      "base_color": "#E39D30",
+      "gradient": 1,
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            7336,
+            2785
+          ],
+          "fitted_size": [
+            1600,
+            607
+          ],
+          "visible_bounds": [
+            200,
+            996,
+            1800,
+            1603
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 0.21810250817884405,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 292
+      },
+      "caption_unchanged": true
+    },
+    {
+      "identity": "playlist.playlist-marvel-cinematic-universe-timeline-order.d704757c",
+      "filename": "Marvel Cinematic Universe (Timeline Order).jpg",
+      "before": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\historical\\before\\playlist\\Marvel Cinematic Universe (Timeline Order).jpg",
+      "after": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\historical\\after\\playlist\\Marvel Cinematic Universe (Timeline Order).jpg",
+      "before_sha256": "99935f92373eae8e5cde2f1ce96a159c5a0ccd59f9bb1712c647586e8103a3bc",
+      "after_sha256": "99935f92373eae8e5cde2f1ce96a159c5a0ccd59f9bb1712c647586e8103a3bc",
+      "changed": false,
+      "before_logo_size": [
+        1600,
+        768
+      ],
+      "after_logo_size": [
+        1600,
+        768
+      ],
+      "before_visible_bounds": [
+        200,
+        916,
+        1800,
+        1684
+      ],
+      "after_visible_bounds": [
+        200,
+        916,
+        1800,
+        1684
+      ],
+      "logo_size_or_position_changed": false,
+      "reasons": [
+        "identical JPEG; source already fits at the original anchor"
+      ],
+      "base_color": "#AD2B2B",
+      "gradient": 1,
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            1595,
+            766
+          ],
+          "fitted_size": [
+            1600,
+            768
+          ],
+          "visible_bounds": [
+            200,
+            916,
+            1800,
+            1684
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.0031347962382444,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 211
+      },
+      "caption_unchanged": true
+    },
+    {
+      "identity": "playlist.playlist-pok-mon-timeline-order.efe5925f",
+      "filename": "Pok\u00e9mon (Timeline Order).jpg",
+      "before": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\historical\\before\\playlist\\Pok\u00e9mon (Timeline Order).jpg",
+      "after": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\historical\\after\\playlist\\Pok\u00e9mon (Timeline Order).jpg",
+      "before_sha256": "d9f0f8195409897849972707cb57692d29fad53efdefffc1da6f5a7681f87e28",
+      "after_sha256": "d9f0f8195409897849972707cb57692d29fad53efdefffc1da6f5a7681f87e28",
+      "changed": false,
+      "before_logo_size": [
+        1600,
+        584
+      ],
+      "after_logo_size": [
+        1600,
+        584
+      ],
+      "before_visible_bounds": [
+        200,
+        1008,
+        1800,
+        1592
+      ],
+      "after_visible_bounds": [
+        200,
+        1008,
+        1800,
+        1592
+      ],
+      "logo_size_or_position_changed": false,
+      "reasons": [
+        "identical JPEG; source already fits at the original anchor"
+      ],
+      "base_color": "#FECA06",
+      "gradient": 1,
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            1597,
+            583
+          ],
+          "fitted_size": [
+            1600,
+            584
+          ],
+          "visible_bounds": [
+            200,
+            1008,
+            1800,
+            1592
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.0018785222291797,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 303
+      },
+      "caption_unchanged": true
+    },
+    {
+      "identity": "playlist.playlist-star-trek-timeline-order.53320ead",
+      "filename": "Star Trek (Timeline Order).jpg",
+      "before": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\historical\\before\\playlist\\Star Trek (Timeline Order).jpg",
+      "after": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\historical\\after\\playlist\\Star Trek (Timeline Order).jpg",
+      "before_sha256": "70acb5d956c94f84ec32bb3d89f7a99a3cd2871ff95cae1ab4421ba46ac0e370",
+      "after_sha256": "70acb5d956c94f84ec32bb3d89f7a99a3cd2871ff95cae1ab4421ba46ac0e370",
+      "changed": false,
+      "before_logo_size": [
+        1600,
+        891
+      ],
+      "after_logo_size": [
+        1600,
+        891
+      ],
+      "before_visible_bounds": [
+        200,
+        854,
+        1800,
+        1745
+      ],
+      "after_visible_bounds": [
+        200,
+        854,
+        1800,
+        1745
+      ],
+      "logo_size_or_position_changed": false,
+      "reasons": [
+        "identical JPEG; source already fits at the original anchor"
+      ],
+      "base_color": "#0193DD",
+      "gradient": 1,
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            1597,
+            889
+          ],
+          "fitted_size": [
+            1600,
+            891
+          ],
+          "visible_bounds": [
+            200,
+            854,
+            1800,
+            1745
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.0018785222291797,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 150
+      },
+      "caption_unchanged": true
+    },
+    {
+      "identity": "playlist.playlist-star-wars-the-clone-wars-timeline-order.c6750e0c",
+      "filename": "Star Wars The Clone Wars (Timeline Order).jpg",
+      "before": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\historical\\before\\playlist\\Star Wars The Clone Wars (Timeline Order).jpg",
+      "after": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\historical\\after\\playlist\\Star Wars The Clone Wars (Timeline Order).jpg",
+      "before_sha256": "703fe5c5fec332b7f6572f099dc9cfd481c36faaf84c59f24d6e3fd1e6eefd7b",
+      "after_sha256": "2de0e1ec2324c886301e771c92836acf42b4d92b60d2283e15e8f897b10fda22",
+      "changed": true,
+      "before_logo_size": [
+        1600,
+        967
+      ],
+      "after_logo_size": [
+        1490,
+        900
+      ],
+      "before_visible_bounds": [
+        200,
+        816,
+        1800,
+        1783
+      ],
+      "after_visible_bounds": [
+        255,
+        850,
+        1745,
+        1750
+      ],
+      "logo_size_or_position_changed": true,
+      "reasons": [
+        "full-canvas target-width height exceeded the new safe height"
+      ],
+      "base_color": "#ED1C24",
+      "gradient": 1,
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            1377,
+            832
+          ],
+          "fitted_size": [
+            1490,
+            900
+          ],
+          "visible_bounds": [
+            255,
+            850,
+            1745,
+            1750
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.0817307692307692,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 145
+      },
+      "caption_unchanged": true
+    },
+    {
+      "identity": "playlist.playlist-star-wars-timeline-order.0af9472c",
+      "filename": "Star Wars (Timeline Order).jpg",
+      "before": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\historical\\before\\playlist\\Star Wars (Timeline Order).jpg",
+      "after": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\historical\\after\\playlist\\Star Wars (Timeline Order).jpg",
+      "before_sha256": "c0575f1dd2ff087054db8569b03bb48fecbe1f3e08a4bc035ca5ceac27652877",
+      "after_sha256": "c0575f1dd2ff087054db8569b03bb48fecbe1f3e08a4bc035ca5ceac27652877",
+      "changed": false,
+      "before_logo_size": [
+        1600,
+        764
+      ],
+      "after_logo_size": [
+        1600,
+        764
+      ],
+      "before_visible_bounds": [
+        200,
+        918,
+        1800,
+        1682
+      ],
+      "after_visible_bounds": [
+        200,
+        918,
+        1800,
+        1682
+      ],
+      "logo_size_or_position_changed": false,
+      "reasons": [
+        "identical JPEG; source already fits at the original anchor"
+      ],
+      "base_color": "#F8C60A",
+      "gradient": 1,
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            1596,
+            762
+          ],
+          "fitted_size": [
+            1600,
+            764
+          ],
+          "visible_bounds": [
+            200,
+            918,
+            1800,
+            1682
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.0025062656641603,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 213
+      },
+      "caption_unchanged": true
+    },
+    {
+      "identity": "playlist.playlist-x-men-timeline-order.627ce505",
+      "filename": "X-Men (Timeline Order).jpg",
+      "before": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\historical\\before\\playlist\\X-Men (Timeline Order).jpg",
+      "after": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\historical\\after\\playlist\\X-Men (Timeline Order).jpg",
+      "before_sha256": "e1c2011e710fd4d0192226ae9df841249c9f0dd0eeefee193504f749bcb36832",
+      "after_sha256": "5e513164bb873d739b2df9cc500521c7449060ce0bce98e3a5786cf002f8f63f",
+      "changed": true,
+      "before_logo_size": [
+        1600,
+        979
+      ],
+      "after_logo_size": [
+        1471,
+        900
+      ],
+      "before_visible_bounds": [
+        200,
+        810,
+        1800,
+        1789
+      ],
+      "after_visible_bounds": [
+        264,
+        850,
+        1735,
+        1750
+      ],
+      "logo_size_or_position_changed": true,
+      "reasons": [
+        "full-canvas target-width height exceeded the new safe height"
+      ],
+      "base_color": "#636363",
+      "gradient": 1,
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            1587,
+            971
+          ],
+          "fitted_size": [
+            1471,
+            900
+          ],
+          "visible_bounds": [
+            264,
+            850,
+            1735,
+            1750
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 0.9268795056642637,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 145
+      },
+      "caption_unchanged": true
+    }
+  ],
+  "historical_changed": 2,
+  "historical_geometry_changed": 2,
+  "source_and_catalog_hashes_unchanged": true,
+  "source_hashes": {
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\logos_playlist\\Star Trek.png": "8a84de6dc3c0e5a5d6002f136b1b7fa496de929cba3b8035b32c92da13b2f2df",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\logos_playlist\\Star Wars.png": "ed6408d3e9134ef2c528e164ef204feb05148edc54f60abc98cbadfbd39d7cea",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\playlist.yml": "3082aa8194571c02483731476a002d9349fba9c18162c6d7e03779b3f629ad1a",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\logos_playlist\\dca.png": "94fba21cefc046ea0a4c4d813a0f376f8a9d85e9ca8441e7fc8eee651f066132",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\logos_playlist\\Star Wars The Clone Wars.png": "10e14d9cf5fdc3f63d06dde6690a89a0a8ae216d004e87729a09bcb793a62ebe",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\logos_playlist\\Pok\u00e9mon.png": "fc03b941138c112254d545e39be14d6c1f507a02c529b488a029ce1e420ecbde",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\phase6\\assets\\babylon.png": "fdf89f346410d2c0e9656bc9223ee35e7cc6377969f96cbaeffc3e9abf8e7e6a",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\phase6\\assets\\wdu.png": "f0ead3bedf57bfc333ea1517a12fba6e0f330d5cf941b27bc351398302f12cd1",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\logos_playlist\\Marvel Cinematic Universe.png": "75b0a1f58deca7a02ab0ebf15997da40d7554d82aa643e647f2d8495af4e82e8",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\logos_playlist\\DragonBall.png": "52f4b15178c1cce8e8c1aae9ba73e8683fa88123936b2487bd5d2b5cb0a8c799",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\logos_playlist\\Arrowverse.png": "256787f4761e845b3a626ab2c23b943eb626ce0d006a98a92a16ded4fac01f8b",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\phase6\\assets\\jrrt.png": "bab84403116d5c948fd4710640c3ecb0859dead9191eb75fdfeb492d4e473556",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\phase6\\assets\\avp.png": "121346d7375b741052e862b4e7124887bd1b85a1fb2e0c9c296e91669b1482d2",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\phase6\\assets\\stargate.png": "5842312151e2ae56020b94d030a447f886df49ac55f537129eb3187a1faeeab7",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\phase6\\assets\\gundam.png": "647992caa06ae2d2c1fd1210762f44cde0981699fd6242573a17342a88ac88e3",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\phase6\\assets\\bsg.png": "f59cf12ea9578825c118aa39e8e5209dc9d30ec4d3402c776fbb846ff133a276",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\index-v1.json": "b38800fa3e264d4646e4acb89a1c9d7853370635016aac949f558ab6e17939a8",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\phase6\\assets\\sao.png": "62c341d8c212eedfc070e72034db5aa530ef7ab7d3efe2ad46ed4eb9ee3e0209",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\logos_playlist\\X-men.png": "f57574eeefecafbb435ac45cd8b350e51cb8303a78a83f1cdb623e9a8d2191b4",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\profiles.yml": "fbdf6e652f5d5ec9917607cd6a9e524c31412bdc752481b2b6eb54d3269c8a76"
+  },
+  "contact_sheet": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\eight-poster-contact-sheet.png",
+  "wdu_comparison": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-previews\\wdu-before-after.png",
+  "live_registry_reservations": "PENDING",
+  "catalog_mappings": "PENDING",
+  "production_authorized": false,
+  "publication_authorized": false
+}

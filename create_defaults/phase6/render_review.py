@@ -1,7 +1,7 @@
 """Render the eight offline Playlist proposals and compare all nine baselines.
 
-All output is a new local review directory. Shared #123456 backgrounds are
-fixtures. This command creates no registry reservation, catalog write or grant.
+All output is a new local review directory. Backgrounds come from the exact
+offline pilot manifest. This creates no registry reservation, catalog write or grant.
 """
 import argparse
 import hashlib,importlib.util,io,json,os,subprocess,sys
@@ -113,14 +113,14 @@ def main(argv=None):
         small=ImageFont.truetype(str(current.ROOT/'fonts/BebasNeue-Regular.ttf'),19)
         sheet=Image.new('RGB',(1600,1420),'#EEF0F3');draw=ImageDraw.Draw(sheet)
         draw.text((25,16),'OFFLINE PLAYLIST STYLE REVIEW',font=font,fill='#102030')
-        draw.text((25,50),'Shared fixture background #123456 / gradient 1. Names confirmed; live identities, mappings and publication pending.',font=small,fill='#102030')
+        draw.text((25,50),'Approved offline colour assignments / gradient 1. Live identities, mappings and publication pending.',font=small,fill='#102030')
         for index,row in enumerate(rows):
             record=records[row['proposed']['persistent_identity']]
             x=(index%4)*400+20;y=100+(index//4)*650
             with Image.open(record['after']) as image:preview=image.resize((360,540),Image.Resampling.LANCZOS)
             sheet.paste(preview,(x,y))
             draw.text((x,y+548),row['proposed']['display_name'],font=font,fill='#102030')
-            draw.text((x,y+579),'Timeline Order | fixture #123456',font=small,fill='#102030')
+            draw.text((x,y+579),'Timeline Order | '+record['base_color'],font=small,fill='#102030')
             draw.text((x,y+604),'Caption gap: '+str(record['composition_style']['measured_gap'])+' px',font=small,fill='#102030')
         sheet.save(out/'eight-poster-contact-sheet.png')
         wdu=records[rows[-1]['proposed']['persistent_identity']]
@@ -135,7 +135,8 @@ def main(argv=None):
         record=dict(kind='offline-playlist-style-artwork-review',head=head,baseline=base,
             baseline_renderer_raw_sha256=hashlib.sha256(blob).hexdigest(),
             style=PLAYLIST.__dict__,
-            fixture_background='#123456',background_assignment_approved=False,
+            offline_background_assignments={r['request']:r['proposed']['fixture_background'] for r in rows},
+            live_background_assignment_approved=False,
             pilot=[records[r['proposed']['persistent_identity']] for r in rows],historical=history,
             historical_changed=sum(r['changed'] for r in history),
             historical_geometry_changed=sum(r['logo_size_or_position_changed'] for r in history),
