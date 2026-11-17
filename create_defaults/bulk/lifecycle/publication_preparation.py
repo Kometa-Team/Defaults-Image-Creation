@@ -176,6 +176,9 @@ def plan_operation(selection,patch,target,*,max_files=MAX_FILES,max_bytes=MAX_BY
         catalog_sha256=patch.sha256,source=catalog['source'],required_members=snapshot['members'],
         members=members,destination=baseline,manifest=manifest,plan=plan))
     CompositionArchive(selection.registry.operations.root).put_json(result.to_dict())
+    if pilot is not None:
+        from create_defaults.phase6.playlist import register_operator_preparation
+        register_operator_preparation(pilot,result,selection,patch,target)
     return result
 
 

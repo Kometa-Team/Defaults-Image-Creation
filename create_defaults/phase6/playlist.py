@@ -16,6 +16,7 @@ from create_defaults.bulk.common import BulkError, canonical, confined, fingerpr
 HERE = Path(__file__).resolve().parent
 REQUESTS = ('avp', 'babylon', 'bsg', 'gundam', 'jrrt', 'sao', 'stargate', 'wdu')
 _OWNED = weakref.WeakKeyDictionary()
+_PREPARED = weakref.WeakKeyDictionary()
 
 
 def fail(reason):
@@ -112,12 +113,12 @@ def _content(context, identity):
         background_proposal=p['fixture_background'], content_type='timeline-order')
 
 
-def _entry(context, identity):
+def _entry(context, identity, view=None):
     row = _rows(context).get(identity)
     if row is None:
         fail('unselected_identity')
     p = row['proposed']
-    entry = context.registry.view().entry(identity)
+    entry = (context.registry.view() if view is None else view).entry(identity)
     content = _content(context, identity)
     names = dict(display_name=p['display_name'], rendered_caption='TIMELINE ORDER', source=content['source'],
         local_path=p['local_path'], public_path=p['public_path'])
@@ -135,8 +136,9 @@ def _definitions(context, definitions):
     from create_defaults.bulk.contracts.playlist.validation import PlaylistBoundary, CONTRACT_SHA256, REGISTRY_SHA256, M2_SHA256
     from create_defaults.bulk.contracts.models import Identity
     boundary = PlaylistBoundary.load(contract_sha256=CONTRACT_SHA256, registry_sha256=REGISTRY_SHA256, adoption_sha256=M2_SHA256)
+    view = context.registry.view()
     for identity, definition in definitions.items():
-        entry = _entry(context, identity)
+        entry = _entry(context, identity, view)
         assigned = Identity.from_dict(dict(schema_version=1, kind='item-identity', id=identity,
             category='Playlist', semantic_member=None, **entry['names']))
         boundary.validate_proposed_definition(assigned, _content(context, identity), definition,
@@ -233,6 +235,56 @@ def preparation_membership(value):
         and m['previous_sha256'] is None and m['previous_git_blob'] == '0'*40 for m in value['members'])
 
 
+def register_operator_preparation(pilot, preparation, selection, catalog, target):
+    """Retain the actual native planner result for this trial's lifetime only."""
+    from create_defaults.bulk.lifecycle.preparation_models import Preparation
+    from create_defaults.bulk.lifecycle.publication_preparation import NativeSelection, OfflineDestination
+    from create_defaults.bulk.lifecycle.catalog_preparation import CatalogPatch
+    context = _context(pilot)
+    if (type(preparation) is not Preparation or type(selection) is not NativeSelection
+            or type(catalog) is not CatalogPatch or type(target) is not OfflineDestination
+            or selection.registry is not context.registry or catalog.source.pilot is not pilot
+            or target.pilot is not pilot or catalog.source.trial is not context.trial
+            or target.trial is not context.trial or not preparation_membership(preparation.to_dict())):
+        fail('operator_preparation')
+    _PREPARED[preparation] = (weakref.ref(pilot), catalog.sha256)
+
+
+def operator_membership(policy, members):
+    """Narrow exception inside the original test-only M6 operator policy.
+
+    No new policy flag or destination selector can mint this binding. Every
+    actual stage/draft still runs the unchanged M6 current review/CAS/byte/tree
+    guards; this function only recognizes the original native planner result.
+    """
+    for preparation, (reference, catalog_sha256) in tuple(_PREPARED.items()):
+        if preparation.sha256 != policy.get('preparation_sha256'):
+            continue
+        pilot = reference()
+        if pilot is None:
+            return False
+        context = _context(pilot)
+        value = preparation.to_dict()
+        wanted_policy = dict(mode='phase5-m6-offline-draft-transport',
+            preparation_sha256=preparation.sha256, catalog_sha256=catalog_sha256,
+            technical_batch_limits={k:value['plan'][k] for k in ('max_files','max_bytes')})
+        expected = {m['destination']:m for m in value['members'] if m['previous_sha256'] is None}
+        if (policy != wanted_policy or len(members) != len(expected)
+                or {m['destination'] for m in members} != set(expected)):
+            return False
+        keys = ('source','size','sha256','git_blob','previous_sha256','previous_git_blob')
+        view = context.registry.view()
+        for member in members:
+            original = expected[member['destination']]
+            _entry(context, original['identity'], view)
+            if (member.get('kind') != 'poster' or member.get('rename_from')
+                    or member.get('context_sha256') != preparation.sha256
+                    or any(member.get(k) != original[k] for k in keys)):
+                return False
+        return True
+    return False
+
+
 def source_quality_fixture(config, view, entry, report):
     """Acknowledge only recorded findings on exact owned fixture bytes.
 
@@ -253,7 +305,8 @@ def source_quality_fixture(config, view, entry, report):
             if not reject_links(getattr(config, name)).resolve().is_relative_to(context.trial.root):
                 fail('foreign_quality_root')
         identity = entry['id']
-        if entry != _entry(context, identity) or view.snapshot.sha256 != context.registry.view().snapshot.sha256:
+        current_view = context.registry.view()
+        if entry != _entry(context, identity, current_view) or view.snapshot.sha256 != current_view.snapshot.sha256:
             fail('quality_identity')
         row = _rows(context)[identity]
         review = row['fixture_quality_review']

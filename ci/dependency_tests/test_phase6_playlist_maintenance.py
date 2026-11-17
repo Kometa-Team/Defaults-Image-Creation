@@ -70,6 +70,22 @@ class Phase6PlaylistMaintenanceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Unapproved offline Playlist path'):
             pilot._regular_diff((row,), pilot.scope_members(), exact=True)
 
+    def test_symbolic_head_is_not_an_immutable_cache_key(self):
+        with self.assertRaisesRegex(ValueError, 'full SHA'):
+            pilot.proof(pilot.ROOT, 'HEAD')
+
+    def test_aggregate_closing_proof_rechecks_the_full_pilot_cohort(self):
+        from ci import phase5_m7_maintenance as m7
+        target=pilot.ROOT/'create_defaults/phase6/assets/avp.png'
+        raw=target.read_bytes()
+        try:
+            with self.assertRaisesRegex(ValueError, 'Changed physical offline Playlist successor'):
+                with m7._invocation(pilot.ROOT), m7._cohort_invocation(pilot.ROOT):
+                    pilot.verify_scope(pilot.ROOT, pilot.scope_members())
+                    target.write_bytes(raw+b'changed')
+        finally:
+            target.write_bytes(raw)
+
     def test_link_and_mode_changes_are_rejected(self):
         name = next(iter(pilot.ADDED))
         for mode in (b'120000', b'100755'):

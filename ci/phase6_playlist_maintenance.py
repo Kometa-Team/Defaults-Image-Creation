@@ -4,6 +4,7 @@ from functools import lru_cache
 import hashlib
 import json
 from pathlib import Path
+import re
 import subprocess
 from threading import get_ident
 
@@ -13,9 +14,9 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = 'dcbfa072dbedcb0069dd27be920ef3103687b5a4'
 OWNER = 'ci/phase6_playlist_maintenance.py'
 RECEIPT = 'ci/phase6-playlist-maintenance-v1.json'
-PIN = 'e670e8bc3d7a23c036906e56b8449f07b3b4948d300a7de92bff053ebc14150e'
+PIN = 'c749d63306fe27fcbebbd014f1771266610fb6cd10c8c709f1bb1bc1ead5f3d5'
 # Generated explicitly by the review tooling; never a directory-prefix grant.
-MODIFIED = frozenset(('ci/phase5_m7_maintenance.py', 'create_defaults/bulk/contracts/translation_preflight/adapters.py', 'create_defaults/bulk/lifecycle/catalog_preparation.py', 'create_defaults/bulk/lifecycle/composition.py', 'create_defaults/bulk/lifecycle/operations.py', 'create_defaults/bulk/lifecycle/preparation_models.py', 'create_defaults/bulk/lifecycle/publication_preparation.py', 'create_defaults/bulk/lifecycle/schemas/preparation-v1.schema.json', 'create_defaults/lifecycle/ROADMAP.md'))
+MODIFIED = frozenset(('ci/phase5_m7_maintenance.py', 'create_defaults/bulk/contracts/translation_preflight/adapters.py', 'create_defaults/bulk/lifecycle/catalog_preparation.py', 'create_defaults/bulk/lifecycle/composition.py', 'create_defaults/bulk/lifecycle/operations.py', 'create_defaults/bulk/lifecycle/preparation_models.py', 'create_defaults/bulk/lifecycle/publication_preparation.py', 'create_defaults/bulk/lifecycle/schemas/preparation-v1.schema.json', 'create_defaults/bulk/operator_publication.py', 'create_defaults/lifecycle/ROADMAP.md'))
 ADDED = frozenset(('.github/workflows/phase6-playlist-validation.yml', 'ci/dependency_tests/test_phase6_playlist_maintenance.py', 'create_defaults/lifecycle/PHASE6_PLAYLIST_PILOT.md', 'create_defaults/phase6/PLAYLIST_PILOT_MANIFEST.json', 'create_defaults/phase6/__init__.py', 'create_defaults/phase6/assets/avp.png', 'create_defaults/phase6/assets/babylon.png', 'create_defaults/phase6/assets/bsg.png', 'create_defaults/phase6/assets/gundam.png', 'create_defaults/phase6/assets/jrrt.png', 'create_defaults/phase6/assets/sao.png', 'create_defaults/phase6/assets/stargate.png', 'create_defaults/phase6/assets/wdu.png', 'create_defaults/phase6/fixtures.py', 'create_defaults/phase6/playlist.py', 'create_defaults/phase6/tests/conftest.py', 'create_defaults/phase6/tests/test_playlist_pilot.py'))
 BINARY = frozenset('create_defaults/phase6/assets/'+name+'.png' for name in
     ('avp', 'babylon', 'bsg', 'gundam', 'jrrt', 'sao', 'stargate', 'wdu'))
@@ -172,6 +173,8 @@ def _immutable_checked(head, raw):
 def proof(root, head, *, selected=None):
     if Path(root).resolve() != ROOT.resolve():
         raise ValueError('Foreign offline Playlist checkout')
+    if not isinstance(head, str) or re.fullmatch('[0-9a-f]{40}', head) is None:
+        raise ValueError('Offline Playlist immutable inputs require a full SHA')
     _ancestry(head)
     raw = regular(ROOT, RECEIPT).read_bytes()
     rows = _decode(raw)
@@ -229,12 +232,22 @@ def verify_scope(root, names):
     selected = names & scope_members()
     if not selected:
         return
-    from ci.people_colorize_maintenance import _head
-    entry = proof(root, _head(root))
+    from ci.phase5_m7_maintenance import _cohort_proof
+    entry = _cohort_proof(root, _pilot_cohort_proof)
+    if entry is not None:
+        # The aggregate rechecks this full physical cohort at its closing proof,
+        # after all historical projections, not merely at scope-check entry.
+        return
+    entry = _pilot_cohort_proof(root)
     if not selected <= scope_members():
         raise ValueError('Unapproved offline Playlist scope')
-    if proof(root, _head(root)) != entry:
+    if _pilot_cohort_proof(root) != entry:
         raise ValueError('Changed closing offline Playlist scope')
+
+
+def _pilot_cohort_proof(root):
+    from ci.people_colorize_maintenance import _head
+    return proof(root, _head(root))
 
 
 def verify_checkout(root=ROOT):

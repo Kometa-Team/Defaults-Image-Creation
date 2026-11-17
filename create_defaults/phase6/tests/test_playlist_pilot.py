@@ -103,6 +103,23 @@ def test_unrecorded_quality_findings_stay_blocked(single):
             context.registry.view().entry(identity), report)
 
 
+def test_operator_cannot_authorize_another_playlist_path(single):
+    from copy import deepcopy
+    from create_defaults.bulk.library_sources import sealed
+    from create_defaults.bulk.common import fingerprint
+    from create_defaults.bulk.operator_publication import approve, authorize
+    binding = single['native'].binding.to_dict()
+    policy = binding['authorization']['policy']
+    candidate = deepcopy(binding['manifest'])
+    candidate['members'][0]['destination'] = 'playlist/Unapproved addition.jpg'
+    candidate = sealed({k:v for k,v in candidate.items() if k != 'sha256'})
+    receipt = approve(candidate, policy, reviewer='bullmoose20', policy_hash=fingerprint(policy),
+        manifest_hash=candidate['sha256'], decision_text='UNAPPROVED PATH REJECTION FIXTURE ONLY',
+        accept_exceptions=True, allow_additions=['playlist/Unapproved addition.jpg'])
+    with pytest.raises(BulkError, match='offline_scope'):
+        authorize(candidate, policy, receipt)
+
+
 def test_closed_pilot_cannot_be_reused():
     from create_defaults.bulk.lifecycle.previews import CompositionTrial
     from create_defaults.phase4.tests.composition_samples import registry
