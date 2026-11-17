@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = 'dcbfa072dbedcb0069dd27be920ef3103687b5a4'
 OWNER = 'ci/phase6_playlist_maintenance.py'
 RECEIPT = 'ci/phase6-playlist-maintenance-v1.json'
-PIN = '481798da6f287504483f59227c0c08ad0851dc2f39eeea4b2a34bfbdd6d0c361'
+PIN = 'cbb38f6a9f3efd851bcd874b7413a48326aa05ff0b500884f64e140ac19611d2'
 # Generated explicitly by the review tooling; never a directory-prefix grant.
 MODIFIED = frozenset(('ci/phase5_m7_maintenance.py', 'create_defaults/bulk/contracts/translation_preflight/adapters.py', 'create_defaults/bulk/lifecycle/catalog_preparation.py', 'create_defaults/bulk/lifecycle/composition.py', 'create_defaults/bulk/lifecycle/operations.py', 'create_defaults/bulk/lifecycle/preparation_models.py', 'create_defaults/bulk/lifecycle/publication_preparation.py', 'create_defaults/bulk/lifecycle/schemas/preparation-v1.schema.json', 'create_defaults/bulk/operator_publication.py', 'create_defaults/lifecycle/ROADMAP.md'))
 ADDED = frozenset(('.github/workflows/phase6-playlist-validation.yml', 'ci/dependency_tests/test_phase6_playlist_maintenance.py', 'create_defaults/lifecycle/PHASE6_PLAYLIST_PILOT.md', 'create_defaults/phase6/PLAYLIST_PILOT_MANIFEST.json', 'create_defaults/phase6/__init__.py', 'create_defaults/phase6/assets/avp.png', 'create_defaults/phase6/assets/babylon.png', 'create_defaults/phase6/assets/bsg.png', 'create_defaults/phase6/assets/gundam.png', 'create_defaults/phase6/assets/jrrt.png', 'create_defaults/phase6/assets/sao.png', 'create_defaults/phase6/assets/stargate.png', 'create_defaults/phase6/assets/wdu.png', 'create_defaults/phase6/fixtures.py', 'create_defaults/phase6/playlist.py', 'create_defaults/phase6/tests/conftest.py', 'create_defaults/phase6/tests/test_playlist_pilot.py'))

@@ -111,6 +111,31 @@ def existing_fixture_posters():
     return result
 
 
+def verify_native_byte_responses(native, report):
+    """Reuse original streaming RemoteBytes against actual local Git blobs."""
+    from urllib.parse import unquote
+    import requests
+    from create_defaults.bulk.library_stage import RemoteBytes
+    members = native.preparation.to_dict()['members']
+    paths = {m['destination'] for m in members}
+    prefix = 'https://raw.githubusercontent.com/Kometa-Team/Default-Images/'+report['head']+'/'
+    class Response:
+        def __init__(self, raw):self.raw=raw
+        def __enter__(self):return self
+        def __exit__(self, *args):pass
+        def raise_for_status(self):pass
+        def iter_content(self, size):
+            for offset in range(0,len(self.raw),size):yield self.raw[offset:offset+size]
+    def local_get(session, url, **kwargs):
+        if not url.startswith(prefix) or kwargs != dict(stream=True, timeout=(15,90), allow_redirects=False):
+            raise AssertionError('Unowned native-byte request')
+        path=unquote(url[len(prefix):])
+        if path not in paths:raise AssertionError('Unexpected native-byte member')
+        return Response(git(native.root/'remote.git','show',report['head']+':'+path))
+    with patch.object(requests.Session, 'get', local_get):
+        RemoteBytes(native.root/'actual-native-byte-responses', native.binding.to_dict()['plan'])(report['head'], members)
+
+
 @contextmanager
 def case(labels, *, export=None):
     labels = tuple(labels)
@@ -171,6 +196,7 @@ def case(labels, *, export=None):
             raise AssertionError('Incomplete or non-preserving offline draft')
         if git(native.root/'remote.git', 'rev-parse', 'refs/heads/master').decode().strip() != destination.base['head']:
             raise AssertionError('Offline base branch moved')
+        verify_native_byte_responses(native, report)
         value = dict(row=row, inputs=inputs, authority=authority, archive=archive, state=state,
             bundle=bundle, decisions=decisions, snapshot=snapshot, pilot=pilot, transaction=transaction,
             source=source, selection=selection, catalog=catalog, destination=destination,
