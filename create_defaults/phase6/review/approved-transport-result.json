@@ -1,0 +1,132 @@
+{
+  "kind": "phase6-approved-eight-playlist-offline-transport",
+  "candidate_commit": "fa8870f4e23d6e0e0161b3fd43385ef9c90e045b",
+  "approved_renderer_commit": "5503ea2481ca675c3c38d3e6e8472df0efe6a1e8",
+  "visual_approval_sha256": "3e9bcf420a4607ff57fa83eff3a880339a8e70aa0b797b640d9755f793626dae",
+  "colour_review_sha256": "ebee94cbb62b9ada445a6e8a2482aeb73531fff7b347c778211a6dfbdbf1d076",
+  "contact_sheet_sha256": "e4abeac2d62c028ce809824eb1311b7b3758383a36ce1fc7b1a0ab40d544b87e",
+  "historical_comparison_sha256": "930bc0a0d0278e23569650398a4b1e69606e608f3469230af292bd0232a255a4",
+  "approved_matches": 8,
+  "composition_views": [
+    {
+      "appearance": "default",
+      "matched": 8
+    },
+    {
+      "appearance": "requested",
+      "matched": 8
+    }
+  ],
+  "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\final-approved-transport\\destination",
+  "transported_commit": "c0f91c5764872bace30227c91d42c6073524b8cc",
+  "posters": [
+    {
+      "display_name": "Alien & Predator",
+      "identity": "playlist.feec6426d0134e93973e8a2b36bd1ebe",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\final-approved-transport\\destination\\playlist\\Alien & Predator (Timeline Order).jpg",
+      "relative_path": "playlist/Alien & Predator (Timeline Order).jpg",
+      "expected_sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+      "actual_sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+      "remote_blob_sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+      "match": true
+    },
+    {
+      "display_name": "Babylon 5",
+      "identity": "playlist.2d41498dd84b47a58ffd8f1728bfa32f",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\final-approved-transport\\destination\\playlist\\Babylon 5 (Timeline Order).jpg",
+      "relative_path": "playlist/Babylon 5 (Timeline Order).jpg",
+      "expected_sha256": "4bde3a4a13e08ed9a30a8c2e7ed760d3959eab18d4edeaf2d710c29de6a4a0ca",
+      "actual_sha256": "4bde3a4a13e08ed9a30a8c2e7ed760d3959eab18d4edeaf2d710c29de6a4a0ca",
+      "remote_blob_sha256": "4bde3a4a13e08ed9a30a8c2e7ed760d3959eab18d4edeaf2d710c29de6a4a0ca",
+      "match": true
+    },
+    {
+      "display_name": "Battlestar Galactica",
+      "identity": "playlist.ca5bf3fafc7a4f888dbee738fc6fea09",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\final-approved-transport\\destination\\playlist\\Battlestar Galactica (Timeline Order).jpg",
+      "relative_path": "playlist/Battlestar Galactica (Timeline Order).jpg",
+      "expected_sha256": "4db6f349cd3591c4a3d52b642dfd6f253294fccba130d0558b7085cf973a429c",
+      "actual_sha256": "4db6f349cd3591c4a3d52b642dfd6f253294fccba130d0558b7085cf973a429c",
+      "remote_blob_sha256": "4db6f349cd3591c4a3d52b642dfd6f253294fccba130d0558b7085cf973a429c",
+      "match": true
+    },
+    {
+      "display_name": "Mobile Suit Gundam",
+      "identity": "playlist.70487260288d489fa6e4d06672990a67",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\final-approved-transport\\destination\\playlist\\Mobile Suit Gundam (Timeline Order).jpg",
+      "relative_path": "playlist/Mobile Suit Gundam (Timeline Order).jpg",
+      "expected_sha256": "864a16e906d71b3b9eaabe01ff9dca5f55d1cdee1527489fbf08b9a545e0b273",
+      "actual_sha256": "864a16e906d71b3b9eaabe01ff9dca5f55d1cdee1527489fbf08b9a545e0b273",
+      "remote_blob_sha256": "864a16e906d71b3b9eaabe01ff9dca5f55d1cdee1527489fbf08b9a545e0b273",
+      "match": true
+    },
+    {
+      "display_name": "Middle-earth",
+      "identity": "playlist.5eba47e8c0a04c2e9914f6618b621f2c",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\final-approved-transport\\destination\\playlist\\Middle-earth (Timeline Order).jpg",
+      "relative_path": "playlist/Middle-earth (Timeline Order).jpg",
+      "expected_sha256": "2e6ba926238e2c7d5213701a08d2c9cefe498ffa6c54c9c411ee488679b764d3",
+      "actual_sha256": "2e6ba926238e2c7d5213701a08d2c9cefe498ffa6c54c9c411ee488679b764d3",
+      "remote_blob_sha256": "2e6ba926238e2c7d5213701a08d2c9cefe498ffa6c54c9c411ee488679b764d3",
+      "match": true
+    },
+    {
+      "display_name": "Sword Art Online",
+      "identity": "playlist.c48a75120f4f4a8aa290c3683b2dc1d2",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\final-approved-transport\\destination\\playlist\\Sword Art Online (Timeline Order).jpg",
+      "relative_path": "playlist/Sword Art Online (Timeline Order).jpg",
+      "expected_sha256": "0221887405a7b2526afae40e0f770a8e9feb5ebbdde86789ce0c6125c7d201db",
+      "actual_sha256": "0221887405a7b2526afae40e0f770a8e9feb5ebbdde86789ce0c6125c7d201db",
+      "remote_blob_sha256": "0221887405a7b2526afae40e0f770a8e9feb5ebbdde86789ce0c6125c7d201db",
+      "match": true
+    },
+    {
+      "display_name": "Stargate",
+      "identity": "playlist.11d52d3953a64d0faabcd7a692fbb87f",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\final-approved-transport\\destination\\playlist\\Stargate (Timeline Order).jpg",
+      "relative_path": "playlist/Stargate (Timeline Order).jpg",
+      "expected_sha256": "8d93feff5ba739ba5aa31a0ba40b0d533e66a32cdf0a5857c8fd1fd76eec5e86",
+      "actual_sha256": "8d93feff5ba739ba5aa31a0ba40b0d533e66a32cdf0a5857c8fd1fd76eec5e86",
+      "remote_blob_sha256": "8d93feff5ba739ba5aa31a0ba40b0d533e66a32cdf0a5857c8fd1fd76eec5e86",
+      "match": true
+    },
+    {
+      "display_name": "The Walking Dead Universe",
+      "identity": "playlist.0aabd1b1c7d44b198858057648ba9514",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\final-approved-transport\\destination\\playlist\\The Walking Dead Universe (Timeline Order).jpg",
+      "relative_path": "playlist/The Walking Dead Universe (Timeline Order).jpg",
+      "expected_sha256": "a6622b755f339e22d813d98adc0d60c3d9289c172b0c2a224fceb32cb96413b3",
+      "actual_sha256": "a6622b755f339e22d813d98adc0d60c3d9289c172b0c2a224fceb32cb96413b3",
+      "remote_blob_sha256": "a6622b755f339e22d813d98adc0d60c3d9289c172b0c2a224fceb32cb96413b3",
+      "match": true
+    }
+  ],
+  "preserved_baseline_posters": 284,
+  "native_report": {
+    "verified_batches": 1,
+    "head": "c0f91c5764872bace30227c91d42c6073524b8cc",
+    "complete": true,
+    "commits": [
+      "c0f91c5764872bace30227c91d42c6073524b8cc"
+    ],
+    "draft_verified": true,
+    "draft_sha256": "8b80940adaf182b29b7eb929f474b21321966577963ec28fc50fcb928a4d044b",
+    "binding_sha256": "14c1100d9144e6dc1118edcb5b6062d09f0ad7cae26b162a2a1fa82dbbabcaf3",
+    "simulation": true,
+    "publication_authorized": false,
+    "operation_complete": false,
+    "remote_writes_authorized": false,
+    "network_writes": 0,
+    "ready": false,
+    "active": false
+  },
+  "native_proof_sha256": "17b48b51f3303158fc6743a8298860349a0cc9aadc54bd285225f449dd9f4b7b",
+  "transport_bundle_sha256": "59d7b12a1ad493d2c62f2bd23d0d098ac2ca278892237ea3fee30149085de11f",
+  "simulation": true,
+  "real_operational_approvals": 0,
+  "live_registry_reservations": "PENDING",
+  "catalog_mappings": "PENDING",
+  "publication_authorized": false,
+  "activation_authorized": false,
+  "elapsed_seconds": 6100.529
+}

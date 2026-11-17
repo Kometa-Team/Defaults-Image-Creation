@@ -99,7 +99,7 @@
     },
     "create_defaults/lifecycle/PHASE6_PLAYLIST_PILOT.md": {
       "before_sha256": null,
-      "sha256": "036bbef1a7e4a4418618250bf89462ac99127ce11ea7ef7681981cfde7d133e1",
+      "sha256": "5b6752dccb3b8b5aa0e70bbc54c1b614695da8df2aecf0f7a6c39e1086a2daa0",
       "text_lf": true
     },
     "create_defaults/lifecycle/ROADMAP.md": {
@@ -170,6 +170,26 @@
     "create_defaults/phase6/render_review.py": {
       "before_sha256": null,
       "sha256": "68443877ccc7f6c8188cacff53b1556a5cc141c4ea025453eaa0edb812337454",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/EVIDENCE_INDEX.md": {
+      "before_sha256": null,
+      "sha256": "1b4aab1058c8ec205d04af5b003509e9109f581e7777d3faa59a5a1bdd6466cb",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/approved-transport-native-proof.json": {
+      "before_sha256": null,
+      "sha256": "a24a5a2048aef01160b69f03a9f1a1076807925299050038246b9044e24a22c7",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/approved-transport-result.json": {
+      "before_sha256": null,
+      "sha256": "e061451e8bcda4ef4e3406509d360b28b58550d9f4803a94683715e15ff64fec",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/candidate-integrity-result.json": {
+      "before_sha256": null,
+      "sha256": "1143e345fbe76fed78662032dc20921106490800f625a17805cd79669cc38506",
       "text_lf": true
     },
     "create_defaults/phase6/review/colour-review.json": {
