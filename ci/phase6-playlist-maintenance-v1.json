@@ -374,7 +374,7 @@
     },
     "create_defaults/phase6/tests/staging_browser.cjs": {
       "before_sha256": null,
-      "sha256": "39fe60b4131f55a9a6b4e7bdc3f9a6efd8dfe874c1a7a9e9d8bfaf57d9a0595c",
+      "sha256": "c64fd9277d6fe150f285d3e2c5c7b8fced3c9d219672c447154845d6dcaa4d81",
       "text_lf": true
     },
     "create_defaults/phase6/tests/test_playlist_pilot.py": {

@@ -40,7 +40,8 @@ const check = (condition, message) => { if (!condition) throw new Error(message)
       await contributor.getByRole('button', {name:'Submit and preview', exact:true}).click();
       const selector = `.card[data-identity="${entry.identity}"]`;
       await contributor.locator(selector).waitFor();
-      await contributor.locator(selector + ' img').evaluate(image => image.decode());
+      await contributor.locator(selector + ' img').scrollIntoViewIfNeeded();
+      await contributor.waitForFunction(selector => {const image=document.querySelector(selector);return image?.complete && image.naturalWidth===2000;}, selector + ' img');
       const id = await contributor.locator(selector).getAttribute('data-id');
       if (index === 0) {
         const forbidden = await contributor.evaluate(async ({id, hash}) => {
@@ -63,7 +64,7 @@ const check = (condition, message) => { if (!condition) throw new Error(message)
         }
       }
       await maintainer.locator(selector + ' img').scrollIntoViewIfNeeded();
-      await maintainer.locator(selector + ' img').evaluate(image => image.decode());
+      await maintainer.waitForFunction(selector => {const image=document.querySelector(selector);return image?.complete && image.naturalWidth===2000;}, selector + ' img');
       const approving = maintainer.waitForResponse(response => response.url().endsWith('/api/approve') && response.request().method() === 'POST');
       await maintainer.locator(selector + ' [data-action="approve"]').click();
       const approved = await approving;
