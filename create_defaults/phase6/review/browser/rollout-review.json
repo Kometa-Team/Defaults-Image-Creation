@@ -1,0 +1,29 @@
+{
+  "kind": "playlist-two-file-rollout-review",
+  "status": "PREPARED_FOR_REVIEW_NOT_EXECUTED",
+  "browser_staging_pass": true,
+  "browser_candidate": "df96fc5a9b07ecd2b6e1196fe0c01f5faade3a5d",
+  "browser_result_sha256": "51eebac59a49bbac68ae4d901e544f9a30b99c03b0e391285f584a980321b098",
+  "production_baseline": {
+    "repository": "Kometa-Team/Default-Images",
+    "branch": "master",
+    "head": "dfff31ab08446353844bb97de601c3a64edc8220",
+    "tree": "66d0d890ab177d3d7f139c47f812999edad3a530"
+  },
+  "production_head_rechecked": "dfff31ab08446353844bb97de601c3a64edc8220",
+  "identities_and_paths_preserved": true,
+  "catalog_changes": [],
+  "unapplied_patch_sha256": "a32e232ae315b58ca05f443b4c5301ae2886950657f5b496652ec3167789f108",
+  "remaining_requirements": [
+    "Refresh production master HEAD/tree immediately before staging; reject drift or refresh membership and approval.",
+    "Revalidate pinned existing destination modes and blob IDs; no addition or rename is approved.",
+    "Create exact sealed operator inventory, proposed policy and candidate manifest; bind full context and preserve this visual approval.",
+    "Obtain actual supported maintainer reviewer attribution, exact manifest/policy hashes, explicit individual exceptions acceptance and draft-only staging decision.",
+    "Use generic operator replacement workflow, not the assigned-identity ADD-only Playlist lifecycle adapter.",
+    "Verify complete two-file M diff, old/new blob identities and candidate SHA256; verify actual remote bytes if separately authorized later."
+  ],
+  "native_historical_playlist_update_adapter": "PENDING",
+  "real_operational_authority": false,
+  "publication_authorized": false,
+  "activation_authorized": false
+}

@@ -1,0 +1,23 @@
+{
+  "candidate_commit": "df96fc5a9b07ecd2b6e1196fe0c01f5faade3a5d",
+  "creates": 1,
+  "replacements": 1,
+  "results": [
+    {
+      "identity": "playlist.feec6426d0134e93973e8a2b36bd1ebe",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\browser-session-df96fc5\\destination\\playlist\\Alien & Predator (Timeline Order).jpg",
+      "approved_sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+      "actual_sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+      "match": true
+    },
+    {
+      "identity": "playlist.playlist-x-men-timeline-order.627ce505",
+      "action": "REPLACE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\browser-session-df96fc5\\destination\\playlist\\X-Men (Timeline Order).jpg",
+      "approved_sha256": "5e513164bb873d739b2df9cc500521c7449060ce0bce98e3a5786cf002f8f63f",
+      "actual_sha256": "5e513164bb873d739b2df9cc500521c7449060ce0bce98e3a5786cf002f8f63f",
+      "match": true
+    }
+  ]
+}

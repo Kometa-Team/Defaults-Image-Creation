@@ -99,7 +99,7 @@
     },
     "create_defaults/lifecycle/PHASE6_PLAYLIST_PILOT.md": {
       "before_sha256": null,
-      "sha256": "5b6752dccb3b8b5aa0e70bbc54c1b614695da8df2aecf0f7a6c39e1086a2daa0",
+      "sha256": "1dac8cadf7fc73015389f02bfb54a38be885eca9c281902da70501269c1063d0",
       "text_lf": true
     },
     "create_defaults/lifecycle/ROADMAP.md": {
@@ -179,7 +179,7 @@
     },
     "create_defaults/phase6/review/EVIDENCE_INDEX.md": {
       "before_sha256": null,
-      "sha256": "1b4aab1058c8ec205d04af5b003509e9109f581e7777d3faa59a5a1bdd6466cb",
+      "sha256": "a09ef0d09171f139742b4095cedabad21caf0af6fe48169e4d4ab24ed8369600",
       "text_lf": true
     },
     "create_defaults/phase6/review/approved-transport-native-proof.json": {
@@ -190,6 +190,51 @@
     "create_defaults/phase6/review/approved-transport-result.json": {
       "before_sha256": null,
       "sha256": "e061451e8bcda4ef4e3406509d360b28b58550d9f4803a94683715e15ff64fec",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/browser/backend-and-source-checks.json": {
+      "before_sha256": null,
+      "sha256": "c6278480be78048daddb52967dcfa749957a8a282054d0eed70dc6be1ed5026e",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/browser/browser-result.json": {
+      "before_sha256": null,
+      "sha256": "51eebac59a49bbac68ae4d901e544f9a30b99c03b0e391285f584a980321b098",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/browser/browser-run.json": {
+      "before_sha256": null,
+      "sha256": "50aa7b0e8770e0453a507d5a26ff0d890be459abc3fb563dfcea9ebfbc6e0561",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/browser/first-two-result.json": {
+      "before_sha256": null,
+      "sha256": "a86135939d70ee4055083a1db9f1c182a1f6cc37a5c904177a8844587ea35b6c",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/browser/one-create-one-replacement.png": {
+      "before_sha256": null,
+      "sha256": "22e7c91d8bf48f000e6c819314949872140097189b104f76907dacffeffbe45f",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/browser/rollout-review.json": {
+      "before_sha256": null,
+      "sha256": "9e2e7e0f305ba897dbdba075002d37dd1571954309170475a895f2e54236136f",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/browser/staging-receipts.json": {
+      "before_sha256": null,
+      "sha256": "d642dd0c6143f51be73e5932c86c7e70c66911aa176a4c66fdc781f60be43500",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/browser/ten-item-staging.png": {
+      "before_sha256": null,
+      "sha256": "925306b2f7acc6fda38a0b209b5aca019ceacafc8b248df474c0c20f955c2296",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/browser/ui-source-integrity.json": {
+      "before_sha256": null,
+      "sha256": "248155e514e4bc96616a4eeb98dbd0dd4ff358fe8e1d99d50e32c7d6423b9762",
       "text_lf": true
     },
     "create_defaults/phase6/review/candidate-integrity-result.json": {
