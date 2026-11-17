@@ -234,6 +234,8 @@ def poster_candidate(registry,*,expected,paths,profiles_path,posters,content,con
     manifest=StablePlanner(view,config).plan(definitions,english,posters=posters,languages=("en",),dependency_artifacts=dependency_artifacts)
     if set(content)!={j["poster_id"] for j in manifest["jobs"]}:fail("candidate_content_membership")
     check_names(manifest["jobs"]);results=[]
+    from create_defaults.phase6.playlist import validation_manifests
+    per_item=validation_manifests(registry,config,resolution,manifest,english)
     for job in manifest["jobs"]:
         identity=job["poster_id"];entry=_member(view,identity)
         package,rule=require_variant(entry["category"],entry["variant"])
@@ -246,7 +248,7 @@ def poster_candidate(registry,*,expected,paths,profiles_path,posters,content,con
             assigned=Identity.from_dict(dict(schema_version=1,kind="item-identity",id=identity,category="Playlist",
                 display_name=names["display_name"],rendered_caption=names["rendered_caption"],source=names["source"],
                 local_path=names["local_path"],public_path=names["public_path"],semantic_member=None))
-            report=validate_candidate(resolution,manifest,identity,english,fixture_only=True,config=config,
+            report=validate_candidate(resolution,per_item.get(identity,manifest),identity,english,fixture_only=True,config=config,
                 content=content[identity],assigned_identity=assigned)
             results.append(dict(identity=identity,contract_sha256=package.contract.sha256,group=identity,
                 presentation="single",context_sha256=report["context_sha256"],source=names["source"],derived_white=False))

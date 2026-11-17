@@ -14,9 +14,9 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = 'dcbfa072dbedcb0069dd27be920ef3103687b5a4'
 OWNER = 'ci/phase6_playlist_maintenance.py'
 RECEIPT = 'ci/phase6-playlist-maintenance-v1.json'
-PIN = 'cbb38f6a9f3efd851bcd874b7413a48326aa05ff0b500884f64e140ac19611d2'
+PIN = '4fd9718eda9a358081353691a0bf5d6f9e11b88e570103aa5003515c935d738a'
 # Generated explicitly by the review tooling; never a directory-prefix grant.
-MODIFIED = frozenset(('ci/phase5_m7_maintenance.py', 'create_defaults/bulk/contracts/translation_preflight/adapters.py', 'create_defaults/bulk/lifecycle/catalog_preparation.py', 'create_defaults/bulk/lifecycle/composition.py', 'create_defaults/bulk/lifecycle/operations.py', 'create_defaults/bulk/lifecycle/preparation_models.py', 'create_defaults/bulk/lifecycle/publication_preparation.py', 'create_defaults/bulk/lifecycle/schemas/preparation-v1.schema.json', 'create_defaults/bulk/operator_publication.py', 'create_defaults/lifecycle/ROADMAP.md'))
+MODIFIED = frozenset(('ci/dependabot_maintenance.py', 'ci/phase5_m7_maintenance.py', 'create_defaults/bulk/contracts/translation_preflight/adapters.py', 'create_defaults/bulk/lifecycle/candidates.py', 'create_defaults/bulk/lifecycle/catalog_preparation.py', 'create_defaults/bulk/lifecycle/composition.py', 'create_defaults/bulk/lifecycle/operations.py', 'create_defaults/bulk/lifecycle/preparation_models.py', 'create_defaults/bulk/lifecycle/publication_preparation.py', 'create_defaults/bulk/lifecycle/schemas/preparation-v1.schema.json', 'create_defaults/bulk/operator_publication.py', 'create_defaults/lifecycle/ROADMAP.md'))
 ADDED = frozenset(('.github/workflows/phase6-playlist-validation.yml', 'ci/dependency_tests/test_phase6_playlist_maintenance.py', 'create_defaults/lifecycle/PHASE6_PLAYLIST_PILOT.md', 'create_defaults/phase6/PLAYLIST_PILOT_MANIFEST.json', 'create_defaults/phase6/__init__.py', 'create_defaults/phase6/assets/avp.png', 'create_defaults/phase6/assets/babylon.png', 'create_defaults/phase6/assets/bsg.png', 'create_defaults/phase6/assets/gundam.png', 'create_defaults/phase6/assets/jrrt.png', 'create_defaults/phase6/assets/sao.png', 'create_defaults/phase6/assets/stargate.png', 'create_defaults/phase6/assets/wdu.png', 'create_defaults/phase6/fixtures.py', 'create_defaults/phase6/playlist.py', 'create_defaults/phase6/tests/conftest.py', 'create_defaults/phase6/tests/test_playlist_pilot.py'))
 BINARY = frozenset('create_defaults/phase6/assets/'+name+'.png' for name in
     ('avp', 'babylon', 'bsg', 'gundam', 'jrrt', 'sao', 'stargate', 'wdu'))
@@ -228,6 +228,21 @@ def historical_bytes(root, name, current):
         return historical_bytes(root, name, current)
 
 
+def selected_hash(name, expected):
+    """Select the exact physical adoption successor, not a historical view."""
+    if name != 'create_defaults/bulk/operator_publication.py':
+        return expected
+    _, before, after = next(row for row in _decode(regular(ROOT, RECEIPT).read_bytes())
+        if row[0] == name)
+    if expected != before:
+        return expected
+    from ci.people_colorize_maintenance import _head
+    entry = proof(ROOT, _head(ROOT), selected={name})
+    if proof(ROOT, _head(ROOT), selected={name}) != entry:
+        raise ValueError('Changed closing offline Playlist adoption successor')
+    return after
+
+
 def verify_scope(root, names):
     selected = names & scope_members()
     if not selected:
@@ -250,9 +265,11 @@ def _pilot_cohort_proof(root):
     return proof(root, _head(root))
 
 
-def verify_checkout(root=ROOT):
+def verify_checkout(root=ROOT, *, expected_head=None):
     from ci.people_colorize_maintenance import _head
     entry = proof(root, _head(root))
+    if expected_head is not None and entry.head != expected_head:
+        raise ValueError('Offline Playlist expected HEAD differs from committed checkout')
     if proof(root, _head(root)) != entry:
         raise ValueError('Changed closing offline Playlist owner, receipt or HEAD')
     return dict(kind='phase6-offline-playlist-provenance', head=entry.head,
@@ -260,4 +277,5 @@ def verify_checkout(root=ROOT):
 
 
 if __name__ == '__main__':
-    print(json.dumps(verify_checkout(), sort_keys=True))
+    import os
+    print(json.dumps(verify_checkout(expected_head=os.environ.get('EXPECTED_HEAD')), sort_keys=True))

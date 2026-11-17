@@ -7,6 +7,11 @@ from ci.people_colorize_maintenance import _head
 
 
 class Phase6PlaylistMaintenanceTests(unittest.TestCase):
+    def test_independent_expected_head_is_required_when_supplied(self):
+        with self.assertRaisesRegex(ValueError,'expected HEAD differs'):
+            pilot.verify_checkout(expected_head='0'*40)
+        self.assertEqual(pilot.verify_checkout(expected_head=_head(pilot.ROOT))['head'],_head(pilot.ROOT))
+
     def test_exact_committed_pilot_and_receipt(self):
         result = pilot.verify_checkout()
         self.assertEqual(result['head'], _head(pilot.ROOT))
@@ -99,6 +104,31 @@ class Phase6PlaylistMaintenanceTests(unittest.TestCase):
                     target.write_bytes(raw+b'changed')
         finally:
             target.write_bytes(raw)
+
+    def test_adoption_selects_only_the_exact_fresh_operator_successor(self):
+        from pathlib import Path
+        from ci.dependency_maintenance import selected_hash
+        from ci.phase5_m6_maintenance import APPROVED
+        name='create_defaults/bulk/operator_publication.py'
+        before=APPROVED[name][0]
+        _, predecessor, after=next(row for row in pilot._decode(
+            (pilot.ROOT/pilot.RECEIPT).read_bytes()) if row[0]==name)
+        self.assertEqual(predecessor, APPROVED[name][1])
+        self.assertEqual(selected_hash(name, before), after)
+        self.assertEqual(selected_hash(name, '0'*64), '0'*64)
+        self.assertEqual(selected_hash('foreign.py', before), before)
+        original=Path.read_bytes
+        target=pilot.ROOT/name
+        raw=target.read_bytes()
+        for bad in (raw+b'changed', dict(pilot._blobs(pilot.BASE))[name], None):
+            def read(path):
+                if path == target:
+                    if bad is None:raise FileNotFoundError(name)
+                    return bad
+                return original(path)
+            with self.subTest(attack=bad is None), patch.object(Path,'read_bytes',read):
+                with self.assertRaises((ValueError,OSError)):
+                    selected_hash(name, before)
 
     def test_link_and_mode_changes_are_rejected(self):
         name = next(iter(pilot.ADDED))

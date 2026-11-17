@@ -13,9 +13,15 @@ from create_defaults.phase6.playlist import REQUESTS, HERE, manifest, for_candid
 EXPORT = Path(os.environ.get('PHASE6_PILOT_EXPORT', 'config/phase6-playlist-evidence/native'))
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture
 def single():
     with case(('avp',), export=EXPORT) as value:
+        yield value
+
+
+@pytest.fixture(scope='module')
+def cohort():
+    with case(REQUESTS, export=EXPORT) as value:
         yield value
 
 
@@ -30,43 +36,42 @@ def test_one_playlist_add_reaches_local_draft(single):
     assert single['synthetic_baseline_posters'] >= 36
 
 
-def test_all_eight_playlist_additions_preserve_existing_posters(single):
-    # Explicit dependency: prove one actual addition before exercising all eight.
-    assert single['report']['draft_verified']
-    with case(REQUESTS, export=EXPORT) as value:
-        expected = {r['proposed']['persistent_identity'] for r in manifest()['requests']}
-        assert set(value['snapshot'].to_dict()['members']) == expected
-        assert set(value['requested']) == set(REQUESTS)
-        assert value['partial']['verified_batches'] == 1 and not value['partial']['complete']
-        assert not value['partial']['draft_verified']
-        assert value['report']['verified_batches'] == 4
-        assert all(value['final_tree'][p] == row for p,row in value['baseline_tree'].items())
-        assert len(value['final_tree']) == len(value['baseline_tree'])+8
-        patch = json.loads(value['catalog'].document_json)
-        assert patch['unchanged_jobs'] == 9
-        assert patch['files']['genre.yml']['before_sha256'] == patch['files']['genre.yml']['after_sha256']
-        assert patch['files']['profiles.yml']['before_sha256'] == patch['files']['profiles.yml']['after_sha256']
-        assert value['historical_artwork_regenerated'] == 0
-        assert not value['production_authorized']
-        summary = dict(kind='phase6-eight-playlist-offline-pilot', success=True,
-            requests=list(REQUESTS), identities=sorted(expected), additions=8,
-            synthetic_baseline_posters=value['synthetic_baseline_posters'],
-            baseline_tree=value['baseline_tree'], final_tree=value['final_tree'],
-            catalog_sha256=value['catalog'].sha256, snapshot_sha256=value['snapshot'].sha256,
-            preparation_sha256=value['preparation'].sha256, report=value['report'],
-            baseline_bytes_are_synthetic=True, historical_artwork_regenerated=0,
-            real_approvals=0, production_authorized=False, publication_authorized=False)
-        path=EXPORT.parent/'eight-request-result.json'
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(summary, indent=2)+'\n', encoding='utf8')
+@pytest.mark.cohort
+def test_all_eight_playlist_additions_preserve_existing_posters(cohort):
+    # CI's separate job requires the successful single-addition job first.
+    value = cohort
+    expected = {r['proposed']['persistent_identity'] for r in manifest()['requests']}
+    assert set(value['snapshot'].to_dict()['members']) == expected
+    assert set(value['requested']) == set(REQUESTS)
+    assert value['report']['verified_batches'] == 1
+    assert all(value['final_tree'][p] == row for p,row in value['baseline_tree'].items())
+    assert len(value['final_tree']) == len(value['baseline_tree'])+8
+    patch = json.loads(value['catalog'].document_json)
+    assert patch['unchanged_jobs'] == 9
+    assert patch['files']['genre.yml']['before_sha256'] == patch['files']['genre.yml']['after_sha256']
+    assert patch['files']['profiles.yml']['before_sha256'] == patch['files']['profiles.yml']['after_sha256']
+    assert value['historical_artwork_regenerated'] == 0
+    assert not value['production_authorized']
+    summary = dict(kind='phase6-eight-playlist-offline-pilot', success=True,
+        requests=list(REQUESTS), identities=sorted(expected), additions=8,
+        synthetic_baseline_posters=value['synthetic_baseline_posters'],
+        baseline_tree=value['baseline_tree'], final_tree=value['final_tree'],
+        catalog_sha256=value['catalog'].sha256, snapshot_sha256=value['snapshot'].sha256,
+        preparation_sha256=value['preparation'].sha256, report=value['report'],
+        baseline_bytes_are_synthetic=True, historical_artwork_regenerated=0,
+        real_approvals=0, production_authorized=False, publication_authorized=False)
+    path=EXPORT.parent/'eight-request-result.json'
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(summary, indent=2)+'\n', encoding='utf8')
 
 
 @pytest.mark.parametrize('attack', ['tampered', 'missing', 'replaced-by-directory'])
-def test_staged_logo_is_fresh_on_each_call(single, attack):
-    pilot = single['pilot']
-    identity = single['snapshot'].to_dict()['members'][0]
+@pytest.mark.cohort
+def test_staged_logo_is_fresh_on_each_call(cohort, attack):
+    pilot = cohort['pilot']
+    identity = cohort['snapshot'].to_dict()['members'][0]
     source = pilot.entry(identity)['names']['source']
-    path = single['row'][0].config.asset_dir/source['path']
+    path = cohort['row'][0].config.asset_dir/source['path']
     raw = path.read_bytes()
     try:
         if attack == 'tampered':
@@ -82,44 +87,48 @@ def test_staged_logo_is_fresh_on_each_call(single, attack):
     assert hashlib.sha256(path.read_bytes()).hexdigest() == source['sha256']
 
 
-def test_playlist_update_stays_blocked(single):
+@pytest.mark.cohort
+def test_playlist_update_stays_blocked(cohort):
     from create_defaults.bulk.lifecycle.operations import propose
-    context = single['row'][1]
+    context = cohort['row'][1]
     with pytest.raises(BulkError, match='playlist_pilot_add_only'):
         propose(context.registry, before=context.candidate, candidate=context.candidate,
             identity='synthetic.operation.forbidden-update', operation='UPDATE')
 
 
-def test_unrecorded_quality_findings_stay_blocked(single):
+@pytest.mark.cohort
+def test_unrecorded_quality_findings_stay_blocked(cohort):
     from copy import deepcopy
     from create_defaults.phase6.playlist import source_quality_fixture
-    context=single['row'][1]
-    identity=single['snapshot'].to_dict()['members'][0]
-    row=single['pilot'].rows()[identity]
+    context=cohort['row'][1]
+    identity=cohort['snapshot'].to_dict()['members'][0]
+    row=cohort['pilot'].rows()[identity]
     report=deepcopy(row['fixture_quality_review']['report'])
     report['diagnostics'].append('unreviewed_new_finding')
     with pytest.raises(BulkError, match='unreviewed_fixture_quality'):
-        source_quality_fixture(single['row'][0].config, context.registry.view(),
+        source_quality_fixture(cohort['row'][0].config, context.registry.view(),
             context.registry.view().entry(identity), report)
 
 
-def test_operator_cannot_authorize_another_playlist_path(single):
+@pytest.mark.cohort
+def test_operator_cannot_authorize_another_playlist_path(cohort):
     from copy import deepcopy
     from create_defaults.bulk.library_sources import sealed
     from create_defaults.bulk.common import fingerprint
     from create_defaults.bulk.operator_publication import approve, authorize
-    binding = single['native'].binding.to_dict()
+    binding = cohort['native'].binding.to_dict()
     policy = binding['authorization']['policy']
     candidate = deepcopy(binding['manifest'])
     candidate['members'][0]['destination'] = 'playlist/Unapproved addition.jpg'
     candidate = sealed({k:v for k,v in candidate.items() if k != 'sha256'})
     receipt = approve(candidate, policy, reviewer='bullmoose20', policy_hash=fingerprint(policy),
         manifest_hash=candidate['sha256'], decision_text='UNAPPROVED PATH REJECTION FIXTURE ONLY',
-        accept_exceptions=True, allow_additions=['playlist/Unapproved addition.jpg'])
+        accept_exceptions=True, allow_additions=[m['destination'] for m in candidate['members']])
     with pytest.raises(BulkError, match='offline_scope'):
         authorize(candidate, policy, receipt)
 
 
+@pytest.mark.cohort
 def test_closed_pilot_cannot_be_reused():
     from create_defaults.bulk.lifecycle.previews import CompositionTrial
     from create_defaults.phase4.tests.composition_samples import registry
@@ -131,7 +140,67 @@ def test_closed_pilot_cannot_be_reused():
         pilot.rows()
 
 
+@pytest.mark.cohort
 def test_capability_cannot_adopt_a_live_root():
     from create_defaults.phase6.playlist import OfflinePlaylistPilot
     with pytest.raises(BulkError, match='owned_capability'):
         OfflinePlaylistPilot(HERE, object())
+
+
+@pytest.fixture(scope='module')
+def planned():
+    from create_defaults.bulk.lifecycle.previews import CompositionTrial
+    from create_defaults.phase4.tests.composition_samples import registry
+    from create_defaults.phase6.fixtures import _definitions
+    from create_defaults.phase6.playlist import OfflinePlaylistPilot
+    with CompositionTrial() as trial:
+        identities=registry(trial)
+        pilot=OfflinePlaylistPilot(trial, identities)
+        candidate=_definitions(trial,identities,REQUESTS)
+        yield trial, identities, pilot, candidate
+
+
+def test_preflight_every_cohort_job_uses_the_existing_single_item_validator(planned):
+    from create_defaults.bulk.lifecycle.candidates import resolve_stable
+    from create_defaults.bulk.contracts.expanded.validation import approved_english
+    from create_defaults.phase6.playlist import validation_manifests
+    trial, registry, pilot, candidate=planned
+    data=candidate.data()
+    resolution=resolve_stable(candidate.paths,candidate.profiles_path,registry.view())
+    plans=validation_manifests(registry,trial.config,resolution,data['manifest'],approved_english())
+    expected={r['proposed']['persistent_identity'] for r in manifest()['requests']}
+    assert set(plans)==expected=={row['identity'] for row in data['validation']}
+    for job in data['manifest']['jobs']:
+        assert plans[job['poster_id']]['jobs']==[job]
+        assert plans[job['poster_id']]['renderer']==data['manifest']['renderer']
+
+
+def test_preflight_original_validator_still_rejects_other_new_items(planned):
+    from create_defaults.bulk.lifecycle.candidates import resolve_stable
+    from create_defaults.bulk.contracts.expanded.validation import approved_english, validate_candidate
+    from create_defaults.bulk.contracts.models import Identity
+    trial, registry, pilot, candidate=planned
+    identity=candidate.posters[0]
+    entry=registry.view().entry(identity)
+    assigned=Identity.from_dict(dict(schema_version=1,kind='item-identity',id=identity,
+        category='Playlist',semantic_member=None,**entry['names']))
+    resolution=resolve_stable(candidate.paths,candidate.profiles_path,registry.view())
+    with pytest.raises(BulkError,match='m5_membership'):
+        validate_candidate(resolution,candidate.data()['manifest'],identity,approved_english(),
+            fixture_only=True,config=trial.config,content=json.loads(candidate.content_json)[identity],
+            assigned_identity=assigned)
+
+
+def test_preflight_resealed_omitted_cohort_job_is_rejected(planned):
+    from copy import deepcopy
+    from create_defaults.bulk.common import fingerprint
+    from create_defaults.bulk.lifecycle.candidates import resolve_stable
+    from create_defaults.bulk.contracts.expanded.validation import approved_english
+    from create_defaults.phase6.playlist import validation_manifests
+    trial, registry, pilot, candidate=planned
+    value=deepcopy(candidate.data()['manifest'])
+    value['jobs'].pop()
+    value['sha256']=fingerprint({k:v for k,v in value.items() if k!='sha256'})
+    resolution=resolve_stable(candidate.paths,candidate.profiles_path,registry.view())
+    with pytest.raises(BulkError):
+        validation_manifests(registry,trial.config,resolution,value,approved_english())

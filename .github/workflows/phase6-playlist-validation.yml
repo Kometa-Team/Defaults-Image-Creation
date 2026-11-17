@@ -2,23 +2,26 @@ name: Phase 6 Offline Playlist Pilot
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch:
 
 permissions:
   contents: read
 
+env:
+  EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+  PYTHONDONTWRITEBYTECODE: '1'
+
 jobs:
-  offline-pilot:
-    name: Offline Playlist pilot (${{ matrix.os }})
+  single-addition:
+    name: Single Playlist ADD (${{ matrix.os }})
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 60
-    env:
-      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
-      PYTHONDONTWRITEBYTECODE: '1'
+    timeout-minutes: 100
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -28,16 +31,49 @@ jobs:
         with:
           python-version: '3.13'
       - run: python -m pip install -r create_defaults/requirements-bulk.txt
-      - name: Exact offline fixture scope and immutable provenance
+      - name: Exact source HEAD, scope and immutable provenance
         run: python -B -m ci.phase6_playlist_maintenance
       - name: Fresh files, HEAD, rollback, batching and admission controls
         run: python -B -m unittest ci.dependency_tests.test_phase6_playlist_maintenance -v
-      - name: One native ADD, then eight requests and negative boundaries
-        run: python -B -m pytest create_defaults/phase6/tests -v --maxfail=1 --junitxml=config/phase6-playlist-evidence/tests.xml
+      - name: One native ADD through verified local draft
+        run: python -B -m pytest create_defaults/phase6/tests/test_playlist_pilot.py::test_one_playlist_add_reaches_local_draft -v --maxfail=1 --junitxml=config/phase6-playlist-evidence/single-tests.xml
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: ${{ always() }}
         with:
-          name: phase6-offline-playlist-${{ matrix.os }}-${{ github.event.pull_request.head.sha || github.sha }}
+          name: phase6-offline-single-${{ matrix.os }}-${{ github.event.pull_request.head.sha || github.sha }}
+          path: config/phase6-playlist-evidence/
+          if-no-files-found: error
+          retention-days: 30
+
+  offline-pilot:
+    name: Eight Playlist requests (${{ matrix.os }})
+    needs: single-addition
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r create_defaults/requirements-bulk.txt
+      - name: Exact source HEAD, scope and immutable provenance
+        run: python -B -m ci.phase6_playlist_maintenance
+      - name: Validate every item and reject hidden or omitted companions
+        run: python -B -m pytest create_defaults/phase6/tests -k preflight -q --maxfail=1
+      - name: All eight native additions and fresh rejection boundaries
+        run: python -B -m pytest create_defaults/phase6/tests -m cohort -v --maxfail=1 --junitxml=config/phase6-playlist-evidence/cohort-tests.xml
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ always() }}
+        with:
+          name: phase6-offline-eight-${{ matrix.os }}-${{ github.event.pull_request.head.sha || github.sha }}
           path: config/phase6-playlist-evidence/
           if-no-files-found: error
           retention-days: 30

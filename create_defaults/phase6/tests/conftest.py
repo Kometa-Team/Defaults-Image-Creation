@@ -2,6 +2,10 @@
 import pytest
 
 
+def pytest_configure(config):
+    config.addinivalue_line('markers', 'cohort: native eight-request pilot and its rejection boundaries')
+
+
 @pytest.fixture(autouse=True)
 def no_http(monkeypatch):
     import requests

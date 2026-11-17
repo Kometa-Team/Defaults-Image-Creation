@@ -194,6 +194,45 @@ class OfflinePlaylistPilot:
         return context.manifest_sha256
 
 
+def validation_manifests(registry, config, resolution, manifest, translations):
+    """Project a complete owned cohort into existing one-item validation plans.
+
+    This returns plans, not approvals. The candidate builder must still run the
+    unchanged M3 validator for every job. Each actual replayed job must equal its
+    member of the full plan. Unowned selections retain the original rejection.
+    """
+    if len(manifest['jobs']) <= 1:
+        return {}
+    for pilot, context in tuple(_OWNED.items()):
+        if context.registry is not registry:
+            continue
+        context = _context(pilot)
+        if config != context.trial.config:
+            fail('candidate_root')
+        from create_defaults.bulk.planner import validate_manifest
+        from create_defaults.bulk.contracts.expanded.resolution import plan
+        validate_manifest(manifest)
+        selected = {j['poster_id'] for j in manifest['jobs']}
+        data = resolution.data()
+        if (len(selected) != len(manifest['jobs']) or not selected <= set(_rows(context))
+                or set(data['expanded']) != selected or data['families']):
+            fail('validation_cohort_membership')
+        view, result = registry.view(), {}
+        for job in manifest['jobs']:
+            identity = job['poster_id']
+            _entry(context, identity, view)
+            if (job['kind'] != 'poster' or job['language'] != 'en'
+                    or resolution.definition(identity)['category'] != 'Playlist'):
+                fail('validation_cohort_membership')
+            one = plan(resolution, translations, config=config,
+                categories=manifest['selection']['categories'], posters=[identity], languages=['en'])
+            if canonical(one['jobs']) != canonical([job]) or one['renderer'] != manifest['renderer']:
+                fail('validation_cohort_job')
+            result[identity] = one
+        return result
+    return {}
+
+
 def for_candidate(candidate):
     from create_defaults.bulk.lifecycle.candidates import PosterCandidate
     if type(candidate) is not PosterCandidate:
