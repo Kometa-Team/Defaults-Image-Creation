@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = '1a367cda9c8e2c07cdcab2f3d4684b0cf03130e7'
 OWNER = 'ci/phase5_m7_maintenance.py'
 RECEIPT = 'ci/phase5-m7-maintenance-v1.json'
-PIN = 'c93844e15cf7d2df250d31b9b572f8b2b63c2c9fd057cd05d7a42e8d67040f2f'
+PIN = '71aae38e1b13eaff809fe8f442de7e705de07e8faeba3e321a4388b3a48d5eb2'
 MODIFIED = frozenset(('ci/phase4_m7.py', 'ci/phase4.py', 'ci/people_storage_maintenance.py',
                       'ci/phase5_m6_maintenance.py', 'create_defaults/lifecycle/ROADMAP.md',
                       'ci/dependency_tests/test_phase5_m6_maintenance.py',

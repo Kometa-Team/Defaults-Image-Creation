@@ -128,5 +128,46 @@ class ValidationTimeoutTests(unittest.TestCase):
         with self.assertRaises(ValueError):m6.verify_timeout_scope(ROOT,{'ci/unapproved.py'})
         with self.assertRaises(ValueError):m6.timeout_bindings(ROOT/'foreign')
 
+    def test_windows_foundations_exception_changes_only_its_budget(self):
+        name='.github/workflows/default-poster-validation.yml'
+        before=m6._git(ROOT,'show','8452b188187ef56d38d8e03cf25a26be9a454fe4:'+name).replace(b'\r\n',b'\n')
+        start=before.index(b'  phase4:\n');end=before.index(b'  people_security:\n',start)
+        job=before[start:end]
+        expression=b"${{ matrix.os == 'windows-latest' && matrix.group == 'foundations' && 90 || 60 }}"
+        self.assertEqual(job.count(b'    timeout-minutes: 60\n'),1)
+        expected=before[:start]+job.replace(b'    timeout-minutes: 60\n',b'    timeout-minutes: '+expression+b'\n')+before[end:]
+        current=(ROOT/name).read_bytes().replace(b'\r\n',b'\n')
+        self.assertEqual(current,expected)
+        m6.verify_timeout_scope(ROOT,{name})
+        read=Path.read_bytes
+        for bad in (before,current.replace(b'&& 90 || 60',b'&& 120 || 60'),
+                    current.replace(expression,expression.replace(b'windows-latest',b'ubuntu-latest')),
+                    current.replace(expression,expression.replace(b'foundations',b'atomic')),
+                    current.replace(b'&& 90 || 60',b'&& 90 || 90'),
+                    current.replace(b'  contents: read',b'  contents: write'),
+                    current.replace(b'run: python ci/phase4.py run',b'run: echo skipped')):
+            self.assertNotEqual(bad,current)
+            with self.subTest(sha256=m6.sha(bad)),patch.object(Path,'read_bytes',lambda p:bad if p==ROOT/name else read(p)),self.assertRaises(ValueError):
+                m6.verify_timeout_scope(ROOT,{name})
+
+    def test_historical_timeout_receipt_scope_is_exact_physical_and_committed(self):
+        name=m6.HISTORICAL_TIMEOUT_RECEIPT;target=ROOT/name
+        read=Path.read_bytes;good=read(target)
+        self.assertEqual(m6.sha(good),m6.HISTORICAL_TIMEOUT_SHA256)
+        m6.verify_timeout_scope(ROOT,{name})
+        for bad in (good+b'\n',good+b'\n# unapproved',read(ROOT/m6.TIMEOUT_RECEIPT)):
+            with self.subTest(sha256=m6.sha(bad)),patch.object(Path,'read_bytes',lambda p:bad if p==target else read(p)),self.assertRaises(ValueError):
+                m6.verify_timeout_scope(ROOT,{name})
+        def missing(path):
+            if path==target:raise FileNotFoundError(name)
+            return read(path)
+        with patch.object(Path,'read_bytes',missing),self.assertRaises(OSError):m6.verify_timeout_scope(ROOT,{name})
+        git=m6._git
+        def committed(root,*args):
+            return b'forged' if args==('show','HEAD:'+name) else git(root,*args)
+        with patch.object(m6,'_git',side_effect=committed),self.assertRaises(ValueError):m6.verify_timeout_scope(ROOT,{name})
+        for unknown in ('ci/unapproved-timeout-registration.json','.github/workflows/unrelated.yml'):
+            with self.subTest(path=unknown),self.assertRaises(ValueError):m6.verify_timeout_scope(ROOT,{name,unknown})
+
 
 if __name__=='__main__':unittest.main()

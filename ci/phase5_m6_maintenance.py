@@ -238,6 +238,9 @@ def verify_people_pr65_scope(root,names):
 TIMEOUT_RECEIPT='ci/validation-timeouts-windows-phase4-v1.json'
 TIMEOUT_BASE='8b90be3a2d72b9c11acd2aa51eb9f75d80d964a4'
 TIMEOUT_PIN='212b4d65d90ead56c680c4955b404b0d24550fd66b6e054c2e33941d5d75b509'
+# Retain the sealed original in older lifecycle diffs after selecting its successor.
+HISTORICAL_TIMEOUT_RECEIPT='ci/validation-timeouts-v1.json'
+HISTORICAL_TIMEOUT_SHA256='a9fd94c00117f5ad320c0e63c98f819b6a5950c5bd564437de35194f31d77541'
 TIMEOUT_MEMBERS=frozenset(['.github/workflows/default-poster-validation.yml', '.github/workflows/lifecycle-m6-validation.yml', '.github/workflows/lifecycle-m7-validation.yml', '.github/workflows/people-bulk-validation.yml', '.github/workflows/people-storage-validation.yml', '.github/workflows/phase5-m3-validation.yml', '.github/workflows/phase5-m4-validation.yml', '.github/workflows/phase5-m5-validation.yml', '.github/workflows/phase5-m6-validation.yml', 'ci/dependency_tests/test_phase5_m6_maintenance.py', 'ci/people_publication_maintenance.py', 'ci/people_unicode_maintenance.py', 'ci/phase5_m5_maintenance.py', 'ci/publication_tests/test_git_recovery_maintenance.py', 'ci/publication_tests/test_publication_maintenance.py', 'ci/publication_tests/test_validation_timeouts.py', 'ci/tests/test_validation.py', 'ci/unicode_tests/test_people_unicode_maintenance.py', 'create_defaults/phase4/m6_tests/test_ci_and_history.py', 'create_defaults/phase4/m7_tests/test_ci.py'])
 
 
@@ -390,10 +393,14 @@ def verify_timeouts(root=ROOT):
 
 
 def verify_timeout_scope(root,names):
-    if not names<=TIMEOUT_MEMBERS|{TIMEOUT_RECEIPT}:raise ValueError('Unapproved timeout scope')
+    if not names<=TIMEOUT_MEMBERS|{TIMEOUT_RECEIPT,HISTORICAL_TIMEOUT_RECEIPT}:raise ValueError('Unapproved timeout scope')
     bindings=verify_timeouts(root)
     for name in names:
-        expected=sha(regular(root,name).read_bytes()) if name==TIMEOUT_RECEIPT else bindings[name]['sha256']
+        if name==HISTORICAL_TIMEOUT_RECEIPT:
+            expected=HISTORICAL_TIMEOUT_SHA256
+            if sha(regular(root,name).read_bytes())!=expected:raise ValueError('Changed historical timeout receipt')
+        else:
+            expected=sha(regular(root,name).read_bytes()) if name==TIMEOUT_RECEIPT else bindings[name]['sha256']
         from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
         if sha(m7_bytes(root,name,_git(root,'show','HEAD:'+name)))!=expected:raise ValueError('Changed committed timeout successor: '+name)
 
@@ -657,7 +664,7 @@ def scope_members():
     from ci.phase4_m7 import ROOT as policy_root
     if Path(policy_root).resolve()!=ROOT.resolve():return frozenset()
     from ci.phase5_m7_maintenance import scope_members as m7_scope
-    return m7_scope() | ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}) | {RECOVERY_CI_RECEIPT,TIMEOUT_RECEIPT,GEOMETRY_RECEIPT,RETENTION_GEOMETRY_SOURCE,RETENTION_GEOMETRY_RECEIPT,COMPUTATION_RECEIPT} | TIMEOUT_MEMBERS | set(COMPUTATION_BEFORE) | set(PEOPLE_PR65_BEFORE) | {PEOPLE_PR65_RECEIPT}
+    return m7_scope() | ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}) | {RECOVERY_CI_RECEIPT,TIMEOUT_RECEIPT,HISTORICAL_TIMEOUT_RECEIPT,GEOMETRY_RECEIPT,RETENTION_GEOMETRY_SOURCE,RETENTION_GEOMETRY_RECEIPT,COMPUTATION_RECEIPT} | TIMEOUT_MEMBERS | set(COMPUTATION_BEFORE) | set(PEOPLE_PR65_BEFORE) | {PEOPLE_PR65_RECEIPT}
 
 
 def verify_scope(root,baseline,names):
@@ -680,7 +687,7 @@ def verify_scope(root,baseline,names):
     verify_retention_geometry_scope(root,names)
     verify_computation_scope(root,names)
     verify_people_pr65_scope(root,names)
-    verify_timeout_scope(root,names & (TIMEOUT_MEMBERS|{TIMEOUT_RECEIPT}))
+    verify_timeout_scope(root,names & (TIMEOUT_MEMBERS|{TIMEOUT_RECEIPT,HISTORICAL_TIMEOUT_RECEIPT}))
 
 
 def selected_hash(name,expected):
