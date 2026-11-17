@@ -244,7 +244,7 @@
     },
     "create_defaults/phase6/staging_app.html": {
       "before_sha256": null,
-      "sha256": "e619ddde2e50a9ad2e0b1a738762e70292b9decccaec327e7e2778a8863f937d",
+      "sha256": "ff2ec8e4c11ac773b24f2f499008e71069c8c430279f3de64f61628184971a59",
       "text_lf": true
     },
     "create_defaults/phase6/staging_app.js": {
@@ -374,7 +374,7 @@
     },
     "create_defaults/phase6/tests/staging_browser.cjs": {
       "before_sha256": null,
-      "sha256": "c64fd9277d6fe150f285d3e2c5c7b8fced3c9d219672c447154845d6dcaa4d81",
+      "sha256": "1d798ee9a611a823066384cfed57b79ec999112726f5b540539ffecc6f592ee7",
       "text_lf": true
     },
     "create_defaults/phase6/tests/test_playlist_pilot.py": {

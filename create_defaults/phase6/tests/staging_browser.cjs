@@ -42,6 +42,8 @@ const check = (condition, message) => { if (!condition) throw new Error(message)
       await contributor.locator(selector).waitFor();
       await contributor.locator(selector + ' img').scrollIntoViewIfNeeded();
       await contributor.waitForFunction(selector => {const image=document.querySelector(selector);return image?.complete && image.naturalWidth===2000;}, selector + ' img');
+      const dimensions = await contributor.locator(selector + ' img').boundingBox();
+      check(Math.abs(dimensions.width / dimensions.height - 2/3) < 0.01, 'Displayed preview must preserve the JPEG aspect ratio');
       const id = await contributor.locator(selector).getAttribute('data-id');
       if (index === 0) {
         const forbidden = await contributor.evaluate(async ({id, hash}) => {
@@ -96,6 +98,8 @@ const check = (condition, message) => { if (!condition) throw new Error(message)
     check(preserved===7 && fs.readdirSync(path.join(stateDir,'destination','playlist')).length===17, 'Incorrect destination inventory');
     check(errors.length === 0, 'Browser JavaScript error');
     check(requests.every(url => url.startsWith(server.url + '/')), 'Browser requested an external origin');
+    await maintainer.locator('.card img').evaluateAll(images => images.forEach(image => {image.loading='eager';}));
+    await maintainer.waitForFunction(() => [...document.querySelectorAll('.card img')].every(image => image.complete && image.naturalWidth===2000));
     await maintainer.screenshot({path:path.join(outputDir,'ten-item-staging.png'),fullPage:true});
     const receipts = path.join(stateDir,'staging-receipts.json');
     const result = {kind:'phase6-real-chrome-staging-result',candidate_commit:server.candidate_commit,browser:browser.version(),playwright:require(path.join(process.env.PLAYWRIGHT_MODULE || 'playwright-core','package.json')).version,creates:8,replacements:2,destination_hash_matches:10,untouched_historical_posters_preserved:7,total_destination_posters:17,results,rejections,receipt_sha256:checksum(receipts),fixture_manifest_sha256:checksum(path.join(fixtureDir,'ten-item-fixtures.json')),browser_javascript_errors:errors,external_browser_requests:0,elapsed_seconds:(Date.now()-started)/1000,simulation:true,role_scope:'local fixture access codes',native_lifecycle_replacement_acceptance:false,live_registry_reservations:'PENDING',catalog_mappings:'PENDING',publication_authorized:false,activation_authorized:false};
