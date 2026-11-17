@@ -53,6 +53,7 @@ def test_all_eight_playlist_additions_preserve_existing_posters(cohort):
     assert value['historical_artwork_regenerated'] == 0
     assert not value['production_authorized']
     summary = dict(kind='phase6-eight-playlist-offline-pilot', success=True,
+        source_head=value['source_head'],
         requests=list(REQUESTS), identities=sorted(expected), additions=8,
         synthetic_baseline_posters=value['synthetic_baseline_posters'],
         baseline_tree=value['baseline_tree'], final_tree=value['final_tree'],
@@ -124,8 +125,9 @@ def test_operator_cannot_authorize_another_playlist_path(cohort):
     receipt = approve(candidate, policy, reviewer='bullmoose20', policy_hash=fingerprint(policy),
         manifest_hash=candidate['sha256'], decision_text='UNAPPROVED PATH REJECTION FIXTURE ONLY',
         accept_exceptions=True, allow_additions=[m['destination'] for m in candidate['members']])
-    with pytest.raises(BulkError, match='offline_scope'):
+    with pytest.raises(BulkError) as rejected:
         authorize(candidate, policy, receipt)
+    assert rejected.value.code == 'offline_scope'
 
 
 @pytest.mark.cohort
@@ -185,10 +187,11 @@ def test_preflight_original_validator_still_rejects_other_new_items(planned):
     assigned=Identity.from_dict(dict(schema_version=1,kind='item-identity',id=identity,
         category='Playlist',semantic_member=None,**entry['names']))
     resolution=resolve_stable(candidate.paths,candidate.profiles_path,registry.view())
-    with pytest.raises(BulkError,match='m5_membership'):
+    with pytest.raises(BulkError) as rejected:
         validate_candidate(resolution,candidate.data()['manifest'],identity,approved_english(),
             fixture_only=True,config=trial.config,content=json.loads(candidate.content_json)[identity],
             assigned_identity=assigned)
+    assert rejected.value.code == 'm5_membership'
 
 
 def test_preflight_resealed_omitted_cohort_job_is_rejected(planned):
@@ -204,3 +207,30 @@ def test_preflight_resealed_omitted_cohort_job_is_rejected(planned):
     resolution=resolve_stable(candidate.paths,candidate.profiles_path,registry.view())
     with pytest.raises(BulkError):
         validation_manifests(registry,trial.config,resolution,value,approved_english())
+
+
+def test_preflight_owner_checks_remain_fresh_without_repeating_trial_history(planned):
+    from dataclasses import replace
+    trial, registry, pilot, candidate=planned
+    assert for_candidate(candidate) is pilot
+    foreign=replace(candidate,config=replace(candidate.config,offline=False))
+    with pytest.raises(BulkError,match='candidate_root'):
+        for_candidate(foreign)
+    marker=trial.root/'trial.json'
+    raw=marker.read_bytes()
+    try:
+        marker.unlink()
+        with pytest.raises(BulkError,match='closed_or_foreign_trial'):
+            for_candidate(candidate)
+    finally:
+        marker.write_bytes(raw)
+    identity=candidate.posters[0]
+    logo=trial.config.asset_dir/registry.view().entry(identity)['names']['source']['path']
+    raw=logo.read_bytes()
+    try:
+        logo.write_bytes(raw+b'changed')
+        with pytest.raises(BulkError,match='staged_logo_bytes'):
+            for_candidate(candidate)
+    finally:
+        logo.write_bytes(raw)
+    assert for_candidate(candidate) is pilot

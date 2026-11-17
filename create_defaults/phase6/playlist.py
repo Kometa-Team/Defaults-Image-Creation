@@ -242,12 +242,18 @@ def for_candidate(candidate):
             context = _context(pilot)
             if candidate.config != context.trial.config:
                 fail('candidate_root')
-            context.trial.require(candidate)
+            # _context already proves the exact live trial/config/root owner.
+            # _definitions below checks every exact Fixture source against one
+            # freshly replayed registry view. Trial.require would replay that
+            # same registry history again for each output. Keep its original
+            # composition call sites; don't duplicate it in this pilot helper.
             definitions = candidate.data()['effective_definitions']
             if (set(definitions) != set(candidate.graph.index().outputs) or candidate.data()['families']
                     or json.loads(candidate.content_json) != {i:_content(context, i) for i in definitions}):
                 fail('candidate_membership')
             _definitions(context, definitions)
+            if _context(pilot) is not context:
+                fail('candidate_owner_changed')
             return pilot
     return None
 

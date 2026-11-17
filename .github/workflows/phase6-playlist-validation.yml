@@ -37,6 +37,9 @@ jobs:
         run: python -B -m unittest ci.dependency_tests.test_phase6_playlist_maintenance -v
       - name: One native ADD through verified local draft
         run: python -B -m pytest create_defaults/phase6/tests/test_playlist_pilot.py::test_one_playlist_add_reaches_local_draft -v --maxfail=1 --junitxml=config/phase6-playlist-evidence/single-tests.xml
+      - name: Closing exact-head physical source proof
+        if: ${{ always() }}
+        run: python -B -m ci.phase6_playlist_maintenance
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: ${{ always() }}
         with:
@@ -70,6 +73,9 @@ jobs:
         run: python -B -m pytest create_defaults/phase6/tests -k preflight -q --maxfail=1
       - name: All eight native additions and fresh rejection boundaries
         run: python -B -m pytest create_defaults/phase6/tests -m cohort -v --maxfail=1 --junitxml=config/phase6-playlist-evidence/cohort-tests.xml
+      - name: Closing exact-head physical source proof
+        if: ${{ always() }}
+        run: python -B -m ci.phase6_playlist_maintenance
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: ${{ always() }}
         with:

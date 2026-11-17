@@ -142,6 +142,9 @@ def case(labels, *, export=None):
     allowed = {r['request'] for r in manifest()['requests']}
     if not labels or len(labels) != len(set(labels)) or not set(labels) <= allowed:
         raise ValueError('Exact nonempty pilot request subset required')
+    source_head = git(HERE.parent.parent, 'rev-parse', 'HEAD').decode().strip()
+    if os.environ.get('EXPECTED_HEAD', source_head) != source_head:
+        raise AssertionError('Fixture source checkout differs from independently supplied HEAD')
     with CompositionTrial() as trial:
         registry = cs.registry(trial)
         pilot = OfflinePlaylistPilot(trial, registry)
@@ -194,12 +197,14 @@ def case(labels, *, export=None):
         if git(native.root/'remote.git', 'rev-parse', 'refs/heads/master').decode().strip() != destination.base['head']:
             raise AssertionError('Offline base branch moved')
         verify_native_byte_responses(native, report)
+        if git(HERE.parent.parent, 'rev-parse', 'HEAD').decode().strip() != source_head:
+            raise AssertionError('Fixture source HEAD moved during native verification')
         value = dict(row=row, inputs=inputs, authority=authority, archive=archive, state=state,
             bundle=bundle, decisions=decisions, snapshot=snapshot, pilot=pilot, transaction=transaction,
             source=source, selection=selection, catalog=catalog, destination=destination,
             preparation=preparation, protocol=protocol, native=native, report=report,
             baseline_tree=initial, final_tree=final, synthetic_baseline_posters=len(existing),
-            requested=labels, historical_artwork_regenerated=0, production_authorized=False)
+            requested=labels, source_head=source_head, historical_artwork_regenerated=0, production_authorized=False)
         if export is not None:
             from create_defaults.phase5.m6_tests.helpers import export_native
             old = os.environ.get('M6_NATIVE_EXPORT')
