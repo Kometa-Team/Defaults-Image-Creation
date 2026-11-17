@@ -108,7 +108,14 @@ class NativeSelection:
         if review.to_dict()['state']!='MAINTAINER_APPROVED' or bundle.sha256!=s['review_bundle_sha256']:fail('current_review')
         from ..contracts.evidence_consumption import ConsumptionAttestation,revalidate
         before=ConsumptionAttestation.from_dict(json.loads(s['phase3_json']))
-        current=revalidate(before,expected_sha256=before.sha256,**self.inputs.phase3_inputs)
+        if pilot is None:
+            current=revalidate(before,expected_sha256=before.sha256,**self.inputs.phase3_inputs)
+        else:
+            # Only the owned Playlist fixture shares its cohort entry proof.
+            # Each request still projects fresh physical sources, and the scope
+            # replays the registry and exact boundary again before returning.
+            with pilot.verification():
+                current=revalidate(before,expected_sha256=before.sha256,**self.inputs.phase3_inputs)
         if current.encoded!=before.encoded:fail('current_phase3')
         # M4/M6 replay above validates native pixels, original review decisions,
         # immutable snapshots and original owned receipt/job records.

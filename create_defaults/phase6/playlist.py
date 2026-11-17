@@ -4,6 +4,8 @@ This capability can only refer to a newly created CompositionTrial and its
 native identity registry. It supplies technical evidence, never live approval.
 """
 from dataclasses import dataclass
+from contextlib import contextmanager
+from contextvars import ContextVar
 import hashlib
 import json
 from pathlib import Path
@@ -17,6 +19,7 @@ HERE = Path(__file__).resolve().parent
 REQUESTS = ('avp', 'babylon', 'bsg', 'gundam', 'jrrt', 'sao', 'stargate', 'wdu')
 _OWNED = weakref.WeakKeyDictionary()
 _PREPARED = weakref.WeakKeyDictionary()
+_VERIFICATION = ContextVar('offline_playlist_verification', default=None)
 
 
 def fail(reason):
@@ -130,13 +133,20 @@ def _entry(context, identity, view=None):
     return entry
 
 
+def _boundary():
+    from create_defaults.bulk.contracts.playlist.validation import PlaylistBoundary, CONTRACT_SHA256, REGISTRY_SHA256, M2_SHA256
+    return PlaylistBoundary.load(contract_sha256=CONTRACT_SHA256, registry_sha256=REGISTRY_SHA256, adoption_sha256=M2_SHA256)
+
+
 def _definitions(context, definitions):
     if not definitions or not set(definitions) <= set(_rows(context)):
         fail('definition_membership')
-    from create_defaults.bulk.contracts.playlist.validation import PlaylistBoundary, CONTRACT_SHA256, REGISTRY_SHA256, M2_SHA256
     from create_defaults.bulk.contracts.models import Identity
-    boundary = PlaylistBoundary.load(contract_sha256=CONTRACT_SHA256, registry_sha256=REGISTRY_SHA256, adoption_sha256=M2_SHA256)
-    view = context.registry.view()
+    proof = _VERIFICATION.get()
+    if proof is not None and proof[0] is context:
+        _, boundary, view = proof
+    else:
+        boundary, view = _boundary(), context.registry.view()
     for identity, definition in definitions.items():
         entry = _entry(context, identity, view)
         assigned = Identity.from_dict(dict(schema_version=1, kind='item-identity', id=identity,
@@ -179,6 +189,29 @@ class OfflinePlaylistPilot:
 
     def require_definitions(self, definitions):
         _definitions(_context(self), definitions)
+
+    @contextmanager
+    def verification(self):
+        """Share only an entry proof, with fresh sources and a closing proof.
+
+        A new public call never inherits another call's observation. Nested
+        consumption keeps the same owner; no caller may provide a registry view.
+        """
+        context = _context(self)
+        previous = _VERIFICATION.get()
+        if previous is not None:
+            fail('nested_verification')
+        boundary, view = _boundary(), context.registry.view()
+        token = _VERIFICATION.set((context, boundary, view))
+        try:
+            yield
+            if _context(self) is not context:
+                fail('verification_owner_changed')
+            _boundary()
+            if context.registry.view().snapshot.sha256 != view.snapshot.sha256:
+                fail('verification_registry_changed')
+        finally:
+            _VERIFICATION.reset(token)
 
     def require_request(self, request, definition):
         context = _context(self)

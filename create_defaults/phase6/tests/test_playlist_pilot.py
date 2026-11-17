@@ -234,3 +234,59 @@ def test_preflight_owner_checks_remain_fresh_without_repeating_trial_history(pla
     finally:
         logo.write_bytes(raw)
     assert for_candidate(candidate) is pilot
+
+
+def test_preflight_phase3_cohort_reuses_entry_but_replays_closing_proof(planned):
+    from unittest.mock import patch
+    from create_defaults.phase6 import playlist
+    _, registry, pilot, candidate = planned
+    definitions = candidate.data()['effective_definitions']
+    with patch.object(registry, 'view', wraps=registry.view) as views, patch.object(
+            playlist, '_boundary', wraps=playlist._boundary) as boundaries:
+        for _ in range(2):
+            with pilot.verification():
+                pilot.require_definitions(definitions)
+                pilot.require_definitions(definitions)
+        assert views.call_count == boundaries.call_count == 4
+        pilot.require_definitions(definitions)
+        pilot.require_definitions(definitions)
+        assert views.call_count == boundaries.call_count == 6
+
+
+@pytest.mark.parametrize('attack', ['tampered', 'missing', 'replaced-by-directory'])
+def test_preflight_phase3_closing_proof_rejects_changed_registry_bytes(planned, attack):
+    _, registry, pilot, candidate = planned
+    pin = registry.view().snapshot.sha256
+    path = registry.operations.contracts.root/'objects'/(pin+'.json')
+    raw = path.read_bytes()
+    try:
+        with pytest.raises((BulkError, FileNotFoundError, IsADirectoryError, PermissionError)):
+            with pilot.verification():
+                pilot.require_definitions(candidate.data()['effective_definitions'])
+                if attack == 'tampered':
+                    path.write_bytes(raw+b'changed')
+                else:
+                    path.unlink()
+                    if attack == 'replaced-by-directory':
+                        path.mkdir()
+    finally:
+        if path.is_dir():path.rmdir()
+        path.write_bytes(raw)
+    # Neither successful nor rejected scopes may leave a proof for the next call.
+    pilot.require_definitions(candidate.data()['effective_definitions'])
+
+
+def test_preflight_phase3_scope_keeps_each_staged_source_read_fresh(planned):
+    trial, registry, pilot, candidate = planned
+    definitions = candidate.data()['effective_definitions']
+    path = trial.config.asset_dir/registry.view().entry(candidate.posters[0])['names']['source']['path']
+    raw = path.read_bytes()
+    try:
+        with pilot.verification():
+            pilot.require_definitions(definitions)
+            path.write_bytes(raw+b'changed')
+            with pytest.raises(BulkError, match='staged_logo_bytes'):
+                pilot.require_definitions(definitions)
+            path.write_bytes(raw)
+    finally:
+        path.write_bytes(raw)

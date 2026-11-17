@@ -54,7 +54,7 @@
     },
     "create_defaults/bulk/lifecycle/publication_preparation.py": {
       "before_sha256": "9a0808658ce7ff6786f04a4979cf7af14fc9c3cf25e1c75bbf46bec099781fc8",
-      "sha256": "2dd820dad9224fca0396e2e937dd05e9e54e7a406549bf8332cd8184f3076d4a",
+      "sha256": "81035cfee1795bab5b060dc639f6412f774f36648dab6ede542243564321dc79",
       "text_lf": true
     },
     "create_defaults/bulk/lifecycle/schemas/preparation-v1.schema.json": {
@@ -134,7 +134,7 @@
     },
     "create_defaults/phase6/playlist.py": {
       "before_sha256": null,
-      "sha256": "a0b331377ca55d3c936907a775353bc1ee55c68639ce06e067971d623d3f68e2",
+      "sha256": "d79ad993eff6f645b53f06e4a0bf9a62c9acda1622e15d938e92c342e7936acf",
       "text_lf": true
     },
     "create_defaults/phase6/tests/conftest.py": {
@@ -144,7 +144,7 @@
     },
     "create_defaults/phase6/tests/test_playlist_pilot.py": {
       "before_sha256": null,
-      "sha256": "8accefc5e320d40d9d5b8587ae5a94f4551914fd3c73383ed94f37cfd8e2761a",
+      "sha256": "d6b10c2aaf8ea424d1b6646ef522939e15d3718e398dd4def2a20c569cecdf17",
       "text_lf": true
     }
   },
