@@ -6,6 +6,7 @@ from pathlib import Path
 import subprocess
 
 from ci.people_storage_maintenance import regular
+from ci.phase5_m7_maintenance import owned_call as _m7_owned_call, MODIFIED as _M7_MODIFIED, _cohort_proof
 
 ROOT=Path(__file__).resolve().parents[1]
 BASE='9da96b0df12526daaee6156bc7778bbd57d9e8b6'
@@ -158,8 +159,12 @@ def _people_pr65_before(name):
 def _people_pr65_ancestry(head):_git(ROOT,'merge-base','--is-ancestor',PEOPLE_PR65_BASE,head)
 
 
-def people_pr65_bindings(root=ROOT):
+@_m7_owned_call(error_prefix='Changed closing People PR65 provenance')
+def people_pr65_bindings(root=ROOT, *, _witness=False):
     if Path(root).resolve()!=ROOT.resolve():raise ValueError('Foreign People PR65 checkout')
+    if not _witness:
+        proof=_cohort_proof(root,_people_cohort_proof)
+        if proof is not None:return _binding_copy(proof[2])
     from ci.people_colorize_maintenance import _head
     head=_head(ROOT)
     _people_pr65_ancestry(head)
@@ -174,16 +179,40 @@ def people_pr65_bindings(root=ROOT):
         if set(b)!={'before_sha256','sha256'} or b['before_sha256']!=PEOPLE_PR65_BEFORE[name]:
             raise ValueError('Changed People PR65 binding')
         if b['before_sha256'] is not None:_people_pr65_before(name)
-        if sha(regular(root,name).read_bytes())!=b['sha256']:
-            raise ValueError('Changed physical People PR65 successor: '+name)
+        _people_physical(root,name,b)
     if _head(ROOT)!=head or regular(root,PEOPLE_PR65_RECEIPT).read_bytes()!=raw:
         raise ValueError('Changed closing People PR65 provenance')
-    return v['files']
+    return (head,raw,_binding_rows(v['files'])) if _witness else v['files']
+
+
+def _binding_rows(bindings):
+    return tuple((name,b['before_sha256'],b['sha256']) for name,b in sorted(bindings.items()))
+
+
+def _binding_copy(rows):
+    return {name:dict(before_sha256=before,sha256=after) for name,before,after in rows}
+
+
+def _people_cohort_proof(root):
+    return people_pr65_bindings(root,_witness=True)
+
+
+def _people_physical(root,name,binding):
+    from ci.phase5_m7_maintenance import _read_owned_predecessor
+    try:
+        current=(_read_owned_predecessor(root,name) if name in _M7_MODIFIED
+                 else regular(root,name).read_bytes())
+    except ValueError as error:
+        raise ValueError('Changed closing People PR65 provenance: '+str(error)) from error
+    if sha(current)!=binding['sha256']:
+        raise ValueError('Changed physical People PR65 successor: '+name)
 
 
 def people_pr65_bytes(root,name,current):
     if name not in PEOPLE_PR65_BEFORE:return current
     binding=people_pr65_bindings(root)[name]
+    if _cohort_proof(root,_people_cohort_proof) is not None:
+        _people_physical(root,name,binding)
     return _people_pr65_before(name) if binding['before_sha256'] is not None and sha(current)==binding['sha256'] else current
 
 
@@ -201,13 +230,17 @@ def verify_people_pr65_scope(root,names):
     bindings=people_pr65_bindings(root)
     for name in names & (set(PEOPLE_PR65_BEFORE)|{PEOPLE_PR65_RECEIPT}):
         expected=sha(regular(root,name).read_bytes()) if name==PEOPLE_PR65_RECEIPT else bindings[name]['sha256']
-        if sha(_git(root,'show','HEAD:'+name))!=expected:raise ValueError('Changed committed People PR65 successor: '+name)
+        from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+        if sha(m7_bytes(root,name,_git(root,'show','HEAD:'+name)))!=expected:raise ValueError('Changed committed People PR65 successor: '+name)
 
 
 # CI timeout-only successor. Historical receipts and assertions are immutable.
-TIMEOUT_RECEIPT='ci/validation-timeouts-v1.json'
+TIMEOUT_RECEIPT='ci/validation-timeouts-windows-phase4-v1.json'
 TIMEOUT_BASE='8b90be3a2d72b9c11acd2aa51eb9f75d80d964a4'
-TIMEOUT_PIN='e9373555b583f9e1e638e0c343ea186a6d28276ee930e3e72d9751a77662ee97'
+TIMEOUT_PIN='212b4d65d90ead56c680c4955b404b0d24550fd66b6e054c2e33941d5d75b509'
+# Retain the sealed original in older lifecycle diffs after selecting its successor.
+HISTORICAL_TIMEOUT_RECEIPT='ci/validation-timeouts-v1.json'
+HISTORICAL_TIMEOUT_SHA256='a9fd94c00117f5ad320c0e63c98f819b6a5950c5bd564437de35194f31d77541'
 TIMEOUT_MEMBERS=frozenset(['.github/workflows/default-poster-validation.yml', '.github/workflows/lifecycle-m6-validation.yml', '.github/workflows/lifecycle-m7-validation.yml', '.github/workflows/people-bulk-validation.yml', '.github/workflows/people-storage-validation.yml', '.github/workflows/phase5-m3-validation.yml', '.github/workflows/phase5-m4-validation.yml', '.github/workflows/phase5-m5-validation.yml', '.github/workflows/phase5-m6-validation.yml', 'ci/dependency_tests/test_phase5_m6_maintenance.py', 'ci/people_publication_maintenance.py', 'ci/people_unicode_maintenance.py', 'ci/phase5_m5_maintenance.py', 'ci/publication_tests/test_git_recovery_maintenance.py', 'ci/publication_tests/test_publication_maintenance.py', 'ci/publication_tests/test_validation_timeouts.py', 'ci/tests/test_validation.py', 'ci/unicode_tests/test_people_unicode_maintenance.py', 'create_defaults/phase4/m6_tests/test_ci_and_history.py', 'create_defaults/phase4/m7_tests/test_ci.py'])
 
 
@@ -305,10 +338,12 @@ def verify_computation_scope(root,names):
         current=regular(root,name).read_bytes()
         expected=sha(current) if name==COMPUTATION_RECEIPT else COMPUTATION_AFTER[name]
         if name in PEOPLE_PR65_BEFORE:expected=people_pr65_bindings(root)[name]['sha256']
-        if sha(current)!=expected or sha(_git(root,'show','HEAD:'+name))!=expected:
+        from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+        if sha(m7_bytes(root,name,current))!=expected or sha(m7_bytes(root,name,_git(root,'show','HEAD:'+name)))!=expected:
             raise ValueError('Changed committed computation successor')
 
 
+@_m7_owned_call
 def timeout_bindings(root=ROOT):
     if Path(root)!=ROOT and Path(root).resolve()!=ROOT.resolve():raise ValueError('Foreign validation timeout checkout')
     from ci.people_colorize_maintenance import _head
@@ -321,11 +356,15 @@ def timeout_bindings(root=ROOT):
 def _timeout_physical(name,binding):
     # Invocation-local binding metadata only. Every use still checks the leaf,
     # ancestors and physical bytes; no path, HEAD or acceptance result is cached.
-    if sha(regular(ROOT,name).read_bytes())!=binding['sha256']:
+    from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+    if sha(m7_bytes(ROOT,name,regular(ROOT,name).read_bytes()))!=binding['sha256']:
         raise ValueError('Changed physical timeout successor: '+name)
 
 
+@_m7_owned_call(when=lambda root,name,current: name in TIMEOUT_MEMBERS or name in COMPUTATION_BEFORE or name in _M7_MODIFIED)
 def timeout_bytes(root,name,current):
+    from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+    current=m7_bytes(root,name,current,opaque=True)
     if name in COMPUTATION_BEFORE and name not in TIMEOUT_MEMBERS:return computation_bytes(root,name,current)
     if name not in TIMEOUT_MEMBERS:return current
     b=timeout_bindings(root)[name]
@@ -342,6 +381,7 @@ def timeout_selected_hash(name,expected):
     return b['sha256'] if expected==b['before_sha256'] and expected is not None else expected
 
 
+@_m7_owned_call
 def verify_timeouts(root=ROOT):
     # Authenticate the receipt/HEAD at both ends of this explicit cohort.
     # Reuse only its immutable bindings, never prior physical verification.
@@ -353,11 +393,16 @@ def verify_timeouts(root=ROOT):
 
 
 def verify_timeout_scope(root,names):
-    if not names<=TIMEOUT_MEMBERS|{TIMEOUT_RECEIPT}:raise ValueError('Unapproved timeout scope')
+    if not names<=TIMEOUT_MEMBERS|{TIMEOUT_RECEIPT,HISTORICAL_TIMEOUT_RECEIPT}:raise ValueError('Unapproved timeout scope')
     bindings=verify_timeouts(root)
     for name in names:
-        expected=sha(regular(root,name).read_bytes()) if name==TIMEOUT_RECEIPT else bindings[name]['sha256']
-        if sha(_git(root,'show','HEAD:'+name))!=expected:raise ValueError('Changed committed timeout successor: '+name)
+        if name==HISTORICAL_TIMEOUT_RECEIPT:
+            expected=HISTORICAL_TIMEOUT_SHA256
+            if sha(regular(root,name).read_bytes())!=expected:raise ValueError('Changed historical timeout receipt')
+        else:
+            expected=sha(regular(root,name).read_bytes()) if name==TIMEOUT_RECEIPT else bindings[name]['sha256']
+        from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+        if sha(m7_bytes(root,name,_git(root,'show','HEAD:'+name)))!=expected:raise ValueError('Changed committed timeout successor: '+name)
 
 
 RECOVERY_CI_RECEIPT='ci/people-publication-git-recovery-ci-v1.json'
@@ -366,6 +411,7 @@ RECOVERY_CI_BASE='0ad49fbec9283387aacc0378f9d6a796839d981d'
 RECOVERY_CI_BEFORE={'ci/people_publication_maintenance.py': '028a7cd6e022c3e364455e8ba711729df81660aa9cbca4988723345c88e49b2d', 'ci/people_unicode_maintenance.py': 'a1195dc14fd14b5f157e8cd2282dc6cae258f4b0452a4e81f1fc16bd9a5ca97f', 'ci/phase5_m5_maintenance.py': 'b035c366441315115339a4b8cc12625d9934718de8f2718da2663b528e47b846', 'ci/dependency_tests/test_phase5_m6_maintenance.py': 'd8f7c0b16e9daceb91f9c32af0937e797ede60d24f1e50cb9d4a6e99bb3af2ee'}
 
 
+@_m7_owned_call
 def recovery_ci_bindings(root=ROOT):
     timeouts=timeout_bindings(root)
     value=_recovery_ci_owned(root,timeouts)
@@ -387,6 +433,8 @@ def _recovery_ci_owned(root,timeouts):
     # verify every current member independently at its point of use.
     for name,b in v['files'].items():
         current=regular(root,name).read_bytes()
+        from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+        current=m7_bytes(root,name,current)
         if name in timeouts:
             timeout=timeouts[name]
             if sha(current)!=timeout['sha256']:
@@ -421,6 +469,7 @@ def _geometry_before():
 def _geometry_ancestry(head):_git(ROOT,'merge-base','--is-ancestor',GEOMETRY_BASE,head)
 
 
+@_m7_owned_call
 def geometry_binding(root=ROOT):
     if Path(root).resolve()!=ROOT.resolve():raise ValueError('Foreign geometry checkout')
     from ci.people_colorize_maintenance import _head
@@ -431,12 +480,16 @@ def geometry_binding(root=ROOT):
             or value['version']!=1 or value['baseline_commit']!=GEOMETRY_BASE or value['files']!=expected
             or value['ci_authorized'] is not False or value['publication_authorized'] is not False):
         raise ValueError('Changed exact geometry registration')
-    if sha(regular(ROOT,GEOMETRY_SOURCE).read_bytes())!=GEOMETRY_SHA:raise ValueError('Changed physical geometry successor')
+    from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+    if sha(m7_bytes(root,GEOMETRY_SOURCE,regular(ROOT,GEOMETRY_SOURCE).read_bytes()))!=GEOMETRY_SHA:raise ValueError('Changed physical geometry successor')
     _geometry_before()
     return value['files'][GEOMETRY_SOURCE]
 
 
+@_m7_owned_call(when=lambda root,name,current: name == GEOMETRY_SOURCE or name in _M7_MODIFIED)
 def geometry_bytes(root,name,current):
+    from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+    current=m7_bytes(root,name,current,opaque=True)
     if name!=GEOMETRY_SOURCE:return current
     binding=geometry_binding(root)
     return _geometry_before() if sha(current)==binding['sha256'] else current
@@ -466,6 +519,7 @@ def _retention_geometry_before():
     return raw
 
 
+@_m7_owned_call
 def retention_geometry_binding(root=ROOT):
     geometry_binding(root)
     value=json.loads(regular(root,RETENTION_GEOMETRY_RECEIPT).read_bytes())
@@ -510,7 +564,8 @@ def verify_recovery_ci_scope(root,names):
     bindings=recovery_ci_bindings(root)
     for name in bound:
         expected=sha(regular(root,name).read_bytes()) if name==RECOVERY_CI_RECEIPT else timeout_selected_hash(name,bindings[name]['sha256'])
-        if sha(_git(root,'show','HEAD:'+name))!=expected:raise ValueError('Changed committed recovery CI successor')
+        from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+        if sha(m7_bytes(root,name,_git(root,'show','HEAD:'+name)))!=expected:raise ValueError('Changed committed recovery CI successor')
 
 
 def _cohort_views(root,paths):
@@ -540,36 +595,59 @@ def _cohort_views(root,paths):
     return views
 
 
-def verify_checkout(root=None):
+@_m7_owned_call
+def verify_checkout(root=None, *, _witness=False):
     root=Path(root or ROOT)
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M6 policy checkout')
+    if not _witness:
+        proof=_cohort_proof(root,_m6_cohort_proof)
+        if proof is not None:
+            return dict(_decode(regular(ROOT,MANIFEST.relative_to(ROOT).as_posix()).read_bytes(),PIN),
+                        members=_binding_copy(proof[1]))
     verify_timeouts(root)
     paths=_physical_paths(root,MEMBERS|ANCHORS)
     value=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)
     from ci.people_colorize_maintenance import _head
-    _ancestry(str(root),_head(root))
+    head=_head(root)
+    _ancestry(str(root),head)
     views=_cohort_views(root,paths)
     for name,binding in value['members'].items():
         if sha(views[name])!=binding['sha256']:raise ValueError('Changed physical M6 successor: '+name)
         if binding['before_sha256'] is not None and sha(_old(name))!=binding['before_sha256']:raise ValueError('Changed M6 predecessor')
         if binding['before_sha256'] is None and _baseline_entry(name).strip():raise ValueError('M6 addition exists in predecessor')
+    if _witness:
+        if _head(root)!=head:raise ValueError('Changed closing M6 cohort HEAD')
+        return head,_binding_rows(value['members'])
     return value
 
 
+def _m6_cohort_proof(root):
+    return verify_checkout(root,_witness=True)
+
+
+@_m7_owned_call(when=lambda root,name,current: name in APPROVED or name in TIMEOUT_MEMBERS or name in COMPUTATION_BEFORE or name == RETENTION_GEOMETRY_SOURCE or name in _M7_MODIFIED)
 def historical_bytes(root,name,current):
+    from ci.phase5_m7_maintenance import historical_bytes as m7_bytes
+    current=m7_bytes(root,name,current)
     current=retention_geometry_bytes(root,name,current)
     current=geometry_bytes(root,name,current)
     current=timeout_bytes(root,name,current)
     if name not in APPROVED:return current
     root=Path(root)
     if root.resolve()!=ROOT.resolve():raise ValueError('Foreign M6 historical projection')
-    paths=_physical_paths(root,MEMBERS|ANCHORS)
-    value=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)
-    views=_cohort_views(root,paths)
-    for member,pin in value['members'].items():
-        if sha(views[member])!=pin['sha256']:raise ValueError('Changed physical M6 successor: '+member)
-    binding=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)['members'][name]
-    actual=recovery_ci_bytes(root,name,paths[name].read_bytes())
+    proof=_cohort_proof(root,_m6_cohort_proof)
+    if proof is None:
+        paths=_physical_paths(root,MEMBERS|ANCHORS)
+        value=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)
+        views=_cohort_views(root,paths)
+        for member,pin in value['members'].items():
+            if sha(views[member])!=pin['sha256']:raise ValueError('Changed physical M6 successor: '+member)
+        binding=_decode(paths[MANIFEST.relative_to(ROOT).as_posix()].read_bytes(),PIN)['members'][name]
+        physical=paths[name]
+    else:
+        binding=_binding_copy(proof[1])[name]
+        physical=regular(root,name)
+    actual=recovery_ci_bytes(root,name,physical.read_bytes())
     current=recovery_ci_bytes(root,name,current)
     if sha(actual)!=binding['sha256']:raise ValueError('Changed M6 physical successor: '+name)
     if binding['before_sha256'] is None:
@@ -585,11 +663,14 @@ def historical_bytes(root,name,current):
 def scope_members():
     from ci.phase4_m7 import ROOT as policy_root
     if Path(policy_root).resolve()!=ROOT.resolve():return frozenset()
-    return ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}) | {RECOVERY_CI_RECEIPT,TIMEOUT_RECEIPT,GEOMETRY_RECEIPT,RETENTION_GEOMETRY_SOURCE,RETENTION_GEOMETRY_RECEIPT,COMPUTATION_RECEIPT} | TIMEOUT_MEMBERS | set(COMPUTATION_BEFORE) | set(PEOPLE_PR65_BEFORE) | {PEOPLE_PR65_RECEIPT}
+    from ci.phase5_m7_maintenance import scope_members as m7_scope
+    return m7_scope() | ((MEMBERS|ANCHORS)-{'create_defaults/lifecycle/ROADMAP.md'}) | {RECOVERY_CI_RECEIPT,TIMEOUT_RECEIPT,HISTORICAL_TIMEOUT_RECEIPT,GEOMETRY_RECEIPT,RETENTION_GEOMETRY_SOURCE,RETENTION_GEOMETRY_RECEIPT,COMPUTATION_RECEIPT} | TIMEOUT_MEMBERS | set(COMPUTATION_BEFORE) | set(PEOPLE_PR65_BEFORE) | {PEOPLE_PR65_RECEIPT}
 
 
 def verify_scope(root,baseline,names):
     verify_checkout(root)
+    from ci.phase5_m7_maintenance import verify_scope as verify_m7_scope
+    verify_m7_scope(root,names)
     if not names<=scope_members():raise ValueError('Unapproved M6 scope')
     if not names:return
     rows=_git(root,'diff','--raw','--no-abbrev','--no-renames','-z',baseline,'HEAD','--',*sorted(names)).split(b'\0')
@@ -606,12 +687,18 @@ def verify_scope(root,baseline,names):
     verify_retention_geometry_scope(root,names)
     verify_computation_scope(root,names)
     verify_people_pr65_scope(root,names)
-    verify_timeout_scope(root,names & (TIMEOUT_MEMBERS|{TIMEOUT_RECEIPT}))
+    verify_timeout_scope(root,names & (TIMEOUT_MEMBERS|{TIMEOUT_RECEIPT,HISTORICAL_TIMEOUT_RECEIPT}))
 
 
 def selected_hash(name,expected):
     if name==RETENTION_GEOMETRY_SOURCE and expected==RETENTION_GEOMETRY_BEFORE:
         return retention_geometry_binding()['sha256']
+    if name=='ci/phase4.py':
+        if expected==APPROVED[name][0]:
+            verify_checkout()
+            expected=APPROVED[name][1]
+        from ci.phase5_m7_maintenance import selected_hash as m7_hash
+        return m7_hash(ROOT,name,expected)
     if name not in {'create_defaults/bulk/library_stage.py','create_defaults/bulk/operator_publication.py','create_defaults/bulk/contracts/models.py','ci/people_storage_maintenance.py','ci/phase4.py','create_defaults/bulk/lifecycle/models.py'}:return expected
     if expected!=APPROVED[name][0]:return expected
     verify_checkout()

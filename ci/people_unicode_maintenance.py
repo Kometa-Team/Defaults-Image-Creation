@@ -11,6 +11,7 @@ from pathlib import Path
 import subprocess
 
 from ci.people_storage_maintenance import regular
+from ci.phase5_m7_maintenance import owned_call as _m7_owned_call
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = '05ea93ba4b75a6c8fbd3755bdf817cb6c8485338'
@@ -136,6 +137,7 @@ def _owned_headers(root, publication):
         publication.RECEIPT, publication.GIT_RECEIPT, publication.RECOVERY_RECEIPT,
         'ci/people_publication_maintenance.py', publication.CI_TEST_LOCK}
     names |= {m6.PEOPLE_PR65_RECEIPT, m6.PEOPLE_PR65_TEST}
+    names |= {'ci/phase5_m7_maintenance.py', 'ci/phase5-m7-maintenance-v1.json'}
     return _head(root), {name:(digest(regular(root,name).read_bytes()),True) for name in names}
 
 
@@ -156,6 +158,9 @@ def _owned_inputs(root, publication, physical, headers):
         selected=binding['sha256']
         if name in timeouts and selected==timeouts[name]['before_sha256']:selected=timeouts[name]['sha256']
         expected[name]=(selected,True)
+    from ci.phase5_m7_maintenance import _owned_members
+    for name,binding in _owned_members(root).items():
+        expected[name]=(binding['sha256'],True)
     # Headers were captured before the proof; changed policy bytes cannot enter
     # this private owner witness after verification. Every path is reread below.
     expected.update(headers[1])
@@ -188,6 +193,7 @@ def _verify_owned(root):
     return _verify(root,True)
 
 
+@_m7_owned_call
 def _verify(root, owned):
     if Path(root).resolve() != ROOT.resolve():
         raise ValueError('Foreign Unicode policy checkout')
@@ -249,6 +255,7 @@ def _verify(root, owned):
     return bindings,_owned_inputs(root,publication,physical_hashes,headers) if owned else None
 
 
+@_m7_owned_call(when=lambda root,name,current: name in SOURCE_MEMBERS | CI_MEMBERS)
 def historical_bytes(root, name, current):
     from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
     current = m6_bytes(root, name, current)

@@ -86,17 +86,19 @@ class Phase5M6MaintenanceTests(unittest.TestCase):
     def test_immutable_batching_and_fresh_head_observations(self):
         import sys
         from collections import Counter
-        from ci import people_colorize_maintenance as color
+        from ci import people_colorize_maintenance as color, phase5_m7_maintenance as m7
         m6._baseline_tree.cache_clear();m6._predecessors.cache_clear();m6._old.cache_clear();m6._baseline_entry.cache_clear()
         m6._people_pr65_before.cache_clear()
         lookups=[];heads=[];read_git=m6._git_raw;read_head=color._head
         def caller():
             frame=sys._getframe(2)
             while frame.f_globals.get('__name__')=='unittest.mock' or frame.f_code.co_name=='_git':frame=frame.f_back
-            self.assertEqual(frame.f_globals.get('__name__'),m6.__name__)
-            return frame.f_code.co_name
+            module=frame.f_globals.get('__name__')
+            self.assertIn(module,{m6.__name__,m7.__name__})
+            return module,frame.f_code.co_name
         def git(root,*args,**kwargs):
-            lookups.append((caller(),args[0]))
+            module,name=caller();self.assertEqual(module,m6.__name__)
+            lookups.append((name,args[0]))
             return read_git(root,*args,**kwargs)
         def head(root):
             heads.append(caller())
@@ -104,7 +106,8 @@ class Phase5M6MaintenanceTests(unittest.TestCase):
         with patch.object(m6,'_git_raw',side_effect=git),patch.object(color,'_head',side_effect=head), \
              patch.object(m6,'people_pr65_bindings',wraps=m6.people_pr65_bindings) as people, \
              patch.object(m6,'timeout_bindings',wraps=m6.timeout_bindings) as timeouts, \
-             patch.object(m6,'geometry_binding',wraps=m6.geometry_binding) as geometry:
+             patch.object(m6,'geometry_binding',wraps=m6.geometry_binding) as geometry, \
+             patch.object(m7,'verify_checkout',wraps=m7.verify_checkout) as successor:
             m6.verify_checkout();cold_end=len(lookups);m6.verify_checkout()
         batching={'_baseline_tree','_predecessors','_old','_baseline_entry'}
         commands=[command for owner,command in lookups if owner in batching]
@@ -118,8 +121,12 @@ class Phase5M6MaintenanceTests(unittest.TestCase):
                          {'ls-tree':predecessors,'show':predecessors})
         self.assertFalse([row for row in lookups[cold_end:] if row[0] in batching|{'_people_pr65_before'}])
         self.assertGreater(people.call_count,0)
-        self.assertEqual(Counter(heads),{'verify_checkout':2,'timeout_bindings':timeouts.call_count,
-                         'geometry_binding':geometry.call_count,'people_pr65_bindings':2*people.call_count})
+        self.assertGreater(successor.call_count,0)
+        self.assertEqual(Counter(heads),{(m6.__name__,'verify_checkout'):2,
+                         (m6.__name__,'timeout_bindings'):timeouts.call_count,
+                         (m6.__name__,'geometry_binding'):geometry.call_count,
+                         (m6.__name__,'people_pr65_bindings'):2*people.call_count,
+                         (m7.__name__,'verify_checkout'):2*successor.call_count})
 
     def test_foreign_checkout_and_scope_fail_closed(self):
         with self.assertRaises(ValueError):m6.verify_checkout(ROOT/'foreign')

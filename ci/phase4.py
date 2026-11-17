@@ -9,6 +9,7 @@ import sys
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
 from ci.dependency_maintenance import ADOPTION_SOURCE, verify_infrastructure
 from ci.validation import identity,read,write,require,unique,pytest_run,validate_execution
+from ci.phase5_m7_maintenance import owned_call as _m7_owned_call
 
 BASE='c33f792992ee704150799fe16536a64630fd8964'
 MAINTENANCE_PIN='4344ddf985670bced739fef580cc0ca05cb53718262082e9c5a0cb2a4d9bfd69'
@@ -70,6 +71,7 @@ def verify_historical_reports(reports):
 def checksum(path):return hashlib.sha256(path.read_bytes().replace(b'\r\n',b'\n')).hexdigest()
 
 
+@_m7_owned_call(when=lambda root,paths: Path(root) == ROOT or Path(root).resolve() == ROOT.resolve())
 def historical_checksums(root,paths):
     # One fresh full security proof for this explicit batch, never a retained
     # checkout approval or caller-supplied provenance object.
@@ -138,6 +140,7 @@ def verify_original_plan(original,*,root=ROOT):
     verify_plan(expected,root=root,current=read(root/'ci/validation-plan.json'))
 
 
+@_m7_owned_call(when=lambda root=ROOT: Path(root) == ROOT or Path(root).resolve() == ROOT.resolve(), cohorts=True)
 def verify_maintenance(root=ROOT):
     dependency=verify_infrastructure(root)
     value=read(root/'ci/phase4-maintenance.json')

@@ -8,6 +8,7 @@ import unittest
 from unittest.mock import patch
 
 from ci import phase5_m6_maintenance as m6
+from ci import phase5_m7_maintenance as m7
 
 ROOT=m6.ROOT
 
@@ -68,9 +69,12 @@ class ValidationTimeoutTests(unittest.TestCase):
                         s=s.replace('&&',' and ').replace('||',' or ')
                         return eval(s,{'__builtins__':{},'startsWith':lambda a,b:a.startswith(b)})
                     was,now=evaluate(previous),evaluate(current)
-                    self.assertIn(now,(15,60))
+                    if name=='.github/workflows/default-poster-validation.yml' and job=='phase4':
+                        self.assertEqual(now,90 if values=={'os':'windows-latest','group':'foundations'} else 60)
+                    else:
+                        self.assertIn(now,(15,60))
+                        if was==60:self.assertEqual(now,60)
                     self.assertGreaterEqual(now,was)
-                    if was==60:self.assertEqual(now,60)
                 original=new.replace('    timeout-minutes: '+current+'\n','    timeout-minutes: '+previous+'\n',1)
                 self.assertEqual(old,original,job)
                 self.assertEqual(restored.count(new),1)
@@ -82,7 +86,7 @@ class ValidationTimeoutTests(unittest.TestCase):
 
     def test_exact_physical_bindings_and_history(self):
         for name,b in m6.verify_timeouts().items():
-            raw=(ROOT/name).read_bytes()
+            raw=m7.historical_bytes(ROOT,name,(ROOT/name).read_bytes())
             self.assertEqual(m6.sha(raw),b['sha256'])
             self.assertEqual(m6.timeout_bytes(ROOT,name,raw),
                              b['predecessor_lf'].encode() if b['predecessor_lf'] is not None else raw)
@@ -123,6 +127,47 @@ class ValidationTimeoutTests(unittest.TestCase):
         with patch.object(m6,'_git',return_value=b'forged'),self.assertRaises(ValueError):m6.verify_timeout_scope(ROOT,names)
         with self.assertRaises(ValueError):m6.verify_timeout_scope(ROOT,{'ci/unapproved.py'})
         with self.assertRaises(ValueError):m6.timeout_bindings(ROOT/'foreign')
+
+    def test_windows_foundations_exception_changes_only_its_budget(self):
+        name='.github/workflows/default-poster-validation.yml'
+        before=m6._git(ROOT,'show','8452b188187ef56d38d8e03cf25a26be9a454fe4:'+name).replace(b'\r\n',b'\n')
+        start=before.index(b'  phase4:\n');end=before.index(b'  people_security:\n',start)
+        job=before[start:end]
+        expression=b"${{ matrix.os == 'windows-latest' && matrix.group == 'foundations' && 90 || 60 }}"
+        self.assertEqual(job.count(b'    timeout-minutes: 60\n'),1)
+        expected=before[:start]+job.replace(b'    timeout-minutes: 60\n',b'    timeout-minutes: '+expression+b'\n')+before[end:]
+        current=(ROOT/name).read_bytes().replace(b'\r\n',b'\n')
+        self.assertEqual(current,expected)
+        m6.verify_timeout_scope(ROOT,{name})
+        read=Path.read_bytes
+        for bad in (before,current.replace(b'&& 90 || 60',b'&& 120 || 60'),
+                    current.replace(expression,expression.replace(b'windows-latest',b'ubuntu-latest')),
+                    current.replace(expression,expression.replace(b'foundations',b'atomic')),
+                    current.replace(b'&& 90 || 60',b'&& 90 || 90'),
+                    current.replace(b'  contents: read',b'  contents: write'),
+                    current.replace(b'run: python ci/phase4.py run',b'run: echo skipped')):
+            self.assertNotEqual(bad,current)
+            with self.subTest(sha256=m6.sha(bad)),patch.object(Path,'read_bytes',lambda p:bad if p==ROOT/name else read(p)),self.assertRaises(ValueError):
+                m6.verify_timeout_scope(ROOT,{name})
+
+    def test_historical_timeout_receipt_scope_is_exact_physical_and_committed(self):
+        name=m6.HISTORICAL_TIMEOUT_RECEIPT;target=ROOT/name
+        read=Path.read_bytes;good=read(target)
+        self.assertEqual(m6.sha(good),m6.HISTORICAL_TIMEOUT_SHA256)
+        m6.verify_timeout_scope(ROOT,{name})
+        for bad in (good+b'\n',good+b'\n# unapproved',read(ROOT/m6.TIMEOUT_RECEIPT)):
+            with self.subTest(sha256=m6.sha(bad)),patch.object(Path,'read_bytes',lambda p:bad if p==target else read(p)),self.assertRaises(ValueError):
+                m6.verify_timeout_scope(ROOT,{name})
+        def missing(path):
+            if path==target:raise FileNotFoundError(name)
+            return read(path)
+        with patch.object(Path,'read_bytes',missing),self.assertRaises(OSError):m6.verify_timeout_scope(ROOT,{name})
+        git=m6._git
+        def committed(root,*args):
+            return b'forged' if args==('show','HEAD:'+name) else git(root,*args)
+        with patch.object(m6,'_git',side_effect=committed),self.assertRaises(ValueError):m6.verify_timeout_scope(ROOT,{name})
+        for unknown in ('ci/unapproved-timeout-registration.json','.github/workflows/unrelated.yml'):
+            with self.subTest(path=unknown),self.assertRaises(ValueError):m6.verify_timeout_scope(ROOT,{name,unknown})
 
 
 if __name__=='__main__':unittest.main()
