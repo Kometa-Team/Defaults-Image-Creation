@@ -1,0 +1,268 @@
+{
+  "version": 1,
+  "kind": "phase6-offline-playlist-pilot-manifest",
+  "baseline": {
+    "main": "dcbfa072dbedcb0069dd27be920ef3103687b5a4",
+    "phase5_pr": 71,
+    "accepted_head": "00d8916ea414e1af1b1c00c855c9f763dc4dece6",
+    "provenance_sha256": "1d613c06d8212e6d57f94ec1f44c17b7bee8ad7de4b40102094ee1f652435263"
+  },
+  "simulation": true,
+  "fixture_approvals_only": true,
+  "production_authorized": false,
+  "publication_authorized": false,
+  "activation_authorized": false,
+  "requests": [
+    {
+      "request": "avp",
+      "logo": {
+        "file": "assets/avp.png",
+        "bytes": 85308,
+        "sha256": "121346d7375b741052e862b4e7124887bd1b85a1fb2e0c9c296e91669b1482d2",
+        "format": "PNG",
+        "mode": "RGBA",
+        "width": 1592,
+        "height": 540,
+        "alpha_extrema": [
+          0,
+          255
+        ]
+      },
+      "proposed": {
+        "display_name": "Alien & Predator",
+        "persistent_identity": "playlist.feec6426d0134e93973e8a2b36bd1ebe",
+        "semantic_key": "pilot-avp",
+        "local_path": "defaults-en/playlist/Alien & Predator (Timeline Order).jpg",
+        "public_path": "playlist/Alien & Predator (Timeline Order).jpg",
+        "source_path": "logos_playlist/avp.png",
+        "rendered_caption": "TIMELINE ORDER",
+        "fixture_background": "#123456"
+      },
+      "status": "PROVISIONAL_FIXTURE_ONLY",
+      "pending_decisions": [
+        "Confirm final display name, persistent registry reservation and output mappings.",
+        "Approve exact logo treatment, complete artwork and assigned background separately.",
+        "Confirm Alien & Predator versus Alien vs. Predator naming."
+      ]
+    },
+    {
+      "request": "babylon",
+      "logo": {
+        "file": "assets/babylon.png",
+        "bytes": 15891,
+        "sha256": "fdf89f346410d2c0e9656bc9223ee35e7cc6377969f96cbaeffc3e9abf8e7e6a",
+        "format": "PNG",
+        "mode": "RGBA",
+        "width": 521,
+        "height": 251,
+        "alpha_extrema": [
+          0,
+          255
+        ]
+      },
+      "proposed": {
+        "display_name": "Babylon 5",
+        "persistent_identity": "playlist.2d41498dd84b47a58ffd8f1728bfa32f",
+        "semantic_key": "pilot-babylon",
+        "local_path": "defaults-en/playlist/Babylon 5 (Timeline Order).jpg",
+        "public_path": "playlist/Babylon 5 (Timeline Order).jpg",
+        "source_path": "logos_playlist/babylon.png",
+        "rendered_caption": "TIMELINE ORDER",
+        "fixture_background": "#123456"
+      },
+      "status": "PROVISIONAL_FIXTURE_ONLY",
+      "pending_decisions": [
+        "Confirm final display name, persistent registry reservation and output mappings.",
+        "Approve exact logo treatment, complete artwork and assigned background separately."
+      ]
+    },
+    {
+      "request": "bsg",
+      "logo": {
+        "file": "assets/bsg.png",
+        "bytes": 29475,
+        "sha256": "f59cf12ea9578825c118aa39e8e5209dc9d30ec4d3402c776fbb846ff133a276",
+        "format": "PNG",
+        "mode": "RGBA",
+        "width": 894,
+        "height": 168,
+        "alpha_extrema": [
+          0,
+          255
+        ]
+      },
+      "proposed": {
+        "display_name": "Battlestar Galactica",
+        "persistent_identity": "playlist.ca5bf3fafc7a4f888dbee738fc6fea09",
+        "semantic_key": "pilot-bsg",
+        "local_path": "defaults-en/playlist/Battlestar Galactica (Timeline Order).jpg",
+        "public_path": "playlist/Battlestar Galactica (Timeline Order).jpg",
+        "source_path": "logos_playlist/bsg.png",
+        "rendered_caption": "TIMELINE ORDER",
+        "fixture_background": "#123456"
+      },
+      "status": "PROVISIONAL_FIXTURE_ONLY",
+      "pending_decisions": [
+        "Confirm final display name, persistent registry reservation and output mappings.",
+        "Approve exact logo treatment, complete artwork and assigned background separately."
+      ]
+    },
+    {
+      "request": "gundam",
+      "logo": {
+        "file": "assets/gundam.png",
+        "bytes": 30058,
+        "sha256": "647992caa06ae2d2c1fd1210762f44cde0981699fd6242573a17342a88ac88e3",
+        "format": "PNG",
+        "mode": "RGBA",
+        "width": 1090,
+        "height": 319,
+        "alpha_extrema": [
+          0,
+          255
+        ]
+      },
+      "proposed": {
+        "display_name": "Mobile Suit Gundam",
+        "persistent_identity": "playlist.70487260288d489fa6e4d06672990a67",
+        "semantic_key": "pilot-gundam",
+        "local_path": "defaults-en/playlist/Mobile Suit Gundam (Timeline Order).jpg",
+        "public_path": "playlist/Mobile Suit Gundam (Timeline Order).jpg",
+        "source_path": "logos_playlist/gundam.png",
+        "rendered_caption": "TIMELINE ORDER",
+        "fixture_background": "#123456"
+      },
+      "status": "PROVISIONAL_FIXTURE_ONLY",
+      "pending_decisions": [
+        "Confirm final display name, persistent registry reservation and output mappings.",
+        "Approve exact logo treatment, complete artwork and assigned background separately.",
+        "Confirm Universal Century or another Gundam timeline."
+      ]
+    },
+    {
+      "request": "jrrt",
+      "logo": {
+        "file": "assets/jrrt.png",
+        "bytes": 107942,
+        "sha256": "bab84403116d5c948fd4710640c3ecb0859dead9191eb75fdfeb492d4e473556",
+        "format": "PNG",
+        "mode": "RGBA",
+        "width": 1593,
+        "height": 345,
+        "alpha_extrema": [
+          0,
+          255
+        ]
+      },
+      "proposed": {
+        "display_name": "Middle-earth",
+        "persistent_identity": "playlist.5eba47e8c0a04c2e9914f6618b621f2c",
+        "semantic_key": "pilot-jrrt",
+        "local_path": "defaults-en/playlist/Middle-earth (Timeline Order).jpg",
+        "public_path": "playlist/Middle-earth (Timeline Order).jpg",
+        "source_path": "logos_playlist/jrrt.png",
+        "rendered_caption": "TIMELINE ORDER",
+        "fixture_background": "#123456"
+      },
+      "status": "PROVISIONAL_FIXTURE_ONLY",
+      "pending_decisions": [
+        "Confirm final display name, persistent registry reservation and output mappings.",
+        "Approve exact logo treatment, complete artwork and assigned background separately.",
+        "Confirm Middle-earth versus supplied Middle Earth Collection wording."
+      ]
+    },
+    {
+      "request": "sao",
+      "logo": {
+        "file": "assets/sao.png",
+        "bytes": 16230,
+        "sha256": "62c341d8c212eedfc070e72034db5aa530ef7ab7d3efe2ad46ed4eb9ee3e0209",
+        "format": "PNG",
+        "mode": "RGBA",
+        "width": 1280,
+        "height": 196,
+        "alpha_extrema": [
+          0,
+          255
+        ]
+      },
+      "proposed": {
+        "display_name": "Sword Art Online",
+        "persistent_identity": "playlist.c48a75120f4f4a8aa290c3683b2dc1d2",
+        "semantic_key": "pilot-sao",
+        "local_path": "defaults-en/playlist/Sword Art Online (Timeline Order).jpg",
+        "public_path": "playlist/Sword Art Online (Timeline Order).jpg",
+        "source_path": "logos_playlist/sao.png",
+        "rendered_caption": "TIMELINE ORDER",
+        "fixture_background": "#123456"
+      },
+      "status": "PROVISIONAL_FIXTURE_ONLY",
+      "pending_decisions": [
+        "Confirm final display name, persistent registry reservation and output mappings.",
+        "Approve exact logo treatment, complete artwork and assigned background separately."
+      ]
+    },
+    {
+      "request": "stargate",
+      "logo": {
+        "file": "assets/stargate.png",
+        "bytes": 42744,
+        "sha256": "5842312151e2ae56020b94d030a447f886df49ac55f537129eb3187a1faeeab7",
+        "format": "PNG",
+        "mode": "RGBA",
+        "width": 2000,
+        "height": 258,
+        "alpha_extrema": [
+          0,
+          255
+        ]
+      },
+      "proposed": {
+        "display_name": "Stargate",
+        "persistent_identity": "playlist.11d52d3953a64d0faabcd7a692fbb87f",
+        "semantic_key": "pilot-stargate",
+        "local_path": "defaults-en/playlist/Stargate (Timeline Order).jpg",
+        "public_path": "playlist/Stargate (Timeline Order).jpg",
+        "source_path": "logos_playlist/stargate.png",
+        "rendered_caption": "TIMELINE ORDER",
+        "fixture_background": "#123456"
+      },
+      "status": "PROVISIONAL_FIXTURE_ONLY",
+      "pending_decisions": [
+        "Confirm final display name, persistent registry reservation and output mappings.",
+        "Approve exact logo treatment, complete artwork and assigned background separately."
+      ]
+    },
+    {
+      "request": "wdu",
+      "logo": {
+        "file": "assets/wdu.png",
+        "bytes": 19058,
+        "sha256": "f0ead3bedf57bfc333ea1517a12fba6e0f330d5cf941b27bc351398302f12cd1",
+        "format": "PNG",
+        "mode": "RGBA",
+        "width": 647,
+        "height": 710,
+        "alpha_extrema": [
+          0,
+          255
+        ]
+      },
+      "proposed": {
+        "display_name": "The Walking Dead Universe",
+        "persistent_identity": "playlist.0aabd1b1c7d44b198858057648ba9514",
+        "semantic_key": "pilot-wdu",
+        "local_path": "defaults-en/playlist/The Walking Dead Universe (Timeline Order).jpg",
+        "public_path": "playlist/The Walking Dead Universe (Timeline Order).jpg",
+        "source_path": "logos_playlist/wdu.png",
+        "rendered_caption": "TIMELINE ORDER",
+        "fixture_background": "#123456"
+      },
+      "status": "PROVISIONAL_FIXTURE_ONLY",
+      "pending_decisions": [
+        "Confirm final display name, persistent registry reservation and output mappings.",
+        "Approve exact logo treatment, complete artwork and assigned background separately."
+      ]
+    }
+  ]
+}

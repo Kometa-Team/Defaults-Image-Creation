@@ -75,7 +75,8 @@ def _owner_bytes(root, head):
 
 
 def scope_members():
-    return MODIFIED | ADDED | {OWNER, RECEIPT}
+    from ci.phase6_playlist_maintenance import scope_members as pilot_scope
+    return MODIFIED | ADDED | {OWNER, RECEIPT} | pilot_scope()
 
 
 @lru_cache(maxsize=4)
@@ -103,13 +104,19 @@ def verify_checkout(root=None, *, _witness=False):
     from ci.people_colorize_maintenance import _head
     head = _head(ROOT)
     ancestry(head)
+    from ci import phase6_playlist_maintenance as pilot
+    # The M7 owner only needs its exact overlapping successors here. Full new
+    # pilot admission has its own scope proof; per-file historical views stay
+    # fresh. Do not repeat the unrelated PNG cohort in every inherited M6 call.
+    pilot_proof = pilot.proof(root, head, selected=pilot.MODIFIED & (MODIFIED | {OWNER}))
     # Keep the independent checker: the README helper is itself an input of
     # inherited Unicode verification and cannot authenticate its own caller.
-    paths = {name: regular(ROOT, name) for name in scope_members()}
+    paths = {name: regular(ROOT, name) for name in MODIFIED | ADDED | {OWNER, RECEIPT}}
     raw = paths[RECEIPT].read_bytes()
     rows = _decode(raw, PIN, BASE, MODIFIED, ADDED)
     for name, before, after in rows:
-        if sha(paths[name].read_bytes()) != after:
+        current = pilot._project(root, name, paths[name].read_bytes(), pilot_proof, owned=True)
+        if sha(current) != after:
             raise ValueError('Changed physical M7 successor: '+name)
         if name in MODIFIED:
             if sha(predecessor(name)) != before:
@@ -123,8 +130,10 @@ def verify_checkout(root=None, *, _witness=False):
         raise ValueError('Changed uncommitted M7 owner')
     if regular(ROOT, RECEIPT).read_bytes() != raw or _head(ROOT) != head:
         raise ValueError('M7 receipt or HEAD moved during verification')
+    if regular(ROOT, pilot.RECEIPT).read_bytes() != pilot_proof.receipt:
+        raise ValueError('Offline Playlist receipt moved during M7 verification')
     if _witness:
-        return head, raw, owner, rows
+        return head, raw, owner, rows, pilot_proof
     return dict(version=1, baseline_commit=BASE, ci_only=True,
                 publication_authorized=False, members={
                     name: dict(before_sha256=before, sha256=after)
@@ -238,6 +247,8 @@ def _read_owned_predecessor(root, name):
         raise ValueError('No M7 predecessor for: '+name)
     binding = _owned_members(root)[name]
     current = regular(ROOT, name).read_bytes()
+    from ci.phase6_playlist_maintenance import historical_bytes as pilot_bytes
+    current = pilot_bytes(root, name, current)
     if sha(current) != binding['sha256']:
         raise ValueError('Changed physical M7 successor: '+name)
     before = predecessor(name)
@@ -247,6 +258,8 @@ def _read_owned_predecessor(root, name):
 
 
 def historical_bytes(root, name, current, *, opaque=False):
+    from ci.phase6_playlist_maintenance import historical_bytes as pilot_bytes
+    current = pilot_bytes(root, name, current)
     if name not in MODIFIED:
         return current
     active = _ACTIVE.get()
@@ -257,7 +270,7 @@ def historical_bytes(root, name, current, *, opaque=False):
         # Entry/closing proofs cover every member. Each actual view additionally
         # rereads its own leaf and ancestors at the point of use, independently
         # of caller bytes. Metadata lives only in this synchronous invocation.
-        if sha(regular(ROOT, name).read_bytes()) != after:
+        if sha(pilot_bytes(root, name, regular(ROOT, name).read_bytes())) != after:
             raise ValueError('Changed physical M7 successor: '+name)
         binding = dict(before_sha256=before, sha256=after)
     else:
@@ -300,6 +313,10 @@ def selected_hash(root, name, expected):
 
 
 def verify_scope(root, names):
+    from ci.phase6_playlist_maintenance import scope_members as pilot_scope, verify_scope as pilot_verify
+    pilot_names = names & pilot_scope()
+    pilot_verify(root, pilot_names)
+    names = names - pilot_names
     selected = names & scope_members()
     if not selected:
         return

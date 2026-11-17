@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "baseline_commit": "dcbfa072dbedcb0069dd27be920ef3103687b5a4",
+  "members": {
+    ".github/workflows/phase6-playlist-validation.yml": {
+      "before_sha256": null,
+      "sha256": "e2ea2cab8d99af37a08612f22560e726ccba50403570267e021f36996d66b384",
+      "text_lf": true
+    },
+    "ci/dependency_tests/test_phase6_playlist_maintenance.py": {
+      "before_sha256": null,
+      "sha256": "48601886378e0ceb8f876a41521356f4eb6a3ca8108058741ec22e19bb047fbc",
+      "text_lf": true
+    },
+    "ci/phase5_m7_maintenance.py": {
+      "before_sha256": "6549260f014d35302d641909f577d5a51f89f638731ae10d380f8193c1549a40",
+      "sha256": "3fe95c164e913e5791a2c06b271f0950636cc65ad3f7c72d73dc2db09befb4f9",
+      "text_lf": true
+    },
+    "create_defaults/bulk/contracts/translation_preflight/adapters.py": {
+      "before_sha256": "f16025d3f4f603731d08fcf361a4d15bc2328f1dd59a50b19a40b54104371442",
+      "sha256": "69934c056640e869bf38c9de220056b7fe3746aa1d9d5445601fd8c877c80e0f",
+      "text_lf": true
+    },
+    "create_defaults/bulk/lifecycle/catalog_preparation.py": {
+      "before_sha256": "89c5e3fdadce53d807f9af51791885bc386d813e4d0553e3f2aad0e68c803492",
+      "sha256": "504807916a9553de05d126a790074b80fe11ceb37ce6bad27dc849dc3369e71a",
+      "text_lf": true
+    },
+    "create_defaults/bulk/lifecycle/operations.py": {
+      "before_sha256": "05210aef1a134c470e9c822a0375d095f4e32e70dd6d6f724c00b4e2a309adc1",
+      "sha256": "b51eabea1eb3e2414e617cd1758fcb837d6466238bf0b248f5baf99c96ca8e01",
+      "text_lf": true
+    },
+    "create_defaults/bulk/lifecycle/publication_preparation.py": {
+      "before_sha256": "9a0808658ce7ff6786f04a4979cf7af14fc9c3cf25e1c75bbf46bec099781fc8",
+      "sha256": "61fb4648815bf557c476a2d9f48993573a5a829268a1c3d12f18342beebd75d3",
+      "text_lf": true
+    },
+    "create_defaults/lifecycle/PHASE6_PLAYLIST_PILOT.md": {
+      "before_sha256": null,
+      "sha256": "07e53542ce9f172f15a88944418eadc5f25c9d9cef2e6e71ae7f1743b999a61a",
+      "text_lf": true
+    },
+    "create_defaults/lifecycle/ROADMAP.md": {
+      "before_sha256": "148a0e5c1d6618f32982de4a9168a9d01c3f0ef042617024dd31ac0c0236a81e",
+      "sha256": "73fda6776b47adc6295bce26c300639ef1f195d703c7d106f9f53e49f1493c55",
+      "text_lf": true
+    },
+    "create_defaults/phase6/PLAYLIST_PILOT_MANIFEST.json": {
+      "before_sha256": null,
+      "sha256": "556744e0f8af02861a70218036c34b1e9165cd4112604b221a7da72aea6be35d",
+      "text_lf": true
+    },
+    "create_defaults/phase6/__init__.py": {
+      "before_sha256": null,
+      "sha256": "35670514fbe63626bab0ab0f05ccec74cbdf053af3a18926a34aa67f09c31a03",
+      "text_lf": true
+    },
+    "create_defaults/phase6/assets/avp.png": {
+      "before_sha256": null,
+      "sha256": "121346d7375b741052e862b4e7124887bd1b85a1fb2e0c9c296e91669b1482d2",
+      "text_lf": false
+    },
+    "create_defaults/phase6/assets/babylon.png": {
+      "before_sha256": null,
+      "sha256": "fdf89f346410d2c0e9656bc9223ee35e7cc6377969f96cbaeffc3e9abf8e7e6a",
+      "text_lf": false
+    },
+    "create_defaults/phase6/assets/bsg.png": {
+      "before_sha256": null,
+      "sha256": "f59cf12ea9578825c118aa39e8e5209dc9d30ec4d3402c776fbb846ff133a276",
+      "text_lf": false
+    },
+    "create_defaults/phase6/assets/gundam.png": {
+      "before_sha256": null,
+      "sha256": "647992caa06ae2d2c1fd1210762f44cde0981699fd6242573a17342a88ac88e3",
+      "text_lf": false
+    },
+    "create_defaults/phase6/assets/jrrt.png": {
+      "before_sha256": null,
+      "sha256": "bab84403116d5c948fd4710640c3ecb0859dead9191eb75fdfeb492d4e473556",
+      "text_lf": false
+    },
+    "create_defaults/phase6/assets/sao.png": {
+      "before_sha256": null,
+      "sha256": "62c341d8c212eedfc070e72034db5aa530ef7ab7d3efe2ad46ed4eb9ee3e0209",
+      "text_lf": false
+    },
+    "create_defaults/phase6/assets/stargate.png": {
+      "before_sha256": null,
+      "sha256": "5842312151e2ae56020b94d030a447f886df49ac55f537129eb3187a1faeeab7",
+      "text_lf": false
+    },
+    "create_defaults/phase6/assets/wdu.png": {
+      "before_sha256": null,
+      "sha256": "f0ead3bedf57bfc333ea1517a12fba6e0f330d5cf941b27bc351398302f12cd1",
+      "text_lf": false
+    },
+    "create_defaults/phase6/fixtures.py": {
+      "before_sha256": null,
+      "sha256": "3d696e9ba879698b775e921f7e4a4b779bc129f47736f989f6542b970a40d051",
+      "text_lf": true
+    },
+    "create_defaults/phase6/playlist.py": {
+      "before_sha256": null,
+      "sha256": "630e35df765485f09cd153cbecb120531b50c2ce4ed535d808f9f118d74908f5",
+      "text_lf": true
+    },
+    "create_defaults/phase6/tests/conftest.py": {
+      "before_sha256": null,
+      "sha256": "34fb275a3318c36dd1e36ef1f8e929e3173600d5c8e1573b4ea55c14bd75c3a0",
+      "text_lf": true
+    },
+    "create_defaults/phase6/tests/test_playlist_pilot.py": {
+      "before_sha256": null,
+      "sha256": "097ac7c2ba6f23ce22837785df1ac87a06eb55fe9ae97e6853791fff89956b1d",
+      "text_lf": true
+    }
+  },
+  "offline_fixture_only": true,
+  "production_authorized": false,
+  "publication_authorized": false
+}

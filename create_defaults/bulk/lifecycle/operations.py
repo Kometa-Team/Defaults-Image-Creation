@@ -48,8 +48,11 @@ def payload(text):
 def require_adapter(candidate):
     if type(candidate) is not PosterCandidate:
         fail('unsupported_prospective_phase3_adapter')
-    if any(candidate.registry.view().entry(i)['category']!='Genre' for i in candidate.graph.index().outputs):
-        fail('unsupported_transaction_category')
+    categories = {candidate.registry.view().entry(i)['category'] for i in candidate.graph.index().outputs}
+    if categories != {'Genre'}:
+        from create_defaults.phase6.playlist import for_candidate
+        if categories != {'Playlist'} or for_candidate(candidate) is None:
+            fail('unsupported_transaction_category')
     if candidate.data()['families']:
         fail('prospective_generator_phase3_identity_adapter_required')
     if set(candidate.data()['effective_definitions'])!=set(candidate.graph.index().outputs):
@@ -164,6 +167,9 @@ class Transaction:
             fail('stale_operation')
         intent = ctx.registry.operations.history(op.id)[-1]
         v = intent.to_dict()
+        if any(ctx.registry.view().entry(i)['category']=='Playlist' for i in candidate.graph.index().outputs):
+            if v['operation'] != 'ADD' or ctx.before is not None:
+                fail('playlist_pilot_add_only')
         if v['operation'] not in {'ADD','UPDATE'} or v['state'] not in {'draft','structurally_validated'}:
             fail('operation_not_applicable')
         details = json.loads(ctx.impact.to_dict()['details_json'])
@@ -230,6 +236,9 @@ def propose(registry, *, before, candidate, identity, operation):
     if operation not in {'ADD','UPDATE'} or type(candidate) is not PosterCandidate:
         fail('unsupported_operation_adapter')
     require_adapter(candidate)
+    if any(registry.view().entry(i)['category']=='Playlist' for i in candidate.graph.index().outputs):
+        if operation != 'ADD' or before is not None:
+            fail('playlist_pilot_add_only')
     from .recovery import inspect_db, validate_state_impact
     with registry.operations.contracts.read_connection() as db:
         state=inspect_db(registry.operations.root,registry.operations.contracts,db)

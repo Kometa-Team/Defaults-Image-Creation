@@ -54,6 +54,7 @@ class PosterRequest:
     variant: str
     outputs_json: bytes
     review_context_sha256: str
+    offline_playlist_pilot: object = None
 
     def expand(self, language):
         from ..expanded.resolution import Resolution, resolve
@@ -87,10 +88,19 @@ class PosterRequest:
         style = {k: v for k, v in definition["composer"].items() if k not in {"logo", "input", "base_color", "out_name", "text"}}
         caption_allowed = (caption_allowed and style == read_canonical(rule["style_json"])
                            and layout_shape(definition) == read_canonical(rule["layout_json"]))
+        pilot_pin = None
+        if self.offline_playlist_pilot is not None:
+            # Explicit owned-fixture consumption of the already validated M3
+            # prospective fixed layout. The historical adapter stays unchanged.
+            from create_defaults.phase6.playlist import require_phase3
+            pilot_pin = require_phase3(self.offline_playlist_pilot, self, definition)
+            caption_allowed = any(caption == read_canonical(t["definition_json"]) for t in types.values())
         parent = next((p for p, children in current["families"].items() if self.identity in children), self.identity)
         dependencies = {"definition": fingerprint(definition), "origin": current["provenance"][parent],
             "generator": current["origins"].get(self.identity),
             "family": sorted(current["families"].get(parent, [])), "rules": self.rules_sha256}
+        if pilot_pin is not None:
+            dependencies['offline_playlist_pilot_sha256'] = pilot_pin
         outputs = decode_json(self.outputs_json)
         local = "/".join(filter(None, ("defaults-"+language, definition["output"]["directory"], definition["output"]["filename"])))
         if (len(outputs) != 1 or outputs[0]["id"] != self.identity or outputs[0]["local_path"] != local
