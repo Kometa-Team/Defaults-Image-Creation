@@ -81,6 +81,8 @@ Native JPEGs, worker receipts, exact snapshots/catalog pre/postimages, measured 
 
 ## Decisions still required for live work
 
+The [Phase 6 closeout checklist](../phase6/PHASE6_CLOSEOUT_CHECKLIST.md) now requires a generated-browser ten-item proof plus a disposable removal/add-back lifecycle and a second existing supported style. The browser catalog is an owned staging fixture; its restoration does not alter the native registry's tombstone-reuse rejection. See the [two-role walkthrough](../phase6/STAGING_APP.md). Live reservations, catalog mappings and publication remain separate.
+
 - Review live registry reservations and catalog mappings; all eight names and filename conventions are confirmed.
 - Approve the exact Playlist package, backgrounds, logo treatment and complete final artwork separately; fixture confirmation/approval is not real approval.
 - Supply authenticated source, identity, role, destination/head, withdrawal/revision, expiry and revocation authority.

@@ -1,10 +1,9 @@
-"""Loopback-only approved-JPEG submission/review/staging prototype.
+"""Loopback-only generated-poster submission/review/staging prototype.
 
 Fixture access codes identify two local test roles, not production identities.
 The owned filesystem destination never selects a live repository or publisher.
 """
 import argparse
-import base64
 import hashlib
 from http import cookies
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -257,7 +256,10 @@ def server_for(app, port=0):
                     self.send(200,(HERE/'staging_app.js').read_bytes(),'text/javascript; charset=utf-8')
                 elif self.path=='/api/state':
                     session=self.session()
-                    self.json(dict(**session, entries=list(app.entries.values()), submissions=list(app.submissions.values())))
+                    with app.lock:
+                        app.guard()
+                        self.json(dict(**session, **app.form_state(),
+                            submissions=[app.review(item) for item in app.submissions.values()]))
                 elif self.path.startswith('/preview/'):
                     self.session()
                     item=app.submissions[self.path.removeprefix('/preview/')]
@@ -283,13 +285,18 @@ def server_for(app, port=0):
                 session=self.session()
                 if not secrets.compare_digest(self.headers.get('X-CSRF-Token',''),session['csrf']):
                     raise Rejected('csrf_required',403)
-                if self.path=='/api/submit':
-                    raw=base64.b64decode(data['jpeg'],validate=True)
-                    result=app.submit(session['role'],data['identity'],raw)
+                if self.path=='/api/generate':
+                    result=app.generate(session['role'],data['identity'],data['style'],data['logo'],data['colour'],data['caption'])
+                elif self.path=='/api/submit':
+                    result=app.submit_generated(session['role'],data['id'])
+                elif self.path=='/api/remove':
+                    result=app.request_removal(session['role'],data['identity'])
+                elif self.path=='/api/reference':
+                    result=app.reference(session['role'],data['active'])
                 elif self.path=='/api/approve':
-                    result=app.approve(session['role'],data['id'],data['sha256'])
+                    result=app.approve(session['role'],data['id'],data['sha256'],data.get('review_digest'))
                 elif self.path=='/api/stage':
-                    result=app.stage(session['role'],data['id'],data['sha256'])
+                    result=app.stage(session['role'],data['id'],data['sha256'],data.get('review_digest'))
                 else:
                     raise Rejected('unknown_action',404)
                 self.json(result)
@@ -307,7 +314,8 @@ def main(argv=None):
     args=parser.parse_args(argv)
     from ci.phase6_playlist_maintenance import verify_checkout
     proof=lambda:verify_checkout(expected_head=args.expected_head)
-    app=Staging(args.fixtures,args.state,source_proof=proof)
+    from .staging_lifecycle import BrowserStaging
+    app=BrowserStaging(args.fixtures,args.state,source_proof=proof)
     server=server_for(app,args.port)
     app._save('server.json',dict(url='http://127.0.0.1:'+str(server.server_port),pid=os.getpid(),candidate_commit=args.expected_head))
     print('Offline staging: http://127.0.0.1:'+str(server.server_port),flush=True)

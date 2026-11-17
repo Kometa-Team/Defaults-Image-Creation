@@ -99,12 +99,17 @@
     },
     "create_defaults/lifecycle/PHASE6_PLAYLIST_PILOT.md": {
       "before_sha256": null,
-      "sha256": "1dac8cadf7fc73015389f02bfb54a38be885eca9c281902da70501269c1063d0",
+      "sha256": "110c10e5757b6df04f4b7b58b379b3062cd1a7acb13a11a013814c8140e0b09f",
       "text_lf": true
     },
     "create_defaults/lifecycle/ROADMAP.md": {
       "before_sha256": "148a0e5c1d6618f32982de4a9168a9d01c3f0ef042617024dd31ac0c0236a81e",
       "sha256": "73fda6776b47adc6295bce26c300639ef1f195d703c7d106f9f53e49f1493c55",
+      "text_lf": true
+    },
+    "create_defaults/phase6/PHASE6_CLOSEOUT_CHECKLIST.md": {
+      "before_sha256": null,
+      "sha256": "28533df5d2304d638ffccb73c1683e7eb6d95d8165cb7749f3f0145e9907c864",
       "text_lf": true
     },
     "create_defaults/phase6/PLAYLIST_PILOT_MANIFEST.json": {
@@ -114,7 +119,7 @@
     },
     "create_defaults/phase6/STAGING_APP.md": {
       "before_sha256": null,
-      "sha256": "619aa348945b78d83e8a916110047532160e581b90077ccedae3a7f334bb57b6",
+      "sha256": "fb58f2f6ecd595935544be2ee8fb25c6dce82e7f2077177d6ecc51a4ca7a5dbd",
       "text_lf": true
     },
     "create_defaults/phase6/__init__.py": {
@@ -289,17 +294,17 @@
     },
     "create_defaults/phase6/staging_app.html": {
       "before_sha256": null,
-      "sha256": "ff2ec8e4c11ac773b24f2f499008e71069c8c430279f3de64f61628184971a59",
+      "sha256": "c7cd08eaed5b80c56b092103ad4adb4d0c77edda45d78225c6a7c4443220b592",
       "text_lf": true
     },
     "create_defaults/phase6/staging_app.js": {
       "before_sha256": null,
-      "sha256": "95dded23f0e5c90a95171fd8502f4375a03ec0ec920e370fe371eeccbee3461d",
+      "sha256": "cf663e2f15b96b7e506f260bc61b51ddae2fb2c77c4e69dcdfdf0f8b45ae4104",
       "text_lf": true
     },
     "create_defaults/phase6/staging_app.py": {
       "before_sha256": null,
-      "sha256": "d74a529dbbd93d2fcbf9cf8bef558329335c0fe6790c90b2aa870cb181490b6f",
+      "sha256": "224913a96a890e9910e0623271a67295b018390ff47afee1f7862e03f4a27be7",
       "text_lf": true
     },
     "create_defaults/phase6/staging_fixtures/approved/playlist/Alien & Predator (Timeline Order).jpg": {
@@ -412,6 +417,11 @@
       "sha256": "ddeb819f4fe1a0b1e69aab96e3a33033f93f22229d9fefd414c4b2726e8356e6",
       "text_lf": true
     },
+    "create_defaults/phase6/staging_lifecycle.py": {
+      "before_sha256": null,
+      "sha256": "e9ce76b1002b7f29e394fd3ffcc4dccd32a0d3df85949069f655457fdf407166",
+      "text_lf": true
+    },
     "create_defaults/phase6/tests/conftest.py": {
       "before_sha256": null,
       "sha256": "f6fb4468e064644df013b32cd3069ed02dec07e4e302a79b451cc74993aad3c7",
@@ -422,6 +432,11 @@
       "sha256": "1d798ee9a611a823066384cfed57b79ec999112726f5b540539ffecc6f592ee7",
       "text_lf": true
     },
+    "create_defaults/phase6/tests/staging_lifecycle_browser.cjs": {
+      "before_sha256": null,
+      "sha256": "62dd07d41771988f87f24bfdde1be3783a0b17b83b2dc96c0fdd1b5fb4ecf7bd",
+      "text_lf": true
+    },
     "create_defaults/phase6/tests/test_playlist_pilot.py": {
       "before_sha256": null,
       "sha256": "d6b10c2aaf8ea424d1b6646ef522939e15d3718e398dd4def2a20c569cecdf17",
@@ -430,6 +445,11 @@
     "create_defaults/phase6/tests/test_staging_app.py": {
       "before_sha256": null,
       "sha256": "52b16498224a07e2f6d31cc02397c65cfde4c5d0d555ea61c1d1e06a38f3f594",
+      "text_lf": true
+    },
+    "create_defaults/phase6/tests/test_staging_lifecycle.py": {
+      "before_sha256": null,
+      "sha256": "08a3689ea1f6ef47d4ebd583af4929caa92ee52aef614ddf131ab06a6ad730f7",
       "text_lf": true
     },
     "create_defaults/phase6/verify_approved_transport.py": {
