@@ -101,6 +101,10 @@ class PosterRequest:
             "family": sorted(current["families"].get(parent, [])), "rules": self.rules_sha256}
         if pilot_pin is not None:
             dependencies['offline_playlist_pilot_sha256'] = pilot_pin
+        if c['category'] == 'Playlist':
+            from dataclasses import asdict
+            from create_defaults.poster_styles import PLAYLIST
+            dependencies['composition_style_sha256'] = fingerprint(asdict(PLAYLIST))
         outputs = decode_json(self.outputs_json)
         local = "/".join(filter(None, ("defaults-"+language, definition["output"]["directory"], definition["output"]["filename"])))
         if (len(outputs) != 1 or outputs[0]["id"] != self.identity or outputs[0]["local_path"] != local

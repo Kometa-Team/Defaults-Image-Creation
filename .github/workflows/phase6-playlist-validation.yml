@@ -35,6 +35,8 @@ jobs:
         run: python -B -m ci.phase6_playlist_maintenance
       - name: Fresh files, HEAD, rollback, batching and admission controls
         run: python -B -m unittest ci.dependency_tests.test_phase6_playlist_maintenance -v
+      - name: Production renderer and bounded Playlist layout regression
+        run: python -B -m pytest create_defaults/tests/test_create_poster.py create_defaults/tests/test_playlist_layout.py -q --maxfail=1
       - name: One native ADD through verified local draft
         run: python -B -m pytest create_defaults/phase6/tests/test_playlist_pilot.py::test_one_playlist_add_reaches_local_draft -v --maxfail=1 --junitxml=config/phase6-playlist-evidence/single-tests.xml
       - name: Closing exact-head physical source proof

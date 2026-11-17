@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import argparse
 import colorsys
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 import hashlib
 from io import BytesIO
 import json
@@ -147,7 +147,7 @@ def composite_center(base, overlay, offset=0):
     return result.convert("RGB")
 
 
-def render_poster(options=None, *, asset_dir=ROOT, font_dir=None, **parameters):
+def render_poster(options=None, *, asset_dir=ROOT, font_dir=None, style=None, **parameters):
     """Return (RGB image, metadata). No external commands, network, or writes.
 
     Pass PosterOptions or legacy-named keyword parameters, not both. Runtime
@@ -158,6 +158,21 @@ def render_poster(options=None, *, asset_dir=ROOT, font_dir=None, **parameters):
     options = options or PosterOptions(**parameters)
     if not isinstance(options, PosterOptions):
         raise TypeError("options must be a PosterOptions instance")
+    selected_style = None
+    if style is not None:
+        try:
+            from .poster_styles import get_style
+        except ImportError:
+            from poster_styles import get_style
+        selected_style = get_style(style)
+        if selected_style.canvas != SIZE or not options.text:
+            raise ValueError('Playlist style requires its fixed canvas and caption')
+        if options.border:
+            raise ValueError('Playlist bounds do not admit a whole-composition border resize')
+        options = replace(options, font_size=selected_style.caption_font_size,
+                          text_offset=selected_style.caption_offset,
+                          logo_resize=selected_style.logo_box[2]-selected_style.logo_box[0],
+                          logo_offset=(selected_style.logo_box[1]+selected_style.logo_box[3])//2-SIZE[1]//2)
     asset_dir = Path(asset_dir)
     font_dir = Path(font_dir) if font_dir else asset_dir / "fonts"
     # PowerShell's untyped numeric 0 compares equal to its empty-string default.
@@ -195,8 +210,20 @@ def render_poster(options=None, *, asset_dir=ROOT, font_dir=None, **parameters):
         alpha = logo.getchannel("A")
         logo = Image.new("RGBA", logo.size, "white")
         logo.putalpha(alpha)
-    logo = resized_logo(logo, width)
-    poster = composite_center(poster, logo, logo_offset)
+    logo_fit = None
+    if selected_style is None:
+        logo = resized_logo(logo, width)
+        poster = composite_center(poster, logo, logo_offset)
+    else:
+        try:
+            from .image_layout import fit_visible_rgba
+        except ImportError:
+            from image_layout import fit_visible_rgba
+        logo, position, logo_fit = fit_visible_rgba(logo, selected_style.logo_box,
+            vertical_alignment=selected_style.logo_vertical_alignment)
+        layer = poster.convert('RGBA')
+        layer.alpha_composite(logo, position)
+        poster = layer.convert('RGB')
     if options.text or options.border:
         poster = jpeg_roundtrip(poster)
     metadata = {"engine": "python", "base_color": hex_color(base_color), "border_color": hex_color(border_color),
@@ -206,7 +233,27 @@ def render_poster(options=None, *, asset_dir=ROOT, font_dir=None, **parameters):
     if options.text:
         path = resolve_font(options.font, font_dir)
         layout = load_layout(str(path), path.stat().st_mtime_ns)
-        caption, caption_metadata = layout.caption(options.text, font_size, font_color)
+        if selected_style is None:
+            caption, caption_metadata = layout.caption(options.text, font_size, font_color)
+        else:
+            caption, caption_metadata = layout.caption(options.text, font_size, font_color,
+                                                      box=selected_style.caption_measurement)
+        if selected_style is not None:
+            ink = caption.getchannel('A').getbbox()
+            if ink is None:
+                raise ValueError('Playlist caption must contain visible glyphs')
+            x, y = (SIZE[0]-caption.width)//2, (SIZE[1]-caption.height)//2+text_offset
+            actual = (x+ink[0], y+ink[1], x+ink[2], y+ink[3])
+            left, top, right, bottom = selected_style.caption_box
+            if not (left <= actual[0] < actual[2] <= right and top <= actual[1] < actual[3] <= bottom):
+                raise ValueError('Caption exceeds the selected style box; text fitting requires separate review')
+            gap = actual[1]-logo_fit['visible_bounds'][3]
+            if gap < selected_style.minimum_vertical_gap:
+                raise ValueError('Logo and caption violate the selected style gap')
+            metadata['composition_style'] = dict(id=selected_style.id,
+                logo=logo_fit, caption_box=list(selected_style.caption_box),
+                caption_visible_bounds=list(actual),
+                minimum_vertical_gap=selected_style.minimum_vertical_gap, measured_gap=gap)
         poster = composite_center(poster, caption, text_offset)
         if options.border:
             poster = jpeg_roundtrip(poster)
@@ -238,7 +285,7 @@ def output_filename(options, base_color):
     return "/".join(parts) + ".jpg"
 
 
-def create_poster(options=None, *, output_path=None, output_dir=None, asset_dir=ROOT, font_dir=None, **parameters):
+def create_poster(options=None, *, output_path=None, output_dir=None, asset_dir=ROOT, font_dir=None, style=None, **parameters):
     """Render and save a new JPEG exclusively; never replace existing assets."""
     if options is not None and parameters:
         raise ValueError("Pass PosterOptions or keyword parameters, not both")
@@ -251,7 +298,7 @@ def create_poster(options=None, *, output_path=None, output_dir=None, asset_dir=
             raise FileExistsError(f"Refusing to overwrite an existing file: {target}")
         if target.suffix.lower() not in {".jpg", ".jpeg"}:
             raise ValueError("Explicit output_path must have a .jpg or .jpeg extension")
-    image, metadata = render_poster(options, asset_dir=asset_dir, font_dir=font_dir)
+    image, metadata = render_poster(options, asset_dir=asset_dir, font_dir=font_dir, style=style)
     if output_path is None:
         target = Path(output_dir or ROOT / "output") / output_filename(options, metadata["base_color"])
     target = target.absolute()
@@ -305,8 +352,11 @@ def main(argv=None):
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--asset-dir", type=Path, default=ROOT)
     parser.add_argument("--font-dir", type=Path)
+    parser.add_argument("--style", choices=['playlist-contained-v1'])
     args = vars(parser.parse_args(argv))
-    extra = {key: args.pop(key) for key in ("output_path", "output_dir", "asset_dir", "font_dir")}
+    extra = {key: args.pop(key) for key in ("output_path", "output_dir", "asset_dir", "font_dir", "style")}
+    if extra['style'] is None:
+        del extra['style']
     try:
         result = create_poster(PosterOptions(**args), **extra)
         print(json.dumps(result, ensure_ascii=True))

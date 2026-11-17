@@ -4,7 +4,7 @@
   "members": {
     ".github/workflows/phase6-playlist-validation.yml": {
       "before_sha256": null,
-      "sha256": "349f05a97b4b37f498d3f145fec120daba3969f2e03762010f8b2722c4997fff",
+      "sha256": "ce9b2f105c1b4d79b9700008d71fe84baec2e923d42ce26b82d18df672f2f74d",
       "text_lf": true
     },
     "ci/dependabot_maintenance.py": {
@@ -24,7 +24,7 @@
     },
     "create_defaults/bulk/contracts/translation_preflight/adapters.py": {
       "before_sha256": "f16025d3f4f603731d08fcf361a4d15bc2328f1dd59a50b19a40b54104371442",
-      "sha256": "69934c056640e869bf38c9de220056b7fe3746aa1d9d5445601fd8c877c80e0f",
+      "sha256": "1600c184575afad943e65ac4a0deb2398580528073ab11a44957e86da83a4d53",
       "text_lf": true
     },
     "create_defaults/bulk/lifecycle/candidates.py": {
@@ -67,9 +67,34 @@
       "sha256": "6f7bd75b62acdf07dec73a4d86fd3d446d43c02345e8a3e3f061184fb3e5fd75",
       "text_lf": true
     },
+    "create_defaults/bulk/planner.py": {
+      "before_sha256": "f29ab240dd24bad05d2ea15bd026f97e3dd34ead1ae121165b043f9065044a6a",
+      "sha256": "da2637a0beb01fb9912b82a5bdd4701bf1f70c16324d115941604aecb262dd20",
+      "text_lf": true
+    },
+    "create_defaults/bulk/schemas/manifest-v1.json": {
+      "before_sha256": "aba4dd0e6f28901215148254540c32698ba97235cc1f45587dfab012ea945c87",
+      "sha256": "198d40e1538b1ab7f1d1360bd6202d7ad255cd3ba3b38cadddaf71f48fc4a2ff",
+      "text_lf": true
+    },
+    "create_defaults/bulk/workers.py": {
+      "before_sha256": "1e7a4daa8bfeb9433b2ef2d6e044e449ba972b87329ac6399853c39f213dfa8a",
+      "sha256": "b46fd4cca9248f928998537975f324229abcddd3f9a9ae72a01d91c30479262c",
+      "text_lf": true
+    },
+    "create_defaults/create_poster.py": {
+      "before_sha256": "51cfae66a3f0feb265a46e5d4c3024fc6daa66abefe453e21ba977fd21953305",
+      "sha256": "d930ef9680e0ab6510a4726b2e239e734974d36dcd604ab0839331b3d064b28d",
+      "text_lf": true
+    },
+    "create_defaults/image_layout.py": {
+      "before_sha256": null,
+      "sha256": "227c2f4abecafb5972dde92e81a56fdf91fa6912ba81ec6c456d5958b9a11dd8",
+      "text_lf": true
+    },
     "create_defaults/lifecycle/PHASE6_PLAYLIST_PILOT.md": {
       "before_sha256": null,
-      "sha256": "3461fdfeaa23974b2372430bec678a6928d567b1b89a8cdd7df96febed73040d",
+      "sha256": "892afc1dcfa3cfb9db9c40674bb140ef27343fc14af63675410af5a70f48fbd1",
       "text_lf": true
     },
     "create_defaults/lifecycle/ROADMAP.md": {
@@ -145,6 +170,16 @@
     "create_defaults/phase6/tests/test_playlist_pilot.py": {
       "before_sha256": null,
       "sha256": "d6b10c2aaf8ea424d1b6646ef522939e15d3718e398dd4def2a20c569cecdf17",
+      "text_lf": true
+    },
+    "create_defaults/poster_styles.py": {
+      "before_sha256": null,
+      "sha256": "0b1f5278ddd3d8c473435b1d9816d89ed70e645147968b7d865fd8e05c088695",
+      "text_lf": true
+    },
+    "create_defaults/tests/test_playlist_layout.py": {
+      "before_sha256": null,
+      "sha256": "0884cf436493ccab6fec54a50626b2f91096c051e568117d2192f65c795e5be1",
       "text_lf": true
     }
   },

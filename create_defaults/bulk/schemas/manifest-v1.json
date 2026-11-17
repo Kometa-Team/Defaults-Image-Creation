@@ -20,6 +20,7 @@
       "allOf": [{"if": {"properties": {"kind": {"const": "overlay"}}}, "then": {"properties": {"raw_parameters": {"$ref": "#/$defs/overlayParameters"}, "parameters": {"$ref": "#/$defs/overlayParameters"}}}}],
       "required": ["id", "kind", "poster_id", "language", "variant", "definition_fingerprint", "generator_origin", "source", "raw_parameters", "parameters", "inputs", "dependencies", "translation", "language_behavior", "local_relative", "remote_relative", "layout_evidence", "color_assignment", "status", "render_ready", "render_fingerprint"],
       "properties": {
+        "composition_style": {"enum": ["playlist-contained-v1"]},
         "id": {"type": "string", "minLength": 1}, "kind": {"enum": ["poster", "overlay"]}, "poster_id": {"type": "string"}, "language": {"$ref": "urn:kometa:bulk:definition:1#/$defs/language"}, "variant": {"type": "string"},
         "definition_fingerprint": {"$ref": "#/$defs/sha"}, "render_fingerprint": {"$ref": "#/$defs/sha"}, "source": {"$ref": "urn:kometa:bulk:definition:1#/properties/source"},
         "generator_origin": {"type": ["object", "null"]},
