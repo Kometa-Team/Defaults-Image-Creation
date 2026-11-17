@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Playlist staging review</title>
+<style>
+body{font:16px system-ui,sans-serif;max-width:1200px;margin:32px auto;padding:0 20px;background:#f4f5f7;color:#172334}h1{margin-bottom:8px}.notice{border-left:4px solid #be8928;padding:12px;background:#fff4d9}section{background:white;border:1px solid #d9dfe6;border-radius:10px;padding:20px;margin:20px 0}label{display:block;margin:12px 0}input,select,button{font:inherit;padding:9px;border-radius:5px;border:1px solid #aeb8c5}button{background:#173f69;color:white;cursor:pointer}button.secondary{background:white;color:#173f69}#message{min-height:24px}#cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}.card{border:1px solid #d9dfe6;border-radius:8px;padding:16px;overflow-wrap:anywhere}.card img{width:100%;max-width:300px;display:block;margin:12px auto}.hash{font:12px monospace}.actions{display:flex;gap:10px;margin-top:12px}.status{font-weight:bold;color:#285479}[hidden]{display:none!important}
+</style><script src="/staging_app.js" defer></script></head>
+<body><h1>Playlist staging review</h1><p class="notice">Offline pilot: eight creates and two replacements. Writes stay in an isolated staging destination. Live reservations, catalog mappings and publication are pending.</p>
+<section><h2>Sign in to a fixture role</h2><form id="login"><label>Role <select id="role"><option value="contributor">Contributor</option><option value="maintainer">Maintainer</option></select></label><label>Staging access code <input id="code" type="password" autocomplete="off" required></label><button>Sign in</button></form><p id="signed-in"></p></section>
+<p id="message" role="status" aria-live="polite"></p>
+<section id="submit-section" hidden><h2>Submit an approved poster</h2><p>Choose a pilot item and upload its approved JPEG. The preview must match its recorded SHA-256.</p><form id="submit"><label>Playlist <select id="item"></select></label><label>Poster JPEG <input id="poster" type="file" accept="image/jpeg" required></label><button>Submit and preview</button></form></section>
+<section id="review-section" hidden><h2>Submitted previews</h2><p id="summary"></p><div id="cards"></div></section>
+</body></html>

@@ -1,0 +1,109 @@
+{
+  "kind": "review-only-two-file-playlist-replacement-plan",
+  "version": 1,
+  "baseline": {
+    "repository": "Kometa-Team/Default-Images",
+    "branch": "master",
+    "head": "dfff31ab08446353844bb97de601c3a64edc8220",
+    "tree": "66d0d890ab177d3d7f139c47f812999edad3a530"
+  },
+  "observation_source": "GitHub plugin GET: repository, branches/master, root and playlist Git trees, fetch_file base64 at pinned HEAD",
+  "members": [
+    {
+      "identity": "playlist.playlist-x-men-timeline-order.627ce505",
+      "destination": "playlist/X-Men (Timeline Order).jpg",
+      "operation": "replace_existing_file",
+      "source": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\ten-item-browser-fixtures\\approved\\playlist\\X-Men (Timeline Order).jpg",
+      "sha256": "5e513164bb873d739b2df9cc500521c7449060ce0bce98e3a5786cf002f8f63f",
+      "size": 378498,
+      "git_blob": "d5c34027fe1f00fa4facba9490e5bed4994f2a77",
+      "previous_sha256": "e1c2011e710fd4d0192226ae9df841249c9f0dd0eeefee193504f749bcb36832",
+      "previous_git_blob": "8ecca4724ea343a5f9865aef914ef1eaee57bd10",
+      "previous_size": 385427,
+      "preimage_file": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\replacement-plan\\preimages\\X-Men (Timeline Order).jpg",
+      "review_scope": "individual",
+      "difference_class": "intentional_playlist_composition_change",
+      "visual_approval_source": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\ten-item-browser-fixtures\\two-replacement-visual-approval.json",
+      "visual_approval_file_sha256": "78a84e3f3da5638e00819bf179a1844c82ac4b282f717439c20dc420ab521496",
+      "expected_raw_diff": {
+        "old_mode": "100644",
+        "new_mode": "100644",
+        "old_blob": "8ecca4724ea343a5f9865aef914ef1eaee57bd10",
+        "new_blob": "d5c34027fe1f00fa4facba9490e5bed4994f2a77",
+        "status": "M"
+      }
+    },
+    {
+      "identity": "playlist.playlist-star-wars-the-clone-wars-timeline-order.c6750e0c",
+      "destination": "playlist/Star Wars The Clone Wars (Timeline Order).jpg",
+      "operation": "replace_existing_file",
+      "source": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\ten-item-browser-fixtures\\approved\\playlist\\Star Wars The Clone Wars (Timeline Order).jpg",
+      "sha256": "2de0e1ec2324c886301e771c92836acf42b4d92b60d2283e15e8f897b10fda22",
+      "size": 795616,
+      "git_blob": "b981a39db31947dc619e0704cb9c40957d2bf28b",
+      "previous_sha256": "703fe5c5fec332b7f6572f099dc9cfd481c36faaf84c59f24d6e3fd1e6eefd7b",
+      "previous_git_blob": "918d77e4e888cd78387c1597836d16c2bd30ed88",
+      "previous_size": 815918,
+      "preimage_file": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\replacement-plan\\preimages\\Star Wars The Clone Wars (Timeline Order).jpg",
+      "review_scope": "individual",
+      "difference_class": "intentional_playlist_composition_change",
+      "visual_approval_source": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\ten-item-browser-fixtures\\two-replacement-visual-approval.json",
+      "visual_approval_file_sha256": "78a84e3f3da5638e00819bf179a1844c82ac4b282f717439c20dc420ab521496",
+      "expected_raw_diff": {
+        "old_mode": "100644",
+        "new_mode": "100644",
+        "old_blob": "918d77e4e888cd78387c1597836d16c2bd30ed88",
+        "new_blob": "b981a39db31947dc619e0704cb9c40957d2bf28b",
+        "status": "M"
+      }
+    }
+  ],
+  "identities_and_destinations_unchanged": true,
+  "catalog_changes": [],
+  "expected_modified_files": [
+    "playlist/Star Wars The Clone Wars (Timeline Order).jpg",
+    "playlist/X-Men (Timeline Order).jpg"
+  ],
+  "candidate_bytes_sha256_verified": true,
+  "preimage_git_blob_and_sha256_verified": true,
+  "preimage_mode_and_tree_membership_verified": true,
+  "visual_approval_scope": "APPROVED_FOR_STAGING_REPLACEMENT_FIXTURES",
+  "remaining_requirements": [
+    "Refresh production master HEAD/tree immediately before staging; reject drift or refresh membership and approval.",
+    "Revalidate pinned existing destination modes and blob IDs; no addition or rename is approved.",
+    "Create exact sealed operator inventory, proposed policy and candidate manifest; bind full context and preserve this visual approval.",
+    "Obtain actual supported maintainer reviewer attribution, exact manifest/policy hashes, explicit individual exceptions acceptance and draft-only staging decision.",
+    "Use generic operator replacement workflow, not the assigned-identity ADD-only Playlist lifecycle adapter.",
+    "Verify complete two-file M diff, old/new blob identities and candidate SHA256; verify actual remote bytes if separately authorized later."
+  ],
+  "operator_approval_receipt": null,
+  "draft_staging_authorization": null,
+  "live_execution_authorized": false,
+  "remote_writes_authorized": false,
+  "publication_authorized": false,
+  "merge_authorized": false,
+  "executable": false,
+  "network_writes": 0,
+  "review_binary_patch": {
+    "path": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\replacement-plan\\two-playlist-replacements.patch",
+    "sha256": "a32e232ae315b58ca05f443b4c5301ae2886950657f5b496652ec3167789f108",
+    "bytes": 1413084,
+    "format": "git diff --binary --full-index",
+    "expected_modified_files": [
+      "playlist/Star Wars The Clone Wars (Timeline Order).jpg",
+      "playlist/X-Men (Timeline Order).jpg"
+    ],
+    "preimage_fixture": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\replacement-plan\\patch-generation-fixture",
+    "validation_fixture": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\replacement-plan\\patch-validation-fixture",
+    "git_apply_check_passed": true,
+    "isolated_apply_candidate_hashes_verified": true,
+    "exact_two_file_100644_M_diff_verified": true,
+    "cached_binary_patch_reproduced": true,
+    "reverse_apply_check_passed": true,
+    "round_trip_preimage_hashes_verified": true,
+    "validation_fixture_restored_clean": true,
+    "applied_to_real_repository": false,
+    "remote_writes": 0,
+    "live_authorization_granted": false
+  }
+}

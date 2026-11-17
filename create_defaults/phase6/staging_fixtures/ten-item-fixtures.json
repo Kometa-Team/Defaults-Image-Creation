@@ -1,0 +1,479 @@
+{
+  "kind": "phase6-ten-item-browser-staging-fixtures",
+  "candidate_commit": "fa8870f4e23d6e0e0161b3fd43385ef9c90e045b",
+  "baseline_commit": "dcbfa072dbedcb0069dd27be920ef3103687b5a4",
+  "creates": 8,
+  "replacements": 2,
+  "entries": [
+    {
+      "action": "CREATE",
+      "backend_operation": "ADD",
+      "identity": "playlist.feec6426d0134e93973e8a2b36bd1ebe",
+      "identity_status": "fixture UUID proposal; live reservation pending",
+      "display_name": "Alien & Predator",
+      "destination": "playlist/Alien & Predator (Timeline Order).jpg",
+      "local_path": "defaults-en/playlist/Alien & Predator (Timeline Order).jpg",
+      "approved_file": "approved/playlist/Alien & Predator (Timeline Order).jpg",
+      "approved_sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+      "base_colour": "#1EAC1B",
+      "source_png_sha256": "121346d7375b741052e862b4e7124887bd1b85a1fb2e0c9c296e91669b1482d2",
+      "precondition": {
+        "exists": false,
+        "sha256": null,
+        "scope": "staging fixture only"
+      },
+      "render_request": {
+        "parameters": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#1EAC1B",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "fonts/BebasNeue-Regular.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 154,
+          "gradient": 1,
+          "logo": "phase6/assets/avp.png",
+          "logo_offset": -200,
+          "logo_resize": 1600,
+          "out_name": "Alien & Predator (Timeline Order)",
+          "text": "TIMELINE ORDER",
+          "text_offset": 450,
+          "white_wash": true
+        },
+        "composition_style": "playlist-contained-v1"
+      },
+      "approval_record": "eight-create-visual-approval.json"
+    },
+    {
+      "action": "CREATE",
+      "backend_operation": "ADD",
+      "identity": "playlist.2d41498dd84b47a58ffd8f1728bfa32f",
+      "identity_status": "fixture UUID proposal; live reservation pending",
+      "display_name": "Babylon 5",
+      "destination": "playlist/Babylon 5 (Timeline Order).jpg",
+      "local_path": "defaults-en/playlist/Babylon 5 (Timeline Order).jpg",
+      "approved_file": "approved/playlist/Babylon 5 (Timeline Order).jpg",
+      "approved_sha256": "4bde3a4a13e08ed9a30a8c2e7ed760d3959eab18d4edeaf2d710c29de6a4a0ca",
+      "base_colour": "#5B4A86",
+      "source_png_sha256": "fdf89f346410d2c0e9656bc9223ee35e7cc6377969f96cbaeffc3e9abf8e7e6a",
+      "precondition": {
+        "exists": false,
+        "sha256": null,
+        "scope": "staging fixture only"
+      },
+      "render_request": {
+        "parameters": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#5B4A86",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "fonts/BebasNeue-Regular.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 154,
+          "gradient": 1,
+          "logo": "phase6/assets/babylon.png",
+          "logo_offset": -200,
+          "logo_resize": 1600,
+          "out_name": "Babylon 5 (Timeline Order)",
+          "text": "TIMELINE ORDER",
+          "text_offset": 450,
+          "white_wash": true
+        },
+        "composition_style": "playlist-contained-v1"
+      },
+      "approval_record": "eight-create-visual-approval.json"
+    },
+    {
+      "action": "CREATE",
+      "backend_operation": "ADD",
+      "identity": "playlist.ca5bf3fafc7a4f888dbee738fc6fea09",
+      "identity_status": "fixture UUID proposal; live reservation pending",
+      "display_name": "Battlestar Galactica",
+      "destination": "playlist/Battlestar Galactica (Timeline Order).jpg",
+      "local_path": "defaults-en/playlist/Battlestar Galactica (Timeline Order).jpg",
+      "approved_file": "approved/playlist/Battlestar Galactica (Timeline Order).jpg",
+      "approved_sha256": "4db6f349cd3591c4a3d52b642dfd6f253294fccba130d0558b7085cf973a429c",
+      "base_colour": "#3C6382",
+      "source_png_sha256": "f59cf12ea9578825c118aa39e8e5209dc9d30ec4d3402c776fbb846ff133a276",
+      "precondition": {
+        "exists": false,
+        "sha256": null,
+        "scope": "staging fixture only"
+      },
+      "render_request": {
+        "parameters": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#3C6382",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "fonts/BebasNeue-Regular.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 154,
+          "gradient": 1,
+          "logo": "phase6/assets/bsg.png",
+          "logo_offset": -200,
+          "logo_resize": 1600,
+          "out_name": "Battlestar Galactica (Timeline Order)",
+          "text": "TIMELINE ORDER",
+          "text_offset": 450,
+          "white_wash": true
+        },
+        "composition_style": "playlist-contained-v1"
+      },
+      "approval_record": "eight-create-visual-approval.json"
+    },
+    {
+      "action": "CREATE",
+      "backend_operation": "ADD",
+      "identity": "playlist.70487260288d489fa6e4d06672990a67",
+      "identity_status": "fixture UUID proposal; live reservation pending",
+      "display_name": "Mobile Suit Gundam",
+      "destination": "playlist/Mobile Suit Gundam (Timeline Order).jpg",
+      "local_path": "defaults-en/playlist/Mobile Suit Gundam (Timeline Order).jpg",
+      "approved_file": "approved/playlist/Mobile Suit Gundam (Timeline Order).jpg",
+      "approved_sha256": "864a16e906d71b3b9eaabe01ff9dca5f55d1cdee1527489fbf08b9a545e0b273",
+      "base_colour": "#285DA8",
+      "source_png_sha256": "647992caa06ae2d2c1fd1210762f44cde0981699fd6242573a17342a88ac88e3",
+      "precondition": {
+        "exists": false,
+        "sha256": null,
+        "scope": "staging fixture only"
+      },
+      "render_request": {
+        "parameters": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#285DA8",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "fonts/BebasNeue-Regular.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 154,
+          "gradient": 1,
+          "logo": "phase6/assets/gundam.png",
+          "logo_offset": -200,
+          "logo_resize": 1600,
+          "out_name": "Mobile Suit Gundam (Timeline Order)",
+          "text": "TIMELINE ORDER",
+          "text_offset": 450,
+          "white_wash": true
+        },
+        "composition_style": "playlist-contained-v1"
+      },
+      "approval_record": "eight-create-visual-approval.json"
+    },
+    {
+      "action": "CREATE",
+      "backend_operation": "ADD",
+      "identity": "playlist.5eba47e8c0a04c2e9914f6618b621f2c",
+      "identity_status": "fixture UUID proposal; live reservation pending",
+      "display_name": "Middle-earth",
+      "destination": "playlist/Middle-earth (Timeline Order).jpg",
+      "local_path": "defaults-en/playlist/Middle-earth (Timeline Order).jpg",
+      "approved_file": "approved/playlist/Middle-earth (Timeline Order).jpg",
+      "approved_sha256": "2e6ba926238e2c7d5213701a08d2c9cefe498ffa6c54c9c411ee488679b764d3",
+      "base_colour": "#C28A25",
+      "source_png_sha256": "bab84403116d5c948fd4710640c3ecb0859dead9191eb75fdfeb492d4e473556",
+      "precondition": {
+        "exists": false,
+        "sha256": null,
+        "scope": "staging fixture only"
+      },
+      "render_request": {
+        "parameters": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#C28A25",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "fonts/BebasNeue-Regular.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 154,
+          "gradient": 1,
+          "logo": "phase6/assets/jrrt.png",
+          "logo_offset": -200,
+          "logo_resize": 1600,
+          "out_name": "Middle-earth (Timeline Order)",
+          "text": "TIMELINE ORDER",
+          "text_offset": 450,
+          "white_wash": true
+        },
+        "composition_style": "playlist-contained-v1"
+      },
+      "approval_record": "eight-create-visual-approval.json"
+    },
+    {
+      "action": "CREATE",
+      "backend_operation": "ADD",
+      "identity": "playlist.c48a75120f4f4a8aa290c3683b2dc1d2",
+      "identity_status": "fixture UUID proposal; live reservation pending",
+      "display_name": "Sword Art Online",
+      "destination": "playlist/Sword Art Online (Timeline Order).jpg",
+      "local_path": "defaults-en/playlist/Sword Art Online (Timeline Order).jpg",
+      "approved_file": "approved/playlist/Sword Art Online (Timeline Order).jpg",
+      "approved_sha256": "0221887405a7b2526afae40e0f770a8e9feb5ebbdde86789ce0c6125c7d201db",
+      "base_colour": "#25A6B2",
+      "source_png_sha256": "62c341d8c212eedfc070e72034db5aa530ef7ab7d3efe2ad46ed4eb9ee3e0209",
+      "precondition": {
+        "exists": false,
+        "sha256": null,
+        "scope": "staging fixture only"
+      },
+      "render_request": {
+        "parameters": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#25A6B2",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "fonts/BebasNeue-Regular.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 154,
+          "gradient": 1,
+          "logo": "phase6/assets/sao.png",
+          "logo_offset": -200,
+          "logo_resize": 1600,
+          "out_name": "Sword Art Online (Timeline Order)",
+          "text": "TIMELINE ORDER",
+          "text_offset": 450,
+          "white_wash": true
+        },
+        "composition_style": "playlist-contained-v1"
+      },
+      "approval_record": "eight-create-visual-approval.json"
+    },
+    {
+      "action": "CREATE",
+      "backend_operation": "ADD",
+      "identity": "playlist.11d52d3953a64d0faabcd7a692fbb87f",
+      "identity_status": "fixture UUID proposal; live reservation pending",
+      "display_name": "Stargate",
+      "destination": "playlist/Stargate (Timeline Order).jpg",
+      "local_path": "defaults-en/playlist/Stargate (Timeline Order).jpg",
+      "approved_file": "approved/playlist/Stargate (Timeline Order).jpg",
+      "approved_sha256": "8d93feff5ba739ba5aa31a0ba40b0d533e66a32cdf0a5857c8fd1fd76eec5e86",
+      "base_colour": "#6C73A1",
+      "source_png_sha256": "5842312151e2ae56020b94d030a447f886df49ac55f537129eb3187a1faeeab7",
+      "precondition": {
+        "exists": false,
+        "sha256": null,
+        "scope": "staging fixture only"
+      },
+      "render_request": {
+        "parameters": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#6C73A1",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "fonts/BebasNeue-Regular.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 154,
+          "gradient": 1,
+          "logo": "phase6/assets/stargate.png",
+          "logo_offset": -200,
+          "logo_resize": 1600,
+          "out_name": "Stargate (Timeline Order)",
+          "text": "TIMELINE ORDER",
+          "text_offset": 450,
+          "white_wash": true
+        },
+        "composition_style": "playlist-contained-v1"
+      },
+      "approval_record": "eight-create-visual-approval.json"
+    },
+    {
+      "action": "CREATE",
+      "backend_operation": "ADD",
+      "identity": "playlist.0aabd1b1c7d44b198858057648ba9514",
+      "identity_status": "fixture UUID proposal; live reservation pending",
+      "display_name": "The Walking Dead Universe",
+      "destination": "playlist/The Walking Dead Universe (Timeline Order).jpg",
+      "local_path": "defaults-en/playlist/The Walking Dead Universe (Timeline Order).jpg",
+      "approved_file": "approved/playlist/The Walking Dead Universe (Timeline Order).jpg",
+      "approved_sha256": "a6622b755f339e22d813d98adc0d60c3d9289c172b0c2a224fceb32cb96413b3",
+      "base_colour": "#797F48",
+      "source_png_sha256": "f0ead3bedf57bfc333ea1517a12fba6e0f330d5cf941b27bc351398302f12cd1",
+      "precondition": {
+        "exists": false,
+        "sha256": null,
+        "scope": "staging fixture only"
+      },
+      "render_request": {
+        "parameters": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#797F48",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "fonts/BebasNeue-Regular.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 154,
+          "gradient": 1,
+          "logo": "phase6/assets/wdu.png",
+          "logo_offset": -200,
+          "logo_resize": 1600,
+          "out_name": "The Walking Dead Universe (Timeline Order)",
+          "text": "TIMELINE ORDER",
+          "text_offset": 450,
+          "white_wash": true
+        },
+        "composition_style": "playlist-contained-v1"
+      },
+      "approval_record": "eight-create-visual-approval.json"
+    },
+    {
+      "action": "REPLACE",
+      "backend_operation": "UPDATE",
+      "identity": "playlist.playlist-x-men-timeline-order.627ce505",
+      "identity_status": "existing historical catalog identity; retain exactly",
+      "display_name": "X-Men (Timeline Order)",
+      "destination": "playlist/X-Men (Timeline Order).jpg",
+      "local_path": "defaults-en/playlist/X-Men (Timeline Order).jpg",
+      "approved_file": "approved/playlist/X-Men (Timeline Order).jpg",
+      "approved_sha256": "5e513164bb873d739b2df9cc500521c7449060ce0bce98e3a5786cf002f8f63f",
+      "base_colour": "#636363",
+      "precondition": {
+        "exists": true,
+        "sha256": "e1c2011e710fd4d0192226ae9df841249c9f0dd0eeefee193504f749bcb36832",
+        "scope": "locally rendered historical staging preimage; NOT a live destination observation"
+      },
+      "render_request": {
+        "parameters": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#636363",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "fonts/BebasNeue-Regular.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 154,
+          "gradient": 1,
+          "logo": "logos_playlist/X-men.png",
+          "logo_offset": -200,
+          "logo_resize": 1600,
+          "out_name": "X-Men (Timeline Order)",
+          "text": "TIMELINE ORDER",
+          "text_offset": 450,
+          "white_wash": true
+        },
+        "composition_style": "playlist-contained-v1"
+      },
+      "catalog_change": "NONE: preserve identity, source definition and destination; replace reviewed artwork only",
+      "approval_record": "two-replacement-visual-approval.json"
+    },
+    {
+      "action": "REPLACE",
+      "backend_operation": "UPDATE",
+      "identity": "playlist.playlist-star-wars-the-clone-wars-timeline-order.c6750e0c",
+      "identity_status": "existing historical catalog identity; retain exactly",
+      "display_name": "Star Wars The Clone Wars (Timeline Order)",
+      "destination": "playlist/Star Wars The Clone Wars (Timeline Order).jpg",
+      "local_path": "defaults-en/playlist/Star Wars The Clone Wars (Timeline Order).jpg",
+      "approved_file": "approved/playlist/Star Wars The Clone Wars (Timeline Order).jpg",
+      "approved_sha256": "2de0e1ec2324c886301e771c92836acf42b4d92b60d2283e15e8f897b10fda22",
+      "base_colour": "#ED1C24",
+      "precondition": {
+        "exists": true,
+        "sha256": "703fe5c5fec332b7f6572f099dc9cfd481c36faaf84c59f24d6e3fd1e6eefd7b",
+        "scope": "locally rendered historical staging preimage; NOT a live destination observation"
+      },
+      "render_request": {
+        "parameters": {
+          "avg_color": false,
+          "avg_color_image": null,
+          "base_color": "#ED1C24",
+          "border": false,
+          "border_color": "#FFFFFF",
+          "border_width": 15,
+          "clean": true,
+          "dom_color": false,
+          "dom_color_image": null,
+          "font": "fonts/BebasNeue-Regular.ttf",
+          "font_color": "#FFFFFF",
+          "font_size": 154,
+          "gradient": 1,
+          "logo": "logos_playlist/Star Wars The Clone Wars.png",
+          "logo_offset": -200,
+          "logo_resize": 1600,
+          "out_name": "Star Wars The Clone Wars (Timeline Order)",
+          "text": "TIMELINE ORDER",
+          "text_offset": 450,
+          "white_wash": true
+        },
+        "composition_style": "playlist-contained-v1"
+      },
+      "catalog_change": "NONE: preserve identity, source definition and destination; replace reviewed artwork only",
+      "approval_record": "two-replacement-visual-approval.json"
+    }
+  ],
+  "browser_workflow_status": "IMPLEMENTED_APPROVED_JPEG_FIXTURE_FLOW",
+  "ten_item_staging_status": "RESULT_RECORDED_SEPARATELY",
+  "browser_steps": [
+    {
+      "scope": "implemented",
+      "steps": [
+        "fixture contributor submission",
+        "exact JPEG preview",
+        "fixture maintainer SHA-bound approval",
+        "owned staging CREATE/REPLACE with preimage CAS",
+        "destination hash and preservation receipts"
+      ]
+    },
+    {
+      "scope": "pending_live_work",
+      "steps": [
+        "real authentication and authorization",
+        "arbitrary logo-to-render web submission",
+        "historical Playlist lifecycle UPDATE adapter",
+        "live reservations/catalog mappings/publication"
+      ]
+    }
+  ],
+  "live_update_preparation": "BLOCKED_UNTIL_TEN_ITEM_STAGING_PASS",
+  "live_registry_reservations": "PENDING",
+  "catalog_mappings": "PENDING",
+  "live_destination_head": null,
+  "live_preimage_hashes_verified": false,
+  "publication_authorized": false,
+  "activation_authorized": false
+}

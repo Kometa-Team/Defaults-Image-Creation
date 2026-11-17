@@ -112,6 +112,11 @@
       "sha256": "356deb472bb5b9e37bf27839cf847afd5fc9b3dfdaddb2f3dc25ac9a68a20b58",
       "text_lf": true
     },
+    "create_defaults/phase6/STAGING_APP.md": {
+      "before_sha256": null,
+      "sha256": "619aa348945b78d83e8a916110047532160e581b90077ccedae3a7f334bb57b6",
+      "text_lf": true
+    },
     "create_defaults/phase6/__init__.py": {
       "before_sha256": null,
       "sha256": "35670514fbe63626bab0ab0f05ccec74cbdf053af3a18926a34aa67f09c31a03",
@@ -212,9 +217,154 @@
       "sha256": "930bc0a0d0278e23569650398a4b1e69606e608f3469230af292bd0232a255a4",
       "text_lf": false
     },
+    "create_defaults/phase6/review/replacements/README.md": {
+      "before_sha256": null,
+      "sha256": "ac27d1cfc84e4ee105dc31206d6cb497ec1578350b78db919c32b7b213bd3da4",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/replacements/patch-validation.json": {
+      "before_sha256": null,
+      "sha256": "56306d205f4fb485dfb1f2aada519465c8b6f89ac69037006853fe4f73c9ada4",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/replacements/replacement-plan.json": {
+      "before_sha256": null,
+      "sha256": "b4170abf7841503a35a8dd190b2c3aee74dba3d0a996da42854dbe609bd69d7b",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/replacements/two-playlist-replacements.patch": {
+      "before_sha256": null,
+      "sha256": "a32e232ae315b58ca05f443b4c5301ae2886950657f5b496652ec3167789f108",
+      "text_lf": true
+    },
     "create_defaults/phase6/review/visual-approval.json": {
       "before_sha256": null,
       "sha256": "d21036c21ffbd01e86357327ecaa37d9d36f3d9e0ac6525aa8e91577a4f86360",
+      "text_lf": true
+    },
+    "create_defaults/phase6/staging_app.html": {
+      "before_sha256": null,
+      "sha256": "e619ddde2e50a9ad2e0b1a738762e70292b9decccaec327e7e2778a8863f937d",
+      "text_lf": true
+    },
+    "create_defaults/phase6/staging_app.js": {
+      "before_sha256": null,
+      "sha256": "31c030469528382b46253195504577ba8850115e074ddecb4b2a1d2a8a3664ee",
+      "text_lf": true
+    },
+    "create_defaults/phase6/staging_app.py": {
+      "before_sha256": null,
+      "sha256": "d74a529dbbd93d2fcbf9cf8bef558329335c0fe6790c90b2aa870cb181490b6f",
+      "text_lf": true
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/Alien & Predator (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/Babylon 5 (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "4bde3a4a13e08ed9a30a8c2e7ed760d3959eab18d4edeaf2d710c29de6a4a0ca",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/Battlestar Galactica (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "4db6f349cd3591c4a3d52b642dfd6f253294fccba130d0558b7085cf973a429c",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/Middle-earth (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "2e6ba926238e2c7d5213701a08d2c9cefe498ffa6c54c9c411ee488679b764d3",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/Mobile Suit Gundam (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "864a16e906d71b3b9eaabe01ff9dca5f55d1cdee1527489fbf08b9a545e0b273",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/Star Wars The Clone Wars (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "2de0e1ec2324c886301e771c92836acf42b4d92b60d2283e15e8f897b10fda22",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/Stargate (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "8d93feff5ba739ba5aa31a0ba40b0d533e66a32cdf0a5857c8fd1fd76eec5e86",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/Sword Art Online (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "0221887405a7b2526afae40e0f770a8e9feb5ebbdde86789ce0c6125c7d201db",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/The Walking Dead Universe (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "a6622b755f339e22d813d98adc0d60c3d9289c172b0c2a224fceb32cb96413b3",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/X-Men (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "5e513164bb873d739b2df9cc500521c7449060ce0bce98e3a5786cf002f8f63f",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/eight-create-visual-approval.json": {
+      "before_sha256": null,
+      "sha256": "d21036c21ffbd01e86357327ecaa37d9d36f3d9e0ac6525aa8e91577a4f86360",
+      "text_lf": true
+    },
+    "create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Arrowverse (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "c793c1320b66f94d445828c5709f806c935739679b5d1c35d04de65dd758d8d3",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/staging-baseline/playlist/DC Animated Universe (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "172552814739e0585b793945e7eec0e4942f540ab6a33842a1349289167c28e3",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Dragon Ball (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "538bd8fda6fbacf5a2f3ee8d9b5d094840b85a6f4b670735b4dcf0c2cc85d703",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Marvel Cinematic Universe (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "99935f92373eae8e5cde2f1ce96a159c5a0ccd59f9bb1712c647586e8103a3bc",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Pok\u00e9mon (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "d9f0f8195409897849972707cb57692d29fad53efdefffc1da6f5a7681f87e28",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Star Trek (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "70acb5d956c94f84ec32bb3d89f7a99a3cd2871ff95cae1ab4421ba46ac0e370",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Star Wars (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "c0575f1dd2ff087054db8569b03bb48fecbe1f3e08a4bc035ca5ceac27652877",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Star Wars The Clone Wars (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "703fe5c5fec332b7f6572f099dc9cfd481c36faaf84c59f24d6e3fd1e6eefd7b",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/staging-baseline/playlist/X-Men (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "e1c2011e710fd4d0192226ae9df841249c9f0dd0eeefee193504f749bcb36832",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/ten-item-fixtures.json": {
+      "before_sha256": null,
+      "sha256": "836456330593f992791480250cdf112d5949c0f324240043a990392f1ff784ae",
+      "text_lf": true
+    },
+    "create_defaults/phase6/staging_fixtures/two-replacement-visual-approval.json": {
+      "before_sha256": null,
+      "sha256": "ddeb819f4fe1a0b1e69aab96e3a33033f93f22229d9fefd414c4b2726e8356e6",
       "text_lf": true
     },
     "create_defaults/phase6/tests/conftest.py": {
@@ -222,9 +372,19 @@
       "sha256": "f6fb4468e064644df013b32cd3069ed02dec07e4e302a79b451cc74993aad3c7",
       "text_lf": true
     },
+    "create_defaults/phase6/tests/staging_browser.cjs": {
+      "before_sha256": null,
+      "sha256": "38f1863cd029d887e01dddbbcab2c3844fee089bd17f32a1d525ef2353dcd3ff",
+      "text_lf": true
+    },
     "create_defaults/phase6/tests/test_playlist_pilot.py": {
       "before_sha256": null,
       "sha256": "d6b10c2aaf8ea424d1b6646ef522939e15d3718e398dd4def2a20c569cecdf17",
+      "text_lf": true
+    },
+    "create_defaults/phase6/tests/test_staging_app.py": {
+      "before_sha256": null,
+      "sha256": "52b16498224a07e2f6d31cc02397c65cfde4c5d0d555ea61c1d1e06a38f3f594",
       "text_lf": true
     },
     "create_defaults/phase6/verify_approved_transport.py": {
