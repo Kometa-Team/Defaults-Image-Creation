@@ -35,6 +35,8 @@ jobs:
         run: python -B -m ci.phase6_playlist_maintenance
       - name: Fresh files, HEAD, rollback, batching and admission controls
         run: python -B -m unittest ci.dependency_tests.test_phase6_playlist_maintenance -v
+      - name: Fixture staging roles, exact render approvals and replacement preimages
+        run: python -B -m unittest create_defaults.phase6.tests.test_staging_app -v
       - name: Production renderer and bounded Playlist layout regression
         run: python -B -m pytest create_defaults/tests/test_create_poster.py create_defaults/tests/test_playlist_layout.py -q --maxfail=1
       - name: Offline artwork and immutable historical comparison
