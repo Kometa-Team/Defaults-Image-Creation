@@ -100,7 +100,8 @@ def baseline():
     # Moving one shared fixture to conftest must not relax any M3 test body.
     path='create_defaults/phase4/tests/test_composition.py'
     old_ast=ast.parse(subprocess.check_output(['git','show',BASE+':'+path],cwd=ROOT))
-    new_ast=ast.parse((ROOT/path).read_text(encoding='utf-8-sig'))
+    from ci.phase6_playlist_maintenance import historical_bytes as pilot_bytes
+    new_ast=ast.parse(pilot_bytes(ROOT,path,(ROOT/path).read_bytes()).decode('utf-8-sig'))
     tests=lambda tree:{n.name:ast.dump(n,include_attributes=False) for n in tree.body if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef)) and n.name.startswith('test_')}
     require(tests(old_ast)==tests(new_ast),'Changed original M3 assertions')
     return sorted(added)

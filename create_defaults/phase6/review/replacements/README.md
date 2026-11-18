@@ -22,9 +22,9 @@ Source references within `../style-candidate/`:
 
 ## Unapplied binary patch
 
-`two-playlist-replacements.patch` is a Git binary patch generated with `git diff --binary --full-index` for exactly the two unchanged paths. Size: 1,413,084 bytes. SHA-256: `a32e232ae315b58ca05f443b4c5301ae2886950657f5b496652ec3167789f108`.
+`two-playlist-replacements.patch` is a Git binary patch generated with `git diff --binary --full-index` for exactly the two unchanged paths. Size: 1,413,128 bytes. SHA-256: `9fd00135191d23c012dc0de4c5532c9181cab5d1d714bc6c705dfdde39112873`.
 
-`prepare_binary_patch.py` created two new local repositories under this folder, each containing only the verified preimage JPEGs. It has no remote and refuses to reuse existing fixture directories. In the second fixture, `git apply --check --index` passed, applying the patch produced the exact approved SHA-256 and Git blob hashes, and the complete staged raw diff contained exactly two `M` entries with old/new `100644` modes and the approved blob IDs. Regenerating the staged binary patch produced identical patch bytes. Reverse-check and reverse-apply passed; both original SHA-256/blob identities were restored and the validation fixture was clean.
+`prepare_binary_patch.py` created two new local repositories under this folder, each containing only the verified preimage JPEGs. It has no remote and refuses to reuse existing fixture directories. In the second fixture, `git apply --check --index` passed, applying the patch produced the exact approved SHA-256 and Git blob hashes, and the complete staged raw diff contained exactly two `M` entries with old/new `100644` modes and the approved blob IDs. The binary format requires the final block separator blank line. A nonblank review-only footer follows it to satisfy the repository diff check; removing that footer reproduces the Git-generated binary patch exactly. The revised patch was checked, applied and reversed again in the isolated fixture; both approved JPEG hashes and the original preimages were verified. Reverse-check and reverse-apply passed; both original SHA-256/blob identities were restored and the validation fixture was clean.
 
 `patch-validation.json` and `replacement-plan.json` record these results. The patch remains unapplied to any real repository. No remote write or live authorization was introduced.
 

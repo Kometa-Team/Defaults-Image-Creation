@@ -14,7 +14,7 @@
     },
     "ci/dependency_tests/test_phase6_playlist_maintenance.py": {
       "before_sha256": null,
-      "sha256": "6df60e7ed51d91f4e291b1875ed7f34dd05344c37a2686f037ba4ae9b5542d99",
+      "sha256": "ed126ada25cbf894b7007266b8c027a6bbe62ab8121b935b9ab1dfbbfc8fa53a",
       "text_lf": true
     },
     "ci/people_unicode_maintenance.py": {
@@ -29,12 +29,12 @@
     },
     "ci/phase4_review.py": {
       "before_sha256": "f4fc3cb0a03efb4a98d99c614e97ec1ece666e685c592ccf7b9fb254e84c1758",
-      "sha256": "235e2fb90a88c50d3675ec60760fb2764d0d8bb686f25cc27a9aabbcb712bdad",
+      "sha256": "c00e31ee10b5e57415de3d51b10622d88b903d5ae915463e394f03b5a44a22b5",
       "text_lf": true
     },
     "ci/phase4_transactions.py": {
       "before_sha256": "28f9dd3a5bcb37ffd02331e3374d5c98b9bb2123eb7a788dced23e308c009950",
-      "sha256": "9ca7b401004856cf9c92373b361e6e77a513d3e48412fccf88b2273c0cb19695",
+      "sha256": "98af1e52727f2a8726ed9acb9e1f9957716ac3f62e6f35dbc3b8cf91527a1c56",
       "text_lf": true
     },
     "ci/phase5_m5_maintenance.py": {
@@ -180,6 +180,11 @@
     "create_defaults/phase3/tests/test_translation_boundaries.py": {
       "before_sha256": "c60eacebb941288bf666390a749974df0e6a572832d82c3c87400a78153c1720",
       "sha256": "d1b53d953411b60d07c45396d5015eb1c833d25f39428d73496735c309a60f57",
+      "text_lf": true
+    },
+    "create_defaults/phase4/tests/test_composition.py": {
+      "before_sha256": "e17f974b626ce5dd7a1a56bd05244d27a9c590708138430d6cef2f1f28ac035b",
+      "sha256": "5368c1d630b311d3b5f8bbe947df90b68601771e1a5874447f96c025c7f6278c",
       "text_lf": true
     },
     "create_defaults/phase6/PHASE6_CLOSEOUT_CHECKLIST.md": {
@@ -479,22 +484,22 @@
     },
     "create_defaults/phase6/review/replacements/README.md": {
       "before_sha256": null,
-      "sha256": "ac27d1cfc84e4ee105dc31206d6cb497ec1578350b78db919c32b7b213bd3da4",
+      "sha256": "1f1e0c81161e170aa778a797b50fe662dacdd32084e70aeabf801789726c62e6",
       "text_lf": true
     },
     "create_defaults/phase6/review/replacements/patch-validation.json": {
       "before_sha256": null,
-      "sha256": "56306d205f4fb485dfb1f2aada519465c8b6f89ac69037006853fe4f73c9ada4",
+      "sha256": "3639d37abc08fcdaca355fbdc73c60f3e0603450e0780399e2e671891ec9cae1",
       "text_lf": true
     },
     "create_defaults/phase6/review/replacements/replacement-plan.json": {
       "before_sha256": null,
-      "sha256": "b4170abf7841503a35a8dd190b2c3aee74dba3d0a996da42854dbe609bd69d7b",
+      "sha256": "bdf6783ec1b5e6c2a6f46fb526e708d80be094916f493aa7f96f7a3175af5886",
       "text_lf": true
     },
     "create_defaults/phase6/review/replacements/two-playlist-replacements.patch": {
       "before_sha256": null,
-      "sha256": "a32e232ae315b58ca05f443b4c5301ae2886950657f5b496652ec3167789f108",
+      "sha256": "9fd00135191d23c012dc0de4c5532c9181cab5d1d714bc6c705dfdde39112873",
       "text_lf": true
     },
     "create_defaults/phase6/review/visual-approval.json": {

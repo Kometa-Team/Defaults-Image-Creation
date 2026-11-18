@@ -99,6 +99,9 @@ def baseline():
         if path=='create_defaults/phase4/tests/test_ci_foundations.py':
             from ci.phase5_m5_maintenance import unicode_adapter
             current=unicode_adapter().historical_bytes(ROOT,path,current.encode('utf8')).decode('utf8')
+        if path=='create_defaults/phase4/tests/test_composition.py':
+            from ci.phase6_playlist_maintenance import historical_bytes as pilot_bytes
+            current=pilot_bytes(ROOT,path,current.encode('utf8')).decode('utf8')
         new=ast.parse(current)
         tests=lambda t:{n.name:ast.dump(n,include_attributes=False) for n in t.body if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef)) and n.name.startswith('test_')}
         require(tests(old)==tests(new),'Changed original Phase 4 assertions: '+path)

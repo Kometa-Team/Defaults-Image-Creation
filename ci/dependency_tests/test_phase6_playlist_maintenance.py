@@ -138,14 +138,19 @@ class Phase6PlaylistMaintenanceTests(unittest.TestCase):
         self.assertTrue(phase4_review.baseline())
         original=Path.read_bytes
         names=('create_defaults/bulk/lifecycle/composition.py',
-               'create_defaults/bulk/lifecycle/composition_models.py')
+               'create_defaults/bulk/lifecycle/composition_models.py',
+               'create_defaults/phase4/tests/test_composition.py')
         before=dict(pilot._blobs(pilot.BASE))
         for name in names:
-            variants=[original(pilot.ROOT/name)+b'\nunreviewed']
+            variants=[original(pilot.ROOT/name)+b'\nunreviewed',None]
             if name in pilot.MODIFIED:variants.append(before[name])
             for raw in variants:
-                def changed(path):return raw if path==pilot.ROOT/name else original(path)
-                with self.subTest(path=name),patch.object(Path,'read_bytes',changed),self.assertRaises(ValueError):
+                def changed(path):
+                    if path==pilot.ROOT/name:
+                        if raw is None:raise FileNotFoundError(name)
+                        return raw
+                    return original(path)
+                with self.subTest(path=name,missing=raw is None),patch.object(Path,'read_bytes',changed),self.assertRaises((ValueError,OSError)):
                     phase4_review.baseline()
 
     def test_unicode_loader_retains_historical_pin_and_rejects_unapproved_successors(self):
