@@ -264,6 +264,19 @@ def server_for(app, port=0):
                     self.session()
                     item=app.submissions[self.path.removeprefix('/preview/')]
                     self.send(200,app.object_bytes(item),'image/jpeg')
+                elif self.path.startswith('/current/'):
+                    self.session()
+                    item=app.submissions[self.path.removeprefix('/current/')]
+                    self.send(200,app.object_bytes(dict(sha256=item['current_preview_sha256'])),'image/jpeg')
+                elif self.path.startswith('/catalog-preview/'):
+                    self.session()
+                    with app.lock:
+                        app.guard()
+                        item=app.catalog[self.path.removeprefix('/catalog-preview/')]
+                        if item['status']!='active': raise Rejected('active_poster_required')
+                        raw=regular(app.destination/item['destination'])
+                        if sha(raw)!=item['sha256']: raise Rejected('catalog_file_mismatch')
+                        self.send(200,raw,'image/jpeg')
                 else:
                     self.json(dict(error='not_found'),404)
             except (Rejected,KeyError) as error:
@@ -286,11 +299,13 @@ def server_for(app, port=0):
                 if not secrets.compare_digest(self.headers.get('X-CSRF-Token',''),session['csrf']):
                     raise Rejected('csrf_required',403)
                 if self.path=='/api/generate':
-                    result=app.generate(session['role'],data['identity'],data['style'],data['logo'],data['colour'],data['caption'])
+                    result=app.generate_request(session['role'],intent=data['intent'],title=data.get('title',''),
+                        identity=data.get('identity'),style=data.get('style'),logo=data.get('logo'),
+                        upload=data.get('upload'),colour=data.get('colour'),caption=data.get('caption',''))
                 elif self.path=='/api/submit':
                     result=app.submit_generated(session['role'],data['id'])
                 elif self.path=='/api/remove':
-                    result=app.request_removal(session['role'],data['identity'])
+                    result=app.request_removal(session['role'],data['identity'],data['reason'])
                 elif self.path=='/api/reference':
                     result=app.reference(session['role'],data['active'])
                 elif self.path=='/api/approve':

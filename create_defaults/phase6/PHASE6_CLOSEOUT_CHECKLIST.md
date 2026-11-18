@@ -9,6 +9,7 @@ Browser proof is required in addition to the accepted native eight-create transp
 - [x] Disposable browser proof: Add, Replace with different bytes, active-reference blocked Remove, successful Remove, same-identity/path add-back in the owned staging catalog. Retain tombstone/history evidence. Native registry restoration remains a separate implementation/approval decision.
 - [x] Generate and submit a second supported style; show style-specific inputs/checks and verify its file/catalog state after staging.
 - [x] Retain automated real-browser evidence, focused integrity results, tested full source SHA and a runnable two-role walkthrough / loopback URL.
+- [ ] Action-specific forms: unmapped local-logo Add, recorded-logo and uploaded-logo Replace with current/proposed comparison, catalog-only reasoned Remove including missing legacy metadata, and rejection of removal approval after a newer replacement. Verify shared logos are retained.
 - [ ] Obtain final-head Windows/Linux evidence under the repository dependency pins; independently replay required artifacts. Local approved-reference reproduction uses the captured Pillow 12.0.0/fonttools 4.60.1 environment; Pillow 13 requirements and prior People repairs remain unchanged.
 - [ ] Separately decide live identity reservations, catalog mappings, real approvals/roles, native historical UPDATE/restoration, exact production preimages and publication authority. Staging success does not authorize live writes, activation or merge.
 

@@ -109,7 +109,7 @@
     },
     "create_defaults/phase6/PHASE6_CLOSEOUT_CHECKLIST.md": {
       "before_sha256": null,
-      "sha256": "a8df203488de0b8dc9d1e973ebffe115e6b873cf182d8805b51dccc7f0b3cb26",
+      "sha256": "b1f9a75d49c2970d10189550d2ee46ca310790c997f36c929b776461a113e07e",
       "text_lf": true
     },
     "create_defaults/phase6/PLAYLIST_PILOT_MANIFEST.json": {
@@ -119,7 +119,7 @@
     },
     "create_defaults/phase6/STAGING_APP.md": {
       "before_sha256": null,
-      "sha256": "dba0b8e951f4b32f330580f6547e4ef05f9c61e1f6a79467ff1ad1cc18391759",
+      "sha256": "49caa3307b170946bea336ebd4e8102487e982534810c355e45abbea29790134",
       "text_lf": true
     },
     "create_defaults/phase6/__init__.py": {
@@ -339,17 +339,17 @@
     },
     "create_defaults/phase6/staging_app.html": {
       "before_sha256": null,
-      "sha256": "c7cd08eaed5b80c56b092103ad4adb4d0c77edda45d78225c6a7c4443220b592",
+      "sha256": "8df756d15a73d50c6c691480f233c6195156d7d77656ccec9d0bac0e2de11191",
       "text_lf": true
     },
     "create_defaults/phase6/staging_app.js": {
       "before_sha256": null,
-      "sha256": "cf663e2f15b96b7e506f260bc61b51ddae2fb2c77c4e69dcdfdf0f8b45ae4104",
+      "sha256": "35c35ce5c733e50395650f63099806cfffc2e2931da77bb3480a86ff1d88d618",
       "text_lf": true
     },
     "create_defaults/phase6/staging_app.py": {
       "before_sha256": null,
-      "sha256": "224913a96a890e9910e0623271a67295b018390ff47afee1f7862e03f4a27be7",
+      "sha256": "79b95cab803f0504eb8b8000bb72d62568b2863cc77d0e866a6d05b30b374e33",
       "text_lf": true
     },
     "create_defaults/phase6/staging_fixtures/approved/playlist/Alien & Predator (Timeline Order).jpg": {
@@ -464,7 +464,7 @@
     },
     "create_defaults/phase6/staging_lifecycle.py": {
       "before_sha256": null,
-      "sha256": "e9ce76b1002b7f29e394fd3ffcc4dccd32a0d3df85949069f655457fdf407166",
+      "sha256": "102341b7ce1bedc8f039bb2aa7b219156001fc9c515ccaca26770edba69672b8",
       "text_lf": true
     },
     "create_defaults/phase6/tests/conftest.py": {
@@ -479,7 +479,7 @@
     },
     "create_defaults/phase6/tests/staging_lifecycle_browser.cjs": {
       "before_sha256": null,
-      "sha256": "62dd07d41771988f87f24bfdde1be3783a0b17b83b2dc96c0fdd1b5fb4ecf7bd",
+      "sha256": "82b3cff489814ff78bc34bb173dd9bfe27d387506a7dd6311e396da05e10dec5",
       "text_lf": true
     },
     "create_defaults/phase6/tests/test_playlist_pilot.py": {
@@ -494,7 +494,7 @@
     },
     "create_defaults/phase6/tests/test_staging_lifecycle.py": {
       "before_sha256": null,
-      "sha256": "08a3689ea1f6ef47d4ebd583af4929caa92ee52aef614ddf131ab06a6ad730f7",
+      "sha256": "b6bdaa4906d47adc399de1574e871bdf4b5612ba5d71b939cedc2d8d9812eed9",
       "text_lf": true
     },
     "create_defaults/phase6/verify_approved_transport.py": {

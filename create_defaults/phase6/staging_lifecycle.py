@@ -4,14 +4,17 @@ The native registry rejects tombstone reuse. Only this owned staging catalog
 supports restoration; this module grants no native registry/catalog capability.
 """
 from copy import deepcopy
+import base64
 import io
 import json
 import os
 import re
 import secrets
 import tempfile
+import warnings
 
 import PIL
+from PIL import Image
 
 from create_defaults import create_poster as renderer
 from create_defaults.bulk.definitions import load_definitions
@@ -27,9 +30,10 @@ class BrowserStaging(Staging):
         super().__init__(*args, **kwargs)
         catalog = renderer.ROOT/'bulk/catalog'
         historical = load_definitions([catalog/'playlist.yml'], profiles_path=catalog/'profiles.yml')
-        self.catalog = {d.id: dict(identity=d.id, destination=d.data['output']['remote_paths']['en'],
+        self.catalog = {d.id: dict(identity=d.id, display_name=d.data['display_name'], destination=d.data['output']['remote_paths']['en'],
             status='active', sha256=self.baseline[d.data['output']['remote_paths']['en']],
-            revision=1, references=[]) for d in historical}
+            revision=1, references=[], render_request=dict(composition_style='playlist-legacy',
+                parameters=dict(d.data['composer'], text='TIMELINE ORDER'))) for d in historical}
         self.catalog_baseline = deepcopy(self.catalog)
         self.disposable = 'fixture.playlist.disposable'
         self.second = 'fixture.franchise.disposable'
@@ -45,11 +49,13 @@ class BrowserStaging(Staging):
             destination='franchise/Disposable Franchise.jpg', approved_sha256=None,
             render_request=dict(parameters=deepcopy(franchise['composer']), composition_style='franchise-legacy'))
         self.logos = {}
-        for r in self.requests.values():
+        for r in [*self.requests.values(),*self.catalog.values()]:
             name=r['render_request']['parameters']['logo']
             self.logos[name]=sha(regular(renderer.ROOT/name))
             if r.get('source_png_sha256') and r['source_png_sha256'] != self.logos[name]:
                 raise Rejected('source_logo_binding')
+        self.uploads=self.root/'uploaded-logos'
+        self.uploads.mkdir()
         self.persist()
 
     def persist(self):
@@ -65,10 +71,101 @@ class BrowserStaging(Staging):
     def form_state(self):
         return dict(entries=list(self.requests.values()), logos=list(self.logos), catalog=self.catalog,
             styles=[dict(id='playlist-contained-v1', label='Playlist / Timeline Order',
-                         caption=True, default_caption='TIMELINE ORDER', category='playlist'),
+                         caption=True, logo=True, default_caption='TIMELINE ORDER', category='playlist'),
+                    dict(id='playlist-legacy', label='Playlist / recorded legacy layout',
+                         caption=True, logo=True, default_caption='TIMELINE ORDER', category='playlist'),
                     dict(id='franchise-legacy', label='Franchise / existing logo-only preset',
-                         caption=False, default_caption='', category='franchise')],
+                         caption=False, logo=True, default_caption='', category='franchise')],
             restoration_scope='owned staging catalog only; native tombstone reuse is blocked')
+
+    def asset(self, name):
+        if isinstance(name,str) and re.fullmatch(r'uploaded:[0-9a-f]{64}',name):
+            path=self.uploads/(name.split(':')[1]+'.png')
+            if sha(regular(path)) != name.split(':')[1]: raise Rejected('uploaded_logo_changed')
+            return path
+        if name not in self.logos and name not in {'fonts/BebasNeue-Regular.ttf','fonts/Comfortaa-Medium.ttf',
+                *('fades/'+name for name in renderer.FADES)}:
+            raise Rejected('unknown_asset',400)
+        return renderer.ROOT/name
+
+    def upload_logo(self, encoded):
+        if not isinstance(encoded,str) or len(encoded)>2_800_000: raise Rejected('logo_upload_size',400)
+        try:
+            raw=base64.b64decode(encoded,validate=True)
+            if not 0<len(raw)<=2*1024*1024: raise ValueError('size')
+            with warnings.catch_warnings():
+                warnings.simplefilter('error',Image.DecompressionBombWarning)
+                with Image.open(io.BytesIO(raw)) as image:
+                    if image.format!='PNG' or getattr(image,'n_frames',1)!=1 or image.width*image.height>renderer.MAX_INPUT_PIXELS:
+                        raise ValueError('single bounded PNG required')
+                    image.verify()
+                with Image.open(io.BytesIO(raw)) as image:
+                    if not image.convert('RGBA').getchannel('A').getbbox(): raise ValueError('empty alpha')
+        except (ValueError,OSError,Image.DecompressionBombError,Image.DecompressionBombWarning) as error:
+            raise Rejected('invalid_logo_png',400) from error
+        checksum=sha(raw)
+        target=self.uploads/(checksum+'.png')
+        if target.exists():
+            if regular(target)!=raw: raise Rejected('uploaded_logo_changed')
+        else:
+            with target.open('xb') as stream: stream.write(raw)
+        return 'uploaded:'+checksum
+
+    def generate_request(self, role, *, intent, title='', identity=None, style=None,
+                         logo=None, upload=None, colour=None, caption=''):
+        with self.lock:
+            if role!='contributor': raise Rejected('contributor_required',403)
+            self.guard()
+            if intent not in {'add','replace'}: raise Rejected('render_action_required',400)
+            current=self.catalog.get(identity)
+            if intent=='replace':
+                if not current or current['status']!='active': raise Rejected('catalog_target_required',400)
+                row=deepcopy(self.requests.get(identity) or current)
+                # Resolve exclusively from the catalog, never caller title/path.
+                row.update(identity=identity,display_name=current.get('display_name',identity),destination=current['destination'])
+                recorded=current.get('render_request')
+                if recorded: row['render_request']=deepcopy(recorded)
+                elif not row.get('render_request'):
+                    row['render_request']=deepcopy(self.requests[self.disposable]['render_request'])
+                if identity in self.entries:
+                    row['approved_sha256']=self.entries[identity]['approved_sha256']
+                    row.pop('prior_visual_reference_sha256',None)
+            else:
+                if not isinstance(title,str) or not title.strip() or len(title)>100 or title!=title.strip():
+                    raise Rejected('poster_title_required',400)
+                styles={r['id']:r for r in self.form_state()['styles']}
+                if style not in styles: raise Rejected('unknown_style',400)
+                category=styles[style]['category']
+                stem=title if category!='playlist' or title.endswith(' (Timeline Order)') else title+' (Timeline Order)'
+                # Existing filename validator covers traversal, reserved names and separators.
+                if '/' in stem or '\\' in stem: raise Rejected('single_poster_title_required',400)
+                destination=category+'/'+renderer.output_filename(renderer.PosterOptions(out_name=stem),'#FFFFFF')
+                matches=[r for r in self.catalog.values() if r['destination'].casefold()==destination.casefold()]
+                if matches and matches[0]['status']=='active': raise Rejected('poster_already_exists_use_replace')
+                preset=next((r for r in self.requests.values() if r['destination'].casefold()==destination.casefold()),None)
+                identity=matches[0]['identity'] if matches else preset['identity'] if preset else 'fixture.'+secrets.token_hex(16)
+                row=deepcopy(preset or self.requests[self.second if category=='franchise' else self.disposable])
+                if not preset: row['approved_sha256']=None
+                row.update(identity=identity,display_name=title,destination=destination)
+                row['render_request']['composition_style']=style
+            if style is None: style=row['render_request']['composition_style']
+            if style not in {r['id'] for r in self.form_state()['styles']} or (style.startswith('playlist') != row['destination'].startswith('playlist/')):
+                raise Rejected('style_category_mismatch',400)
+            if upload is not None: logo=self.upload_logo(upload)
+            if not logo: raise Rejected('logo_required_for_style',400)
+            self.asset(logo)
+            if intent=='replace' and row.get('approved_sha256'):
+                approved=self.entries[identity]['render_request']
+                if (upload is not None or style!=approved['composition_style'] or
+                        logo!=approved['parameters']['logo'] or colour!=approved['parameters']['base_color'] or
+                        caption!=approved['parameters']['text']):
+                    # A deliberately changed replacement needs fresh visual review,
+                    # never the earlier approval of different bytes.
+                    row['prior_visual_reference_sha256']=row['approved_sha256']
+                    row['approved_sha256']=None
+            row['render_request']['parameters']['out_name']=row['destination'].rsplit('/',1)[1][:-4]
+            self.requests[identity]=row
+            return self.generate(role,identity,style,logo,colour,caption)
 
     def _object(self, raw):
         checksum=sha(raw)
@@ -84,26 +181,26 @@ class BrowserStaging(Staging):
             if role != 'contributor': raise Rejected('contributor_required', 403)
             self.source_proof()
             self.guard()
-            if identity not in self.requests or logo not in self.logos:
+            if identity not in self.requests:
                 raise Rejected('unknown_fixture_or_logo', 400)
             row=self.requests[identity]
-            expected_style=row['render_request']['composition_style']
-            if style != expected_style: raise Rejected('style_not_supported_for_fixture', 400)
+            if style not in {r['id'] for r in self.form_state()['styles']}: raise Rejected('unknown_style',400)
             if not isinstance(colour,str) or not re.fullmatch(r'#[0-9a-fA-F]{6}',colour):
                 raise Rejected('six_digit_background_required',400)
-            if not isinstance(caption,str) or len(caption)>40 or (style=='playlist-contained-v1' and not caption.strip()) or (style=='franchise-legacy' and caption):
+            if not isinstance(caption,str) or len(caption)>40 or (style.startswith('playlist') and not caption.strip()) or (style=='franchise-legacy' and caption):
                 raise Rejected('selected_style_caption_requirements',400)
             params=deepcopy(row['render_request']['parameters'])
             params.update(logo=logo, base_color=colour, text=caption)
-            assets={name:sha(regular(renderer.ROOT/name)) for name in
+            assets={name:sha(regular(self.asset(name))) for name in
                 {logo, params['font'], 'fades/'+renderer.FADES[params['gradient']]}}
-            if assets[logo] != self.logos[logo]: raise Rejected('source_logo_changed')
-            image, metadata=renderer.render_poster(renderer.PosterOptions(**params),
-                asset_dir=renderer.ROOT, style=None if style=='franchise-legacy' else style)
+            if logo in self.logos and assets[logo] != self.logos[logo]: raise Rejected('source_logo_changed')
+            effective=dict(params,logo=str(self.asset(logo)))
+            image, metadata=renderer.render_poster(renderer.PosterOptions(**effective),
+                asset_dir=renderer.ROOT, style=style if style=='playlist-contained-v1' else None)
             encoded=io.BytesIO()
             image.save(encoded,'JPEG',quality=100,subsampling=0)
             raw=encoded.getvalue()
-            if assets != {name:sha(regular(renderer.ROOT/name)) for name in assets}:
+            if assets != {name:sha(regular(self.asset(name))) for name in assets}:
                 raise Rejected('render_asset_changed')
             self.guard()
             self.source_proof()
@@ -114,7 +211,9 @@ class BrowserStaging(Staging):
             self.submissions[sid]=dict(id=sid, identity=identity, display_name=row['display_name'],
                 destination=row['destination'], action=action, sha256=checksum, status='draft',
                 approved_sha256=None, receipt=None, before=current,
-                reference_sha256=row['approved_sha256'], reference_match=(checksum==row['approved_sha256']) if row['approved_sha256'] else None,
+                current_preview_sha256=self._object(regular(self.destination/current['destination'])) if current and current['status']=='active' else None,
+                reference_sha256=row.get('approved_sha256'), reference_match=(checksum==row['approved_sha256']) if row.get('approved_sha256') else None,
+                prior_visual_reference_sha256=row.get('prior_visual_reference_sha256'),
                 render=dict(style=style, parameters=params, assets=assets, metadata=metadata,
                     pillow=PIL.__version__, renderer_sha256=sha(regular(renderer.ROOT/'create_poster.py'))),
                 approval_digest=None)
@@ -132,16 +231,17 @@ class BrowserStaging(Staging):
             self.persist()
             return self.review(item)
 
-    def request_removal(self, role, identity):
+    def request_removal(self, role, identity, reason):
         with self.lock:
             if role != 'contributor': raise Rejected('contributor_required',403)
             self.guard()
-            if identity != self.disposable: raise Rejected('disposable_removal_only',403)
+            if not isinstance(reason,str) or not 3<=len(reason.strip())<=500: raise Rejected('removal_reason_required',400)
             before=deepcopy(self.catalog.get(identity))
             if not before or before['status']!='active': raise Rejected('active_poster_required')
             raw=regular(self.destination/before['destination'])
             sid=secrets.token_hex(12)
-            self.submissions[sid]=dict(id=sid, identity=identity, display_name='Disposable Playlist',
+            if sha(raw)!=before['sha256']: raise Rejected('catalog_file_mismatch')
+            self.submissions[sid]=dict(id=sid, identity=identity, display_name=before.get('display_name',identity),reason=reason.strip(),
                 destination=before['destination'], action='REMOVE', sha256=self._object(raw),
                 status='preview', approved_sha256=None, receipt=None, before=before,
                 reference_sha256=None, reference_match=None, render=None, approval_digest=None)
@@ -164,24 +264,27 @@ class BrowserStaging(Staging):
         if item['status']=='staged': return deepcopy(item)
         current=self.catalog.get(item['identity'])
         before=item['before']
-        after=dict(identity=item['identity'], destination=item['destination'],
+        after=dict(deepcopy(before) if before else {},identity=item['identity'], display_name=item['display_name'], destination=item['destination'],
             status='retired' if item['action']=='REMOVE' else 'active',
             sha256=None if item['action']=='REMOVE' else item['sha256'],
             revision=(before['revision'] if before else 0)+1,
             references=deepcopy(before['references']) if before else [])
         if item['action']=='REMOVE': after['last_sha256']=item['sha256']
+        elif item['render']: after['render_request']=dict(composition_style=item['render']['style'],parameters=deepcopy(item['render']['parameters']))
         checks=[dict(name='catalog precondition / identity / path', passed=current==before),
-                dict(name='exact immutable preview JPEG', passed=sha(self.object_bytes(item))==item['sha256']),
-                dict(name='destination preimage', passed=self.expected.get(item['destination'])==(before['sha256'] if before else None)),
-                dict(name='no active references for removal', passed=item['action']!='REMOVE' or not (current or {}).get('references')),
-                dict(name='approved reference bytes (main ten only)', passed=item['reference_match'] is not False)]
+                dict(name='exact current file' if item['action']=='REMOVE' else 'exact generated JPEG', passed=sha(self.object_bytes(item))==item['sha256']),
+                dict(name='destination preimage', passed=self.expected.get(item['destination'])==(before['sha256'] if before else None))]
+        if item['action']=='REMOVE':
+            checks.append(dict(name='no active references for removal',passed=not (current or {}).get('references')))
+            checks.append(dict(name='removal reason and exact current file',passed=bool(item.get('reason')) and self.expected.get(item['destination'])==item['sha256']))
         if item['render']:
-            checks.append(dict(name='fresh render assets',passed=all(sha(regular(renderer.ROOT/name))==digest
+            if item['reference_sha256']: checks.append(dict(name='approved reference bytes (main ten only)',passed=item['reference_match'] is not False))
+            checks.append(dict(name='fresh render assets',passed=all(sha(regular(self.asset(name)))==digest
                 for name,digest in item['render']['assets'].items())))
         value=deepcopy(item)
         value.update(checks=checks, catalog_change=dict(before=before,after=after),
             can_approve=all(r['passed'] for r in checks))
-        value['review_digest']=sha(canonical(dict(sha256=item['sha256'],before=before,after=after,checks=checks)))
+        value['review_digest']=sha(canonical(dict(sha256=item['sha256'],before=before,after=after,checks=checks,reason=item.get('reason'))))
         return value
 
     def approve(self, role, sid, expected_hash, review_digest=None):
@@ -243,5 +346,7 @@ class BrowserStaging(Staging):
                 file_absent=not target.exists(),catalog_entry=deepcopy(self.catalog[item['identity']]),
                 catalog_sha256=sha(regular(self.root/'catalog.json')),review_digest=review_digest,
                 match=True,simulation=True,publication_authorized=False))
+            if item['render']:
+                self.requests[item['identity']]['render_request']=deepcopy(self.catalog[item['identity']]['render_request'])
             self.persist()
             return deepcopy(item)
