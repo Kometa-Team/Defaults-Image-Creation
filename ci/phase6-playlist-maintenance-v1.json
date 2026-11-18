@@ -14,7 +14,12 @@
     },
     "ci/dependency_tests/test_phase6_playlist_maintenance.py": {
       "before_sha256": null,
-      "sha256": "36944b7ba39fe84e9cdc7f5de0e56ba5dd4a50351393795445f9ee833f6f289a",
+      "sha256": "80371d24de95f524f47f1464d12739465d0db1d8d7e47748e9ac7d6d6ebfb13e",
+      "text_lf": true
+    },
+    "ci/people_unicode_maintenance.py": {
+      "before_sha256": "4ee658a6835ba1dd87e7ace163603fd0c786316ace2b3ab1c509fff33126d32b",
+      "sha256": "c2445f8aebecde26b43fafe54726f28c126c15c4168242d40dc73df21b1cc0fb",
       "text_lf": true
     },
     "ci/phase4.py": {
@@ -32,9 +37,14 @@
       "sha256": "9ca7b401004856cf9c92373b361e6e77a513d3e48412fccf88b2273c0cb19695",
       "text_lf": true
     },
+    "ci/phase5_m5_maintenance.py": {
+      "before_sha256": "04e39b994dbef17bcdc4934d64a18154b9dbe9f334fdafcdcb6e0a219f50cf2d",
+      "sha256": "710a023316b9625ed04a5c5eb2030142f2360d38e9bf9ba8dbb74d7e21b4a957",
+      "text_lf": true
+    },
     "ci/phase5_m6_maintenance.py": {
       "before_sha256": "c7e80f97e8ff2845a8077b1de716e74211a951cac748933d4205b8b918cf7c6c",
-      "sha256": "5efc177549bf339bd5450c9c1ffcb0244656880191a6fe8920dd8b992f112d4d",
+      "sha256": "d1cebf18dcf3bbce07a3aa9a3fc6ec583fc013c3193a84fab89b09ec7fa29d94",
       "text_lf": true
     },
     "ci/phase5_m7_maintenance.py": {
@@ -209,7 +219,7 @@
     },
     "create_defaults/phase6/review/EVIDENCE_INDEX.md": {
       "before_sha256": null,
-      "sha256": "d4656c65c8f1855083b5d4c792a503f5de79fbfd3678869ff73d9efadedaedbb",
+      "sha256": "8a623c6985e6b057bbf5865e5b43a332ee95ddbedd8a89ef724193ec7062eb2b",
       "text_lf": true
     },
     "create_defaults/phase6/review/action-forms/blocked-removal.png": {

@@ -97,6 +97,22 @@ class Phase6PlaylistMaintenanceTests(unittest.TestCase):
                 with self.subTest(path=name),patch.object(Path,'read_bytes',changed),self.assertRaises(ValueError):
                     phase4_review.baseline()
 
+    def test_unicode_loader_retains_historical_pin_and_rejects_unapproved_successors(self):
+        from pathlib import Path
+        from ci import phase5_m5_maintenance as m5
+        self.assertEqual(m5.UNICODE_ADAPTER_SHA256,'4ee658a6835ba1dd87e7ace163603fd0c786316ace2b3ab1c509fff33126d32b')
+        name='ci/people_unicode_maintenance.py'
+        original=Path.read_bytes;raw=original(pilot.ROOT/name)
+        self.assertEqual(m5.unicode_adapter().digest(raw),pilot.selected_hash(name,m5.UNICODE_ADAPTER_SHA256))
+        for bad in (raw+b'\nunreviewed',dict(pilot._blobs(pilot.BASE))[name],None):
+            def read(path):
+                if path==pilot.ROOT/name:
+                    if bad is None:raise FileNotFoundError(name)
+                    return bad
+                return original(path)
+            with self.subTest(missing=bad is None),patch.object(Path,'read_bytes',read),self.assertRaises((ValueError,OSError)):
+                m5.unicode_adapter()
+
     def test_independent_expected_head_is_required_when_supplied(self):
         with self.assertRaisesRegex(ValueError,'expected HEAD differs'):
             pilot.verify_checkout(expected_head='0'*40)
@@ -117,7 +133,8 @@ class Phase6PlaylistMaintenanceTests(unittest.TestCase):
                  'create_defaults/bulk/workers.py', 'create_defaults/bulk/schemas/manifest-v1.json',
                  'create_defaults/bulk/contracts/expanded/validation.py',
                  'ci/publication_tests/test_validation_timeouts.py',
-                 'ci/phase4.py','ci/phase4_transactions.py','ci/phase4_review.py')
+                 'ci/phase4.py','ci/phase4_transactions.py','ci/phase4_review.py',
+                 'ci/people_unicode_maintenance.py','ci/phase5_m5_maintenance.py')
         with m7._invocation(pilot.ROOT), m7._cohort_invocation(pilot.ROOT):
             pilot.verify_scope(pilot.ROOT, pilot.scope_members())
             for name in names:

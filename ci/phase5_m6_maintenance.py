@@ -693,7 +693,7 @@ def verify_scope(root,baseline,names):
 def selected_hash(name,expected):
     if name in {'create_defaults/bulk/planner.py','create_defaults/bulk/workers.py',
                 'create_defaults/create_poster.py','create_defaults/validation_manifest.py',
-                'ci/phase4_transactions.py'}:
+                'ci/phase4_transactions.py','ci/people_unicode_maintenance.py'}:
         # Exact Phase 6 intersections only; all original M6 selections below
         # retain their historical meanings and predecessor assertions.
         from ci.phase6_playlist_maintenance import selected_hash as pilot_hash

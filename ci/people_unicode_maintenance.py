@@ -198,7 +198,9 @@ def _verify(root, owned):
     if Path(root).resolve() != ROOT.resolve():
         raise ValueError('Foreign Unicode policy checkout')
     from ci.phase5_m5_maintenance import UNICODE_ADAPTER_SHA256
-    if digest(regular(ROOT, 'ci/people_unicode_maintenance.py').read_bytes()) != UNICODE_ADAPTER_SHA256:
+    from ci.phase6_playlist_maintenance import selected_hash as pilot_hash
+    expected_adapter=pilot_hash('ci/people_unicode_maintenance.py',UNICODE_ADAPTER_SHA256)
+    if digest(regular(ROOT, 'ci/people_unicode_maintenance.py').read_bytes()) != expected_adapter:
         raise ValueError('Changed independently pinned Unicode adapter')
     publication = publication_adapter()
     headers = _owned_headers(root,publication) if owned else None
@@ -226,6 +228,9 @@ def _verify(root, owned):
         if name == 'create_defaults/phase4/tests/test_ci_foundations.py':
             from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
             current = m6_bytes(root, name, current)
+        if name == 'ci/phase4_transactions.py':
+            from ci.phase5_m7_maintenance import historical_bytes as transaction_history
+            current = transaction_history(root,name,current)
         if name == m6.PEOPLE_PR65_REQUIREMENTS:
             current = m6.people_pr65_bytes(root, name, current)
         if name in publication_bindings:

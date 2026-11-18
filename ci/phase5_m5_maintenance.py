@@ -66,7 +66,9 @@ def _unicode_module(raw):
 
 def unicode_adapter():
     raw = regular(ROOT, 'ci/people_unicode_maintenance.py').read_bytes()
-    if sha(raw) != UNICODE_ADAPTER_SHA256:
+    from ci.phase6_playlist_maintenance import selected_hash
+    expected=selected_hash('ci/people_unicode_maintenance.py',UNICODE_ADAPTER_SHA256)
+    if sha(raw) != expected:
         raise ValueError('Changed pinned Unicode successor adapter')
     return _unicode_module(raw)
 
