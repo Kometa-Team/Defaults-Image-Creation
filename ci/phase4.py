@@ -82,6 +82,10 @@ def historical_checksums(root,paths):
     for path in paths:
         current=regular(root,path)
         actual=checksum(current)
+        if path in {'create_defaults/phase3/tests/test_translation_boundaries.py',
+                    'create_defaults/phase3/tests/test_destination_isolation.py'}:
+            from ci.phase6_playlist_maintenance import historical_bytes as pilot_bytes
+            actual=hashlib.sha256(pilot_bytes(root,path,current.read_bytes()).replace(b'\r\n',b'\n')).hexdigest()
         if path not in security['files']:
             if path=='create_defaults/phase3/tests/test_final_phase3_acceptance.py':
                 from ci.phase5_m6_maintenance import historical_bytes as m6_bytes

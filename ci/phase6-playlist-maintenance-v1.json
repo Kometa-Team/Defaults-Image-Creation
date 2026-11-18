@@ -14,7 +14,7 @@
     },
     "ci/dependency_tests/test_phase6_playlist_maintenance.py": {
       "before_sha256": null,
-      "sha256": "80371d24de95f524f47f1464d12739465d0db1d8d7e47748e9ac7d6d6ebfb13e",
+      "sha256": "9df0f65a10b68ba1198a2c606d906ddd9885ee6440b86ecfe99c6a4c6862345c",
       "text_lf": true
     },
     "ci/people_unicode_maintenance.py": {
@@ -24,7 +24,7 @@
     },
     "ci/phase4.py": {
       "before_sha256": "81a3def1ae44496626088fbd025b891cf4928062b291e3e3867091ff9ddf6cfe",
-      "sha256": "adf29f2c23642b2b25228f6de2354e3ce5ca6bc0ed489d8ccbb14db511d0835f",
+      "sha256": "d8a8c491d17df1c18da29251af3b0a0a1c0a43117c6a7c19912828def6d24d60",
       "text_lf": true
     },
     "ci/phase4_review.py": {
@@ -60,6 +60,16 @@
     "create_defaults/bulk/contracts/expanded/validation.py": {
       "before_sha256": "5a657072935d4fa37e0a01a341d2de28f36ad39363bbcc6bc7b669b02c9060fb",
       "sha256": "aa063c76c0046fcc8cbf45203f14341deee14911cf7308ae45a762bd9a8fea3a",
+      "text_lf": true
+    },
+    "create_defaults/bulk/contracts/logos/wash.py": {
+      "before_sha256": "4b1088717daacb11cad0d835819f83ca1a7396cf9fbcac9addf9f9f44977df50",
+      "sha256": "1335363b43eeda6f4c2fab8538e21acd5e5defc5ac3d508b388705dbc8e1d95e",
+      "text_lf": true
+    },
+    "create_defaults/bulk/contracts/playlist/validation.py": {
+      "before_sha256": "fa49d2f9db810cd93964a9b8b7b35ae658bbfd7dd47cd2ec84bb88835fd5acf5",
+      "sha256": "a932623679e460a9851199b8a95344a0f7a50e16c7c4b68fa2f02798210f1722",
       "text_lf": true
     },
     "create_defaults/bulk/contracts/translation_preflight/adapters.py": {
@@ -142,6 +152,31 @@
       "sha256": "73fda6776b47adc6295bce26c300639ef1f195d703c7d106f9f53e49f1493c55",
       "text_lf": true
     },
+    "create_defaults/phase2/tests/test_package_a.py": {
+      "before_sha256": "6959e3bd3f3d2163d48fa670d750bcb7e44f9bc8587706a6771f50fd0e2d1f55",
+      "sha256": "9fbfa3d1f1669297dff09b04320e054930a44e9e93b8e053c7c1487107c24488",
+      "text_lf": true
+    },
+    "create_defaults/phase3/tests/test_destination_isolation.py": {
+      "before_sha256": "00ade97f494c75690ab19590acc6183db2526448f4d223dbc5b069dadabeed46",
+      "sha256": "e34b22a44bd4846500981750f8483fb80c233a65634736fa954335e44050f7a5",
+      "text_lf": true
+    },
+    "create_defaults/phase3/tests/test_evidence_consumption.py": {
+      "before_sha256": "4cb99543b847ab622837e09b34c252df491a8ef56d296fb346bfbdc7d481abb9",
+      "sha256": "d28cebb1fb2f7ab6a99bda5fc81373b3aaabc921a9bbb6253a1b1534971c4be7",
+      "text_lf": true
+    },
+    "create_defaults/phase3/tests/test_final_phase3_acceptance.py": {
+      "before_sha256": "9a6539d75cac6d64a27ab21fd6fdb663f0505bafa95489f5293899c2bff0f143",
+      "sha256": "994370355fe00e5a79d4aba16130e64a3ad1ba7d4de251afa067c3515b15e14a",
+      "text_lf": true
+    },
+    "create_defaults/phase3/tests/test_translation_boundaries.py": {
+      "before_sha256": "c60eacebb941288bf666390a749974df0e6a572832d82c3c87400a78153c1720",
+      "sha256": "d1b53d953411b60d07c45396d5015eb1c833d25f39428d73496735c309a60f57",
+      "text_lf": true
+    },
     "create_defaults/phase6/PHASE6_CLOSEOUT_CHECKLIST.md": {
       "before_sha256": null,
       "sha256": "8267475804ad06074713392f352fa3446ccf8f6a74fa9654fdef3c749f2e4c76",
@@ -201,6 +236,31 @@
       "before_sha256": null,
       "sha256": "f0ead3bedf57bfc333ea1517a12fba6e0f330d5cf941b27bc351398302f12cd1",
       "text_lf": false
+    },
+    "create_defaults/phase6/canonical/destination-preflight-v1.json": {
+      "before_sha256": null,
+      "sha256": "d1b56c164569c1e4c34757f4bd708f81e560d42fd3935e572c5c73cd6a6043f0",
+      "text_lf": true
+    },
+    "create_defaults/phase6/canonical/evidence-consumption-v1.json": {
+      "before_sha256": null,
+      "sha256": "f69a7c9f645f06d4a84f2628c6b049a7e1b9dc01fbf4dcab9d7eac1906b28130",
+      "text_lf": true
+    },
+    "create_defaults/phase6/canonical/phase3-final-acceptance-v1.json": {
+      "before_sha256": null,
+      "sha256": "622231ed0795bda202777417e99cebf2bc1897c488e9a9e147e133049ab6d234",
+      "text_lf": true
+    },
+    "create_defaults/phase6/canonical/translation-preflight-v1.json": {
+      "before_sha256": null,
+      "sha256": "9e6926cf34d90a1eef22f6701c294fc9af0475d091cd64ec93f35addca237493",
+      "text_lf": true
+    },
+    "create_defaults/phase6/canonical_fixtures.py": {
+      "before_sha256": null,
+      "sha256": "1443d5b285a465a3c69527be79fa687649944d12c3c52beda7df198dda78b2f4",
+      "text_lf": true
     },
     "create_defaults/phase6/fixtures.py": {
       "before_sha256": null,

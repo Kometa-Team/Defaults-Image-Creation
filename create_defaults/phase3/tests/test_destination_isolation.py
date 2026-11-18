@@ -125,6 +125,7 @@ def test_all_previous_additive_ids_schemas_vectors_and_workflow_are_preserved():
 def test_full_canonical_destination_fixture_matches_on_both_platforms(tmp_path):
     item,lp=poster(tmp_path,language='fr',filename='Élan — Noël.jpg')
     result=evaluate(**scenario((item,),lp,root='Reviewed/French'))
-    expected=json.loads((ROOT/'create_defaults/phase3/tests/destination-preflight-v1.json').read_text(encoding='utf8'))
+    from create_defaults.phase6.canonical_fixtures import current_fixture
+    expected=current_fixture('destination-preflight-v1.json')
     assert result.to_dict()==expected['evidence']
     assert result.sha256==expected['sha256']==fingerprint(expected['evidence'])

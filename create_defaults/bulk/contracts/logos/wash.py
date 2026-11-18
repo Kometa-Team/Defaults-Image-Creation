@@ -12,10 +12,7 @@ SOURCE = Path(__file__).resolve().parents[3] / "create_poster.py"
 SOURCE_SHA256 = "ff748c9c8422a46f662f36a094a3ef523d2f9c4c23d622729f18c1f1894e0717"
 
 
-def implementation():
-    text = SOURCE.read_text(encoding="utf-8-sig").replace("\r\n", "\n")
-    if fingerprint(text) != SOURCE_SHA256:
-        raise BulkError("logo_wash_source", "Approved renderer changed; no substitute wash is permitted")
+def _inline(text):
     function = next(n for n in ast.parse(text).body if isinstance(n, ast.FunctionDef) and n.name == "render_poster")
     choices = [n for n in function.body if isinstance(n, ast.If) and ast.unparse(n.test) == "options.white_wash"]
     if len(choices) != 1 or len(choices[0].body) != 3 or choices[0].orelse:
@@ -24,6 +21,24 @@ def implementation():
     # Only the hash-pinned repository implementation is compiled; never submitted
     # Python/JSON, a whole renderer or a contributor-selected source path.
     module = ast.fix_missing_locations(ast.Module(body=body, type_ignores=[]))
+    return module
+
+
+def implementation():
+    raw = SOURCE.read_bytes()
+    text = raw.decode("utf-8-sig").replace("\r\n", "\n")
+    # The additive Playlist layout changes the enclosing module, not this
+    # operation. Authenticate the exact physical successor (even on rollback)
+    # and compare the actual inline AST with its pinned predecessor.
+    root = Path(__file__).resolve().parents[4]
+    if SOURCE != root / "create_defaults/create_poster.py":
+        raise BulkError("logo_wash_source", "Approved renderer changed; no substitute wash is permitted")
+    from ci.phase6_playlist_maintenance import historical_bytes
+    before = historical_bytes(root, "create_defaults/create_poster.py", raw).decode("utf-8-sig").replace("\r\n", "\n")
+    if (fingerprint(before) != SOURCE_SHA256 or
+            ast.dump(_inline(text), include_attributes=False) != ast.dump(_inline(before), include_attributes=False)):
+        raise BulkError("logo_wash_source", "Approved renderer changed; no substitute wash is permitted")
+    module = _inline(text)
     code = compile(module, str(SOURCE), "exec")
     return code, {"id": "existing-poster-white-wash", "version": "renderer-inline-m3-v1",
                   "source_sha256": SOURCE_SHA256, "body_sha256": fingerprint(ast.dump(module, include_attributes=False)),

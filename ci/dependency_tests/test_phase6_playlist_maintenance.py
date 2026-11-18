@@ -7,6 +7,37 @@ from ci.people_colorize_maintenance import _head
 
 
 class Phase6PlaylistMaintenanceTests(unittest.TestCase):
+    def test_canonical_successors_keep_historical_records_and_exact_current_snapshots(self):
+        from pathlib import Path
+        from create_defaults.phase6.canonical_fixtures import current_fixture, HISTORICAL
+        from create_defaults.bulk.common import fingerprint
+        original=Path.read_bytes
+        for name in HISTORICAL:
+            value=current_fixture(name)
+            self.assertEqual(fingerprint(value['evidence']),value['sha256'])
+            for prefix in ('create_defaults/phase3/tests/','create_defaults/phase6/canonical/'):
+                target=pilot.ROOT/(prefix+name)
+                def changed(path):return original(path)+b'changed' if path==target else original(path)
+                with self.subTest(path=prefix+name),patch.object(Path,'read_bytes',changed),self.assertRaises(ValueError):
+                    current_fixture(name)
+        with self.assertRaises(ValueError):current_fixture('unknown.json')
+
+    def test_wash_keeps_exact_inline_operation_and_rejects_rollback_and_tamper(self):
+        from pathlib import Path
+        from create_defaults.bulk.contracts.logos import wash
+        name='create_defaults/create_poster.py';target=pilot.ROOT/name
+        original=Path.read_bytes;raw=original(target)
+        _,provenance=wash.implementation()
+        self.assertEqual(provenance['source_sha256'],wash.SOURCE_SHA256)
+        for bad in (raw+b'\nunreviewed',dict(pilot._blobs(pilot.BASE))[name],None):
+            def changed(path):
+                if path==target:
+                    if bad is None:raise FileNotFoundError(name)
+                    return bad
+                return original(path)
+            with self.subTest(missing=bad is None),patch.object(Path,'read_bytes',changed),self.assertRaises((ValueError,OSError)):
+                wash.implementation()
+
     def test_protected_and_adopted_selectors_retain_exact_original_pins(self):
         from ci import phase5_m7_maintenance as m7
         from ci.dependency_maintenance import selected_hash
