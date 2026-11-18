@@ -24,3 +24,30 @@ def current_fixture(name):
     # Recheck the full fresh physical cohort and HEAD at exit as well as entry.
     pilot.verify_checkout()
     return value
+
+
+def current_calibration_fixture(historical_current):
+    """Only the unchanged wash adapter's two derived provenance hashes differ."""
+    pilot.verify_checkout()
+    value = json.loads(regular(pilot.ROOT, 'create_defaults/phase6/canonical/logo-calibration-pillow13.json').read_bytes())
+    if (set(value) != {'before_sha256', 'sha256', 'measurements', 'before_policy_sha256',
+            'policy_sha256', 'before_adapter_sha256', 'adapter_sha256'}
+            or fingerprint(historical_current) != value['before_sha256']):
+        raise ValueError('Changed historical calibration successor input')
+    adapter = regular(pilot.ROOT, 'create_defaults/bulk/contracts/logos/wash.py').read_bytes().decode('utf-8-sig').replace('\r\n', '\n')
+    if fingerprint(adapter) != value['adapter_sha256']:
+        raise ValueError('Changed calibration wash adapter')
+    result = json.loads(json.dumps(historical_current))
+    if len(result['measurements']) != value['measurements']:
+        raise ValueError('Changed calibration successor membership')
+    for row in result['measurements']:
+        diagnostics = row['diagnostics']
+        if (diagnostics['policy_sha256'] != value['before_policy_sha256']
+                or diagnostics['transform']['adapter_sha256'] != value['before_adapter_sha256']):
+            raise ValueError('Changed historical calibration transformation')
+        diagnostics['policy_sha256'] = value['policy_sha256']
+        diagnostics['transform']['adapter_sha256'] = value['adapter_sha256']
+    if fingerprint(result) != value['sha256']:
+        raise ValueError('Changed full current calibration expectation')
+    pilot.verify_checkout()
+    return result

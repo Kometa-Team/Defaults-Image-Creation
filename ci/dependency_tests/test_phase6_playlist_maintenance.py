@@ -38,6 +38,21 @@ class Phase6PlaylistMaintenanceTests(unittest.TestCase):
             with self.subTest(missing=bad is None),patch.object(Path,'read_bytes',changed),self.assertRaises((ValueError,OSError)):
                 wash.implementation()
 
+    def test_calibration_successor_rejects_changed_findings_and_binding(self):
+        import copy,json
+        from pathlib import Path
+        from ci.dependency_maintenance import current_calibration_expectation
+        from create_defaults.bulk.contracts.logos.calibration import HERE
+        from create_defaults.phase6.canonical_fixtures import current_calibration_fixture
+        value=current_calibration_expectation(json.loads((HERE/'calibration-v1.json').read_bytes()))
+        self.assertEqual(len(current_calibration_fixture(value)['measurements']),60)
+        bad=copy.deepcopy(value);bad['measurements'][0]['diagnostics']['outcome']='MATCH'
+        with self.assertRaises(ValueError):current_calibration_fixture(bad)
+        original=Path.read_bytes
+        target=pilot.ROOT/'create_defaults/phase6/canonical/logo-calibration-pillow13.json'
+        def changed(path):return original(path)+b'changed' if path==target else original(path)
+        with patch.object(Path,'read_bytes',changed),self.assertRaises(ValueError):current_calibration_fixture(value)
+
     def test_protected_and_adopted_selectors_retain_exact_original_pins(self):
         from ci import phase5_m7_maintenance as m7
         from ci.dependency_maintenance import selected_hash

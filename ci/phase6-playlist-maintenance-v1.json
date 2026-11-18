@@ -14,7 +14,7 @@
     },
     "ci/dependency_tests/test_phase6_playlist_maintenance.py": {
       "before_sha256": null,
-      "sha256": "9df0f65a10b68ba1198a2c606d906ddd9885ee6440b86ecfe99c6a4c6862345c",
+      "sha256": "446d8f0e373d674b0fd4f98e723f523b0326b7c071ac6b96b45e50d15f59d968",
       "text_lf": true
     },
     "ci/people_unicode_maintenance.py": {
@@ -125,6 +125,11 @@
     "create_defaults/bulk/schemas/manifest-v1.json": {
       "before_sha256": "aba4dd0e6f28901215148254540c32698ba97235cc1f45587dfab012ea945c87",
       "sha256": "198d40e1538b1ab7f1d1360bd6202d7ad255cd3ba3b38cadddaf71f48fc4a2ff",
+      "text_lf": true
+    },
+    "create_defaults/bulk/tests/test_logo_workflow.py": {
+      "before_sha256": "e6b9fb94d9d52695ce3ef2edd0cd973bf8e9883d5bfd5776aadd0aff78eac5a7",
+      "sha256": "c4f6d3c9af79c9572d5bc7811f0b63f25b10a5c207162c836b37fc7af19c0c6b",
       "text_lf": true
     },
     "create_defaults/bulk/workers.py": {
@@ -247,6 +252,11 @@
       "sha256": "f69a7c9f645f06d4a84f2628c6b049a7e1b9dc01fbf4dcab9d7eac1906b28130",
       "text_lf": true
     },
+    "create_defaults/phase6/canonical/logo-calibration-pillow13.json": {
+      "before_sha256": null,
+      "sha256": "3052b1926dc05c8dd53ad1522bfc4205eaa1dbaac04769e17faa35502f84e98e",
+      "text_lf": true
+    },
     "create_defaults/phase6/canonical/phase3-final-acceptance-v1.json": {
       "before_sha256": null,
       "sha256": "622231ed0795bda202777417e99cebf2bc1897c488e9a9e147e133049ab6d234",
@@ -259,7 +269,7 @@
     },
     "create_defaults/phase6/canonical_fixtures.py": {
       "before_sha256": null,
-      "sha256": "1443d5b285a465a3c69527be79fa687649944d12c3c52beda7df198dda78b2f4",
+      "sha256": "5eb73eda87188931e1b787d31c3b262dc02546740fce961023f77fb2252b70b9",
       "text_lf": true
     },
     "create_defaults/phase6/fixtures.py": {
@@ -279,7 +289,7 @@
     },
     "create_defaults/phase6/review/EVIDENCE_INDEX.md": {
       "before_sha256": null,
-      "sha256": "8a623c6985e6b057bbf5865e5b43a332ee95ddbedd8a89ef724193ec7062eb2b",
+      "sha256": "f6f4695c02b20216336860c6b9e127ebae5a83e67eedc3d0d957bbd60869bb11",
       "text_lf": true
     },
     "create_defaults/phase6/review/action-forms/blocked-removal.png": {
