@@ -391,6 +391,22 @@ def source_quality_fixture(config, view, entry, report):
             fail('quality_identity')
         row = _rows(context)[identity]
         review = row['fixture_quality_review']
+        if report != review['report'] and 'fixture_quality_pillow13' in row:
+            successor = row['fixture_quality_pillow13']
+            if (set(successor) != {'pillow_version','before_report_sha256','report_sha256','report'}
+                    or successor['pillow_version'] != '13.0.0'
+                    or successor['before_report_sha256'] != review['report_sha256']
+                    or fingerprint(successor['report']) != successor['report_sha256']):
+                fail('unreviewed_fixture_quality')
+            # Pillow 13 changed only the descriptive, downsampled soft-edge
+            # count. Keep the original report and accept one exact pinned
+            # successor; no tolerance or new finding gains fixture authority.
+            projected = {**successor['report'], 'halo_observations': {
+                **successor['report']['halo_observations'],
+                'soft_edge_samples': review['report']['halo_observations']['soft_edge_samples']}}
+            if projected != review['report']:
+                fail('unreviewed_fixture_quality')
+            review = {**review, 'report': successor['report'], 'report_sha256': successor['report_sha256']}
         if (set(review) != {'kind', 'reviewer', 'decision', 'report', 'report_sha256', 'simulation',
                 'real_approval', 'production_authorized', 'publication_authorized'}
                 or review['kind'] != 'offline-source-quality-fixture'

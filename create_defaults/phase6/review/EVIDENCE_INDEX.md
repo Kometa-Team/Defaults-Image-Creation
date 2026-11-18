@@ -64,3 +64,24 @@ Tested source `0aeebd00e929dda95466513f4b6a0e34fa803bbc`: Add accepts a title/st
 Chrome 157.0.8103.79 / Playwright 1.65.1: 110.497s browser / 116.0s runner wall. The 37 focused tests include one inherited M6 batching, 13 Phase 6 provenance, eight staging integrity and 15 real-render/action lifecycle tests (96.484s wall). They also cover missing legacy render metadata, invalid/animated/oversized/empty uploads, unvalidated files, changed upload bytes, stale catalog/file preimages, same-path newer replacements, exact restoration paths and closing rollback.
 
 [Current/proposed replacement](action-forms/replacement-side-by-side.png) / [main ten](action-forms/ten-generated-staging.png) / [blocked removal](action-forms/blocked-removal.png) / [walkthrough](../STAGING_APP.md). Earlier browser/native records are preserved. All writes remain in newly owned staging roots; live authority, catalog mappings, publication, activation, native historical UPDATE/restoration, hosted final-head and Linux/repository-pin render evidence remain separate.
+
+## PR #72 sign-off and pinned-dependency fixture replay
+
+The maintainer [approved the updated browser proof of concept](https://github.com/Kometa-Team/Defaults-Image-Creation/pull/72#issuecomment-6968123387) at the `bf2adb9` review checkpoint. This sign-off covers the staging browser exercise; real execution authority remains pending.
+
+The [explicit Windows/Linux pilot at `37eb4ab`](https://github.com/Kometa-Team/Defaults-Image-Creation/actions/runs/44236843673) passed integrity/render checks but rejected the native ADD's source-quality fixture report. An isolated comparison of the same eight PNGs under Pillow 12.0.0 and the repository-pinned Pillow 13.0.0 found one changed field: the descriptive downsampled `halo_observations.soft_edge_samples`. Source hashes, alpha counts/bounds, ICC data, diagnostics and blockers are identical.
+
+| Request | Retained Pillow 12 sample count | Exact Pillow 13 sample count |
+| --- | ---: | ---: |
+| avp | 1494 | 1478 |
+| babylon | 1699 | 1802 |
+| bsg | 2029 | 2046 |
+| gundam | 2374 | 2381 |
+| jrrt | 1897 | 1880 |
+| sao | 1328 | 1342 |
+| stargate | 927 | 919 |
+| wdu | 6001 | 5987 |
+
+The [pilot manifest](../PLAYLIST_PILOT_MANIFEST.json) retains every original `fixture_quality_review` unchanged and adds an exact `fixture_quality_pillow13` report, its full SHA-256 and its historical report hash. Selection requires exact report equality and proves that only the sample count differs. This adds no tolerance and accepts no new diagnostic, source bytes, transparency claim or real approval. Preflight tests exercise both recorded reports for every request and reject changed findings, unrecorded counts, foreign profiles, wrong predecessors and authority escalation. The production PNG inspector, Pillow 13 requirements, approved JPEGs, names, identities and destinations remain unchanged.
+
+The final-head hosted replay result and run links are recorded in the PR evidence index/body after validation; this source record does not claim a pending run passed. All live reservations, mappings, publication, activation and merge remain separate.

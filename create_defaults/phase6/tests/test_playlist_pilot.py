@@ -177,6 +177,50 @@ def test_preflight_every_cohort_job_uses_the_existing_single_item_validator(plan
         assert plans[job['poster_id']]['renderer']==data['manifest']['renderer']
 
 
+@pytest.mark.parametrize('label', REQUESTS)
+def test_preflight_quality_retains_historical_and_exact_pillow13_reports(planned, label):
+    from create_defaults.bulk.common import fingerprint
+    from create_defaults.bulk.contracts.logos.assets import inspect_png
+    from create_defaults.phase6.playlist import source_quality_fixture
+    trial, registry, pilot, _ = planned
+    row=next(r for r in pilot.rows().values() if r['request']==label)
+    old=row['fixture_quality_review'];new=row['fixture_quality_pillow13']
+    entry=registry.view().entry(row['proposed']['persistent_identity'])
+    for report in (old['report'],new['report']):
+        review=source_quality_fixture(trial.config,registry.view(),entry,report)
+        assert review['report_sha256']==fingerprint(report)
+        assert review['simulation'] and not any(review[k] for k in
+            ('real_approval','production_authorized','publication_authorized'))
+    actual=inspect_png((trial.config.asset_dir/entry['names']['source']['path']).read_bytes()).report()
+    assert actual in (old['report'],new['report'])
+    assert source_quality_fixture(trial.config,registry.view(),entry,actual)['report_sha256']==fingerprint(actual)
+
+
+@pytest.mark.parametrize('attack', ['diagnostic','samples','source','authority','profile','predecessor','resealed-finding'])
+def test_preflight_quality_successors_reject_unrecorded_changes(planned, attack):
+    from copy import deepcopy
+    from unittest.mock import patch
+    from create_defaults.bulk.common import fingerprint
+    from create_defaults.phase6 import playlist
+    trial, registry, pilot, _ = planned
+    rows=deepcopy(pilot.rows())
+    row=next(r for r in rows.values() if r['request']=='avp')
+    successor=row['fixture_quality_pillow13']
+    report=deepcopy(successor['report'])
+    if attack=='diagnostic':report['diagnostics'].append('unreviewed_new_finding')
+    elif attack=='samples':report['halo_observations']['soft_edge_samples']+=1000
+    elif attack=='source':report['sha256']='0'*64
+    elif attack=='authority':row['fixture_quality_review']['real_approval']=True
+    elif attack=='profile':successor['pillow_version']='14.0.0'
+    elif attack=='predecessor':successor['before_report_sha256']='0'*64
+    else:
+        report['diagnostics'].append('resealed_unreviewed_finding')
+        successor['report']=deepcopy(report);successor['report_sha256']=fingerprint(report)
+    entry=registry.view().entry(row['proposed']['persistent_identity'])
+    with patch.object(playlist,'_rows',return_value=rows),pytest.raises(BulkError,match='unreviewed_fixture_quality'):
+        playlist.source_quality_fixture(trial.config,registry.view(),entry,report)
+
+
 def test_preflight_original_validator_still_rejects_other_new_items(planned):
     from create_defaults.bulk.lifecycle.candidates import resolve_stable
     from create_defaults.bulk.contracts.expanded.validation import approved_english, validate_candidate

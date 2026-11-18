@@ -124,7 +124,7 @@
     },
     "create_defaults/phase6/PLAYLIST_PILOT_MANIFEST.json": {
       "before_sha256": null,
-      "sha256": "356deb472bb5b9e37bf27839cf847afd5fc9b3dfdaddb2f3dc25ac9a68a20b58",
+      "sha256": "5a0b4adee55954a940083a4eb76d7ed13119dd8c4a6e1a7ce449e20d9c098ae9",
       "text_lf": true
     },
     "create_defaults/phase6/STAGING_APP.md": {
@@ -184,7 +184,7 @@
     },
     "create_defaults/phase6/playlist.py": {
       "before_sha256": null,
-      "sha256": "9c06df38cbc78262501082db4838d84462121a7df3ad1957033ef187355e34a0",
+      "sha256": "3681de0677e2121e2711f5978f406e3ea59107f506beceb99e1ab9ac7e711107",
       "text_lf": true
     },
     "create_defaults/phase6/render_review.py": {
@@ -194,7 +194,7 @@
     },
     "create_defaults/phase6/review/EVIDENCE_INDEX.md": {
       "before_sha256": null,
-      "sha256": "aae11019375b90dbc35bce04d0ba65dc6b7ad41a04e92d497d53598fec3d3371",
+      "sha256": "52d59502b2dd9942f8dfddc1bde6f61c424bd78dd3bc3bdcba3ac99c68fc1204",
       "text_lf": true
     },
     "create_defaults/phase6/review/action-forms/blocked-removal.png": {
@@ -554,7 +554,7 @@
     },
     "create_defaults/phase6/tests/test_playlist_pilot.py": {
       "before_sha256": null,
-      "sha256": "d6b10c2aaf8ea424d1b6646ef522939e15d3718e398dd4def2a20c569cecdf17",
+      "sha256": "a42dfb61b2ea72d3ad79115190b210367d6d4868d16091bbc05b21199f4c9ab4",
       "text_lf": true
     },
     "create_defaults/phase6/tests/test_staging_app.py": {

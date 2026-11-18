@@ -109,6 +109,67 @@
         "real_approval": false,
         "production_authorized": false,
         "publication_authorized": false
+      },
+      "fixture_quality_pillow13": {
+        "pillow_version": "13.0.0",
+        "before_report_sha256": "825fed6036365954356dd54a96abc91b06e21b417336392ae1416d70ca6de3e8",
+        "report_sha256": "038f98d8ff02d9b98faa21e915bba5cecc38a61f25096eaf8a6d3f0fe2d0c21d",
+        "report": {
+          "alpha_min": 0,
+          "clear_pixels": 728891,
+          "default_transparency_blockers": [],
+          "diagnostics": [
+            "foreground_edge_contact_requires_review",
+            "alpha_channel_does_not_prove_clean_background",
+            "embedded_color_profile_requires_context_review"
+          ],
+          "dimensions": [
+            1592,
+            540
+          ],
+          "edge_visible_pixels_top_bottom_left_right": [
+            476,
+            724,
+            1,
+            1
+          ],
+          "halo_observations": {
+            "analysis_size": [
+              128,
+              43
+            ],
+            "interpretation": "descriptive_only_human_quality_review_required",
+            "rgb_at_soft_edges": [
+              [
+                0,
+                255
+              ],
+              [
+                0,
+                255
+              ],
+              [
+                0,
+                255
+              ]
+            ],
+            "soft_edge_samples": 1478
+          },
+          "icc_sha256": "2c92ed6315c5533df3786347d10a05a4515fb4e11f76c0e09a9bfbe2469f847a",
+          "integrity": "valid",
+          "mode": "RGBA",
+          "opaque_pixels": 129003,
+          "partial_pixels": 1786,
+          "pixels": 859680,
+          "quality": "review_required_clipping_lettering_and_readability_not_automatically_proven",
+          "sha256": "121346d7375b741052e862b4e7124887bd1b85a1fb2e0c9c296e91669b1482d2",
+          "visible_bounds": [
+            0,
+            0,
+            1592,
+            540
+          ]
+        }
       }
     },
     {
@@ -209,6 +270,69 @@
         "real_approval": false,
         "production_authorized": false,
         "publication_authorized": false
+      },
+      "fixture_quality_pillow13": {
+        "pillow_version": "13.0.0",
+        "before_report_sha256": "f371c961c34e72294cf60fe9c880b4ca9c01b9cd940cdd29ee332049441e2622",
+        "report_sha256": "da8b4e2294bda14ce046dd9590dc6fcf7bb153316cc3946e566420e9279b23aa",
+        "report": {
+          "alpha_min": 0,
+          "clear_pixels": 91821,
+          "default_transparency_blockers": [
+            "rectangular_alpha_background_not_proven_transparent"
+          ],
+          "diagnostics": [
+            "foreground_edge_contact_requires_review",
+            "rectangular_matte_or_clipping_requires_review",
+            "alpha_channel_does_not_prove_clean_background"
+          ],
+          "dimensions": [
+            521,
+            251
+          ],
+          "edge_visible_pixels_top_bottom_left_right": [
+            156,
+            31,
+            4,
+            3
+          ],
+          "halo_observations": {
+            "analysis_size": [
+              128,
+              62
+            ],
+            "interpretation": "descriptive_only_human_quality_review_required",
+            "rgb_at_soft_edges": [
+              [
+                0,
+                255
+              ],
+              [
+                0,
+                255
+              ],
+              [
+                0,
+                255
+              ]
+            ],
+            "soft_edge_samples": 1802
+          },
+          "icc_sha256": null,
+          "integrity": "valid",
+          "mode": "RGBA",
+          "opaque_pixels": 38819,
+          "partial_pixels": 131,
+          "pixels": 130771,
+          "quality": "review_required_clipping_lettering_and_readability_not_automatically_proven",
+          "sha256": "fdf89f346410d2c0e9656bc9223ee35e7cc6377969f96cbaeffc3e9abf8e7e6a",
+          "visible_bounds": [
+            0,
+            0,
+            521,
+            251
+          ]
+        }
       }
     },
     {
@@ -306,6 +430,66 @@
         "real_approval": false,
         "production_authorized": false,
         "publication_authorized": false
+      },
+      "fixture_quality_pillow13": {
+        "pillow_version": "13.0.0",
+        "before_report_sha256": "158454b2a7fe0bcf60fe9601dd5fbcf1e951c1f2a6b07babd7b8ece01fcfb987",
+        "report_sha256": "4accd55d375cb3b111cee7e6e06bc7c71a46167883e339df530dc700755c03bc",
+        "report": {
+          "alpha_min": 0,
+          "clear_pixels": 78849,
+          "default_transparency_blockers": [],
+          "diagnostics": [
+            "foreground_edge_contact_requires_review",
+            "alpha_channel_does_not_prove_clean_background"
+          ],
+          "dimensions": [
+            894,
+            168
+          ],
+          "edge_visible_pixels_top_bottom_left_right": [
+            328,
+            679,
+            16,
+            3
+          ],
+          "halo_observations": {
+            "analysis_size": [
+              128,
+              24
+            ],
+            "interpretation": "descriptive_only_human_quality_review_required",
+            "rgb_at_soft_edges": [
+              [
+                0,
+                255
+              ],
+              [
+                0,
+                255
+              ],
+              [
+                0,
+                255
+              ]
+            ],
+            "soft_edge_samples": 2046
+          },
+          "icc_sha256": null,
+          "integrity": "valid",
+          "mode": "RGBA",
+          "opaque_pixels": 59324,
+          "partial_pixels": 12019,
+          "pixels": 150192,
+          "quality": "review_required_clipping_lettering_and_readability_not_automatically_proven",
+          "sha256": "f59cf12ea9578825c118aa39e8e5209dc9d30ec4d3402c776fbb846ff133a276",
+          "visible_bounds": [
+            0,
+            0,
+            894,
+            168
+          ]
+        }
       }
     },
     {
@@ -407,6 +591,69 @@
         "real_approval": false,
         "production_authorized": false,
         "publication_authorized": false
+      },
+      "fixture_quality_pillow13": {
+        "pillow_version": "13.0.0",
+        "before_report_sha256": "c85e4a739deafcd347ace307ca329e7215f07a8aebefb9e8465cb6c793cb0b48",
+        "report_sha256": "7d939f98658e3b316f2e9c2b90f3f57cab05c0df9148918b0006321a5ee8d0f3",
+        "report": {
+          "alpha_min": 0,
+          "clear_pixels": 154286,
+          "default_transparency_blockers": [
+            "rectangular_alpha_background_not_proven_transparent"
+          ],
+          "diagnostics": [
+            "foreground_edge_contact_requires_review",
+            "rectangular_matte_or_clipping_requires_review",
+            "alpha_channel_does_not_prove_clean_background"
+          ],
+          "dimensions": [
+            1090,
+            319
+          ],
+          "edge_visible_pixels_top_bottom_left_right": [
+            67,
+            21,
+            33,
+            7
+          ],
+          "halo_observations": {
+            "analysis_size": [
+              128,
+              37
+            ],
+            "interpretation": "descriptive_only_human_quality_review_required",
+            "rgb_at_soft_edges": [
+              [
+                0,
+                255
+              ],
+              [
+                0,
+                255
+              ],
+              [
+                0,
+                255
+              ]
+            ],
+            "soft_edge_samples": 2381
+          },
+          "icc_sha256": null,
+          "integrity": "valid",
+          "mode": "RGBA",
+          "opaque_pixels": 189418,
+          "partial_pixels": 4006,
+          "pixels": 347710,
+          "quality": "review_required_clipping_lettering_and_readability_not_automatically_proven",
+          "sha256": "647992caa06ae2d2c1fd1210762f44cde0981699fd6242573a17342a88ac88e3",
+          "visible_bounds": [
+            0,
+            0,
+            1090,
+            319
+          ]
+        }
       }
     },
     {
@@ -506,6 +753,67 @@
         "real_approval": false,
         "production_authorized": false,
         "publication_authorized": false
+      },
+      "fixture_quality_pillow13": {
+        "pillow_version": "13.0.0",
+        "before_report_sha256": "30dc3498d26f7bb4cedb0814c695a98752c1f62a3b808cd5bb8295b69e21cdbc",
+        "report_sha256": "a87ba044f517b8715240ddd68187a28f893e7e6cca42fe18c634cf266919c12f",
+        "report": {
+          "alpha_min": 0,
+          "clear_pixels": 456779,
+          "default_transparency_blockers": [],
+          "diagnostics": [
+            "foreground_edge_contact_requires_review",
+            "alpha_channel_does_not_prove_clean_background",
+            "embedded_color_profile_requires_context_review"
+          ],
+          "dimensions": [
+            1593,
+            345
+          ],
+          "edge_visible_pixels_top_bottom_left_right": [
+            4,
+            9,
+            2,
+            1
+          ],
+          "halo_observations": {
+            "analysis_size": [
+              128,
+              28
+            ],
+            "interpretation": "descriptive_only_human_quality_review_required",
+            "rgb_at_soft_edges": [
+              [
+                0,
+                255
+              ],
+              [
+                0,
+                255
+              ],
+              [
+                0,
+                255
+              ]
+            ],
+            "soft_edge_samples": 1880
+          },
+          "icc_sha256": "2c92ed6315c5533df3786347d10a05a4515fb4e11f76c0e09a9bfbe2469f847a",
+          "integrity": "valid",
+          "mode": "RGBA",
+          "opaque_pixels": 90014,
+          "partial_pixels": 2792,
+          "pixels": 549585,
+          "quality": "review_required_clipping_lettering_and_readability_not_automatically_proven",
+          "sha256": "bab84403116d5c948fd4710640c3ecb0859dead9191eb75fdfeb492d4e473556",
+          "visible_bounds": [
+            0,
+            0,
+            1593,
+            345
+          ]
+        }
       }
     },
     {
@@ -606,6 +914,69 @@
         "real_approval": false,
         "production_authorized": false,
         "publication_authorized": false
+      },
+      "fixture_quality_pillow13": {
+        "pillow_version": "13.0.0",
+        "before_report_sha256": "0da9a3c0eb03756abf1dbda4465937e0e8160b9cfc2d5e46d9ea4983c947b4b2",
+        "report_sha256": "bece326c65a723e583c23b0587239bae673ee3f8ba898f0993c87f4958a62af4",
+        "report": {
+          "alpha_min": 0,
+          "clear_pixels": 181290,
+          "default_transparency_blockers": [
+            "rectangular_alpha_background_not_proven_transparent"
+          ],
+          "diagnostics": [
+            "foreground_edge_contact_requires_review",
+            "rectangular_matte_or_clipping_requires_review",
+            "alpha_channel_does_not_prove_clean_background"
+          ],
+          "dimensions": [
+            1280,
+            196
+          ],
+          "edge_visible_pixels_top_bottom_left_right": [
+            9,
+            31,
+            6,
+            19
+          ],
+          "halo_observations": {
+            "analysis_size": [
+              128,
+              20
+            ],
+            "interpretation": "descriptive_only_human_quality_review_required",
+            "rgb_at_soft_edges": [
+              [
+                0,
+                255
+              ],
+              [
+                0,
+                255
+              ],
+              [
+                0,
+                255
+              ]
+            ],
+            "soft_edge_samples": 1342
+          },
+          "icc_sha256": null,
+          "integrity": "valid",
+          "mode": "RGBA",
+          "opaque_pixels": 68205,
+          "partial_pixels": 1385,
+          "pixels": 250880,
+          "quality": "review_required_clipping_lettering_and_readability_not_automatically_proven",
+          "sha256": "62c341d8c212eedfc070e72034db5aa530ef7ab7d3efe2ad46ed4eb9ee3e0209",
+          "visible_bounds": [
+            0,
+            0,
+            1280,
+            196
+          ]
+        }
       }
     },
     {
@@ -703,6 +1074,66 @@
         "real_approval": false,
         "production_authorized": false,
         "publication_authorized": false
+      },
+      "fixture_quality_pillow13": {
+        "pillow_version": "13.0.0",
+        "before_report_sha256": "7524c8551cc15edd96007420878c711110b482ef7575efc3c0d5d5eac0905120",
+        "report_sha256": "cce2ddd7387100e865507c917c058dc7c8d3f09e2a3a18ee003e05e2b407f5c4",
+        "report": {
+          "alpha_min": 0,
+          "clear_pixels": 439064,
+          "default_transparency_blockers": [],
+          "diagnostics": [
+            "foreground_edge_contact_requires_review",
+            "alpha_channel_does_not_prove_clean_background"
+          ],
+          "dimensions": [
+            2000,
+            258
+          ],
+          "edge_visible_pixels_top_bottom_left_right": [
+            13,
+            48,
+            15,
+            6
+          ],
+          "halo_observations": {
+            "analysis_size": [
+              128,
+              17
+            ],
+            "interpretation": "descriptive_only_human_quality_review_required",
+            "rgb_at_soft_edges": [
+              [
+                0,
+                255
+              ],
+              [
+                0,
+                255
+              ],
+              [
+                0,
+                255
+              ]
+            ],
+            "soft_edge_samples": 919
+          },
+          "icc_sha256": null,
+          "integrity": "valid",
+          "mode": "RGBA",
+          "opaque_pixels": 64871,
+          "partial_pixels": 12065,
+          "pixels": 516000,
+          "quality": "review_required_clipping_lettering_and_readability_not_automatically_proven",
+          "sha256": "5842312151e2ae56020b94d030a447f886df49ac55f537129eb3187a1faeeab7",
+          "visible_bounds": [
+            0,
+            0,
+            2000,
+            258
+          ]
+        }
       }
     },
     {
@@ -803,6 +1234,69 @@
         "real_approval": false,
         "production_authorized": false,
         "publication_authorized": false
+      },
+      "fixture_quality_pillow13": {
+        "pillow_version": "13.0.0",
+        "before_report_sha256": "3dcea516ad39cfae75903022396c3fcdf46edecd9fb7864058f51045a083a9ed",
+        "report_sha256": "d1ad59856305a573b4d770f9fd4d9456a9348733c8cc54f5fae5378aaffd187d",
+        "report": {
+          "alpha_min": 0,
+          "clear_pixels": 116440,
+          "default_transparency_blockers": [
+            "rectangular_alpha_background_not_proven_transparent"
+          ],
+          "diagnostics": [
+            "foreground_edge_contact_requires_review",
+            "rectangular_matte_or_clipping_requires_review",
+            "alpha_channel_does_not_prove_clean_background"
+          ],
+          "dimensions": [
+            647,
+            710
+          ],
+          "edge_visible_pixels_top_bottom_left_right": [
+            46,
+            71,
+            2,
+            33
+          ],
+          "halo_observations": {
+            "analysis_size": [
+              117,
+              128
+            ],
+            "interpretation": "descriptive_only_human_quality_review_required",
+            "rgb_at_soft_edges": [
+              [
+                0,
+                255
+              ],
+              [
+                0,
+                255
+              ],
+              [
+                0,
+                255
+              ]
+            ],
+            "soft_edge_samples": 5987
+          },
+          "icc_sha256": null,
+          "integrity": "valid",
+          "mode": "RGBA",
+          "opaque_pixels": 342130,
+          "partial_pixels": 800,
+          "pixels": 459370,
+          "quality": "review_required_clipping_lettering_and_readability_not_automatically_proven",
+          "sha256": "f0ead3bedf57bfc333ea1517a12fba6e0f330d5cf941b27bc351398302f12cd1",
+          "visible_bounds": [
+            0,
+            0,
+            647,
+            710
+          ]
+        }
       }
     }
   ]
