@@ -71,7 +71,7 @@ def verify_historical_reports(reports):
 def checksum(path):return hashlib.sha256(path.read_bytes().replace(b'\r\n',b'\n')).hexdigest()
 
 
-@_m7_owned_call(when=lambda root,paths: Path(root) == ROOT or Path(root).resolve() == ROOT.resolve())
+@_m7_owned_call(when=lambda root,paths: Path(root) == ROOT or Path(root).resolve() == ROOT.resolve(), cohorts=True)
 def historical_checksums(root,paths):
     # One fresh full security proof for this explicit batch, never a retained
     # checkout approval or caller-supplied provenance object.

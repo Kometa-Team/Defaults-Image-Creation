@@ -10,6 +10,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 from ci.validation import identity,read,write,require,unique,pytest_run,validate_execution
 from ci.phase4 import checksum,fingerprint
+from ci.phase5_m7_maintenance import owned_call as _m7_owned_call
 
 BASE='47e69a59fd1c306789457250ef6493bdfef7fc17'
 IDS=ROOT/'ci/phase4-transaction-test-ids.json'
@@ -24,6 +25,7 @@ def implementation_checksum():
     return fingerprint({n:(ROOT/'create_defaults/bulk/lifecycle'/n).read_text(encoding='utf-8-sig').replace('\r\n','\n') for n in FILES})
 
 
+@_m7_owned_call(when=lambda root=ROOT: Path(root) == ROOT or Path(root).resolve() == ROOT.resolve(), cohorts=True)
 def verify_maintenance(root=ROOT):
     value=read(root/'ci/phase4-m5-maintenance.json')
     expected={'ci/validation-plan.json','.github/workflows/default-poster-validation.yml',

@@ -81,6 +81,22 @@ class Phase6PlaylistMaintenanceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'Frozen renderer/source changed: poster_text.py'):
             manifests.validate_manifest(value)
 
+    def test_m3_baseline_keeps_exact_sources_and_rejects_tamper_and_rollback(self):
+        from pathlib import Path
+        from ci import phase4_review
+        self.assertTrue(phase4_review.baseline())
+        original=Path.read_bytes
+        names=('create_defaults/bulk/lifecycle/composition.py',
+               'create_defaults/bulk/lifecycle/composition_models.py')
+        before=dict(pilot._blobs(pilot.BASE))
+        for name in names:
+            variants=[original(pilot.ROOT/name)+b'\nunreviewed']
+            if name in pilot.MODIFIED:variants.append(before[name])
+            for raw in variants:
+                def changed(path):return raw if path==pilot.ROOT/name else original(path)
+                with self.subTest(path=name),patch.object(Path,'read_bytes',changed),self.assertRaises(ValueError):
+                    phase4_review.baseline()
+
     def test_independent_expected_head_is_required_when_supplied(self):
         with self.assertRaisesRegex(ValueError,'expected HEAD differs'):
             pilot.verify_checkout(expected_head='0'*40)
@@ -100,7 +116,8 @@ class Phase6PlaylistMaintenanceTests(unittest.TestCase):
         names = ('create_defaults/create_poster.py', 'create_defaults/bulk/planner.py',
                  'create_defaults/bulk/workers.py', 'create_defaults/bulk/schemas/manifest-v1.json',
                  'create_defaults/bulk/contracts/expanded/validation.py',
-                 'ci/publication_tests/test_validation_timeouts.py')
+                 'ci/publication_tests/test_validation_timeouts.py',
+                 'ci/phase4.py','ci/phase4_transactions.py','ci/phase4_review.py')
         with m7._invocation(pilot.ROOT), m7._cohort_invocation(pilot.ROOT):
             pilot.verify_scope(pilot.ROOT, pilot.scope_members())
             for name in names:

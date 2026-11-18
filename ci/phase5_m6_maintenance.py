@@ -692,7 +692,8 @@ def verify_scope(root,baseline,names):
 
 def selected_hash(name,expected):
     if name in {'create_defaults/bulk/planner.py','create_defaults/bulk/workers.py',
-                'create_defaults/create_poster.py','create_defaults/validation_manifest.py'}:
+                'create_defaults/create_poster.py','create_defaults/validation_manifest.py',
+                'ci/phase4_transactions.py'}:
         # Exact Phase 6 intersections only; all original M6 selections below
         # retain their historical meanings and predecessor assertions.
         from ci.phase6_playlist_maintenance import selected_hash as pilot_hash
@@ -704,7 +705,8 @@ def selected_hash(name,expected):
             verify_checkout()
             expected=APPROVED[name][1]
         from ci.phase5_m7_maintenance import selected_hash as m7_hash
-        return m7_hash(ROOT,name,expected)
+        from ci.phase6_playlist_maintenance import selected_hash as pilot_hash
+        return pilot_hash(name,m7_hash(ROOT,name,expected))
     if name not in {'create_defaults/bulk/library_stage.py','create_defaults/bulk/operator_publication.py','create_defaults/bulk/contracts/models.py','ci/people_storage_maintenance.py','ci/phase4.py','create_defaults/bulk/lifecycle/models.py'}:return expected
     if expected!=APPROVED[name][0]:return expected
     verify_checkout()
