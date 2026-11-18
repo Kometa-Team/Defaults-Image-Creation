@@ -106,6 +106,21 @@ class LifecycleTests(unittest.TestCase):
             self.app.stage('maintainer',item['id'],item['sha256'],item['review_digest'])
         self.stage(item)
 
+    def test_file_change_during_review_is_rejected_before_overwrite(self):
+        added=self.stage(self.generic())
+        item=self.generic(intent='replace',identity=added['identity'],upload=self.uploaded('#AA2244'))
+        self.app.approve('maintainer',item['id'],item['sha256'],item['review_digest'])
+        original=self.app.object_bytes
+        target=self.app.destination/item['destination']
+        def drift_during_review(submission):
+            raw=original(submission)
+            target.write_bytes(b'external staging drift')
+            return raw
+        self.app.object_bytes=drift_during_review
+        with self.assertRaisesRegex(Rejected,'destination_preimage_changed'):
+            self.app.stage('maintainer',item['id'],item['sha256'],item['review_digest'])
+        self.assertEqual(target.read_bytes(),b'external staging drift')
+
     def test_ten_generated_references_match_and_preserve_catalog_identities(self):
         for identity,row in self.app.entries.items():
             with self.subTest(title=row['display_name']):

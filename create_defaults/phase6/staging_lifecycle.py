@@ -164,6 +164,10 @@ class BrowserStaging(Staging):
                     row['prior_visual_reference_sha256']=row['approved_sha256']
                     row['approved_sha256']=None
             row['render_request']['parameters']['out_name']=row['destination'].rsplit('/',1)[1][:-4]
+            # Preset approval/source descriptors must not masquerade as metadata
+            # for a newly uploaded or custom poster. The render records its assets.
+            row={key:row[key] for key in ('identity','display_name','destination','render_request',
+                'approved_sha256','prior_visual_reference_sha256') if key in row}
             self.requests[identity]=row
             return self.generate(role,identity,style,logo,colour,caption)
 
@@ -314,10 +318,14 @@ class BrowserStaging(Staging):
             raw=self.object_bytes(item)
             target=self.destination/item['destination']
             before_raw=regular(target) if target.exists() else None
+            before_hash=sha(before_raw) if before_raw is not None else None
+            if before_hash != (item['before']['sha256'] if item['before'] else None):
+                raise Rejected('destination_preimage_changed')
             old_inventory,old_catalog=deepcopy(self.expected),deepcopy(self.catalog)
             try:
                 target.parent.mkdir(exist_ok=True)
                 if item['action']=='REMOVE':
+                    self.guard()
                     target.unlink()
                     self.expected.pop(item['destination'])
                 else:
@@ -325,6 +333,7 @@ class BrowserStaging(Staging):
                     try:
                         with os.fdopen(fd,'wb') as stream:
                             stream.write(raw); stream.flush(); os.fsync(stream.fileno())
+                        self.guard()
                         os.replace(temporary,target)
                     finally:
                         if os.path.exists(temporary): os.unlink(temporary)
