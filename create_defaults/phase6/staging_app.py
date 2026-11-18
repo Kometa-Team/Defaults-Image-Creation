@@ -15,6 +15,7 @@ import secrets
 import shutil
 import stat
 import tempfile
+import time
 from threading import RLock
 
 from PIL import Image
@@ -100,7 +101,15 @@ class Staging:
                 stream.write(raw)
                 stream.flush()
                 os.fsync(stream.fileno())
-            os.replace(temporary, self.root / name)
+            for attempt in range(6):
+                try:
+                    os.replace(temporary, self.root / name)
+                    break
+                except PermissionError as error:
+                    # Windows scanners/readers can briefly deny atomic rename.
+                    # Retry only the owned metadata write; never bypass checks.
+                    if getattr(error,'winerror',None) not in {5,32,33} or attempt==5: raise
+                    time.sleep(0.05*(attempt+1))
         finally:
             if os.path.exists(temporary):
                 os.unlink(temporary)

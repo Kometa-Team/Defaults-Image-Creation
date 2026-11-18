@@ -2,6 +2,8 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
+import os
 
 from create_defaults.phase6.staging_app import HERE, Rejected, Staging
 
@@ -82,6 +84,23 @@ class StagingTests(unittest.TestCase):
 
     def test_existing_destination_cannot_be_adopted(self):
         with self.assertRaises(FileExistsError):Staging(HERE/'staging_fixtures',self.app.root)
+
+    def test_windows_metadata_rename_retry_is_bounded_and_keeps_atomic_bytes(self):
+        real=os.replace;calls=[]
+        def transient(source,target):
+            calls.append(True)
+            if len(calls)==1:
+                error=PermissionError('Windows sharing violation');error.winerror=5;raise error
+            return real(source,target)
+        with patch('create_defaults.phase6.staging_app.os.replace',side_effect=transient),patch('create_defaults.phase6.staging_app.time.sleep'):
+            self.app._save('retry-probe.json',{'exact':'bytes'})
+        self.assertEqual(len(calls),2)
+        before=(self.app.root/'retry-probe.json').read_bytes()
+        error=PermissionError('Persistent Windows denial');error.winerror=32
+        with patch('create_defaults.phase6.staging_app.os.replace',side_effect=error) as replace,patch('create_defaults.phase6.staging_app.time.sleep'):
+            with self.assertRaises(PermissionError):self.app._save('retry-probe.json',{'different':'bytes'})
+            self.assertEqual(replace.call_count,6)
+        self.assertEqual((self.app.root/'retry-probe.json').read_bytes(),before)
 
 
 if __name__=='__main__':unittest.main()

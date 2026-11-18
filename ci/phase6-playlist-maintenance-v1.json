@@ -349,7 +349,7 @@
     },
     "create_defaults/phase6/staging_app.py": {
       "before_sha256": null,
-      "sha256": "79b95cab803f0504eb8b8000bb72d62568b2863cc77d0e866a6d05b30b374e33",
+      "sha256": "790da5f58c2f69d1c1ea3f7f01729383326a0436a7b227a6d943188bc353909c",
       "text_lf": true
     },
     "create_defaults/phase6/staging_fixtures/approved/playlist/Alien & Predator (Timeline Order).jpg": {
@@ -489,7 +489,7 @@
     },
     "create_defaults/phase6/tests/test_staging_app.py": {
       "before_sha256": null,
-      "sha256": "52b16498224a07e2f6d31cc02397c65cfde4c5d0d555ea61c1d1e06a38f3f594",
+      "sha256": "aaf30658476780b050eb3c68ecc3fdb149eff30d84ab96f2eb3e898d2ff3453d",
       "text_lf": true
     },
     "create_defaults/phase6/tests/test_staging_lifecycle.py": {
