@@ -14,7 +14,7 @@
     },
     "ci/dependency_tests/test_phase6_playlist_maintenance.py": {
       "before_sha256": null,
-      "sha256": "5630e1b8aa34c4d9b07b0ee610e1eccf9c8052105b9dfcac6c5f08a01de1f17b",
+      "sha256": "fd8664f3d27beba4505c3bda2bbf619eaad1adbf54fbf95ed2180cdd7210b48c",
       "text_lf": true
     },
     "ci/phase5_m6_maintenance.py": {
@@ -25,6 +25,11 @@
     "ci/phase5_m7_maintenance.py": {
       "before_sha256": "6549260f014d35302d641909f577d5a51f89f638731ae10d380f8193c1549a40",
       "sha256": "8f56a8bd69b8c34c830197436b4e04f01fb155d66699150dbadcfeb07a688be5",
+      "text_lf": true
+    },
+    "ci/publication_tests/test_validation_timeouts.py": {
+      "before_sha256": "f48e83aa3aab7d61373133cd1f646da23c201221c2611f167909d39ef9f0dde3",
+      "sha256": "2d394772ea140f130f4a931ff93e02344a60aaedb4dedb08877f68a72a26ec6e",
       "text_lf": true
     },
     "create_defaults/bulk/contracts/expanded/validation.py": {
