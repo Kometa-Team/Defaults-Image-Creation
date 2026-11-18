@@ -179,24 +179,29 @@ def test_preflight_every_cohort_job_uses_the_existing_single_item_validator(plan
 
 @pytest.mark.parametrize('label', REQUESTS)
 def test_preflight_quality_retains_historical_and_exact_pillow13_reports(planned, label):
+    from copy import deepcopy
     from create_defaults.bulk.common import fingerprint
     from create_defaults.bulk.contracts.logos.assets import inspect_png
     from create_defaults.phase6.playlist import source_quality_fixture
     trial, registry, pilot, _ = planned
     row=next(r for r in pilot.rows().values() if r['request']==label)
     old=row['fixture_quality_review'];new=row['fixture_quality_pillow13']
+    updated=deepcopy(old['report'])
+    updated['halo_observations']['soft_edge_samples']=new['soft_edge_samples']
+    assert fingerprint(updated)==new['report_sha256']
     entry=registry.view().entry(row['proposed']['persistent_identity'])
-    for report in (old['report'],new['report']):
+    for report in (old['report'],updated):
         review=source_quality_fixture(trial.config,registry.view(),entry,report)
         assert review['report_sha256']==fingerprint(report)
         assert review['simulation'] and not any(review[k] for k in
             ('real_approval','production_authorized','publication_authorized'))
     actual=inspect_png((trial.config.asset_dir/entry['names']['source']['path']).read_bytes()).report()
-    assert actual in (old['report'],new['report'])
+    assert actual in (old['report'],updated)
     assert source_quality_fixture(trial.config,registry.view(),entry,actual)['report_sha256']==fingerprint(actual)
 
 
-@pytest.mark.parametrize('attack', ['diagnostic','samples','source','authority','profile','predecessor','resealed-finding'])
+@pytest.mark.parametrize('attack', ['diagnostic','samples','source','authority','profile','predecessor',
+    'historical-report','historical-hash','resealed-finding'])
 def test_preflight_quality_successors_reject_unrecorded_changes(planned, attack):
     from copy import deepcopy
     from unittest.mock import patch
@@ -206,13 +211,18 @@ def test_preflight_quality_successors_reject_unrecorded_changes(planned, attack)
     rows=deepcopy(pilot.rows())
     row=next(r for r in rows.values() if r['request']=='avp')
     successor=row['fixture_quality_pillow13']
-    report=deepcopy(successor['report'])
+    report=deepcopy(row['fixture_quality_review']['report'])
+    report['halo_observations']['soft_edge_samples']=successor['soft_edge_samples']
     if attack=='diagnostic':report['diagnostics'].append('unreviewed_new_finding')
     elif attack=='samples':report['halo_observations']['soft_edge_samples']+=1000
     elif attack=='source':report['sha256']='0'*64
     elif attack=='authority':row['fixture_quality_review']['real_approval']=True
     elif attack=='profile':successor['pillow_version']='14.0.0'
     elif attack=='predecessor':successor['before_report_sha256']='0'*64
+    elif attack=='historical-report':row['fixture_quality_review']['report']['halo_observations']['soft_edge_samples']+=1
+    elif attack=='historical-hash':
+        row['fixture_quality_review']['report_sha256']='0'*64
+        successor['before_report_sha256']='0'*64
     else:
         report['diagnostics'].append('resealed_unreviewed_finding')
         successor['report']=deepcopy(report);successor['report_sha256']=fingerprint(report)
