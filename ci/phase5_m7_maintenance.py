@@ -116,9 +116,10 @@ def verify_checkout(root=None, *, _witness=False):
     ancestry(head)
     from ci import phase6_playlist_maintenance as pilot
     # The M7 owner only needs its exact overlapping successors here. Full new
-    # pilot admission has its own scope proof; per-file historical views stay
-    # fresh. Do not repeat the unrelated PNG cohort in every inherited M6 call.
-    pilot_proof = (pilot.proof(root, head, selected=pilot.MODIFIED & (MODIFIED | {OWNER}))
+    # pilot admission has its own scope proof. The loop below reads and proves
+    # every overlapping member through both receipts using the same fresh bytes;
+    # only this owner lies outside that loop. Do not duplicate those body reads.
+    pilot_proof = (pilot.proof(root, head, selected=pilot.MODIFIED & {OWNER})
                    if ROOT.resolve() == pilot.ROOT.resolve() else None)
     # Keep the independent checker: the README helper is itself an input of
     # inherited Unicode verification and cannot authenticate its own caller.
@@ -269,7 +270,14 @@ def _read_owned_predecessor(root, name):
         raise ValueError('No M7 predecessor for: '+name)
     binding = _owned_members(root, physical=False)[name]
     current = regular(ROOT, name).read_bytes()
-    current = _pilot_history(root, name, current)
+    from ci import phase6_playlist_maintenance as pilot
+    active = _ACTIVE.get()
+    if name in pilot.MODIFIED and len(active[0]) == 5:
+        # Private reader owns these freshly read bytes. Both successor layers
+        # validate this exact body; caller-supplied views use independent reads.
+        current = pilot._project(root, name, current, active[0][4], owned=True)
+    else:
+        current = _pilot_history(root, name, current)
     if sha(current) != binding['sha256']:
         raise ValueError('Changed physical M7 successor: '+name)
     before = predecessor(name)
