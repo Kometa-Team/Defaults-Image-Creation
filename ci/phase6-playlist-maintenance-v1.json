@@ -14,12 +14,12 @@
     },
     "ci/dependency_tests/test_phase6_playlist_maintenance.py": {
       "before_sha256": null,
-      "sha256": "ed126ada25cbf894b7007266b8c027a6bbe62ab8121b935b9ab1dfbbfc8fa53a",
+      "sha256": "78fd0306cb65ad6f6a8671fcaccb22e049aca8568236303d666e3341037f4ef4",
       "text_lf": true
     },
     "ci/people_unicode_maintenance.py": {
       "before_sha256": "4ee658a6835ba1dd87e7ace163603fd0c786316ace2b3ab1c509fff33126d32b",
-      "sha256": "c2445f8aebecde26b43fafe54726f28c126c15c4168242d40dc73df21b1cc0fb",
+      "sha256": "02d95c28925de3920e68498746a9a349cff86e3b16f6bbc8290c1fb394e91ec9",
       "text_lf": true
     },
     "ci/phase4.py": {

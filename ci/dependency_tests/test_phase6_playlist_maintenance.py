@@ -153,6 +153,75 @@ class Phase6PlaylistMaintenanceTests(unittest.TestCase):
                 with self.subTest(path=name,missing=raw is None),patch.object(Path,'read_bytes',changed),self.assertRaises((ValueError,OSError)):
                     phase4_review.baseline()
 
+    def test_unicode_cohort_reuses_only_entry_proof_and_copies_metadata(self):
+        from ci import phase5_m5_maintenance as m5, phase5_m7_maintenance as m7
+        from pathlib import Path
+        adapter=m5.unicode_adapter();name='ci/people_bulk_maintenance.py'
+        original=Path.read_bytes;reads=[]
+        def read(path):
+            reads.append(path)
+            return original(path)
+        @m7.owned_call(cohorts=True)
+        def public(root):
+            first=adapter.verify(root);expected=first[name]['sha256']
+            first[name]['sha256']='0'*64
+            bindings,owned=adapter._verify_owned(root)
+            self.assertEqual(bindings[name]['sha256'],expected)
+            for _ in range(2):
+                raw=(root/name).read_bytes()
+                adapter._historical_owned(root,name,raw,bindings,owned)
+                adapter.historical_bytes(root,name,raw)
+            adapter._close_owned(root,owned)
+        with patch.object(adapter,'_verify_fresh',wraps=adapter._verify_fresh) as prove,patch.object(Path,'read_bytes',read):
+            public(pilot.ROOT)
+            self.assertEqual(prove.call_count,2)
+            public(pilot.ROOT)
+            self.assertEqual(prove.call_count,4)
+        self.assertGreaterEqual(reads.count(pilot.ROOT/name),8)
+
+    def test_unicode_cohort_rejects_projection_and_closing_drift(self):
+        from pathlib import Path
+        from ci import phase5_m5_maintenance as m5, phase5_m7_maintenance as m7
+        adapter=m5.unicode_adapter();name='ci/people_bulk_maintenance.py'
+        target=pilot.ROOT/name;original=Path.read_bytes;raw=original(target)
+        old=adapter.predecessor(name)
+        for bad in (raw+b'changed',old,None):
+            active=[False]
+            def read(path):
+                if active[0] and path==target:
+                    if bad is None:raise FileNotFoundError(name)
+                    return bad
+                return original(path)
+            @m7.owned_call(cohorts=True)
+            def public(root):
+                bindings,owned=adapter._verify_owned(root)
+                active[0]=True
+                try:
+                    # Reset before closing: these assertions require immediate
+                    # point-of-use rejection rather than just a later failure.
+                    for project in (
+                        lambda:adapter._historical_owned(root,name,raw,bindings,owned),
+                        lambda:adapter.historical_bytes(root,name,raw),
+                        lambda:adapter.selected_hash(name,bindings[name]['before_sha256'])):
+                        with self.assertRaises((ValueError,OSError)):project()
+                finally:active[0]=False
+            with self.subTest(missing=bad is None),patch.object(Path,'read_bytes',read):public(pilot.ROOT)
+        active=[False]
+        other=pilot.ROOT/'create_people_posters/unicode_labels.py'
+        def read(path):return original(path)+b'changed' if active[0] and path==other else original(path)
+        @m7.owned_call(cohorts=True)
+        def closing(root):
+            adapter.verify(root)
+            active[0]=True
+        with patch.object(Path,'read_bytes',read),self.assertRaises(ValueError):closing(pilot.ROOT)
+        active[0]=False
+        head=_head(pilot.ROOT)
+        @m7.owned_call(cohorts=True)
+        def moving(root):
+            adapter.verify(root)
+            active[0]=True
+        with patch('ci.people_colorize_maintenance._head',side_effect=lambda root:'f'*40 if active[0] else head),self.assertRaises(ValueError):moving(pilot.ROOT)
+
     def test_unicode_loader_retains_historical_pin_and_rejects_unapproved_successors(self):
         from pathlib import Path
         from ci import phase5_m5_maintenance as m5
