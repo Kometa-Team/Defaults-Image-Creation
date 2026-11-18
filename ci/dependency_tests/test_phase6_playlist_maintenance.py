@@ -7,6 +7,80 @@ from ci.people_colorize_maintenance import _head
 
 
 class Phase6PlaylistMaintenanceTests(unittest.TestCase):
+    def test_protected_and_adopted_selectors_retain_exact_original_pins(self):
+        from ci import phase5_m7_maintenance as m7
+        from ci.dependency_maintenance import selected_hash
+        from ci.phase5_m6_maintenance import APPROVED
+        rows={name:(before,after) for name,before,after in pilot._decode((pilot.ROOT/pilot.RECEIPT).read_bytes())}
+        with m7._invocation(pilot.ROOT),m7._cohort_invocation(pilot.ROOT):
+            for name in pilot.PROTECTED_SUCCESSORS:
+                before,after=rows[name]
+                original=APPROVED[name][0] if name in APPROVED else before
+                self.assertEqual(selected_hash(name,original),after)
+                self.assertEqual(pilot.selected_hash(name,'0'*64),'0'*64)
+                self.assertEqual(pilot.selected_hash('foreign.py',before),before)
+
+    def test_protected_successors_recheck_tamper_rollback_and_missing_leaves(self):
+        from pathlib import Path
+        from ci import phase5_m7_maintenance as m7
+        from ci.dependency_maintenance import selected_hash
+        original=Path.read_bytes
+        before=dict(pilot._blobs(pilot.BASE))
+        with m7._invocation(pilot.ROOT),m7._cohort_invocation(pilot.ROOT):
+            for name in pilot.PROTECTED_SUCCESSORS-{'create_defaults/bulk/operator_publication.py'}:
+                target=pilot.ROOT/name;current=target.read_bytes();expected=pilot.member_sha(name,before[name])
+                pilot.selected_hash(name,expected)
+                for bad in (current+b'changed',before[name],None):
+                    def read(path):
+                        if path==target:
+                            if bad is None:raise FileNotFoundError(name)
+                            return bad
+                        return original(path)
+                    with self.subTest(path=name,missing=bad is None),patch.object(Path,'read_bytes',read):
+                        with self.assertRaises((ValueError,OSError)):selected_hash(name,expected)
+
+    def test_protected_cohort_is_once_per_invocation_with_fresh_leaf_reads(self):
+        from pathlib import Path
+        from ci import phase5_m7_maintenance as m7
+        names=('create_defaults/bulk/planner.py','create_defaults/bulk/workers.py')
+        before=dict(pilot._blobs(pilot.BASE));original=Path.read_bytes;reads=[]
+        def read(path):reads.append(path);return original(path)
+        for _ in range(2):
+            with patch.object(pilot,'_protected_cohort_proof',wraps=pilot._protected_cohort_proof) as proof:
+                with m7._invocation(pilot.ROOT),m7._cohort_invocation(pilot.ROOT),patch.object(Path,'read_bytes',read):
+                    for _ in range(2):
+                        for name in names:pilot.selected_hash(name,pilot.member_sha(name,before[name]))
+                self.assertEqual(proof.call_count,2)  # entry and closing, no proof survives a call
+        for name in names:self.assertGreaterEqual(reads.count(pilot.ROOT/name),4)
+
+    def test_protected_cohort_closing_rechecks_files_and_head(self):
+        from ci import phase5_m7_maintenance as m7
+        name='create_defaults/bulk/planner.py';target=pilot.ROOT/name;raw=target.read_bytes()
+        expected=pilot.member_sha(name,dict(pilot._blobs(pilot.BASE))[name])
+        try:
+            with self.assertRaises(ValueError):
+                with m7._invocation(pilot.ROOT),m7._cohort_invocation(pilot.ROOT):
+                    pilot.selected_hash(name,expected)
+                    target.write_bytes(raw+b'closing tamper')
+        finally:target.write_bytes(raw)
+        head=_head(pilot.ROOT)
+        with patch('ci.people_colorize_maintenance._head',side_effect=[head,'0'*40]):
+            with self.assertRaises(ValueError):pilot.selected_hash(name,expected)
+
+    def test_frozen_historical_and_current_manifests_keep_exact_records(self):
+        from create_defaults.bulk import baselines
+        from create_defaults import validation_manifest as manifests
+        root=pilot.ROOT/'create_defaults'
+        path=root/'fixtures/effective-jobs-en-cmap-compat.json.gz'
+        before=path.read_bytes()
+        self.assertTrue(baselines.verify_historical())
+        self.assertTrue(baselines.verify_current())
+        self.assertEqual(path.read_bytes(),before)
+        value=manifests.load_manifest(root/'bulk/baselines/effective-jobs-en-current.json.gz')
+        value['source_text_hashes']['poster_text.py']='0'*64
+        with self.assertRaisesRegex(ValueError,'Frozen renderer/source changed: poster_text.py'):
+            manifests.validate_manifest(value)
+
     def test_independent_expected_head_is_required_when_supplied(self):
         with self.assertRaisesRegex(ValueError,'expected HEAD differs'):
             pilot.verify_checkout(expected_head='0'*40)
