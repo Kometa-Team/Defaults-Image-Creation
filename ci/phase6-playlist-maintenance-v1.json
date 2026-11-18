@@ -464,7 +464,7 @@
     },
     "create_defaults/phase6/staging_lifecycle.py": {
       "before_sha256": null,
-      "sha256": "8259317ee47ae91b3fd33627e974f11835a3f51615d7aed12e3ef6e2fcc13996",
+      "sha256": "ef23580f196e3bed23bcd9f64d74f20537655dfa3ddc9a640313035f64624adb",
       "text_lf": true
     },
     "create_defaults/phase6/tests/conftest.py": {
@@ -494,7 +494,7 @@
     },
     "create_defaults/phase6/tests/test_staging_lifecycle.py": {
       "before_sha256": null,
-      "sha256": "8113965bc0d78d5cbe02847f51e2565b139cc018dce20241c9925d8e847b95b4",
+      "sha256": "f8904a1655bb9d7fee9e00b4066f8d0af923dd1da713ffa70f3ecbf308086a16",
       "text_lf": true
     },
     "create_defaults/phase6/verify_approved_transport.py": {

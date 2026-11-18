@@ -56,6 +56,7 @@ class BrowserStaging(Staging):
                 raise Rejected('source_logo_binding')
         self.uploads=self.root/'uploaded-logos'
         self.uploads.mkdir()
+        self.validated_uploads=set()
         self.persist()
 
     def persist(self):
@@ -80,6 +81,7 @@ class BrowserStaging(Staging):
 
     def asset(self, name):
         if isinstance(name,str) and re.fullmatch(r'uploaded:[0-9a-f]{64}',name):
+            if name not in self.validated_uploads: raise Rejected('unknown_uploaded_logo',400)
             path=self.uploads/(name.split(':')[1]+'.png')
             if sha(regular(path)) != name.split(':')[1]: raise Rejected('uploaded_logo_changed')
             return path
@@ -109,6 +111,7 @@ class BrowserStaging(Staging):
             if regular(target)!=raw: raise Rejected('uploaded_logo_changed')
         else:
             with target.open('xb') as stream: stream.write(raw)
+        self.validated_uploads.add('uploaded:'+checksum)
         return 'uploaded:'+checksum
 
     def generate_request(self, role, *, intent, title='', identity=None, style=None,
@@ -142,6 +145,7 @@ class BrowserStaging(Staging):
                 destination=category+'/'+renderer.output_filename(renderer.PosterOptions(out_name=stem),'#FFFFFF')
                 matches=[r for r in self.catalog.values() if r['destination'].casefold()==destination.casefold()]
                 if matches and matches[0]['status']=='active': raise Rejected('poster_already_exists_use_replace')
+                if matches: destination=matches[0]['destination']
                 preset=next((r for r in self.requests.values() if r['destination'].casefold()==destination.casefold()),None)
                 identity=matches[0]['identity'] if matches else preset['identity'] if preset else 'fixture.'+secrets.token_hex(16)
                 row=deepcopy(preset or self.requests[self.second if category=='franchise' else self.disposable])
@@ -322,11 +326,13 @@ class BrowserStaging(Staging):
             if before_hash != (item['before']['sha256'] if item['before'] else None):
                 raise Rejected('destination_preimage_changed')
             old_inventory,old_catalog=deepcopy(self.expected),deepcopy(self.catalog)
+            mutated=False
             try:
                 target.parent.mkdir(exist_ok=True)
                 if item['action']=='REMOVE':
                     self.guard()
                     target.unlink()
+                    mutated=True
                     self.expected.pop(item['destination'])
                 else:
                     fd,temporary=tempfile.mkstemp(dir=self.root)
@@ -335,6 +341,7 @@ class BrowserStaging(Staging):
                             stream.write(raw); stream.flush(); os.fsync(stream.fileno())
                         self.guard()
                         os.replace(temporary,target)
+                        mutated=True
                     finally:
                         if os.path.exists(temporary): os.unlink(temporary)
                     self.expected[item['destination']]=expected_hash
@@ -343,10 +350,11 @@ class BrowserStaging(Staging):
                 self.guard()
                 self.source_proof()
             except BaseException:
-                if before_raw is None: target.unlink(missing_ok=True)
-                else: target.write_bytes(before_raw)
+                if mutated:
+                    if before_raw is None: target.unlink(missing_ok=True)
+                    else: target.write_bytes(before_raw)
                 self.expected,self.catalog=old_inventory,old_catalog
-                self._save('catalog.json',self.catalog)
+                if mutated: self._save('catalog.json',self.catalog)
                 raise
             item.update(status='staged',checks=review['checks'],catalog_change=review['catalog_change'],
                 review_digest=review_digest,can_approve=False,receipt=dict(identity=item['identity'],destination=str(target),

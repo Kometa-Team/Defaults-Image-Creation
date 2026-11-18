@@ -121,6 +121,36 @@ class LifecycleTests(unittest.TestCase):
             self.app.stage('maintainer',item['id'],item['sha256'],item['review_digest'])
         self.assertEqual(target.read_bytes(),b'external staging drift')
 
+    def test_restoration_keeps_exact_catalog_path_and_preserves_uploaded_logo(self):
+        added=self.stage(self.generic())
+        logo=added['render']['parameters']['logo'];original=self.app.asset(logo).read_bytes()
+        removed=self.stage(self.app.request_removal('contributor',added['identity'],'Retire custom fixture'))
+        restored=self.stage(self.generic(title='unmapped browser fixture',upload=None,logo=logo))
+        self.assertEqual(restored['action'],'RESTORE')
+        self.assertEqual((restored['identity'],restored['destination']),(added['identity'],added['destination']))
+        self.assertTrue(removed['receipt']['file_absent'])
+        self.assertEqual(self.app.asset(logo).read_bytes(),original)
+
+    def test_unvalidated_owned_file_is_not_an_uploaded_logo(self):
+        raw=b'not validated by the upload route';checksum=sha(raw)
+        (self.app.uploads/(checksum+'.png')).write_bytes(raw)
+        with self.assertRaisesRegex(Rejected,'unknown_uploaded_logo'):
+            self.generic(upload=None,logo='uploaded:'+checksum)
+
+    def test_failed_prewrite_guard_does_not_restore_over_an_external_change(self):
+        added=self.stage(self.generic())
+        item=self.generic(intent='replace',identity=added['identity'])
+        self.app.approve('maintainer',item['id'],item['sha256'],item['review_digest'])
+        original=self.app.guard;calls=[];target=self.app.destination/item['destination']
+        def fail_prewrite():
+            calls.append(True)
+            if len(calls)==2:target.write_bytes(b'external staging drift')
+            original()
+        self.app.guard=fail_prewrite
+        with self.assertRaisesRegex(Rejected,'staging_or_fixture_drift'):
+            self.app.stage('maintainer',item['id'],item['sha256'],item['review_digest'])
+        self.assertEqual(target.read_bytes(),b'external staging drift')
+
     def test_ten_generated_references_match_and_preserve_catalog_identities(self):
         for identity,row in self.app.entries.items():
             with self.subTest(title=row['display_name']):
