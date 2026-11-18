@@ -109,7 +109,7 @@
     },
     "create_defaults/phase6/PHASE6_CLOSEOUT_CHECKLIST.md": {
       "before_sha256": null,
-      "sha256": "b1f9a75d49c2970d10189550d2ee46ca310790c997f36c929b776461a113e07e",
+      "sha256": "8267475804ad06074713392f352fa3446ccf8f6a74fa9654fdef3c749f2e4c76",
       "text_lf": true
     },
     "create_defaults/phase6/PLAYLIST_PILOT_MANIFEST.json": {
@@ -184,8 +184,68 @@
     },
     "create_defaults/phase6/review/EVIDENCE_INDEX.md": {
       "before_sha256": null,
-      "sha256": "b400cc28a3a33b49c9017b4ea629e35b78bebcaa7eafa9b1da28d0e4289f8cee",
+      "sha256": "aae11019375b90dbc35bce04d0ba65dc6b7ad41a04e92d497d53598fec3d3371",
       "text_lf": true
+    },
+    "create_defaults/phase6/review/action-forms/blocked-removal.png": {
+      "before_sha256": null,
+      "sha256": "4334a44bd93c12d7513e9fa7980974e94b36327c9acbceddd7d638e85565a917",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/action-forms/browser-result.json": {
+      "before_sha256": null,
+      "sha256": "fc5f967947e995df615d2f54fe0d35b37dfbc9479350f264f70ca086a4b1a5b9",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/action-forms/browser-run.json": {
+      "before_sha256": null,
+      "sha256": "5067254bb9098ebdfb77e5a6e564c30b626d0c6210297d2ec27bedaf3be3717e",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/action-forms/catalog.json": {
+      "before_sha256": null,
+      "sha256": "67875079872d8c1978764d096eb7cf61ef0a7276efcba27d454cb682e00315b6",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/action-forms/first-two-result.json": {
+      "before_sha256": null,
+      "sha256": "2a7faddfe9684b352fb3a7a855472f2fc2fe4af6c259131be941573bbdacc905",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/action-forms/focused-checks.json": {
+      "before_sha256": null,
+      "sha256": "ad3c4bd20491fb11dfe6c099197364ed09612a4a317ca14941df80870941f7cc",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/action-forms/replacement-side-by-side.png": {
+      "before_sha256": null,
+      "sha256": "ffb4f5f674c2c754f2c430d6965dce3f3f620c0c5798726163ff531485c26588",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/action-forms/second-style.png": {
+      "before_sha256": null,
+      "sha256": "ebcb318f2dd4d172534fb121a54540f718c51b0ed803597a50c9e662f3c43709",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/action-forms/staging-receipts.json": {
+      "before_sha256": null,
+      "sha256": "d834ee804a22a774a75ed47c106dcd1c46159630cdbba7d5b7a7a30bbefaeb49",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/action-forms/ten-generated-staging.png": {
+      "before_sha256": null,
+      "sha256": "73f7a606c12c3f2d6fae87fb7c106d67efeaa6dd0a418c1be6161290fc0b071b",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/action-forms/unmapped-ellipse.png": {
+      "before_sha256": null,
+      "sha256": "eeeb40bccc4af168130f9c8d1bcc83c4b018e4b056a918278137bcae3d698863",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/action-forms/unmapped-rectangle.png": {
+      "before_sha256": null,
+      "sha256": "2e7000e78d9a5c13127d4055b90fb84a3ca3a78830990078d32648bd572161ee",
+      "text_lf": false
     },
     "create_defaults/phase6/review/approved-transport-native-proof.json": {
       "before_sha256": null,
