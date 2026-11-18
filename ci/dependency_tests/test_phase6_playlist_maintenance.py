@@ -106,7 +106,9 @@ class Phase6PlaylistMaintenanceTests(unittest.TestCase):
             for name in names:
                 target = pilot.ROOT/name
                 current = target.read_bytes()
-                self.assertEqual(m7.historical_bytes(pilot.ROOT, name, current), before[name])
+                self.assertEqual(pilot.historical_bytes(pilot.ROOT, name, current), before[name])
+                expected=m7.predecessor(name) if name in m7.MODIFIED else before[name]
+                self.assertEqual(m7.historical_bytes(pilot.ROOT, name, current), expected)
                 for bad in (current+b'changed', before[name], None):
                     def read(path):
                         if path == target:

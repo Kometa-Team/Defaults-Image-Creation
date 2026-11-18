@@ -14,7 +14,7 @@
     },
     "ci/dependency_tests/test_phase6_playlist_maintenance.py": {
       "before_sha256": null,
-      "sha256": "fd8664f3d27beba4505c3bda2bbf619eaad1adbf54fbf95ed2180cdd7210b48c",
+      "sha256": "471cdd77806309e1377e2a4b14b99739555594e99a7fa710b32efd8676074409",
       "text_lf": true
     },
     "ci/phase5_m6_maintenance.py": {
