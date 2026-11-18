@@ -7,6 +7,11 @@ from ci.people_colorize_maintenance import _head
 
 
 class Phase6PlaylistMaintenanceTests(unittest.TestCase):
+    def test_calibration_test_is_an_exact_dependency_infrastructure_successor(self):
+        from ci.dependency_maintenance import verify_infrastructure
+        result=verify_infrastructure(pilot.ROOT)
+        self.assertIn('create_defaults/bulk/tests/test_logo_workflow.py',result['infrastructure'])
+
     def test_canonical_successors_keep_historical_records_and_exact_current_snapshots(self):
         from pathlib import Path
         from create_defaults.phase6.canonical_fixtures import current_fixture, HISTORICAL
