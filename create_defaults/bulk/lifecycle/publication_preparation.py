@@ -30,8 +30,13 @@ def tree(repo,commit):
 
 
 class OfflineDestination:
-    def __init__(self,trial,existing=None):
+    def __init__(self,trial,existing=None,*,offline_playlist_pilot=None):
         if type(trial) is not CompositionTrial or trial._closed:fail('owned_trial_required')
+        self.pilot=offline_playlist_pilot
+        if self.pilot is not None:
+            from create_defaults.phase6.playlist import OfflinePlaylistPilot
+            if type(self.pilot) is not OfflinePlaylistPilot:fail('destination_ownership')
+            self.pilot.require_trial(trial)
         self.trial=trial
         self.root=Path(tempfile.mkdtemp(prefix='m5-base-',dir=trial.root)).resolve()
         git(self.root,'init','-b','master')
@@ -44,13 +49,15 @@ class OfflineDestination:
         atomic_bytes(self.root/'.gitattributes',b'* -text\n')
         for name,raw in (existing or {}).items():
             validate_paths([dict(destination=name)])
-            if not name.startswith('genre/'):fail('destination_scope')
+            roots=('genre/','playlist/') if self.pilot is not None else ('genre/',)
+            if not name.startswith(roots):fail('destination_scope')
             atomic_bytes(confined(self.root,name),raw)
         git(self.root,'add','--','keep.txt','.gitattributes',*(existing or {}))
         git(self.root,'commit','-m','Owned offline destination base')
         self.base=self.observe()
 
     def observe(self):
+        if self.pilot is not None:self.pilot.require_trial(self.trial)
         if type(self.trial) is not CompositionTrial or self.trial._closed or not self.root.is_relative_to(self.trial.root):fail('destination_ownership')
         if git(self.root,'remote').strip() or git(self.root,'status','--porcelain').strip():fail('destination_ownership')
         if Path(git(self.root,'rev-parse','--absolute-git-dir').decode().strip()).resolve()!=self.root/'.git':fail('destination_ownership')
@@ -78,13 +85,17 @@ class NativeSelection:
             state,graph,definitions,keys,retained,plans,_,entries=mappings._state(self.registry,store,db)
         if self.snapshot_sha256 not in state['snapshots']:fail('uncommitted_snapshot')
         snapshot=DefinitionSnapshot.from_bytes(store.read_object(self.snapshot_sha256));s=snapshot.to_dict()
+        from create_defaults.phase6.playlist import for_candidate
+        pilot=for_candidate(ctx.candidate)
+        if pilot is not None and s['operation_type']!='ADD':fail('playlist_pilot_add_only')
         if snapshot.sha256!=self.snapshot_sha256 or s['composition_sha256']!=self.inputs.composition_sha256:fail('snapshot_binding')
         if s['operation_type'] not in {'ADD','UPDATE'} or ctx.candidate.data()['effective_definitions']!={i:definitions[i] for i in s['members']}:fail('current_definition')
         if set(s['members'])!=set(ctx.candidate.graph.index().outputs):fail('native_membership')
         from .basis import historical_basis
         for identity in s['members']:
             e=entries[identity];rule=historical_basis().rule(e['category'],e['variant'])
-            if (e!=s['entries'][identity] or e['origin']!='assigned' or e['category']!='Genre'
+            category_ok=e['category']=='Genre' or (e['category']=='Playlist' and pilot is not None)
+            if (e!=s['entries'][identity] or e['origin']!='assigned' or not category_ok
                     or e['semantic']['language']!='en' or e['tombstone_sha256'] is not None
                     or rule['source_kind']!='logo' or rule['required_presentations']!=['single']
                     or retained[identity]['snapshot_sha256']!=snapshot.sha256 or keys[identity]!=identity):fail('cohort_or_mapping')
@@ -97,7 +108,14 @@ class NativeSelection:
         if review.to_dict()['state']!='MAINTAINER_APPROVED' or bundle.sha256!=s['review_bundle_sha256']:fail('current_review')
         from ..contracts.evidence_consumption import ConsumptionAttestation,revalidate
         before=ConsumptionAttestation.from_dict(json.loads(s['phase3_json']))
-        current=revalidate(before,expected_sha256=before.sha256,**self.inputs.phase3_inputs)
+        if pilot is None:
+            current=revalidate(before,expected_sha256=before.sha256,**self.inputs.phase3_inputs)
+        else:
+            # Only the owned Playlist fixture shares its cohort entry proof.
+            # Each request still projects fresh physical sources, and the scope
+            # replays the registry and exact boundary again before returning.
+            with pilot.verification():
+                current=revalidate(before,expected_sha256=before.sha256,**self.inputs.phase3_inputs)
         if current.encoded!=before.encoded:fail('current_phase3')
         # M4/M6 replay above validates native pixels, original review decisions,
         # immutable snapshots and original owned receipt/job records.
@@ -125,6 +143,9 @@ def plan_operation(selection,patch,target,*,max_files=MAX_FILES,max_bytes=MAX_BY
     if type(selection) is not NativeSelection or type(patch) is not CatalogPatch or type(target) is not OfflineDestination:fail('typed_preparation')
     if type(max_files) is not int or type(max_bytes) is not int or not 1<=max_files<=MAX_FILES or not 1<=max_bytes<=MAX_BYTES:fail('batch_limits')
     snapshot,context=selection.verify();catalog=patch.verify(context['definitions'])
+    from create_defaults.phase6.playlist import for_candidate
+    pilot=for_candidate(selection.inputs.composition.candidate)
+    if patch.source.pilot is not pilot or target.pilot is not pilot:fail('foreign_preparation')
     if patch.source.trial is not target.trial or selection.registry.operations.root!=target.trial.config.cache_dir:fail('foreign_preparation')
     if catalog['members']!=snapshot['members'] or catalog['definitions_sha256']!=fingerprint(context['definitions']):fail('catalog_membership')
     if target.observe()!=target.base:fail('destination_changed')
@@ -133,7 +154,8 @@ def plan_operation(selection,patch,target,*,max_files=MAX_FILES,max_bytes=MAX_BY
     for identity in snapshot['members']:
         member=snapshot['artwork'][identity];entry=snapshot['entries'][identity]
         path=entry['names']['public_path']
-        if path!=member['public_path'] or not path.startswith('genre/'):fail('destination_scope')
+        root=entry['category'].lower()+'/'
+        if root not in {'genre/','playlist/'} or path!=member['public_path'] or not path.startswith(root):fail('destination_scope')
         raw=archive.read_bytes(member['object_sha256'])
         if sha(raw)!=member['sha256'] or len(raw)!=member['bytes']:fail('artifact_bytes')
         output=confined(target.trial.root,'m5-artwork/'+selection.snapshot_sha256+'/'+identity+'.jpg')
@@ -161,6 +183,9 @@ def plan_operation(selection,patch,target,*,max_files=MAX_FILES,max_bytes=MAX_BY
         catalog_sha256=patch.sha256,source=catalog['source'],required_members=snapshot['members'],
         members=members,destination=baseline,manifest=manifest,plan=plan))
     CompositionArchive(selection.registry.operations.root).put_json(result.to_dict())
+    if pilot is not None:
+        from create_defaults.phase6.playlist import register_operator_preparation
+        register_operator_preparation(pilot,result,selection,patch,target)
     return result
 
 

@@ -95,7 +95,8 @@ def selected_hash(name, expected):
     from ci.phase5_m6_maintenance import selected_hash as m6_hash
     expected = retention_hash(name, expected)
     if name not in MEMBERS:
-        return m6_hash(name, expected)
+        from ci.phase6_playlist_maintenance import selected_hash as pilot_hash
+        return pilot_hash(name, m6_hash(name, expected))
     binding = manifest()['members'][name]
     if binding['before_sha256'] is None or expected != binding['before_sha256']:
         return m6_hash(name, expected)

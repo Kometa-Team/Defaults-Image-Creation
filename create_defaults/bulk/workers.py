@@ -95,7 +95,8 @@ def compose(task, target, resources):
             raise BulkError("changed_input", "Rendering input changed after planning")
         if item["role"] in {"logo", "avg_color_image", "font"}:
             parameters[item["role"]] = str(path)
-    create_poster(PosterOptions(**parameters), output_path=target, asset_dir=config.asset_dir, font_dir=config.asset_dir / "fonts")
+    create_poster(PosterOptions(**parameters), output_path=target, asset_dir=config.asset_dir,
+                  font_dir=config.asset_dir / "fonts", style=payload.get('composition_style'))
 
 
 def probe_renderer(task, target, resources):
@@ -116,7 +117,9 @@ def tasks_from_manifest(manifest):
         for dependency in job["dependencies"]:
             inputs.append({"role": dependency["input"], "path": by_id[dependency["job_id"]]["local_relative"], "sha256": dependency["sha256"], "generated": True})
         yield RenderTask(job["id"], job["render_fingerprint"], job["local_relative"],
-                         {"parameters": job["parameters"], "inputs": inputs, "renderer": manifest["renderer"], **({"kind": "overlay"} if job["kind"] == "overlay" else {})},
+                         {"parameters": job["parameters"], "inputs": inputs, "renderer": manifest["renderer"],
+                          **({'composition_style': job['composition_style']} if 'composition_style' in job else {}),
+                          **({"kind": "overlay"} if job["kind"] == "overlay" else {})},
                          tuple(item["job_id"] for item in job["dependencies"]))
 
 

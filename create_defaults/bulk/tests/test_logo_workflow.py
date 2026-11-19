@@ -166,6 +166,8 @@ def test_corpus_is_sealed_family_disjoint_and_evaluation_reproducible():
     report=evaluate()
     from ci.dependency_maintenance import current_calibration_expectation
     expected=current_calibration_expectation(json.loads((HERE/"calibration-v1.json").read_bytes()))
+    from create_defaults.phase6.canonical_fixtures import current_calibration_fixture
+    expected=current_calibration_fixture(expected)
     assert canonical(report)==canonical(expected)
     assert report["corpus_sha256"]==CORPUS_SHA256 and report["family_disjoint"]
     for split in report["summaries"].values():

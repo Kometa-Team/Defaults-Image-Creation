@@ -1,0 +1,58 @@
+{
+  "kind": "offline-playlist-visual-review-approval",
+  "date": "2026-11-17",
+  "reviewer": "maintainer in current conversation",
+  "message": "looks great",
+  "scope": "Eight-poster colour set and rendered previews for the offline pilot",
+  "decision": "APPROVED_FOR_OFFLINE_PILOT",
+  "renderer_head": "5503ea2481ca675c3c38d3e6e8472df0efe6a1e8",
+  "colour_review_sha256": "ebee94cbb62b9ada445a6e8a2482aeb73531fff7b347c778211a6dfbdbf1d076",
+  "contact_sheet_sha256": "e4abeac2d62c028ce809824eb1311b7b3758383a36ce1fc7b1a0ab40d544b87e",
+  "posters": [
+    {
+      "display_name": "Alien & Predator",
+      "base_colour": "#1EAC1B",
+      "sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078"
+    },
+    {
+      "display_name": "Babylon 5",
+      "base_colour": "#5B4A86",
+      "sha256": "4bde3a4a13e08ed9a30a8c2e7ed760d3959eab18d4edeaf2d710c29de6a4a0ca"
+    },
+    {
+      "display_name": "Battlestar Galactica",
+      "base_colour": "#3C6382",
+      "sha256": "4db6f349cd3591c4a3d52b642dfd6f253294fccba130d0558b7085cf973a429c"
+    },
+    {
+      "display_name": "Mobile Suit Gundam",
+      "base_colour": "#285DA8",
+      "sha256": "864a16e906d71b3b9eaabe01ff9dca5f55d1cdee1527489fbf08b9a545e0b273"
+    },
+    {
+      "display_name": "Middle-earth",
+      "base_colour": "#C28A25",
+      "sha256": "2e6ba926238e2c7d5213701a08d2c9cefe498ffa6c54c9c411ee488679b764d3"
+    },
+    {
+      "display_name": "Sword Art Online",
+      "base_colour": "#25A6B2",
+      "sha256": "0221887405a7b2526afae40e0f770a8e9feb5ebbdde86789ce0c6125c7d201db"
+    },
+    {
+      "display_name": "Stargate",
+      "base_colour": "#6C73A1",
+      "sha256": "8d93feff5ba739ba5aa31a0ba40b0d533e66a32cdf0a5857c8fd1fd76eec5e86"
+    },
+    {
+      "display_name": "The Walking Dead Universe",
+      "base_colour": "#797F48",
+      "sha256": "a6622b755f339e22d813d98adc0d60c3d9289c172b0c2a224fceb32cb96413b3"
+    }
+  ],
+  "live_registry_reservations": "PENDING",
+  "catalog_mappings": "PENDING",
+  "production_authorized": false,
+  "publication_authorized": false,
+  "activation_authorized": false
+}

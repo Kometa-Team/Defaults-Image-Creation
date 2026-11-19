@@ -165,7 +165,8 @@ def test_cross_platform_full_canonical_evidence_fixture(tmp_path):
     report=run(request,snapshot_for({'en':b'key_names: {TIMELINE_ORDER: Timeline Order}',
         'fr':'key_names: {TIMELINE_ORDER: "Été — Ordre chronologique, déjà vu!"}'.encode()}),'fr')
     fixture=ROOT/'create_defaults/phase3/tests/translation-preflight-v1.json'
-    expected=json.loads(fixture.read_text(encoding='utf8'))
+    from create_defaults.phase6.canonical_fixtures import current_fixture
+    expected=current_fixture('translation-preflight-v1.json')
     assert report.to_dict()==expected['evidence']
     assert report.sha256==expected['sha256']==fingerprint(expected['evidence'])
 

@@ -1,0 +1,26 @@
+{
+  "path": "create_defaults/phase6/review/replacements/two-playlist-replacements.patch",
+  "sha256": "9fd00135191d23c012dc0de4c5532c9181cab5d1d714bc6c705dfdde39112873",
+  "bytes": 1413128,
+  "format": "git diff --binary --full-index",
+  "expected_modified_files": [
+    "playlist/Star Wars The Clone Wars (Timeline Order).jpg",
+    "playlist/X-Men (Timeline Order).jpg"
+  ],
+  "preimage_fixture": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\replacement-plan\\patch-generation-fixture",
+  "validation_fixture": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\replacement-plan\\patch-validation-fixture",
+  "git_apply_check_passed": true,
+  "isolated_apply_candidate_hashes_verified": true,
+  "exact_two_file_100644_M_diff_verified": true,
+  "cached_binary_patch_reproduced": false,
+  "reverse_apply_check_passed": true,
+  "round_trip_preimage_hashes_verified": true,
+  "validation_fixture_restored_clean": true,
+  "applied_to_real_repository": false,
+  "remote_writes": 0,
+  "live_authorization_granted": false,
+  "previous_patch_sha256": "a32e232ae315b58ca05f443b4c5301ae2886950657f5b496652ec3167789f108",
+  "final_binary_block_separator_preserved": true,
+  "nonblank_review_footer_added": true,
+  "cached_binary_patch_equal_before_review_footer": true
+}

@@ -331,7 +331,9 @@ class PlaylistBoundary:
             results.append(result)
         renderer = renderer_identity()
         design = self.contract.to_dict()["variants"][0]["design"]
-        _same(renderer["sources"]["create_poster.py"], design["logo"]["transformation"]["sha256"], "contract", "wash_implementation")
+        from ..logos.wash import implementation
+        _, wash = implementation()
+        _same(wash["source_sha256"], design["logo"]["transformation"]["sha256"], "contract", "wash_implementation")
         _same(fingerprint(renderer["encoding"]), design["output"]["encoding_sha256"], "contract", "encoding")
         return {"source_main": SOURCE_MAIN, "contract_version": self.contract.to_dict()["version"],
                 "contract_sha256": self.contract.sha256, "registry_version": self.registry.to_dict()["version"],

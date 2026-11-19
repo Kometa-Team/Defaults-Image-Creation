@@ -110,11 +110,16 @@ def authorize(manifest, policy, receipt):
     offline = policy.get('mode') == 'phase5-m6-offline-draft-transport'
     if offline:
         limits = policy.get('technical_batch_limits')
+        genre_only = all(m['destination'].startswith('genre/') for m in members)
+        playlist_fixture = False
+        if not genre_only:
+            from create_defaults.phase6.playlist import operator_membership
+            playlist_fixture = operator_membership(policy, members)
         if (not isinstance(limits, dict) or set(limits) != {'max_files', 'max_bytes'}
                 or type(limits['max_files']) is not int or not 1 <= limits['max_files'] <= 300
                 or type(limits['max_bytes']) is not int or not 1 <= limits['max_bytes'] <= 200 * 1024 ** 2
-                or any(m.get('kind') != 'poster' or not m['destination'].startswith('genre/')
-                       or m.get('rename_from') for m in members)):
+                or not (genre_only or playlist_fixture)
+                or any(m.get('kind') != 'poster' or m.get('rename_from') for m in members)):
             raise BulkError('offline_scope', 'Offline lifecycle fixture requires bounded English Genre poster batches')
         plan = batch_plan(publication, **limits)
     else:

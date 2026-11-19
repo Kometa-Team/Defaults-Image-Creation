@@ -17,8 +17,15 @@ class ValidationTimeoutTests(unittest.TestCase):
     def test_all_workflows_change_only_timeout_fields(self):
         bindings=m6.verify_timeouts()
         changed_jobs=0
-        for path in sorted((ROOT/'.github/workflows').glob('*.yml')):
-            name=path.relative_to(ROOT).as_posix()
+        historical={name for name in m6._git(ROOT,'ls-tree','-r','--name-only',
+            m6.TIMEOUT_BASE,'.github/workflows').decode().splitlines() if name.endswith('.yml')}
+        current={path.relative_to(ROOT).as_posix() for path in (ROOT/'.github/workflows').glob('*.yml')}
+        addition={'.github/workflows/phase6-playlist-validation.yml'}
+        self.assertEqual(current,historical|addition)
+        from ci.phase6_playlist_maintenance import verify_scope
+        verify_scope(ROOT,addition)
+        for name in sorted(historical):
+            path=ROOT/name
             before=m6._git(ROOT,'show',m6.TIMEOUT_BASE+':'+name).decode()
             after=path.read_bytes().replace(b'\r\n',b'\n').decode()
             def jobs(raw):

@@ -78,7 +78,15 @@ def test_default_white_wash_and_requested_source_preserving_are_distinct(compose
     # the centre of an opaque synthetic logo region is white vs coloured.
     ia=Image.open(BytesIO(archive(row).read_bytes(ma['object_sha256'])));ib=Image.open(BytesIO(archive(row).read_bytes(mb['object_sha256'])))
     assert ia.tobytes()!=ib.tobytes()
-    point=(450,1200) if kind=='playlist' else (400,900)
+    point=(400,900)
+    if kind=='playlist':
+        from create_defaults.image_layout import fit_visible_rgba
+        from create_defaults.poster_styles import PLAYLIST
+        fitted,(x,y),_=fit_visible_rgba(Image.open(BytesIO(samples.png())),
+            PLAYLIST.logo_box,vertical_alignment=PLAYLIST.logo_vertical_alignment)
+        local=(fitted.width//3,fitted.height//2)
+        assert fitted.getpixel(local)==(230,45,70,255)
+        point=(x+local[0],y+local[1])
     assert ia.getpixel(point)==(255,255,255)
     r,g,b=ib.getpixel(point);assert r>g and r>b
     assert json.loads(row[2].to_dict()['context_json'])['request_json'].find('not-granted')>=0

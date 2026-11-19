@@ -1,0 +1,1101 @@
+{
+  "kind": "phase6-generated-browser-lifecycle-proof",
+  "candidate_commit": "0aeebd00e929dda95466513f4b6a0e34fa803bbc",
+  "browser": "157.0.8103.79",
+  "playwright": "1.65.1",
+  "creates": 8,
+  "replacements": 2,
+  "generated_reference_matches": 10,
+  "destination_hash_matches": 10,
+  "unchanged_historical_files": 7,
+  "main_set": [
+    {
+      "identity": "playlist.feec6426d0134e93973e8a2b36bd1ebe",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Alien & Predator (Timeline Order).jpg",
+      "sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+      "receipt": {
+        "identity": "playlist.feec6426d0134e93973e8a2b36bd1ebe",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Alien & Predator (Timeline Order).jpg",
+        "relative_path": "playlist/Alien & Predator (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.feec6426d0134e93973e8a2b36bd1ebe",
+          "display_name": "Alien & Predator",
+          "destination": "playlist/Alien & Predator (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+          "revision": 1,
+          "references": [],
+          "render_request": {
+            "composition_style": "playlist-contained-v1",
+            "parameters": {
+              "avg_color": false,
+              "avg_color_image": null,
+              "base_color": "#1EAC1B",
+              "border": false,
+              "border_color": "#FFFFFF",
+              "border_width": 15,
+              "clean": true,
+              "dom_color": false,
+              "dom_color_image": null,
+              "font": "fonts/BebasNeue-Regular.ttf",
+              "font_color": "#FFFFFF",
+              "font_size": 154,
+              "gradient": 1,
+              "logo": "phase6/assets/avp.png",
+              "logo_offset": -200,
+              "logo_resize": 1600,
+              "out_name": "Alien & Predator (Timeline Order)",
+              "text": "TIMELINE ORDER",
+              "text_offset": 450,
+              "white_wash": true
+            }
+          }
+        },
+        "catalog_sha256": "d951823dc45439fcc486b93a1d85d0dd7fab871d3a22b865c0cf08ab9ec2ddda",
+        "review_digest": "bfa9c6bca53db9aea75ce7fad9cc3524db5c34bc0518e52fec759efbd1880f69",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.playlist-x-men-timeline-order.627ce505",
+      "action": "REPLACE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\X-Men (Timeline Order).jpg",
+      "sha256": "5e513164bb873d739b2df9cc500521c7449060ce0bce98e3a5786cf002f8f63f",
+      "receipt": {
+        "identity": "playlist.playlist-x-men-timeline-order.627ce505",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\X-Men (Timeline Order).jpg",
+        "relative_path": "playlist/X-Men (Timeline Order).jpg",
+        "action": "REPLACE",
+        "previous_sha256": "e1c2011e710fd4d0192226ae9df841249c9f0dd0eeefee193504f749bcb36832",
+        "destination_sha256": "5e513164bb873d739b2df9cc500521c7449060ce0bce98e3a5786cf002f8f63f",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.playlist-x-men-timeline-order.627ce505",
+          "display_name": "X-Men (Timeline Order)",
+          "destination": "playlist/X-Men (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "5e513164bb873d739b2df9cc500521c7449060ce0bce98e3a5786cf002f8f63f",
+          "revision": 2,
+          "references": [],
+          "render_request": {
+            "composition_style": "playlist-contained-v1",
+            "parameters": {
+              "avg_color": false,
+              "avg_color_image": null,
+              "base_color": "#636363",
+              "border": false,
+              "border_color": "#FFFFFF",
+              "border_width": 15,
+              "clean": true,
+              "dom_color": false,
+              "dom_color_image": null,
+              "font": "fonts/BebasNeue-Regular.ttf",
+              "font_color": "#FFFFFF",
+              "font_size": 154,
+              "gradient": 1,
+              "logo": "logos_playlist/X-men.png",
+              "logo_offset": -200,
+              "logo_resize": 1600,
+              "out_name": "X-Men (Timeline Order)",
+              "text": "TIMELINE ORDER",
+              "text_offset": 450,
+              "white_wash": true
+            }
+          }
+        },
+        "catalog_sha256": "62602d858b4e62034f7accf31f47e851a394d4da1a883c1642df6478a69c5061",
+        "review_digest": "0bd6bc270ebc8d4e53ee08fa4d7e8e90cf9e4052a5494129eb057dc18726c3c2",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.2d41498dd84b47a58ffd8f1728bfa32f",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Babylon 5 (Timeline Order).jpg",
+      "sha256": "4bde3a4a13e08ed9a30a8c2e7ed760d3959eab18d4edeaf2d710c29de6a4a0ca",
+      "receipt": {
+        "identity": "playlist.2d41498dd84b47a58ffd8f1728bfa32f",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Babylon 5 (Timeline Order).jpg",
+        "relative_path": "playlist/Babylon 5 (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "4bde3a4a13e08ed9a30a8c2e7ed760d3959eab18d4edeaf2d710c29de6a4a0ca",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.2d41498dd84b47a58ffd8f1728bfa32f",
+          "display_name": "Babylon 5",
+          "destination": "playlist/Babylon 5 (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "4bde3a4a13e08ed9a30a8c2e7ed760d3959eab18d4edeaf2d710c29de6a4a0ca",
+          "revision": 1,
+          "references": [],
+          "render_request": {
+            "composition_style": "playlist-contained-v1",
+            "parameters": {
+              "avg_color": false,
+              "avg_color_image": null,
+              "base_color": "#5B4A86",
+              "border": false,
+              "border_color": "#FFFFFF",
+              "border_width": 15,
+              "clean": true,
+              "dom_color": false,
+              "dom_color_image": null,
+              "font": "fonts/BebasNeue-Regular.ttf",
+              "font_color": "#FFFFFF",
+              "font_size": 154,
+              "gradient": 1,
+              "logo": "phase6/assets/babylon.png",
+              "logo_offset": -200,
+              "logo_resize": 1600,
+              "out_name": "Babylon 5 (Timeline Order)",
+              "text": "TIMELINE ORDER",
+              "text_offset": 450,
+              "white_wash": true
+            }
+          }
+        },
+        "catalog_sha256": "1df3526e26cfdb8b0687871cea1e840b6a3a3f5f39b5ced2c80c2de4e1c200b8",
+        "review_digest": "6866f346dfa66f8c2ae75aa9f5ddc277b2d455f48827479d12574513b20db077",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.ca5bf3fafc7a4f888dbee738fc6fea09",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Battlestar Galactica (Timeline Order).jpg",
+      "sha256": "4db6f349cd3591c4a3d52b642dfd6f253294fccba130d0558b7085cf973a429c",
+      "receipt": {
+        "identity": "playlist.ca5bf3fafc7a4f888dbee738fc6fea09",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Battlestar Galactica (Timeline Order).jpg",
+        "relative_path": "playlist/Battlestar Galactica (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "4db6f349cd3591c4a3d52b642dfd6f253294fccba130d0558b7085cf973a429c",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.ca5bf3fafc7a4f888dbee738fc6fea09",
+          "display_name": "Battlestar Galactica",
+          "destination": "playlist/Battlestar Galactica (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "4db6f349cd3591c4a3d52b642dfd6f253294fccba130d0558b7085cf973a429c",
+          "revision": 1,
+          "references": [],
+          "render_request": {
+            "composition_style": "playlist-contained-v1",
+            "parameters": {
+              "avg_color": false,
+              "avg_color_image": null,
+              "base_color": "#3C6382",
+              "border": false,
+              "border_color": "#FFFFFF",
+              "border_width": 15,
+              "clean": true,
+              "dom_color": false,
+              "dom_color_image": null,
+              "font": "fonts/BebasNeue-Regular.ttf",
+              "font_color": "#FFFFFF",
+              "font_size": 154,
+              "gradient": 1,
+              "logo": "phase6/assets/bsg.png",
+              "logo_offset": -200,
+              "logo_resize": 1600,
+              "out_name": "Battlestar Galactica (Timeline Order)",
+              "text": "TIMELINE ORDER",
+              "text_offset": 450,
+              "white_wash": true
+            }
+          }
+        },
+        "catalog_sha256": "98015b08fd5462ebdd598b247383aca5057125bb45fa48fb1c5c23058897ef30",
+        "review_digest": "d86ec93b2df1cf0ca2bdda3e4aef574ef50f8a775dc05e5dd6fb612820ec1e6c",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.70487260288d489fa6e4d06672990a67",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Mobile Suit Gundam (Timeline Order).jpg",
+      "sha256": "864a16e906d71b3b9eaabe01ff9dca5f55d1cdee1527489fbf08b9a545e0b273",
+      "receipt": {
+        "identity": "playlist.70487260288d489fa6e4d06672990a67",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Mobile Suit Gundam (Timeline Order).jpg",
+        "relative_path": "playlist/Mobile Suit Gundam (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "864a16e906d71b3b9eaabe01ff9dca5f55d1cdee1527489fbf08b9a545e0b273",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.70487260288d489fa6e4d06672990a67",
+          "display_name": "Mobile Suit Gundam",
+          "destination": "playlist/Mobile Suit Gundam (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "864a16e906d71b3b9eaabe01ff9dca5f55d1cdee1527489fbf08b9a545e0b273",
+          "revision": 1,
+          "references": [],
+          "render_request": {
+            "composition_style": "playlist-contained-v1",
+            "parameters": {
+              "avg_color": false,
+              "avg_color_image": null,
+              "base_color": "#285DA8",
+              "border": false,
+              "border_color": "#FFFFFF",
+              "border_width": 15,
+              "clean": true,
+              "dom_color": false,
+              "dom_color_image": null,
+              "font": "fonts/BebasNeue-Regular.ttf",
+              "font_color": "#FFFFFF",
+              "font_size": 154,
+              "gradient": 1,
+              "logo": "phase6/assets/gundam.png",
+              "logo_offset": -200,
+              "logo_resize": 1600,
+              "out_name": "Mobile Suit Gundam (Timeline Order)",
+              "text": "TIMELINE ORDER",
+              "text_offset": 450,
+              "white_wash": true
+            }
+          }
+        },
+        "catalog_sha256": "afb5dcd0760c817e110c8ae8fbde8c373f9fae2a3119014bfe7c356ad6f65165",
+        "review_digest": "341ad2c91f3951c2712fda61c920dfb01318d2da8171afb8b7738c91b69d4067",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.5eba47e8c0a04c2e9914f6618b621f2c",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Middle-earth (Timeline Order).jpg",
+      "sha256": "2e6ba926238e2c7d5213701a08d2c9cefe498ffa6c54c9c411ee488679b764d3",
+      "receipt": {
+        "identity": "playlist.5eba47e8c0a04c2e9914f6618b621f2c",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Middle-earth (Timeline Order).jpg",
+        "relative_path": "playlist/Middle-earth (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "2e6ba926238e2c7d5213701a08d2c9cefe498ffa6c54c9c411ee488679b764d3",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.5eba47e8c0a04c2e9914f6618b621f2c",
+          "display_name": "Middle-earth",
+          "destination": "playlist/Middle-earth (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "2e6ba926238e2c7d5213701a08d2c9cefe498ffa6c54c9c411ee488679b764d3",
+          "revision": 1,
+          "references": [],
+          "render_request": {
+            "composition_style": "playlist-contained-v1",
+            "parameters": {
+              "avg_color": false,
+              "avg_color_image": null,
+              "base_color": "#C28A25",
+              "border": false,
+              "border_color": "#FFFFFF",
+              "border_width": 15,
+              "clean": true,
+              "dom_color": false,
+              "dom_color_image": null,
+              "font": "fonts/BebasNeue-Regular.ttf",
+              "font_color": "#FFFFFF",
+              "font_size": 154,
+              "gradient": 1,
+              "logo": "phase6/assets/jrrt.png",
+              "logo_offset": -200,
+              "logo_resize": 1600,
+              "out_name": "Middle-earth (Timeline Order)",
+              "text": "TIMELINE ORDER",
+              "text_offset": 450,
+              "white_wash": true
+            }
+          }
+        },
+        "catalog_sha256": "7d2b575fdd385088bc2a046e2636e8f531d268a26ca474df8022d6d6d3e81eea",
+        "review_digest": "89aee056b4e78063b117e44f16f132606273db56c758ac2bb299768638c4e7f1",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.c48a75120f4f4a8aa290c3683b2dc1d2",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Sword Art Online (Timeline Order).jpg",
+      "sha256": "0221887405a7b2526afae40e0f770a8e9feb5ebbdde86789ce0c6125c7d201db",
+      "receipt": {
+        "identity": "playlist.c48a75120f4f4a8aa290c3683b2dc1d2",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Sword Art Online (Timeline Order).jpg",
+        "relative_path": "playlist/Sword Art Online (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "0221887405a7b2526afae40e0f770a8e9feb5ebbdde86789ce0c6125c7d201db",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.c48a75120f4f4a8aa290c3683b2dc1d2",
+          "display_name": "Sword Art Online",
+          "destination": "playlist/Sword Art Online (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "0221887405a7b2526afae40e0f770a8e9feb5ebbdde86789ce0c6125c7d201db",
+          "revision": 1,
+          "references": [],
+          "render_request": {
+            "composition_style": "playlist-contained-v1",
+            "parameters": {
+              "avg_color": false,
+              "avg_color_image": null,
+              "base_color": "#25A6B2",
+              "border": false,
+              "border_color": "#FFFFFF",
+              "border_width": 15,
+              "clean": true,
+              "dom_color": false,
+              "dom_color_image": null,
+              "font": "fonts/BebasNeue-Regular.ttf",
+              "font_color": "#FFFFFF",
+              "font_size": 154,
+              "gradient": 1,
+              "logo": "phase6/assets/sao.png",
+              "logo_offset": -200,
+              "logo_resize": 1600,
+              "out_name": "Sword Art Online (Timeline Order)",
+              "text": "TIMELINE ORDER",
+              "text_offset": 450,
+              "white_wash": true
+            }
+          }
+        },
+        "catalog_sha256": "a32db4112680119200114e5603e057a808b0d26ea60d748415153751a890eb77",
+        "review_digest": "faafce95fbe63ab5bfb48a6d6b7987e95522bf6d6902a27c808d9a0279008282",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.11d52d3953a64d0faabcd7a692fbb87f",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Stargate (Timeline Order).jpg",
+      "sha256": "8d93feff5ba739ba5aa31a0ba40b0d533e66a32cdf0a5857c8fd1fd76eec5e86",
+      "receipt": {
+        "identity": "playlist.11d52d3953a64d0faabcd7a692fbb87f",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Stargate (Timeline Order).jpg",
+        "relative_path": "playlist/Stargate (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "8d93feff5ba739ba5aa31a0ba40b0d533e66a32cdf0a5857c8fd1fd76eec5e86",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.11d52d3953a64d0faabcd7a692fbb87f",
+          "display_name": "Stargate",
+          "destination": "playlist/Stargate (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "8d93feff5ba739ba5aa31a0ba40b0d533e66a32cdf0a5857c8fd1fd76eec5e86",
+          "revision": 1,
+          "references": [],
+          "render_request": {
+            "composition_style": "playlist-contained-v1",
+            "parameters": {
+              "avg_color": false,
+              "avg_color_image": null,
+              "base_color": "#6C73A1",
+              "border": false,
+              "border_color": "#FFFFFF",
+              "border_width": 15,
+              "clean": true,
+              "dom_color": false,
+              "dom_color_image": null,
+              "font": "fonts/BebasNeue-Regular.ttf",
+              "font_color": "#FFFFFF",
+              "font_size": 154,
+              "gradient": 1,
+              "logo": "phase6/assets/stargate.png",
+              "logo_offset": -200,
+              "logo_resize": 1600,
+              "out_name": "Stargate (Timeline Order)",
+              "text": "TIMELINE ORDER",
+              "text_offset": 450,
+              "white_wash": true
+            }
+          }
+        },
+        "catalog_sha256": "0824ae7eafc692b3decec32d961f569b805350e9401b36c88d20cb477571b5c2",
+        "review_digest": "268d06d151f5b1a7a8e5a1a2344e3945db3001df0fdfde282f9dd99483d603df",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.0aabd1b1c7d44b198858057648ba9514",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\The Walking Dead Universe (Timeline Order).jpg",
+      "sha256": "a6622b755f339e22d813d98adc0d60c3d9289c172b0c2a224fceb32cb96413b3",
+      "receipt": {
+        "identity": "playlist.0aabd1b1c7d44b198858057648ba9514",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\The Walking Dead Universe (Timeline Order).jpg",
+        "relative_path": "playlist/The Walking Dead Universe (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "a6622b755f339e22d813d98adc0d60c3d9289c172b0c2a224fceb32cb96413b3",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.0aabd1b1c7d44b198858057648ba9514",
+          "display_name": "The Walking Dead Universe",
+          "destination": "playlist/The Walking Dead Universe (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "a6622b755f339e22d813d98adc0d60c3d9289c172b0c2a224fceb32cb96413b3",
+          "revision": 1,
+          "references": [],
+          "render_request": {
+            "composition_style": "playlist-contained-v1",
+            "parameters": {
+              "avg_color": false,
+              "avg_color_image": null,
+              "base_color": "#797F48",
+              "border": false,
+              "border_color": "#FFFFFF",
+              "border_width": 15,
+              "clean": true,
+              "dom_color": false,
+              "dom_color_image": null,
+              "font": "fonts/BebasNeue-Regular.ttf",
+              "font_color": "#FFFFFF",
+              "font_size": 154,
+              "gradient": 1,
+              "logo": "phase6/assets/wdu.png",
+              "logo_offset": -200,
+              "logo_resize": 1600,
+              "out_name": "The Walking Dead Universe (Timeline Order)",
+              "text": "TIMELINE ORDER",
+              "text_offset": 450,
+              "white_wash": true
+            }
+          }
+        },
+        "catalog_sha256": "d3220a2f647817a408800cc1e4df685742ab1245085550e8f63080b933b3d4d8",
+        "review_digest": "5c580a43fcb1ff3b653f1d5c6654832a82a85c0a1f10a5f3d6cf0b6f04e98ae5",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.playlist-star-wars-the-clone-wars-timeline-order.c6750e0c",
+      "action": "REPLACE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Star Wars The Clone Wars (Timeline Order).jpg",
+      "sha256": "2de0e1ec2324c886301e771c92836acf42b4d92b60d2283e15e8f897b10fda22",
+      "receipt": {
+        "identity": "playlist.playlist-star-wars-the-clone-wars-timeline-order.c6750e0c",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Star Wars The Clone Wars (Timeline Order).jpg",
+        "relative_path": "playlist/Star Wars The Clone Wars (Timeline Order).jpg",
+        "action": "REPLACE",
+        "previous_sha256": "703fe5c5fec332b7f6572f099dc9cfd481c36faaf84c59f24d6e3fd1e6eefd7b",
+        "destination_sha256": "2de0e1ec2324c886301e771c92836acf42b4d92b60d2283e15e8f897b10fda22",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.playlist-star-wars-the-clone-wars-timeline-order.c6750e0c",
+          "display_name": "Star Wars The Clone Wars (Timeline Order)",
+          "destination": "playlist/Star Wars The Clone Wars (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "2de0e1ec2324c886301e771c92836acf42b4d92b60d2283e15e8f897b10fda22",
+          "revision": 2,
+          "references": [],
+          "render_request": {
+            "composition_style": "playlist-contained-v1",
+            "parameters": {
+              "avg_color": false,
+              "avg_color_image": null,
+              "base_color": "#ED1C24",
+              "border": false,
+              "border_color": "#FFFFFF",
+              "border_width": 15,
+              "clean": true,
+              "dom_color": false,
+              "dom_color_image": null,
+              "font": "fonts/BebasNeue-Regular.ttf",
+              "font_color": "#FFFFFF",
+              "font_size": 154,
+              "gradient": 1,
+              "logo": "logos_playlist/Star Wars The Clone Wars.png",
+              "logo_offset": -200,
+              "logo_resize": 1600,
+              "out_name": "Star Wars The Clone Wars (Timeline Order)",
+              "text": "TIMELINE ORDER",
+              "text_offset": 450,
+              "white_wash": true
+            }
+          }
+        },
+        "catalog_sha256": "a306e3bde2d305a28b1befcf931d3e5bc74b47c35f502355ee2d8707dc593c3e",
+        "review_digest": "b300da9622492ca2d0efb14cb600716f80a7e2225e6fa56d1cd48671bbc2c99c",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    }
+  ],
+  "negative_reference_case": {
+    "case": "changed background",
+    "expected_sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+    "actual_sha256": "41ee8950d9f312365f41d59f0fb4c96ffdb333c5f661cd24149741f49a9ce5b8",
+    "reason": "Contributor changed base_color from approved fixture to #123456; generated image is new bytes and receives no carried approval.",
+    "checks": [
+      {
+        "name": "catalog precondition / identity / path",
+        "passed": true
+      },
+      {
+        "name": "exact generated JPEG",
+        "passed": true
+      },
+      {
+        "name": "destination preimage",
+        "passed": true
+      },
+      {
+        "name": "approved reference bytes (main ten only)",
+        "passed": false
+      },
+      {
+        "name": "fresh render assets",
+        "passed": true
+      }
+    ]
+  },
+  "disposable": [
+    {
+      "identity": "fixture.playlist.disposable",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Disposable Playlist (Timeline Order).jpg",
+      "sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+      "receipt": {
+        "identity": "fixture.playlist.disposable",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Disposable Playlist (Timeline Order).jpg",
+        "relative_path": "playlist/Disposable Playlist (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "fixture.playlist.disposable",
+          "display_name": "Disposable Playlist",
+          "destination": "playlist/Disposable Playlist (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+          "revision": 1,
+          "references": [],
+          "render_request": {
+            "composition_style": "playlist-contained-v1",
+            "parameters": {
+              "avg_color": false,
+              "avg_color_image": null,
+              "base_color": "#1EAC1B",
+              "border": false,
+              "border_color": "#FFFFFF",
+              "border_width": 15,
+              "clean": true,
+              "dom_color": false,
+              "dom_color_image": null,
+              "font": "fonts/BebasNeue-Regular.ttf",
+              "font_color": "#FFFFFF",
+              "font_size": 154,
+              "gradient": 1,
+              "logo": "phase6/assets/avp.png",
+              "logo_offset": -200,
+              "logo_resize": 1600,
+              "out_name": "Disposable Playlist (Timeline Order)",
+              "text": "TIMELINE ORDER",
+              "text_offset": 450,
+              "white_wash": true
+            }
+          }
+        },
+        "catalog_sha256": "d99bd1a9fe94bb57e347fc5b579b62734e4601f3cfa96baa961d9ca6e0c77b39",
+        "review_digest": "2f874b1136b0dd319bc139ec1afe07690f1de6f0fd4f470c496ff6d929c9315e",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "fixture.playlist.disposable",
+      "action": "REPLACE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Disposable Playlist (Timeline Order).jpg",
+      "sha256": "49dcaac8a5127cc73e88ff9b495a24b4c5d3f44ba2e8a47f1313ca77efbf6fe2",
+      "receipt": {
+        "identity": "fixture.playlist.disposable",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Disposable Playlist (Timeline Order).jpg",
+        "relative_path": "playlist/Disposable Playlist (Timeline Order).jpg",
+        "action": "REPLACE",
+        "previous_sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+        "destination_sha256": "49dcaac8a5127cc73e88ff9b495a24b4c5d3f44ba2e8a47f1313ca77efbf6fe2",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "fixture.playlist.disposable",
+          "display_name": "Disposable Playlist",
+          "destination": "playlist/Disposable Playlist (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "49dcaac8a5127cc73e88ff9b495a24b4c5d3f44ba2e8a47f1313ca77efbf6fe2",
+          "revision": 2,
+          "references": [],
+          "render_request": {
+            "composition_style": "playlist-contained-v1",
+            "parameters": {
+              "avg_color": false,
+              "avg_color_image": null,
+              "base_color": "#556677",
+              "border": false,
+              "border_color": "#FFFFFF",
+              "border_width": 15,
+              "clean": true,
+              "dom_color": false,
+              "dom_color_image": null,
+              "font": "fonts/BebasNeue-Regular.ttf",
+              "font_color": "#FFFFFF",
+              "font_size": 154,
+              "gradient": 1,
+              "logo": "phase6/assets/avp.png",
+              "logo_offset": -200,
+              "logo_resize": 1600,
+              "out_name": "Disposable Playlist (Timeline Order)",
+              "text": "TIMELINE ORDER",
+              "text_offset": 450,
+              "white_wash": true
+            }
+          }
+        },
+        "catalog_sha256": "b581d19430a9835452d285b67be7a678020c15b2d26c01c4563281bc940fa531",
+        "review_digest": "e5b49476880c858eed403bcef4953138f50f34c6d97026b70a16fb9bce6a65b4",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "fixture.playlist.disposable",
+      "action": "REMOVE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Disposable Playlist (Timeline Order).jpg",
+      "sha256": "49dcaac8a5127cc73e88ff9b495a24b4c5d3f44ba2e8a47f1313ca77efbf6fe2",
+      "receipt": {
+        "identity": "fixture.playlist.disposable",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Disposable Playlist (Timeline Order).jpg",
+        "relative_path": "playlist/Disposable Playlist (Timeline Order).jpg",
+        "action": "REMOVE",
+        "previous_sha256": "49dcaac8a5127cc73e88ff9b495a24b4c5d3f44ba2e8a47f1313ca77efbf6fe2",
+        "destination_sha256": null,
+        "file_absent": true,
+        "catalog_entry": {
+          "identity": "fixture.playlist.disposable",
+          "display_name": "Disposable Playlist",
+          "destination": "playlist/Disposable Playlist (Timeline Order).jpg",
+          "status": "retired",
+          "sha256": null,
+          "revision": 5,
+          "references": [],
+          "render_request": {
+            "composition_style": "playlist-contained-v1",
+            "parameters": {
+              "avg_color": false,
+              "avg_color_image": null,
+              "base_color": "#556677",
+              "border": false,
+              "border_color": "#FFFFFF",
+              "border_width": 15,
+              "clean": true,
+              "dom_color": false,
+              "dom_color_image": null,
+              "font": "fonts/BebasNeue-Regular.ttf",
+              "font_color": "#FFFFFF",
+              "font_size": 154,
+              "gradient": 1,
+              "logo": "phase6/assets/avp.png",
+              "logo_offset": -200,
+              "logo_resize": 1600,
+              "out_name": "Disposable Playlist (Timeline Order)",
+              "text": "TIMELINE ORDER",
+              "text_offset": 450,
+              "white_wash": true
+            }
+          },
+          "last_sha256": "49dcaac8a5127cc73e88ff9b495a24b4c5d3f44ba2e8a47f1313ca77efbf6fe2"
+        },
+        "catalog_sha256": "c53fc329cfe45e56a9bbd2a4328aee2982a5c012a7b2cf4801856e4a7e7dbe0c",
+        "review_digest": "f2d1ee729ca1add591f9bce1fec05e952b77dc292169c09f79b49c1bd0e58d2f",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "fixture.playlist.disposable",
+      "action": "RESTORE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Disposable Playlist (Timeline Order).jpg",
+      "sha256": "49dcaac8a5127cc73e88ff9b495a24b4c5d3f44ba2e8a47f1313ca77efbf6fe2",
+      "receipt": {
+        "identity": "fixture.playlist.disposable",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Disposable Playlist (Timeline Order).jpg",
+        "relative_path": "playlist/Disposable Playlist (Timeline Order).jpg",
+        "action": "RESTORE",
+        "previous_sha256": null,
+        "destination_sha256": "49dcaac8a5127cc73e88ff9b495a24b4c5d3f44ba2e8a47f1313ca77efbf6fe2",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "fixture.playlist.disposable",
+          "display_name": "Disposable Playlist",
+          "destination": "playlist/Disposable Playlist (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "49dcaac8a5127cc73e88ff9b495a24b4c5d3f44ba2e8a47f1313ca77efbf6fe2",
+          "revision": 6,
+          "references": [],
+          "render_request": {
+            "composition_style": "playlist-contained-v1",
+            "parameters": {
+              "avg_color": false,
+              "avg_color_image": null,
+              "base_color": "#556677",
+              "border": false,
+              "border_color": "#FFFFFF",
+              "border_width": 15,
+              "clean": true,
+              "dom_color": false,
+              "dom_color_image": null,
+              "font": "fonts/BebasNeue-Regular.ttf",
+              "font_color": "#FFFFFF",
+              "font_size": 154,
+              "gradient": 1,
+              "logo": "phase6/assets/avp.png",
+              "logo_offset": -200,
+              "logo_resize": 1600,
+              "out_name": "Disposable Playlist (Timeline Order)",
+              "text": "TIMELINE ORDER",
+              "text_offset": 450,
+              "white_wash": true
+            }
+          },
+          "last_sha256": "49dcaac8a5127cc73e88ff9b495a24b4c5d3f44ba2e8a47f1313ca77efbf6fe2"
+        },
+        "catalog_sha256": "f391dd004a40467a55284c3d7ea63db05c91678cb309768cd3d859a08cf44f4b",
+        "review_digest": "c33c3d9bf5e0e76954004b32b3a7d34f3b13afd01082ba1dec6f70d98dcd13ec",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    }
+  ],
+  "action_specific_proof": {
+    "unmapped_add": {
+      "identity": "fixture.59722104211f16f0a8d0eafa0fe14e57",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Unmapped Browser Logo (Timeline Order).jpg",
+      "sha256": "5636770f47f996d3459296078d8a2accf53a61fdf0aeed4cdf75556b3f38fa6e",
+      "receipt": {
+        "identity": "fixture.59722104211f16f0a8d0eafa0fe14e57",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Unmapped Browser Logo (Timeline Order).jpg",
+        "relative_path": "playlist/Unmapped Browser Logo (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "5636770f47f996d3459296078d8a2accf53a61fdf0aeed4cdf75556b3f38fa6e",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "fixture.59722104211f16f0a8d0eafa0fe14e57",
+          "display_name": "Unmapped Browser Logo",
+          "destination": "playlist/Unmapped Browser Logo (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "5636770f47f996d3459296078d8a2accf53a61fdf0aeed4cdf75556b3f38fa6e",
+          "revision": 1,
+          "references": [],
+          "render_request": {
+            "composition_style": "playlist-contained-v1",
+            "parameters": {
+              "avg_color": false,
+              "avg_color_image": null,
+              "base_color": "#123456",
+              "border": false,
+              "border_color": "#FFFFFF",
+              "border_width": 15,
+              "clean": true,
+              "dom_color": false,
+              "dom_color_image": null,
+              "font": "fonts/BebasNeue-Regular.ttf",
+              "font_color": "#FFFFFF",
+              "font_size": 154,
+              "gradient": 1,
+              "logo": "uploaded:2e7000e78d9a5c13127d4055b90fb84a3ca3a78830990078d32648bd572161ee",
+              "logo_offset": -200,
+              "logo_resize": 1600,
+              "out_name": "Unmapped Browser Logo (Timeline Order)",
+              "text": "TIMELINE ORDER",
+              "text_offset": 450,
+              "white_wash": true
+            }
+          }
+        },
+        "catalog_sha256": "bcead25d1244aaf5b6da9b73f737d8b778eeb95825f8d7ea47d1f9060a38a009",
+        "review_digest": "b24fe64be05f1102eca794a1a8f9d253d499b94526d768c496a95c1b0ec3f08b",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    "recorded_logo_replace": {
+      "identity": "fixture.59722104211f16f0a8d0eafa0fe14e57",
+      "action": "REPLACE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Unmapped Browser Logo (Timeline Order).jpg",
+      "sha256": "5636770f47f996d3459296078d8a2accf53a61fdf0aeed4cdf75556b3f38fa6e",
+      "receipt": {
+        "identity": "fixture.59722104211f16f0a8d0eafa0fe14e57",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Unmapped Browser Logo (Timeline Order).jpg",
+        "relative_path": "playlist/Unmapped Browser Logo (Timeline Order).jpg",
+        "action": "REPLACE",
+        "previous_sha256": "5636770f47f996d3459296078d8a2accf53a61fdf0aeed4cdf75556b3f38fa6e",
+        "destination_sha256": "5636770f47f996d3459296078d8a2accf53a61fdf0aeed4cdf75556b3f38fa6e",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "fixture.59722104211f16f0a8d0eafa0fe14e57",
+          "display_name": "Unmapped Browser Logo",
+          "destination": "playlist/Unmapped Browser Logo (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "5636770f47f996d3459296078d8a2accf53a61fdf0aeed4cdf75556b3f38fa6e",
+          "revision": 2,
+          "references": [],
+          "render_request": {
+            "composition_style": "playlist-contained-v1",
+            "parameters": {
+              "avg_color": false,
+              "avg_color_image": null,
+              "base_color": "#123456",
+              "border": false,
+              "border_color": "#FFFFFF",
+              "border_width": 15,
+              "clean": true,
+              "dom_color": false,
+              "dom_color_image": null,
+              "font": "fonts/BebasNeue-Regular.ttf",
+              "font_color": "#FFFFFF",
+              "font_size": 154,
+              "gradient": 1,
+              "logo": "uploaded:2e7000e78d9a5c13127d4055b90fb84a3ca3a78830990078d32648bd572161ee",
+              "logo_offset": -200,
+              "logo_resize": 1600,
+              "out_name": "Unmapped Browser Logo (Timeline Order)",
+              "text": "TIMELINE ORDER",
+              "text_offset": 450,
+              "white_wash": true
+            }
+          }
+        },
+        "catalog_sha256": "74a7577ca06ebf22d4784a1cea7143174d70d9a436fc144c61262f01930ece9c",
+        "review_digest": "8ddf4d5ba5c9207b5cf7851967ba6bd17ddcc10bb73dae8e8124b2e3aec2c5a3",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    "uploaded_logo_replace": {
+      "identity": "fixture.59722104211f16f0a8d0eafa0fe14e57",
+      "action": "REPLACE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Unmapped Browser Logo (Timeline Order).jpg",
+      "sha256": "7941a7bbf26e7a65eba06cd13a6e1c87595d6dba4e86bed787c8436c609fac17",
+      "receipt": {
+        "identity": "fixture.59722104211f16f0a8d0eafa0fe14e57",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\playlist\\Unmapped Browser Logo (Timeline Order).jpg",
+        "relative_path": "playlist/Unmapped Browser Logo (Timeline Order).jpg",
+        "action": "REPLACE",
+        "previous_sha256": "5636770f47f996d3459296078d8a2accf53a61fdf0aeed4cdf75556b3f38fa6e",
+        "destination_sha256": "7941a7bbf26e7a65eba06cd13a6e1c87595d6dba4e86bed787c8436c609fac17",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "fixture.59722104211f16f0a8d0eafa0fe14e57",
+          "display_name": "Unmapped Browser Logo",
+          "destination": "playlist/Unmapped Browser Logo (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "7941a7bbf26e7a65eba06cd13a6e1c87595d6dba4e86bed787c8436c609fac17",
+          "revision": 3,
+          "references": [],
+          "render_request": {
+            "composition_style": "playlist-contained-v1",
+            "parameters": {
+              "avg_color": false,
+              "avg_color_image": null,
+              "base_color": "#123456",
+              "border": false,
+              "border_color": "#FFFFFF",
+              "border_width": 15,
+              "clean": true,
+              "dom_color": false,
+              "dom_color_image": null,
+              "font": "fonts/BebasNeue-Regular.ttf",
+              "font_color": "#FFFFFF",
+              "font_size": 154,
+              "gradient": 1,
+              "logo": "uploaded:eeeb40bccc4af168130f9c8d1bcc83c4b018e4b056a918278137bcae3d698863",
+              "logo_offset": -200,
+              "logo_resize": 1600,
+              "out_name": "Unmapped Browser Logo (Timeline Order)",
+              "text": "TIMELINE ORDER",
+              "text_offset": 450,
+              "white_wash": true
+            }
+          }
+        },
+        "catalog_sha256": "67875079872d8c1978764d096eb7cf61ef0a7276efcba27d454cb682e00315b6",
+        "review_digest": "473fe14cef72771d16993ea77d51937bb06d8c7f20ac370dc255b170329e8950",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    "prior_approved_removal_rejected": {
+      "status": 409,
+      "error": "required_check_failed"
+    },
+    "unmapped_logo_fixtures": [
+      {
+        "file": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-chrome-0aeebd0\\unmapped-rectangle.png",
+        "sha256": "2e7000e78d9a5c13127d4055b90fb84a3ca3a78830990078d32648bd572161ee"
+      },
+      {
+        "file": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-chrome-0aeebd0\\unmapped-ellipse.png",
+        "sha256": "eeeb40bccc4af168130f9c8d1bcc83c4b018e4b056a918278137bcae3d698863"
+      }
+    ],
+    "shared_mapped_logos_preserved": 18,
+    "uploaded_logos_preserved": 2
+  },
+  "second_style": {
+    "identity": "fixture.franchise.disposable",
+    "action": "CREATE",
+    "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\franchise\\Disposable Franchise.jpg",
+    "sha256": "69ef986a7221ff189f1669a4a02788d0b816e23cd41b99193161aaffb5718484",
+    "receipt": {
+      "identity": "fixture.franchise.disposable",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-0aeebd0\\destination\\franchise\\Disposable Franchise.jpg",
+      "relative_path": "franchise/Disposable Franchise.jpg",
+      "action": "CREATE",
+      "previous_sha256": null,
+      "destination_sha256": "69ef986a7221ff189f1669a4a02788d0b816e23cd41b99193161aaffb5718484",
+      "file_absent": false,
+      "catalog_entry": {
+        "identity": "fixture.franchise.disposable",
+        "display_name": "Disposable Franchise",
+        "destination": "franchise/Disposable Franchise.jpg",
+        "status": "active",
+        "sha256": "69ef986a7221ff189f1669a4a02788d0b816e23cd41b99193161aaffb5718484",
+        "revision": 1,
+        "references": [],
+        "render_request": {
+          "composition_style": "franchise-legacy",
+          "parameters": {
+            "avg_color": false,
+            "avg_color_image": null,
+            "base_color": "#B93033",
+            "border": false,
+            "border_color": "#FFFFFF",
+            "border_width": 15,
+            "clean": true,
+            "dom_color": false,
+            "dom_color_image": null,
+            "font": "fonts/Comfortaa-Medium.ttf",
+            "font_color": "#FFFFFF",
+            "font_size": 250,
+            "gradient": 1,
+            "logo": "logos_franchise/28 Days Weeks Later.png",
+            "logo_offset": 0,
+            "logo_resize": 1600,
+            "out_name": "Disposable Franchise",
+            "text": "",
+            "text_offset": 0,
+            "white_wash": false
+          }
+        }
+      },
+      "catalog_sha256": "67212fb8bacc82e10607bc39b996df1e5c3717a188655568c425fe130ca7c0d4",
+      "review_digest": "1e5d52a539b7c13e0c1d0786164204b799dbb4e9c68e67193e7132ae95dc41ff",
+      "match": true,
+      "simulation": true,
+      "publication_authorized": false
+    },
+    "verified": true
+  },
+  "rejections": [
+    {
+      "id": "fa0aa56887ab9b988a9f1183",
+      "action": "CREATE",
+      "status": 409,
+      "error": "required_check_failed"
+    },
+    {
+      "id": "eda2818fb41072f0af3569da",
+      "action": "CREATE",
+      "status": 403,
+      "error": "maintainer_required"
+    },
+    {
+      "id": "eda2818fb41072f0af3569da",
+      "action": "CREATE",
+      "status": 403,
+      "error": "csrf_required"
+    },
+    {
+      "id": "6e87b81b491fe486ce759eaf",
+      "action": "REMOVE",
+      "status": 409,
+      "error": "required_check_failed"
+    },
+    {
+      "id": "6e87b81b491fe486ce759eaf",
+      "action": "REMOVE",
+      "status": 409,
+      "error": "required_check_failed"
+    },
+    {
+      "case": "newer replacement invalidates approved removal",
+      "status": 409,
+      "error": "required_check_failed"
+    }
+  ],
+  "catalog_sha256": "67875079872d8c1978764d096eb7cf61ef0a7276efcba27d454cb682e00315b6",
+  "receipts_sha256": "d834ee804a22a774a75ed47c106dcd1c46159630cdbba7d5b7a7a30bbefaeb49",
+  "fixture_manifest_sha256": "c04662d414b9057916bf24718c3246a89d21f4f8acee1bd536f4117ce344da90",
+  "browser_errors": [],
+  "external_requests": 0,
+  "elapsed_seconds": 110.497,
+  "restoration": "owned staging catalog only; native registry tombstone reuse remains blocked",
+  "native_lifecycle_replacement_acceptance": false,
+  "live_registry_reservations": "PENDING",
+  "live_catalog_mappings": "PENDING",
+  "publication_authorized": false
+}

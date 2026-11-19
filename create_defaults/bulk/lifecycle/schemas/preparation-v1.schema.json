@@ -183,6 +183,21 @@
         "files": {
           "type": "object",
           "properties": {
+            "playlist.yml": {
+              "type": "object",
+              "properties": {
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "git_blob": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{40}$"
+                }
+              },
+              "required": ["sha256", "git_blob"],
+              "additionalProperties": false
+            },
             "genre.yml": {
               "type": "object",
               "properties": {

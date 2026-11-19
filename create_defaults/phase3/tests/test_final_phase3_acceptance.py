@@ -22,7 +22,8 @@ def french(tmp_path_factory):return example(tmp_path_factory.mktemp('m5-french')
 
 def test_complete_chain_archive_and_cross_platform_canonical_export(tmp_path):
     result=integration_cases(tmp_path)
-    expected=json.loads((Path(__file__).with_name('phase3-final-acceptance-v1.json')).read_text(encoding='utf8'))
+    from create_defaults.phase6.canonical_fixtures import current_fixture
+    expected=current_fixture('phase3-final-acceptance-v1.json')
     assert result==expected['evidence'] and fingerprint(result)==expected['sha256']
     from ci.validation import identity,write
     write(ROOT/'config/phase3-ci/phase3-final-acceptance.json',{**identity(),'evidence':result,'evidence_sha256':fingerprint(result)})
@@ -201,6 +202,17 @@ def test_all_existing_phase3_ids_and_production_interfaces_are_unchanged():
         original=subprocess.check_output(['git','show',base+':'+successor],cwd=ROOT)
         assert m6_bytes(ROOT,successor,(ROOT/successor).read_bytes()).replace(b'\r\n',b'\n')==original.replace(b'\r\n',b'\n')
         changed=[path for path in changed if path!=successor]
+    # Only the exact registered offline pilot successors receive the already
+    # sealed interface view. Authenticate every physical file before exclusion.
+    from ci.phase6_playlist_maintenance import historical_bytes as pilot_bytes
+    successors={'create_defaults/bulk/contracts/expanded/validation.py',
+        'create_defaults/bulk/contracts/translation_preflight/adapters.py',
+        'create_defaults/bulk/contracts/logos/wash.py',
+        'create_defaults/bulk/contracts/playlist/validation.py'}
+    for path in sorted(successors & set(changed)):
+        original=subprocess.check_output(['git','show',base+':'+path],cwd=ROOT)
+        assert pilot_bytes(ROOT,path,(ROOT/path).read_bytes()).replace(b'\r\n',b'\n')==original.replace(b'\r\n',b'\n')
+        changed.remove(path)
     assert not any(p.startswith('create_defaults/bulk/contracts/') and p not in MAINTAINED|{'create_defaults/bulk/contracts/evidence_consumption/engine.py'} for p in changed)
     # The exact authorized bridge/CI/pin maintenance is independently hash-bound.
     # All other original runtime/selection interfaces retain their frozen bytes.

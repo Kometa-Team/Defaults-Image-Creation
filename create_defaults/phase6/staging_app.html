@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Phase 6 staging lifecycle</title>
+<style>
+body{font:16px system-ui,sans-serif;max-width:1200px;margin:32px auto;padding:0 20px;background:#f4f5f7;color:#172334}h1{margin-bottom:8px}.notice{border-left:4px solid #be8928;padding:12px;background:#fff4d9}section{background:white;border:1px solid #d9dfe6;border-radius:10px;padding:20px;margin:20px 0}label{display:block;margin:12px 0}input,select,textarea,button{font:inherit;padding:9px;border-radius:5px;border:1px solid #aeb8c5;max-width:100%}button{background:#173f69;color:white;cursor:pointer}button:disabled{background:#65717e;cursor:not-allowed}#message{min-height:24px}#cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(480px,100%),1fr));gap:18px}.card{border:1px solid #d9dfe6;border-radius:8px;padding:16px;overflow-wrap:anywhere}.card img,#current-poster{width:100%;max-width:300px;height:auto;display:block;margin:12px auto}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:16px}.comparison figure{margin:0}.hash{font:12px monospace}.actions{display:flex;gap:10px;margin-top:12px}.status{font-weight:bold;color:#285479}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}li[data-passed=false]{color:#a21414;font-weight:bold}[hidden]{display:none!important}
+</style><script src="/staging_app.js" defer></script></head>
+<body><h1>Phase 6 staging lifecycle</h1><p class="notice">Owned local staging only. Add, replace or request removal using fixture roles. The eight + two regression renders retain their exact approved-reference checks. Live reservations, catalog mappings and publication remain pending.</p>
+<section><h2>Sign in to a fixture role</h2><form id="login"><label>Role <select id="role"><option value="contributor">Contributor</option><option value="maintainer">Maintainer</option></select></label><label>Staging access code <input id="code" type="password" autocomplete="off" required></label><button>Sign in</button></form><p id="signed-in"></p></section>
+<p id="message" role="status" aria-live="polite"></p>
+<section id="submit-section" hidden><h2>Contributor request</h2><form id="generate">
+<label>Action <select id="intent"><option value="add">Add a poster / add back</option><option value="replace">Replace a poster</option><option value="remove">Request removal</option></select></label>
+<div id="add-fields"><label>Optional pilot preset <select id="preset"></select></label><label>Title <input id="title" maxlength="100" required></label></div>
+<div id="target-fields" hidden><label>Existing catalog poster <select id="item"></select></label><p id="target-info"></p><img id="current-poster" width="2000" height="3000" alt="Current catalog poster"></div>
+<fieldset id="render-fields"><legend>Render settings</legend><label>Style <select id="style"></select></label><p id="style-help"></p>
+<label>Logo source <select id="logo-source"><option value="mapped">Use mapped / recorded logo</option><option value="upload">Choose a local logo file</option></select></label>
+<label id="mapped-label">Mapped / recorded logo <select id="logo"></select></label><label id="upload-label" hidden>Local PNG logo <input id="upload" type="file" accept="image/png"><small>Single-frame PNG, up to 2 MiB and 40 million pixels. No existing mapping is needed.</small></label>
+<label>Background colour <input id="colour" pattern="#[0-9a-fA-F]{6}" required></label><label id="caption-label">Caption <input id="caption" maxlength="40"></label></fieldset>
+<div id="remove-fields" hidden><label>Reason for removal <textarea id="reason" minlength="3" maxlength="500"></textarea></label><p>Identity, destination and active references come from the catalog. Render settings are not required. Source logos are retained.</p></div>
+<button id="generate-button">Generate preview</button><button id="remove" hidden>Request removal</button></form></section>
+<section id="reference-section" hidden><h2>Disposable dependency fixture</h2><p>These controls attach/release an active reference to Disposable Playlist. Reference changes make older removal requests stale; submit a fresh request afterwards.</p><button id="attach">Attach active reference</button> <button id="release">Release active reference</button></section>
+<section id="review-section" hidden><h2>Maintainer review</h2><p id="summary"></p><div id="cards"></div><details><summary>Current owned staging catalog</summary><pre id="catalog"></pre></details></section>
+</body></html>

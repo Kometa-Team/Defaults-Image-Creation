@@ -47,7 +47,11 @@ class Preparation(Document):
         if any(value[k] is not expected for k,expected in FLAGS.items()):fail('authority')
         members=value['members'];ids=[m['identity'] for m in members]
         if not ids or ids!=sorted(set(ids)) or ids!=value['required_members']:fail('membership')
-        if any(re.fullmatch(r'genre\.[0-9a-f]{32}',i) is None for i in ids):fail('cohort')
+        if all(re.fullmatch(r'genre\.[0-9a-f]{32}',i) is not None for i in ids):
+            if set(value['source']['files'])!={'genre.yml','profiles.yml','index-v1.json'}:fail('cohort')
+        else:
+            from create_defaults.phase6.playlist import preparation_membership
+            if not preparation_membership(value):fail('cohort')
         from .models import HeadRef
         for head in value['native_heads']:HeadRef.from_dict(head)
         paths=[]

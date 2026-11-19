@@ -1,0 +1,16 @@
+{
+  "command": [
+    "C:\\Users\\nickz\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+    "-B",
+    "-m",
+    "unittest",
+    "ci.dependency_tests.test_phase5_m6_maintenance.Phase5M6MaintenanceTests.test_immutable_batching_and_fresh_head_observations",
+    "ci.dependency_tests.test_phase6_playlist_maintenance",
+    "create_defaults.phase6.tests.test_staging_app",
+    "create_defaults.phase6.tests.test_staging_lifecycle",
+    "-q"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 96.484,
+  "head": "0aeebd00e929dda95466513f4b6a0e34fa803bbc"
+}

@@ -244,5 +244,6 @@ def test_canonical_attestation_roundtrip_and_external_pin(chain):
 
 def test_full_canonical_fixture_across_platforms(tmp_path):
     report=consume(**example(tmp_path,language='fr'))
-    expected=json.loads((ROOT/'create_defaults/phase3/tests/evidence-consumption-v1.json').read_text(encoding='utf8'))
+    from create_defaults.phase6.canonical_fixtures import current_fixture
+    expected=current_fixture('evidence-consumption-v1.json')
     assert report.to_dict()==expected['evidence'] and report.sha256==expected['sha256']

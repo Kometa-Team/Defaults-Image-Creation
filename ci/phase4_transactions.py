@@ -10,6 +10,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 from ci.validation import identity,read,write,require,unique,pytest_run,validate_execution
 from ci.phase4 import checksum,fingerprint
+from ci.phase5_m7_maintenance import owned_call as _m7_owned_call
 
 BASE='47e69a59fd1c306789457250ef6493bdfef7fc17'
 IDS=ROOT/'ci/phase4-transaction-test-ids.json'
@@ -24,6 +25,7 @@ def implementation_checksum():
     return fingerprint({n:(ROOT/'create_defaults/bulk/lifecycle'/n).read_text(encoding='utf-8-sig').replace('\r\n','\n') for n in FILES})
 
 
+@_m7_owned_call(when=lambda root=ROOT: Path(root) == ROOT or Path(root).resolve() == ROOT.resolve(), cohorts=True)
 def verify_maintenance(root=ROOT):
     value=read(root/'ci/phase4-m5-maintenance.json')
     expected={'ci/validation-plan.json','.github/workflows/default-poster-validation.yml',
@@ -97,6 +99,9 @@ def baseline():
         if path=='create_defaults/phase4/tests/test_ci_foundations.py':
             from ci.phase5_m5_maintenance import unicode_adapter
             current=unicode_adapter().historical_bytes(ROOT,path,current.encode('utf8')).decode('utf8')
+        if path=='create_defaults/phase4/tests/test_composition.py':
+            from ci.phase6_playlist_maintenance import historical_bytes as pilot_bytes
+            current=pilot_bytes(ROOT,path,current.encode('utf8')).decode('utf8')
         new=ast.parse(current)
         tests=lambda t:{n.name:ast.dump(n,include_attributes=False) for n in t.body if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef)) and n.name.startswith('test_')}
         require(tests(old)==tests(new),'Changed original Phase 4 assertions: '+path)

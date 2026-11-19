@@ -1,0 +1,694 @@
+{
+  "version": 1,
+  "baseline_commit": "dcbfa072dbedcb0069dd27be920ef3103687b5a4",
+  "members": {
+    ".github/workflows/phase6-playlist-validation.yml": {
+      "before_sha256": null,
+      "sha256": "24f64a7241c8975b3bc1a178e48a90c9399cabd9d5869c3792c4d050c063deac",
+      "text_lf": true
+    },
+    "ci/dependabot_maintenance.py": {
+      "before_sha256": "82900620fdb1b2bcda15b3eb68706a1e5a30725ff391d95c424ca0249c71cb95",
+      "sha256": "20d3907da79d5dbc6ab4fce80b29d1e778dbc6e2d88d90ed2788c8d84ed066fd",
+      "text_lf": true
+    },
+    "ci/dependency_tests/test_phase6_playlist_maintenance.py": {
+      "before_sha256": null,
+      "sha256": "78fd0306cb65ad6f6a8671fcaccb22e049aca8568236303d666e3341037f4ef4",
+      "text_lf": true
+    },
+    "ci/people_unicode_maintenance.py": {
+      "before_sha256": "4ee658a6835ba1dd87e7ace163603fd0c786316ace2b3ab1c509fff33126d32b",
+      "sha256": "02d95c28925de3920e68498746a9a349cff86e3b16f6bbc8290c1fb394e91ec9",
+      "text_lf": true
+    },
+    "ci/phase4.py": {
+      "before_sha256": "81a3def1ae44496626088fbd025b891cf4928062b291e3e3867091ff9ddf6cfe",
+      "sha256": "d8a8c491d17df1c18da29251af3b0a0a1c0a43117c6a7c19912828def6d24d60",
+      "text_lf": true
+    },
+    "ci/phase4_review.py": {
+      "before_sha256": "f4fc3cb0a03efb4a98d99c614e97ec1ece666e685c592ccf7b9fb254e84c1758",
+      "sha256": "c00e31ee10b5e57415de3d51b10622d88b903d5ae915463e394f03b5a44a22b5",
+      "text_lf": true
+    },
+    "ci/phase4_transactions.py": {
+      "before_sha256": "28f9dd3a5bcb37ffd02331e3374d5c98b9bb2123eb7a788dced23e308c009950",
+      "sha256": "98af1e52727f2a8726ed9acb9e1f9957716ac3f62e6f35dbc3b8cf91527a1c56",
+      "text_lf": true
+    },
+    "ci/phase5_m5_maintenance.py": {
+      "before_sha256": "04e39b994dbef17bcdc4934d64a18154b9dbe9f334fdafcdcb6e0a219f50cf2d",
+      "sha256": "710a023316b9625ed04a5c5eb2030142f2360d38e9bf9ba8dbb74d7e21b4a957",
+      "text_lf": true
+    },
+    "ci/phase5_m6_maintenance.py": {
+      "before_sha256": "c7e80f97e8ff2845a8077b1de716e74211a951cac748933d4205b8b918cf7c6c",
+      "sha256": "d5224baac4fcc5b36e7426b6c76becaff29972b8239a88c66426cecd83156fe0",
+      "text_lf": true
+    },
+    "ci/phase5_m7_maintenance.py": {
+      "before_sha256": "6549260f014d35302d641909f577d5a51f89f638731ae10d380f8193c1549a40",
+      "sha256": "1ae12706857b717291933b7864813cae3b49ad2f39b725e67bd98b6c54568e6a",
+      "text_lf": true
+    },
+    "ci/publication_tests/test_validation_timeouts.py": {
+      "before_sha256": "f48e83aa3aab7d61373133cd1f646da23c201221c2611f167909d39ef9f0dde3",
+      "sha256": "2d394772ea140f130f4a931ff93e02344a60aaedb4dedb08877f68a72a26ec6e",
+      "text_lf": true
+    },
+    "create_defaults/bulk/contracts/expanded/validation.py": {
+      "before_sha256": "5a657072935d4fa37e0a01a341d2de28f36ad39363bbcc6bc7b669b02c9060fb",
+      "sha256": "aa063c76c0046fcc8cbf45203f14341deee14911cf7308ae45a762bd9a8fea3a",
+      "text_lf": true
+    },
+    "create_defaults/bulk/contracts/logos/wash.py": {
+      "before_sha256": "4b1088717daacb11cad0d835819f83ca1a7396cf9fbcac9addf9f9f44977df50",
+      "sha256": "1335363b43eeda6f4c2fab8538e21acd5e5defc5ac3d508b388705dbc8e1d95e",
+      "text_lf": true
+    },
+    "create_defaults/bulk/contracts/playlist/validation.py": {
+      "before_sha256": "fa49d2f9db810cd93964a9b8b7b35ae658bbfd7dd47cd2ec84bb88835fd5acf5",
+      "sha256": "a932623679e460a9851199b8a95344a0f7a50e16c7c4b68fa2f02798210f1722",
+      "text_lf": true
+    },
+    "create_defaults/bulk/contracts/translation_preflight/adapters.py": {
+      "before_sha256": "f16025d3f4f603731d08fcf361a4d15bc2328f1dd59a50b19a40b54104371442",
+      "sha256": "1600c184575afad943e65ac4a0deb2398580528073ab11a44957e86da83a4d53",
+      "text_lf": true
+    },
+    "create_defaults/bulk/lifecycle/candidates.py": {
+      "before_sha256": "08319ab9e59d61ef5f6fcead86a76a97dae9f8fbcbcb95395c64fbda156089b8",
+      "sha256": "d4a919eea89471ed198293fb58c6ae681c7bfdf5ed13e9a2089a7e0cc1cd5dcd",
+      "text_lf": true
+    },
+    "create_defaults/bulk/lifecycle/catalog_preparation.py": {
+      "before_sha256": "89c5e3fdadce53d807f9af51791885bc386d813e4d0553e3f2aad0e68c803492",
+      "sha256": "04d022f4be9adb58b5da51f1677950cb48ff252eae69d01587b135e6890e0246",
+      "text_lf": true
+    },
+    "create_defaults/bulk/lifecycle/composition.py": {
+      "before_sha256": "d2f48077836634e86dcb22ebe7b8e20b870852122e256e5fed8c86ac79070691",
+      "sha256": "8fb6b43eb355e71cfd43b95a8ac9f0e429d93673831108f0d029e3cb46114dbf",
+      "text_lf": true
+    },
+    "create_defaults/bulk/lifecycle/operations.py": {
+      "before_sha256": "05210aef1a134c470e9c822a0375d095f4e32e70dd6d6f724c00b4e2a309adc1",
+      "sha256": "b51eabea1eb3e2414e617cd1758fcb837d6466238bf0b248f5baf99c96ca8e01",
+      "text_lf": true
+    },
+    "create_defaults/bulk/lifecycle/preparation_models.py": {
+      "before_sha256": "3da4e87141952a2db30d1f655272b90a133857332367f2aa8b0c57d19f478563",
+      "sha256": "4cdc63386a1da938463ceca9656024b38d81d28feef5cfdb4bf81db006d9517a",
+      "text_lf": true
+    },
+    "create_defaults/bulk/lifecycle/publication_preparation.py": {
+      "before_sha256": "9a0808658ce7ff6786f04a4979cf7af14fc9c3cf25e1c75bbf46bec099781fc8",
+      "sha256": "81035cfee1795bab5b060dc639f6412f774f36648dab6ede542243564321dc79",
+      "text_lf": true
+    },
+    "create_defaults/bulk/lifecycle/schemas/preparation-v1.schema.json": {
+      "before_sha256": "b67fc9e7b403cebb15d69a5b59b0939637fb95d0d8866458d11f8c906497e750",
+      "sha256": "f95e47919702ae2e09a97b4e7829d070ed66104003504d0368e8bc70182c0094",
+      "text_lf": true
+    },
+    "create_defaults/bulk/operator_publication.py": {
+      "before_sha256": "39e4d54dca3a2954bd09fc41aecc556313f0d5804ffd03ec5c1606144d6f866e",
+      "sha256": "6f7bd75b62acdf07dec73a4d86fd3d446d43c02345e8a3e3f061184fb3e5fd75",
+      "text_lf": true
+    },
+    "create_defaults/bulk/planner.py": {
+      "before_sha256": "f29ab240dd24bad05d2ea15bd026f97e3dd34ead1ae121165b043f9065044a6a",
+      "sha256": "da2637a0beb01fb9912b82a5bdd4701bf1f70c16324d115941604aecb262dd20",
+      "text_lf": true
+    },
+    "create_defaults/bulk/schemas/manifest-v1.json": {
+      "before_sha256": "aba4dd0e6f28901215148254540c32698ba97235cc1f45587dfab012ea945c87",
+      "sha256": "198d40e1538b1ab7f1d1360bd6202d7ad255cd3ba3b38cadddaf71f48fc4a2ff",
+      "text_lf": true
+    },
+    "create_defaults/bulk/tests/test_logo_workflow.py": {
+      "before_sha256": "e6b9fb94d9d52695ce3ef2edd0cd973bf8e9883d5bfd5776aadd0aff78eac5a7",
+      "sha256": "c4f6d3c9af79c9572d5bc7811f0b63f25b10a5c207162c836b37fc7af19c0c6b",
+      "text_lf": true
+    },
+    "create_defaults/bulk/workers.py": {
+      "before_sha256": "1e7a4daa8bfeb9433b2ef2d6e044e449ba972b87329ac6399853c39f213dfa8a",
+      "sha256": "b46fd4cca9248f928998537975f324229abcddd3f9a9ae72a01d91c30479262c",
+      "text_lf": true
+    },
+    "create_defaults/create_poster.py": {
+      "before_sha256": "51cfae66a3f0feb265a46e5d4c3024fc6daa66abefe453e21ba977fd21953305",
+      "sha256": "5c9500a5b7b22a76deca289a83fbd49768969f1edc90fee6bb7c7b1a384818ca",
+      "text_lf": true
+    },
+    "create_defaults/image_layout.py": {
+      "before_sha256": null,
+      "sha256": "227c2f4abecafb5972dde92e81a56fdf91fa6912ba81ec6c456d5958b9a11dd8",
+      "text_lf": true
+    },
+    "create_defaults/lifecycle/PHASE6_PLAYLIST_PILOT.md": {
+      "before_sha256": null,
+      "sha256": "110c10e5757b6df04f4b7b58b379b3062cd1a7acb13a11a013814c8140e0b09f",
+      "text_lf": true
+    },
+    "create_defaults/lifecycle/ROADMAP.md": {
+      "before_sha256": "148a0e5c1d6618f32982de4a9168a9d01c3f0ef042617024dd31ac0c0236a81e",
+      "sha256": "73fda6776b47adc6295bce26c300639ef1f195d703c7d106f9f53e49f1493c55",
+      "text_lf": true
+    },
+    "create_defaults/phase2/tests/test_package_a.py": {
+      "before_sha256": "6959e3bd3f3d2163d48fa670d750bcb7e44f9bc8587706a6771f50fd0e2d1f55",
+      "sha256": "9fbfa3d1f1669297dff09b04320e054930a44e9e93b8e053c7c1487107c24488",
+      "text_lf": true
+    },
+    "create_defaults/phase3/tests/test_destination_isolation.py": {
+      "before_sha256": "00ade97f494c75690ab19590acc6183db2526448f4d223dbc5b069dadabeed46",
+      "sha256": "e34b22a44bd4846500981750f8483fb80c233a65634736fa954335e44050f7a5",
+      "text_lf": true
+    },
+    "create_defaults/phase3/tests/test_evidence_consumption.py": {
+      "before_sha256": "4cb99543b847ab622837e09b34c252df491a8ef56d296fb346bfbdc7d481abb9",
+      "sha256": "d28cebb1fb2f7ab6a99bda5fc81373b3aaabc921a9bbb6253a1b1534971c4be7",
+      "text_lf": true
+    },
+    "create_defaults/phase3/tests/test_final_phase3_acceptance.py": {
+      "before_sha256": "9a6539d75cac6d64a27ab21fd6fdb663f0505bafa95489f5293899c2bff0f143",
+      "sha256": "994370355fe00e5a79d4aba16130e64a3ad1ba7d4de251afa067c3515b15e14a",
+      "text_lf": true
+    },
+    "create_defaults/phase3/tests/test_translation_boundaries.py": {
+      "before_sha256": "c60eacebb941288bf666390a749974df0e6a572832d82c3c87400a78153c1720",
+      "sha256": "d1b53d953411b60d07c45396d5015eb1c833d25f39428d73496735c309a60f57",
+      "text_lf": true
+    },
+    "create_defaults/phase4/tests/test_composition.py": {
+      "before_sha256": "e17f974b626ce5dd7a1a56bd05244d27a9c590708138430d6cef2f1f28ac035b",
+      "sha256": "5368c1d630b311d3b5f8bbe947df90b68601771e1a5874447f96c025c7f6278c",
+      "text_lf": true
+    },
+    "create_defaults/phase6/PHASE6_CLOSEOUT_CHECKLIST.md": {
+      "before_sha256": null,
+      "sha256": "8267475804ad06074713392f352fa3446ccf8f6a74fa9654fdef3c749f2e4c76",
+      "text_lf": true
+    },
+    "create_defaults/phase6/PLAYLIST_PILOT_MANIFEST.json": {
+      "before_sha256": null,
+      "sha256": "50e02b960fc61ca0412e6cd353f4d7511d095d37cccdb915bc440df4da458625",
+      "text_lf": true
+    },
+    "create_defaults/phase6/STAGING_APP.md": {
+      "before_sha256": null,
+      "sha256": "49caa3307b170946bea336ebd4e8102487e982534810c355e45abbea29790134",
+      "text_lf": true
+    },
+    "create_defaults/phase6/__init__.py": {
+      "before_sha256": null,
+      "sha256": "35670514fbe63626bab0ab0f05ccec74cbdf053af3a18926a34aa67f09c31a03",
+      "text_lf": true
+    },
+    "create_defaults/phase6/assets/avp.png": {
+      "before_sha256": null,
+      "sha256": "121346d7375b741052e862b4e7124887bd1b85a1fb2e0c9c296e91669b1482d2",
+      "text_lf": false
+    },
+    "create_defaults/phase6/assets/babylon.png": {
+      "before_sha256": null,
+      "sha256": "fdf89f346410d2c0e9656bc9223ee35e7cc6377969f96cbaeffc3e9abf8e7e6a",
+      "text_lf": false
+    },
+    "create_defaults/phase6/assets/bsg.png": {
+      "before_sha256": null,
+      "sha256": "f59cf12ea9578825c118aa39e8e5209dc9d30ec4d3402c776fbb846ff133a276",
+      "text_lf": false
+    },
+    "create_defaults/phase6/assets/gundam.png": {
+      "before_sha256": null,
+      "sha256": "647992caa06ae2d2c1fd1210762f44cde0981699fd6242573a17342a88ac88e3",
+      "text_lf": false
+    },
+    "create_defaults/phase6/assets/jrrt.png": {
+      "before_sha256": null,
+      "sha256": "bab84403116d5c948fd4710640c3ecb0859dead9191eb75fdfeb492d4e473556",
+      "text_lf": false
+    },
+    "create_defaults/phase6/assets/sao.png": {
+      "before_sha256": null,
+      "sha256": "62c341d8c212eedfc070e72034db5aa530ef7ab7d3efe2ad46ed4eb9ee3e0209",
+      "text_lf": false
+    },
+    "create_defaults/phase6/assets/stargate.png": {
+      "before_sha256": null,
+      "sha256": "5842312151e2ae56020b94d030a447f886df49ac55f537129eb3187a1faeeab7",
+      "text_lf": false
+    },
+    "create_defaults/phase6/assets/wdu.png": {
+      "before_sha256": null,
+      "sha256": "f0ead3bedf57bfc333ea1517a12fba6e0f330d5cf941b27bc351398302f12cd1",
+      "text_lf": false
+    },
+    "create_defaults/phase6/canonical/destination-preflight-v1.json": {
+      "before_sha256": null,
+      "sha256": "d1b56c164569c1e4c34757f4bd708f81e560d42fd3935e572c5c73cd6a6043f0",
+      "text_lf": true
+    },
+    "create_defaults/phase6/canonical/evidence-consumption-v1.json": {
+      "before_sha256": null,
+      "sha256": "f69a7c9f645f06d4a84f2628c6b049a7e1b9dc01fbf4dcab9d7eac1906b28130",
+      "text_lf": true
+    },
+    "create_defaults/phase6/canonical/logo-calibration-pillow13.json": {
+      "before_sha256": null,
+      "sha256": "3052b1926dc05c8dd53ad1522bfc4205eaa1dbaac04769e17faa35502f84e98e",
+      "text_lf": true
+    },
+    "create_defaults/phase6/canonical/phase3-final-acceptance-v1.json": {
+      "before_sha256": null,
+      "sha256": "622231ed0795bda202777417e99cebf2bc1897c488e9a9e147e133049ab6d234",
+      "text_lf": true
+    },
+    "create_defaults/phase6/canonical/translation-preflight-v1.json": {
+      "before_sha256": null,
+      "sha256": "9e6926cf34d90a1eef22f6701c294fc9af0475d091cd64ec93f35addca237493",
+      "text_lf": true
+    },
+    "create_defaults/phase6/canonical_fixtures.py": {
+      "before_sha256": null,
+      "sha256": "5eb73eda87188931e1b787d31c3b262dc02546740fce961023f77fb2252b70b9",
+      "text_lf": true
+    },
+    "create_defaults/phase6/fixtures.py": {
+      "before_sha256": null,
+      "sha256": "99c3cb5e2ee40f91d7f4d9e0bbe17f720c531c4c343a319bc21d0527c352ce83",
+      "text_lf": true
+    },
+    "create_defaults/phase6/playlist.py": {
+      "before_sha256": null,
+      "sha256": "fac23a03e02f2397af007998cdcabe723b3eec2ce9f66984054f2d5ee365c8d7",
+      "text_lf": true
+    },
+    "create_defaults/phase6/render_review.py": {
+      "before_sha256": null,
+      "sha256": "68443877ccc7f6c8188cacff53b1556a5cc141c4ea025453eaa0edb812337454",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/EVIDENCE_INDEX.md": {
+      "before_sha256": null,
+      "sha256": "591f8d5455676fbf23043c9fe94a18c86bf4ade581f57c322d7a47c4efbfbb2f",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/action-forms/blocked-removal.png": {
+      "before_sha256": null,
+      "sha256": "4334a44bd93c12d7513e9fa7980974e94b36327c9acbceddd7d638e85565a917",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/action-forms/browser-result.json": {
+      "before_sha256": null,
+      "sha256": "fc5f967947e995df615d2f54fe0d35b37dfbc9479350f264f70ca086a4b1a5b9",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/action-forms/browser-run.json": {
+      "before_sha256": null,
+      "sha256": "5067254bb9098ebdfb77e5a6e564c30b626d0c6210297d2ec27bedaf3be3717e",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/action-forms/catalog.json": {
+      "before_sha256": null,
+      "sha256": "67875079872d8c1978764d096eb7cf61ef0a7276efcba27d454cb682e00315b6",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/action-forms/first-two-result.json": {
+      "before_sha256": null,
+      "sha256": "2a7faddfe9684b352fb3a7a855472f2fc2fe4af6c259131be941573bbdacc905",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/action-forms/focused-checks.json": {
+      "before_sha256": null,
+      "sha256": "ad3c4bd20491fb11dfe6c099197364ed09612a4a317ca14941df80870941f7cc",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/action-forms/replacement-side-by-side.png": {
+      "before_sha256": null,
+      "sha256": "ffb4f5f674c2c754f2c430d6965dce3f3f620c0c5798726163ff531485c26588",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/action-forms/second-style.png": {
+      "before_sha256": null,
+      "sha256": "ebcb318f2dd4d172534fb121a54540f718c51b0ed803597a50c9e662f3c43709",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/action-forms/staging-receipts.json": {
+      "before_sha256": null,
+      "sha256": "d834ee804a22a774a75ed47c106dcd1c46159630cdbba7d5b7a7a30bbefaeb49",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/action-forms/ten-generated-staging.png": {
+      "before_sha256": null,
+      "sha256": "73f7a606c12c3f2d6fae87fb7c106d67efeaa6dd0a418c1be6161290fc0b071b",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/action-forms/unmapped-ellipse.png": {
+      "before_sha256": null,
+      "sha256": "eeeb40bccc4af168130f9c8d1bcc83c4b018e4b056a918278137bcae3d698863",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/action-forms/unmapped-rectangle.png": {
+      "before_sha256": null,
+      "sha256": "2e7000e78d9a5c13127d4055b90fb84a3ca3a78830990078d32648bd572161ee",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/approved-transport-native-proof.json": {
+      "before_sha256": null,
+      "sha256": "a24a5a2048aef01160b69f03a9f1a1076807925299050038246b9044e24a22c7",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/approved-transport-result.json": {
+      "before_sha256": null,
+      "sha256": "e061451e8bcda4ef4e3406509d360b28b58550d9f4803a94683715e15ff64fec",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/browser/backend-and-source-checks.json": {
+      "before_sha256": null,
+      "sha256": "c6278480be78048daddb52967dcfa749957a8a282054d0eed70dc6be1ed5026e",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/browser/browser-result.json": {
+      "before_sha256": null,
+      "sha256": "51eebac59a49bbac68ae4d901e544f9a30b99c03b0e391285f584a980321b098",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/browser/browser-run.json": {
+      "before_sha256": null,
+      "sha256": "50aa7b0e8770e0453a507d5a26ff0d890be459abc3fb563dfcea9ebfbc6e0561",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/browser/first-two-result.json": {
+      "before_sha256": null,
+      "sha256": "a86135939d70ee4055083a1db9f1c182a1f6cc37a5c904177a8844587ea35b6c",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/browser/one-create-one-replacement.png": {
+      "before_sha256": null,
+      "sha256": "22e7c91d8bf48f000e6c819314949872140097189b104f76907dacffeffbe45f",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/browser/rollout-review.json": {
+      "before_sha256": null,
+      "sha256": "9e2e7e0f305ba897dbdba075002d37dd1571954309170475a895f2e54236136f",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/browser/staging-receipts.json": {
+      "before_sha256": null,
+      "sha256": "d642dd0c6143f51be73e5932c86c7e70c66911aa176a4c66fdc781f60be43500",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/browser/ten-item-staging.png": {
+      "before_sha256": null,
+      "sha256": "925306b2f7acc6fda38a0b209b5aca019ceacafc8b248df474c0c20f955c2296",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/browser/ui-source-integrity.json": {
+      "before_sha256": null,
+      "sha256": "248155e514e4bc96616a4eeb98dbd0dd4ff358fe8e1d99d50e32c7d6423b9762",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/candidate-integrity-result.json": {
+      "before_sha256": null,
+      "sha256": "1143e345fbe76fed78662032dc20921106490800f625a17805cd79669cc38506",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/colour-review.json": {
+      "before_sha256": null,
+      "sha256": "0a238b8c5fd47f696bb0bd9d95a058951893b8a7e7bac39f6bcf18ffccf44b06",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/eight-poster-colour-proposals.png": {
+      "before_sha256": null,
+      "sha256": "e4abeac2d62c028ce809824eb1311b7b3758383a36ce1fc7b1a0ab40d544b87e",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/generated-browser/blocked-removal.png": {
+      "before_sha256": null,
+      "sha256": "c6d48d4fde6e8e9b259755da430adf6699e8aa108cfbbab94e8df048050c227c",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/generated-browser/browser-result.json": {
+      "before_sha256": null,
+      "sha256": "c58be9563dbc0b23b3593a6a1b4aa8a4f374068d0ed0a50bf3dd67bd626c1d85",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/generated-browser/browser-run.json": {
+      "before_sha256": null,
+      "sha256": "66f81641443798a5249e9b4badee06223570d979d7a7042b97a4b58107b9ec98",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/generated-browser/catalog.json": {
+      "before_sha256": null,
+      "sha256": "e6160f0197ae4765c5fcb0c57b4578114b5d3b2683eb629becd770a6bf847b0c",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/generated-browser/first-two-result.json": {
+      "before_sha256": null,
+      "sha256": "c3fea922e84d7c32b640a4530bcadf906692327e3be7b745f9e0978ad9ee353a",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/generated-browser/focused-checks.json": {
+      "before_sha256": null,
+      "sha256": "e0b0aa741b15edf8c852029defb32a07dd55d43593c1edfef1d27418ff4b8af5",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/generated-browser/second-style.png": {
+      "before_sha256": null,
+      "sha256": "07b467acf69a42a87faf5b5baa58b680a15ad25e720fe6b5fc58a7767f49c173",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/generated-browser/staging-receipts.json": {
+      "before_sha256": null,
+      "sha256": "8c5545791e5fa3ee5f7c7c93d3b57b1d4a942220782ce433985fbb35e1d6320c",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/generated-browser/ten-generated-staging.png": {
+      "before_sha256": null,
+      "sha256": "b6e79fa1164bfa2c483a4ecc17f9e9da325941a333bd46ce8aee5f324961a875",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/historical-comparison.json": {
+      "before_sha256": null,
+      "sha256": "9389df55ef3f7af3c2eefef65dba85aab796d49a8ee809ca3198721e87360b48",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/nine-poster-historical-comparison.png": {
+      "before_sha256": null,
+      "sha256": "930bc0a0d0278e23569650398a4b1e69606e608f3469230af292bd0232a255a4",
+      "text_lf": false
+    },
+    "create_defaults/phase6/review/replacements/README.md": {
+      "before_sha256": null,
+      "sha256": "1f1e0c81161e170aa778a797b50fe662dacdd32084e70aeabf801789726c62e6",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/replacements/patch-validation.json": {
+      "before_sha256": null,
+      "sha256": "3639d37abc08fcdaca355fbdc73c60f3e0603450e0780399e2e671891ec9cae1",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/replacements/replacement-plan.json": {
+      "before_sha256": null,
+      "sha256": "bdf6783ec1b5e6c2a6f46fb526e708d80be094916f493aa7f96f7a3175af5886",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/replacements/two-playlist-replacements.patch": {
+      "before_sha256": null,
+      "sha256": "9fd00135191d23c012dc0de4c5532c9181cab5d1d714bc6c705dfdde39112873",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/visual-approval.json": {
+      "before_sha256": null,
+      "sha256": "d21036c21ffbd01e86357327ecaa37d9d36f3d9e0ac6525aa8e91577a4f86360",
+      "text_lf": true
+    },
+    "create_defaults/phase6/staging_app.html": {
+      "before_sha256": null,
+      "sha256": "8df756d15a73d50c6c691480f233c6195156d7d77656ccec9d0bac0e2de11191",
+      "text_lf": true
+    },
+    "create_defaults/phase6/staging_app.js": {
+      "before_sha256": null,
+      "sha256": "35c35ce5c733e50395650f63099806cfffc2e2931da77bb3480a86ff1d88d618",
+      "text_lf": true
+    },
+    "create_defaults/phase6/staging_app.py": {
+      "before_sha256": null,
+      "sha256": "790da5f58c2f69d1c1ea3f7f01729383326a0436a7b227a6d943188bc353909c",
+      "text_lf": true
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/Alien & Predator (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/Babylon 5 (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "4bde3a4a13e08ed9a30a8c2e7ed760d3959eab18d4edeaf2d710c29de6a4a0ca",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/Battlestar Galactica (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "4db6f349cd3591c4a3d52b642dfd6f253294fccba130d0558b7085cf973a429c",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/Middle-earth (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "2e6ba926238e2c7d5213701a08d2c9cefe498ffa6c54c9c411ee488679b764d3",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/Mobile Suit Gundam (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "864a16e906d71b3b9eaabe01ff9dca5f55d1cdee1527489fbf08b9a545e0b273",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/Star Wars The Clone Wars (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "2de0e1ec2324c886301e771c92836acf42b4d92b60d2283e15e8f897b10fda22",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/Stargate (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "8d93feff5ba739ba5aa31a0ba40b0d533e66a32cdf0a5857c8fd1fd76eec5e86",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/Sword Art Online (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "0221887405a7b2526afae40e0f770a8e9feb5ebbdde86789ce0c6125c7d201db",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/The Walking Dead Universe (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "a6622b755f339e22d813d98adc0d60c3d9289c172b0c2a224fceb32cb96413b3",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/approved/playlist/X-Men (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "5e513164bb873d739b2df9cc500521c7449060ce0bce98e3a5786cf002f8f63f",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/eight-create-visual-approval.json": {
+      "before_sha256": null,
+      "sha256": "d21036c21ffbd01e86357327ecaa37d9d36f3d9e0ac6525aa8e91577a4f86360",
+      "text_lf": true
+    },
+    "create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Arrowverse (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "c793c1320b66f94d445828c5709f806c935739679b5d1c35d04de65dd758d8d3",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/staging-baseline/playlist/DC Animated Universe (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "172552814739e0585b793945e7eec0e4942f540ab6a33842a1349289167c28e3",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Dragon Ball (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "538bd8fda6fbacf5a2f3ee8d9b5d094840b85a6f4b670735b4dcf0c2cc85d703",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Marvel Cinematic Universe (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "99935f92373eae8e5cde2f1ce96a159c5a0ccd59f9bb1712c647586e8103a3bc",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Pok\u00e9mon (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "d9f0f8195409897849972707cb57692d29fad53efdefffc1da6f5a7681f87e28",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Star Trek (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "70acb5d956c94f84ec32bb3d89f7a99a3cd2871ff95cae1ab4421ba46ac0e370",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Star Wars (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "c0575f1dd2ff087054db8569b03bb48fecbe1f3e08a4bc035ca5ceac27652877",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Star Wars The Clone Wars (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "703fe5c5fec332b7f6572f099dc9cfd481c36faaf84c59f24d6e3fd1e6eefd7b",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/staging-baseline/playlist/X-Men (Timeline Order).jpg": {
+      "before_sha256": null,
+      "sha256": "e1c2011e710fd4d0192226ae9df841249c9f0dd0eeefee193504f749bcb36832",
+      "text_lf": false
+    },
+    "create_defaults/phase6/staging_fixtures/ten-item-fixtures.json": {
+      "before_sha256": null,
+      "sha256": "836456330593f992791480250cdf112d5949c0f324240043a990392f1ff784ae",
+      "text_lf": true
+    },
+    "create_defaults/phase6/staging_fixtures/two-replacement-visual-approval.json": {
+      "before_sha256": null,
+      "sha256": "ddeb819f4fe1a0b1e69aab96e3a33033f93f22229d9fefd414c4b2726e8356e6",
+      "text_lf": true
+    },
+    "create_defaults/phase6/staging_lifecycle.py": {
+      "before_sha256": null,
+      "sha256": "ef23580f196e3bed23bcd9f64d74f20537655dfa3ddc9a640313035f64624adb",
+      "text_lf": true
+    },
+    "create_defaults/phase6/tests/conftest.py": {
+      "before_sha256": null,
+      "sha256": "f6fb4468e064644df013b32cd3069ed02dec07e4e302a79b451cc74993aad3c7",
+      "text_lf": true
+    },
+    "create_defaults/phase6/tests/staging_browser.cjs": {
+      "before_sha256": null,
+      "sha256": "1d798ee9a611a823066384cfed57b79ec999112726f5b540539ffecc6f592ee7",
+      "text_lf": true
+    },
+    "create_defaults/phase6/tests/staging_lifecycle_browser.cjs": {
+      "before_sha256": null,
+      "sha256": "82b3cff489814ff78bc34bb173dd9bfe27d387506a7dd6311e396da05e10dec5",
+      "text_lf": true
+    },
+    "create_defaults/phase6/tests/test_playlist_pilot.py": {
+      "before_sha256": null,
+      "sha256": "138ed280335be6831b8540450fc8479b093f14b97e088eadf6734ca2ed353e54",
+      "text_lf": true
+    },
+    "create_defaults/phase6/tests/test_staging_app.py": {
+      "before_sha256": null,
+      "sha256": "aaf30658476780b050eb3c68ecc3fdb149eff30d84ab96f2eb3e898d2ff3453d",
+      "text_lf": true
+    },
+    "create_defaults/phase6/tests/test_staging_lifecycle.py": {
+      "before_sha256": null,
+      "sha256": "f8904a1655bb9d7fee9e00b4066f8d0af923dd1da713ffa70f3ecbf308086a16",
+      "text_lf": true
+    },
+    "create_defaults/phase6/verify_approved_transport.py": {
+      "before_sha256": null,
+      "sha256": "5a82e05279f69f6a24448c7791af19b836f9f4d2d345c7c7a67dd8ace8fccff5",
+      "text_lf": true
+    },
+    "create_defaults/poster_styles.py": {
+      "before_sha256": null,
+      "sha256": "06f3107911662d8499602c5337c2cb80729229b491c380092af4d5dd9872e8c9",
+      "text_lf": true
+    },
+    "create_defaults/tests/test_playlist_layout.py": {
+      "before_sha256": null,
+      "sha256": "d5ed42b2dc7a4af26d684a0eb2f878802bdfef50027d272526745d0a580ebfe0",
+      "text_lf": true
+    },
+    "create_defaults/validation_manifest.py": {
+      "before_sha256": "feb383c8fbcffe15e70c035c4ef0f1102c6d9cdc3289be04a3dbdeac690b718b",
+      "sha256": "d1fcb4f60462edfa38284b2e732541da0b19831ca4ace4f14d8d6adb01f65234",
+      "text_lf": true
+    }
+  },
+  "offline_fixture_only": true,
+  "production_authorized": false,
+  "publication_authorized": false
+}

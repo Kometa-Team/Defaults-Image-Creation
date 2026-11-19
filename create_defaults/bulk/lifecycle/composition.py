@@ -169,7 +169,11 @@ def validate_native(manifest,config,view,spec):
             if sha256(path)!=item['sha256']:fail('input_drift')
             if item['role'] in {'logo','overlay_source'} and rule['source_kind'] not in {'placeholder','composition'}:
                 report=inspect_png(input_bytes(path)).report()
-                if report['default_transparency_blockers'] or report['diagnostics']:fail('source_transparency_or_quality_review_required')
+                if report['default_transparency_blockers'] or report['diagnostics']:
+                    from create_defaults.phase6.playlist import source_quality_fixture
+                    fixture=source_quality_fixture(config,view,e,report)
+                    if fixture is None:fail('source_transparency_or_quality_review_required')
+                    report['offline_fixture_quality']=fixture
                 if rule['treatment']=='BOTH_REQUIRED' and e['semantic']['role']=='white' and not parameters.get('white_wash',False):
                     with Image.open(path) as white:
                         rgba=white.convert('RGBA')

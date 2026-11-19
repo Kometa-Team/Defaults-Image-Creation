@@ -1,0 +1,526 @@
+{
+  "kind": "phase6-generated-browser-lifecycle-proof",
+  "candidate_commit": "33f4d0ea4fe5b4262319f5eec1aeaab221c8780d",
+  "browser": "157.0.8103.79",
+  "playwright": "1.65.1",
+  "creates": 8,
+  "replacements": 2,
+  "generated_reference_matches": 10,
+  "destination_hash_matches": 10,
+  "unchanged_historical_files": 7,
+  "main_set": [
+    {
+      "identity": "playlist.feec6426d0134e93973e8a2b36bd1ebe",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Alien & Predator (Timeline Order).jpg",
+      "sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+      "receipt": {
+        "identity": "playlist.feec6426d0134e93973e8a2b36bd1ebe",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Alien & Predator (Timeline Order).jpg",
+        "relative_path": "playlist/Alien & Predator (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.feec6426d0134e93973e8a2b36bd1ebe",
+          "destination": "playlist/Alien & Predator (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+          "revision": 1,
+          "references": []
+        },
+        "catalog_sha256": "1be31bc36ed82093a5c04c82236c95cc507f1019f4f6a9c51c25b1587bc1cd24",
+        "review_digest": "0e00f65a583a07878e01646daa9f7904fdd921eb29eaf95ed459f375096f60fe",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.playlist-x-men-timeline-order.627ce505",
+      "action": "REPLACE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\X-Men (Timeline Order).jpg",
+      "sha256": "5e513164bb873d739b2df9cc500521c7449060ce0bce98e3a5786cf002f8f63f",
+      "receipt": {
+        "identity": "playlist.playlist-x-men-timeline-order.627ce505",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\X-Men (Timeline Order).jpg",
+        "relative_path": "playlist/X-Men (Timeline Order).jpg",
+        "action": "REPLACE",
+        "previous_sha256": "e1c2011e710fd4d0192226ae9df841249c9f0dd0eeefee193504f749bcb36832",
+        "destination_sha256": "5e513164bb873d739b2df9cc500521c7449060ce0bce98e3a5786cf002f8f63f",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.playlist-x-men-timeline-order.627ce505",
+          "destination": "playlist/X-Men (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "5e513164bb873d739b2df9cc500521c7449060ce0bce98e3a5786cf002f8f63f",
+          "revision": 2,
+          "references": []
+        },
+        "catalog_sha256": "0fb59e923c83265d36ce4f03eb26d35e044de1cf96c15cdd929129d3fda2545a",
+        "review_digest": "37a0f957a3df895029aef94d2764257c0c9e9594b660671ccaa9e22965108eb7",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.2d41498dd84b47a58ffd8f1728bfa32f",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Babylon 5 (Timeline Order).jpg",
+      "sha256": "4bde3a4a13e08ed9a30a8c2e7ed760d3959eab18d4edeaf2d710c29de6a4a0ca",
+      "receipt": {
+        "identity": "playlist.2d41498dd84b47a58ffd8f1728bfa32f",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Babylon 5 (Timeline Order).jpg",
+        "relative_path": "playlist/Babylon 5 (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "4bde3a4a13e08ed9a30a8c2e7ed760d3959eab18d4edeaf2d710c29de6a4a0ca",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.2d41498dd84b47a58ffd8f1728bfa32f",
+          "destination": "playlist/Babylon 5 (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "4bde3a4a13e08ed9a30a8c2e7ed760d3959eab18d4edeaf2d710c29de6a4a0ca",
+          "revision": 1,
+          "references": []
+        },
+        "catalog_sha256": "d6b81ff1317855dfa64c6f8ff52f9a45f7994fe68a8114281c7491ae94a4964b",
+        "review_digest": "2d94dbeb75b1d7e7040f09c0d842a5f2d6a29540852f3d8e72fb69084de06c6e",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.ca5bf3fafc7a4f888dbee738fc6fea09",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Battlestar Galactica (Timeline Order).jpg",
+      "sha256": "4db6f349cd3591c4a3d52b642dfd6f253294fccba130d0558b7085cf973a429c",
+      "receipt": {
+        "identity": "playlist.ca5bf3fafc7a4f888dbee738fc6fea09",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Battlestar Galactica (Timeline Order).jpg",
+        "relative_path": "playlist/Battlestar Galactica (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "4db6f349cd3591c4a3d52b642dfd6f253294fccba130d0558b7085cf973a429c",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.ca5bf3fafc7a4f888dbee738fc6fea09",
+          "destination": "playlist/Battlestar Galactica (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "4db6f349cd3591c4a3d52b642dfd6f253294fccba130d0558b7085cf973a429c",
+          "revision": 1,
+          "references": []
+        },
+        "catalog_sha256": "7c045ede6e6de1445dbdf21c54a07a96ae426243ea0c5612d34c35b85aa84131",
+        "review_digest": "b5a961dae153b5fcf0c697676b10f12ea29c974af15bfd0adaef214231078ad0",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.70487260288d489fa6e4d06672990a67",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Mobile Suit Gundam (Timeline Order).jpg",
+      "sha256": "864a16e906d71b3b9eaabe01ff9dca5f55d1cdee1527489fbf08b9a545e0b273",
+      "receipt": {
+        "identity": "playlist.70487260288d489fa6e4d06672990a67",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Mobile Suit Gundam (Timeline Order).jpg",
+        "relative_path": "playlist/Mobile Suit Gundam (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "864a16e906d71b3b9eaabe01ff9dca5f55d1cdee1527489fbf08b9a545e0b273",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.70487260288d489fa6e4d06672990a67",
+          "destination": "playlist/Mobile Suit Gundam (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "864a16e906d71b3b9eaabe01ff9dca5f55d1cdee1527489fbf08b9a545e0b273",
+          "revision": 1,
+          "references": []
+        },
+        "catalog_sha256": "c66cf8d6553dec628cb4431729a897f904de06f374bd4f20be406bd437029580",
+        "review_digest": "e982aac287deb84996c509e25d79553f7c4a1eb5ae14bbd37d3f21f40a7f20a2",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.5eba47e8c0a04c2e9914f6618b621f2c",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Middle-earth (Timeline Order).jpg",
+      "sha256": "2e6ba926238e2c7d5213701a08d2c9cefe498ffa6c54c9c411ee488679b764d3",
+      "receipt": {
+        "identity": "playlist.5eba47e8c0a04c2e9914f6618b621f2c",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Middle-earth (Timeline Order).jpg",
+        "relative_path": "playlist/Middle-earth (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "2e6ba926238e2c7d5213701a08d2c9cefe498ffa6c54c9c411ee488679b764d3",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.5eba47e8c0a04c2e9914f6618b621f2c",
+          "destination": "playlist/Middle-earth (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "2e6ba926238e2c7d5213701a08d2c9cefe498ffa6c54c9c411ee488679b764d3",
+          "revision": 1,
+          "references": []
+        },
+        "catalog_sha256": "3310da7addaf8a60f8e00d426b08a4eb6ebe0019a1dbeec5841c1c9da73adf59",
+        "review_digest": "6f5b2d5a42773554ad3b83bb34215f35a6d67d00ba637bed6be9e7731d703d67",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.c48a75120f4f4a8aa290c3683b2dc1d2",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Sword Art Online (Timeline Order).jpg",
+      "sha256": "0221887405a7b2526afae40e0f770a8e9feb5ebbdde86789ce0c6125c7d201db",
+      "receipt": {
+        "identity": "playlist.c48a75120f4f4a8aa290c3683b2dc1d2",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Sword Art Online (Timeline Order).jpg",
+        "relative_path": "playlist/Sword Art Online (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "0221887405a7b2526afae40e0f770a8e9feb5ebbdde86789ce0c6125c7d201db",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.c48a75120f4f4a8aa290c3683b2dc1d2",
+          "destination": "playlist/Sword Art Online (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "0221887405a7b2526afae40e0f770a8e9feb5ebbdde86789ce0c6125c7d201db",
+          "revision": 1,
+          "references": []
+        },
+        "catalog_sha256": "5ac17a7927fd81782c95b0a737f9aa668be1f2937f1d9edd2907025f1792dceb",
+        "review_digest": "711237f5427c5300a3a14316a7e63ba3950b7f9a3637710e322f7e5d234009f8",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.11d52d3953a64d0faabcd7a692fbb87f",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Stargate (Timeline Order).jpg",
+      "sha256": "8d93feff5ba739ba5aa31a0ba40b0d533e66a32cdf0a5857c8fd1fd76eec5e86",
+      "receipt": {
+        "identity": "playlist.11d52d3953a64d0faabcd7a692fbb87f",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Stargate (Timeline Order).jpg",
+        "relative_path": "playlist/Stargate (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "8d93feff5ba739ba5aa31a0ba40b0d533e66a32cdf0a5857c8fd1fd76eec5e86",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.11d52d3953a64d0faabcd7a692fbb87f",
+          "destination": "playlist/Stargate (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "8d93feff5ba739ba5aa31a0ba40b0d533e66a32cdf0a5857c8fd1fd76eec5e86",
+          "revision": 1,
+          "references": []
+        },
+        "catalog_sha256": "144d9a86d553c3ec95c39f072c48bb1fc5ab7bb3c3bcd87da1bc5e46ae9b2f05",
+        "review_digest": "0f00c86b0ec3fd98198cd1c7fbb71f91f9fe2b0ce5d3ceb124c55b3d97437dca",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.0aabd1b1c7d44b198858057648ba9514",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\The Walking Dead Universe (Timeline Order).jpg",
+      "sha256": "a6622b755f339e22d813d98adc0d60c3d9289c172b0c2a224fceb32cb96413b3",
+      "receipt": {
+        "identity": "playlist.0aabd1b1c7d44b198858057648ba9514",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\The Walking Dead Universe (Timeline Order).jpg",
+        "relative_path": "playlist/The Walking Dead Universe (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "a6622b755f339e22d813d98adc0d60c3d9289c172b0c2a224fceb32cb96413b3",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.0aabd1b1c7d44b198858057648ba9514",
+          "destination": "playlist/The Walking Dead Universe (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "a6622b755f339e22d813d98adc0d60c3d9289c172b0c2a224fceb32cb96413b3",
+          "revision": 1,
+          "references": []
+        },
+        "catalog_sha256": "9e62eeff37d9c7788d619a8d554772b892eb5c47f355a58cc9c5e6c5bc321c7d",
+        "review_digest": "058b2b960bbce7acad1407a086fe355a13e6c40d4c10942c4b5f9daeb95eba68",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "playlist.playlist-star-wars-the-clone-wars-timeline-order.c6750e0c",
+      "action": "REPLACE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Star Wars The Clone Wars (Timeline Order).jpg",
+      "sha256": "2de0e1ec2324c886301e771c92836acf42b4d92b60d2283e15e8f897b10fda22",
+      "receipt": {
+        "identity": "playlist.playlist-star-wars-the-clone-wars-timeline-order.c6750e0c",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Star Wars The Clone Wars (Timeline Order).jpg",
+        "relative_path": "playlist/Star Wars The Clone Wars (Timeline Order).jpg",
+        "action": "REPLACE",
+        "previous_sha256": "703fe5c5fec332b7f6572f099dc9cfd481c36faaf84c59f24d6e3fd1e6eefd7b",
+        "destination_sha256": "2de0e1ec2324c886301e771c92836acf42b4d92b60d2283e15e8f897b10fda22",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "playlist.playlist-star-wars-the-clone-wars-timeline-order.c6750e0c",
+          "destination": "playlist/Star Wars The Clone Wars (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "2de0e1ec2324c886301e771c92836acf42b4d92b60d2283e15e8f897b10fda22",
+          "revision": 2,
+          "references": []
+        },
+        "catalog_sha256": "b251ee2eeac845d6d813c224eaf93b554b99c1a5f2be071b1a507938115af2ac",
+        "review_digest": "310df2ec1abde4bf3ab3701732c40f191d85a3e7b6fd8b86388ad4b02f75c01a",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    }
+  ],
+  "negative_reference_case": {
+    "case": "changed background",
+    "expected_sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+    "actual_sha256": "41ee8950d9f312365f41d59f0fb4c96ffdb333c5f661cd24149741f49a9ce5b8",
+    "reason": "Contributor changed base_color from approved fixture to #123456; generated image is new bytes and receives no carried approval.",
+    "checks": [
+      {
+        "name": "catalog precondition / identity / path",
+        "passed": true
+      },
+      {
+        "name": "exact immutable preview JPEG",
+        "passed": true
+      },
+      {
+        "name": "destination preimage",
+        "passed": true
+      },
+      {
+        "name": "no active references for removal",
+        "passed": true
+      },
+      {
+        "name": "approved reference bytes (main ten only)",
+        "passed": false
+      },
+      {
+        "name": "fresh render assets",
+        "passed": true
+      }
+    ]
+  },
+  "disposable": [
+    {
+      "identity": "fixture.playlist.disposable",
+      "action": "CREATE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Disposable Playlist (Timeline Order).jpg",
+      "sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+      "receipt": {
+        "identity": "fixture.playlist.disposable",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Disposable Playlist (Timeline Order).jpg",
+        "relative_path": "playlist/Disposable Playlist (Timeline Order).jpg",
+        "action": "CREATE",
+        "previous_sha256": null,
+        "destination_sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "fixture.playlist.disposable",
+          "destination": "playlist/Disposable Playlist (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+          "revision": 1,
+          "references": []
+        },
+        "catalog_sha256": "819ab3bef224dcd2cfebbad15f28120e7f2bfded622c2da51a60d9957cdcb959",
+        "review_digest": "7d724524f1643c0a605f88ad009a48c01aec4a48cc035f4df35fde2fd9cfbcdf",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "fixture.playlist.disposable",
+      "action": "REPLACE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Disposable Playlist (Timeline Order).jpg",
+      "sha256": "49dcaac8a5127cc73e88ff9b495a24b4c5d3f44ba2e8a47f1313ca77efbf6fe2",
+      "receipt": {
+        "identity": "fixture.playlist.disposable",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Disposable Playlist (Timeline Order).jpg",
+        "relative_path": "playlist/Disposable Playlist (Timeline Order).jpg",
+        "action": "REPLACE",
+        "previous_sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+        "destination_sha256": "49dcaac8a5127cc73e88ff9b495a24b4c5d3f44ba2e8a47f1313ca77efbf6fe2",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "fixture.playlist.disposable",
+          "destination": "playlist/Disposable Playlist (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "49dcaac8a5127cc73e88ff9b495a24b4c5d3f44ba2e8a47f1313ca77efbf6fe2",
+          "revision": 2,
+          "references": []
+        },
+        "catalog_sha256": "74d5bf8216f63f10ff93f1bc8cbba453fbcff3b1f3e0003ff6ba1de0e1b84893",
+        "review_digest": "9b834e5d700a15c5808e3bd0956d246c1d91e859ea3a8b488f6c3a69ee863c27",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "fixture.playlist.disposable",
+      "action": "REMOVE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Disposable Playlist (Timeline Order).jpg",
+      "sha256": "49dcaac8a5127cc73e88ff9b495a24b4c5d3f44ba2e8a47f1313ca77efbf6fe2",
+      "receipt": {
+        "identity": "fixture.playlist.disposable",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Disposable Playlist (Timeline Order).jpg",
+        "relative_path": "playlist/Disposable Playlist (Timeline Order).jpg",
+        "action": "REMOVE",
+        "previous_sha256": "49dcaac8a5127cc73e88ff9b495a24b4c5d3f44ba2e8a47f1313ca77efbf6fe2",
+        "destination_sha256": null,
+        "file_absent": true,
+        "catalog_entry": {
+          "identity": "fixture.playlist.disposable",
+          "destination": "playlist/Disposable Playlist (Timeline Order).jpg",
+          "status": "retired",
+          "sha256": null,
+          "revision": 5,
+          "references": [],
+          "last_sha256": "49dcaac8a5127cc73e88ff9b495a24b4c5d3f44ba2e8a47f1313ca77efbf6fe2"
+        },
+        "catalog_sha256": "260466c9d7136632ae4313eca50e2ea70ebed6434e1e30b94a0d2df2de093f33",
+        "review_digest": "ddc61ea10a502280806cf1404c45fa1aa8051e6c93e5289497061d2a1e4c38bf",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    },
+    {
+      "identity": "fixture.playlist.disposable",
+      "action": "RESTORE",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Disposable Playlist (Timeline Order).jpg",
+      "sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+      "receipt": {
+        "identity": "fixture.playlist.disposable",
+        "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\playlist\\Disposable Playlist (Timeline Order).jpg",
+        "relative_path": "playlist/Disposable Playlist (Timeline Order).jpg",
+        "action": "RESTORE",
+        "previous_sha256": null,
+        "destination_sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+        "file_absent": false,
+        "catalog_entry": {
+          "identity": "fixture.playlist.disposable",
+          "destination": "playlist/Disposable Playlist (Timeline Order).jpg",
+          "status": "active",
+          "sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+          "revision": 6,
+          "references": []
+        },
+        "catalog_sha256": "ab019f4560224d2435cfefa45c76d8babf6a06c5821ab0cd21d75d1777437422",
+        "review_digest": "638571dada2cf7f1eab2ca62560d8f8881cef18dfd2d735b3bfd0550ac60951f",
+        "match": true,
+        "simulation": true,
+        "publication_authorized": false
+      },
+      "verified": true
+    }
+  ],
+  "second_style": {
+    "identity": "fixture.franchise.disposable",
+    "action": "CREATE",
+    "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\franchise\\Disposable Franchise.jpg",
+    "sha256": "69ef986a7221ff189f1669a4a02788d0b816e23cd41b99193161aaffb5718484",
+    "receipt": {
+      "identity": "fixture.franchise.disposable",
+      "destination": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\generated-browser-session-33f4d0e\\destination\\franchise\\Disposable Franchise.jpg",
+      "relative_path": "franchise/Disposable Franchise.jpg",
+      "action": "CREATE",
+      "previous_sha256": null,
+      "destination_sha256": "69ef986a7221ff189f1669a4a02788d0b816e23cd41b99193161aaffb5718484",
+      "file_absent": false,
+      "catalog_entry": {
+        "identity": "fixture.franchise.disposable",
+        "destination": "franchise/Disposable Franchise.jpg",
+        "status": "active",
+        "sha256": "69ef986a7221ff189f1669a4a02788d0b816e23cd41b99193161aaffb5718484",
+        "revision": 1,
+        "references": []
+      },
+      "catalog_sha256": "e6160f0197ae4765c5fcb0c57b4578114b5d3b2683eb629becd770a6bf847b0c",
+      "review_digest": "e2d6a6243e962470f2a93b9e8e12ab831a303fead6373d46b151aba29de6cc0f",
+      "match": true,
+      "simulation": true,
+      "publication_authorized": false
+    },
+    "verified": true
+  },
+  "rejections": [
+    {
+      "id": "78b1c21f1e80903a4b9183e5",
+      "action": "CREATE",
+      "status": 409,
+      "error": "required_check_failed"
+    },
+    {
+      "id": "bfba4b0debfa0eaaa1143958",
+      "action": "CREATE",
+      "status": 403,
+      "error": "maintainer_required"
+    },
+    {
+      "id": "bfba4b0debfa0eaaa1143958",
+      "action": "CREATE",
+      "status": 403,
+      "error": "csrf_required"
+    },
+    {
+      "id": "b2dcf64f3bce79065f7e25a6",
+      "action": "REMOVE",
+      "status": 409,
+      "error": "required_check_failed"
+    },
+    {
+      "id": "b2dcf64f3bce79065f7e25a6",
+      "action": "REMOVE",
+      "status": 409,
+      "error": "required_check_failed"
+    }
+  ],
+  "catalog_sha256": "e6160f0197ae4765c5fcb0c57b4578114b5d3b2683eb629becd770a6bf847b0c",
+  "receipts_sha256": "8c5545791e5fa3ee5f7c7c93d3b57b1d4a942220782ce433985fbb35e1d6320c",
+  "fixture_manifest_sha256": "c04662d414b9057916bf24718c3246a89d21f4f8acee1bd536f4117ce344da90",
+  "browser_errors": [],
+  "external_requests": 0,
+  "elapsed_seconds": 66.263,
+  "restoration": "owned staging catalog only; native registry tombstone reuse remains blocked",
+  "native_lifecycle_replacement_acceptance": false,
+  "live_registry_reservations": "PENDING",
+  "live_catalog_mappings": "PENDING",
+  "publication_authorized": false
+}

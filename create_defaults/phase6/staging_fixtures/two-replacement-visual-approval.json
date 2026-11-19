@@ -1,0 +1,29 @@
+{
+  "kind": "offline-playlist-replacement-visual-approvals",
+  "date": "2026-11-17",
+  "reviewer": "maintainer in current conversation",
+  "message": "I approve the updated X-Men and Star Wars The Clone Wars renders.",
+  "decision": "APPROVED_FOR_STAGING_REPLACEMENT_FIXTURES",
+  "renderer_commit": "5503ea2481ca675c3c38d3e6e8472df0efe6a1e8",
+  "historical_comparison_sha256": "e9545f50a3212fc59347f47e06508176144cad25fdb87b8e1a3f274f4baf7fbb",
+  "catalog_file_sha256": "3082aa8194571c02483731476a002d9349fba9c18162c6d7e03779b3f629ad1a",
+  "replacements": [
+    {
+      "identity": "playlist.playlist-x-men-timeline-order.627ce505",
+      "display_name": "X-Men (Timeline Order)",
+      "destination": "playlist/X-Men (Timeline Order).jpg",
+      "approved_sha256": "5e513164bb873d739b2df9cc500521c7449060ce0bce98e3a5786cf002f8f63f",
+      "file": "approved/playlist/X-Men (Timeline Order).jpg"
+    },
+    {
+      "identity": "playlist.playlist-star-wars-the-clone-wars-timeline-order.c6750e0c",
+      "display_name": "Star Wars The Clone Wars (Timeline Order)",
+      "destination": "playlist/Star Wars The Clone Wars (Timeline Order).jpg",
+      "approved_sha256": "2de0e1ec2324c886301e771c92836acf42b4d92b60d2283e15e8f897b10fda22",
+      "file": "approved/playlist/Star Wars The Clone Wars (Timeline Order).jpg"
+    }
+  ],
+  "identities_and_destinations_unchanged": true,
+  "live_execution_authorized": false,
+  "publication_authorized": false
+}

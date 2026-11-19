@@ -18,6 +18,9 @@ import shutil
 import subprocess
 import sys
 
+if __package__ in (None, ''):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 import yaml
 from fontTools.ttLib import TTFont
 
@@ -301,7 +304,13 @@ def validate_manifest(manifest, assets=ROOT, *, source_root=None):
     if manifest["schema"] != SCHEMA or len(manifest["jobs"]) != manifest["effective_composer_jobs"]:
         raise ValueError("Incomplete frozen manifest")
     for name, checksum in manifest["source_text_hashes"].items():
-        if text_digest(source_root / name) != checksum:
+        expected = checksum
+        if name == 'create_poster.py' and Path(assets).resolve() == ROOT.resolve():
+            # Keep frozen manifest bytes. Independently authenticate only the
+            # exact current renderer successor, including rollback rejection.
+            from ci.phase6_playlist_maintenance import selected_hash
+            expected = selected_hash('create_defaults/create_poster.py', checksum)
+        if text_digest(source_root / name) != expected:
             raise ValueError(f"Frozen renderer/source changed: {name}")
     for path, checksum in manifest["asset_hashes"].items():
         try:

@@ -35,7 +35,7 @@ def _loaded_library_versions():
 
 def renderer_identity():
     root = Path(__file__).resolve().parents[1]
-    sources = {name: fingerprint((root / name).read_text(encoding="utf-8-sig").replace("\r\n", "\n")) for name in ("create_poster.py", "poster_text.py")}
+    sources = {name: fingerprint((root / name).read_text(encoding="utf-8-sig").replace("\r\n", "\n")) for name in ("create_poster.py", "poster_text.py", "image_layout.py", "poster_styles.py")}
     return {"sources": sources, "python": platform.python_version(), "platform": platform.system(),
             "libraries": dict(_loaded_library_versions()),
             "encoding": {"format": "JPEG", "quality": 100, "subsampling": 0}, "canvas": [2000, 3000]}
@@ -56,6 +56,13 @@ def effective_parameters(raw):
     for name in ("base_color", "font_color", "border_color"):
         result[name] = normalize_hex(raw[name])
     return result
+
+
+def render_fingerprint(job, renderer):
+    material = {key: job[key] for key in ('kind', 'parameters', 'inputs', 'dependencies', 'language_behavior')}
+    if 'composition_style' in job:
+        material['composition_style'] = job['composition_style']
+    return fingerprint(material | {'renderer': renderer})
 
 
 def validate_manifest(value):
@@ -85,7 +92,15 @@ def validate_manifest(value):
                 raise BulkError("incomplete_parameters", "Raw composer types/fields are invalid")
             if set(job["raw_parameters"]) != set(PosterOptions.__dataclass_fields__) or job["parameters"] != effective_parameters(job["raw_parameters"]):
                 raise BulkError("incomplete_parameters", "Invalid raw/effective composer record")
-        elif job["render_ready"] and (job["parameters"] != job["raw_parameters"] or value["renderer"]["encoding"] != {"format": "PNG", "compress_level": 9}
+        playlist = job['kind'] == 'poster' and job['poster_id'].startswith('playlist.')
+        explicit_styles = 'poster_styles.py' in value['renderer']['sources']
+        if playlist and explicit_styles:
+            from create_defaults.poster_styles import PLAYLIST
+            if job.get('composition_style') != PLAYLIST.id:
+                raise BulkError('composition_style', 'Playlist jobs require their exact composition style')
+        elif 'composition_style' in job:
+            raise BulkError('composition_style', 'Composition style does not belong to this job/renderer')
+        if job['kind'] == 'overlay' and job["render_ready"] and (job["parameters"] != job["raw_parameters"] or value["renderer"]["encoding"] != {"format": "PNG", "compress_level": 9}
                 or job["parameters"]["resampling"] != "Pillow-LANCZOS" or "bulk/overlays.py" not in value["renderer"]["sources"]
                 or job["parameters"]["box"] not in ([285, 85], [440, 100])
                 or not job["local_relative"].endswith(".png")
@@ -96,7 +111,7 @@ def validate_manifest(value):
             if (Path(job['local_relative']).name != source_name
                     or job['remote_relative'] is not None and Path(job['remote_relative']).name != source_name):
                 raise BulkError('overlay_basename', 'Both overlay destinations must preserve the exact authoritative source basename')
-        expected = fingerprint({key: job[key] for key in ("kind", "parameters", "inputs", "dependencies", "language_behavior")} | {"renderer": value["renderer"]})
+        expected = render_fingerprint(job, value['renderer'])
         if expected != job["render_fingerprint"]:
             raise BulkError("corrupt_manifest", "Render fingerprint mismatch")
     return value
@@ -255,7 +270,10 @@ class Planner:
                     "local_relative": local, "remote_relative": item["output"]["remote_paths"][language],
                     "layout_evidence": item["layout"], "color_assignment": item["color_assignment"], "status": "planned",
                     "render_ready": item["caption"]["direction"] == "auto"}
-                job["render_fingerprint"] = fingerprint({key: job[key] for key in ("kind", "parameters", "inputs", "dependencies", "language_behavior")} | {"renderer": renderer})
+                if item['category'] == 'Playlist':
+                    from create_defaults.poster_styles import PLAYLIST
+                    job['composition_style'] = PLAYLIST.id
+                job["render_fingerprint"] = render_fingerprint(job, renderer)
                 jobs.append(job)
                 by_identity[(identity, language)] = job
         result = {"schema_version": 1, "kind": "bulk-plan", "renderer": renderer, "jobs": jobs,

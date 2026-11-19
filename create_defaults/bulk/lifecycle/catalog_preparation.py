@@ -40,14 +40,24 @@ class OwnedCatalog:
     No path/URL/repository selector and no constructor adopting an existing root.
     Actual checked-in catalog bytes seed it; ownership is explicitly simulated.
     """
-    def __init__(self,trial):
+    def __init__(self,trial,*,offline_playlist_pilot=None):
         if type(trial) is not CompositionTrial or trial._closed:fail('owned_trial_required')
+        self.pilot=offline_playlist_pilot
+        self.category='Genre'
+        self.files=FILES
+        if self.pilot is not None:
+            from create_defaults.phase6.playlist import OfflinePlaylistPilot
+            if type(self.pilot) is not OfflinePlaylistPilot:fail('source_ownership')
+            self.pilot.require_trial(trial)
+            self.category='Playlist'
+            self.files=(*FILES,'playlist.yml')
+        self.catalog_name=self.category.lower()+'.yml'
         self.trial=trial;self.root=Path(tempfile.mkdtemp(prefix='m5-source-',dir=trial.root)).resolve()
         self.origin_head=git(ROOT,'rev-parse','HEAD').decode().strip()
-        self.origin={name:(ROOT/CATALOG/name).read_bytes() for name in FILES}
-        self.original_definitions={d.id:d.data for d in load_definitions([ROOT/CATALOG/'genre.yml'],profiles_path=ROOT/CATALOG/'profiles.yml')}
+        self.origin={name:(ROOT/CATALOG/name).read_bytes() for name in self.files}
+        self.original_definitions={d.id:d.data for d in load_definitions([ROOT/CATALOG/self.catalog_name],profiles_path=ROOT/CATALOG/'profiles.yml')}
         self.original_index=decode_json(self.origin['index-v1.json'])
-        self._validated_genre=sha(self.origin['genre.yml'])
+        self._validated_genre=sha(self.origin[self.catalog_name])
         for name,raw in self.origin.items():
             actual=git(ROOT,'show',self.origin_head+':'+CATALOG+name)
             if actual.replace(b'\r\n',b'\n')!=raw.replace(b'\r\n',b'\n'):fail('dirty_source')
@@ -56,34 +66,43 @@ class OwnedCatalog:
         git(self.root,'init','-b','main')
         for key,value in {'user.name':'Offline M5','user.email':'offline@invalid.local','core.autocrlf':'false',
                 'core.hooksPath':str(self.root/'no-hooks')}.items():git(self.root,'config',key,value)
-        git(self.root,'add','--','ownership.json',*(CATALOG+n for n in FILES))
+        git(self.root,'add','--','ownership.json',*(CATALOG+n for n in self.files))
         git(self.root,'commit','-m','Owned offline catalog preimage')
 
     def require(self):
+        expected_files=FILES if self.category=='Genre' else (*FILES,'playlist.yml')
+        if (self.category not in {'Genre','Playlist'} or self.files!=expected_files
+                or self.catalog_name!=self.category.lower()+'.yml'
+                or (self.pilot is None)!=(self.category=='Genre')):fail('source_ownership')
         if type(self.trial) is not CompositionTrial or self.trial._closed:fail('closed_source')
         if not self.root.is_relative_to(self.trial.root) or not self.root.name.startswith('m5-source-') or decode_json((self.root/'ownership.json').read_bytes())!=MARKER:fail('source_ownership')
         if git(self.root,'remote').strip() or git(self.root,'branch','--show-current').decode().strip()!='main':fail('source_ownership')
         if Path(git(self.root,'rev-parse','--absolute-git-dir').decode().strip()).resolve()!=self.root/'.git':fail('source_ownership')
         if git(self.root,'status','--porcelain').strip():fail('stale_source')
+        if self.pilot is not None:self.pilot.require_trial(self.trial)
 
     def observe(self):
         self.require()
         head=git(self.root,'rev-parse','HEAD').decode().strip()
         files={}
-        for name in FILES:
+        for name in self.files:
             path=confined(self.root,CATALOG+name,must_exist=True);raw=path.read_bytes()
             if len(raw)>(MAX_BINARY if name=='index-v1.json' else 2_000_000) or git(self.root,'show',head+':'+CATALOG+name)!=raw:fail('source_blob')
             mode=git(self.root,'ls-tree',head,'--',CATALOG+name).decode().split()[0]
             if mode!='100644':fail('source_mode')
             files[name]=dict(sha256=sha(raw),git_blob=git(self.root,'rev-parse',head+':'+CATALOG+name).decode().strip())
         paths=set(tree_row.split(b'\t',1)[1].decode() for tree_row in git(self.root,'ls-tree','-r','-z',head).split(b'\0') if tree_row)
-        if paths!={'ownership.json',*(CATALOG+n for n in FILES)}:fail('source_root')
+        if paths!={'ownership.json',*(CATALOG+n for n in self.files)}:fail('source_root')
         if (self.root/CATALOG/'profiles.yml').read_bytes()!=self.origin['profiles.yml']:fail('locked_profile')
-        if files['genre.yml']['sha256']!=self._validated_genre:
-            definitions={d.id:d.data for d in load_definitions([self.root/CATALOG/'genre.yml'],profiles_path=self.root/CATALOG/'profiles.yml')}
+        if self.pilot is not None and (self.root/CATALOG/'genre.yml').read_bytes()!=self.origin['genre.yml']:fail('historical_catalog_change')
+        if files[self.catalog_name]['sha256']!=self._validated_genre:
+            definitions={d.id:d.data for d in load_definitions([self.root/CATALOG/self.catalog_name],profiles_path=self.root/CATALOG/'profiles.yml')}
             if any(definitions.get(i)!=d for i,d in self.original_definitions.items()):fail('historical_catalog_change')
-            if any(re.fullmatch(r'genre\.[0-9a-f]{32}',i) is None for i in definitions.keys()-self.original_definitions.keys()):fail('catalog_scope')
-            self._validated_genre=files['genre.yml']['sha256']
+            if any(re.fullmatch(self.category.lower()+r'\.[0-9a-f]{32}',i) is None for i in definitions.keys()-self.original_definitions.keys()):fail('catalog_scope')
+            if self.pilot is not None:
+                additions={i:d for i,d in definitions.items() if i not in self.original_definitions}
+                if additions:self.pilot.require_definitions(additions)
+            self._validated_genre=files[self.catalog_name]['sha256']
         index=decode_json((self.root/CATALOG/'index-v1.json').read_bytes())
         if index['sha256']!=fingerprint({k:v for k,v in index.items() if k!='sha256'}):fail('catalog_index')
         if any(index['posters'].get(i)!=r for i,r in self.original_index['posters'].items()):fail('historical_index_change')
@@ -164,9 +183,10 @@ def _patch_yaml(raw,encoded_desired):
     return result
 
 
-def patch_index(raw,required):
+def patch_index(raw,required,*,category='Genre'):
     if len(raw)>MAX_BINARY:fail('catalog_bound')
-    return _patch_index(raw,tuple(sorted(required)))
+    if category not in {'Genre','Playlist'}:fail('catalog_scope')
+    return _patch_index(raw,tuple(sorted(required)),category)
 
 
 def _json_encoded(value):return json.dumps(value,separators=(',',':'),ensure_ascii=True,allow_nan=False)
@@ -182,7 +202,7 @@ def _json_span(value,key):
 
 
 @lru_cache(maxsize=4)
-def _patch_index(raw,required):
+def _patch_index(raw,required,category='Genre'):
     value=decode_json(raw)
     # Accept only the existing compact index representation. Original strict
     # JSON parsing supplies structure; no second parser or whole-file rewrite.
@@ -191,7 +211,7 @@ def _patch_index(raw,required):
     if value['sha256']!=fingerprint({k:v for k,v in value.items() if k!='sha256'}):fail('catalog_index')
     result=deepcopy(value);fresh={}
     for identity in sorted(required):
-        record=dict(definition=identity,category='Genre',dependencies=[])
+        record=dict(definition=identity,category=category,dependencies=[])
         if identity in value['posters']:
             if value['posters'][identity]!=record:fail('catalog_index_membership')
         else:result['posters'][identity]=record;fresh[identity]=record
@@ -222,12 +242,13 @@ class CatalogPatch:
                 or value['kind']!='phase5-owned-catalog-patch' or value['simulation'] is not True
                 or value['production_authorized'] is not False):fail('catalog_schema')
         if (value['source']!=json.loads(self.observation_json) or value['members']!=sorted(desired)
-                or value['definitions_sha256']!=fingerprint(desired) or set(value['files'])!=set(FILES)):fail('catalog_membership')
-        current={n:confined(self.source.root,CATALOG+n,must_exist=True).read_bytes() for n in FILES}
-        expected=dict(current,**{'genre.yml':patch_yaml(current['genre.yml'],desired),
-            'index-v1.json':patch_index(current['index-v1.json'],desired)})
+                or value['definitions_sha256']!=fingerprint(desired) or set(value['files'])!=set(self.source.files)):fail('catalog_membership')
+        if self.source.pilot is not None:self.source.pilot.require_definitions(desired)
+        current={n:confined(self.source.root,CATALOG+n,must_exist=True).read_bytes() for n in self.source.files}
+        expected=dict(current,**{self.source.catalog_name:patch_yaml(current[self.source.catalog_name],desired),
+            'index-v1.json':patch_index(current['index-v1.json'],desired,category=self.source.category)})
         for name,row in value['files'].items():
-            if name not in FILES:fail('catalog_root')
+            if name not in self.source.files:fail('catalog_root')
             if sha(archive.read_bytes(row['before_object']))!=row['before_sha256'] or sha(archive.read_bytes(row['after_object']))!=row['after_sha256']:fail('catalog_object')
             if archive.read_bytes(row['before_object'])!=current[name] or archive.read_bytes(row['after_object'])!=expected[name]:fail('catalog_postimage')
         return value
@@ -235,29 +256,32 @@ class CatalogPatch:
 
 def prepare_catalog(source,desired,*,cancel=None,checkpoint=lambda name:None):
     if type(source) is not OwnedCatalog:fail('source_ownership')
-    if not desired or any(re.fullmatch(r'genre\.[0-9a-f]{32}',i) is None or d.get('id')!=i or d.get('category')!='Genre' or d.get('generator') is not None for i,d in desired.items()):fail('catalog_scope')
+    if not desired or any(re.fullmatch(source.category.lower()+r'\.[0-9a-f]{32}',i) is None or d.get('id')!=i or d.get('category')!=source.category or d.get('generator') is not None for i,d in desired.items()):fail('catalog_scope')
+    if source.pilot is not None:
+        source.pilot.require_definitions(desired)
+        if set(desired)&set(source.original_index['posters']):fail('playlist_pilot_add_only')
     observation=source.observe();checkpoint('before_catalog')
     if cancel is not None and cancel():fail('cancelled')
-    raw={n:confined(source.root,CATALOG+n,must_exist=True).read_bytes() for n in FILES}
+    raw={n:confined(source.root,CATALOG+n,must_exist=True).read_bytes() for n in source.files}
     stage=confined(source.trial.root,'m5-catalog/'+fingerprint(dict(source=observation,desired=desired)))
     stage.mkdir(parents=True,exist_ok=True)
-    before=load_definitions([source.root/CATALOG/'genre.yml'],profiles_path=source.root/CATALOG/'profiles.yml')
+    before=load_definitions([source.root/CATALOG/source.catalog_name],profiles_path=source.root/CATALOG/'profiles.yml')
     old={d.id:d.data for d in before}
     # Original metadata planner must agree with the complete preimage lookup.
     expanded,_,_=Planner().expand(before)
     index=decode_json(raw['index-v1.json'])
-    if {i for i,r in index['posters'].items() if r['category']=='Genre'}!=set(expanded):fail('catalog_index_membership')
-    post=dict(raw);post['genre.yml']=patch_yaml(raw['genre.yml'],desired)
-    post['index-v1.json']=patch_index(raw['index-v1.json'],desired)
+    if {i for i,r in index['posters'].items() if r['category']==source.category}!=set(expanded):fail('catalog_index_membership')
+    post=dict(raw);post[source.catalog_name]=patch_yaml(raw[source.catalog_name],desired)
+    post['index-v1.json']=patch_index(raw['index-v1.json'],desired,category=source.category)
     for name,data in post.items():atomic_bytes(stage/name,data,replace=True)
-    after=load_definitions([stage/'genre.yml'],profiles_path=stage/'profiles.yml')
+    after=load_definitions([stage/source.catalog_name],profiles_path=stage/'profiles.yml')
     expected=dict(old,**desired)
     if {d.id:d.data for d in after}!=expected:fail('unintended_definition_change')
     jobs,families,_=Planner().expand(after)
     if families or set(jobs)!=set(expected):fail('unintended_job_change')
     if any(jobs[i].data!=old[i] for i in old if i not in desired):fail('unrelated_job_change')
     new_index=decode_json(post['index-v1.json'])
-    if {i for i,r in new_index['posters'].items() if r['category']=='Genre'}!=set(jobs):fail('catalog_index_membership')
+    if {i for i,r in new_index['posters'].items() if r['category']==source.category}!=set(jobs):fail('catalog_index_membership')
     if any(new_index['posters'][i]!=r for i,r in index['posters'].items()):fail('unrelated_index_change')
     checkpoint('after_postimage')
     if cancel is not None and cancel():fail('cancelled')
@@ -265,7 +289,7 @@ def prepare_catalog(source,desired,*,cancel=None,checkpoint=lambda name:None):
     archive=CompositionArchive(source.trial.config.cache_dir)
     value=dict(version=1,kind='phase5-owned-catalog-patch',source=observation,members=sorted(desired),
         definitions_sha256=fingerprint(desired),files={n:dict(before_sha256=sha(raw[n]),after_sha256=sha(post[n]),
-            before_object=archive.put_bytes(raw[n]),after_object=archive.put_bytes(post[n])) for n in FILES},
+            before_object=archive.put_bytes(raw[n]),after_object=archive.put_bytes(post[n])) for n in source.files},
         unchanged_definitions_sha256=fingerprint({i:d for i,d in old.items() if i not in desired}),
         unchanged_jobs=len(old.keys()-desired.keys()),simulation=True,production_authorized=False)
     archive.put_json(value)

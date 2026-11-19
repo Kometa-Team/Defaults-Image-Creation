@@ -193,12 +193,41 @@ def _verify_owned(root):
     return _verify(root,True)
 
 
+def _unicode_cohort_proof(root):
+    bindings, owned = _verify_fresh(root, True)
+    # Immutable witness only; each consumer receives independent binding dicts.
+    return tuple((name, tuple(sorted(row.items()))) for name, row in sorted(bindings.items())), owned
+
+
+def _projection_leaf(root, name):
+    from ci.phase5_m7_maintenance import _cohort_proof
+    entry = _cohort_proof(root, _unicode_cohort_proof)
+    if entry is not None:
+        expected, text_lf = next(row[1:] for row in entry[1][1] if row[0] == name)
+        if digest(regular(root, name).read_bytes(), text_lf) != expected:
+            raise ValueError('Changed aggregate Unicode projection input: '+name)
+
+
 @_m7_owned_call
 def _verify(root, owned):
+    from ci.phase5_m7_maintenance import _cohort_proof
+    entry = _cohort_proof(root, _unicode_cohort_proof)
+    if entry is None:
+        return _verify_fresh(root, owned)
+    rows, witness = entry
+    # Only an existing synchronous aggregate can reuse the entry proof. Its
+    # closing proof reexecutes all checks below, including every physical file
+    # and fresh HEAD. Existing COLLECTION closing proofs remain unchanged.
+    return {name:dict(row) for name,row in rows}, witness if owned else None
+
+
+def _verify_fresh(root, owned):
     if Path(root).resolve() != ROOT.resolve():
         raise ValueError('Foreign Unicode policy checkout')
     from ci.phase5_m5_maintenance import UNICODE_ADAPTER_SHA256
-    if digest(regular(ROOT, 'ci/people_unicode_maintenance.py').read_bytes()) != UNICODE_ADAPTER_SHA256:
+    from ci.phase6_playlist_maintenance import selected_hash as pilot_hash
+    expected_adapter=pilot_hash('ci/people_unicode_maintenance.py',UNICODE_ADAPTER_SHA256)
+    if digest(regular(ROOT, 'ci/people_unicode_maintenance.py').read_bytes()) != expected_adapter:
         raise ValueError('Changed independently pinned Unicode adapter')
     publication = publication_adapter()
     headers = _owned_headers(root,publication) if owned else None
@@ -226,6 +255,9 @@ def _verify(root, owned):
         if name == 'create_defaults/phase4/tests/test_ci_foundations.py':
             from ci.phase5_m6_maintenance import historical_bytes as m6_bytes
             current = m6_bytes(root, name, current)
+        if name == 'ci/phase4_transactions.py':
+            from ci.phase5_m7_maintenance import historical_bytes as transaction_history
+            current = transaction_history(root,name,current)
         if name == m6.PEOPLE_PR65_REQUIREMENTS:
             current = m6.people_pr65_bytes(root, name, current)
         if name in publication_bindings:
@@ -263,6 +295,7 @@ def historical_bytes(root, name, current):
     if name not in SOURCE_MEMBERS | CI_MEMBERS:
         return current
     binding = verify(root)[name]
+    _projection_leaf(root, name)
     from ci.phase5_m6_maintenance import people_pr65_bytes
     current = people_pr65_bytes(root, name, current)
     if binding['before_sha256'] is not None and digest(current, binding['text_lf']) == binding['sha256']:
@@ -277,6 +310,7 @@ def selected_hash(name, expected):
     if name not in SOURCE_MEMBERS | CI_MEMBERS:
         return publication_adapter().timeout_hash(name, expected)
     binding = verify()[name]
+    _projection_leaf(ROOT, name)
     selected = binding['sha256'] if binding['before_sha256'] is not None and expected == binding['before_sha256'] else expected
     from ci.phase5_m6_maintenance import people_pr65_bindings, PEOPLE_PR65_REQUIREMENTS
     if name == PEOPLE_PR65_REQUIREMENTS and selected == binding['sha256']:

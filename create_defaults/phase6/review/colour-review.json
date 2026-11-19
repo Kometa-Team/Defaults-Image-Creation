@@ -1,0 +1,564 @@
+{
+  "kind": "offline-playlist-colour-review",
+  "head": "5503ea2481ca675c3c38d3e6e8472df0efe6a1e8",
+  "simulation": true,
+  "renderer": {
+    "sources": {
+      "create_poster.py": "ecf84c06bfeb5a7ee54b9f976d9fcd1de0dabb0680558e48cd975126d19af472",
+      "poster_text.py": "1eb975693eec7c4369b83dc1e5e578d515319a061fcda2cd1950920aee438584",
+      "image_layout.py": "94500d30cec6b6f6b6c7c546adc4d5d0665b949ab6b849c3ce80306e0bc15403",
+      "poster_styles.py": "e9657fd5c56991926c8fceaff7936c04503eca7eb9fcba43a70798a5bbf14813"
+    },
+    "python": "3.13.17",
+    "platform": "Windows",
+    "libraries": {
+      "Pillow": "12.0.0",
+      "fonttools": "4.60.1",
+      "uharfbuzz": "0.56.3",
+      "python-bidi": "0.6.11"
+    },
+    "encoding": {
+      "format": "JPEG",
+      "quality": 100,
+      "subsampling": 0
+    },
+    "canvas": [
+      2000,
+      3000
+    ]
+  },
+  "layout_approvals": {
+    "source": "explicit maintainer message",
+    "date": "2026-11-17",
+    "titles": [
+      "The Walking Dead Universe",
+      "Star Wars The Clone Wars",
+      "X-Men"
+    ],
+    "scope": "layout only"
+  },
+  "background_assignments_approved": false,
+  "live_registry_reservations": "PENDING",
+  "catalog_mappings": "PENDING",
+  "publication_authorized": false,
+  "prior_fixture_renders_unchanged": true,
+  "source_and_catalog_hashes_unchanged": true,
+  "input_sha256": {
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\franchise.yml": "95ee4f232ff99fdf3cb15c637a59835dfcf6d385b9162c278d7e68de99d2cd4f",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\country.yml": "2dfcfce36afeccf83a99b41396ef856ec3167d19b309d9d45e4ad618b56dafac",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\playlist.yml": "3082aa8194571c02483731476a002d9349fba9c18162c6d7e03779b3f629ad1a",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\audiolanguage.yml": "27a55b708fded8aeb59b61cea06a0684025f9ff008589ab7273a6b38e98b5421",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\phase6\\assets\\stargate.png": "5842312151e2ae56020b94d030a447f886df49ac55f537129eb3187a1faeeab7",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\awards.yml": "294a0c255d972abc595009693fda31aad89a363e0fdbb763f41938b8604c0937",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\resolution.yml": "de2fa9340fd22adacda929b524c3868d1a805d2bde7976844793985a558883d2",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\studio.yml": "6c335c205a5559ee9840abb6ca4a30670faf08e3935e29064c021e31d72122f8",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\decade.yml": "84845bb39820ec96dc93397c954d6c1f774576ba1bbe8d1f2856ead063dc6039",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\profiles.yml": "fbdf6e652f5d5ec9917607cd6a9e524c31412bdc752481b2b6eb54d3269c8a76",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\universe.yml": "2995b764032c24fe6d0f6bd91285264f36d15fa8110a80e17c1971776d2f2fc5",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\phase6\\assets\\wdu.png": "f0ead3bedf57bfc333ea1517a12fba6e0f330d5cf941b27bc351398302f12cd1",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\network.yml": "a8fbce68b219b512e05163007c2fa7abac0bfa8cb674806139cfffc3f599147e",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\based.yml": "3f71d2eee1a32216a66f7c5bc43dceda149707474e0292e2290851e6c38dfb61",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\phase6\\PLAYLIST_PILOT_MANIFEST.json": "98856b4356cb8ccf72903532a7bcad6cb57595bb16f8db3fa28d75922190946f",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\seasonal.yml": "8bc4db37bd2aa986cfa20be02c1fb45ffdfa82a1bc19474aaa115ed98d06bd7c",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\phase6\\assets\\babylon.png": "fdf89f346410d2c0e9656bc9223ee35e7cc6377969f96cbaeffc3e9abf8e7e6a",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\aspect.yml": "e5e4801b80c4286e9a16e8896093d2da34a88a3769b5fa4b09bc32dba655272f",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\phase6\\assets\\sao.png": "62c341d8c212eedfc070e72034db5aa530ef7ab7d3efe2ad46ed4eb9ee3e0209",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\phase6\\assets\\avp.png": "121346d7375b741052e862b4e7124887bd1b85a1fb2e0c9c296e91669b1482d2",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\year.yml": "0e153723c553bbf29ac55a7774443dba7d4f8bb9bb05c70050728cef40a26ac4",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\phase6\\assets\\jrrt.png": "bab84403116d5c948fd4710640c3ecb0859dead9191eb75fdfeb492d4e473556",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\genre.yml": "5e13ec94f256657592c31adf6cfacbb2f5a5a2ed9f707c7c126a8e580e9e102e",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\phase6\\assets\\bsg.png": "f59cf12ea9578825c118aa39e8e5209dc9d30ec4d3402c776fbb846ff133a276",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\chart.yml": "05c3fb990432935c7a12c9c3339f3a4cf48838882e2d959368d032346870c800",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\create_default_posters.ps1": "d01b6327f9e0535f7f74b78c85729713957ae5ae2f4aab6cd5d86e66ad28bd83",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\phase6\\assets\\gundam.png": "647992caa06ae2d2c1fd1210762f44cde0981699fd6242573a17342a88ac88e3",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\separators.yml": "5261ced521dd0e90b933222d4a75227fcf078ce2a4da481ccbba4599d2e59363",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\subtitlelanguage.yml": "07d296f9b328688902c8fdd5acc9a0b319dccc7fb25a7752931e302957927666",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\streaming.yml": "a2836cedb5b4c72f41e02ecc4a0d75b826317767cdf104e1f76ecc4c1c23483d",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\videoformat.yml": "4765ae60b14fdc5a4b073d01bfdd08f9c8e6813882d0ecd73d479379da30414f",
+    "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\bulk\\catalog\\contentrating.yml": "af8c63ee51cb72c0ca3b7ba67cb704344542b4aee301544f938b03948ce3522f"
+  },
+  "contact_sheet": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\colour-proposals\\eight-poster-colour-proposals.png",
+  "contact_sheet_sha256": "e4abeac2d62c028ce809824eb1311b7b3758383a36ce1fc7b1a0ab40d544b87e",
+  "posters": [
+    {
+      "request": "avp",
+      "display_name": "Alien & Predator",
+      "identity": "playlist.feec6426d0134e93973e8a2b36bd1ebe",
+      "base_colour": "#1EAC1B",
+      "origin": "existing-franchise-colour",
+      "rationale": "Alien Predator",
+      "playlist_colour_approved": false,
+      "gradient": 1,
+      "gradient_asset": "fades/@center-out-fade.png",
+      "source": {
+        "path": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\create_default_posters.ps1",
+        "line": 4504,
+        "file_sha256": "d01b6327f9e0535f7f74b78c85729713957ae5ae2f4aab6cd5d86e66ad28bd83",
+        "recorded_line": "'| Alien Predator.png| +0| 1600| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Alien Predator| #1EAC1B| 1| 1| 0| 1',"
+      },
+      "path": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\colour-proposals\\playlist\\Alien & Predator (Timeline Order).jpg",
+      "sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            1592,
+            540
+          ],
+          "fitted_size": [
+            1600,
+            543
+          ],
+          "visible_bounds": [
+            200,
+            1028,
+            1800,
+            1571
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.0050251256281406,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 324
+      }
+    },
+    {
+      "request": "babylon",
+      "display_name": "Babylon 5",
+      "identity": "playlist.2d41498dd84b47a58ffd8f1728bfa32f",
+      "base_colour": "#5B4A86",
+      "origin": "new-colour-proposal",
+      "rationale": "muted violet proposal",
+      "playlist_colour_approved": false,
+      "gradient": 1,
+      "gradient_asset": "fades/@center-out-fade.png",
+      "path": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\colour-proposals\\playlist\\Babylon 5 (Timeline Order).jpg",
+      "sha256": "4bde3a4a13e08ed9a30a8c2e7ed760d3959eab18d4edeaf2d710c29de6a4a0ca",
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            521,
+            251
+          ],
+          "fitted_size": [
+            1600,
+            771
+          ],
+          "visible_bounds": [
+            200,
+            914,
+            1800,
+            1685
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 3.071017274472169,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 210
+      }
+    },
+    {
+      "request": "bsg",
+      "display_name": "Battlestar Galactica",
+      "identity": "playlist.ca5bf3fafc7a4f888dbee738fc6fea09",
+      "base_colour": "#3C6382",
+      "origin": "new-colour-proposal",
+      "rationale": "steel blue proposal",
+      "playlist_colour_approved": false,
+      "gradient": 1,
+      "gradient_asset": "fades/@center-out-fade.png",
+      "path": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\colour-proposals\\playlist\\Battlestar Galactica (Timeline Order).jpg",
+      "sha256": "4db6f349cd3591c4a3d52b642dfd6f253294fccba130d0558b7085cf973a429c",
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            894,
+            168
+          ],
+          "fitted_size": [
+            1600,
+            301
+          ],
+          "visible_bounds": [
+            200,
+            1149,
+            1800,
+            1450
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.7897091722595078,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 445
+      }
+    },
+    {
+      "request": "gundam",
+      "display_name": "Mobile Suit Gundam",
+      "identity": "playlist.70487260288d489fa6e4d06672990a67",
+      "base_colour": "#285DA8",
+      "origin": "new-colour-proposal",
+      "rationale": "royal blue proposal",
+      "playlist_colour_approved": false,
+      "gradient": 1,
+      "gradient_asset": "fades/@center-out-fade.png",
+      "path": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\colour-proposals\\playlist\\Mobile Suit Gundam (Timeline Order).jpg",
+      "sha256": "864a16e906d71b3b9eaabe01ff9dca5f55d1cdee1527489fbf08b9a545e0b273",
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            1090,
+            319
+          ],
+          "fitted_size": [
+            1600,
+            468
+          ],
+          "visible_bounds": [
+            200,
+            1066,
+            1800,
+            1534
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.4678899082568808,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 361
+      }
+    },
+    {
+      "request": "jrrt",
+      "display_name": "Middle-earth",
+      "identity": "playlist.5eba47e8c0a04c2e9914f6618b621f2c",
+      "base_colour": "#C28A25",
+      "origin": "existing-franchise-colour",
+      "rationale": "Middle Earth",
+      "playlist_colour_approved": false,
+      "gradient": 1,
+      "gradient_asset": "fades/@center-out-fade.png",
+      "source": {
+        "path": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\create_default_posters.ps1",
+        "line": 4553,
+        "file_sha256": "d01b6327f9e0535f7f74b78c85729713957ae5ae2f4aab6cd5d86e66ad28bd83",
+        "recorded_line": "'| Middle Earth.png| +0| 1600| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Middle Earth| #C28A25| 1| 1| 0| 1',"
+      },
+      "path": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\colour-proposals\\playlist\\Middle-earth (Timeline Order).jpg",
+      "sha256": "2e6ba926238e2c7d5213701a08d2c9cefe498ffa6c54c9c411ee488679b764d3",
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            1593,
+            345
+          ],
+          "fitted_size": [
+            1600,
+            347
+          ],
+          "visible_bounds": [
+            200,
+            1126,
+            1800,
+            1473
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.0043942247332078,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 422
+      }
+    },
+    {
+      "request": "sao",
+      "display_name": "Sword Art Online",
+      "identity": "playlist.c48a75120f4f4a8aa290c3683b2dc1d2",
+      "base_colour": "#25A6B2",
+      "origin": "new-colour-proposal",
+      "rationale": "cyan teal proposal",
+      "playlist_colour_approved": false,
+      "gradient": 1,
+      "gradient_asset": "fades/@center-out-fade.png",
+      "path": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\colour-proposals\\playlist\\Sword Art Online (Timeline Order).jpg",
+      "sha256": "0221887405a7b2526afae40e0f770a8e9feb5ebbdde86789ce0c6125c7d201db",
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            1280,
+            196
+          ],
+          "fitted_size": [
+            1600,
+            245
+          ],
+          "visible_bounds": [
+            200,
+            1177,
+            1800,
+            1422
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.25,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 473
+      }
+    },
+    {
+      "request": "stargate",
+      "display_name": "Stargate",
+      "identity": "playlist.11d52d3953a64d0faabcd7a692fbb87f",
+      "base_colour": "#6C73A1",
+      "origin": "existing-franchise-colour",
+      "rationale": "Stargate",
+      "playlist_colour_approved": false,
+      "gradient": 1,
+      "gradient_asset": "fades/@center-out-fade.png",
+      "source": {
+        "path": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\create_default_posters.ps1",
+        "line": 4583,
+        "file_sha256": "d01b6327f9e0535f7f74b78c85729713957ae5ae2f4aab6cd5d86e66ad28bd83",
+        "recorded_line": "'| Stargate.png| +0| 1600| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | Stargate| #6C73A1| 1| 1| 0| 1',"
+      },
+      "path": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\colour-proposals\\playlist\\Stargate (Timeline Order).jpg",
+      "sha256": "8d93feff5ba739ba5aa31a0ba40b0d533e66a32cdf0a5857c8fd1fd76eec5e86",
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            2000,
+            258
+          ],
+          "fitted_size": [
+            1600,
+            206
+          ],
+          "visible_bounds": [
+            200,
+            1197,
+            1800,
+            1403
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 0.8,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 492
+      }
+    },
+    {
+      "request": "wdu",
+      "display_name": "The Walking Dead Universe",
+      "identity": "playlist.0aabd1b1c7d44b198858057648ba9514",
+      "base_colour": "#797F48",
+      "origin": "existing-franchise-colour",
+      "rationale": "The Walking Dead",
+      "playlist_colour_approved": false,
+      "gradient": 1,
+      "gradient_asset": "fades/@center-out-fade.png",
+      "source": {
+        "path": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\style-candidate\\create_defaults\\create_default_posters.ps1",
+        "line": 4595,
+        "file_sha256": "d01b6327f9e0535f7f74b78c85729713957ae5ae2f4aab6cd5d86e66ad28bd83",
+        "recorded_line": "'| The Walking Dead.png| +0| 1600| +0| ComfortAa-Medium| | #FFFFFF| 0| 15| #FFFFFF| | The Walking Dead| #797F48| 1| 1| 0| 1',"
+      },
+      "path": "C:\\Users\\bullmoose20\\Defaults-Image-Creation\\review\\phase6-playlist\\colour-proposals\\playlist\\The Walking Dead Universe (Timeline Order).jpg",
+      "sha256": "a6622b755f339e22d813d98adc0d60c3d9289c172b0c2a224fceb32cb96413b3",
+      "composition_style": {
+        "id": "playlist-contained-v1",
+        "fit_policy": "contain-visible-alpha",
+        "logo": {
+          "source_alpha_bounds": [
+            0,
+            0,
+            647,
+            710
+          ],
+          "fitted_size": [
+            820,
+            900
+          ],
+          "visible_bounds": [
+            590,
+            850,
+            1410,
+            1750
+          ],
+          "box": [
+            200,
+            850,
+            1800,
+            1750
+          ],
+          "scale": 1.267605633802817,
+          "vertical_alignment": "center"
+        },
+        "caption_box": [
+          50,
+          1850,
+          1950,
+          2050
+        ],
+        "caption_visible_bounds": [
+          623,
+          1895,
+          1376,
+          2004
+        ],
+        "minimum_vertical_gap": 100,
+        "measured_gap": 145
+      }
+    }
+  ]
+}
