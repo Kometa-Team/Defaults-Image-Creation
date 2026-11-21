@@ -110,6 +110,16 @@ class CatalogReservationTests(unittest.TestCase):
         with patch.object(CatalogReservations,'_commit',synchronized),ThreadPoolExecutor(max_workers=2) as pool:
             results=list(pool.map(run,(1,2)))
         self.assertEqual(1,sum(r is not None for r in results));self.assertEqual(1,len(self.open().state()[1]['entries']))
+        winner=next(r for r in results if r is not None)
+        loser=results.index(None)+1
+        request=request_for('Concurrent '+str(loser),'concurrent-'+str(loser),'logos_playlist/concurrent-'+str(loser)+'.png')
+        retried=self.open().reserve(expected=self.registry.head(),**request)
+        head,ledger=self.open().state()
+        self.assertEqual({winner['entry']['id'],retried['entry']['id']},{e['id'] for e in ledger['entries']})
+        self.assertEqual(2,len(ledger['requests']))
+        restarted=self.open().reserve(expected=expected,**request)
+        self.assertTrue(restarted['reused']);self.assertEqual(retried['entry'],restarted['entry'])
+        self.assertEqual(head,self.registry.head())
 
     def test_catalog_and_identity_are_committed_together(self):
         result=self.reserve();head,value=self.open().state();identity=result['entry']['id']

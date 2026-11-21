@@ -2,7 +2,9 @@
 
 This integration is implemented for review and exercised only in staging.
 It has not been deployed, and no production UUIDs or catalog records have been
-created. It changes no historical lifecycle schema, receipt, pin or workflow.
+created. Historical lifecycle schemas, receipts, pins and workflows are retained.
+The draft includes the empty production-owned ledger and an exact additive CI
+receipt; its Windows/Linux validation workflow has read-only permissions.
 
 The existing owner is the Git-backed catalog in
 `Kometa-Team/Defaults-Image-Creation`, branch `main`, under
@@ -35,6 +37,10 @@ One private-index Git commit contains the new reservation, its catalog
 definition, index lookup and source PNG. `git update-ref <ref> <new> <expected>`
 is the local CAS: two concurrent writers cannot both win at the same head.
 Failed CAS attempts leave no referenced reservation or partial catalog state.
+The concurrent-writer regression retries the loser against the fresh revision,
+then reopens the store: both reservations remain and retrying the second token
+returns its original UUID without another commit. CAS protects the shared Git
+ref; separate clones must publish through a non-force, current-base catalog PR.
 Existing profiles, definitions and index records are checked on reload.
 
 `prepare_publication` passes the assigned identities and exact approved JPEGs
@@ -51,21 +57,22 @@ The public staging initializer explicitly rejects production owners.
 
 ## Proposed live rollout, requiring review first
 
-1. Review this implementation, staging results and proposed owner. Register the
-   exact new implementation/test/documentation paths through the repository's
-   sealed CI admission mechanism before an implementation PR is considered
-   ready. Existing sealed records and safeguards must remain unchanged; this
-   local prototype does not claim hosted preservation acceptance.
-   The later owner/data change also needs narrow admission for the ledger,
+1. Review this implementation, staging results, empty ledger and proposed owner.
+   `ci/catalog-reservations-maintenance-v1.json` registers only the exact new
+   implementation, test, documentation, evidence, workflow and empty-ledger
+   hashes. The prior Phase 6 receipt and all its member hashes remain unchanged.
+   The later data change needs a separate narrow admission for ledger updates,
    the two catalog postimages and the eight exact source-PNG additions. Retain
    historical receipts and source-pin inventories; register exact successors
    rather than editing old evidence or granting a directory-wide exception.
    Data successor hashes cannot be finalized until the separately authorized
    production UUID allocation has produced those exact postimages.
 2. Refresh catalog `main` and Default-Images `master`, and require the eight
-   approved destinations still to be absent. Install a reviewed empty ledger
-   for the production owner in a separate catalog bootstrap change. Pin its
-   baseline and owner; a staging ledger must never be relabelled as production.
+   approved destinations still to be absent. Merge the separately reviewed
+   implementation/empty-ledger PR before allocating production identities.
+   The empty ledger pins its initialization parent and destination snapshot;
+   a staging ledger must never be relabelled as production. Destination drift
+   requires a reviewed successor before allocations, not a silent rebase.
 3. Only after the rollout is authorized, call the existing allocator through
    this adapter against that owner using the eight approved tokens and mappings.
    These will be production allocations; the staging UUIDs are test evidence

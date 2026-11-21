@@ -1,0 +1,45 @@
+{
+  "baseline_commit": "8a3acdffb5cb564e57d41de397bd16039ea97457",
+  "catalog_changes_authorized": false,
+  "members": {
+    ".github/workflows/catalog-reservations-validation.yml": {
+      "before_sha256": null,
+      "sha256": "cf04cdcc4bd8c17a14284870705643986f85041a85ae8340411feae42b66439e",
+      "text_lf": true
+    },
+    "ci/dependency_tests/test_catalog_reservations_maintenance.py": {
+      "before_sha256": null,
+      "sha256": "060ab5d2b7e7e52590e488691fe5473c51290c459b672f6e1134ab53a4e7d674",
+      "text_lf": true
+    },
+    "create_defaults/bulk/CATALOG_RESERVATIONS.md": {
+      "before_sha256": null,
+      "sha256": "8784371c5f4ecb7c25f068a402d9bc4ca2afbb45e9ad4932487827eabaaa6e53",
+      "text_lf": true
+    },
+    "create_defaults/bulk/catalog/reservations-v1.json": {
+      "before_sha256": null,
+      "sha256": "7899bd48f6d72b146f48192a9ff6eee21232c9b8ab58a3355cb26f64ec939672",
+      "text_lf": true
+    },
+    "create_defaults/bulk/catalog_reservations.py": {
+      "before_sha256": null,
+      "sha256": "cf982ecd8269ba750ca03e0c0117d65550276113bf023b7f1eb9de61ec505a94",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/catalog-reservations-staging.json": {
+      "before_sha256": null,
+      "sha256": "ecceb08497b93e314b96d73269307eadf72dccb3435bd0de8dea7d8bc31089c8",
+      "text_lf": true
+    },
+    "create_defaults/tests/test_catalog_reservations.py": {
+      "before_sha256": null,
+      "sha256": "a1aa05623ee2131f0862966a498168f411e6b696413fa98b2959220af7180378",
+      "text_lf": true
+    }
+  },
+  "predecessor_owner_sha256": "76233fabde6de7405818207704bd11ecd46bd2de45f7a364cabe81a64b60e4c3",
+  "production_allocations_authorized": false,
+  "publication_authorized": false,
+  "version": 1
+}
