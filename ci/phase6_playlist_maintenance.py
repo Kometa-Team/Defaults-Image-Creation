@@ -17,7 +17,7 @@ RECEIPT = 'ci/phase6-playlist-maintenance-v1.json'
 PIN = '2625bc13ac87d79b6f287ae79ddb99d13bcbca0bd45d61215fce74cf46679906'
 REGISTRY_BASE = '8a3acdffb5cb564e57d41de397bd16039ea97457'
 REGISTRY_RECEIPT = 'ci/catalog-reservations-maintenance-v1.json'
-REGISTRY_PIN = '57934b402a5f59d8c982458a59409352691c20963664745d9d333eda2f475ef0'
+REGISTRY_PIN = '7ee6a57640abb30f4e73fffbaf597a87e7709938cd32ed666566cded4d3d2886'
 REGISTRY_ADDED = frozenset((
     '.github/workflows/catalog-reservations-validation.yml',
     'ci/dependency_tests/test_catalog_reservations_maintenance.py',

@@ -9,7 +9,7 @@
     },
     "ci/dependency_tests/test_catalog_reservations_maintenance.py": {
       "before_sha256": null,
-      "sha256": "060ab5d2b7e7e52590e488691fe5473c51290c459b672f6e1134ab53a4e7d674",
+      "sha256": "e024b9c376887ecbce9362b54829b4f718a3515bf886b6a8ba759a71a3a63a7a",
       "text_lf": true
     },
     "create_defaults/bulk/CATALOG_RESERVATIONS.md": {

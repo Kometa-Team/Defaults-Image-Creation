@@ -18,7 +18,13 @@ class CatalogReservationMaintenanceTests(unittest.TestCase):
 
     def test_actual_lifecycle_scope_including_registry(self):
         from ci.phase4_m7 import changed_scope
-        changed_scope()
+        from ci.phase5_m7_maintenance import owned_call
+        @owned_call(cohorts=True)
+        def aggregate(root):
+            self.assertTrue(pilot.REGISTRY_ADDED <= changed_scope())
+        # The aggregate owns only entry proofs, with fresh leaves and complete
+        # closing checks; no witness or approval survives this public call.
+        aggregate(pilot.ROOT)
 
     def test_additions_and_receipt_reject_tamper_and_missing_after_prior_proof(self):
         original=Path.read_bytes
