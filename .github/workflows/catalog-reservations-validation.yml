@@ -34,7 +34,7 @@ jobs:
       - name: Exact committed scope and empty-ledger provenance
         run: python -B -m ci.phase6_playlist_maintenance
       - name: CAS writers, restart retry, collisions and publication boundaries
-        run: python -B -m unittest create_defaults.tests.test_catalog_reservations -v
+        run: python -B -m unittest create_defaults.phase6.tests.test_catalog_reservations -v
       - name: Exact admission, historical receipt and fresh physical checks
         run: python -B -m unittest ci.dependency_tests.test_catalog_reservations_maintenance ci.dependency_tests.test_phase6_playlist_maintenance -v
       - name: Closing exact-head proof

@@ -13,8 +13,10 @@ class CatalogReservationMaintenanceTests(unittest.TestCase):
         self.assertFalse(result['production_authorized'])
         before=dict(pilot._blobs(pilot.REGISTRY_BASE))
         self.assertEqual(before[pilot.RECEIPT],pilot.git('show','HEAD:'+pilot.RECEIPT))
+        self.assertEqual(pilot.git('show',pilot.REGISTRY_PREDECESSOR+':'+pilot.REGISTRY_PRIOR_RECEIPT),
+                         pilot.git('show','HEAD:'+pilot.REGISTRY_PRIOR_RECEIPT))
         self.assertTrue(pilot.REGISTRY_ADDED.isdisjoint(before))
-        self.assertEqual(set(pilot.scope_members()),set(pilot.MODIFIED|pilot.ADDED|pilot.REGISTRY_ADDED|{pilot.OWNER,pilot.RECEIPT,pilot.REGISTRY_RECEIPT}))
+        self.assertEqual(set(pilot.scope_members()),set(pilot.MODIFIED|pilot.ADDED|pilot.REGISTRY_ADDED|{pilot.OWNER,pilot.RECEIPT,pilot.REGISTRY_RECEIPT,pilot.REGISTRY_PRIOR_RECEIPT}))
 
     def test_actual_lifecycle_scope_including_registry(self):
         from ci.phase4_m7 import changed_scope
@@ -29,7 +31,7 @@ class CatalogReservationMaintenanceTests(unittest.TestCase):
     def test_additions_and_receipt_reject_tamper_and_missing_after_prior_proof(self):
         original=Path.read_bytes
         pilot.verify_checkout()
-        for name in pilot.REGISTRY_ADDED|{pilot.REGISTRY_RECEIPT}:
+        for name in pilot.REGISTRY_ADDED|pilot.REGISTRY_MODIFIED|{pilot.REGISTRY_RECEIPT,pilot.REGISTRY_PRIOR_RECEIPT}:
             target=pilot.ROOT/name
             for bad in (original(target)+b'changed',None):
                 def read(path):
@@ -45,6 +47,45 @@ class CatalogReservationMaintenanceTests(unittest.TestCase):
         old=dict(pilot._blobs(pilot.REGISTRY_BASE))[pilot.OWNER]
         def read(path):return old if path==target else original(path)
         with patch.object(Path,'read_bytes',read),self.assertRaises(ValueError):pilot.verify_checkout()
+
+    def test_original_unittest_inventory_and_registry_coverage_remain_exact(self):
+        import unittest
+        from ci import validation
+        from create_defaults.phase6.tests.test_catalog_reservations import CatalogReservationTests
+        baseline=validation.read(validation.BASELINE_PATH)['unittest']
+        self.assertEqual(sum(map(len,baseline.values())),155)
+        actual={root:sorted(validation.unit_ids(validation.unit_suite(root))) for root in baseline}
+        self.assertEqual(actual,baseline)
+        registry=unittest.defaultTestLoader.loadTestsFromTestCase(CatalogReservationTests)
+        self.assertEqual(registry.countTestCases(),16)
+        self.assertTrue(set(validation.unit_ids(registry)).isdisjoint(
+            node for nodes in actual.values() for node in nodes))
+
+    def test_sealed_ci_successors_preserve_history_and_reject_rollback(self):
+        original=Path.read_bytes
+        before=dict(pilot._blobs(pilot.REGISTRY_BASE))
+        historical={n:a for n,_,a in pilot._decode((pilot.ROOT/pilot.RECEIPT).read_bytes())}
+        _,registered=pilot._decode_registry((pilot.ROOT/pilot.REGISTRY_RECEIPT).read_bytes())
+        for name,prior,after in registered:
+            if name not in pilot.REGISTRY_MODIFIED:continue
+            self.assertEqual(prior,pilot.member_sha(name,before[name]))
+            self.assertEqual(prior,historical[name])
+            self.assertNotEqual(prior,after)
+            target=pilot.ROOT/name
+            def read(path):return before[name] if path==target else original(path)
+            with self.subTest(name=name),patch.object(Path,'read_bytes',read),self.assertRaises(ValueError):
+                pilot.verify_checkout()
+
+    def test_new_workflow_cannot_change_permissions_commands_or_budget(self):
+        name='.github/workflows/catalog-reservations-validation.yml';target=pilot.ROOT/name
+        original=Path.read_bytes;raw=original(target)
+        for old,new in ((b'contents: read',b'contents: write'),
+                        (b'timeout-minutes: 30',b'timeout-minutes: 60'),
+                        (b'create_defaults.phase6.tests.test_catalog_reservations',b'ci.tests.test_validation')):
+            bad=raw.replace(old,new);self.assertNotEqual(bad,raw)
+            def read(path):return bad if path==target else original(path)
+            with self.subTest(change=new),patch.object(Path,'read_bytes',read),self.assertRaises(ValueError):
+                pilot.verify_scope(pilot.ROOT,{name})
 
     def test_empty_ledger_has_no_allocations_or_publication_authority(self):
         from create_defaults.bulk.library_sources import check_seal

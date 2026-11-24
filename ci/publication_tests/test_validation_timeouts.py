@@ -20,7 +20,8 @@ class ValidationTimeoutTests(unittest.TestCase):
         historical={name for name in m6._git(ROOT,'ls-tree','-r','--name-only',
             m6.TIMEOUT_BASE,'.github/workflows').decode().splitlines() if name.endswith('.yml')}
         current={path.relative_to(ROOT).as_posix() for path in (ROOT/'.github/workflows').glob('*.yml')}
-        addition={'.github/workflows/phase6-playlist-validation.yml'}
+        addition={'.github/workflows/phase6-playlist-validation.yml',
+                  '.github/workflows/catalog-reservations-validation.yml'}
         self.assertEqual(current,historical|addition)
         from ci.phase6_playlist_maintenance import verify_scope
         verify_scope(ROOT,addition)

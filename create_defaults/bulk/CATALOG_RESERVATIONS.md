@@ -58,9 +58,12 @@ The public staging initializer explicitly rejects production owners.
 ## Proposed live rollout, requiring review first
 
 1. Review this implementation, staging results, empty ledger and proposed owner.
-   `ci/catalog-reservations-maintenance-v1.json` registers only the exact new
+   `ci/catalog-reservations-maintenance-v2.json` registers only the exact new
    implementation, test, documentation, evidence, workflow and empty-ledger
-   hashes. The prior Phase 6 receipt and all its member hashes remain unchanged.
+   hashes and the exact CI-test successors. The prior Phase 6 receipt and its
+   historical member hashes remain unchanged; current test bytes are bound by
+   the successor receipt and project only to authenticated predecessor bytes.
+   The verified v1 registry receipt is also retained and checked byte-for-byte.
    The later data change needs a separate narrow admission for ledger updates,
    the two catalog postimages and the eight exact source-PNG additions. Retain
    historical receipts and source-pin inventories; register exact successors

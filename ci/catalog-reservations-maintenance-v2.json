@@ -1,0 +1,57 @@
+{
+  "baseline_commit": "8a3acdffb5cb564e57d41de397bd16039ea97457",
+  "catalog_changes_authorized": false,
+  "members": {
+    ".github/workflows/catalog-reservations-validation.yml": {
+      "before_sha256": null,
+      "sha256": "001658821ffd68dccc15efadc26cb4506ec217051378fe1d7455edd5a491cdbd",
+      "text_lf": true
+    },
+    "ci/dependency_tests/test_catalog_reservations_maintenance.py": {
+      "before_sha256": null,
+      "sha256": "bc30bfe1d73aa23387fb6345bafcc6c0bdffbb2bdefa33b1ffd4ce620d86e5d2",
+      "text_lf": true
+    },
+    "ci/dependency_tests/test_phase6_playlist_maintenance.py": {
+      "before_sha256": "78fd0306cb65ad6f6a8671fcaccb22e049aca8568236303d666e3341037f4ef4",
+      "sha256": "1d39714aed5e5866f665cb1d5b25b1875958c98c90e7badf58fa6404b644fec1",
+      "text_lf": true
+    },
+    "ci/publication_tests/test_validation_timeouts.py": {
+      "before_sha256": "2d394772ea140f130f4a931ff93e02344a60aaedb4dedb08877f68a72a26ec6e",
+      "sha256": "6c4ea87adfb30fbeae8e2888528bcfa67e3cd3bc460fa5a6951244da9b3862f9",
+      "text_lf": true
+    },
+    "create_defaults/bulk/CATALOG_RESERVATIONS.md": {
+      "before_sha256": null,
+      "sha256": "5296a2a3e1adb58133d445d3aff010a37a14428a79067ac3d9cf850e9cce2c75",
+      "text_lf": true
+    },
+    "create_defaults/bulk/catalog/reservations-v1.json": {
+      "before_sha256": null,
+      "sha256": "7899bd48f6d72b146f48192a9ff6eee21232c9b8ab58a3355cb26f64ec939672",
+      "text_lf": true
+    },
+    "create_defaults/bulk/catalog_reservations.py": {
+      "before_sha256": null,
+      "sha256": "cf982ecd8269ba750ca03e0c0117d65550276113bf023b7f1eb9de61ec505a94",
+      "text_lf": true
+    },
+    "create_defaults/phase6/review/catalog-reservations-staging.json": {
+      "before_sha256": null,
+      "sha256": "ecceb08497b93e314b96d73269307eadf72dccb3435bd0de8dea7d8bc31089c8",
+      "text_lf": true
+    },
+    "create_defaults/phase6/tests/test_catalog_reservations.py": {
+      "before_sha256": null,
+      "sha256": "9daf17fe1a0b05295176aa5ba4947b4571d30cb3ca6e06a7ec0577c95e12a699",
+      "text_lf": true
+    }
+  },
+  "predecessor_commit": "276ad76dbe06408a1338dec5910b918a5f8fb5ef",
+  "predecessor_owner_sha256": "76233fabde6de7405818207704bd11ecd46bd2de45f7a364cabe81a64b60e4c3",
+  "predecessor_receipt_sha256": "188dd31b3bc1fa1902767608e16fea394649132b1f8c4ee2f056d32de593df3d",
+  "production_allocations_authorized": false,
+  "publication_authorized": false,
+  "version": 2
+}

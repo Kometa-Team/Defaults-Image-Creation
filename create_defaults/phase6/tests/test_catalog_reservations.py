@@ -15,7 +15,7 @@ from create_defaults.bulk.catalog_reservations import CatalogReservations, CATAL
 from create_defaults.bulk.common import BulkError, Conflict, canonical
 from create_defaults.bulk.library_sources import sealed
 
-ROOT=Path(__file__).resolve().parents[2]
+ROOT=Path(__file__).resolve().parents[3]
 OWNER=dict(repository='Kometa-Team/Defaults-Image-Creation',branch='main',environment='staging')
 
 
