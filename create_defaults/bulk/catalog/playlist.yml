@@ -397,3 +397,63 @@ definitions:
     parent: null
     relationship: null
     exception: null
+- applicability:
+    en:
+      reason: Prospective English metadata only
+      status: applicable
+  caption:
+    case: upper
+    direction: auto
+    fallback: null
+    key: key_names.TIMELINE_ORDER
+    mode: translation
+    template_key: null
+    text: ''
+  category: Playlist
+  color_assignment:
+    exception: null
+    id: playlist.29b59c326f8743258b51c3e097ba26e5.background
+    origin: independent
+    parent: null
+    relationship: null
+  composer:
+    avg_color: false
+    avg_color_image: null
+    base_color: '#1EAC1B'
+    border: false
+    border_color: '#FFFFFF'
+    border_width: 15
+    clean: true
+    dom_color: false
+    dom_color_image: null
+    font: fonts/BebasNeue-Regular.ttf
+    font_color: '#FFFFFF'
+    font_size: 154
+    gradient: 1
+    logo: logos_playlist/avp.png
+    logo_offset: -200
+    logo_resize: 1600
+    out_name: Alien & Predator (Timeline Order)
+    text: ''
+    text_offset: 450
+    white_wash: true
+  dependencies: []
+  display_name: Alien & Predator
+  generator: null
+  id: playlist.29b59c326f8743258b51c3e097ba26e5
+  languages:
+  - en
+  layout:
+    kind: fixed
+    measurement: null
+  output:
+    directory: playlist
+    filename: Alien & Predator (Timeline Order).jpg
+    remote_paths:
+      en: playlist/Alien & Predator (Timeline Order).jpg
+  overrides: []
+  source:
+    kind: authored
+    line: null
+    path: catalog/playlist.yml
+    row_sha256: null
