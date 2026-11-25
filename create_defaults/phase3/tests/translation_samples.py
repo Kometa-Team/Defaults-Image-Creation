@@ -38,9 +38,22 @@ def real_package(category='Playlist'):
 
 
 @lru_cache(maxsize=1)
-def real_resolution():
+def _historical_playlist():
     from create_defaults.bulk.catalog_history import resolve_historical
     return resolve_historical(categories=('Playlist',))
+
+
+@lru_cache(maxsize=1)
+def real_resolution():
+    # Retain the authenticated snapshot's lifetime while the existing adapter
+    # re-enters its exact Resolution loader and checks fresh file pins.
+    historical=_historical_playlist()
+    historical.verify_current()
+    pins={name:Path(path) for name,path,_ in historical.source_pins}
+    result=resolve([pins['playlist.yml']],profiles_path=pins['profiles.yml'])
+    assert result.encoded==historical.encoded
+    historical.verify_current()
+    return result
 
 
 def request_for(resolution, package, language='en', identity=None, variant=None):

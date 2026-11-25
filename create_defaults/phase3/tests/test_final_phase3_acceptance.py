@@ -208,7 +208,10 @@ def test_all_existing_phase3_ids_and_production_interfaces_are_unchanged():
     successors={'create_defaults/bulk/contracts/expanded/validation.py',
         'create_defaults/bulk/contracts/translation_preflight/adapters.py',
         'create_defaults/bulk/contracts/logos/wash.py',
-        'create_defaults/bulk/contracts/playlist/validation.py'}
+        'create_defaults/bulk/contracts/playlist/validation.py',
+        'create_defaults/bulk/contracts/adoption/inventory.py',
+        'create_defaults/bulk/contracts/categories/evidence.py',
+        'create_defaults/bulk/contracts/expanded/historical.py'}
     for path in sorted(successors & set(changed)):
         original=subprocess.check_output(['git','show',base+':'+path],cwd=ROOT)
         assert pilot_bytes(ROOT,path,(ROOT/path).read_bytes()).replace(b'\r\n',b'\n')==original.replace(b'\r\n',b'\n')
