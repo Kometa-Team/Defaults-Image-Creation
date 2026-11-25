@@ -34,6 +34,40 @@ REGISTRY_MODIFIED = frozenset((
     'ci/publication_tests/test_validation_timeouts.py',
     'ci/dependency_tests/test_phase6_playlist_maintenance.py',
 ))
+# Exact, separately reviewed data successor. The original receipts stay sealed.
+DATA_BASE = 'e58da53c03857ade7b2bdd0c743c6970c0c761a3'
+DATA_PREDECESSOR = 'd94d3209b0bd498494125137ab6db93b7aadc081'
+DATA_ALLOCATION = 'd3ed9ff46a77cb7a13caef57a84830f08e1d25c8'
+DATA_RECEIPT = 'ci/catalog-data-successor-v1.json'
+DATA_PIN = '830db7f9544be4f2718e8584ded26e2e780454d86ddcf06e9edf2ce984fd8b21'
+DATA_MODIFIED = frozenset((
+    '.github/workflows/catalog-reservations-validation.yml',
+    'ci/dependency_tests/test_catalog_reservations_maintenance.py',
+    'ci/dependency_tests/test_phase6_playlist_maintenance.py',
+    'ci/phase5_m6_maintenance.py', 'ci/phase5_m7_maintenance.py',
+    'create_defaults/bulk/catalog/reservations-v1.json',
+    'create_defaults/bulk/catalog/playlist.yml', 'create_defaults/bulk/catalog/index-v1.json',
+    'create_defaults/bulk/contracts/playlist/validation.py',
+    'create_defaults/bulk/lifecycle/basis.py',
+))
+DATA_ADDED = frozenset((
+    'ci/dependency_tests/test_catalog_data_maintenance.py',
+    'create_defaults/bulk/catalog_history.py',
+    'create_defaults/phase6/tests/test_historical_catalog.py',
+    'create_defaults/logos_playlist/avp.png', 'create_defaults/logos_playlist/babylon.png',
+    'create_defaults/logos_playlist/bsg.png', 'create_defaults/logos_playlist/gundam.png',
+    'create_defaults/logos_playlist/jrrt.png', 'create_defaults/logos_playlist/sao.png',
+    'create_defaults/logos_playlist/stargate.png', 'create_defaults/logos_playlist/wdu.png',
+))
+DATA_BINARY = frozenset(name for name in DATA_ADDED if name.endswith('.png'))
+DATA_PROTECTED = frozenset(('create_defaults/bulk/catalog/playlist.yml',
+    'create_defaults/bulk/catalog/index-v1.json'))
+
+
+def historical_members():
+    return MODIFIED | DATA_MODIFIED
+
+
 # Generated explicitly by the review tooling; never a directory-prefix grant.
 MODIFIED = frozenset(('ci/dependabot_maintenance.py', 'ci/people_unicode_maintenance.py', 'ci/phase4.py', 'ci/phase4_review.py', 'ci/phase4_transactions.py', 'ci/phase5_m5_maintenance.py', 'ci/phase5_m6_maintenance.py', 'ci/phase5_m7_maintenance.py', 'ci/publication_tests/test_validation_timeouts.py', 'create_defaults/bulk/contracts/expanded/validation.py', 'create_defaults/bulk/contracts/logos/wash.py', 'create_defaults/bulk/contracts/playlist/validation.py', 'create_defaults/bulk/contracts/translation_preflight/adapters.py', 'create_defaults/bulk/lifecycle/candidates.py', 'create_defaults/bulk/lifecycle/catalog_preparation.py', 'create_defaults/bulk/lifecycle/composition.py', 'create_defaults/bulk/lifecycle/operations.py', 'create_defaults/bulk/lifecycle/preparation_models.py', 'create_defaults/bulk/lifecycle/publication_preparation.py', 'create_defaults/bulk/lifecycle/schemas/preparation-v1.schema.json', 'create_defaults/bulk/operator_publication.py', 'create_defaults/bulk/planner.py', 'create_defaults/bulk/schemas/manifest-v1.json', 'create_defaults/bulk/tests/test_logo_workflow.py', 'create_defaults/bulk/workers.py', 'create_defaults/create_poster.py', 'create_defaults/lifecycle/ROADMAP.md', 'create_defaults/phase2/tests/test_package_a.py', 'create_defaults/phase3/tests/test_destination_isolation.py', 'create_defaults/phase3/tests/test_evidence_consumption.py', 'create_defaults/phase3/tests/test_final_phase3_acceptance.py', 'create_defaults/phase3/tests/test_translation_boundaries.py', 'create_defaults/phase4/tests/test_composition.py', 'create_defaults/validation_manifest.py'))
 ADDED = frozenset(('.github/workflows/phase6-playlist-validation.yml', 'ci/dependency_tests/test_phase6_playlist_maintenance.py', 'create_defaults/image_layout.py', 'create_defaults/lifecycle/PHASE6_PLAYLIST_PILOT.md', 'create_defaults/phase6/PHASE6_CLOSEOUT_CHECKLIST.md', 'create_defaults/phase6/PLAYLIST_PILOT_MANIFEST.json', 'create_defaults/phase6/STAGING_APP.md', 'create_defaults/phase6/__init__.py', 'create_defaults/phase6/assets/avp.png', 'create_defaults/phase6/assets/babylon.png', 'create_defaults/phase6/assets/bsg.png', 'create_defaults/phase6/assets/gundam.png', 'create_defaults/phase6/assets/jrrt.png', 'create_defaults/phase6/assets/sao.png', 'create_defaults/phase6/assets/stargate.png', 'create_defaults/phase6/assets/wdu.png', 'create_defaults/phase6/canonical/destination-preflight-v1.json', 'create_defaults/phase6/canonical/evidence-consumption-v1.json', 'create_defaults/phase6/canonical/logo-calibration-pillow13.json', 'create_defaults/phase6/canonical/phase3-final-acceptance-v1.json', 'create_defaults/phase6/canonical/translation-preflight-v1.json', 'create_defaults/phase6/canonical_fixtures.py', 'create_defaults/phase6/fixtures.py', 'create_defaults/phase6/playlist.py', 'create_defaults/phase6/render_review.py', 'create_defaults/phase6/review/EVIDENCE_INDEX.md', 'create_defaults/phase6/review/action-forms/blocked-removal.png', 'create_defaults/phase6/review/action-forms/browser-result.json', 'create_defaults/phase6/review/action-forms/browser-run.json', 'create_defaults/phase6/review/action-forms/catalog.json', 'create_defaults/phase6/review/action-forms/first-two-result.json', 'create_defaults/phase6/review/action-forms/focused-checks.json', 'create_defaults/phase6/review/action-forms/replacement-side-by-side.png', 'create_defaults/phase6/review/action-forms/second-style.png', 'create_defaults/phase6/review/action-forms/staging-receipts.json', 'create_defaults/phase6/review/action-forms/ten-generated-staging.png', 'create_defaults/phase6/review/action-forms/unmapped-ellipse.png', 'create_defaults/phase6/review/action-forms/unmapped-rectangle.png', 'create_defaults/phase6/review/approved-transport-native-proof.json', 'create_defaults/phase6/review/approved-transport-result.json', 'create_defaults/phase6/review/browser/backend-and-source-checks.json', 'create_defaults/phase6/review/browser/browser-result.json', 'create_defaults/phase6/review/browser/browser-run.json', 'create_defaults/phase6/review/browser/first-two-result.json', 'create_defaults/phase6/review/browser/one-create-one-replacement.png', 'create_defaults/phase6/review/browser/rollout-review.json', 'create_defaults/phase6/review/browser/staging-receipts.json', 'create_defaults/phase6/review/browser/ten-item-staging.png', 'create_defaults/phase6/review/browser/ui-source-integrity.json', 'create_defaults/phase6/review/candidate-integrity-result.json', 'create_defaults/phase6/review/colour-review.json', 'create_defaults/phase6/review/eight-poster-colour-proposals.png', 'create_defaults/phase6/review/generated-browser/blocked-removal.png', 'create_defaults/phase6/review/generated-browser/browser-result.json', 'create_defaults/phase6/review/generated-browser/browser-run.json', 'create_defaults/phase6/review/generated-browser/catalog.json', 'create_defaults/phase6/review/generated-browser/first-two-result.json', 'create_defaults/phase6/review/generated-browser/focused-checks.json', 'create_defaults/phase6/review/generated-browser/second-style.png', 'create_defaults/phase6/review/generated-browser/staging-receipts.json', 'create_defaults/phase6/review/generated-browser/ten-generated-staging.png', 'create_defaults/phase6/review/historical-comparison.json', 'create_defaults/phase6/review/nine-poster-historical-comparison.png', 'create_defaults/phase6/review/replacements/README.md', 'create_defaults/phase6/review/replacements/patch-validation.json', 'create_defaults/phase6/review/replacements/replacement-plan.json', 'create_defaults/phase6/review/replacements/two-playlist-replacements.patch', 'create_defaults/phase6/review/visual-approval.json', 'create_defaults/phase6/staging_app.html', 'create_defaults/phase6/staging_app.js', 'create_defaults/phase6/staging_app.py', 'create_defaults/phase6/staging_fixtures/approved/playlist/Alien & Predator (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/approved/playlist/Babylon 5 (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/approved/playlist/Battlestar Galactica (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/approved/playlist/Middle-earth (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/approved/playlist/Mobile Suit Gundam (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/approved/playlist/Star Wars The Clone Wars (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/approved/playlist/Stargate (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/approved/playlist/Sword Art Online (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/approved/playlist/The Walking Dead Universe (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/approved/playlist/X-Men (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/eight-create-visual-approval.json', 'create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Arrowverse (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/staging-baseline/playlist/DC Animated Universe (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Dragon Ball (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Marvel Cinematic Universe (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Pokémon (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Star Trek (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Star Wars (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/staging-baseline/playlist/Star Wars The Clone Wars (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/staging-baseline/playlist/X-Men (Timeline Order).jpg', 'create_defaults/phase6/staging_fixtures/ten-item-fixtures.json', 'create_defaults/phase6/staging_fixtures/two-replacement-visual-approval.json', 'create_defaults/phase6/staging_lifecycle.py', 'create_defaults/phase6/tests/conftest.py', 'create_defaults/phase6/tests/staging_browser.cjs', 'create_defaults/phase6/tests/staging_lifecycle_browser.cjs', 'create_defaults/phase6/tests/test_playlist_pilot.py', 'create_defaults/phase6/tests/test_staging_app.py', 'create_defaults/phase6/tests/test_staging_lifecycle.py', 'create_defaults/phase6/verify_approved_transport.py', 'create_defaults/poster_styles.py', 'create_defaults/tests/test_playlist_layout.py'))
@@ -52,11 +86,11 @@ def fingerprint(value):
 
 @lru_cache(maxsize=256)
 def member_sha(name, raw):
-    return hashlib.sha256(raw if name in BINARY else raw.replace(b'\r\n', b'\n')).hexdigest()
+    return hashlib.sha256(raw if name in BINARY | DATA_BINARY else raw.replace(b'\r\n', b'\n')).hexdigest()
 
 
 def scope_members():
-    return MODIFIED | ADDED | {OWNER, RECEIPT, REGISTRY_RECEIPT, REGISTRY_PRIOR_RECEIPT} | REGISTRY_ADDED
+    return MODIFIED | ADDED | {OWNER, RECEIPT, REGISTRY_RECEIPT, REGISTRY_PRIOR_RECEIPT} | REGISTRY_ADDED | DATA_MODIFIED | DATA_ADDED | {DATA_RECEIPT}
 
 
 def git(*args, data=None):
@@ -112,12 +146,37 @@ def _decode_registry(raw):
 
 
 @lru_cache(maxsize=8)
-def current_rows(raw, registry_raw):
-    """Current bindings, separate from the immutable historical receipt rows."""
+def _decode_data(raw):
+    value = json.loads(raw)
+    if (fingerprint(value) != DATA_PIN or set(value) != {
+            'version', 'baseline_commit', 'predecessor_commit', 'allocation_commit',
+            'predecessor_owner_sha256', 'members', 'publication_authorized'}
+            or value['version'] != 1 or value['baseline_commit'] != DATA_BASE
+            or value['predecessor_commit'] != DATA_PREDECESSOR
+            or value['allocation_commit'] != DATA_ALLOCATION
+            or value['publication_authorized'] is not False
+            or set(value['members']) != DATA_MODIFIED | DATA_ADDED):
+        raise ValueError('Changed exact catalog data successor receipt')
+    rows = []
+    for name, binding in sorted(value['members'].items()):
+        if (set(binding) != {'before_sha256', 'sha256', 'text_lf'}
+                or (binding['before_sha256'] is None) != (name in DATA_ADDED)
+                or binding['text_lf'] is not (name not in DATA_BINARY)):
+            raise ValueError('Changed catalog data successor membership')
+        rows.append((name, binding['before_sha256'], binding['sha256']))
+    return value['predecessor_owner_sha256'], tuple(rows)
+
+
+def current_rows(raw, registry_raw, data_raw=None):
+    """Current bindings; original receipt rows keep their historical meaning."""
+    if data_raw is None:
+        data_raw = regular(ROOT, DATA_RECEIPT).read_bytes()
     _, registered = _decode_registry(registry_raw)
-    after = {name: successor for name, _, successor in registered if name in REGISTRY_MODIFIED}
-    return tuple((name, before, after.get(name, successor))
-                 for name, before, successor in _decode(raw))
+    _, data = _decode_data(data_raw)
+    current = {name:(before, after) for name,before,after in _decode(raw)}
+    for name,before,after in registered + data:
+        current[name] = (current[name][0] if name in current else before, after)
+    return tuple((name,*binding) for name,binding in sorted(current.items()))
 
 
 @lru_cache(maxsize=16)
@@ -135,34 +194,42 @@ def _tree(commit):
 
 
 @lru_cache(maxsize=16)
-def _blobs(commit):
-    # Immutable Git objects only. No physical bytes, HEAD or approval is cached.
-    tree = _tree(commit)
-    encoded = git('cat-file', '--batch', data=b''.join(oid.encode()+b'\n' for _, oid in tree))
-    offset, rows = 0, []
-    for name, oid in tree:
+def _batch_blobs(commits):
+    # Batch immutable objects across baselines. No checkout/HEAD proof is cached.
+    trees = tuple((commit, _tree(commit)) for commit in commits)
+    objects = dict.fromkeys(oid for _,tree in trees for _,oid in tree)
+    encoded = git('cat-file', '--batch', data=b''.join(oid.encode()+b'\n' for oid in objects))
+    offset, decoded = 0, {}
+    limits = {oid:(4*1024*1024 if name == 'create_defaults/bulk/catalog/index-v1.json'
+                   else 2*1024*1024) for _,tree in trees for name,oid in tree}
+    for oid in objects:
         end = encoded.index(b'\n', offset)
         header = encoded[offset:end].split()
         if len(header) != 3 or header[:2] != [oid.encode(), b'blob']:
             raise ValueError('Missing offline Playlist immutable object')
         size = int(header[2])
-        if not 0 <= size <= 2*1024*1024:
+        if not 0 <= size <= limits[oid]:
             raise ValueError('Offline Playlist immutable object bound')
         offset = end+1
         raw = encoded[offset:offset+size]
         if len(raw) != size or encoded[offset+size:offset+size+1] != b'\n':
             raise ValueError('Incomplete offline Playlist immutable object')
         offset += size+1
-        rows.append((name, raw))
+        decoded[oid] = raw
     if offset != len(encoded):
         raise ValueError('Extra offline Playlist immutable object bytes')
-    return tuple(rows)
+    return tuple(tuple((name,decoded[oid]) for name,oid in tree) for _,tree in trees)
+
+
+@lru_cache(maxsize=16)
+def _blobs(commit):
+    return _batch_blobs((commit,))[0]
 
 
 @lru_cache(maxsize=16)
 def _ancestry(head):
     # This reviewed descendant includes the original sealed pilot baseline.
-    git('merge-base', '--is-ancestor', REGISTRY_PREDECESSOR, head)
+    git('merge-base', '--is-ancestor', DATA_PREDECESSOR, head)
 
 
 @lru_cache(maxsize=16)
@@ -200,14 +267,26 @@ class _Proof:
     selected: tuple
     registry_receipt: bytes
     prior_registry_receipt: bytes
+    data_receipt: bytes
 
 
 @lru_cache(maxsize=16)
-def _immutable_checked(head, raw, registry_raw):
+def _immutable_checked(head, raw, registry_raw, data_raw):
     rows = _decode(raw)
     predecessor_owner, registered = _decode_registry(registry_raw)
-    current, before = dict(_blobs(head)), dict(_blobs(BASE))
-    registry_before = dict(_blobs(REGISTRY_BASE))
+    data_owner, data_rows = _decode_data(data_raw)
+    current, before, registry_before, data_before = map(dict,
+        _batch_blobs((head, BASE, REGISTRY_BASE, DATA_BASE)))
+    if sha(data_before[OWNER]) != data_owner:
+        raise ValueError('Changed catalog data predecessor owner')
+    for name, predecessor, successor in data_rows:
+        if member_sha(name, current[name]) != successor:
+            raise ValueError('Changed committed catalog data successor: '+name)
+        if name in DATA_MODIFIED:
+            if member_sha(name, data_before[name]) != predecessor:
+                raise ValueError('Changed catalog data predecessor: '+name)
+        elif name in data_before:
+            raise ValueError('Catalog data addition exists in predecessor: '+name)
     if (sha(registry_before[OWNER]) != predecessor_owner
             or registry_before[RECEIPT] != current[RECEIPT]):
         raise ValueError('Changed catalog reservation predecessor owner or historical receipt')
@@ -218,10 +297,10 @@ def _immutable_checked(head, raw, registry_raw):
     _regular_diff(_diff(head), scope_members(), exact=True)
     for metadata, name in _diff(head):
         status = metadata.split()[4]
-        if status != (b'M' if name in MODIFIED else b'A'):
+        if status != (b'M' if name in before else b'A'):
             raise ValueError('Changed offline Playlist member admission: '+name)
     for name, predecessor, successor in registered:
-        if member_sha(name, current[name]) != successor:
+        if member_sha(name, data_before[name] if name in DATA_MODIFIED else current[name]) != successor:
             raise ValueError('Changed committed catalog reservation successor: '+name)
         if name in REGISTRY_MODIFIED:
             if member_sha(name, registry_before[name]) != predecessor:
@@ -229,7 +308,8 @@ def _immutable_checked(head, raw, registry_raw):
         elif name in registry_before:
             raise ValueError('Catalog reservation addition exists in predecessor: '+name)
     for name, predecessor, successor in rows:
-        historical = registry_before[name] if name in REGISTRY_MODIFIED else current[name]
+        historical = (registry_before[name] if name in REGISTRY_MODIFIED
+                      else data_before[name] if name in DATA_MODIFIED else current[name])
         if member_sha(name, historical) != successor:
             raise ValueError('Changed committed offline Playlist successor: '+name)
         if name in MODIFIED:
@@ -241,6 +321,8 @@ def _immutable_checked(head, raw, registry_raw):
         raise ValueError('Uncommitted offline Playlist receipt')
     if sha(registry_raw) != sha(current[REGISTRY_RECEIPT]):
         raise ValueError('Uncommitted catalog reservation receipt')
+    if sha(data_raw) != sha(current[DATA_RECEIPT]):
+        raise ValueError('Uncommitted catalog data successor receipt')
     return sha(current[OWNER])
 
 
@@ -255,14 +337,14 @@ def proof(root, head, *, selected=None):
     prior_registry_raw = regular(ROOT, REGISTRY_PRIOR_RECEIPT).read_bytes()
     if sha(prior_registry_raw) != REGISTRY_PRIOR_SHA256:
         raise ValueError('Changed physical prior catalog reservation receipt')
-    rows = current_rows(raw, registry_raw)
-    _, registered = _decode_registry(registry_raw)
-    additions = tuple(row for row in registered if row[0] in REGISTRY_ADDED)
-    immutable_owner = _immutable_checked(head, raw, registry_raw)
-    selected = MODIFIED | ADDED | REGISTRY_ADDED if selected is None else frozenset(selected)
-    if not selected <= MODIFIED | ADDED | REGISTRY_ADDED:
+    data_raw = regular(ROOT, DATA_RECEIPT).read_bytes()
+    rows = current_rows(raw, registry_raw, data_raw)
+    immutable_owner = _immutable_checked(head, raw, registry_raw, data_raw)
+    members = MODIFIED | ADDED | REGISTRY_ADDED | DATA_MODIFIED | DATA_ADDED
+    selected = members if selected is None else frozenset(selected)
+    if not selected <= members:
         raise ValueError('Foreign offline Playlist proof selection')
-    for name, _, successor in rows + additions:
+    for name, _, successor in rows:
         if name in selected and member_sha(name, regular(ROOT, name).read_bytes()) != successor:
             raise ValueError('Changed physical offline Playlist successor: '+name)
     owner = sha(regular(ROOT, OWNER).read_bytes())
@@ -274,15 +356,17 @@ def proof(root, head, *, selected=None):
         raise ValueError('Catalog reservation receipt moved during verification')
     if regular(ROOT, REGISTRY_PRIOR_RECEIPT).read_bytes() != prior_registry_raw:
         raise ValueError('Prior catalog reservation receipt moved during verification')
-    return _Proof(head, raw, owner, rows, tuple(sorted(selected)), registry_raw, prior_registry_raw)
+    if regular(ROOT, DATA_RECEIPT).read_bytes() != data_raw:
+        raise ValueError('Catalog data successor receipt moved during verification')
+    return _Proof(head, raw, owner, rows, tuple(sorted(selected)), registry_raw, prior_registry_raw, data_raw)
 
 
 def _project(root, name, current, witness, *, owned=False):
     if Path(root).resolve() != ROOT.resolve():
         raise ValueError('Foreign offline Playlist historical projection')
-    if name not in MODIFIED:
+    if name not in historical_members():
         return current
-    rows = current_rows(witness.receipt, witness.registry_receipt)
+    rows = current_rows(witness.receipt, witness.registry_receipt, witness.data_receipt)
     binding = next(row for row in rows if row[0] == name)
     _, predecessor, successor = binding
     # Each historical projection checks the leaf at the point of use. A caller
@@ -290,9 +374,14 @@ def _project(root, name, current, witness, *, owned=False):
     physical = current if owned else regular(root, name).read_bytes()
     if member_sha(name, physical) != successor:
         raise ValueError('Changed physical offline Playlist successor: '+name)
-    historical_successor = next(row[2] for row in _decode(witness.receipt) if row[0] == name)
+    if name in MODIFIED:
+        old_row = next(row for row in _decode(witness.receipt) if row[0] == name)
+        baseline, predecessor, historical_successor = BASE, old_row[1], old_row[2]
+    else:
+        baseline = DATA_BASE
+        predecessor = historical_successor = next(row[1] for row in _decode_data(witness.data_receipt)[1] if row[0] == name)
     if member_sha(name, current) in {successor, historical_successor}:
-        before = dict(_blobs(BASE))[name]
+        before = dict(_blobs(baseline))[name]
         if member_sha(name, before) != predecessor:
             raise ValueError('Changed offline Playlist predecessor object: '+name)
         return before
@@ -302,7 +391,7 @@ def _project(root, name, current, witness, *, owned=False):
 
 
 def historical_bytes(root, name, current):
-    if name not in MODIFIED:
+    if name not in historical_members():
         return current
     from ci import phase5_m7_maintenance as m7
     owner = m7._ACTIVE.get()
@@ -315,10 +404,13 @@ def historical_bytes(root, name, current):
 
 def selected_hash(name, expected):
     """Exact protected source and CI successors, with fresh physical checks."""
-    if name not in PROTECTED_SUCCESSORS:
+    if name in DATA_PROTECTED:
+        source = _decode_data(regular(ROOT, DATA_RECEIPT).read_bytes())[1]
+    elif name in PROTECTED_SUCCESSORS:
+        source = _decode(regular(ROOT, RECEIPT).read_bytes())
+    else:
         return expected
-    _, before, after = next(row for row in _decode(regular(ROOT, RECEIPT).read_bytes())
-        if row[0] == name)
+    _, before, after = next(row for row in source if row[0] == name)
     if expected != before:
         return expected
     from ci.phase5_m7_maintenance import _cohort_proof
@@ -343,7 +435,7 @@ PROTECTED_SUCCESSORS = frozenset({'ci/phase4.py','ci/phase4_transactions.py','ci
 
 def _protected_cohort_proof(root):
     from ci.people_colorize_maintenance import _head
-    return proof(root,_head(root),selected=PROTECTED_SUCCESSORS)
+    return proof(root,_head(root),selected=PROTECTED_SUCCESSORS | DATA_PROTECTED)
 
 
 def verify_scope(root, names):

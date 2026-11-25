@@ -1,0 +1,115 @@
+{
+  "allocation_commit": "d3ed9ff46a77cb7a13caef57a84830f08e1d25c8",
+  "baseline_commit": "e58da53c03857ade7b2bdd0c743c6970c0c761a3",
+  "members": {
+    ".github/workflows/catalog-reservations-validation.yml": {
+      "before_sha256": "001658821ffd68dccc15efadc26cb4506ec217051378fe1d7455edd5a491cdbd",
+      "sha256": "fc4813401fe660db8fb75d58ce58f9f1bd61d26965e4f3f3bd75a45832cfb288",
+      "text_lf": true
+    },
+    "ci/dependency_tests/test_catalog_data_maintenance.py": {
+      "before_sha256": null,
+      "sha256": "46a9143fa549f5fed9ba87790cdb9eb90855b445d6be47cff486b874fe956021",
+      "text_lf": true
+    },
+    "ci/dependency_tests/test_catalog_reservations_maintenance.py": {
+      "before_sha256": "bc30bfe1d73aa23387fb6345bafcc6c0bdffbb2bdefa33b1ffd4ce620d86e5d2",
+      "sha256": "36115811faa22a0e2215be99f9951d8d30b1eae4af27fcc9cf3be87f2039d22b",
+      "text_lf": true
+    },
+    "ci/dependency_tests/test_phase6_playlist_maintenance.py": {
+      "before_sha256": "1d39714aed5e5866f665cb1d5b25b1875958c98c90e7badf58fa6404b644fec1",
+      "sha256": "857233fd074aab916ecf800f1d0aaf4519edc8d2511e7f65119eae83c03459f3",
+      "text_lf": true
+    },
+    "ci/phase5_m6_maintenance.py": {
+      "before_sha256": "d5224baac4fcc5b36e7426b6c76becaff29972b8239a88c66426cecd83156fe0",
+      "sha256": "8804ae065c50b42aa974390ab6fd340171b5a7df168c7420f17b7c188926dfd3",
+      "text_lf": true
+    },
+    "ci/phase5_m7_maintenance.py": {
+      "before_sha256": "1ae12706857b717291933b7864813cae3b49ad2f39b725e67bd98b6c54568e6a",
+      "sha256": "58f4927b6e2ce1e65327e9f7777f8370ba6ddaf910c8d8be0e9915777a8cb885",
+      "text_lf": true
+    },
+    "create_defaults/bulk/catalog/index-v1.json": {
+      "before_sha256": "b48de6588fb7c204f53a4a5339d095b47ea0c462fc903630a718c90c96b7135f",
+      "sha256": "66df3eead5ff4ee6f33cd16df618b9cd60bde360da1e3967011cb284b7237e3a",
+      "text_lf": true
+    },
+    "create_defaults/bulk/catalog/playlist.yml": {
+      "before_sha256": "5fe92bef660f0941f341b5753e90803792c49d3ead894716eaeb426d1f61e48a",
+      "sha256": "24c88d848ef76f0bb17ba2029839c9f91c1e1253be86b1f59cf64d09cdbf55d7",
+      "text_lf": true
+    },
+    "create_defaults/bulk/catalog/reservations-v1.json": {
+      "before_sha256": "7899bd48f6d72b146f48192a9ff6eee21232c9b8ab58a3355cb26f64ec939672",
+      "sha256": "19ee4df1fdad8f474908dcb36318b8d8f06985ba9602ae6fe668dd325f34e733",
+      "text_lf": true
+    },
+    "create_defaults/bulk/catalog_history.py": {
+      "before_sha256": null,
+      "sha256": "6e4edbda2c920e6769dcdf3cfeeaa67d7e4808e63a181475be3b5dc3767c8a11",
+      "text_lf": true
+    },
+    "create_defaults/bulk/contracts/playlist/validation.py": {
+      "before_sha256": "a932623679e460a9851199b8a95344a0f7a50e16c7c4b68fa2f02798210f1722",
+      "sha256": "8462c49d7fac2e25624f8153e39888d88960c9287854f3748196389e5cb5bace",
+      "text_lf": true
+    },
+    "create_defaults/bulk/lifecycle/basis.py": {
+      "before_sha256": "95278b3dee21fa880a873a3034642f3ccd508e0f2a07c3ca0723e16a74f5c23e",
+      "sha256": "1944bbe4948b38e719eb2c30cef27712eaafc9242354f272c3b23e1c25a6db26",
+      "text_lf": true
+    },
+    "create_defaults/logos_playlist/avp.png": {
+      "before_sha256": null,
+      "sha256": "121346d7375b741052e862b4e7124887bd1b85a1fb2e0c9c296e91669b1482d2",
+      "text_lf": false
+    },
+    "create_defaults/logos_playlist/babylon.png": {
+      "before_sha256": null,
+      "sha256": "fdf89f346410d2c0e9656bc9223ee35e7cc6377969f96cbaeffc3e9abf8e7e6a",
+      "text_lf": false
+    },
+    "create_defaults/logos_playlist/bsg.png": {
+      "before_sha256": null,
+      "sha256": "f59cf12ea9578825c118aa39e8e5209dc9d30ec4d3402c776fbb846ff133a276",
+      "text_lf": false
+    },
+    "create_defaults/logos_playlist/gundam.png": {
+      "before_sha256": null,
+      "sha256": "647992caa06ae2d2c1fd1210762f44cde0981699fd6242573a17342a88ac88e3",
+      "text_lf": false
+    },
+    "create_defaults/logos_playlist/jrrt.png": {
+      "before_sha256": null,
+      "sha256": "bab84403116d5c948fd4710640c3ecb0859dead9191eb75fdfeb492d4e473556",
+      "text_lf": false
+    },
+    "create_defaults/logos_playlist/sao.png": {
+      "before_sha256": null,
+      "sha256": "62c341d8c212eedfc070e72034db5aa530ef7ab7d3efe2ad46ed4eb9ee3e0209",
+      "text_lf": false
+    },
+    "create_defaults/logos_playlist/stargate.png": {
+      "before_sha256": null,
+      "sha256": "5842312151e2ae56020b94d030a447f886df49ac55f537129eb3187a1faeeab7",
+      "text_lf": false
+    },
+    "create_defaults/logos_playlist/wdu.png": {
+      "before_sha256": null,
+      "sha256": "f0ead3bedf57bfc333ea1517a12fba6e0f330d5cf941b27bc351398302f12cd1",
+      "text_lf": false
+    },
+    "create_defaults/phase6/tests/test_historical_catalog.py": {
+      "before_sha256": null,
+      "sha256": "15a54dbb29d28c928c7e4d3ce8b79ba0798191d6d62f7ef094518216e5145f8b",
+      "text_lf": true
+    }
+  },
+  "predecessor_commit": "d94d3209b0bd498494125137ab6db93b7aadc081",
+  "predecessor_owner_sha256": "831783cf25a04785216f67785747dcf558d4e050c8152f570500e516ef6b9495",
+  "publication_authorized": false,
+  "version": 1
+}

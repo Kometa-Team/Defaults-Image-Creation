@@ -84,7 +84,7 @@ def scope_members():
 
 def _pilot_history(root, name, current):
     from ci import phase6_playlist_maintenance as pilot
-    if name not in pilot.MODIFIED or ROOT.resolve() != pilot.ROOT.resolve():
+    if name not in pilot.historical_members() or ROOT.resolve() != pilot.ROOT.resolve():
         return current
     return pilot.historical_bytes(root, name, current)
 

@@ -31,12 +31,12 @@ jobs:
         with:
           python-version: '3.13'
       - run: python -m pip install -r create_defaults/requirements-bulk.txt
-      - name: Exact committed scope and empty-ledger provenance
+      - name: Exact committed scope, bootstrap and data successor provenance
         run: python -B -m ci.phase6_playlist_maintenance
       - name: CAS writers, restart retry, collisions and publication boundaries
-        run: python -B -m unittest create_defaults.phase6.tests.test_catalog_reservations -v
+        run: python -B -m unittest create_defaults.phase6.tests.test_catalog_reservations create_defaults.phase6.tests.test_historical_catalog -v
       - name: Exact admission, historical receipt and fresh physical checks
-        run: python -B -m unittest ci.dependency_tests.test_catalog_reservations_maintenance ci.dependency_tests.test_phase6_playlist_maintenance -v
+        run: python -B -m unittest ci.dependency_tests.test_catalog_reservations_maintenance ci.dependency_tests.test_phase6_playlist_maintenance ci.dependency_tests.test_catalog_data_maintenance -v
       - name: Closing exact-head proof
         if: ${{ always() }}
         run: python -B -m ci.phase6_playlist_maintenance

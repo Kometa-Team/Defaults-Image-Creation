@@ -279,7 +279,7 @@ class Phase6PlaylistMaintenanceTests(unittest.TestCase):
                             m7.historical_bytes(pilot.ROOT, name, current)
 
     def test_immutable_objects_are_batched_but_physical_files_stay_fresh(self):
-        for method in (pilot._tree, pilot._blobs, pilot._ancestry, pilot._diff, pilot._immutable_checked):
+        for method in (pilot._tree, pilot._blobs, pilot._batch_blobs, pilot._ancestry, pilot._diff, pilot._immutable_checked):
             method.cache_clear()
         original = pilot.git
         calls = []
