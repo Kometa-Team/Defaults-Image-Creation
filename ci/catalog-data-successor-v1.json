@@ -49,17 +49,42 @@
     },
     "create_defaults/bulk/catalog_history.py": {
       "before_sha256": null,
-      "sha256": "6e4edbda2c920e6769dcdf3cfeeaa67d7e4808e63a181475be3b5dc3767c8a11",
+      "sha256": "dca7c43dd70202d7a420a16fba44d80877e81f02626ab6481b7febd187f22b13",
+      "text_lf": true
+    },
+    "create_defaults/bulk/contracts/adoption/inventory.py": {
+      "before_sha256": "f2e32da2cfdae8840c0206348b2853ccc4f9dae209944bea219a5cec3cdb70c5",
+      "sha256": "c6cccd31f67040b9024627d126f712b71c5c6ce0e2d8b7afd29fab63ece9496f",
+      "text_lf": true
+    },
+    "create_defaults/bulk/contracts/categories/evidence.py": {
+      "before_sha256": "0f2b409b6860d2f5c21684ac41d12c8450f51c481e5aa5ad802a9bdc207c294d",
+      "sha256": "2cf3b77001c5cdf216096228d2466864ce3d2a9d374e3baba40a61cb33bc68f6",
+      "text_lf": true
+    },
+    "create_defaults/bulk/contracts/expanded/historical.py": {
+      "before_sha256": "5cd6ad3e2e161ccafc77ea5c76f4914fbe99c3343a977c52058e4342c4938f21",
+      "sha256": "c6ab67104b66a15ec0c7e36b2267cc4ed20ec288e8d71f2013ae5bcdd29e9e6f",
       "text_lf": true
     },
     "create_defaults/bulk/contracts/playlist/validation.py": {
       "before_sha256": "a932623679e460a9851199b8a95344a0f7a50e16c7c4b68fa2f02798210f1722",
-      "sha256": "8462c49d7fac2e25624f8153e39888d88960c9287854f3748196389e5cb5bace",
+      "sha256": "0f6a668ab3984a7bd6c9b9353e41da0ba4909119143b4f759e7e2b7e7869bd84",
       "text_lf": true
     },
     "create_defaults/bulk/lifecycle/basis.py": {
       "before_sha256": "95278b3dee21fa880a873a3034642f3ccd508e0f2a07c3ca0723e16a74f5c23e",
       "sha256": "1944bbe4948b38e719eb2c30cef27712eaafc9242354f272c3b23e1c25a6db26",
+      "text_lf": true
+    },
+    "create_defaults/bulk/tests/conftest.py": {
+      "before_sha256": "51decf5941bbb6f296c504e28c50ac2a1cb4664ac8d8f8cc89f75a318dfe970c",
+      "sha256": "6916a343ec3a6111bab14b7564ed227336f1100b2a0393eba5b8974667fa86d9",
+      "text_lf": true
+    },
+    "create_defaults/bulk/tests/test_catalog_generation.py": {
+      "before_sha256": "8dfff080354a047b36a8c90b4c425c4fc61cd4202b3587a5d6e561409cc056ab",
+      "sha256": "a957229d46323cd85f010e67cc7533e85f6ddfd49f45e539d4f63f09683199be",
       "text_lf": true
     },
     "create_defaults/logos_playlist/avp.png": {
@@ -104,7 +129,7 @@
     },
     "create_defaults/phase6/tests/test_historical_catalog.py": {
       "before_sha256": null,
-      "sha256": "15a54dbb29d28c928c7e4d3ce8b79ba0798191d6d62f7ef094518216e5145f8b",
+      "sha256": "fb6a754f135891f4f62718bf4b3b801aa218cff0dccc8913bbba429da4d136e0",
       "text_lf": true
     }
   },

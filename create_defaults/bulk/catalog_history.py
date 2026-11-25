@@ -6,7 +6,9 @@ from pathlib import Path, PurePosixPath
 import subprocess
 from tempfile import TemporaryDirectory
 
-from .common import BulkError
+from .common import BulkError, reject_links
+from .config import CATEGORIES, select_categories
+from .definitions import load_definitions
 from .contracts.adoption.sources import load_pins
 from .contracts.expanded.resolution import Resolution, resolve
 
@@ -107,3 +109,26 @@ def resolve_historical():
     except BaseException:
         directory.cleanup()
         raise
+
+
+def load_historical_catalog(categories):
+    """Normal definition loader over authenticated pre-addition catalog inputs."""
+    authority = _bindings()
+    selected = select_categories(categories)
+    with TemporaryDirectory(prefix='defaults-historical-definitions-') as folder:
+        root = Path(folder)
+        objects = _blobs(*authority)
+        for name,raw in objects:
+            (root/name).write_bytes(raw)
+        paths = [root/(category.lower()+'.yml') for category in CATEGORIES
+                 if category in selected and category != 'Overlays']
+        for name,raw in objects:
+            if reject_links(root/name).read_bytes() != raw:
+                _fail('Historical catalog input changed before loading')
+        definitions = load_definitions(paths,profiles_path=root/'profiles.yml')
+        for name,raw in objects:
+            if reject_links(root/name).read_bytes() != raw:
+                _fail('Historical catalog input changed during definition loading')
+        if _bindings() != authority:
+            _fail('Historical catalog authority changed during definition loading')
+        return definitions

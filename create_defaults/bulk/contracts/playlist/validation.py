@@ -13,7 +13,7 @@ import unicodedata
 
 from ...common import BulkError, canonical, confined, fingerprint, sha256
 from ...config import ROOT
-from ...catalog import load_catalog
+from ...catalog_history import load_historical_catalog as load_catalog
 from ...definitions import Definition
 from ...planner import effective_parameters, renderer_identity
 from ...translations import Translations
@@ -297,11 +297,7 @@ class PlaylistBoundary:
     def audit(self):
         """Reproducible nine-item read-only audit; report all material mismatches."""
         verify_sources(load_pins())
-        from ...catalog_history import resolve_historical
-        historical = resolve_historical()
-        historical.verify_current()
-        definitions = {key: historical.definition(key) for key,value in historical.data()["expanded"].items()
-                       if value["category"] == "Playlist"}
+        definitions = {d.id: d.for_language("en").data for d in load_catalog(("Playlist",))}
         expected_ids = sorted(r.to_dict()["identity"]["id"] for r in self.records)
         membership = sorted(definitions) == expected_ids
         translations = Translations({"en": ROOT / "fixtures/english/en.yml"})

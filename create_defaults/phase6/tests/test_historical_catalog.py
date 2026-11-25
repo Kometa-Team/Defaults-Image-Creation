@@ -35,6 +35,19 @@ class HistoricalCatalogTests(unittest.TestCase):
         expanded=self.current.data()['expanded']
         self.assertEqual({key:value for key,value in expanded.items() if value['category']=='Playlist'},current)
 
+    def test_historical_loader_keeps_declared_membership_and_closing_file_checks(self):
+        definitions=history.load_historical_catalog(('Playlist',))
+        self.assertEqual({d.id:d.for_language('en').data for d in definitions},
+            {r['identity']['id']:read_canonical(r['effective_definition_json']) for r in self.records})
+        original=history.load_definitions
+        def changed(paths,**kwargs):
+            result=original(paths,**kwargs)
+            Path(paths[0]).write_bytes(b'unapproved')
+            return result
+        with patch.object(history,'load_definitions',changed):
+            with self.assertRaisesRegex(BulkError,'changed during definition loading'):
+                history.load_historical_catalog(('Playlist',))
+
     def test_current_resolution_still_rejects_file_drift(self):
         target=history.ROOT/'create_defaults/bulk/catalog/playlist.yml'
         original=Path.read_bytes;raw=original(target)

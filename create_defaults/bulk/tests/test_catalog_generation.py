@@ -6,7 +6,8 @@ from PIL import Image
 import pytest
 import yaml
 
-from create_defaults.bulk.catalog import CATALOG, load_catalog
+from create_defaults.bulk.catalog import CATALOG
+from create_defaults.bulk.catalog_history import load_historical_catalog as load_catalog
 from create_defaults.bulk.common import BulkError, sha256
 from create_defaults.bulk.config import CATEGORIES, Config, ROOT
 from create_defaults.bulk.definitions import Definition
