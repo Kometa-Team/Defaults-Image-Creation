@@ -1,0 +1,115 @@
+{
+  "allocated_staging_uuids": 8,
+  "approved_jpeg_hash_matches": 8,
+  "catalog_mappings_valid": 8,
+  "conflicts": [
+    {
+      "case": "changed-request-token",
+      "error": "stale_version",
+      "rejected": true
+    },
+    {
+      "case": "semantic",
+      "error": "stale_version",
+      "rejected": true
+    },
+    {
+      "case": "public-path",
+      "error": "p4m2_name_collision",
+      "rejected": true
+    }
+  ],
+  "destination_baseline": "ab842c454921a738121e7744209e38def7e2a27d",
+  "elapsed_seconds": 222.906,
+  "entries": [
+    {
+      "approved_sha256": "4ed3194f2d70204f730b3847f22349fcd2c579818b9d6a09a03730180be18078",
+      "catalog_commit": "a039d41a7f6d9d2fdaac4cb0e41ddc6d2caac7b1",
+      "production_identity": null,
+      "public_path": "playlist/Alien & Predator (Timeline Order).jpg",
+      "request": "avp",
+      "staging_identity": "playlist.10916230f39c45caa5a0b6e152c5b931"
+    },
+    {
+      "approved_sha256": "4bde3a4a13e08ed9a30a8c2e7ed760d3959eab18d4edeaf2d710c29de6a4a0ca",
+      "catalog_commit": "a039d41a7f6d9d2fdaac4cb0e41ddc6d2caac7b1",
+      "production_identity": null,
+      "public_path": "playlist/Babylon 5 (Timeline Order).jpg",
+      "request": "babylon",
+      "staging_identity": "playlist.f10f35ee9a18424db9d057353c99744b"
+    },
+    {
+      "approved_sha256": "4db6f349cd3591c4a3d52b642dfd6f253294fccba130d0558b7085cf973a429c",
+      "catalog_commit": "a039d41a7f6d9d2fdaac4cb0e41ddc6d2caac7b1",
+      "production_identity": null,
+      "public_path": "playlist/Battlestar Galactica (Timeline Order).jpg",
+      "request": "bsg",
+      "staging_identity": "playlist.602ef98d63814255b94e2802602baef1"
+    },
+    {
+      "approved_sha256": "864a16e906d71b3b9eaabe01ff9dca5f55d1cdee1527489fbf08b9a545e0b273",
+      "catalog_commit": "a039d41a7f6d9d2fdaac4cb0e41ddc6d2caac7b1",
+      "production_identity": null,
+      "public_path": "playlist/Mobile Suit Gundam (Timeline Order).jpg",
+      "request": "gundam",
+      "staging_identity": "playlist.b629543f941f405caa54b31bee6fcf91"
+    },
+    {
+      "approved_sha256": "2e6ba926238e2c7d5213701a08d2c9cefe498ffa6c54c9c411ee488679b764d3",
+      "catalog_commit": "a039d41a7f6d9d2fdaac4cb0e41ddc6d2caac7b1",
+      "production_identity": null,
+      "public_path": "playlist/Middle-earth (Timeline Order).jpg",
+      "request": "jrrt",
+      "staging_identity": "playlist.6379d1c52a2c4a7c807c7b3acc68933b"
+    },
+    {
+      "approved_sha256": "0221887405a7b2526afae40e0f770a8e9feb5ebbdde86789ce0c6125c7d201db",
+      "catalog_commit": "a039d41a7f6d9d2fdaac4cb0e41ddc6d2caac7b1",
+      "production_identity": null,
+      "public_path": "playlist/Sword Art Online (Timeline Order).jpg",
+      "request": "sao",
+      "staging_identity": "playlist.4de71a8fabe74121b8a61916044fe563"
+    },
+    {
+      "approved_sha256": "8d93feff5ba739ba5aa31a0ba40b0d533e66a32cdf0a5857c8fd1fd76eec5e86",
+      "catalog_commit": "a039d41a7f6d9d2fdaac4cb0e41ddc6d2caac7b1",
+      "production_identity": null,
+      "public_path": "playlist/Stargate (Timeline Order).jpg",
+      "request": "stargate",
+      "staging_identity": "playlist.832ba7a4eb7c46e28f33c4b1ea72cf7a"
+    },
+    {
+      "approved_sha256": "a6622b755f339e22d813d98adc0d60c3d9289c172b0c2a224fceb32cb96413b3",
+      "catalog_commit": "a039d41a7f6d9d2fdaac4cb0e41ddc6d2caac7b1",
+      "production_identity": null,
+      "public_path": "playlist/The Walking Dead Universe (Timeline Order).jpg",
+      "request": "wdu",
+      "staging_identity": "playlist.01cf69a59a3947e5bd65e996e1d087b5"
+    }
+  ],
+  "evidence_kind": "local-staging-only; reused unchanged implementation; UUIDs are not production reservations",
+  "exact_release_diff": {
+    "additions": 8,
+    "deletions": 0,
+    "modifications": 0,
+    "renames": 0
+  },
+  "implementation_sha256": "cf982ecd8269ba750ca03e0c0117d65550276113bf023b7f1eb9de61ec505a94",
+  "live_catalog_writes": 0,
+  "network_writes": 0,
+  "new_allocations_this_run": 0,
+  "operator_manifest_approved": false,
+  "owner": {
+    "branch": "main",
+    "environment": "staging",
+    "ledger": "create_defaults/bulk/catalog/reservations-v1.json",
+    "repository": "Kometa-Team/Defaults-Image-Creation"
+  },
+  "production_registry_initialized": false,
+  "production_uuids_allocated": 0,
+  "restart_retry_matches": 8,
+  "source_commit": "c83504ab1481ac26adaff65d2125bba27c40a3ef",
+  "staging_catalog_head": "a039d41a7f6d9d2fdaac4cb0e41ddc6d2caac7b1",
+  "staging_release_head": "0d2b7d3f90cbb6de15b9eb4a5a633d8988e0d244",
+  "success": true
+}

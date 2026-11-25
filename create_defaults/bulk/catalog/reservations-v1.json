@@ -1,0 +1,16 @@
+{
+  "base_commit": "c83504ab1481ac26adaff65d2125bba27c40a3ef",
+  "destination_head": "ab842c454921a738121e7744209e38def7e2a27d",
+  "entries": [],
+  "kind": "catalog-reservations",
+  "owner": {
+    "branch": "main",
+    "environment": "production",
+    "repository": "Kometa-Team/Defaults-Image-Creation"
+  },
+  "parent": "c83504ab1481ac26adaff65d2125bba27c40a3ef",
+  "publication_authorized": false,
+  "requests": [],
+  "sha256": "3ef0f32342c3f32d44010a2e1b5ca9a6e8bed9d1b1ae7ef3a340c5424bb7b576",
+  "version": 1
+}

@@ -344,7 +344,9 @@ class Phase6PlaylistMaintenanceTests(unittest.TestCase):
         with m7._invocation(pilot.ROOT):
             physical=m7._owned_members(pilot.ROOT)
             legacy=m7._owned_members(pilot.ROOT, physical=False)
-            for name, before, after in pilot._decode((pilot.ROOT/pilot.RECEIPT).read_bytes()):
+            for name, before, after in pilot.current_rows(
+                    (pilot.ROOT/pilot.RECEIPT).read_bytes(),
+                    (pilot.ROOT/pilot.REGISTRY_RECEIPT).read_bytes()):
                 if name in pilot.MODIFIED:
                     self.assertEqual(physical[name]['sha256'], after)
             name='create_defaults/lifecycle/ROADMAP.md'
