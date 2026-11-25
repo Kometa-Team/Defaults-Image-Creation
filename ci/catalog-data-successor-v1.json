@@ -84,7 +84,7 @@
     },
     "create_defaults/bulk/tests/test_catalog_generation.py": {
       "before_sha256": "8dfff080354a047b36a8c90b4c425c4fc61cd4202b3587a5d6e561409cc056ab",
-      "sha256": "a957229d46323cd85f010e67cc7533e85f6ddfd49f45e539d4f63f09683199be",
+      "sha256": "bb7aaa18d7b529c901721eb85d5dc9e10ba6de60fc7fd54061f0441beff482e0",
       "text_lf": true
     },
     "create_defaults/logos_playlist/avp.png": {
@@ -126,6 +126,11 @@
       "before_sha256": null,
       "sha256": "f0ead3bedf57bfc333ea1517a12fba6e0f330d5cf941b27bc351398302f12cd1",
       "text_lf": false
+    },
+    "create_defaults/phase2/tests/test_package_a.py": {
+      "before_sha256": "9fbfa3d1f1669297dff09b04320e054930a44e9e93b8e053c7c1487107c24488",
+      "sha256": "4b4e5536bb68a4a33abb504be6aecab2c7ea608184991f46fb463941968833cc",
+      "text_lf": true
     },
     "create_defaults/phase6/tests/test_historical_catalog.py": {
       "before_sha256": null,

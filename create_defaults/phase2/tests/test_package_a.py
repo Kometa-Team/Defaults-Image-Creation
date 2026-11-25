@@ -241,15 +241,26 @@ class EvidenceTests(unittest.TestCase):
 
     def test_overlay_globs_count_files_not_operations(self):
         from create_defaults.bulk.asset_cases import historical
+        from ci import phase6_playlist_maintenance as successor
+        entry = successor.verify_checkout()
+        # Authenticate only the eight exact new PNG postimages. Frozen overlay
+        # observations still count their original namespace; unknown additions
+        # remain in actual below and fail the unchanged exact-set assertion.
+        additions = {name.removeprefix("create_defaults/") for name in successor.DATA_BINARY}
+        self.assertEqual(len(additions), 8)
         for item in self.audit["overlays"]:
             directory = ROOT / str(Path(item["input_pattern"]).parent)
-            actual = {path.relative_to(ROOT).as_posix() for path in directory.iterdir() if path.suffix.lower() == ".png"}
+            current = {path.relative_to(ROOT).as_posix() for path in directory.iterdir() if path.suffix.lower() == ".png"}
+            introduced = {name for name in additions if (ROOT / name).parent == directory}
+            self.assertTrue(introduced <= current)
+            actual = current - introduced
             # Frozen observations retain their historical spellings; only the
             # explicit byte-preserving source-case ledger can bridge to today.
             expected = {historical(ROOT, path).relative_to(ROOT).as_posix() for path in item["inputs"]}
             self.assertEqual(expected, actual)
             self.assertEqual(item["matching_files"], len(actual))
         self.assertEqual(self.audit["summary"]["overlay_file_transforms"], sum(item["matching_files"] for item in self.audit["overlays"]))
+        self.assertEqual(successor.verify_checkout(), entry)
 
     def test_inactive_legacy_path_is_not_required_missing_logo(self):
         self.assertEqual(self.audit["assets"]["missing_inputs"], [])
