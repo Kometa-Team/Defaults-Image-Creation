@@ -49,7 +49,7 @@
     },
     "create_defaults/bulk/catalog_history.py": {
       "before_sha256": null,
-      "sha256": "001bdbfa2410931e6f4d4a72b17f4e483b45eaefae80ee7953bf044675f9a264",
+      "sha256": "2f2efbe91eef515c21f734b2ddcc1789c802c2c0074ffa2666a09e05ca2be223",
       "text_lf": true
     },
     "create_defaults/bulk/contracts/adoption/inventory.py": {
@@ -132,9 +132,14 @@
       "sha256": "4b4e5536bb68a4a33abb504be6aecab2c7ea608184991f46fb463941968833cc",
       "text_lf": true
     },
+    "create_defaults/phase3/tests/translation_samples.py": {
+      "before_sha256": "c3a2ee97c316ee2d3f385a50eb1a27f36444aa7e97fc509afcee361ee01c3903",
+      "sha256": "28ae65a14ae09603abd7f410520b5406433a3590f2759dee7f6f0da8f9cd52f9",
+      "text_lf": true
+    },
     "create_defaults/phase6/tests/test_historical_catalog.py": {
       "before_sha256": null,
-      "sha256": "fb6a754f135891f4f62718bf4b3b801aa218cff0dccc8913bbba429da4d136e0",
+      "sha256": "867b060b5ca5bc8cf5fa3af598763b4a09cc5d23b0a5dcc73bef10ca835cc1da",
       "text_lf": true
     }
   },

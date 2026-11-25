@@ -99,7 +99,7 @@ class HistoricalResolution(Resolution):
         return super().verify_current(identities)
 
 
-def resolve_historical():
+def resolve_historical(*, categories=None):
     """Use the normal loader/expander over the pinned pre-addition catalog."""
     authority = _bindings()
     directory = TemporaryDirectory(prefix='defaults-historical-catalog-')
@@ -107,7 +107,12 @@ def resolve_historical():
     try:
         for name,raw in _blobs(*authority):
             (root/name).write_bytes(raw)
-        paths = tuple(sorted(path for path in root.iterdir() if path.name != 'profiles.yml'))
+        if categories is None:
+            paths = tuple(sorted(path for path in root.iterdir() if path.name != 'profiles.yml'))
+        else:
+            selected = select_categories(categories)
+            paths = tuple(root/(category.lower()+'.yml') for category in CATEGORIES
+                          if category in selected and category != 'Overlays')
         current = resolve(paths, profiles_path=root/'profiles.yml')
         result = HistoricalResolution(current.encoded,current.source_pins,directory,authority)
         result.verify_current()

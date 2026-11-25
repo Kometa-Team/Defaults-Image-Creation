@@ -39,7 +39,8 @@ def real_package(category='Playlist'):
 
 @lru_cache(maxsize=1)
 def real_resolution():
-    return resolve([CATALOG/'playlist.yml'])
+    from create_defaults.bulk.catalog_history import resolve_historical
+    return resolve_historical(categories=('Playlist',))
 
 
 def request_for(resolution, package, language='en', identity=None, variant=None):

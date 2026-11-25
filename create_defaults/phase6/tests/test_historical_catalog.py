@@ -48,6 +48,15 @@ class HistoricalCatalogTests(unittest.TestCase):
             with self.assertRaisesRegex(BulkError,'changed during definition loading'):
                 history.load_historical_catalog(('Playlist',))
 
+    def test_scoped_historical_resolution_keeps_exact_original_playlist(self):
+        current=history.resolve_historical(categories=('Playlist',))
+        self.assertEqual({Path(path).name for _,path,_ in current.source_pins},
+            {'playlist.yml','profiles.yml'})
+        expected={r['identity']['id']:read_canonical(r['effective_definition_json']) for r in self.records}
+        self.assertEqual(current.data()['expanded'],expected)
+        current.verify_current()
+        self.assertEqual(len(load_catalog(('Playlist',))),17)
+
     def test_current_resolution_still_rejects_file_drift(self):
         target=history.ROOT/'create_defaults/bulk/catalog/playlist.yml'
         original=Path.read_bytes;raw=original(target)

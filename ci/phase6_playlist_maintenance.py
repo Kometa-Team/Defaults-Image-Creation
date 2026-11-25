@@ -39,7 +39,7 @@ DATA_BASE = 'e58da53c03857ade7b2bdd0c743c6970c0c761a3'
 DATA_PREDECESSOR = 'd94d3209b0bd498494125137ab6db93b7aadc081'
 DATA_ALLOCATION = 'd3ed9ff46a77cb7a13caef57a84830f08e1d25c8'
 DATA_RECEIPT = 'ci/catalog-data-successor-v1.json'
-DATA_PIN = '0d17ab33df900c5b1db4ff9a7278b29f8d3c13ad788faff7db3e4f14ad3e4a71'
+DATA_PIN = 'e751d70b3574d1f84979d8b5c2cb9988996e081f1dc7642dd53c358809212e6c'
 DATA_MODIFIED = frozenset((
     '.github/workflows/catalog-reservations-validation.yml',
     'ci/dependency_tests/test_catalog_reservations_maintenance.py',
@@ -55,6 +55,7 @@ DATA_MODIFIED = frozenset((
     'create_defaults/bulk/tests/conftest.py',
     'create_defaults/bulk/tests/test_catalog_generation.py',
     'create_defaults/phase2/tests/test_package_a.py',
+    'create_defaults/phase3/tests/translation_samples.py',
 ))
 DATA_ADDED = frozenset((
     'ci/dependency_tests/test_catalog_data_maintenance.py',
