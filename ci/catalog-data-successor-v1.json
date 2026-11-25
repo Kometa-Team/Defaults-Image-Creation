@@ -49,7 +49,7 @@
     },
     "create_defaults/bulk/catalog_history.py": {
       "before_sha256": null,
-      "sha256": "dca7c43dd70202d7a420a16fba44d80877e81f02626ab6481b7febd187f22b13",
+      "sha256": "001bdbfa2410931e6f4d4a72b17f4e483b45eaefae80ee7953bf044675f9a264",
       "text_lf": true
     },
     "create_defaults/bulk/contracts/adoption/inventory.py": {

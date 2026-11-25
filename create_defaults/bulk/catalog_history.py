@@ -9,7 +9,6 @@ from tempfile import TemporaryDirectory
 from .common import BulkError, reject_links
 from .config import CATEGORIES, select_categories
 from .definitions import load_definitions
-from .contracts.adoption.sources import load_pins
 from .contracts.expanded.resolution import Resolution, resolve
 
 
@@ -28,6 +27,13 @@ def _git(*args, data=None):
     if result.returncode:
         _fail('Cannot read the authenticated historical catalog commit')
     return result.stdout
+
+
+def load_pins():
+    # Adoption's public package imports its inventory; defer this import until
+    # the historical reader is initialized to avoid an import-order cycle.
+    from .contracts.adoption.sources import load_pins as original
+    return original()
 
 
 def _bindings():
