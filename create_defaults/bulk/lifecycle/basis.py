@@ -10,7 +10,7 @@ from ..common import canonical, fingerprint
 from ..contracts.adoption.models import HistoricalRegistry
 from ..contracts.models import Identity
 from ..contracts.categories.release import Implementation, RELEASE_SHA256
-from ..contracts.expanded.resolution import resolve
+from ..catalog_history import resolve_historical
 from ..contracts.playlist.validation import M2_SHA256
 from .identity_models import fail
 
@@ -111,9 +111,14 @@ def historical_basis():
 
 
 @lru_cache(maxsize=1)
+def _frozen_resolution():
+    return resolve_historical()
+
+
 def frozen_resolution():
     # No output/artifact generation: the original loader/expander only.
-    value = resolve()
+    value = _frozen_resolution()
+    value.verify_current()
     actual = set(value.data()["expanded"])
     expected = {i for i in historical_basis().ids if historical_basis().row(i)["identity"]["category"] != "Overlays"}
     if actual != expected:fail("historical_expansion_membership")
