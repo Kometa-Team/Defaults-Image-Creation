@@ -23,7 +23,7 @@
     },
     "ci/people_unicode_maintenance.py": {
       "before_sha256": "02d95c28925de3920e68498746a9a349cff86e3b16f6bbc8290c1fb394e91ec9",
-      "sha256": "db34da75e5e3e99d6582cb1f239744864fd3411a06abf38de8083f6693b171b3"
+      "sha256": "9222f22c9e4394ee0daabc19be3accf35932d6e50b4a22b011dd3b81a247c31b"
     },
     "ci/phase5_m6_maintenance.py": {
       "before_sha256": "8804ae065c50b42aa974390ab6fd340171b5a7df168c7420f17b7c188926dfd3",

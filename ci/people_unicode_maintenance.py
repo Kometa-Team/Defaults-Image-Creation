@@ -276,7 +276,7 @@ def _verify_fresh(root, owned):
                 current = publication.predecessor(name)
         elif name in timeouts:
             timeout = timeouts[name]
-            if digest(physical) != timeout['sha256']:
+            if digest(physical) != source_adapter().selected_hash(name,timeout['sha256']):
                 raise ValueError('Changed owned timeout member: '+name)
             current = timeout['predecessor_lf'].encode() if timeout['predecessor_lf'] is not None else physical
         elif name in m6.COMPUTATION_BEFORE:
