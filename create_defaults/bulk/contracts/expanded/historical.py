@@ -8,7 +8,7 @@ from ..adoption.inventory import discover
 from ..adoption.models import audit_membership, read_canonical
 from ..playlist.validation import CONTRACT_SHA256, M2_SHA256
 from .graph import Snapshot, node_id
-from .resolution import resolve
+from ...catalog_history import resolve_historical as resolve
 
 
 def build(registry, records, resolution):

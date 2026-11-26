@@ -691,6 +691,9 @@ def verify_scope(root,baseline,names):
 
 
 def selected_hash(name,expected):
+    if name in {'create_defaults/bulk/catalog/playlist.yml', 'create_defaults/bulk/catalog/index-v1.json'}:
+        from ci.phase6_playlist_maintenance import selected_hash as catalog_hash
+        return catalog_hash(name,expected)
     if name in {'create_defaults/bulk/planner.py','create_defaults/bulk/workers.py',
                 'create_defaults/create_poster.py','create_defaults/validation_manifest.py',
                 'create_defaults/bulk/tests/test_logo_workflow.py',

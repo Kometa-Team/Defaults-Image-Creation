@@ -129,7 +129,7 @@ def _build_historical_context(verified_historical_discovery):
     """
     from create_defaults.bulk.contracts.adoption.sources import load_pins,verify_sources
     from create_defaults.bulk.contracts.categories.evidence import verify_inputs
-    from create_defaults.bulk.contracts.expanded.resolution import resolve
+    from create_defaults.bulk.catalog_history import resolve_historical as resolve
     from create_defaults.bulk.contracts.expanded.historical import build
     import PIL.Image
     import requests

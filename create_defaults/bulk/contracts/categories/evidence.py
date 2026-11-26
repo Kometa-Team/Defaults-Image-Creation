@@ -14,7 +14,7 @@ from ...config import ROOT
 from ..adoption.models import HistoricalOutput,HistoricalRegistry,read_canonical
 from ..adoption.sources import load_pins,verify_sources
 from ..playlist.validation import M2_SHA256
-from ..expanded.resolution import resolve
+from ...catalog_history import resolve_historical as resolve
 from ..expanded.historical import build
 
 

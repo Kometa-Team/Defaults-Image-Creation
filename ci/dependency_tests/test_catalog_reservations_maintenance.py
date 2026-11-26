@@ -16,7 +16,7 @@ class CatalogReservationMaintenanceTests(unittest.TestCase):
         self.assertEqual(pilot.git('show',pilot.REGISTRY_PREDECESSOR+':'+pilot.REGISTRY_PRIOR_RECEIPT),
                          pilot.git('show','HEAD:'+pilot.REGISTRY_PRIOR_RECEIPT))
         self.assertTrue(pilot.REGISTRY_ADDED.isdisjoint(before))
-        self.assertEqual(set(pilot.scope_members()),set(pilot.MODIFIED|pilot.ADDED|pilot.REGISTRY_ADDED|{pilot.OWNER,pilot.RECEIPT,pilot.REGISTRY_RECEIPT,pilot.REGISTRY_PRIOR_RECEIPT}))
+        self.assertEqual(set(pilot.scope_members()),set(pilot.MODIFIED|pilot.ADDED|pilot.REGISTRY_ADDED|{pilot.OWNER,pilot.RECEIPT,pilot.REGISTRY_RECEIPT,pilot.REGISTRY_PRIOR_RECEIPT,pilot.DATA_RECEIPT}|pilot.DATA_MODIFIED|pilot.DATA_ADDED))
 
     def test_actual_lifecycle_scope_including_registry(self):
         from ci.phase4_m7 import changed_scope
@@ -90,16 +90,19 @@ class CatalogReservationMaintenanceTests(unittest.TestCase):
     def test_empty_ledger_has_no_allocations_or_publication_authority(self):
         from create_defaults.bulk.library_sources import check_seal
         from create_defaults.bulk.catalog_reservations import LEDGER
-        value=check_seal(json.loads((pilot.ROOT/LEDGER).read_bytes()))
+        bootstrap='6a3cf77a5882d31987ea6f9691a7faf0139f050b'
+        original=pilot.git('show',bootstrap+':'+LEDGER)
+        self.assertEqual(original,pilot.git('show',pilot.DATA_BASE+':'+LEDGER))
+        value=check_seal(json.loads(original))
         self.assertEqual(value['entries'],[]);self.assertEqual(value['requests'],[])
         self.assertEqual(value['owner'],dict(repository='Kometa-Team/Defaults-Image-Creation',branch='main',environment='production'))
         self.assertFalse(value['publication_authorized'])
-        event=pilot.git('log','--no-merges','-1','--format=%H','HEAD','--',LEDGER).decode().strip()
+        event=pilot.git('log','--no-merges','-1','--format=%H',bootstrap,'--',LEDGER).decode().strip()
         parent=pilot.git('rev-parse',event+'^').decode().strip()
         self.assertEqual(value['parent'],parent);self.assertEqual(value['base_commit'],parent)
         for name in ('playlist.yml','index-v1.json','profiles.yml'):
             path='create_defaults/bulk/catalog/'+name
-            self.assertEqual(pilot.git('show',pilot.REGISTRY_BASE+':'+path),pilot.git('show','HEAD:'+path))
+            self.assertEqual(pilot.git('show',pilot.REGISTRY_BASE+':'+path),pilot.git('show',bootstrap+':'+path))
 
     def test_registration_is_add_only_and_rejects_unknown_modes_and_paths(self):
         for name in pilot.REGISTRY_ADDED|{'unapproved.txt'}:

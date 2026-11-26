@@ -13,7 +13,7 @@ import unicodedata
 
 from ...common import BulkError, canonical, confined, fingerprint, sha256
 from ...config import ROOT
-from ...catalog import load_catalog
+from ...catalog_history import load_historical_catalog as load_catalog
 from ...definitions import Definition
 from ...planner import effective_parameters, renderer_identity
 from ...translations import Translations

@@ -7,7 +7,7 @@ import json
 from pathlib import PurePosixPath
 
 from ... import asset_cases
-from ...catalog import load_catalog
+from ...catalog_history import load_historical_catalog as load_catalog
 from ...common import confined, fingerprint, sha256
 from ...config import CATEGORIES, ROOT
 from ...generators import GENERATORS

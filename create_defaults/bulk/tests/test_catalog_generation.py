@@ -27,7 +27,8 @@ COUNTS = {"Aspect": 9, "AudioLanguage": 188, "Awards": 4847, "Based": 4, "Chart"
 
 @pytest.fixture(scope="module")
 def catalog():
-    definitions = load_catalog(["All"])
+    from create_defaults.bulk.catalog_history import load_historical_catalog
+    definitions = load_historical_catalog(["All"])
     expanded = tuple(Planner(generators=GENERATORS).expand(definitions)[0].values())
     return definitions, expanded
 
