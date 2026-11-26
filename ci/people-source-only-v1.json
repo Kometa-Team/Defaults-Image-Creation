@@ -7,11 +7,7 @@
     },
     "ci/people_readme_maintenance.py": {
       "before_sha256": "f774f23ba259b3749507ed28f3181e9fe1def540b8ee706ff9da752d1da8bf90",
-      "sha256": "7e09649b5df928e110cdfd0e460905a8d1ec55a6c91d4a27733ff65922abc219"
-    },
-    "ci/people_security.py": {
-      "before_sha256": "27c8cd933862be63ebceb9f4a54df3b2080ea567877a5928ef75e2205947ca3c",
-      "sha256": "4af6c782aaf48eefbbd6e0c30510226ae8759f4537b69ae7093869e7d7eb9c5f"
+      "sha256": "58d9c8917b48005fae04eedf3eb236a09b5270e27d5c45c504ef9164ac36695e"
     },
     "ci/people_unicode_maintenance.py": {
       "before_sha256": "02d95c28925de3920e68498746a9a349cff86e3b16f6bbc8290c1fb394e91ec9",
@@ -63,7 +59,7 @@
     },
     "create_people_posters/publish_people_github.py": {
       "before_sha256": "2f9953098f9476aa648ae2c0c11eb406d28ed37d5eac07a5aa6e23cc42800b8d",
-      "sha256": "d6b8825ea07f063a84252ac9fd0e2b3741f54a3dd2c8f5e8791ed9a0f4ba1ac5"
+      "sha256": "4b5d0f51230590587b06aa7cb71b8af626a0bda224624cdedae79ed0a0a5203f"
     },
     "create_people_posters/recover_edge_chops.py": {
       "before_sha256": "a945c37104ae4d9b7a8d0c5dddff69da786e3f7b82278819e33729c8e430e16f",
@@ -79,7 +75,7 @@
     },
     "create_people_posters/tests/test_background_orchestrator.py": {
       "before_sha256": "9653f2ce93558c6a2fe47ced1de359c1b66d4b879ded16f6a3a6bd772fe7928f",
-      "sha256": "2db01f7f7dc4c3fe646d81d0c13c66e414feab6250c311d94f13243203ad9c9d"
+      "sha256": "9de4888726e02992ed90d408a87bd2779462f7c7fed3cbcb5b289cfcef4cd711"
     },
     "create_people_posters/tests/test_people_api_orchestrator.py": {
       "before_sha256": "9308754202c7dab68c0e4acfa0f75203e9539459420a12c3565545e1918944ad",
@@ -91,7 +87,7 @@
     },
     "create_people_posters/tests/test_people_source_only.py": {
       "before_sha256": null,
-      "sha256": "c6ee3c09791fc9fa20d5a07484e010f5bf325349ec6d326196ac9eb9d2b355bf"
+      "sha256": "a3ee42ce9be7650a6bbbe6326855c06b959bc6d3b81e518fb7005efcc3d9b9c8"
     },
     "create_people_posters/tmdb_people.py": {
       "before_sha256": "73924057e4495e74d56f6ba0684c88b4c5674ebec9c26670897dba062972b2d8",

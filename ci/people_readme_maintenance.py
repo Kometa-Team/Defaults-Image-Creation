@@ -186,7 +186,8 @@ def scope_members():
 
 def test_ids():
     from ci.people_job_retention_maintenance import test_ids as retention_ids
-    return list(manifest()['pytest_ids']) + retention_ids()
+    from ci.phase6_playlist_maintenance import source_adapter
+    return list(manifest()['pytest_ids']) + retention_ids() + source_adapter().test_ids()
 
 
 def verify_scope(root, baseline, names):

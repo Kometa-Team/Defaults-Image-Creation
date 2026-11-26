@@ -109,7 +109,7 @@ def call_main(monkeypatch, *args):
         # incompatible persistent workspace or modifying its checkpoints.
         options = ["--workspace-mode", "persistent"]
     else:
-        options = ["--batch-id", os.environ["PEOPLE_BATCH_ID"]]
+        options = ["--workspace-mode", "batch", "--batch-id", os.environ["PEOPLE_BATCH_ID"]]
         orch.CONFIG_DIR = config.parent.parent
     monkeypatch.setattr(sys, "argv", ["orchestrator.py", *options, *args])
     try:

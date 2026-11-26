@@ -151,6 +151,18 @@ def test_old_batch_cannot_resume_and_receipt_stays_readable(source_only,monkeypa
         with pytest.raises(ValueError,match='Incompatible output contract'):manager.select(cleanup=False)
         assert manifest.read_bytes()==prior
     finally:manager.close()
+    # A direct publisher retry must supply the recorded contract up front;
+    # it cannot reinterpret already imported legacy dimension settings.
+    import publish_people_github as publisher
+    import dotenv
+    (source_only/'manifest.json').write_text(json.dumps({'output_contract':jobs.SOURCE_CONTRACT}))
+    with monkeypatch.context() as retry:
+        retry.delenv('PEOPLE_OUTPUT_CONTRACT')
+        retry.setattr(dotenv,'load_dotenv',lambda *a,**k:None)
+        retry.setattr(publisher,'GitHubClient',lambda:pytest.fail('Incompatible retry reached GitHub'))
+        retry.setattr(sys,'argv',['publisher','--op','validate','--config',str(source_only)])
+        assert publisher.main()==1
+        assert not os.getenv('PEOPLE_OUTPUT_CONTRACT')
     # Standalone renderer checkpoints also cannot adopt an old seven-style job.
     state=source_only/'.orch/poster-render.json';state.parent.mkdir()
     state.write_text(json.dumps({'Legacy':{'fingerprint':{'engine':'python'}}}))

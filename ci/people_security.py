@@ -28,8 +28,6 @@ def selections():
     from ci.people_storage_maintenance import extra_ids
     from ci.people_job_retention_maintenance import collection_test_ids
     groups["compatibility"] = groups["compatibility"] + extra_ids(ROOT) + collection_test_ids()
-    from ci.phase6_playlist_maintenance import source_adapter
-    groups['compatibility'] += source_adapter().test_ids()
     require(set(groups) == GROUPS, "Changed mandatory People groups")
     seen = set()
     for name, ids in groups.items():

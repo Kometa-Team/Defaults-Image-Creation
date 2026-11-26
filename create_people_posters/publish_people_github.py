@@ -732,13 +732,7 @@ def main():
     ledger = None
     inventory = None
     try:
-        from people_workspaces import check_output_contract, reject_links
-        contract_file = args.config / 'manifest.json'
-        reject_links(contract_file)
-        if contract_file.is_file():
-            recorded = json.loads(contract_file.read_text(encoding='utf8')).get('output_contract')
-            if recorded and not os.getenv('PEOPLE_OUTPUT_CONTRACT'):
-                os.environ['PEOPLE_OUTPUT_CONTRACT'] = recorded
+        from people_workspaces import check_output_contract
         check_output_contract(args.config)
         branch = branch_name(args.branch)
         if args.op in {"prepare", "push"}:
@@ -768,7 +762,7 @@ def main():
                 prepare(args.config, batch, ledger, branch)
             publisher.publish(batch, args.dry_run)
             if not args.dry_run:
-                print(f"[OK] All seven destinations verified for {batch}")
+                print(f"[OK] All required destinations verified for {batch}")
         return 0
     except (GitHubError, ValueError, OSError) as error:
         print(f"[ERROR] {safe_exception(error)}", file=sys.stderr)
