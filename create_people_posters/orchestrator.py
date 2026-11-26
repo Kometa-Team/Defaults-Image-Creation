@@ -716,7 +716,7 @@ def _main(resources):
     args = parser.parse_args()
     from people_workspaces import SOURCE_CONTRACT
     os.environ["PEOPLE_OUTPUT_CONTRACT"] = SOURCE_CONTRACT
-    if args.workspace_mode != "batch":
+    if args.workspace_mode != "batch" and not args.list:
         parser.error("Source-only outputs require a managed batch; historical persistent workspaces are retained")
     from poster_renderer import poster_engine, poster_fingerprint, checkpoint_changed, prepare_inputs, renderer_command
     try:

@@ -64,6 +64,11 @@ def test_exact_two_outputs_alpha_framing_and_repeat_without_resources(source_onl
         assert not sync.image_quality_findings(style,path)[0]
     assert poster.render_batch(source_only)['skipped']==1
     assert poster.renderer_fingerprint()['output_contract']==jobs.SOURCE_CONTRACT
+    recovered=source_only/'accepted-recovery'
+    report=poster.render_recovery_candidate(source_only/'recovery-render',recovered,'Recovered',transparent,original)
+    assert report['processed']==1 and report['failed']==0
+    assert poster.output_path(recovered,'transparent','Recovered').is_file()
+    assert {p.name for p in recovered.iterdir()}=={'transparent'}
 
 
 def test_early_normalization_reuses_fit_and_preserves_native(source_only,monkeypatch):
@@ -146,6 +151,12 @@ def test_old_batch_cannot_resume_and_receipt_stays_readable(source_only,monkeypa
         with pytest.raises(ValueError,match='Incompatible output contract'):manager.select(cleanup=False)
         assert manifest.read_bytes()==prior
     finally:manager.close()
+    # Standalone renderer checkpoints also cannot adopt an old seven-style job.
+    state=source_only/'.orch/poster-render.json';state.parent.mkdir()
+    state.write_text(json.dumps({'Legacy':{'fingerprint':{'engine':'python'}}}))
+    prior=state.read_bytes()
+    with pytest.raises(ValueError,match='Incompatible output contract'):poster.render_batch(source_only)
+    assert state.read_bytes()==prior
 
 
 def test_unused_styles_refused_before_style_work(source_only,monkeypatch):

@@ -38,10 +38,31 @@ def cutout(path):
 
 @pytest.fixture(autouse=True)
 def isolated(monkeypatch, tmp_path):
+    environment = dict(os.environ)
     for key in list(os.environ):
-        if key.startswith(("REMOVE_BG_", "SEL_", "ORCH_", "EDGE_CHOP_", "COLORIZE_")):
+        if key.startswith(("REMOVE_BG_", "SEL_", "ORCH_", "EDGE_CHOP_", "COLORIZE_", "PEOPLE_")):
             monkeypatch.delenv(key)
-    config = tmp_path / "config"
+    import create_people_poster as poster
+    import sync_people_images as sync
+    monkeypatch.setattr(poster, "SIZE", (2000, 3000))
+    monkeypatch.setattr(sync, "TARGET_TRANSPARENT_SIZE", (2000, 3000))
+    # Managed source-contract workspace; direct recovery tests retain legacy
+    # image geometry unless they enter the standard orchestrator.
+    from people_workspaces import Workspaces, SOURCE_CONTRACT
+    with monkeypatch.context() as setup:
+        setup.setenv("PEOPLE_OUTPUT_CONTRACT", SOURCE_CONTRACT)
+        setup.setenv("PEOPLE_PUBLISH_MODE", "local")
+        manager = Workspaces(tmp_path / "orchestrator-config")
+        try:
+            batch = manager.create(cleanup=False)
+            config = manager.path(batch)
+            for directory in ("people_dirs/Downloads", "people_dirs", "Downloads/color", "Downloads/other", "Downloads", "posters", "logs", "input"):
+                (config / directory).rmdir()
+        finally:
+            manager.close()
+    monkeypatch.setenv("PEOPLE_JOBS_DIR", str(config.parent))
+    monkeypatch.setenv("PEOPLE_STATE_DIR", str(tmp_path / "orchestrator-config/state"))
+    monkeypatch.setenv("PEOPLE_BATCH_ID", batch)
     monkeypatch.setattr(orch, "SCRIPT_DIR", tmp_path)
     monkeypatch.setattr(orch, "CONFIG_DIR", config)
     monkeypatch.setattr(orch, "STATE_DIR", config / ".orch")
@@ -52,7 +73,7 @@ def isolated(monkeypatch, tmp_path):
     monkeypatch.setattr(recovery, "LOGS_DIR", config / "logs")
     monkeypatch.setattr(recovery, "load_dotenv", lambda *args, **kwargs: None)
     monkeypatch.setattr(recovery, "log", lambda message: None)
-    monkeypatch.setenv("REMBG_HOME", str(config / "models"))
+    monkeypatch.setenv("REMBG_HOME", str(tmp_path / "models"))
     monkeypatch.setenv("REMOVE_BG_ENGINE", "adobe")
     monkeypatch.setenv("SEL_SRC_DIR", str(config / "people_dirs" / "Downloads"))
     monkeypatch.setenv("SEL_ORIG_DIR", str(config / "people_dirs" / "original"))
@@ -61,10 +82,15 @@ def isolated(monkeypatch, tmp_path):
     (repo / "transparent").mkdir(parents=True)
     monkeypatch.setenv("PEOPLE_IMAGES_DIR", str(repo))
     monkeypatch.setenv("PEOPLE_PUBLISH_MODE", "local_git")
-    monkeypatch.setenv("PEOPLE_WORKSPACE_MODE", "persistent")
+    monkeypatch.setenv("PEOPLE_WORKSPACE_MODE", "batch")
     monkeypatch.setenv("POSTER_ENGINE", "powershell")
     monkeypatch.setenv("ORCH_CONTINUE_IF_EMPTY", "true")
     monkeypatch.setenv("TMDB_KEY", "NOT_A_REAL_TMDB_RECOVERY_FIXTURE_20261024")
+    try:
+        yield
+    finally:
+        os.environ.clear()
+        os.environ.update(environment)
 
 
 def marker(key, meta=None):
@@ -77,11 +103,21 @@ def resume_ready():
 
 
 def call_main(monkeypatch, *args):
-    monkeypatch.setattr(sys, "argv", ["orchestrator.py", *args])
+    config = orch.CONFIG_DIR
+    if "--list" in args:
+        # Existing read-only step status remains available without resuming an
+        # incompatible persistent workspace or modifying its checkpoints.
+        options = ["--workspace-mode", "persistent"]
+    else:
+        options = ["--batch-id", os.environ["PEOPLE_BATCH_ID"]]
+        orch.CONFIG_DIR = config.parent.parent
+    monkeypatch.setattr(sys, "argv", ["orchestrator.py", *options, *args])
     try:
         orch.main()
     except SystemExit as exc:
         return exc.code
+    finally:
+        orch.CONFIG_DIR = config
     return 0
 
 
@@ -117,7 +153,7 @@ def test_backend_selection_end_to_end(monkeypatch, engine, script):
     resume_ready()
     calls = mock_runner(monkeypatch)
     assert call_main(monkeypatch, "--stop-after", "remove_bg") == 0
-    assert [argv[1] for argv in calls] == ["ensure_people_repo.py", script]
+    assert [argv[1] for argv in calls] == [script]
     saved = json.loads((orch.STATE_DIR / "remove_bg.done.json").read_text())
     assert saved["background_fingerprint"]["engine"] == (engine or "birefnet")
     assert not orch.LOCK_FILE.exists()
@@ -190,7 +226,7 @@ def test_resume_skips_all_completed_steps(monkeypatch):
     marker("poster_ps1")
     calls = mock_runner(monkeypatch)
     assert call_main(monkeypatch, "--stop-after", "poster_ps1") == 0
-    assert [argv[1] for argv in calls] == ["ensure_people_repo.py"]
+    assert calls == []
 
 
 def test_redo_remove_bg_preserves_upstream_and_reruns_downstream(monkeypatch):
@@ -307,7 +343,7 @@ def test_local_no_work_persists_unverified_checkpoint(monkeypatch):
     assert call_main(monkeypatch, "--stop-after", "poster_ps1") == 0
     saved = json.loads((orch.STATE_DIR / "remove_bg.done.json").read_text())
     assert saved["outcome"] == "no_work" and saved["model_verified"] is False
-    assert len(calls) == 2
+    assert len(calls) == 1
 
 
 def test_no_work_cannot_verify_changed_engine(monkeypatch):
@@ -425,7 +461,7 @@ def test_orchestrator_local_batch_hands_valid_cutouts_and_originals_to_poster(mo
     assert call_main(monkeypatch, "--stop-after", "poster_ps1") == 0
     assert len(FakeRemover.instances) == 1 and len(FakeRemover.instances[0].calls) == 2
     assert FakeRemover.instances[0].closed
-    assert len(calls) == 3
+    assert len(calls) == 2
     saved = json.loads((orch.STATE_DIR / "remove_bg.done.json").read_text())
     assert saved["outcome"] == "success" and saved["model_verified"] is True
 

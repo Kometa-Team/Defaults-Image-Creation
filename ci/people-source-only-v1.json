@@ -31,7 +31,7 @@
     },
     "create_people_posters/create_people_poster.py": {
       "before_sha256": "e7f9bbd790c5a4a2c36ffaeee59c4abf226c9a312dfe5565dc8b3628726291bb",
-      "sha256": "f22470b0e551cf7d8b664b06087ddec38f178a9367df8dc5d2c947ddf165444a"
+      "sha256": "1d9026300262bc979a25115c22da5870da21932046b135f302feb1b28cbab175"
     },
     "create_people_posters/find_and_download_missing_people.py": {
       "before_sha256": "5f6a5f0130600c912617c44d636f27ae8ff75fc1b477205ae04a9ed3387f4f41",
@@ -43,7 +43,7 @@
     },
     "create_people_posters/orchestrator.py": {
       "before_sha256": "3d867940e78f934b5f940d1548012d0baa2816a0f59249644fc484f4d08a7200",
-      "sha256": "7c0fd7fdd72b9d295f6761bee12869c614f47a671a5466c27eb1c06e9ff5927a"
+      "sha256": "0d9114f8629390c29fbf788f6dfea898381d8c30909e8bf87525621c465991ae"
     },
     "create_people_posters/people_batch_safety.py": {
       "before_sha256": "8ac62a88862a9fe9192b1551c27ed68ce5c00c5bda349b26a6675bf88d6ca084",
@@ -77,13 +77,21 @@
       "before_sha256": "d5c99d20343fbf1c06871358554637e73215e057a72e18270f657f9c60368488",
       "sha256": "4bb4b0730ea558f2fd4656b9b010e2c650e9eeb5bc63dbddbbb5619182b45509"
     },
+    "create_people_posters/tests/test_background_orchestrator.py": {
+      "before_sha256": "9653f2ce93558c6a2fe47ced1de359c1b66d4b879ded16f6a3a6bd772fe7928f",
+      "sha256": "2db01f7f7dc4c3fe646d81d0c13c66e414feab6250c311d94f13243203ad9c9d"
+    },
     "create_people_posters/tests/test_people_api_orchestrator.py": {
       "before_sha256": "9308754202c7dab68c0e4acfa0f75203e9539459420a12c3565545e1918944ad",
       "sha256": "30a3139b079bd5cffde3757e27d4d89dcbdb67f4077a158bd39f10ca4676cfba"
     },
+    "create_people_posters/tests/test_people_pipeline_failures.py": {
+      "before_sha256": "fdc30f6283552bb9576263ca1948a7642e2e6519b1bbf584bf3847369131ce29",
+      "sha256": "099e3428025c2c5d976e0eb5d1a18039b5b504e8f36d45169be4a8e110de6e4b"
+    },
     "create_people_posters/tests/test_people_source_only.py": {
       "before_sha256": null,
-      "sha256": "8926fbd5f68c9f72f4738141b45deb331e6446fe1f1962e41399929784986a9d"
+      "sha256": "c6ee3c09791fc9fa20d5a07484e010f5bf325349ec6d326196ac9eb9d2b355bf"
     },
     "create_people_posters/tmdb_people.py": {
       "before_sha256": "73924057e4495e74d56f6ba0684c88b4c5674ebec9c26670897dba062972b2d8",

@@ -25,7 +25,7 @@ from unicode_labels import resolve_label, ReviewRequired, POLICY_SHA256, INTER_S
 from people_workspaces import atomic_json, reject_links
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-from people_workspaces import output_size, source_only, SOURCE_CONTRACT
+from people_workspaces import output_size, source_only, SOURCE_CONTRACT, SOURCE_STYLES
 SIZE = output_size()
 STYLES = ("original", "bw", "diiivoy", "diiivoycolor", "rainier", "signature", "transparent")
 COLLECTION_ARTWORK = {
@@ -374,6 +374,9 @@ def render_batch(config: Path, names=None):
     fingerprint = renderer_fingerprint()
     state_path = config / ".orch" / "poster-render.json"
     previous = json.loads(state_path.read_text(encoding="utf-8")) if state_path.exists() else {}
+    if source_only() and any(record.get("fingerprint", {}).get("output_contract") != SOURCE_CONTRACT
+                             for record in previous.values()):
+        raise ValueError("Incompatible output contract in retained renderer checkpoint")
     sources = {}
     for directory in (root / "tmppeople", root / "Downloads"):
         if directory.is_dir():
@@ -510,7 +513,7 @@ def render_recovery_candidate(workspace, people_root, name, cutout, photograph):
     if report["failed"]:
         raise ValueError("Pillow recovery rendering failed: " + str(report["images"]))
     from remove_bg_birefnet import atomic_copy
-    for style in STYLES:
+    for style in (SOURCE_STYLES if source_only() else STYLES):
         if style != "original":
             source = output_path(root, style, name)
             target = output_path(Path(people_root), style, name)
