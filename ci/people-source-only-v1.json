@@ -39,7 +39,7 @@
     },
     "create_people_posters/orchestrator.py": {
       "before_sha256": "3d867940e78f934b5f940d1548012d0baa2816a0f59249644fc484f4d08a7200",
-      "sha256": "0d9114f8629390c29fbf788f6dfea898381d8c30909e8bf87525621c465991ae"
+      "sha256": "eabe0181f30b5e7471940bb288ea4b418a3002a86bc678971f4de3aa1f0edaed"
     },
     "create_people_posters/people_batch_safety.py": {
       "before_sha256": "8ac62a88862a9fe9192b1551c27ed68ce5c00c5bda349b26a6675bf88d6ca084",
@@ -55,7 +55,7 @@
     },
     "create_people_posters/people_workspaces.py": {
       "before_sha256": "66523dec76743438fa9e5ee935ba9aad1b49e5f63cf13c1e8e5b71bf4e95f4c9",
-      "sha256": "097172939cda1769036587f3a456a1320a4b8265e151315bcc3534d180971eaf"
+      "sha256": "5e83148135084cecd74b438e6d8c0c9ca9681e1fed1274cab39ec3fc6c0177b0"
     },
     "create_people_posters/publish_people_github.py": {
       "before_sha256": "2f9953098f9476aa648ae2c0c11eb406d28ed37d5eac07a5aa6e23cc42800b8d",
@@ -87,7 +87,11 @@
     },
     "create_people_posters/tests/test_people_source_only.py": {
       "before_sha256": null,
-      "sha256": "a3ee42ce9be7650a6bbbe6326855c06b959bc6d3b81e518fb7005efcc3d9b9c8"
+      "sha256": "bb34df454d1af36e378e463746ebc6db7abde9e56c4a8dbf5767da267d33178a"
+    },
+    "create_people_posters/tests/test_people_startup_retention.py": {
+      "before_sha256": "f461ef9d09ed0c989a738801caa6cfb4ff6b714051e5baead70cce4e9aabca5c",
+      "sha256": "fad851fce9fd42638c99da18f1b6dae79d1aa3a54de2a87bfdabe4b39d7ca10b"
     },
     "create_people_posters/tmdb_people.py": {
       "before_sha256": "73924057e4495e74d56f6ba0684c88b4c5674ebec9c26670897dba062972b2d8",
@@ -110,6 +114,8 @@
     "create_people_posters/tests/test_people_source_only.py::test_staging_requires_authorization_and_fresh_contract",
     "create_people_posters/tests/test_people_source_only.py::test_old_batch_cannot_resume_and_receipt_stays_readable",
     "create_people_posters/tests/test_people_source_only.py::test_unused_styles_refused_before_style_work",
+    "create_people_posters/tests/test_people_source_only.py::test_incompatible_expired_resume_is_retained_before_cleanup[automatic]",
+    "create_people_posters/tests/test_people_source_only.py::test_incompatible_expired_resume_is_retained_before_cleanup[explicit]",
     "create_people_posters/tests/test_people_source_only.py::test_exact_ci_successor_rejects_changed_physical_bytes[tamper]",
     "create_people_posters/tests/test_people_source_only.py::test_exact_ci_successor_rejects_changed_physical_bytes[rollback]",
     "create_people_posters/tests/test_people_source_only.py::test_exact_ci_successor_rejects_changed_physical_bytes[missing]",

@@ -41,6 +41,10 @@ def output_size():
     return (1000, 1500) if source_only() else (2000, 3000)
 
 
+class IncompatibleOutputContract(ValueError):
+    pass
+
+
 def check_output_contract(config):
     """Historical manifests stay readable; incompatible regeneration is blocked."""
     path = Path(config) / "manifest.json"
@@ -48,7 +52,7 @@ def check_output_contract(config):
     if path.is_file():
         recorded = json.loads(path.read_text(encoding="utf8")).get("output_contract", "")
         if recorded != os.getenv("PEOPLE_OUTPUT_CONTRACT", ""):
-            raise ValueError("Incompatible output contract; retain this batch and use --new-batch")
+            raise IncompatibleOutputContract("Incompatible output contract; retain this batch and use --new-batch")
 
 
 def atomic_json(path, data):

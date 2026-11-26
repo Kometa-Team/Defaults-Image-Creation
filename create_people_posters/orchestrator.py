@@ -714,7 +714,7 @@ def _main(resources):
                         help="Skip non-blocking TMDB alternate retries for top-edge transparent chops.")
 
     args = parser.parse_args()
-    from people_workspaces import SOURCE_CONTRACT
+    from people_workspaces import SOURCE_CONTRACT, IncompatibleOutputContract
     os.environ["PEOPLE_OUTPUT_CONTRACT"] = SOURCE_CONTRACT
     if args.workspace_mode != "batch" and not args.list:
         parser.error("Source-only outputs require a managed batch; historical persistent workspaces are retained")
@@ -758,6 +758,8 @@ def _main(resources):
                     manager.activate(batch)
                     resources.callback(manager.deactivate, batch)
                 except (OSError, ValueError) as error:
+                    if isinstance(error, IncompatibleOutputContract):
+                        raise
                     resume_error = error
             if _bool_env("PEOPLE_AUTO_CLEANUP", True) and not args.dry_run:
                 cleanup_on_launch(manager)

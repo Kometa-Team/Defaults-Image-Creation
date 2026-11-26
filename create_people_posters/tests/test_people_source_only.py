@@ -15,6 +15,7 @@ import people_workspaces as jobs
 import create_people_poster as poster
 import sync_people_images as sync
 import people_remote_inventory as discovery
+from create_people_posters.tests.test_people_api_orchestrator import isolated as api_isolated
 
 
 @pytest.fixture
@@ -176,6 +177,28 @@ def test_unused_styles_refused_before_style_work(source_only,monkeypatch):
     monkeypatch.setattr(renderer,'prepare_cutout',lambda _:pytest.fail('Unused renderer reached'))
     for style in ('bw','diiivoy','diiivoycolor','rainier','signature'):
         with pytest.raises(ValueError):renderer.render_independent(None,'Person',(style,))
+
+
+@pytest.mark.parametrize('selection',['automatic','explicit'])
+def test_incompatible_expired_resume_is_retained_before_cleanup(api_isolated,monkeypatch,selection):
+    import time
+    from create_people_posters.tests.test_people_api_orchestrator import invoke,orch
+    manager=jobs.Workspaces(api_isolated)
+    try:
+        batch=manager.create(cleanup=False)
+        manager.set_status(batch,'failed')
+        with manager.db:
+            manager.db.execute('UPDATE jobs SET updated=? WHERE id=?',(time.time()-30*86400,batch))
+        manifest=manager.path(batch)/'manifest.json';before=manifest.read_bytes()
+        source=manager.path(batch)/'posters/only-source.jpg';source.write_bytes(b'native evidence')
+        monkeypatch.setattr(jobs.Workspaces,'cleanup',lambda *a,**k:pytest.fail('Incompatible resume reached expiry'))
+        monkeypatch.setattr(orch,'run_cmd',lambda *a,**k:pytest.fail('Incompatible resume ran a step'))
+        args=['--batch-id',batch] if selection=='explicit' else []
+        with pytest.raises(SystemExit) as error:invoke(monkeypatch,*args,'--stop-after','ensure_repo')
+        assert error.value.code==2
+        assert manifest.read_bytes()==before and source.read_bytes()==b'native evidence'
+        assert not (manager.path(batch)/'.active').exists()
+    finally:manager.close()
 
 
 @pytest.mark.parametrize('attack',['tamper','rollback','missing'])
