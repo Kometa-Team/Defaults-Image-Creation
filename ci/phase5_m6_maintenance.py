@@ -204,6 +204,8 @@ def _people_physical(root,name,binding):
                  else regular(root,name).read_bytes())
     except ValueError as error:
         raise ValueError('Changed closing People PR65 provenance: '+str(error)) from error
+    from ci.phase6_playlist_maintenance import source_adapter
+    current=source_adapter().historical_bytes(root,name,current)
     if sha(current)!=binding['sha256']:
         raise ValueError('Changed physical People PR65 successor: '+name)
 

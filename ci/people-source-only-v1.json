@@ -25,6 +25,10 @@
       "before_sha256": "02d95c28925de3920e68498746a9a349cff86e3b16f6bbc8290c1fb394e91ec9",
       "sha256": "db34da75e5e3e99d6582cb1f239744864fd3411a06abf38de8083f6693b171b3"
     },
+    "ci/phase5_m6_maintenance.py": {
+      "before_sha256": "8804ae065c50b42aa974390ab6fd340171b5a7df168c7420f17b7c188926dfd3",
+      "sha256": "c53e9d78979664b8338af9d5b60e7166a24317c6243f191dcc79cf524edaadf1"
+    },
     "ci/phase5_m7_maintenance.py": {
       "before_sha256": "58f4927b6e2ce1e65327e9f7777f8370ba6ddaf910c8d8be0e9915777a8cb885",
       "sha256": "52e7e1bcf7ea966f54be42a38682fe109d20c5983584ea69ad036026d16181d5"

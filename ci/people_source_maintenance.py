@@ -11,7 +11,7 @@ from ci.people_collection_maintenance import _head
 ROOT=Path(__file__).resolve().parents[1]
 BASE='a89df404a554f648f7f83d119e4af0e34073a866'
 RECEIPT='ci/people-source-only-v1.json'
-PIN='67d56994c41821c90df488f5079fc062a0b6a033c883928ee1fafd7d96cf6504'
+PIN='4dde21f9025f620d49e891ea015a460e1c5ab29a4fe2a3848184938cf9f8dace'
 OWNER='ci/people_source_maintenance.py'
 ENTRY='ci/phase6_playlist_maintenance.py'
 MEMBERS=frozenset((
@@ -39,6 +39,7 @@ MEMBERS=frozenset((
     'ci/people_publication_maintenance.py',
     'ci/people_readme_maintenance.py',
     'ci/phase5_m7_maintenance.py',
+    'ci/phase5_m6_maintenance.py',
     'ci/publication_tests/test_git_publication_maintenance.py',
     'ci/publication_tests/test_git_recovery_maintenance.py',
     'ci/unicode_tests/test_people_unicode_maintenance.py',
