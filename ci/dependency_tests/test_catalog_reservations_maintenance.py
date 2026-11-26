@@ -16,7 +16,8 @@ class CatalogReservationMaintenanceTests(unittest.TestCase):
         self.assertEqual(pilot.git('show',pilot.REGISTRY_PREDECESSOR+':'+pilot.REGISTRY_PRIOR_RECEIPT),
                          pilot.git('show','HEAD:'+pilot.REGISTRY_PRIOR_RECEIPT))
         self.assertTrue(pilot.REGISTRY_ADDED.isdisjoint(before))
-        self.assertEqual(set(pilot.scope_members()),set(pilot.MODIFIED|pilot.ADDED|pilot.REGISTRY_ADDED|{pilot.OWNER,pilot.RECEIPT,pilot.REGISTRY_RECEIPT,pilot.REGISTRY_PRIOR_RECEIPT,pilot.DATA_RECEIPT}|pilot.DATA_MODIFIED|pilot.DATA_ADDED))
+        source=pilot.source_adapter();source.verify()
+        self.assertEqual(set(pilot.scope_members()),set(pilot.MODIFIED|pilot.ADDED|pilot.REGISTRY_ADDED|{pilot.OWNER,pilot.RECEIPT,pilot.REGISTRY_RECEIPT,pilot.REGISTRY_PRIOR_RECEIPT,pilot.DATA_RECEIPT}|pilot.DATA_MODIFIED|pilot.DATA_ADDED|source.scope_members()))
 
     def test_actual_lifecycle_scope_including_registry(self):
         from ci.phase4_m7 import changed_scope

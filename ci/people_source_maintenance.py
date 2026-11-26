@@ -11,7 +11,7 @@ from ci.people_collection_maintenance import _head
 ROOT=Path(__file__).resolve().parents[1]
 BASE='a89df404a554f648f7f83d119e4af0e34073a866'
 RECEIPT='ci/people-source-only-v1.json'
-PIN='12f92f472033ff213c3ae802a4ded1b91d35b9c81bf40d1da2507174890d14b9'
+PIN='67d56994c41821c90df488f5079fc062a0b6a033c883928ee1fafd7d96cf6504'
 OWNER='ci/people_source_maintenance.py'
 ENTRY='ci/phase6_playlist_maintenance.py'
 MEMBERS=frozenset((
@@ -39,6 +39,12 @@ MEMBERS=frozenset((
     'ci/people_publication_maintenance.py',
     'ci/people_readme_maintenance.py',
     'ci/phase5_m7_maintenance.py',
+    'ci/publication_tests/test_git_publication_maintenance.py',
+    'ci/publication_tests/test_git_recovery_maintenance.py',
+    'ci/unicode_tests/test_people_unicode_maintenance.py',
+    'ci/dependency_tests/test_phase6_playlist_maintenance.py',
+    'ci/dependency_tests/test_catalog_reservations_maintenance.py',
+    'ci/dependency_tests/test_catalog_data_maintenance.py',
 ))
 
 def sha(raw):return hashlib.sha256(raw.replace(b'\r\n',b'\n')).hexdigest()

@@ -1,6 +1,18 @@
 {
   "baseline_commit": "a89df404a554f648f7f83d119e4af0e34073a866",
   "files": {
+    "ci/dependency_tests/test_catalog_data_maintenance.py": {
+      "before_sha256": "46a9143fa549f5fed9ba87790cdb9eb90855b445d6be47cff486b874fe956021",
+      "sha256": "cfd9a377a3bef63aa502cba0b647e591ed8743caa9f6c26be61357de41c9428b"
+    },
+    "ci/dependency_tests/test_catalog_reservations_maintenance.py": {
+      "before_sha256": "36115811faa22a0e2215be99f9951d8d30b1eae4af27fcc9cf3be87f2039d22b",
+      "sha256": "24f14d81caaeb2415057d964362affa1ebd8a8506fb6f2b3d299da37c1a52a16"
+    },
+    "ci/dependency_tests/test_phase6_playlist_maintenance.py": {
+      "before_sha256": "857233fd074aab916ecf800f1d0aaf4519edc8d2511e7f65119eae83c03459f3",
+      "sha256": "583062f93c1a2bd236c60e2bce07cef67aba46a8884f591aa68aa8baf4b56f32"
+    },
     "ci/people_publication_maintenance.py": {
       "before_sha256": "39df495fe7d249113a5fd074a71c2696bc8a4602095ce2e554579a371fedd15e",
       "sha256": "ab465f49a37321f9cfed67b21d9dd3b07e6cb5d957e76b96c34ac938b41f300a"
@@ -16,6 +28,18 @@
     "ci/phase5_m7_maintenance.py": {
       "before_sha256": "58f4927b6e2ce1e65327e9f7777f8370ba6ddaf910c8d8be0e9915777a8cb885",
       "sha256": "52e7e1bcf7ea966f54be42a38682fe109d20c5983584ea69ad036026d16181d5"
+    },
+    "ci/publication_tests/test_git_publication_maintenance.py": {
+      "before_sha256": "acd51f4e857508a98cbbe267926441a920503927bdd2e04662a57467f40386fe",
+      "sha256": "004c4a3a9a1fed68ba1ade199494ec2c44f6edac4226bef2e32d7c74d21f8777"
+    },
+    "ci/publication_tests/test_git_recovery_maintenance.py": {
+      "before_sha256": "15348052dc368c05d47a59612766ffb74ed2ccaf540c25ac9773494370b99b89",
+      "sha256": "c3d5d9e7acc9a0701558cddfaec5bf1b09036a6c4d5dfd00db226c700062cfa3"
+    },
+    "ci/unicode_tests/test_people_unicode_maintenance.py": {
+      "before_sha256": "cc833dce49ebd1f7e6f1784f77020b3a0dce51bd709150ed2e132d9fa41f63d1",
+      "sha256": "4d44404a723e9ade8c0ac4caa16d403b42ba89e411345bd0021edbae07f2247a"
     },
     "create_people_posters/SOURCE_ONLY.md": {
       "before_sha256": null,
@@ -75,7 +99,7 @@
     },
     "create_people_posters/tests/test_background_orchestrator.py": {
       "before_sha256": "9653f2ce93558c6a2fe47ced1de359c1b66d4b879ded16f6a3a6bd772fe7928f",
-      "sha256": "9de4888726e02992ed90d408a87bd2779462f7c7fed3cbcb5b289cfcef4cd711"
+      "sha256": "df2d7d11a93a4967a03d95cd2ee22366390824064202f395ae23dd43c333b831"
     },
     "create_people_posters/tests/test_people_api_orchestrator.py": {
       "before_sha256": "9308754202c7dab68c0e4acfa0f75203e9539459420a12c3565545e1918944ad",
