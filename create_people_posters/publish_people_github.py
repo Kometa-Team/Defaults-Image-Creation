@@ -732,6 +732,14 @@ def main():
     ledger = None
     inventory = None
     try:
+        from people_workspaces import check_output_contract, reject_links
+        contract_file = args.config / 'manifest.json'
+        reject_links(contract_file)
+        if contract_file.is_file():
+            recorded = json.loads(contract_file.read_text(encoding='utf8')).get('output_contract')
+            if recorded and not os.getenv('PEOPLE_OUTPUT_CONTRACT'):
+                os.environ['PEOPLE_OUTPUT_CONTRACT'] = recorded
+        check_output_contract(args.config)
         branch = branch_name(args.branch)
         if args.op in {"prepare", "push"}:
             from people_batch_safety import assert_batch_ready

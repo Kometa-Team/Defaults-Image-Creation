@@ -686,8 +686,8 @@ def _main(resources):
     parser.add_argument("--redo", help="Clear checkpoint for this step (and downstream) and restart at that step.")
     parser.add_argument("--stop-after", help="Stop cleanly after this step completes; useful for recovery QA gates.")
     parser.add_argument("--list", action="store_true", help="List step status and exit.")
-    parser.add_argument("--publish-mode", choices=["local_git", "github_api"], default=os.getenv("PEOPLE_PUBLISH_MODE", "github_api"),
-                        help="Publishing backend (default: github_api; local_git requires full image clones)")
+    parser.add_argument("--publish-mode", choices=["local", "github_api"], default="local",
+                        help="Default: local generation only; github_api requires explicitly authorized staging targets")
     parser.add_argument("--workspace-mode", choices=["persistent", "batch"], default=os.getenv("PEOPLE_WORKSPACE_MODE", "batch"),
                         help="Processing workspace (default: batch; persistent uses legacy staging)")
     parser.add_argument("--batch-id", help="Resume a particular managed batch")
@@ -714,18 +714,23 @@ def _main(resources):
                         help="Skip non-blocking TMDB alternate retries for top-edge transparent chops.")
 
     args = parser.parse_args()
+    from people_workspaces import SOURCE_CONTRACT
+    os.environ["PEOPLE_OUTPUT_CONTRACT"] = SOURCE_CONTRACT
+    if args.workspace_mode != "batch":
+        parser.error("Source-only outputs require a managed batch; historical persistent workspaces are retained")
     from poster_renderer import poster_engine, poster_fingerprint, checkpoint_changed, prepare_inputs, renderer_command
     try:
         selected_poster_engine = poster_engine()
     except ValueError as error:
         parser.error(safe_exception(error))
     from people_github import sandbox_settings
-    if sandbox_settings() and (args.publish_mode != "github_api" or args.workspace_mode != "batch"):
-        parser.error("Sandbox requires github_api + batch; local_git/persistent are blocked")
-    if args.publish_mode not in {"local_git", "github_api"} or args.workspace_mode not in {"persistent", "batch"}:
+    try:
+        if args.publish_mode == "github_api" and not sandbox_settings():
+            parser.error("Source-only publication requires explicitly authorized staging repositories")
+    except ValueError as error:
+        parser.error(safe_exception(error))
+    if args.publish_mode not in {"local", "github_api"} or args.workspace_mode not in {"persistent", "batch"}:
         parser.error("Invalid PEOPLE_PUBLISH_MODE or PEOPLE_WORKSPACE_MODE")
-    if args.dry_run and args.publish_mode != "github_api":
-        parser.error("--dry-run is for github_api publishing; use the legacy tools' dry-run options for local_git")
     if args.people_list and not args.people_list.is_file():
         parser.error("--people-list must be an existing file")
     os.environ["PEOPLE_PUBLISH_MODE"] = args.publish_mode
@@ -810,6 +815,8 @@ def _main(resources):
         else _bool_env("ORCH_GENERATE_READMES", False)
     )
     grid_images = args.grid_images or _bool_env("ORCH_GRID_IMAGES", False)
+    if generate_readmes:
+        parser.error("Source-only batches use staging destination README Actions; local repository synchronization is disabled")
 
     bg_output_dir = Path(args.bg_output_dir).expanduser().resolve() if args.bg_output_dir else env_path("SEL_DOWNLOAD_DIR")
     bg_exts = {e.strip().lower().lstrip(".") for e in (args.bg_exts or "png").split(",") if e.strip()}
@@ -830,6 +837,8 @@ def _main(resources):
             sys.exit(2)
 
     def _ensure_repo():
+        if args.publish_mode == "local":
+            return None
         if args.publish_mode == "github_api":
             return _api_command("validate")
         # Let ensure_people_repo.py figure things out (clone/validate)
@@ -919,6 +928,8 @@ def _main(resources):
         return args2
 
     def _update_repos():
+        if args.publish_mode == "local":
+            return None
         if args.publish_mode == "github_api":
             return _api_command("refresh")
         _require_repo_or_die()
@@ -929,6 +940,8 @@ def _main(resources):
         return [py, "update_people_repos.py"] + args2
 
     def _sync_images():
+        if args.publish_mode == "local":
+            return None
         if args.publish_mode == "github_api":
             return _api_command("prepare")
         _require_repo_or_die()
@@ -949,6 +962,8 @@ def _main(resources):
         return [py, "sync_md.py", "--src", src, "--dst", dst, "--pattern", "*.md"]
 
     def _push_repos():
+        if args.publish_mode == "local":
+            return None
         if args.publish_mode == "github_api":
             return _api_command("push")
         _require_repo_or_die()
@@ -1147,6 +1162,12 @@ def _main(resources):
                 sys.exit(2)
             argv = builder()
             if argv is None:
+                if args.publish_mode == 'local' and s.key in {'ensure_repo','update','sync_images','push'}:
+                    if s.marker_path:
+                        write_marker(s.marker_path,{'skipped':True,'output_contract':SOURCE_CONTRACT,'reason':'local generation only'})
+                    if s.key == args.stop_after:
+                        return
+                    continue
                 # Recovery is optional; a selected renderer must actually run.
                 if s.key == "recover_edge_chops":
                     if s.marker_path:
@@ -1319,7 +1340,7 @@ def _main(resources):
                 print(f"[INFO] Stop requested after {s.key}; exiting before downstream steps.")
                 return
 
-        if manager and not args.dry_run:
+        if manager and not args.dry_run and args.publish_mode != "local":
             from people_publication_state import PublicationState
             ledger = PublicationState(manager.state)
             try:
@@ -1332,6 +1353,8 @@ def _main(resources):
                     manager.set_status(batch, "recovery_pending", "Publication verified; recovery retry still pending")
             finally:
                 ledger.close()
+        elif manager and args.publish_mode == "local":
+            manager.set_status(batch,"local_validated")
         elif args.publish_mode == "github_api" and not args.dry_run:
             # A completed persistent run gets a new receipt ID on its next generation run.
             (CONFIG_DIR / ".orch" / "api-batch.json").unlink(missing_ok=True)

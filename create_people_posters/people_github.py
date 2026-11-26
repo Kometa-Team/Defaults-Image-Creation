@@ -34,11 +34,14 @@ SANDBOX_ROOT = Path(__file__).resolve().parent / "config" / "sandboxes"
 
 
 def sandbox_settings():
+    from people_workspaces import source_only, SOURCE_CONTRACT, SOURCE_STYLES
     target = os.getenv("PEOPLE_GITHUB_TARGET", "production").strip()
     location = os.getenv("PEOPLE_SANDBOX_CONFIG", "").strip()
     if target not in {"production", "sandbox"}:
         raise ValueError("PEOPLE_GITHUB_TARGET must be production or sandbox")
     if target == "production":
+        if source_only():
+            raise ValueError("Source-only outputs cannot use any legacy production repository")
         if location:
             raise ValueError("Sandbox config is set but sandbox mode is not enabled; refusing production fallback")
         return None
@@ -62,9 +65,13 @@ def sandbox_settings():
             or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9-]{0,38}", owner)
             or owner.casefold() == "kometa-team" or settings.get("branch") != "master"):
         raise ValueError("Sandbox requires a personal owner, version 1 and an explicit master branch")
-    expected = {style: f"{owner}/kometa-people-sandbox-{style}" for style in REPOSITORIES}
+    styles = SOURCE_STYLES if source_only() else REPOSITORIES
+    if source_only() and (settings.get("output_contract") != SOURCE_CONTRACT
+                          or settings.get("publication_authorized") is not True):
+        raise ValueError("Staging targets require the exact source-only contract and explicit publication authorization")
+    expected = {style: f"{owner}/kometa-people-sandbox-{style}" for style in styles}
     if settings.get("repositories") != expected:
-        raise ValueError("Sandbox must name exactly seven distinct personal kometa-people-sandbox-STYLE repositories")
+        raise ValueError("Sandbox must name exactly two distinct personal kometa-people-sandbox-STYLE repositories" if source_only() else "Sandbox must name exactly seven distinct personal kometa-people-sandbox-STYLE repositories")
     return dict(settings, root=path.parent)
 
 
@@ -74,6 +81,9 @@ def repository_mapping():
 
 
 def sandbox_storage():
+    from people_workspaces import source_only
+    if source_only() and os.getenv("PEOPLE_PUBLISH_MODE", "local") == "local":
+        return None
     settings = sandbox_settings()
     if not settings:
         return None
@@ -183,6 +193,8 @@ def _report_tree_failure(response, emit=True):
 
 class GitHubClient:
     def __init__(self, token=None, session=None, sleep=time.sleep, attempts=4):
+        from people_workspaces import source_only
+        self.source_only = source_only()
         self.sandbox = sandbox_settings()
         self.repositories = repository_mapping()
         self.token = token or auth_token()
@@ -204,6 +216,11 @@ class GitHubClient:
                                      "X-GitHub-Api-Version": "2022-11-28"})
 
     def request(self, method, path, payload=None):
+        from people_workspaces import source_only
+        if source_only() != self.source_only:
+            raise ValueError("Output contract changed during GitHub operation")
+        if self.source_only and repository_mapping() != self.repositories:
+            raise ValueError("Authorized staging destinations changed during GitHub operation")
         if not path.startswith("/repos/"):
             raise ValueError("Only repository API paths are supported")
         if self.sandbox:

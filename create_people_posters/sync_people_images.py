@@ -63,7 +63,10 @@ CATEGORIES = [
     "rainier",
     "transparent",
 ]
-TARGET_TRANSPARENT_SIZE = (2000, 3000)
+from people_workspaces import output_size, source_only, SOURCE_STYLES
+TARGET_TRANSPARENT_SIZE = output_size()
+if source_only():
+    CATEGORIES = list(SOURCE_STYLES)
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tif", ".tiff"}
 COLOR_REQUIRED_CATEGORIES = {"diiivoycolor", "original", "rainier", "signature", "transparent"}
 
@@ -249,11 +252,16 @@ def image_quality_findings(
 
     try:
         with Image.open(path) as img:
+            if source_only():
+                if category == 'transparent' and (img.format != 'PNG' or img.mode != 'RGBA'):
+                    blocking.append('Transparent output must be RGBA PNG')
+                if category == 'original' and not allow_native_original and (img.format != 'JPEG' or img.mode != 'RGB'):
+                    blocking.append('Original output must be RGB JPEG')
             if category == "original" and allow_native_original and getattr(img, "n_frames", 1) != 1:
                 blocking.append("Animated/multipage input is unsupported")
                 return blocking, warnings
             if img.size != TARGET_TRANSPARENT_SIZE and not allow_fixable_dimensions:
-                blocking.append(f"dimensions are {img.width}x{img.height}, expected 2000x3000")
+                blocking.append(f"dimensions are {img.width}x{img.height}, expected {TARGET_TRANSPARENT_SIZE[0]}x{TARGET_TRANSPARENT_SIZE[1]}")
             if category == "transparent" and not has_any_transparency(img):
                 blocking.append("not transparent; send through remove_bg")
             if category in COLOR_REQUIRED_CATEGORIES and is_grayscale(img):

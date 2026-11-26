@@ -78,7 +78,8 @@ ATTEMPTED_CANDIDATES_FILE = OUT_ROOT / "attempted_candidates.csv"
 REMBG_HOME = CONFIG_DIR / "models" / "rembg"
 TMDB_SEARCH_URL = "https://api.themoviedb.org/3/search/person"
 TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/original"
-TARGET_SIZE = (2000, 3000)
+from people_workspaces import output_size, source_only
+TARGET_SIZE = output_size()
 SAME_IMAGE_HASH_DISTANCE = 8
 SAME_IMAGE_MEAN_DELTA = 6.0
 RECOVERY_WARNING_CHOICES = {
@@ -578,9 +579,13 @@ def download_candidate(session: requests.Session, candidate: ProfileCandidate, t
 def normalize_to_download(candidate_path: Path, download_path: Path) -> None:
     download_path.parent.mkdir(parents=True, exist_ok=True)
     with Image.open(candidate_path) as img:
-        img = ImageOps.exif_transpose(img).convert("RGB")
-        fitted = ImageOps.fit(img, TARGET_SIZE, method=Image.Resampling.LANCZOS, centering=(0.5, 0.5))
-        fitted.save(download_path, "JPEG", quality=95, subsampling=0, optimize=True)
+        mode = "RGBA" if source_only() and download_path.suffix.lower()=='.png' and "A" in img.getbands() else "RGB"
+        img = ImageOps.exif_transpose(img).convert(mode)
+        fitted = img.copy() if img.size == TARGET_SIZE else ImageOps.fit(img, TARGET_SIZE, method=Image.Resampling.LANCZOS, centering=(0.5, 0.5))
+        if source_only() and download_path.suffix.lower()=='.png':
+            fitted.save(download_path, "PNG")
+        else:
+            fitted.save(download_path, "JPEG", quality=95, subsampling=0, optimize=True)
 
 
 def original_source_paths(people_root: Path, name: str) -> list[Path]:
@@ -881,6 +886,8 @@ def style_file_paths(people_root: Path, name: str) -> list[Path]:
     first = (name[:1] or "_").upper()
     paths: list[Path] = []
     for style, ext in STYLE_EXTS.items():
+        if source_only() and style not in {'original','transparent'}:
+            continue
         root = people_root / style
         paths.append(root / first / "Images" / f"{name}{ext}")
         paths.append(root / f"{name}{ext}")

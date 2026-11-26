@@ -39,7 +39,8 @@ def _publication_module(raw):
 
 def publication_adapter():
     raw = regular(ROOT, 'ci/people_publication_maintenance.py').read_bytes()
-    if digest(raw) != PUBLICATION_ADAPTER_SHA256:
+    from ci.phase6_playlist_maintenance import source_adapter
+    if digest(raw) != source_adapter().selected_hash('ci/people_publication_maintenance.py',PUBLICATION_ADAPTER_SHA256):
         raise ValueError('Changed independently pinned publication adapter')
     return _publication_module(raw)
 
@@ -105,7 +106,8 @@ def _publication_identity(root, publication):
                       (publication.RECOVERY_RECEIPT, publication.RECOVERY_PIN)):
         if publication.fingerprint(json.loads(regular(root, name).read_bytes())) != pin:
             raise ValueError('Changed invocation-local publication receipt: '+name)
-    if digest(regular(root, 'ci/people_publication_maintenance.py').read_bytes()) != PUBLICATION_ADAPTER_SHA256:
+    from ci.phase6_playlist_maintenance import source_adapter
+    if digest(regular(root, 'ci/people_publication_maintenance.py').read_bytes()) != source_adapter().selected_hash('ci/people_publication_maintenance.py',PUBLICATION_ADAPTER_SHA256):
         raise ValueError('Changed invocation-local publication adapter')
 
 
@@ -120,7 +122,8 @@ def _publication_close(root, publication, timeouts):
         expected = binding['sha256']
         if name in timeouts and expected == timeouts[name]['before_sha256']:
             expected = timeouts[name]['sha256']
-        if digest(regular(root, name).read_bytes()) != expected:
+        from ci.phase6_playlist_maintenance import source_adapter
+        if digest(regular(root, name).read_bytes()) != source_adapter().selected_hash(name,expected):
             raise ValueError('Changed closing publication member: '+name)
     if digest(regular(root, publication.CI_TEST_LOCK).read_bytes()) != publication.CI_TEST_LOCK_SHA:
         raise ValueError('Changed closing publication dependency')
@@ -164,6 +167,8 @@ def _owned_inputs(root, publication, physical, headers):
     # Headers were captured before the proof; changed policy bytes cannot enter
     # this private owner witness after verification. Every path is reread below.
     expected.update(headers[1])
+    from ci.phase6_playlist_maintenance import source_adapter
+    expected={name:(source_adapter().selected_hash(name,pin),text_lf) for name,(pin,text_lf) in expected.items()}
     return headers[0],tuple((name,*value) for name,value in sorted(expected.items()))
 
 
@@ -250,7 +255,8 @@ def _verify_fresh(root, owned):
         before = predecessor(name)
         # Read independently after the full publication proof, at the point of use.
         physical = regular(root, name).read_bytes()
-        current = physical
+        from ci.phase6_playlist_maintenance import source_adapter
+        current = source_adapter().historical_bytes(root,name,physical)
         if owned:physical_hashes[name]=(digest(physical,binding['text_lf']),binding['text_lf'])
         if name == 'create_defaults/phase4/tests/test_ci_foundations.py':
             from ci.phase5_m6_maintenance import historical_bytes as m6_bytes

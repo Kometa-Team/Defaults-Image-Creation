@@ -115,7 +115,15 @@ def extract_filenames_from_source_directory(directory: Path) -> set[str]:
 def copy_file(source: Path, destination: Path) -> None:
     """Copy a file from the source path to the destination path."""
     destination.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(source, destination)
+    from people_workspaces import source_only
+    if source_only():
+        from types import SimpleNamespace
+        from recover_edge_chops import preserve_selected_candidate, normalize_to_download
+        preserve_selected_candidate(SimpleNamespace(recovery_selected_raw=source))
+        destination = destination.with_suffix('.png')
+        normalize_to_download(source,destination)
+    else:
+        shutil.copyfile(source, destination)
     write_to_log_file(f"Copied file from {source} => Saved as: {destination}")
 
 
@@ -264,7 +272,8 @@ if __name__ == "__main__":
 
     # Fetch online content (kept minimal to match your current logic)
     online_file_url = "https://raw.githubusercontent.com/Kometa-Team/People-Images-bw/master/README.md"
-    if os.getenv("PEOPLE_PUBLISH_MODE", "local_git") == "github_api":
+    from people_workspaces import source_only
+    if source_only() or os.getenv("PEOPLE_PUBLISH_MODE", "local_git") == "github_api":
         from people_remote_inventory import online_complete_names
         online_file_names = online_complete_names()
     else:

@@ -26,6 +26,29 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent / "config"
 ID_PATTERN = re.compile(r"[0-9]{8}T[0-9]{6}-[0-9a-f]{12}\Z")
+SOURCE_CONTRACT = "source-only-1000x1500-v1"
+SOURCE_STYLES = ("original", "transparent")
+
+
+def source_only():
+    value = os.getenv("PEOPLE_OUTPUT_CONTRACT", "")
+    if value not in {"", SOURCE_CONTRACT}:
+        raise ValueError("Unknown People output contract")
+    return value == SOURCE_CONTRACT
+
+
+def output_size():
+    return (1000, 1500) if source_only() else (2000, 3000)
+
+
+def check_output_contract(config):
+    """Historical manifests stay readable; incompatible regeneration is blocked."""
+    path = Path(config) / "manifest.json"
+    reject_links(path)
+    if path.is_file():
+        recorded = json.loads(path.read_text(encoding="utf8")).get("output_contract", "")
+        if recorded != os.getenv("PEOPLE_OUTPUT_CONTRACT", ""):
+            raise ValueError("Incompatible output contract; retain this batch and use --new-batch")
 
 
 def atomic_json(path, data):
@@ -153,6 +176,8 @@ class Workspaces:
         now = time.time()
         data = {"id": batch, "managed_by": "kometa-people-v1", "status": "pending", "created": now,
                 "people_list_source": str(source), "explicit_people_list": people_list is not None}
+        if source_only():
+            data["output_contract"] = SOURCE_CONTRACT
         atomic_json(path / "manifest.json", data)
         with self.db:
             self.db.execute("INSERT INTO jobs VALUES (?,?,?,?,?,?)", (batch, "pending", now, now, None, ""))
@@ -163,6 +188,7 @@ class Workspaces:
             if self.retired(batch):
                 raise ValueError("Failed operation retired after verified replacement; use a new batch for new work")
             record, _ = self.record(batch)
+            check_output_contract(self.path(batch))
             if record["status"] in {"complete", "cleanup_eligible", "validation_only"}:
                 raise ValueError("Published/cleaned/validation-only batch cannot be regenerated; use --new-batch")
             return batch
@@ -170,6 +196,7 @@ class Workspaces:
             candidate = self.resume_candidate()
             if candidate:
                 _, manifest = self.record(candidate)
+                check_output_contract(self.path(candidate))
                 if people_list and Path(manifest["people_list_source"]) != Path(people_list).absolute():
                     raise ValueError("Another unfinished batch exists; use --new-batch or --batch-id")
                 return candidate

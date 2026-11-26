@@ -261,6 +261,9 @@ def _owned_members(root, *, physical=True):
         for name, before, after in active[0][4].rows:
             if name in pilot_modified:
                 bindings[name] = dict(before_sha256=before, sha256=after)
+    if physical:
+        from ci.phase6_playlist_maintenance import source_adapter
+        bindings={name:dict(binding,sha256=source_adapter().selected_hash(name,binding['sha256'])) for name,binding in bindings.items()}
     return bindings
 
 
