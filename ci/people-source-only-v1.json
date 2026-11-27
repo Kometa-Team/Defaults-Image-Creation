@@ -9,6 +9,10 @@
       "before_sha256": "36115811faa22a0e2215be99f9951d8d30b1eae4af27fcc9cf3be87f2039d22b",
       "sha256": "24f14d81caaeb2415057d964362affa1ebd8a8506fb6f2b3d299da37c1a52a16"
     },
+    "ci/dependency_tests/test_phase5_m5_maintenance.py": {
+      "before_sha256": "2af3fe3303c86b8457d10c34553d0dbb9172071132449861026d78bf8fd19c4c",
+      "sha256": "79762e07472a27394f6eb6bcd21f508e70a74a763ee90c9e8255990a9b3253e5"
+    },
     "ci/dependency_tests/test_phase5_m7_followup.py": {
       "before_sha256": "138613d5b64dbbb4dded14a8987ba6132bf8de9ec02e070f9c885eb7f5bd94ce",
       "sha256": "f81ef869646d5cfcfef43c906779c450d610575507c44e052a8d63243f24d0a3"

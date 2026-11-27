@@ -14,7 +14,7 @@ from ci.people_collection_maintenance import _head
 ROOT=Path(__file__).resolve().parents[1]
 BASE='a89df404a554f648f7f83d119e4af0e34073a866'
 RECEIPT='ci/people-source-only-v1.json'
-PIN='d22a5b976f3e643b3d6a1e5f6bc150ff028be63db22be7a9207cd0db5ba79ca2'
+PIN='910e8c12fce233af76e36cdc560ff8c93a7b90b7dfecccd58711014c17e2eade'
 OWNER='ci/people_source_maintenance.py'
 ENTRY='ci/phase6_playlist_maintenance.py'
 _ACTIVE=ContextVar('source_only_verification_owner',default=None)
@@ -56,6 +56,7 @@ MEMBERS=frozenset((
     'ci/dependency_tests/test_catalog_reservations_maintenance.py',
     'ci/dependency_tests/test_catalog_data_maintenance.py',
     'ci/dependency_tests/test_phase5_m7_followup.py',
+    'ci/dependency_tests/test_phase5_m5_maintenance.py',
 ))
 
 def sha(raw):return hashlib.sha256(raw.replace(b'\r\n',b'\n')).hexdigest()
