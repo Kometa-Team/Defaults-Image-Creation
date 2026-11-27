@@ -47,7 +47,7 @@
     },
     "create_people_posters/SOURCE_ONLY.md": {
       "before_sha256": null,
-      "sha256": "7a031871bec71abdd0535d9f789c2b401acfb0696deff797528be69713ac02a6"
+      "sha256": "0586d69d520772aa9a536af13669a23c5afeae23d072b5a60a18d6f3d44b5fed"
     },
     "create_people_posters/audit_people_images.py": {
       "before_sha256": "ed91f71c8c516d1a21bf11f616e8df22a774dac941f5efec7ec555113370f27d",
@@ -75,7 +75,7 @@
     },
     "create_people_posters/people_github.py": {
       "before_sha256": "c2438262e187f2438117aa39e4eebf650859ad141a8c90d29c9c32c15ac3d39a",
-      "sha256": "10e14277c5614b801f35ee1e2854e6d0a6beead1b4786298fb7ef9983a82fe7d"
+      "sha256": "7926c18f35e3a55826719859c25dfb07927186073e00f7dbabe86bbfb5bec3cb"
     },
     "create_people_posters/people_remote_inventory.py": {
       "before_sha256": "54f36198cba90a9b3fddd795a0b4bcdc03eb777957e4ab2c3ba1db658c2dfe56",
@@ -87,7 +87,7 @@
     },
     "create_people_posters/publish_people_github.py": {
       "before_sha256": "2f9953098f9476aa648ae2c0c11eb406d28ed37d5eac07a5aa6e23cc42800b8d",
-      "sha256": "4b5d0f51230590587b06aa7cb71b8af626a0bda224624cdedae79ed0a0a5203f"
+      "sha256": "33b73d7f05237aa5f769a9e906715cc62be6f8fb935587f85234623484ac7ae3"
     },
     "create_people_posters/recover_edge_chops.py": {
       "before_sha256": "a945c37104ae4d9b7a8d0c5dddff69da786e3f7b82278819e33729c8e430e16f",
@@ -115,7 +115,7 @@
     },
     "create_people_posters/tests/test_people_source_only.py": {
       "before_sha256": null,
-      "sha256": "b4c46904740279b43c124b8d3dd9bc8c0e968e7f3886d6b36e15f03caba10ec1"
+      "sha256": "bf76815494973d163d34614539c6a7d2cc4c3339902c1680768ab0c3d5d61574"
     },
     "create_people_posters/tests/test_people_startup_retention.py": {
       "before_sha256": "f461ef9d09ed0c989a738801caa6cfb4ff6b714051e5baead70cce4e9aabca5c",
@@ -151,7 +151,37 @@
     "create_people_posters/tests/test_people_source_only.py::test_exact_ci_successor_keeps_fresh_closing_head",
     "create_people_posters/tests/test_people_source_only.py::test_exact_ci_successor_rejects_wrong_git_evidence[unknown-path]",
     "create_people_posters/tests/test_people_source_only.py::test_exact_ci_successor_rejects_wrong_git_evidence[mode]",
-    "create_people_posters/tests/test_people_source_only.py::test_exact_ci_successor_rejects_wrong_git_evidence[object]"
+    "create_people_posters/tests/test_people_source_only.py::test_exact_ci_successor_rejects_wrong_git_evidence[object]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_exact_configuration_branch_and_numeric_routing[main]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_exact_configuration_branch_and_numeric_routing[master]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[missing]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[unauthorized]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[contract]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[id]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[branch]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[duplicate]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[unknown-field]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[mode]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[legacy-contract]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[local]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_rechecks_identity_branch_and_retry_authority[rename]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_rechecks_identity_branch_and_retry_authority[id]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_rechecks_identity_branch_and_retry_authority[branch]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_rechecks_identity_branch_and_retry_authority[revoked]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_rechecks_identity_branch_and_retry_authority[retry-revoked]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_rechecks_identity_branch_and_retry_authority[readme-branch]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_rechecks_identity_branch_and_retry_authority[write-branch]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_blocks_all_legacy_operations[Kometa-Team/People-Images]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_blocks_all_legacy_operations[Kometa-Team/People-Images-transparent]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_blocks_all_legacy_operations[Kometa-Team/People-Images-bw]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_blocks_all_legacy_operations[Kometa-Team/People-Images-diiivoy]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_blocks_all_legacy_operations[Kometa-Team/People-Images-diiivoycolor]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_blocks_all_legacy_operations[Kometa-Team/People-Images-rainier]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_blocks_all_legacy_operations[Kometa-Team/People-Images-signature]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_batch_binding_survives_restart_and_rejects_missing_or_changed_authority",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_missing_readme_blocks_before_artwork_writes",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_existing_publisher_receipts_and_no_write_retry[main]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_existing_publisher_receipts_and_no_write_retry[master]"
   ],
   "version": 1
 }

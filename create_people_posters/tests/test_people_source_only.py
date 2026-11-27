@@ -23,7 +23,7 @@ def source_only(tmp_path,monkeypatch):
     monkeypatch.setenv('PEOPLE_OUTPUT_CONTRACT',jobs.SOURCE_CONTRACT)
     monkeypatch.setenv('PEOPLE_PUBLISH_MODE','local')
     monkeypatch.setenv('PEOPLE_AUTO_CLEANUP','false')
-    for key in ('PEOPLE_GITHUB_TARGET','PEOPLE_SANDBOX_CONFIG','PEOPLE_STATE_DIR','PEOPLE_JOBS_DIR'):
+    for key in ('PEOPLE_GITHUB_TARGET','PEOPLE_SANDBOX_CONFIG','PEOPLE_REPLACEMENT_CONFIG','PEOPLE_STATE_DIR','PEOPLE_JOBS_DIR'):
         monkeypatch.delenv(key,raising=False)
     monkeypatch.setattr(poster,'SIZE',(1000,1500))
     monkeypatch.setattr(sync,'TARGET_TRANSPARENT_SIZE',(1000,1500))
@@ -261,6 +261,196 @@ def test_exact_ci_successor_rejects_wrong_git_evidence(monkeypatch,attack):
     try:
         with pytest.raises(ValueError):owner.verify()
     finally:owner.immutable.cache_clear();owner.objects.cache_clear()
+
+
+def replacement_targets(source_only,monkeypatch,branch='main'):
+    root=source_only/'replacements';monkeypatch.setattr(github,'REPLACEMENT_ROOT',root)
+    path=root/'approved/targets.json';path.parent.mkdir(parents=True)
+    data=dict(version=1,branch=branch,output_contract=jobs.SOURCE_CONTRACT,publication_authorized=True,
+        repositories=dict(original='Kometa-Team/People-Images-1500',transparent='Kometa-Team/People-Images-transparent-1500'),
+        repository_ids=dict(github.REPLACEMENT_IDS))
+    path.write_text(json.dumps(data));monkeypatch.setenv('PEOPLE_GITHUB_TARGET','replacement')
+    monkeypatch.setenv('PEOPLE_PUBLISH_MODE','github_api');monkeypatch.delenv('PEOPLE_BRANCH',raising=False)
+    monkeypatch.setenv('PEOPLE_REPLACEMENT_CONFIG',str(path))
+    return path,data
+
+
+class ReplacementSession:
+    def __init__(self,data):self.data=data;self.headers={};self.calls=[];self.metadata_change={};self.status=200
+    def request(self,method,url,**kwargs):
+        self.calls.append((method,url,kwargs.get('json')))
+        parts=url.split('/');style=next(s for s,i in self.data['repository_ids'].items() if str(i)==parts[4])
+        if len(parts)==5:
+            value=dict(id=self.data['repository_ids'][style],full_name=self.data['repositories'][style],
+                default_branch=self.data['branch'],permissions={'push':True})
+            value.update(self.metadata_change)
+        elif url.endswith('actions/workflows/readme.yml'):
+            value=dict(state='active',path='.github/workflows/readme.yml')
+        elif '/actions/runs/' in url:value={'head_branch':self.data['branch']}
+        else:value={'ok':True}
+        return SimpleNamespace(status_code=200 if len(parts)==5 else self.status,json=lambda:value,headers={},text='')
+
+
+@pytest.mark.parametrize('branch',['main','master'])
+def test_replacement_exact_configuration_branch_and_numeric_routing(source_only,monkeypatch,branch):
+    _,data=replacement_targets(source_only,monkeypatch,branch)
+    session=ReplacementSession(data);client=github.GitHubClient('fixture-token',session)
+    assert github.repository_mapping()==data['repositories'] and github.branch_name()==branch
+    with pytest.raises(ValueError):github.branch_name('master' if branch=='main' else 'main')
+    repo=data['repositories']['original']
+    assert client.request('GET',f'/repos/{repo}/git/ref/heads/{branch}')=={'ok':True}
+    assert session.calls[-1][1]==f"https://api.github.com/repositories/{data['repository_ids']['original']}/git/ref/heads/{branch}"
+    for method,route,payload in [('PATCH','git/refs/heads/'+branch,{'sha':'a'*40,'force':False}),
+            ('POST','actions/workflows/readme.yml/dispatches',{'ref':branch,'inputs':{'batch_id':'fixture'}}),
+            ('POST','actions/runs/123/rerun',{})]:
+        client.request(method,f'/repos/{repo}/{route}',payload)
+
+
+@pytest.mark.parametrize('attack',['missing','unauthorized','contract','id','branch','duplicate','unknown-field','mode','legacy-contract','local'])
+def test_replacement_configuration_fails_closed(source_only,monkeypatch,attack):
+    path,data=replacement_targets(source_only,monkeypatch)
+    if attack=='missing':path.unlink()
+    elif attack=='mode':monkeypatch.delenv('PEOPLE_GITHUB_TARGET')
+    elif attack=='legacy-contract':monkeypatch.delenv('PEOPLE_OUTPUT_CONTRACT')
+    elif attack=='local':monkeypatch.setenv('PEOPLE_PUBLISH_MODE','local')
+    else:
+        if attack=='unauthorized':data['publication_authorized']=False
+        if attack=='contract':data['output_contract']='legacy'
+        if attack=='id':data['repository_ids']['original']+=1
+        if attack=='branch':data['branch']='development'
+        if attack=='duplicate':data['repositories']['original']=data['repositories']['transparent']
+        if attack=='unknown-field':data['unreviewed']='extra authority'
+        path.write_text(json.dumps(data))
+    with pytest.raises((ValueError,OSError)):github.repository_mapping()
+
+
+@pytest.mark.parametrize('attack',['rename','id','branch','revoked','retry-revoked','readme-branch','write-branch'])
+def test_replacement_rechecks_identity_branch_and_retry_authority(source_only,monkeypatch,attack):
+    path,data=replacement_targets(source_only,monkeypatch)
+    session=ReplacementSession(data);client=github.GitHubClient('fixture-token',session,sleep=lambda _:None)
+    repo=data['repositories']['original'];client.request('GET','/repos/'+repo)
+    session.calls.clear()
+    if attack in ('rename','id','branch'):
+        key={'rename':'full_name','id':'id','branch':'default_branch'}[attack]
+        session.metadata_change={key:'unexpected' if key!='id' else 1}
+    if attack=='revoked':
+        data['publication_authorized']=False;path.write_text(json.dumps(data))
+    if attack=='retry-revoked':
+        session.status=503
+        def revoke(_):
+            data['publication_authorized']=False;path.write_text(json.dumps(data))
+        client.sleep=revoke
+    route='actions/workflows/readme.yml/dispatches' if attack=='readme-branch' else 'git/refs/heads/master' if attack=='write-branch' else 'git/blobs'
+    payload={'ref':'master'} if attack=='readme-branch' else {'content':'fixture','force':False}
+    with pytest.raises((ValueError,github.GitHubError)):client.request('PATCH' if attack=='write-branch' else 'POST','/repos/'+repo+'/'+route,payload)
+    assert sum(method!='GET' for method,_,_ in session.calls)==(1 if attack=='retry-revoked' else 0)
+
+
+@pytest.mark.parametrize('legacy',list(github.REPOSITORIES.values()))
+def test_replacement_blocks_all_legacy_operations(source_only,monkeypatch,legacy):
+    _,data=replacement_targets(source_only,monkeypatch);session=ReplacementSession(data)
+    client=github.GitHubClient('fixture-token',session)
+    for method,route,payload in [('GET','git/ref/heads/main',None),('POST','git/blobs',{}),
+            ('PATCH','git/refs/heads/main',{'force':False}),('POST','actions/workflows/readme.yml/dispatches',{'ref':'main'})]:
+        with pytest.raises(ValueError):client.request(method,'/repos/'+legacy+'/'+route,payload)
+    assert not session.calls
+
+
+def test_replacement_batch_binding_survives_restart_and_rejects_missing_or_changed_authority(source_only,monkeypatch):
+    from people_publication_state import PublicationState
+    from publish_people_github import prepare,Publisher
+    from people_remote_inventory import RemoteInventory
+    path,data=replacement_targets(source_only,monkeypatch)
+    stage(source_only);assert poster.render_batch(source_only)['processed']==1
+    state=source_only/'state';ledger=PublicationState(state)
+    try:
+        plan=prepare(source_only,'20261127T000000-123456abcdef',ledger,'main');assert len(plan)==2
+    finally:ledger.close()
+    ledger=PublicationState(state)
+    try:
+        assert len(prepare(source_only,'20261127T000000-123456abcdef',ledger,'main'))==2
+        old=ledger.db.execute('SELECT authorization FROM replacement_targets').fetchone()[0]
+        data['repositories']['original']='Kometa-Team/Approved-future-name';path.write_text(json.dumps(data))
+        with pytest.raises(ValueError,match='retarget'):prepare(source_only,'20261127T000000-123456abcdef',ledger,'main')
+        data['repositories']['original']='Kometa-Team/People-Images-1500';path.write_text(json.dumps(data))
+        ledger.db.execute('DELETE FROM replacement_targets');ledger.db.commit()
+        with pytest.raises(ValueError,match='Missing replacement'):prepare(source_only,'20261127T000000-123456abcdef',ledger,'main')
+        session=ReplacementSession(data);client=github.GitHubClient('fixture-token',session)
+        inventory=RemoteInventory(client,source_only/'inventory.db','main')
+        try:
+            with pytest.raises(ValueError,match='Missing replacement'):Publisher(client,inventory,ledger).publish('20261127T000000-123456abcdef')
+            assert not session.calls
+        finally:inventory.close()
+        assert json.loads(old)['repository_ids']==github.REPLACEMENT_IDS
+    finally:ledger.close()
+
+
+def test_replacement_missing_readme_blocks_before_artwork_writes(source_only,monkeypatch):
+    from people_publication_state import PublicationState
+    from people_remote_inventory import RemoteInventory
+    from publish_people_github import Publisher
+    _,data=replacement_targets(source_only,monkeypatch);session=ReplacementSession(data)
+    session.status=404;client=github.GitHubClient('fixture-token',session,attempts=1)
+    ledger=PublicationState(source_only/'state');inventory=RemoteInventory(client,source_only/'inventory.db')
+    try:
+        with pytest.raises(github.GitHubError):Publisher(client,inventory,ledger).validate()
+        assert not any(method!='GET' for method,_,_ in session.calls)
+    finally:inventory.close();ledger.close()
+
+
+@pytest.mark.parametrize('branch',['main','master'])
+def test_replacement_existing_publisher_receipts_and_no_write_retry(source_only,monkeypatch,branch):
+    from create_people_posters.tests import test_people_github as existing
+    from people_publication_state import PublicationState
+    from people_remote_inventory import RemoteInventory,blob_sha
+    from publish_people_github import Publisher,prepare
+    import copy
+    _,data=replacement_targets(source_only,monkeypatch,branch)
+    monkeypatch.setattr(existing,'REPOSITORIES',data['repositories'])
+    peer=existing.FakeGitHub();generate=peer.generate_readmes
+    def readmes(repo):
+        generate(repo);files=copy.deepcopy(peer.trees[peer.commits[peer.heads[repo]]])
+        for name,item in files.items():
+            if name.endswith('README.md'):
+                raw=peer.blobs[item['sha']].replace(b'/master/',('/'+branch+'/').encode())
+                sha=blob_sha(raw);peer.blobs[sha]=raw;item.update(sha=sha,size=len(raw))
+        peer.advance(repo,files)
+    peer.generate_readmes=readmes
+    class Session(ReplacementSession):
+        def request(self,method,url,**kwargs):
+            parts=url.split('/');style=next(s for s,i in data['repository_ids'].items() if str(i)==parts[4])
+            repo=data['repositories'][style];route='/'.join(parts[5:])
+            if not route or route=='actions/workflows/readme.yml':return super().request(method,url,**kwargs)
+            self.calls.append((method,url,kwargs.get('json')))
+            if method=='GET' and route.startswith('git/ref/heads/'):
+                result={'object':{'sha':peer.heads[repo]}}
+            elif method=='GET' and route.startswith('git/commits/'):
+                result={'tree':{'sha':peer.commits[parts[-1]]}}
+            else:
+                # Adapt the retained master-only fake, after the real transport
+                # has checked and routed the exact configured branch and ID.
+                payload=copy.deepcopy(kwargs.get('json'))
+                if payload and 'ref' in payload:payload['ref']='master'
+                mapped=route.replace('git/refs/heads/'+branch,'git/refs/heads/master')
+                result=peer.request(method,'/repos/'+repo+'/'+mapped,payload)
+                for runs in peer.runs.values():
+                    for run in runs:run['head_branch']=branch
+            return SimpleNamespace(status_code=200,json=lambda:result,headers={},text='')
+    session=Session(data);client=github.GitHubClient('fixture-token',session,sleep=lambda _:None)
+    monkeypatch.setenv('UPDATE_TRIGGER_READMES','true');monkeypatch.setenv('UPDATE_REQUIRE_README_DISPATCH','true')
+    monkeypatch.setenv('PEOPLE_README_POLL_INTERVAL','0.001')
+    stage(source_only);assert poster.render_batch(source_only)['processed']==1
+    ledger=PublicationState(source_only/'state');inventory=RemoteInventory(client,source_only/'inventory.db',branch)
+    try:
+        rows=prepare(source_only,'20261127T000001-123456abcdef',ledger,branch)
+        publisher=Publisher(client,inventory,ledger);publisher.validate();publisher.publish('20261127T000001-123456abcdef')
+        assert len(rows)==2 and ledger.verified('20261127T000001-123456abcdef')
+        for row in rows:assert peer.blobs[row['blob']]==Path(row['prepared']).read_bytes()
+        session.calls.clear();publisher.publish('20261127T000001-123456abcdef')
+        assert not any(method!='GET' for method,_,_ in session.calls)
+        monkeypatch.setenv('PEOPLE_PUBLICATION_BACKEND','git-v2')
+        with pytest.raises(ValueError,match='REST publisher'):publisher.publish('20261127T000001-123456abcdef')
+    finally:inventory.close();ledger.close()
 
 
 if not hasattr(jobs,'SOURCE_CONTRACT'):
