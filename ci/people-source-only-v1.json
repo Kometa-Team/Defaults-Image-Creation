@@ -111,7 +111,7 @@
     },
     "create_people_posters/tests/test_people_pipeline_failures.py": {
       "before_sha256": "fdc30f6283552bb9576263ca1948a7642e2e6519b1bbf584bf3847369131ce29",
-      "sha256": "30152d3b5990185503740169b234ad084fb598add2d729ca6d43384e4a16d468"
+      "sha256": "9ecd2552a92aa2fdd415a944b421a8cd14d7715b91bd6c7e39e4487eadb946de"
     },
     "create_people_posters/tests/test_people_source_only.py": {
       "before_sha256": null,

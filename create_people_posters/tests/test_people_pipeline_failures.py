@@ -123,7 +123,8 @@ def downloader(monkeypatch, tmp_path):
     monkeypatch.setenv("POSTER_DIR", str(tmp_path / "posters"))
     monkeypatch.setenv("PEOPLE_WORKSPACE_MODE", "batch")
     monkeypatch.setenv("PEOPLE_PUBLISH_MODE", "local_git")
-    namespace = runpy.run_path(str(ROOT / "tmdb_people.py"), run_name="test_downloader")
+    import importlib.util
+    namespace = runpy.run_path(importlib.util.find_spec("tmdb_people").origin, run_name="test_downloader")
     yield SimpleNamespace(api=api, ns=namespace, globals=namespace["run_people"].__globals__, root=tmp_path)
     # The CLI installs its own logging handlers; release them for Windows tmpdir cleanup.
     import logging
