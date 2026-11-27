@@ -72,6 +72,25 @@ def test_exact_two_outputs_alpha_framing_and_repeat_without_resources(source_onl
     assert {p.name for p in recovered.iterdir()}=={'transparent'}
 
 
+def test_png_original_checkpoint_reuses_exact_final_jpeg(source_only):
+    cutout,photo=stage(source_only)
+    raw=cutout.read_bytes()
+    normalized=photo.with_suffix('.png')
+    with Image.open(photo) as image:image.save(normalized,'PNG')
+    photo.unlink()
+    input_hash=hashlib.sha256(normalized.read_bytes()).hexdigest()
+    assert poster.render_batch(source_only)['processed']==1
+    outputs=list((source_only/'people_dirs').glob('*/?*/Images/*'))
+    before={p:(p.read_bytes(),p.stat().st_mtime_ns) for p in outputs}
+    checkpoint=source_only/'.orch/poster-render.json'
+    assert next(iter(json.loads(checkpoint.read_text()).values()))['original_hash']==input_hash
+    retained=checkpoint.read_bytes()
+    cutout.write_bytes(raw)
+    assert poster.render_batch(source_only)['skipped']==1
+    assert checkpoint.read_bytes()==retained
+    assert all((p.read_bytes(),p.stat().st_mtime_ns)==value for p,value in before.items())
+
+
 def test_early_normalization_reuses_fit_and_preserves_native(source_only,monkeypatch):
     import recover_edge_chops as recovery
     import audit_people_images as audit

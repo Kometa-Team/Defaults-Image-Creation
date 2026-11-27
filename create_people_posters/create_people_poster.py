@@ -406,7 +406,12 @@ def render_batch(config: Path, names=None):
             native_hash = digest(original)
             source_hash = digest(source)
             old = previous.get(name, {})
-            if (old.get("fingerprint") == fingerprint and old.get("original_hash") == native_hash
+            original_unchanged = old.get("original_hash") == native_hash
+            if source_only() and original == output_path(root,'original',name,'.jpg'):
+                # A working PNG becomes the final JPEG; retain its input hash
+                # while accepting only the exact JPEG already bound by outputs.
+                original_unchanged |= old.get('outputs',{}).get(str(original)) == native_hash
+            if (old.get("fingerprint") == fingerprint and original_unchanged
                     and source_hash in {old.get("source_hash"), old.get("transparent_hash")}
                     and all(Path(p).is_file() and digest(Path(p)) == sha for p, sha in old.get("outputs", {}).items())
                     and len(old.get("outputs", {})) == (2 if source_only() else 7) and not old.get("style_errors")):
@@ -433,7 +438,7 @@ def render_batch(config: Path, names=None):
                 scratch.mkdir(parents=True,exist_ok=True)
                 reject_links(scratch)
                 original_target = output_path(root,'original',name,'.jpg' if source_only() else original.suffix.lower())
-                prior_valid = (old.get('fingerprint') == fingerprint and old.get('original_hash') == native_hash
+                prior_valid = (old.get('fingerprint') == fingerprint and original_unchanged
                     and source_hash in {old.get('source_hash'),old.get('transparent_hash')})
                 hashes = dict(old.get('outputs',{})) if prior_valid else {}
                 labels = dict(old.get('labels',{})) if prior_valid else {}

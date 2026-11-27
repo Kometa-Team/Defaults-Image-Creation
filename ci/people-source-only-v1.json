@@ -55,7 +55,7 @@
     },
     "create_people_posters/create_people_poster.py": {
       "before_sha256": "e7f9bbd790c5a4a2c36ffaeee59c4abf226c9a312dfe5565dc8b3628726291bb",
-      "sha256": "1d9026300262bc979a25115c22da5870da21932046b135f302feb1b28cbab175"
+      "sha256": "3817959e7c8351ebc35c809d462c3b8010c297debbd53f7ea6771c1f043c9a24"
     },
     "create_people_posters/find_and_download_missing_people.py": {
       "before_sha256": "5f6a5f0130600c912617c44d636f27ae8ff75fc1b477205ae04a9ed3387f4f41",
@@ -115,7 +115,7 @@
     },
     "create_people_posters/tests/test_people_source_only.py": {
       "before_sha256": null,
-      "sha256": "bb34df454d1af36e378e463746ebc6db7abde9e56c4a8dbf5767da267d33178a"
+      "sha256": "b064584a63db2081e2cf99a38f63bbe70ef0cb67b8c7544a437d806f99dfef09"
     },
     "create_people_posters/tests/test_people_startup_retention.py": {
       "before_sha256": "f461ef9d09ed0c989a738801caa6cfb4ff6b714051e5baead70cce4e9aabca5c",
@@ -129,6 +129,7 @@
   "publication_authorized": false,
   "pytest_ids": [
     "create_people_posters/tests/test_people_source_only.py::test_exact_two_outputs_alpha_framing_and_repeat_without_resources",
+    "create_people_posters/tests/test_people_source_only.py::test_png_original_checkpoint_reuses_exact_final_jpeg",
     "create_people_posters/tests/test_people_source_only.py::test_early_normalization_reuses_fit_and_preserves_native",
     "create_people_posters/tests/test_people_source_only.py::test_legacy_dimensions_not_accepted_or_downscaled_at_render",
     "create_people_posters/tests/test_people_source_only.py::test_discovery_requires_only_two_correct_sized_outputs",
