@@ -310,7 +310,7 @@ def _immutable_checked(head, raw, registry_raw, data_raw):
     current, before, registry_before, data_before = map(dict,
         _batch_blobs((head, BASE, REGISTRY_BASE, DATA_BASE)))
     source=source_adapter()
-    _,source_before=source.verify(ROOT)
+    _,source_before=source._metadata(ROOT)
     current={name:source_before.get(name,raw) if name in source.MEMBERS else raw for name,raw in current.items()}
     if sha(data_before[OWNER]) != data_owner:
         raise ValueError('Changed catalog data predecessor owner')
