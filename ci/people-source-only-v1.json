@@ -87,7 +87,7 @@
     },
     "create_people_posters/publish_people_github.py": {
       "before_sha256": "2f9953098f9476aa648ae2c0c11eb406d28ed37d5eac07a5aa6e23cc42800b8d",
-      "sha256": "33b73d7f05237aa5f769a9e906715cc62be6f8fb935587f85234623484ac7ae3"
+      "sha256": "c42dc011d7e1b91f106cc9cd2288a0da0182466a1ed9b33c08fed3b036803b12"
     },
     "create_people_posters/recover_edge_chops.py": {
       "before_sha256": "a945c37104ae4d9b7a8d0c5dddff69da786e3f7b82278819e33729c8e430e16f",

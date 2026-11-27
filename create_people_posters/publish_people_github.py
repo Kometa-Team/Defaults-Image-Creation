@@ -541,10 +541,11 @@ class Publisher:
             raise GitHubError("Publication and README receipts are incomplete")
 
     def validate(self):
+        replacement=isinstance(getattr(self.client,'sandbox',None),dict) and self.client.sandbox.get('target')=='replacement'
         for style, repo in self.repositories.items():
             print(f"[INFO] Validating {repo}@{self.branch}", flush=True)
             metadata = self.client.request("GET", f"/repos/{repo}")
-            if getattr(self.client, "sandbox", None) and self.client.sandbox.get('target')!='replacement':
+            if getattr(self.client, "sandbox", None) and not replacement:
                 if (metadata.get("full_name", "").casefold() != repo.casefold()
                         or metadata.get("private") is not True or metadata.get("fork") is not False
                         or metadata.get("owner", {}).get("type") != "User"):
@@ -553,7 +554,7 @@ class Publisher:
                 raise GitHubError(f"Repository is archived or disabled: {repo}")
             if metadata.get("permissions", {}).get("push") is False:
                 raise GitHubError(f"No write access to {repo}; request Contents:write. Community users need an authorized fork/PR workflow.", 403)
-            if getattr(self.client,'sandbox',None) and self.client.sandbox.get('target')=='replacement':
+            if replacement:
                 workflow=self.client.request('GET',f'/repos/{repo}/actions/workflows/readme.yml')
                 if workflow.get('state')!='active' or workflow.get('path')!='.github/workflows/readme.yml':
                     raise GitHubError('Replacement requires the existing active README receipt workflow before publication')
@@ -648,7 +649,7 @@ class Publisher:
 
     def publish(self, batch, dry_run=False):
         replacement_binding(batch,self.ledger,self.repositories,self.branch,getattr(self.client,'sandbox',None))
-        if (getattr(self.client,'sandbox',None) and self.client.sandbox.get('target')=='replacement'
+        if (isinstance(getattr(self.client,'sandbox',None),dict) and self.client.sandbox.get('target')=='replacement'
                 and os.getenv('PEOPLE_PUBLICATION_BACKEND','rest-v1')!='rest-v1'):
             raise ValueError('Replacement repositories require the existing REST publisher')
         backend = os.getenv("PEOPLE_PUBLICATION_BACKEND", "rest-v1")
