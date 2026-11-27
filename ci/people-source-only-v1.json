@@ -53,6 +53,10 @@
       "before_sha256": "ed91f71c8c516d1a21bf11f616e8df22a774dac941f5efec7ec555113370f27d",
       "sha256": "364c50e2176940e5008e2eaebb70326d56b1bfa735ef9bfe3b1d7319fef1b9c8"
     },
+    "create_people_posters/bulk/Dockerfile": {
+      "before_sha256": "93f9d87de4aa6da8ca0bc02f563eae2209126fb9aa7e810e7a718ed933fdac15",
+      "sha256": "14e84ccca146e152a607d41e383b043d81085d261479d79379943b3b9b35a858"
+    },
     "create_people_posters/create_people_poster.py": {
       "before_sha256": "e7f9bbd790c5a4a2c36ffaeee59c4abf226c9a312dfe5565dc8b3628726291bb",
       "sha256": "3817959e7c8351ebc35c809d462c3b8010c297debbd53f7ea6771c1f043c9a24"
@@ -93,6 +97,10 @@
       "before_sha256": "a945c37104ae4d9b7a8d0c5dddff69da786e3f7b82278819e33729c8e430e16f",
       "sha256": "b422f5574ed8e6116b75c850e2c0e90a40ff569e37bd29ae247d910f97892d63"
     },
+    "create_people_posters/reliability_tests/test_tree_diagnostic.py": {
+      "before_sha256": "71e3d6133b3a9d4ca9aa36e2d30b086d2b36753989d2eba76810b5ad3f6d357c",
+      "sha256": "da18544d2891f264348ed3ce27bcd0a1e00787b24e1fe4c3f34f1770f4d61866"
+    },
     "create_people_posters/sel_remove_bg.py": {
       "before_sha256": "95984bb646b3d69d3a44f9fede9b1c5c829a4a7a2637d5899acae51c23316369",
       "sha256": "4c7ab7d64332d66b7a6a811aec2566e26edc75a2db2209a2ca1f965ac61d5b3b"
@@ -104,6 +112,10 @@
     "create_people_posters/tests/test_background_orchestrator.py": {
       "before_sha256": "9653f2ce93558c6a2fe47ced1de359c1b66d4b879ded16f6a3a6bd772fe7928f",
       "sha256": "df2d7d11a93a4967a03d95cd2ee22366390824064202f395ae23dd43c333b831"
+    },
+    "create_people_posters/tests/test_background_sync.py": {
+      "before_sha256": "efcd9df8ffc7b3382fe12fe90eccabb4072f1531046f189173c7efb5b4c362a3",
+      "sha256": "657cac308a270e3e05c10c189141a9df2f0a4d25c697bd0cb609d57512fdd2d9"
     },
     "create_people_posters/tests/test_people_api_orchestrator.py": {
       "before_sha256": "9308754202c7dab68c0e4acfa0f75203e9539459420a12c3565545e1918944ad",
@@ -124,6 +136,10 @@
     "create_people_posters/tmdb_people.py": {
       "before_sha256": "73924057e4495e74d56f6ba0684c88b4c5674ebec9c26670897dba062972b2d8",
       "sha256": "91b29e959e67d5ad673ec027743bd5d7ab131df852025baa519e329601c85bfa"
+    },
+    "create_people_posters/unicode/runtime-source-only-v1.json": {
+      "before_sha256": null,
+      "sha256": "1c2220719542a0bf230ce22e0452508be8d9f60b4fc8ce2c09d63ec1cd1793d9"
     }
   },
   "publication_authorized": false,

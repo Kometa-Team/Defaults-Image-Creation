@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
+import importlib.util
 import logging
 import os
 from pathlib import Path
@@ -11,7 +12,7 @@ import pytest
 from PIL import Image, ImageOps
 
 
-SCRIPT = Path(__file__).resolve().parents[1] / "sync_people_images.py"
+SCRIPT = Path(importlib.util.find_spec("sync_people_images").origin)
 TARGET = (2000, 3000)
 
 
