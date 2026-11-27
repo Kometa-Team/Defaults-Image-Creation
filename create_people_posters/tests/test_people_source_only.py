@@ -453,6 +453,71 @@ def test_replacement_existing_publisher_receipts_and_no_write_retry(source_only,
     finally:inventory.close();ledger.close()
 
 
+def test_exact_ci_source_invocation_reuses_only_entry_proof(monkeypatch):
+    from unittest.mock import patch
+    from ci.phase6_playlist_maintenance import source_adapter
+    owner=source_adapter();value,before=owner.verify()
+    name='create_people_posters/people_github.py';binding=value['files'][name]
+    raw=(owner.ROOT/name).read_bytes()
+    with patch.object(owner,'verify',wraps=owner.verify) as verify:
+        with owner.invocation():
+            with owner.invocation():
+                for _ in range(3):
+                    assert owner.selected_hash(name,binding['before_sha256'])==binding['sha256']
+                    assert owner.historical_bytes(owner.ROOT,name,raw)==before[name]
+            assert verify.call_count==1
+        assert verify.call_count==2
+        owner.selected_hash(name,binding['before_sha256'])
+        assert verify.call_count==3
+
+
+@pytest.mark.parametrize('attack',['projection','closing','head','expired'])
+def test_exact_ci_source_invocation_retains_freshness_and_closing_checks(monkeypatch,attack):
+    from contextvars import copy_context
+    from ci.phase6_playlist_maintenance import source_adapter
+    owner=source_adapter();value,before=owner.verify()
+    name='create_people_posters/people_github.py';binding=value['files'][name]
+    raw=(owner.ROOT/name).read_bytes();read=Path.read_bytes
+    if attack=='projection':
+        with owner.invocation():
+            for bad in (raw+b'changed',before[name],None):
+                def physical(path):
+                    if path!=owner.ROOT/name:return read(path)
+                    if bad is None:raise FileNotFoundError(path)
+                    return bad
+                with monkeypatch.context() as changed:
+                    changed.setattr(Path,'read_bytes',physical)
+                    with pytest.raises((ValueError,OSError)):
+                        owner.historical_bytes(owner.ROOT,name,raw)
+            stat=Path.lstat
+            with monkeypatch.context() as changed:
+                changed.setattr(Path,'lstat',lambda path:SimpleNamespace(st_mode=0o040755)
+                                if path==owner.ROOT/name else stat(path))
+                with pytest.raises(ValueError):owner.historical_bytes(owner.ROOT,name,raw)
+    elif attack=='closing':
+        other=owner.ROOT/'create_people_posters/SOURCE_ONLY.md'
+        with monkeypatch.context() as changed:
+            with pytest.raises(ValueError,match='source-only'):
+                with owner.invocation():
+                    owner.selected_hash(name,binding['before_sha256'])
+                    changed.setattr(Path,'read_bytes',lambda path:read(path)+b'changed' if path==other else read(path))
+    elif attack=='head':
+        head=owner._head(owner.ROOT)
+        for stage in ('projection','closing'):
+            observed=[head]
+            with monkeypatch.context() as changed:
+                changed.setattr(owner,'_head',lambda root:observed[0])
+                with pytest.raises(ValueError,match='source-only'):
+                    with owner.invocation():
+                        observed[0]='0'*40
+                        if stage=='projection':owner.selected_hash(name,binding['before_sha256'])
+    else:
+        with owner.invocation():snapshot=copy_context()
+        with pytest.raises(ValueError,match='source-only'):
+            snapshot.run(owner.selected_hash,name,binding['before_sha256'])
+    assert owner._ACTIVE.get() is None
+
+
 if not hasattr(jobs,'SOURCE_CONTRACT'):
     # The mandatory compatibility job imports the authenticated Jost runtime.
     # These new contract cases need current production imports instead. Keep

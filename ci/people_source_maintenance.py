@@ -1,9 +1,12 @@
 """Exact source-only successor; historical receipts and authority stay unchanged."""
 from functools import lru_cache
+from contextlib import contextmanager
+from contextvars import ContextVar
 import hashlib
 import json
 from pathlib import Path
 import subprocess
+from threading import get_ident
 
 from ci.people_storage_maintenance import regular
 from ci.people_collection_maintenance import _head
@@ -11,9 +14,10 @@ from ci.people_collection_maintenance import _head
 ROOT=Path(__file__).resolve().parents[1]
 BASE='a89df404a554f648f7f83d119e4af0e34073a866'
 RECEIPT='ci/people-source-only-v1.json'
-PIN='1f2b27bd2887eb9ea1127a19b99b4d2217b0797d73364f25f1b57632e9999eef'
+PIN='d22a5b976f3e643b3d6a1e5f6bc150ff028be63db22be7a9207cd0db5ba79ca2'
 OWNER='ci/people_source_maintenance.py'
 ENTRY='ci/phase6_playlist_maintenance.py'
+_ACTIVE=ContextVar('source_only_verification_owner',default=None)
 MEMBERS=frozenset((
     'create_people_posters/audit_people_images.py',
     'create_people_posters/create_people_poster.py',
@@ -51,6 +55,7 @@ MEMBERS=frozenset((
     'ci/dependency_tests/test_phase6_playlist_maintenance.py',
     'ci/dependency_tests/test_catalog_reservations_maintenance.py',
     'ci/dependency_tests/test_catalog_data_maintenance.py',
+    'ci/dependency_tests/test_phase5_m7_followup.py',
 ))
 
 def sha(raw):return hashlib.sha256(raw.replace(b'\r\n',b'\n')).hexdigest()
@@ -119,16 +124,47 @@ def verify(root=ROOT):
     if _head(ROOT)!=head:raise ValueError('HEAD moved during source-only verification')
     return value,dict(before)
 
+def _metadata(root=ROOT):
+    active=_ACTIVE.get()
+    if active is None:return verify(root)
+    key,alive,head,entry=active
+    if (not alive[0] or key!=(str(Path(root).resolve()),get_ident())
+            or Path(root).resolve()!=ROOT.resolve() or _head(ROOT)!=head):
+        raise ValueError('Expired, foreign or changed source-only verification owner')
+    return entry
+
+@contextmanager
+def invocation(root=ROOT):
+    # Only synchronous nested proof work shares this witness. Public verify()
+    # stays fresh, projections reread their input, and closing checks every file.
+    if Path(root).resolve()!=ROOT.resolve():raise ValueError('Foreign source-only checkout')
+    if _ACTIVE.get() is not None:
+        _metadata(root)
+        yield
+        return
+    head=_head(ROOT)
+    value,before=verify(root)
+    entry=json.loads(json.dumps(value)),dict(before)
+    alive=[True]
+    token=_ACTIVE.set(((str(ROOT.resolve()),get_ident()),alive,head,entry))
+    try:
+        yield
+        if _head(ROOT)!=head or verify(root)!=entry:
+            raise ValueError('Changed closing source-only proof or HEAD')
+    finally:
+        alive[0]=False
+        _ACTIVE.reset(token)
+
 def historical_bytes(root,name,current):
     if name not in MEMBERS:return current
-    value,before=verify(root);binding=value['files'][name]
+    value,before=_metadata(root);binding=value['files'][name]
     actual=regular(ROOT,name).read_bytes()
     if sha(actual)!=binding['sha256']:raise ValueError('Changed source-only projection input: '+name)
     return before.get(name,current) if sha(current)==binding['sha256'] else current
 
 def selected_hash(name,expected):
     if name not in MEMBERS:return expected
-    value,_=verify();binding=value['files'][name]
+    value,_=_metadata();binding=value['files'][name]
     return binding['sha256'] if expected==binding['before_sha256'] else expected
 
 def test_ids():return list(verify()[0]['pytest_ids'])

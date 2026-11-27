@@ -101,7 +101,7 @@ def _pilot_members():
     return MODIFIED | ADDED | {OWNER, RECEIPT, REGISTRY_RECEIPT, REGISTRY_PRIOR_RECEIPT} | REGISTRY_ADDED | DATA_MODIFIED | DATA_ADDED | {DATA_RECEIPT}
 
 
-SOURCE_ADAPTER_SHA256 = '229d0795267abf226e42bc8aaab5899dab76705e966d8e9a1957d7df8618eb56'
+SOURCE_ADAPTER_SHA256 = 'c1856d1be07c3f69ff740026a5161604ceaa901dec5b0152aa2e697aae282674'
 
 
 @lru_cache(maxsize=4)
@@ -366,7 +366,7 @@ def proof(root, head, *, selected=None):
         raise ValueError('Foreign offline Playlist checkout')
     if not isinstance(head, str) or re.fullmatch('[0-9a-f]{40}', head) is None:
         raise ValueError('Offline Playlist immutable inputs require a full SHA')
-    source_adapter().verify(root)
+    source_adapter()._metadata(root)
     _ancestry(head)
     raw = regular(ROOT, RECEIPT).read_bytes()
     registry_raw = regular(ROOT, REGISTRY_RECEIPT).read_bytes()
