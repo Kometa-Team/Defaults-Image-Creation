@@ -223,7 +223,16 @@ def test_daily_inter_tamper_fails_before_rendering(tmp_path,monkeypatch):
 
 
 def test_orchestrator_people_list_offline_real_seven_style_renderer(tmp_path,monkeypatch):
-    import orchestrator as orch
+    # Preserve the original seven-style orchestration fixture against exact
+    # pre-source-only code. Current orchestration has its own mandatory cases.
+    frozen=ROOT/'.unicode-legacy-orchestrator.py'
+    raw=(frozen.read_bytes() if frozen.is_file() else subprocess.check_output([
+        'git','show','a89df404a554f648f7f83d119e4af0e34073a866:create_people_posters/orchestrator.py'],cwd=ROOT.parent))
+    assert hashlib.sha256(raw).hexdigest()=='3d867940e78f934b5f940d1548012d0baa2816a0f59249644fc484f4d08a7200'
+    orch=types.ModuleType('unicode_legacy_orchestrator')
+    orch.__file__=str(ROOT/'orchestrator.py')
+    monkeypatch.setitem(sys.modules,orch.__name__,orch)
+    exec(compile(raw,orch.__file__,'exec'),orch.__dict__)
     config=tmp_path/'config';config.mkdir()
     people=config/'people_list.txt';people.write_text('123|'+NAMES[0]+'\n456|'+NAMES[2]+'\n',encoding='utf8')
     for name in (NAMES[0],NAMES[2]):stage(config,name)

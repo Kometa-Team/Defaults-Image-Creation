@@ -11,7 +11,7 @@ from ci.people_collection_maintenance import _head
 ROOT=Path(__file__).resolve().parents[1]
 BASE='a89df404a554f648f7f83d119e4af0e34073a866'
 RECEIPT='ci/people-source-only-v1.json'
-PIN='c79daebe449333bb07eadc6ba14bf30bbdf45596c0af668b1da4f4251f3be9c4'
+PIN='1f2b27bd2887eb9ea1127a19b99b4d2217b0797d73364f25f1b57632e9999eef'
 OWNER='ci/people_source_maintenance.py'
 ENTRY='ci/phase6_playlist_maintenance.py'
 MEMBERS=frozenset((
@@ -39,6 +39,7 @@ MEMBERS=frozenset((
     'create_people_posters/tests/test_background_sync.py',
     'create_people_posters/bulk/Dockerfile',
     'create_people_posters/unicode/runtime-source-only-v1.json',
+    'create_people_posters/unicode/tests/test_unicode_successor.py',
     'ci/people_unicode_maintenance.py',
     'ci/people_publication_maintenance.py',
     'ci/people_readme_maintenance.py',

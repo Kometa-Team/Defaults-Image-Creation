@@ -55,7 +55,7 @@
     },
     "create_people_posters/bulk/Dockerfile": {
       "before_sha256": "93f9d87de4aa6da8ca0bc02f563eae2209126fb9aa7e810e7a718ed933fdac15",
-      "sha256": "14e84ccca146e152a607d41e383b043d81085d261479d79379943b3b9b35a858"
+      "sha256": "da0a76dc743632e2430ece12056ba3a902892e4c12d996334aeea4f3177c3ba5"
     },
     "create_people_posters/create_people_poster.py": {
       "before_sha256": "e7f9bbd790c5a4a2c36ffaeee59c4abf226c9a312dfe5565dc8b3628726291bb",
@@ -140,6 +140,10 @@
     "create_people_posters/unicode/runtime-source-only-v1.json": {
       "before_sha256": null,
       "sha256": "1c2220719542a0bf230ce22e0452508be8d9f60b4fc8ce2c09d63ec1cd1793d9"
+    },
+    "create_people_posters/unicode/tests/test_unicode_successor.py": {
+      "before_sha256": "5d0ad7021705083ba4e7622108aa61e958b8656f0ccc085922d6dfe6158f4821",
+      "sha256": "80d26350d276c40764321dbaf1638206d501c762170db3921c391c3d427fa464"
     }
   },
   "publication_authorized": false,
