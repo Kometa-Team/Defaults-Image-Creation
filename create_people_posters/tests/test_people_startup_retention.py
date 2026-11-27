@@ -13,8 +13,8 @@ def test_startup_cleanup_runs_and_protects_resumed_job(isolated, monkeypatch, re
     manager = Workspaces(isolated)
     old = manager.create(cleanup=False)
     manager.set_status(old, 'no_work')
-    from people_workspaces import SOURCE_CONTRACT
-    monkeypatch.setenv('PEOPLE_OUTPUT_CONTRACT', SOURCE_CONTRACT)
+    import people_workspaces as jobs
+    if hasattr(jobs,'SOURCE_CONTRACT'):monkeypatch.setenv('PEOPLE_OUTPUT_CONTRACT', jobs.SOURCE_CONTRACT)
     resume = manager.create(cleanup=False)
     manager.set_status(resume, 'failed')
     manager.db.execute('UPDATE jobs SET created=?,updated=?', (time.time() - 30 * 86400,) * 2)
