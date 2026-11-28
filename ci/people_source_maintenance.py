@@ -14,7 +14,7 @@ from ci.people_collection_maintenance import _head
 ROOT=Path(__file__).resolve().parents[1]
 BASE='a89df404a554f648f7f83d119e4af0e34073a866'
 RECEIPT='ci/people-source-only-v1.json'
-PIN='910e8c12fce233af76e36cdc560ff8c93a7b90b7dfecccd58711014c17e2eade'
+PIN='df42e542ab7ba3d745242f6ebe277b386b4541644e08ec42b2c9b631152c3361'
 OWNER='ci/people_source_maintenance.py'
 ENTRY='ci/phase6_playlist_maintenance.py'
 _ACTIVE=ContextVar('source_only_verification_owner',default=None)

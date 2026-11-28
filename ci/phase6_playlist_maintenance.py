@@ -101,7 +101,7 @@ def _pilot_members():
     return MODIFIED | ADDED | {OWNER, RECEIPT, REGISTRY_RECEIPT, REGISTRY_PRIOR_RECEIPT} | REGISTRY_ADDED | DATA_MODIFIED | DATA_ADDED | {DATA_RECEIPT}
 
 
-SOURCE_ADAPTER_SHA256 = 'e3fb171c9b4b16ff73db9ffa1db3ab94008a5edb69aeec3813952cfc188dca74'
+SOURCE_ADAPTER_SHA256 = '8158b19b0bfc1c8de6e7dfe2d9356ffd623efc13bb0c73501ec1e8761e8c6032'
 
 
 @lru_cache(maxsize=4)
@@ -453,17 +453,20 @@ def selected_hash(name, expected):
     _, before, after = next(row for row in source if row[0] == name)
     if expected != before:
         return source_adapter().selected_hash(name,expected)
-    from ci.phase5_m7_maintenance import _cohort_proof
-    entry = _cohort_proof(ROOT, _protected_cohort_proof)
-    owned = entry is not None
-    if not owned:
-        entry = _protected_cohort_proof(ROOT)
-    # Even an invocation-owned cohort never substitutes for this leaf read.
-    if member_sha(name,regular(ROOT,name).read_bytes()) != source_adapter().selected_hash(name,after):
-        raise ValueError('Changed physical offline Playlist protected successor: '+name)
-    if not owned and _protected_cohort_proof(ROOT) != entry:
-        raise ValueError('Changed closing offline Playlist adoption successor')
-    return source_adapter().selected_hash(name,after)
+    # This public path can run outside an M7 owner. Share only its source entry
+    # proof; retain both protected proofs, the fresh leaf and the source close.
+    with source_adapter().invocation():
+        from ci.phase5_m7_maintenance import _cohort_proof
+        entry = _cohort_proof(ROOT, _protected_cohort_proof)
+        owned = entry is not None
+        if not owned:
+            entry = _protected_cohort_proof(ROOT)
+        # Even an invocation-owned cohort never substitutes for this leaf read.
+        if member_sha(name,regular(ROOT,name).read_bytes()) != source_adapter().selected_hash(name,after):
+            raise ValueError('Changed physical offline Playlist protected successor: '+name)
+        if not owned and _protected_cohort_proof(ROOT) != entry:
+            raise ValueError('Changed closing offline Playlist adoption successor')
+        return source_adapter().selected_hash(name,after)
 
 
 PROTECTED_SUCCESSORS = frozenset({'ci/phase4.py','ci/phase4_transactions.py','ci/people_unicode_maintenance.py',

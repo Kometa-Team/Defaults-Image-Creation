@@ -469,6 +469,15 @@ def test_exact_ci_source_invocation_reuses_only_entry_proof(monkeypatch):
         assert verify.call_count==2
         owner.selected_hash(name,binding['before_sha256'])
         assert verify.call_count==3
+    # Protected hash selection also runs without an M7 owner. Each public call
+    # retains two complete source proofs, never one per nested selection.
+    from ci import phase6_playlist_maintenance as pilot
+    target='ci/people_unicode_maintenance.py'
+    predecessor=next(row[1] for row in pilot._decode((owner.ROOT/pilot.RECEIPT).read_bytes()) if row[0]==target)
+    with patch.object(owner,'verify',wraps=owner.verify) as verify:
+        for count in (2,4):
+            assert pilot.selected_hash(target,predecessor)==value['files'][target]['sha256']
+            assert verify.call_count==count
 
 
 @pytest.mark.parametrize('attack',['projection','closing','head','expired'])
@@ -501,6 +510,18 @@ def test_exact_ci_source_invocation_retains_freshness_and_closing_checks(monkeyp
                 with owner.invocation():
                     owner.selected_hash(name,binding['before_sha256'])
                     changed.setattr(Path,'read_bytes',lambda path:read(path)+b'changed' if path==other else read(path))
+        from ci import phase6_playlist_maintenance as pilot
+        target='ci/people_unicode_maintenance.py'
+        predecessor=next(row[1] for row in pilot._decode((owner.ROOT/pilot.RECEIPT).read_bytes()) if row[0]==target)
+        proof=pilot._protected_cohort_proof
+        with monkeypatch.context() as changed:
+            def move(root):
+                result=proof(root)
+                changed.setattr(Path,'read_bytes',lambda path:read(path)+b'changed' if path==other else read(path))
+                return result
+            changed.setattr(pilot,'_protected_cohort_proof',move)
+            with pytest.raises(ValueError,match='source-only'):
+                pilot.selected_hash(target,predecessor)
     elif attack=='head':
         head=owner._head(owner.ROOT)
         for stage in ('projection','closing'):

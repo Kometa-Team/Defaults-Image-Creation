@@ -135,7 +135,7 @@
     },
     "create_people_posters/tests/test_people_source_only.py": {
       "before_sha256": null,
-      "sha256": "549f34fd9baf5afe83034aaa7f5ed19f7023e7671a862422c22f42b57d6e785f"
+      "sha256": "c443f481f65a015e18685f52c6a42dbae6403ec3d9e739891754859cf5880683"
     },
     "create_people_posters/tests/test_people_startup_retention.py": {
       "before_sha256": "f461ef9d09ed0c989a738801caa6cfb4ff6b714051e5baead70cce4e9aabca5c",
