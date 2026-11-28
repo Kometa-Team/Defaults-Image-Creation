@@ -25,7 +25,8 @@ from unicode_labels import resolve_label, ReviewRequired, POLICY_SHA256, INTER_S
 from people_workspaces import atomic_json, reject_links
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-SIZE = (2000, 3000)
+from people_workspaces import output_size, source_only, SOURCE_CONTRACT, SOURCE_STYLES
+SIZE = output_size()
 STYLES = ("original", "bw", "diiivoy", "diiivoycolor", "rainier", "signature", "transparent")
 COLLECTION_ARTWORK = {
     "signature": "@zbase-Signature-no-text.png",
@@ -58,6 +59,11 @@ def resource_dirs():
 
 
 def renderer_fingerprint():
+    if source_only():
+        return {"engine": "python", "pillow": PILLOW_VERSION,
+                "output_contract": SOURCE_CONTRACT,
+                "files": {str(path.resolve()): digest(path) for path in
+                          (Path(__file__), SCRIPT_DIR / "people_workspaces.py", SCRIPT_DIR / "sync_people_images.py")}}
     assets, fonts = resource_dirs()
     files = [Path(__file__), SCRIPT_DIR / "poster_fonts.py", SCRIPT_DIR / "unicode_labels.py",
              *(assets / name for name in ARTWORK), *(fonts / name for name in FONTS),
@@ -114,6 +120,9 @@ def gray(image: Image.Image) -> Image.Image:
 
 class Renderer:
     def __init__(self):
+        if source_only():
+            self.art, self.fonts, self.metrics = {}, {}, {}
+            return
         asset_dir, self.font_dir = resource_dirs()
         for path in [*(asset_dir / n for n in ARTWORK), *(self.font_dir / n for n in FONTS)]:
             if not path.is_file():
@@ -312,6 +321,8 @@ class Renderer:
 
     def render_independent(self, source, name, styles=('bw','diiivoy','diiivoycolor','rainier','signature','transparent'), *, filename=None):
         styles = tuple(styles)
+        if source_only() and styles != ('transparent',):
+            raise ValueError('Source-only batches render Transparent only; Original uses its preserved photograph')
         if not styles or len(set(styles)) != len(styles) or set(styles)-{'bw','signature','rainier','diiivoy','diiivoycolor','transparent'}:
             raise ValueError('Unknown or duplicate styles')
         result = dict(outputs={}, errors={}, labels={}, warnings=[])
@@ -357,10 +368,15 @@ def render_batch(config: Path, names=None):
     reject_links(config)
     config = config.resolve()
     root = config / "people_dirs"
+    from people_workspaces import check_output_contract
+    check_output_contract(config)
     renderer = Renderer()
     fingerprint = renderer_fingerprint()
     state_path = config / ".orch" / "poster-render.json"
     previous = json.loads(state_path.read_text(encoding="utf-8")) if state_path.exists() else {}
+    if source_only() and any(record.get("fingerprint", {}).get("output_contract") != SOURCE_CONTRACT
+                             for record in previous.values()):
+        raise ValueError("Incompatible output contract in retained renderer checkpoint")
     sources = {}
     for directory in (root / "tmppeople", root / "Downloads"):
         if directory.is_dir():
@@ -390,10 +406,15 @@ def render_batch(config: Path, names=None):
             native_hash = digest(original)
             source_hash = digest(source)
             old = previous.get(name, {})
-            if (old.get("fingerprint") == fingerprint and old.get("original_hash") == native_hash
+            original_unchanged = old.get("original_hash") == native_hash
+            if source_only() and original == output_path(root,'original',name,'.jpg'):
+                # A working PNG becomes the final JPEG; retain its input hash
+                # while accepting only the exact JPEG already bound by outputs.
+                original_unchanged |= old.get('outputs',{}).get(str(original)) == native_hash
+            if (old.get("fingerprint") == fingerprint and original_unchanged
                     and source_hash in {old.get("source_hash"), old.get("transparent_hash")}
                     and all(Path(p).is_file() and digest(Path(p)) == sha for p, sha in old.get("outputs", {}).items())
-                    and len(old.get("outputs", {})) == 7 and not old.get("style_errors")):
+                    and len(old.get("outputs", {})) == (2 if source_only() else 7) and not old.get("style_errors")):
                 report["skipped"] += 1
                 result["status"] = "unchanged"
             else:
@@ -401,7 +422,9 @@ def render_batch(config: Path, names=None):
                     if image.format != "PNG" or getattr(image, "n_frames", 1) != 1:
                         raise ValueError("Expected a single-frame PNG cutout")
                     image.load()
-                    rendered = renderer.render_independent(image,name,filename=name)
+                    if source_only() and image.size != SIZE:
+                        raise ValueError("Cutout must already match the source-only working dimensions")
+                    rendered = renderer.render_independent(image,name,('transparent',),filename=name) if source_only() else renderer.render_independent(image,name,filename=name)
                 warnings = list(rendered['warnings'])
                 errors = dict(rendered['errors'])
                 if errors:
@@ -414,8 +437,8 @@ def render_batch(config: Path, names=None):
                 scratch = root / 'tmppeople'
                 scratch.mkdir(parents=True,exist_ok=True)
                 reject_links(scratch)
-                original_target = output_path(root,'original',name,original.suffix.lower())
-                prior_valid = (old.get('fingerprint') == fingerprint and old.get('original_hash') == native_hash
+                original_target = output_path(root,'original',name,'.jpg' if source_only() else original.suffix.lower())
+                prior_valid = (old.get('fingerprint') == fingerprint and original_unchanged
                     and source_hash in {old.get('source_hash'),old.get('transparent_hash')})
                 hashes = dict(old.get('outputs',{})) if prior_valid else {}
                 labels = dict(old.get('labels',{})) if prior_valid else {}
@@ -431,13 +454,19 @@ def render_batch(config: Path, names=None):
                         candidates.append(('original',None))
                         for style,image in candidates:
                             filename = name if style in {'transparent','original'} else clean
-                            target = output_path(root,style,filename,original.suffix.lower() if style=='original' else None)
+                            target = output_path(root,style,filename,('.jpg' if source_only() else original.suffix.lower()) if style=='original' else None)
                             reject_links(target)
                             if hashes.get(str(target)) and target.is_file() and digest(target)==hashes[str(target)]:
                                 continue
                             try:
                                 staged = Path(temp)/(style+target.suffix)
-                                if style=='original':shutil.copyfile(original,staged)
+                                if style=='original' and source_only():
+                                    with Image.open(original) as photo:
+                                        if photo.size != SIZE:
+                                            raise ValueError("Original must already match the source-only working dimensions")
+                                    from sync_people_images import sync_original_presentation
+                                    sync_original_presentation(original,staged)
+                                elif style=='original':shutil.copyfile(original,staged)
                                 elif style=='transparent':image.save(staged,'PNG')
                                 else:image.save(staged,'JPEG',quality=100,subsampling=0)
                                 blocking,notes = image_quality_findings(style,staged,allow_native_original=style=='original',allow_fixable_dimensions=style=='original')
@@ -489,7 +518,7 @@ def render_recovery_candidate(workspace, people_root, name, cutout, photograph):
     if report["failed"]:
         raise ValueError("Pillow recovery rendering failed: " + str(report["images"]))
     from remove_bg_birefnet import atomic_copy
-    for style in STYLES:
+    for style in (SOURCE_STYLES if source_only() else STYLES):
         if style != "original":
             source = output_path(root, style, name)
             target = output_path(Path(people_root), style, name)

@@ -37,7 +37,22 @@ def isolated(tmp_path, monkeypatch):
         os.environ.update(environment)
 
 
+def source_runtime():
+    import people_workspaces
+    return hasattr(people_workspaces,'SOURCE_CONTRACT')
+
+
 def invoke(monkeypatch, *args):
+    if source_runtime() and '--publish-mode' in args and args[args.index('--publish-mode')+1]=='github_api':
+        import people_github as github
+        from people_workspaces import SOURCE_CONTRACT, SOURCE_STYLES
+        targets=orch.CONFIG_DIR/'targets.json'
+        targets.write_text(json.dumps(dict(version=1,owner='test-user',branch='master',
+            output_contract=SOURCE_CONTRACT,publication_authorized=True,
+            repositories={style:'test-user/kometa-people-sandbox-'+style for style in SOURCE_STYLES})))
+        monkeypatch.setattr(github,'SANDBOX_ROOT',orch.CONFIG_DIR.parent)
+        monkeypatch.setenv('PEOPLE_GITHUB_TARGET','sandbox')
+        monkeypatch.setenv('PEOPLE_SANDBOX_CONFIG',str(targets))
     monkeypatch.setattr(sys, "argv", ["orchestrator.py", *args])
     return orch.main()
 
@@ -45,18 +60,20 @@ def invoke(monkeypatch, *args):
 def test_api_mode_without_clones_preserves_step_names(isolated, monkeypatch):
     calls = []
     monkeypatch.setattr(orch, "run_cmd", lambda title, argv, **kw: (calls.append(argv) or (0, None, None)))
-    invoke(monkeypatch, "--publish-mode", "github_api", "--workspace-mode", "persistent", "--redo", "sync_images")
+    from people_workspaces import Workspaces
+    if source_runtime():monkeypatch.setattr(Workspaces,'confirm_published',lambda *a,**k:None)
+    invoke(monkeypatch, "--publish-mode", "github_api", "--workspace-mode", "batch" if source_runtime() else "persistent", "--redo", "sync_images")
     api = [call for call in calls if "publish_people_github.py" in call]
     assert [call[call.index("--op") + 1] for call in api] == ["validate", "prepare", "push"]
     assert all(call[call.index("--branch") + 1] == "master" for call in api)
     assert not any("ensure_people_repo.py" in call or "update_people_repos.py" in call for call in calls)
-    assert (isolated / ".orch/sync_images.done.json").exists()
+    assert (orch.CONFIG_DIR / ".orch/sync_images.done.json").exists()
 
 
 def test_api_dry_run_not_checkpointed_as_publication(isolated, monkeypatch):
     calls = []
     monkeypatch.setattr(orch, "run_cmd", lambda title, argv, **kw: (calls.append(argv) or (0, None, None)))
-    invoke(monkeypatch, "--publish-mode", "github_api", "--workspace-mode", "persistent", "--redo", "sync_images", "--dry-run")
+    invoke(monkeypatch, "--publish-mode", "github_api", "--workspace-mode", "batch" if source_runtime() else "persistent", "--redo", "sync_images", "--dry-run")
     assert all("--dry-run" in call for call in calls)
     assert not (isolated / ".orch/sync_images.done.json").exists()
 
@@ -123,22 +140,34 @@ def test_legacy_mode_still_invokes_local_tools(isolated, monkeypatch, selection)
     else:
         monkeypatch.setenv("PEOPLE_PUBLISH_MODE", "local_git")
         monkeypatch.setenv("PEOPLE_WORKSPACE_MODE", "persistent")
-    invoke(monkeypatch, *args, "--redo", "sync_images")
-    assert any("sync_people_images.py" in call for call in calls)
-    assert any("update_people_repos.py" in call and "push" in call for call in calls)
-    assert not any("publish_people_github.py" in call for call in calls)
+    # Retain this original test ID: the new standard contract must reject the
+    # old local-Git/persistent route before it can reach production clones.
+    if source_runtime():
+        with pytest.raises(SystemExit) as error:
+            invoke(monkeypatch, *args, "--redo", "sync_images")
+        assert error.value.code==2
+        assert calls==[]
+    else:
+        invoke(monkeypatch, *args, "--redo", "sync_images")
+        assert any("sync_people_images.py" in call for call in calls)
+        assert any("update_people_repos.py" in call and "push" in call for call in calls)
+        assert not any("publish_people_github.py" in call for call in calls)
 
 
 def test_default_run_uses_api_batch_without_clones(isolated, monkeypatch):
     calls = []
     monkeypatch.setattr(orch, "run_cmd", lambda title, argv, **kw: (calls.append(argv) or (0, None, None)))
     invoke(monkeypatch, "--stop-after", "ensure_repo")
-    assert os.environ["PEOPLE_PUBLISH_MODE"] == "github_api"
+    assert os.environ["PEOPLE_PUBLISH_MODE"] == ("local" if source_runtime() else "github_api")
     assert os.environ["PEOPLE_WORKSPACE_MODE"] == "batch"
     assert orch.CONFIG_DIR.parent == isolated / "jobs"
     assert (orch.CONFIG_DIR / "manifest.json").is_file()
-    assert len(calls) == 1 and "publish_people_github.py" in calls[0]
-    assert calls[0][calls[0].index("--op") + 1] == "validate"
+    if source_runtime():
+        assert calls == []
+        assert json.loads((orch.CONFIG_DIR/'manifest.json').read_text())['output_contract']=='source-only-1000x1500-v1'
+    else:
+        assert len(calls)==1 and "publish_people_github.py" in calls[0]
+        assert calls[0][calls[0].index("--op")+1]=="validate"
     assert not (orch.CONFIG_DIR / ".active").exists()
 
 
@@ -156,7 +185,7 @@ def test_default_api_failure_never_falls_back_to_cloning(isolated, monkeypatch):
     calls = []
     monkeypatch.setattr(orch, "run_cmd", lambda title, argv, **kw: (calls.append(argv) or (7, None, None)))
     with pytest.raises(SystemExit) as error:
-        invoke(monkeypatch)
+        invoke(monkeypatch,'--publish-mode','github_api')
     assert error.value.code == 7
     assert len(calls) == 1 and "publish_people_github.py" in calls[0]
     manifest = json.loads((orch.CONFIG_DIR / "manifest.json").read_text(encoding="utf-8"))
@@ -171,6 +200,11 @@ def launch_jobs(isolated,monkeypatch):
     manager=Workspaces(isolated)
     old=published_job(manager,monkeypatch)
     resume=manager.create(cleanup=False)
+    if source_runtime():
+        manifest=manager.path(resume)/'manifest.json'
+        value=json.loads(manifest.read_text(encoding='utf8'))
+        value['output_contract']='source-only-1000x1500-v1'
+        manifest.write_text(json.dumps(value),encoding='utf8')
     manager.set_status(resume,"failed","recoverable")
     with manager.db:
         manager.db.execute("UPDATE jobs SET published=? WHERE id=?",(time.time()-4*86400,old))

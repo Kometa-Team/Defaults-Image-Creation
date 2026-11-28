@@ -39,13 +39,16 @@ RECOVERY_MEMBERS = frozenset(('ci/publication_tests/test_git_recovery_maintenanc
 
 
 def timeout_bytes(root, name, current):
+    from ci.phase6_playlist_maintenance import source_adapter
+    current=source_adapter().historical_bytes(root,name,current)
     from ci.phase5_m6_maintenance import timeout_bytes as project
     return project(root, name, current)
 
 
 def timeout_hash(name, expected):
     from ci.phase5_m6_maintenance import timeout_selected_hash
-    return timeout_selected_hash(name, expected)
+    from ci.phase6_playlist_maintenance import source_adapter
+    return source_adapter().selected_hash(name,timeout_selected_hash(name, expected))
 
 
 def recovery_bindings(root=ROOT):
@@ -102,7 +105,7 @@ def git_bindings(root=ROOT):
     historical = json.loads(regular(ROOT, RECEIPT).read_bytes())['files']
     for name, binding in value['files'].items():
         if (set(binding) != {'operation','before_sha256','sha256','text_lf','predecessor_lf'}
-                or binding['text_lf'] is not True or digest(recovery[name]['predecessor_lf'].encode() if name in recovery and recovery[name]['operation']=='M' else regular(ROOT,name).read_bytes()) != binding['sha256']):
+                or binding['text_lf'] is not True or digest(recovery[name]['predecessor_lf'].encode() if name in recovery and recovery[name]['operation']=='M' else timeout_bytes(root,name,regular(ROOT,name).read_bytes())) != binding['sha256']):
             raise ValueError('Changed physical native Git successor: '+name)
         if name in historical:
             if (binding['operation'] != 'M' or type(binding['predecessor_lf']) is not str

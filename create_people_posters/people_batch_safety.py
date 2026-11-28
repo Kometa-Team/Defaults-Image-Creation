@@ -10,6 +10,8 @@ class IncompleteBatchError(ValueError):
 
 def assert_batch_ready(config):
     config = Path(config)
+    from people_workspaces import check_output_contract, source_only, SOURCE_STYLES
+    check_output_contract(config)
     for name in ("tmdb_people", "remove_bg_birefnet"):
         path = config / "logs" / (name + ".json")
         if path.exists():
@@ -57,8 +59,8 @@ def assert_batch_ready(config):
             if not matched:
                 raise IncompleteBatchError("Publication blocked: an explicit selection has no successful TMDB identity; retry tmdb for this batch")
             required_names |= matched
-    for style in ("bw", "diiivoy", "diiivoycolor", "rainier", "original", "signature", "transparent"):
+    for style in (SOURCE_STYLES if source_only() else ("bw", "diiivoy", "diiivoycolor", "rainier", "original", "signature", "transparent")):
         rendered = {name_key(path.stem) for path in (config / "people_dirs" / style).glob("*/Images/*")
                     if path.is_file() and path.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp"}}
         if required_names - rendered:
-            raise IncompleteBatchError("Publication blocked: explicit selections lack all seven generated styles; retry local generation")
+            raise IncompleteBatchError("Publication blocked: explicit selections lack both source outputs; retry local generation" if source_only() else "Publication blocked: explicit selections lack all seven generated styles; retry local generation")

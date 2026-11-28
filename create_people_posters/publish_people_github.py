@@ -81,6 +81,27 @@ def current_batch(config):
     return batch
 
 
+def replacement_binding(batch,ledger,repositories,branch,expected,create=False):
+    current=sandbox_settings()
+    replacement=current and current.get('target')=='replacement'
+    exists=ledger.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='replacement_targets'").fetchone()
+    prior=ledger.db.execute('SELECT authorization FROM replacement_targets WHERE batch=?',(batch,)).fetchone() if exists else None
+    if not replacement:
+        if prior:raise ValueError('Cannot change a replacement batch target profile')
+        return
+    if current!=expected or current['repositories']!=repositories or current['branch']!=branch:
+        raise ValueError('Replacement authorization or destination changed')
+    authorization=json.dumps({key:value for key,value in current.items() if key!='root'},sort_keys=True,separators=(',',':'))
+    if prior:
+        if prior[0]!=authorization:raise ValueError('Cannot retarget replacement batch identities or authorization')
+    elif not create or ledger.rows(batch):
+        raise ValueError('Missing replacement batch authorization; create a fresh batch')
+    else:
+        with ledger.db:
+            ledger.db.execute('CREATE TABLE IF NOT EXISTS replacement_targets (batch TEXT PRIMARY KEY, authorization TEXT NOT NULL)')
+            ledger.db.execute('INSERT INTO replacement_targets VALUES (?,?)',(batch,authorization))
+
+
 def prepare(config, batch, ledger, branch):
     from people_batch_safety import assert_batch_ready
     assert_batch_ready(config)
@@ -89,8 +110,10 @@ def prepare(config, batch, ledger, branch):
                                     image_quality_findings, iter_files,
                                     original_presentation_path, sync_original_presentation)
     repositories = repository_mapping()
+    authorization=sandbox_settings()
     previous = ledger.rows(batch)
     if previous:
+        replacement_binding(batch,ledger,repositories,branch,authorization)
         if any(row["repo"] != repositories.get(row["style"]) for row in previous):
             raise ValueError("Cannot retarget an existing publication batch; create a fresh batch")
         if any(row["branch"] != branch for row in previous):
@@ -178,6 +201,7 @@ def prepare(config, batch, ledger, branch):
         missing = set(repositories) - styles
         if missing:
             raise ValueError(f"Missing mandatory outputs for {person}: {', '.join(sorted(missing))}")
+    replacement_binding(batch,ledger,repositories,branch,authorization,create=True)
     ledger.plan(batch, branch, plan)
     return plan
 
@@ -517,10 +541,11 @@ class Publisher:
             raise GitHubError("Publication and README receipts are incomplete")
 
     def validate(self):
+        replacement=isinstance(getattr(self.client,'sandbox',None),dict) and self.client.sandbox.get('target')=='replacement'
         for style, repo in self.repositories.items():
             print(f"[INFO] Validating {repo}@{self.branch}", flush=True)
             metadata = self.client.request("GET", f"/repos/{repo}")
-            if getattr(self.client, "sandbox", None):
+            if getattr(self.client, "sandbox", None) and not replacement:
                 if (metadata.get("full_name", "").casefold() != repo.casefold()
                         or metadata.get("private") is not True or metadata.get("fork") is not False
                         or metadata.get("owner", {}).get("type") != "User"):
@@ -529,6 +554,10 @@ class Publisher:
                 raise GitHubError(f"Repository is archived or disabled: {repo}")
             if metadata.get("permissions", {}).get("push") is False:
                 raise GitHubError(f"No write access to {repo}; request Contents:write. Community users need an authorized fork/PR workflow.", 403)
+            if replacement:
+                workflow=self.client.request('GET',f'/repos/{repo}/actions/workflows/readme.yml')
+                if workflow.get('state')!='active' or workflow.get('path')!='.github/workflows/readme.yml':
+                    raise GitHubError('Replacement requires the existing active README receipt workflow before publication')
             self.inventory.refresh(style)
             print(f"[OK] {repo}@{self.branch}")
 
@@ -619,6 +648,10 @@ class Publisher:
         raise GitHubError("Concurrent branch updates exhausted retries; resume this batch later")
 
     def publish(self, batch, dry_run=False):
+        replacement_binding(batch,self.ledger,self.repositories,self.branch,getattr(self.client,'sandbox',None))
+        if (isinstance(getattr(self.client,'sandbox',None),dict) and self.client.sandbox.get('target')=='replacement'
+                and os.getenv('PEOPLE_PUBLICATION_BACKEND','rest-v1')!='rest-v1'):
+            raise ValueError('Replacement repositories require the existing REST publisher')
         backend = os.getenv("PEOPLE_PUBLICATION_BACKEND", "rest-v1")
         if backend == "git-v2":
             if dry_run or not env_bool("PEOPLE_RELIABLE_PUBLISH", False):
@@ -732,6 +765,8 @@ def main():
     ledger = None
     inventory = None
     try:
+        from people_workspaces import check_output_contract
+        check_output_contract(args.config)
         branch = branch_name(args.branch)
         if args.op in {"prepare", "push"}:
             from people_batch_safety import assert_batch_ready
@@ -760,7 +795,7 @@ def main():
                 prepare(args.config, batch, ledger, branch)
             publisher.publish(batch, args.dry_run)
             if not args.dry_run:
-                print(f"[OK] All seven destinations verified for {batch}")
+                print(f"[OK] All required destinations verified for {batch}")
         return 0
     except (GitHubError, ValueError, OSError) as error:
         print(f"[ERROR] {safe_exception(error)}", file=sys.stderr)

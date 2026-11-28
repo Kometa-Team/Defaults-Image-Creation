@@ -22,7 +22,7 @@ COPY create_people_posters/fonts/Comfortaa-Medium.ttf create_people_posters/font
      create_people_posters/fonts/OFL-Fuggles.txt create_people_posters/fonts/OFL-Inter.txt \
      create_people_posters/fonts/OFL-Montserrat.txt ./create_people_posters/fonts/
 COPY create_people_posters/assets/people/ ./create_people_posters/assets/people/
-COPY create_people_posters/unicode/runtime-release-v3.json ./create_people_posters/.bulk-runtime.json
+COPY create_people_posters/unicode/runtime-source-only-v1.json ./create_people_posters/.bulk-runtime.json
 # Windows and Linux checkouts produce the same sealed Python/license bytes.
 RUN python -c "from pathlib import Path; [(p.write_bytes(p.read_bytes().replace(b'\r\n',b'\n'))) for p in Path('create_people_posters').rglob('*') if p.suffix in {'.py','.txt'}]" \
     && python create_people_posters/unicode_runtime.py verify --manifest create_people_posters/.bulk-runtime.json
@@ -53,6 +53,8 @@ COPY create_people_posters/fonts/Jost-260.ttf create_people_posters/fonts/OFL-Jo
 COPY create_people_posters/bulk/runtime-release.json ./create_people_posters/bulk/runtime-release.json
 COPY create_people_posters/unicode/tests/ ./create_people_posters/unicode/tests/
 COPY create_people_posters/orchestrator.py create_people_posters/poster_renderer.py ./create_people_posters/
+# Exact historical orchestration fixture, excluded from the release stage.
+ADD --chmod=0644 --checksum=sha256:3d867940e78f934b5f940d1548012d0baa2816a0f59249644fc484f4d08a7200 https://raw.githubusercontent.com/Kometa-Team/Defaults-Image-Creation/a89df404a554f648f7f83d119e4af0e34073a866/create_people_posters/orchestrator.py ./create_people_posters/.unicode-legacy-orchestrator.py
 USER root
 # Exec form matches ENTRYPOINT and avoids a shell injecting a PWD variable
 # (the existing diagnostic guard correctly treats a configured PWD as secret).

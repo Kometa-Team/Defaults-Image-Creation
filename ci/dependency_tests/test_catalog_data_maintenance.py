@@ -18,7 +18,10 @@ class CatalogDataMaintenanceTests(unittest.TestCase):
         for name in (pilot.RECEIPT,pilot.REGISTRY_RECEIPT,pilot.REGISTRY_PRIOR_RECEIPT):
             self.assertEqual(before[name],(pilot.ROOT/name).read_bytes().replace(b'\r\n',b'\n'))
         self.assertEqual(pilot.git('rev-parse',pilot.DATA_PREDECESSOR+'^').decode().strip(),pilot.DATA_ALLOCATION)
-        rows=pilot._diff(result['head'],pilot.DATA_BASE)
+        source=pilot.source_adapter();source.verify()
+        # The authenticated source successor starts after the exact data release.
+        # Keep the original data diff assertion against that immutable boundary.
+        rows=pilot._diff(source.BASE,pilot.DATA_BASE)
         self.assertEqual({name for _,name in rows},pilot.DATA_MODIFIED|pilot.DATA_ADDED|{pilot.OWNER,pilot.DATA_RECEIPT})
         pilot._regular_diff(rows,pilot.DATA_MODIFIED|pilot.DATA_ADDED|{pilot.OWNER,pilot.DATA_RECEIPT},exact=True)
         for metadata,name in rows:

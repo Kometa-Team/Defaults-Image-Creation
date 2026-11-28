@@ -13,7 +13,7 @@ class NativeRegistrationTests(unittest.TestCase):
         current=m.git_bindings();effective=m.verify()
         self.assertEqual(len(effective),7);self.assertEqual(len(current),7)
         for name,binding in current.items():
-            self.assertEqual(m.digest((m.ROOT/name).read_bytes()),binding['sha256'])
+            self.assertEqual(m.digest(m.timeout_bytes(m.ROOT,name,(m.ROOT/name).read_bytes())),binding['sha256'])
             if name in old['files']:
                 self.assertEqual(m.digest(binding['predecessor_lf'].encode()),old['files'][name]['sha256'])
                 self.assertEqual(m.historical_bytes(m.ROOT,name,(m.ROOT/name).read_bytes()),m.predecessor(name))

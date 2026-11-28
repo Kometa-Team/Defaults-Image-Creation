@@ -1,0 +1,220 @@
+{
+  "baseline_commit": "a89df404a554f648f7f83d119e4af0e34073a866",
+  "files": {
+    "ci/dependency_tests/test_catalog_data_maintenance.py": {
+      "before_sha256": "46a9143fa549f5fed9ba87790cdb9eb90855b445d6be47cff486b874fe956021",
+      "sha256": "cfd9a377a3bef63aa502cba0b647e591ed8743caa9f6c26be61357de41c9428b"
+    },
+    "ci/dependency_tests/test_catalog_reservations_maintenance.py": {
+      "before_sha256": "36115811faa22a0e2215be99f9951d8d30b1eae4af27fcc9cf3be87f2039d22b",
+      "sha256": "24f14d81caaeb2415057d964362affa1ebd8a8506fb6f2b3d299da37c1a52a16"
+    },
+    "ci/dependency_tests/test_phase5_m5_maintenance.py": {
+      "before_sha256": "2af3fe3303c86b8457d10c34553d0dbb9172071132449861026d78bf8fd19c4c",
+      "sha256": "79762e07472a27394f6eb6bcd21f508e70a74a763ee90c9e8255990a9b3253e5"
+    },
+    "ci/dependency_tests/test_phase5_m7_followup.py": {
+      "before_sha256": "138613d5b64dbbb4dded14a8987ba6132bf8de9ec02e070f9c885eb7f5bd94ce",
+      "sha256": "f81ef869646d5cfcfef43c906779c450d610575507c44e052a8d63243f24d0a3"
+    },
+    "ci/dependency_tests/test_phase6_playlist_maintenance.py": {
+      "before_sha256": "857233fd074aab916ecf800f1d0aaf4519edc8d2511e7f65119eae83c03459f3",
+      "sha256": "583062f93c1a2bd236c60e2bce07cef67aba46a8884f591aa68aa8baf4b56f32"
+    },
+    "ci/people_publication_maintenance.py": {
+      "before_sha256": "39df495fe7d249113a5fd074a71c2696bc8a4602095ce2e554579a371fedd15e",
+      "sha256": "ab465f49a37321f9cfed67b21d9dd3b07e6cb5d957e76b96c34ac938b41f300a"
+    },
+    "ci/people_readme_maintenance.py": {
+      "before_sha256": "f774f23ba259b3749507ed28f3181e9fe1def540b8ee706ff9da752d1da8bf90",
+      "sha256": "58d9c8917b48005fae04eedf3eb236a09b5270e27d5c45c504ef9164ac36695e"
+    },
+    "ci/people_unicode_maintenance.py": {
+      "before_sha256": "02d95c28925de3920e68498746a9a349cff86e3b16f6bbc8290c1fb394e91ec9",
+      "sha256": "9222f22c9e4394ee0daabc19be3accf35932d6e50b4a22b011dd3b81a247c31b"
+    },
+    "ci/phase5_m6_maintenance.py": {
+      "before_sha256": "8804ae065c50b42aa974390ab6fd340171b5a7df168c7420f17b7c188926dfd3",
+      "sha256": "c53e9d78979664b8338af9d5b60e7166a24317c6243f191dcc79cf524edaadf1"
+    },
+    "ci/phase5_m7_maintenance.py": {
+      "before_sha256": "58f4927b6e2ce1e65327e9f7777f8370ba6ddaf910c8d8be0e9915777a8cb885",
+      "sha256": "8b04e952739b95cbe0563676d563dc50e847979f1b1d5d8c13e54a8a5ce719b1"
+    },
+    "ci/publication_tests/test_git_publication_maintenance.py": {
+      "before_sha256": "acd51f4e857508a98cbbe267926441a920503927bdd2e04662a57467f40386fe",
+      "sha256": "004c4a3a9a1fed68ba1ade199494ec2c44f6edac4226bef2e32d7c74d21f8777"
+    },
+    "ci/publication_tests/test_git_recovery_maintenance.py": {
+      "before_sha256": "15348052dc368c05d47a59612766ffb74ed2ccaf540c25ac9773494370b99b89",
+      "sha256": "c3d5d9e7acc9a0701558cddfaec5bf1b09036a6c4d5dfd00db226c700062cfa3"
+    },
+    "ci/unicode_tests/test_people_unicode_maintenance.py": {
+      "before_sha256": "cc833dce49ebd1f7e6f1784f77020b3a0dce51bd709150ed2e132d9fa41f63d1",
+      "sha256": "4d44404a723e9ade8c0ac4caa16d403b42ba89e411345bd0021edbae07f2247a"
+    },
+    "create_people_posters/SOURCE_ONLY.md": {
+      "before_sha256": null,
+      "sha256": "0586d69d520772aa9a536af13669a23c5afeae23d072b5a60a18d6f3d44b5fed"
+    },
+    "create_people_posters/audit_people_images.py": {
+      "before_sha256": "ed91f71c8c516d1a21bf11f616e8df22a774dac941f5efec7ec555113370f27d",
+      "sha256": "364c50e2176940e5008e2eaebb70326d56b1bfa735ef9bfe3b1d7319fef1b9c8"
+    },
+    "create_people_posters/bulk/Dockerfile": {
+      "before_sha256": "93f9d87de4aa6da8ca0bc02f563eae2209126fb9aa7e810e7a718ed933fdac15",
+      "sha256": "4db41f88a91387f19a1dc05d7caf406d25e34ebfefef53c950c50651a34da0b0"
+    },
+    "create_people_posters/create_people_poster.py": {
+      "before_sha256": "e7f9bbd790c5a4a2c36ffaeee59c4abf226c9a312dfe5565dc8b3628726291bb",
+      "sha256": "3817959e7c8351ebc35c809d462c3b8010c297debbd53f7ea6771c1f043c9a24"
+    },
+    "create_people_posters/find_and_download_missing_people.py": {
+      "before_sha256": "5f6a5f0130600c912617c44d636f27ae8ff75fc1b477205ae04a9ed3387f4f41",
+      "sha256": "bfc1f6b1d12779ea0f15557f69fec36e3fe026febba769f7773c9da6bc509479"
+    },
+    "create_people_posters/image_check.py": {
+      "before_sha256": "dc0b9cc48041776ee396a24232221ee8873d5def786b79e5dca1256503be0925",
+      "sha256": "9571ad541fedad88797cdfb542c42a166145d032528f0c77d62320fbd14bbffa"
+    },
+    "create_people_posters/orchestrator.py": {
+      "before_sha256": "3d867940e78f934b5f940d1548012d0baa2816a0f59249644fc484f4d08a7200",
+      "sha256": "eabe0181f30b5e7471940bb288ea4b418a3002a86bc678971f4de3aa1f0edaed"
+    },
+    "create_people_posters/people_batch_safety.py": {
+      "before_sha256": "8ac62a88862a9fe9192b1551c27ed68ce5c00c5bda349b26a6675bf88d6ca084",
+      "sha256": "f8915073f1101d39382f27bab6de76686edf38b18728a9842c6fd19fd15785b8"
+    },
+    "create_people_posters/people_github.py": {
+      "before_sha256": "c2438262e187f2438117aa39e4eebf650859ad141a8c90d29c9c32c15ac3d39a",
+      "sha256": "7926c18f35e3a55826719859c25dfb07927186073e00f7dbabe86bbfb5bec3cb"
+    },
+    "create_people_posters/people_remote_inventory.py": {
+      "before_sha256": "54f36198cba90a9b3fddd795a0b4bcdc03eb777957e4ab2c3ba1db658c2dfe56",
+      "sha256": "e23fb7f0dd113270e260705d589619776f7fd14f25593615db89fcb9187ad0be"
+    },
+    "create_people_posters/people_workspaces.py": {
+      "before_sha256": "66523dec76743438fa9e5ee935ba9aad1b49e5f63cf13c1e8e5b71bf4e95f4c9",
+      "sha256": "5e83148135084cecd74b438e6d8c0c9ca9681e1fed1274cab39ec3fc6c0177b0"
+    },
+    "create_people_posters/publish_people_github.py": {
+      "before_sha256": "2f9953098f9476aa648ae2c0c11eb406d28ed37d5eac07a5aa6e23cc42800b8d",
+      "sha256": "c42dc011d7e1b91f106cc9cd2288a0da0182466a1ed9b33c08fed3b036803b12"
+    },
+    "create_people_posters/recover_edge_chops.py": {
+      "before_sha256": "a945c37104ae4d9b7a8d0c5dddff69da786e3f7b82278819e33729c8e430e16f",
+      "sha256": "b422f5574ed8e6116b75c850e2c0e90a40ff569e37bd29ae247d910f97892d63"
+    },
+    "create_people_posters/reliability_tests/test_tree_diagnostic.py": {
+      "before_sha256": "71e3d6133b3a9d4ca9aa36e2d30b086d2b36753989d2eba76810b5ad3f6d357c",
+      "sha256": "da18544d2891f264348ed3ce27bcd0a1e00787b24e1fe4c3f34f1770f4d61866"
+    },
+    "create_people_posters/sel_remove_bg.py": {
+      "before_sha256": "95984bb646b3d69d3a44f9fede9b1c5c829a4a7a2637d5899acae51c23316369",
+      "sha256": "4c7ab7d64332d66b7a6a811aec2566e26edc75a2db2209a2ca1f965ac61d5b3b"
+    },
+    "create_people_posters/sync_people_images.py": {
+      "before_sha256": "d5c99d20343fbf1c06871358554637e73215e057a72e18270f657f9c60368488",
+      "sha256": "4bb4b0730ea558f2fd4656b9b010e2c650e9eeb5bc63dbddbbb5619182b45509"
+    },
+    "create_people_posters/tests/test_background_orchestrator.py": {
+      "before_sha256": "9653f2ce93558c6a2fe47ced1de359c1b66d4b879ded16f6a3a6bd772fe7928f",
+      "sha256": "df2d7d11a93a4967a03d95cd2ee22366390824064202f395ae23dd43c333b831"
+    },
+    "create_people_posters/tests/test_background_sync.py": {
+      "before_sha256": "efcd9df8ffc7b3382fe12fe90eccabb4072f1531046f189173c7efb5b4c362a3",
+      "sha256": "657cac308a270e3e05c10c189141a9df2f0a4d25c697bd0cb609d57512fdd2d9"
+    },
+    "create_people_posters/tests/test_people_api_orchestrator.py": {
+      "before_sha256": "9308754202c7dab68c0e4acfa0f75203e9539459420a12c3565545e1918944ad",
+      "sha256": "d778982b72510cc18c4cd66c0079f0ea694a5ffb3b1f1777dc1c4cb1614917a9"
+    },
+    "create_people_posters/tests/test_people_pipeline_failures.py": {
+      "before_sha256": "fdc30f6283552bb9576263ca1948a7642e2e6519b1bbf584bf3847369131ce29",
+      "sha256": "9ecd2552a92aa2fdd415a944b421a8cd14d7715b91bd6c7e39e4487eadb946de"
+    },
+    "create_people_posters/tests/test_people_source_only.py": {
+      "before_sha256": null,
+      "sha256": "c443f481f65a015e18685f52c6a42dbae6403ec3d9e739891754859cf5880683"
+    },
+    "create_people_posters/tests/test_people_startup_retention.py": {
+      "before_sha256": "f461ef9d09ed0c989a738801caa6cfb4ff6b714051e5baead70cce4e9aabca5c",
+      "sha256": "cae991cc2e32a7544c77903a44ad5ed7fbfc9d561e00c2a5c2f347ab32a526f2"
+    },
+    "create_people_posters/tmdb_people.py": {
+      "before_sha256": "73924057e4495e74d56f6ba0684c88b4c5674ebec9c26670897dba062972b2d8",
+      "sha256": "91b29e959e67d5ad673ec027743bd5d7ab131df852025baa519e329601c85bfa"
+    },
+    "create_people_posters/unicode/runtime-source-only-v1.json": {
+      "before_sha256": null,
+      "sha256": "1c2220719542a0bf230ce22e0452508be8d9f60b4fc8ce2c09d63ec1cd1793d9"
+    },
+    "create_people_posters/unicode/tests/test_unicode_successor.py": {
+      "before_sha256": "5d0ad7021705083ba4e7622108aa61e958b8656f0ccc085922d6dfe6158f4821",
+      "sha256": "80d26350d276c40764321dbaf1638206d501c762170db3921c391c3d427fa464"
+    }
+  },
+  "publication_authorized": false,
+  "pytest_ids": [
+    "create_people_posters/tests/test_people_source_only.py::test_exact_two_outputs_alpha_framing_and_repeat_without_resources",
+    "create_people_posters/tests/test_people_source_only.py::test_png_original_checkpoint_reuses_exact_final_jpeg",
+    "create_people_posters/tests/test_people_source_only.py::test_early_normalization_reuses_fit_and_preserves_native",
+    "create_people_posters/tests/test_people_source_only.py::test_legacy_dimensions_not_accepted_or_downscaled_at_render",
+    "create_people_posters/tests/test_people_source_only.py::test_discovery_requires_only_two_correct_sized_outputs",
+    "create_people_posters/tests/test_people_source_only.py::test_all_production_repositories_blocked_at_transport_and_config[Kometa-Team/People-Images]",
+    "create_people_posters/tests/test_people_source_only.py::test_all_production_repositories_blocked_at_transport_and_config[Kometa-Team/People-Images-transparent]",
+    "create_people_posters/tests/test_people_source_only.py::test_all_production_repositories_blocked_at_transport_and_config[Kometa-Team/People-Images-bw]",
+    "create_people_posters/tests/test_people_source_only.py::test_all_production_repositories_blocked_at_transport_and_config[Kometa-Team/People-Images-diiivoy]",
+    "create_people_posters/tests/test_people_source_only.py::test_all_production_repositories_blocked_at_transport_and_config[Kometa-Team/People-Images-diiivoycolor]",
+    "create_people_posters/tests/test_people_source_only.py::test_all_production_repositories_blocked_at_transport_and_config[Kometa-Team/People-Images-rainier]",
+    "create_people_posters/tests/test_people_source_only.py::test_all_production_repositories_blocked_at_transport_and_config[Kometa-Team/People-Images-signature]",
+    "create_people_posters/tests/test_people_source_only.py::test_staging_requires_authorization_and_fresh_contract",
+    "create_people_posters/tests/test_people_source_only.py::test_old_batch_cannot_resume_and_receipt_stays_readable",
+    "create_people_posters/tests/test_people_source_only.py::test_unused_styles_refused_before_style_work",
+    "create_people_posters/tests/test_people_source_only.py::test_incompatible_expired_resume_is_retained_before_cleanup[automatic]",
+    "create_people_posters/tests/test_people_source_only.py::test_incompatible_expired_resume_is_retained_before_cleanup[explicit]",
+    "create_people_posters/tests/test_people_source_only.py::test_exact_ci_successor_rejects_changed_physical_bytes[tamper]",
+    "create_people_posters/tests/test_people_source_only.py::test_exact_ci_successor_rejects_changed_physical_bytes[rollback]",
+    "create_people_posters/tests/test_people_source_only.py::test_exact_ci_successor_rejects_changed_physical_bytes[missing]",
+    "create_people_posters/tests/test_people_source_only.py::test_exact_ci_successor_keeps_fresh_closing_head",
+    "create_people_posters/tests/test_people_source_only.py::test_exact_ci_successor_rejects_wrong_git_evidence[unknown-path]",
+    "create_people_posters/tests/test_people_source_only.py::test_exact_ci_successor_rejects_wrong_git_evidence[mode]",
+    "create_people_posters/tests/test_people_source_only.py::test_exact_ci_successor_rejects_wrong_git_evidence[object]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_exact_configuration_branch_and_numeric_routing[main]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_exact_configuration_branch_and_numeric_routing[master]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[missing]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[unauthorized]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[contract]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[id]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[branch]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[duplicate]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[unknown-field]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[mode]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[legacy-contract]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_configuration_fails_closed[local]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_rechecks_identity_branch_and_retry_authority[rename]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_rechecks_identity_branch_and_retry_authority[id]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_rechecks_identity_branch_and_retry_authority[branch]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_rechecks_identity_branch_and_retry_authority[revoked]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_rechecks_identity_branch_and_retry_authority[retry-revoked]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_rechecks_identity_branch_and_retry_authority[readme-branch]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_rechecks_identity_branch_and_retry_authority[write-branch]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_blocks_all_legacy_operations[Kometa-Team/People-Images]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_blocks_all_legacy_operations[Kometa-Team/People-Images-transparent]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_blocks_all_legacy_operations[Kometa-Team/People-Images-bw]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_blocks_all_legacy_operations[Kometa-Team/People-Images-diiivoy]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_blocks_all_legacy_operations[Kometa-Team/People-Images-diiivoycolor]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_blocks_all_legacy_operations[Kometa-Team/People-Images-rainier]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_blocks_all_legacy_operations[Kometa-Team/People-Images-signature]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_batch_binding_survives_restart_and_rejects_missing_or_changed_authority",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_missing_readme_blocks_before_artwork_writes",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_existing_publisher_receipts_and_no_write_retry[main]",
+    "create_people_posters/tests/test_people_source_only.py::test_replacement_existing_publisher_receipts_and_no_write_retry[master]",
+    "create_people_posters/tests/test_people_source_only.py::test_exact_ci_source_invocation_reuses_only_entry_proof",
+    "create_people_posters/tests/test_people_source_only.py::test_exact_ci_source_invocation_retains_freshness_and_closing_checks[projection]",
+    "create_people_posters/tests/test_people_source_only.py::test_exact_ci_source_invocation_retains_freshness_and_closing_checks[closing]",
+    "create_people_posters/tests/test_people_source_only.py::test_exact_ci_source_invocation_retains_freshness_and_closing_checks[head]",
+    "create_people_posters/tests/test_people_source_only.py::test_exact_ci_source_invocation_retains_freshness_and_closing_checks[expired]"
+  ],
+  "version": 1
+}

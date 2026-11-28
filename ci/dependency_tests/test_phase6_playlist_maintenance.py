@@ -67,7 +67,7 @@ class Phase6PlaylistMaintenanceTests(unittest.TestCase):
             for name in pilot.PROTECTED_SUCCESSORS:
                 before,after=rows[name]
                 original=APPROVED[name][0] if name in APPROVED else before
-                self.assertEqual(selected_hash(name,original),after)
+                self.assertEqual(selected_hash(name,original),pilot.source_adapter().selected_hash(name,after))
                 self.assertEqual(pilot.selected_hash(name,'0'*64),'0'*64)
                 self.assertEqual(pilot.selected_hash('foreign.py',before),before)
 
@@ -348,7 +348,7 @@ class Phase6PlaylistMaintenanceTests(unittest.TestCase):
                     (pilot.ROOT/pilot.RECEIPT).read_bytes(),
                     (pilot.ROOT/pilot.REGISTRY_RECEIPT).read_bytes()):
                 if name in pilot.MODIFIED:
-                    self.assertEqual(physical[name]['sha256'], after)
+                    self.assertEqual(physical[name]['sha256'], pilot.source_adapter().selected_hash(name,after))
             name='create_defaults/lifecycle/ROADMAP.md'
             self.assertNotEqual(physical[name]['sha256'], legacy[name]['sha256'])
             name='create_defaults/bulk/operator_publication.py'

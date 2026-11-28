@@ -220,10 +220,14 @@ class Phase5M7FollowupTests(unittest.TestCase):
         targets = set(m6.PEOPLE_PR65_BEFORE) & maintenance.MODIFIED
         self.assertEqual(targets, {'ci/people_unicode_maintenance.py',
             'ci/phase5_m5_maintenance.py', 'ci/dependency_tests/test_phase5_m6_maintenance.py'})
-        original, reads = Path.read_bytes, Counter()
+        original, reads, source_reads = Path.read_bytes, Counter(), Counter()
         def read(path):
             if path in {maintenance.ROOT/name for name in targets}:
-                reads[(path.relative_to(maintenance.ROOT).as_posix(), sys._getframe(1).f_code.co_name)] += 1
+                caller = sys._getframe(1)
+                name = path.relative_to(maintenance.ROOT).as_posix()
+                counts = (source_reads if caller.f_globals.get('__name__') ==
+                          'verified_people_source_maintenance' else reads)
+                counts[(name, caller.f_code.co_name)] += 1
             return original(path)
         with patch.object(Path, 'read_bytes', read), \
                 patch.object(maintenance, 'verify_checkout', wraps=maintenance.verify_checkout) as verify:
@@ -234,6 +238,13 @@ class Phase5M7FollowupTests(unittest.TestCase):
             self.assertEqual(reads[(name, 'verify_checkout')], 4)
             self.assertEqual(reads[(name, '_read_owned_predecessor')], 2)
             self.assertEqual(sum(n for (path,fn),n in reads.items() if path == name), 6)
+            # Keep all six original M7/People reads exact. The independent
+            # source successor adds entry/exit proofs and fresh leaf checks;
+            # count those separately instead of weakening the original bound.
+            from ci.phase6_playlist_maintenance import source_adapter
+            expected = ({(name, 'verify'): 4, (name, 'historical_bytes'): 14}
+                        if name in source_adapter().MEMBERS else {})
+            self.assertEqual({key:n for key,n in source_reads.items() if key[0] == name}, expected)
 
     def test_aggregate_proofs_close_dependencies_and_expire_between_calls(self):
         from contextvars import copy_context

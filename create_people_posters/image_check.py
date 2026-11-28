@@ -58,8 +58,8 @@ logging.getLogger("PIL.PngImagePlugin").setLevel(logging.ERROR)
 
 # ========= CONFIG =========
 # (kept identical to your PowerShell checks)
-REQUIRED_WIDTH = 2000
-REQUIRED_HEIGHT = 3000
+from people_workspaces import output_size
+REQUIRED_WIDTH, REQUIRED_HEIGHT = output_size()
 BASE_IMAGE_RATIO = round(1 / 1.5, 4)  # 0.6667
 BASE_W_QUALITY = 399
 BASE_H_QUALITY = 599

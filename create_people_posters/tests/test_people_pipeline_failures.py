@@ -20,14 +20,27 @@ from create_people_posters.tests.test_people_api_orchestrator import isolated as
 
 @pytest.mark.parametrize("step", ["sync_images", "push"])
 def test_partial_person_summary_blocks_publication_on_direct_resume(orchestrator_isolated, monkeypatch, step):
-    (orchestrator_isolated / "logs").mkdir()
-    (orchestrator_isolated / "logs/tmdb_people.json").write_text(json.dumps({"failed": 1, "exit_code": 1, "complete": False}))
+    import people_workspaces as jobs
+    config=orchestrator_isolated
+    options=["--workspace-mode","persistent"]
+    if hasattr(jobs,'SOURCE_CONTRACT'):
+        monkeypatch.setenv("PEOPLE_OUTPUT_CONTRACT", jobs.SOURCE_CONTRACT)
+        monkeypatch.setenv("PEOPLE_PUBLISH_MODE", "local")
+        manager = jobs.Workspaces(orchestrator_isolated)
+        try:
+            batch = manager.create(cleanup=False)
+            config = manager.path(batch)
+        finally:
+            manager.close()
+        options=["--workspace-mode","batch","--batch-id",batch]
+    (config/'logs').mkdir(exist_ok=True)
+    (config / "logs/tmdb_people.json").write_text(json.dumps({"failed": 1, "exit_code": 1, "complete": False}))
     calls = []
     monkeypatch.setattr(orch, "run_cmd", lambda title, argv, **kw: (calls.append(argv) or (0, None, None)))
     with pytest.raises(IncompleteBatchError):
-        invoke(monkeypatch, "--publish-mode", "github_api", "--workspace-mode", "persistent", "--redo", step)
+        invoke(monkeypatch, "--publish-mode", "github_api", *options, "--redo", step)
     assert not any("--op" in argv and argv[argv.index("--op") + 1] in {"prepare", "push"} for argv in calls)
-    assert not (orchestrator_isolated / (".orch/" + step + ".done.json")).exists()
+    assert not (config / (".orch/" + step + ".done.json")).exists()
 
 
 @pytest.mark.parametrize("exception,operation,category,retryable", [
@@ -110,7 +123,8 @@ def downloader(monkeypatch, tmp_path):
     monkeypatch.setenv("POSTER_DIR", str(tmp_path / "posters"))
     monkeypatch.setenv("PEOPLE_WORKSPACE_MODE", "batch")
     monkeypatch.setenv("PEOPLE_PUBLISH_MODE", "local_git")
-    namespace = runpy.run_path(str(ROOT / "tmdb_people.py"), run_name="test_downloader")
+    import importlib.util
+    namespace = runpy.run_path(importlib.util.find_spec("tmdb_people").origin, run_name="test_downloader")
     yield SimpleNamespace(api=api, ns=namespace, globals=namespace["run_people"].__globals__, root=tmp_path)
     # The CLI installs its own logging handlers; release them for Windows tmpdir cleanup.
     import logging

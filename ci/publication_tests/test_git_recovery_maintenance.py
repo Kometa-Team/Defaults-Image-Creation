@@ -113,6 +113,8 @@ class RecoveryRegistrationTests(unittest.TestCase):
         source,_=u.receipts();self.assertEqual(len(source['files']),22)
         for name,b in source['files'].items():
             current=(ROOT/name).read_bytes()
+            from ci.phase6_playlist_maintenance import source_adapter
+            current=source_adapter().historical_bytes(ROOT,name,current)
             if name==m6.PEOPLE_PR65_REQUIREMENTS:
                 self.assertEqual(b['sha256'],m6.PEOPLE_PR65_BEFORE[name])
                 current=m6.people_pr65_bytes(ROOT,name,current)

@@ -858,7 +858,8 @@ def fetch_online_names(styles: List[str], branch: str = "master") -> Set[str]:
     Parse README.md(s) for Kometa-Team People-Images-* repos and collect names already online.
     Default keeps legacy behavior: styles=["bw"] unless overridden.
     """
-    if os.getenv("PEOPLE_PUBLISH_MODE", "local_git") == "github_api":
+    from people_workspaces import source_only
+    if source_only() or os.getenv("PEOPLE_PUBLISH_MODE", "local_git") == "github_api":
         from people_remote_inventory import online_complete_names
         return {_normalize_name(name) for name in online_complete_names()}
     online: Set[str] = set()

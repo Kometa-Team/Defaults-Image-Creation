@@ -231,6 +231,27 @@ class CollectionCompatibilityTests(unittest.TestCase):
         added = adapter.test_ids()
         groups, original = people_security.selections()
         actual = [*original, *(node for nodes in groups.values() for node in nodes)]
+        # Authenticate the exact pre-source inventory from immutable main,
+        # then prove the separately sealed additions before the old assertions.
+        from ci.phase6_playlist_maintenance import source_adapter
+        source = source_adapter()
+        approved = source.test_ids()
+        def recorded(name):
+            return json.loads(source.git('show', source.BASE+':ci/'+name))
+        historical = [node for node in recorded('original-test-ids.json')['pytest']
+                      if node.startswith('create_people_posters/tests/')]
+        historical += [node for nodes in recorded('people-security-test-ids.json').values()
+                       for node in nodes]
+        for name, field in (
+                ('people-storage-maintenance-v1.json', 'storage_test_ids'),
+                ('people-readme-maintenance-v1.json', 'pytest_ids'),
+                ('people-job-retention-maintenance-v1.json', 'pytest_ids'),
+                ('people-collection-maintenance-v1.json', 'pytest_ids')):
+            historical += recorded(name)[field]
+        self.assertEqual((len(approved), len(set(approved))), (59, 59))
+        self.assertFalse(set(historical) & set(approved))
+        self.assertCountEqual(actual, [*historical, *approved])
+        actual = [node for node in actual if node not in set(approved)]
         self.assertEqual((len(added), len(set(added))), (32, 32))
         self.assertEqual((len(actual), len(set(actual))), (1216, 1216))
         self.assertEqual(len(set(actual)-set(added)), 1184)

@@ -165,19 +165,27 @@ def _invocation(root):
     if active is not None and active[1][0] and active[2] == key:
         yield
         return
-    entry = verify_checkout(root, _witness=True)
-    alive = [True]
-    token = _ACTIVE.set((entry, alive, key))
-    try:
-        yield
-        # Reread the entire cohort, its modes, owner, receipt and fresh HEAD.
-        # A stable proof at a different HEAD must not close this invocation.
-        if verify_checkout(root, _witness=True) != entry:
-            raise ValueError('Changed closing M7 owner receipt or HEAD')
-    finally:
-        # Copied contexts cannot keep an approval alive after its owner returns.
-        alive[0] = False
-        _ACTIVE.reset(token)
+    from contextlib import nullcontext
+    from importlib import import_module
+    # Resolve the canonical module even after a synthetic test restores
+    # sys.modules; a stale package attribute can hold a different proof class.
+    pilot = import_module('ci.phase6_playlist_maintenance')
+    source = (pilot.source_adapter().invocation(root)
+              if ROOT.resolve() == pilot.ROOT.resolve() else nullcontext())
+    with source:
+        entry = verify_checkout(root, _witness=True)
+        alive = [True]
+        token = _ACTIVE.set((entry, alive, key))
+        try:
+            yield
+            # Reread the entire cohort, its modes, owner, receipt and fresh HEAD.
+            # A stable proof at a different HEAD must not close this invocation.
+            if verify_checkout(root, _witness=True) != entry:
+                raise ValueError('Changed closing M7 owner receipt or HEAD')
+        finally:
+            # Copied contexts cannot keep an approval alive after its owner returns.
+            alive[0] = False
+            _ACTIVE.reset(token)
 
 
 @contextmanager
@@ -261,6 +269,9 @@ def _owned_members(root, *, physical=True):
         for name, before, after in active[0][4].rows:
             if name in pilot_modified:
                 bindings[name] = dict(before_sha256=before, sha256=after)
+    if physical:
+        from ci.phase6_playlist_maintenance import source_adapter
+        bindings={name:dict(binding,sha256=source_adapter().selected_hash(name,binding['sha256'])) for name,binding in bindings.items()}
     return bindings
 
 

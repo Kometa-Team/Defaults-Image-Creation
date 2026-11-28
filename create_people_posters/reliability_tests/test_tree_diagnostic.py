@@ -111,6 +111,9 @@ def test_original_legacy_transport_and_chunk_logic_preserved():
     import subprocess
     def module(name, old=False):
         raw=subprocess.check_output(['git','show','a3c379b0681e583ec4387d83b040b504aa6bc33b:'+name],cwd=ROOT) if old else (ROOT/name).read_bytes()
+        if not old:
+            from ci.phase6_playlist_maintenance import source_adapter
+            raw=source_adapter().historical_bytes(ROOT,name,raw)
         return ast.parse(raw)
     def method(tree, cls, name):
         return next(n for c in tree.body if isinstance(c,ast.ClassDef) and c.name==cls for n in c.body if isinstance(n,ast.FunctionDef) and n.name==name)

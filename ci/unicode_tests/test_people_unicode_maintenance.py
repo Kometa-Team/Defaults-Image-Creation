@@ -124,7 +124,8 @@ class UnicodeMaintenanceTests(unittest.TestCase):
         adapter = self.adapter()
         name = 'create_people_posters/create_people_poster.py'
         binding = adapter.verify()[name]
-        self.assertEqual(adapter.selected_hash(name, binding['before_sha256']), binding['sha256'])
+        from ci.phase6_playlist_maintenance import source_adapter
+        self.assertEqual(adapter.selected_hash(name, binding['before_sha256']), source_adapter().selected_hash(name,binding['sha256']))
         self.assertEqual(adapter.selected_hash(name, 'f'*64), 'f'*64)
         self.assertEqual(adapter.selected_hash('unknown.py', 'f'*64), 'f'*64)
         self.assertEqual(adapter.historical_bytes(ROOT, name, (ROOT/name).read_bytes()), adapter.predecessor(name))

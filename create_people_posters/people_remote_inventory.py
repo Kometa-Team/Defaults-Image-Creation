@@ -122,6 +122,14 @@ class RemoteInventory:
         for row in self.images(style):
             path = PurePosixPath(row["path"])
             if row["mode"] == "100644" and path.suffix.lower() == suffix:
+                from people_workspaces import source_only
+                if source_only():
+                    import tempfile
+                    from sync_people_images import image_quality_findings
+                    with tempfile.TemporaryDirectory(prefix='people-discovery-') as folder:
+                        downloaded = self.fetch_image(style,row['path'],Path(folder)/path.name)
+                        if image_quality_findings(style,downloaded)[0]:
+                            continue
                 key = name_key(path.stem)
                 counts[key] = counts.get(key, 0) + 1
         return {key for key, count in counts.items() if count == 1}
@@ -152,6 +160,35 @@ class RemoteInventory:
 
 
 def online_complete_names():
+    from people_workspaces import source_only, SOURCE_STYLES, SOURCE_CONTRACT, reject_links
+    if source_only() and os.getenv('PEOPLE_PUBLISH_MODE','local') == 'local':
+        from sync_people_images import image_quality_findings
+        config=Path(os.getenv('PEOPLE_CONFIG_DIR') or Path(__file__).resolve().parent/'config')
+        roots=[config]
+        jobs=Path(os.getenv('PEOPLE_JOBS_DIR') or config.parent)
+        if (config/'manifest.json').is_file() and jobs.is_dir():
+            for candidate in jobs.iterdir():
+                reject_links(candidate)
+                if not candidate.is_dir():
+                    continue
+                manifest=candidate/'manifest.json'
+                reject_links(manifest)
+                if manifest.is_file():
+                    import json
+                    if json.loads(manifest.read_text(encoding='utf8')).get('output_contract')==SOURCE_CONTRACT:
+                        roots.append(candidate)
+        completed=set()
+        for root in set(roots):
+            sets=[]
+            for style in SOURCE_STYLES:
+                counts={}
+                for path in (root/'people_dirs'/style).glob('*/Images/*'):
+                    reject_links(path)
+                    if path.is_file() and not image_quality_findings(style,path)[0]:
+                        key=name_key(path.stem);counts[key]=counts.get(key,0)+1
+                sets.append({key for key,count in counts.items() if count==1})
+            completed |= set.intersection(*sets)
+        return completed
     inventory = RemoteInventory(GitHubClient())
     try:
         inventory.refresh_all()

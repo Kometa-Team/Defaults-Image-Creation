@@ -169,12 +169,13 @@ def save_image(person, file_label: str | None = None) -> str:
     base_name = file_label or person.name
     if retained_input(str(person.id), base_name):
         return "reused"
-    if os.getenv("PEOPLE_PUBLISH_MODE", "local_git") == "github_api":
+    from people_workspaces import source_only
+    if source_only() or os.getenv("PEOPLE_PUBLISH_MODE", "local_git") == "github_api":
         from people_remote_inventory import name_key, online_complete_names
         if not hasattr(save_image, "complete_names"):
             save_image.complete_names = online_complete_names()
         if name_key(safe_filename(base_name)) in save_image.complete_names:
-            logging.info("All seven styles already exist: %s", base_name)
+            logging.info("All required styles already exist: %s", base_name)
             return "already_complete"
     with failure_boundary("download_image", str(person.id)):
         from create_people_posters.people_http import image_response

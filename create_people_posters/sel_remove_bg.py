@@ -121,8 +121,9 @@ MAX_TOOL_READY_RESTARTS = max(1, int(os.getenv("SEL_MAX_TOOL_READY_RESTARTS", "5
 MAX_CONSECUTIVE_PROCESSING_STALLS = max(0, int(os.getenv("SEL_MAX_CONSECUTIVE_PROCESSING_STALLS", "3")))
 
 # Size enforcement
-EXPECT_W = int(os.getenv("SEL_EXPECT_WIDTH", "2000"))
-EXPECT_H = int(os.getenv("SEL_EXPECT_HEIGHT", "3000"))
+from people_workspaces import output_size
+EXPECT_W = int(os.getenv("SEL_EXPECT_WIDTH", str(output_size()[0])))
+EXPECT_H = int(os.getenv("SEL_EXPECT_HEIGHT", str(output_size()[1])))
 ENFORCE_SIZE = env_bool("SEL_ENFORCE_SIZE", "true")
 
 # Make sure folders exist

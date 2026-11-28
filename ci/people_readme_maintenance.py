@@ -134,7 +134,9 @@ def verify_checkout(root=None):
     paths = _regular_files(root, set(value['members']) | ANCHORS)
     for name, binding in value['members'].items():
         from ci.dependabot_maintenance import historical_bytes as dependency_history
-        current = dependency_history(root, name, paths[name].read_bytes())
+        from ci.phase6_playlist_maintenance import source_adapter
+        current=source_adapter().historical_bytes(root,name,paths[name].read_bytes())
+        current = dependency_history(root,name,current)
         if sha(current) != binding['sha256']:
             raise ValueError('Unreviewed README publication successor: ' + name)
         if binding['before_sha256'] is not None and sha(_old(name)) != binding['before_sha256']:
@@ -160,6 +162,8 @@ def selected_hash(name, expected):
 
 
 def historical_bytes(root, name, current):
+    from ci.phase6_playlist_maintenance import source_adapter
+    current=source_adapter().historical_bytes(root,name,current)
     from ci.dependabot_maintenance import historical_bytes as dependency_history
     current = dependency_history(root, name, current)
     if name not in MEMBERS:
@@ -182,7 +186,8 @@ def scope_members():
 
 def test_ids():
     from ci.people_job_retention_maintenance import test_ids as retention_ids
-    return list(manifest()['pytest_ids']) + retention_ids()
+    from ci.phase6_playlist_maintenance import source_adapter
+    return list(manifest()['pytest_ids']) + retention_ids() + source_adapter().test_ids()
 
 
 def verify_scope(root, baseline, names):

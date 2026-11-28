@@ -73,7 +73,7 @@ DATA_PROTECTED = frozenset(('create_defaults/bulk/catalog/playlist.yml',
 
 
 def historical_members():
-    return MODIFIED | DATA_MODIFIED
+    return MODIFIED | DATA_MODIFIED | source_adapter().MEMBERS
 
 
 # Generated explicitly by the review tooling; never a directory-prefix grant.
@@ -97,8 +97,30 @@ def member_sha(name, raw):
     return hashlib.sha256(raw if name in BINARY | DATA_BINARY else raw.replace(b'\r\n', b'\n')).hexdigest()
 
 
-def scope_members():
+def _pilot_members():
     return MODIFIED | ADDED | {OWNER, RECEIPT, REGISTRY_RECEIPT, REGISTRY_PRIOR_RECEIPT} | REGISTRY_ADDED | DATA_MODIFIED | DATA_ADDED | {DATA_RECEIPT}
+
+
+SOURCE_ADAPTER_SHA256 = '8158b19b0bfc1c8de6e7dfe2d9356ffd623efc13bb0c73501ec1e8761e8c6032'
+
+
+@lru_cache(maxsize=4)
+def _source_module(raw):
+    from types import ModuleType
+    module=ModuleType('verified_people_source_maintenance')
+    module.__file__=str(ROOT/'ci/people_source_maintenance.py')
+    exec(compile(raw,module.__file__,'exec'),module.__dict__)
+    return module
+
+
+def source_adapter():
+    raw=regular(ROOT,'ci/people_source_maintenance.py').read_bytes()
+    if sha(raw)!=SOURCE_ADAPTER_SHA256:raise ValueError('Changed independently pinned People source-only adapter')
+    return _source_module(raw)
+
+
+def scope_members():
+    return _pilot_members() | source_adapter().scope_members()
 
 
 def git(*args, data=None):
@@ -190,7 +212,7 @@ def current_rows(raw, registry_raw, data_raw=None):
 @lru_cache(maxsize=16)
 def _tree(commit):
     entries = []
-    for row in git('ls-tree', '-r', '-z', commit, '--', *sorted(scope_members())).split(b'\0'):
+    for row in git('ls-tree', '-r', '-z', commit, '--', *sorted(_pilot_members())).split(b'\0'):
         if not row:
             continue
         metadata, name = row.split(b'\t', 1)
@@ -245,7 +267,9 @@ def _diff(head, baseline=BASE):
     rows = git('diff', '--raw', '--no-abbrev', '--no-renames', '-z', baseline, head).split(b'\0')
     if rows[-1] != b'' or len(rows) % 2 != 1:
         raise ValueError('Incomplete offline Playlist scope diff')
-    return tuple((rows[i], rows[i+1].decode()) for i in range(0, len(rows)-1, 2))
+    source=source_adapter().scope_members()-_pilot_members()
+    return tuple((rows[i], rows[i+1].decode()) for i in range(0, len(rows)-1, 2)
+                 if rows[i+1].decode() not in source)
 
 
 def _regular_diff(rows, names, *, exact=False):
@@ -285,6 +309,9 @@ def _immutable_checked(head, raw, registry_raw, data_raw):
     data_owner, data_rows = _decode_data(data_raw)
     current, before, registry_before, data_before = map(dict,
         _batch_blobs((head, BASE, REGISTRY_BASE, DATA_BASE)))
+    source=source_adapter()
+    _,source_before=source._metadata(ROOT)
+    current={name:source_before.get(name,raw) if name in source.MEMBERS else raw for name,raw in current.items()}
     if sha(data_before[OWNER]) != data_owner:
         raise ValueError('Changed catalog data predecessor owner')
     for name, predecessor, successor in data_rows:
@@ -298,11 +325,11 @@ def _immutable_checked(head, raw, registry_raw, data_raw):
     if (sha(registry_before[OWNER]) != predecessor_owner
             or registry_before[RECEIPT] != current[RECEIPT]):
         raise ValueError('Changed catalog reservation predecessor owner or historical receipt')
-    if set(current) != scope_members():
+    if set(current) != _pilot_members():
         raise ValueError('Missing/extra offline Playlist immutable member')
     if sha(current[REGISTRY_PRIOR_RECEIPT]) != REGISTRY_PRIOR_SHA256:
         raise ValueError('Changed immutable prior catalog reservation receipt')
-    _regular_diff(_diff(head), scope_members(), exact=True)
+    _regular_diff(_diff(head), _pilot_members(), exact=True)
     for metadata, name in _diff(head):
         status = metadata.split()[4]
         if status != (b'M' if name in before else b'A'):
@@ -339,6 +366,7 @@ def proof(root, head, *, selected=None):
         raise ValueError('Foreign offline Playlist checkout')
     if not isinstance(head, str) or re.fullmatch('[0-9a-f]{40}', head) is None:
         raise ValueError('Offline Playlist immutable inputs require a full SHA')
+    source_adapter()._metadata(root)
     _ancestry(head)
     raw = regular(ROOT, RECEIPT).read_bytes()
     registry_raw = regular(ROOT, REGISTRY_RECEIPT).read_bytes()
@@ -353,7 +381,7 @@ def proof(root, head, *, selected=None):
     if not selected <= members:
         raise ValueError('Foreign offline Playlist proof selection')
     for name, _, successor in rows:
-        if name in selected and member_sha(name, regular(ROOT, name).read_bytes()) != successor:
+        if name in selected and member_sha(name, regular(ROOT, name).read_bytes()) != source_adapter().selected_hash(name,successor):
             raise ValueError('Changed physical offline Playlist successor: '+name)
     owner = sha(regular(ROOT, OWNER).read_bytes())
     if owner != immutable_owner:
@@ -374,12 +402,16 @@ def _project(root, name, current, witness, *, owned=False):
         raise ValueError('Foreign offline Playlist historical projection')
     if name not in historical_members():
         return current
+    current=source_adapter().historical_bytes(root,name,current)
+    if name not in MODIFIED | DATA_MODIFIED:
+        return current
     rows = current_rows(witness.receipt, witness.registry_receipt, witness.data_receipt)
     binding = next(row for row in rows if row[0] == name)
     _, predecessor, successor = binding
     # Each historical projection checks the leaf at the point of use. A caller
     # holding old bytes cannot substitute for current physical acceptance.
     physical = current if owned else regular(root, name).read_bytes()
+    physical=source_adapter().historical_bytes(root,name,physical)
     if member_sha(name, physical) != successor:
         raise ValueError('Changed physical offline Playlist successor: '+name)
     if name in MODIFIED:
@@ -417,21 +449,24 @@ def selected_hash(name, expected):
     elif name in PROTECTED_SUCCESSORS:
         source = _decode(regular(ROOT, RECEIPT).read_bytes())
     else:
-        return expected
+        return source_adapter().selected_hash(name,expected)
     _, before, after = next(row for row in source if row[0] == name)
     if expected != before:
-        return expected
-    from ci.phase5_m7_maintenance import _cohort_proof
-    entry = _cohort_proof(ROOT, _protected_cohort_proof)
-    owned = entry is not None
-    if not owned:
-        entry = _protected_cohort_proof(ROOT)
-    # Even an invocation-owned cohort never substitutes for this leaf read.
-    if member_sha(name,regular(ROOT,name).read_bytes()) != after:
-        raise ValueError('Changed physical offline Playlist protected successor: '+name)
-    if not owned and _protected_cohort_proof(ROOT) != entry:
-        raise ValueError('Changed closing offline Playlist adoption successor')
-    return after
+        return source_adapter().selected_hash(name,expected)
+    # This public path can run outside an M7 owner. Share only its source entry
+    # proof; retain both protected proofs, the fresh leaf and the source close.
+    with source_adapter().invocation():
+        from ci.phase5_m7_maintenance import _cohort_proof
+        entry = _cohort_proof(ROOT, _protected_cohort_proof)
+        owned = entry is not None
+        if not owned:
+            entry = _protected_cohort_proof(ROOT)
+        # Even an invocation-owned cohort never substitutes for this leaf read.
+        if member_sha(name,regular(ROOT,name).read_bytes()) != source_adapter().selected_hash(name,after):
+            raise ValueError('Changed physical offline Playlist protected successor: '+name)
+        if not owned and _protected_cohort_proof(ROOT) != entry:
+            raise ValueError('Changed closing offline Playlist adoption successor')
+        return source_adapter().selected_hash(name,after)
 
 
 PROTECTED_SUCCESSORS = frozenset({'ci/phase4.py','ci/phase4_transactions.py','ci/people_unicode_maintenance.py',

@@ -19,7 +19,7 @@ import re
 import subprocess
 import time
 from pathlib import Path
-from urllib.parse import quote, urlsplit
+from urllib.parse import quote, urlsplit, parse_qs
 
 import requests
 
@@ -31,14 +31,49 @@ REPOSITORIES = {
     for style in ("original", "transparent", "bw", "diiivoy", "diiivoycolor", "rainier", "signature")
 }
 SANDBOX_ROOT = Path(__file__).resolve().parent / "config" / "sandboxes"
+REPLACEMENT_ROOT = Path(__file__).resolve().parent / "config" / "replacements"
+REPLACEMENT_IDS = {'original':1473470855,'transparent':1473472220}
+
+
+def replacement_settings():
+    from people_workspaces import source_only, SOURCE_CONTRACT, reject_links
+    location=os.getenv('PEOPLE_REPLACEMENT_CONFIG','').strip()
+    if (not source_only() or not location or os.getenv('PEOPLE_SANDBOX_CONFIG','').strip()
+            or os.getenv('PEOPLE_PUBLISH_MODE','local')!='github_api'):
+        raise ValueError('Replacement publication requires a separate explicit source-only configuration')
+    path=Path(location).expanduser().absolute();reject_links(path)
+    try:relative=path.resolve().relative_to(REPLACEMENT_ROOT.resolve())
+    except ValueError:raise ValueError('Replacement config must be config/replacements/RUN/targets.json') from None
+    if len(relative.parts)!=2 or path.name!='targets.json' or path.stat().st_size>65536:
+        raise ValueError('Invalid replacement configuration path or size')
+    value=json.loads(path.read_text(encoding='utf8'))
+    if (type(value) is not dict or set(value)!={'version','branch','repositories','repository_ids','output_contract','publication_authorized'}
+            or type(value['version']) is not int or value['version']!=1
+            or value['branch'] not in ('main','master') or value['output_contract']!=SOURCE_CONTRACT
+            or value['publication_authorized'] is not True or value['repository_ids']!=REPLACEMENT_IDS
+            or any(type(v) is not int for v in value['repository_ids'].values())
+            or type(value['repositories']) is not dict or set(value['repositories'])!=set(REPLACEMENT_IDS)):
+        raise ValueError('Replacement authorization must bind both exact identities, branch and source-only contract')
+    names=list(value['repositories'].values())
+    if (any(not isinstance(name,str) or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9-]{0,38}/[A-Za-z0-9_.-]+',name)
+            or name.split('/')[-1] in {'.','..'} for name in names)
+            or len({name.casefold() for name in names})!=2):
+        raise ValueError('Replacement destinations must have distinct, exact repository names')
+    return dict(value,root=path.resolve().parent,target='replacement')
 
 
 def sandbox_settings():
+    from people_workspaces import source_only, SOURCE_CONTRACT, SOURCE_STYLES
     target = os.getenv("PEOPLE_GITHUB_TARGET", "production").strip()
+    if target=='replacement':return replacement_settings()
+    if os.getenv('PEOPLE_REPLACEMENT_CONFIG','').strip():
+        raise ValueError('Replacement config is set without replacement mode; refusing fallback')
     location = os.getenv("PEOPLE_SANDBOX_CONFIG", "").strip()
     if target not in {"production", "sandbox"}:
-        raise ValueError("PEOPLE_GITHUB_TARGET must be production or sandbox")
+        raise ValueError("PEOPLE_GITHUB_TARGET must be production, sandbox or replacement")
     if target == "production":
+        if source_only():
+            raise ValueError("Source-only outputs cannot use any legacy production repository")
         if location:
             raise ValueError("Sandbox config is set but sandbox mode is not enabled; refusing production fallback")
         return None
@@ -62,9 +97,13 @@ def sandbox_settings():
             or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9-]{0,38}", owner)
             or owner.casefold() == "kometa-team" or settings.get("branch") != "master"):
         raise ValueError("Sandbox requires a personal owner, version 1 and an explicit master branch")
-    expected = {style: f"{owner}/kometa-people-sandbox-{style}" for style in REPOSITORIES}
+    styles = SOURCE_STYLES if source_only() else REPOSITORIES
+    if source_only() and (settings.get("output_contract") != SOURCE_CONTRACT
+                          or settings.get("publication_authorized") is not True):
+        raise ValueError("Staging targets require the exact source-only contract and explicit publication authorization")
+    expected = {style: f"{owner}/kometa-people-sandbox-{style}" for style in styles}
     if settings.get("repositories") != expected:
-        raise ValueError("Sandbox must name exactly seven distinct personal kometa-people-sandbox-STYLE repositories")
+        raise ValueError("Sandbox must name exactly two distinct personal kometa-people-sandbox-STYLE repositories" if source_only() else "Sandbox must name exactly seven distinct personal kometa-people-sandbox-STYLE repositories")
     return dict(settings, root=path.parent)
 
 
@@ -74,6 +113,9 @@ def repository_mapping():
 
 
 def sandbox_storage():
+    from people_workspaces import source_only
+    if source_only() and os.getenv("PEOPLE_PUBLISH_MODE", "local") == "local":
+        return None
     settings = sandbox_settings()
     if not settings:
         return None
@@ -88,6 +130,8 @@ def sandbox_storage():
 def branch_name(value=None):
     settings = sandbox_settings()
     if settings:
+        if settings.get('target')=='replacement' and os.getenv('PEOPLE_BRANCH',settings['branch'])!=settings['branch']:
+            raise ValueError('Replacement branch differs from targets.json')
         if value and value != settings["branch"]:
             raise ValueError("Sandbox branch differs from targets.json")
         return settings["branch"]
@@ -183,6 +227,8 @@ def _report_tree_failure(response, emit=True):
 
 class GitHubClient:
     def __init__(self, token=None, session=None, sleep=time.sleep, attempts=4):
+        from people_workspaces import source_only
+        self.source_only = source_only()
         self.sandbox = sandbox_settings()
         self.repositories = repository_mapping()
         self.token = token or auth_token()
@@ -204,6 +250,11 @@ class GitHubClient:
                                      "X-GitHub-Api-Version": "2022-11-28"})
 
     def request(self, method, path, payload=None):
+        from people_workspaces import source_only
+        if source_only() != self.source_only:
+            raise ValueError("Output contract changed during GitHub operation")
+        if self.source_only and repository_mapping() != self.repositories:
+            raise ValueError("Authorized staging destinations changed during GitHub operation")
         if not path.startswith("/repos/"):
             raise ValueError("Only repository API paths are supported")
         if self.sandbox:
@@ -223,7 +274,8 @@ class GitHubClient:
                     self.sleep(delay)
                 self.last_write = time.monotonic()
             try:
-                response = self.session.request(method, "https://api.github.com" + path,
+                url=self._replacement_guard(method,path,payload) or "https://api.github.com" + path
+                response = self.session.request(method, url,
                                                 json=payload, timeout=(10, 90), allow_redirects=False)
             except requests.RequestException:
                 if attempt + 1 == self.attempts:
@@ -291,7 +343,8 @@ class GitHubClient:
         else:
             self.last_write = time.monotonic()
         try:
-            response = self.session.request(method, "https://api.github.com" + path,
+            url=self._replacement_guard(method,path,payload) or "https://api.github.com" + path
+            response = self.session.request(method, url,
                 json=payload, timeout=(10, 90), allow_redirects=False)
         except requests.RequestException:
             raise self.reliability_error("network", retryable=True, ambiguous=not read) from None
@@ -316,6 +369,41 @@ class GitHubClient:
         if category == "rate_limit" and code == "malformed_response":
             category, retryable = "unclassified", False
         raise self.reliability_error(category, status, retryable, not read and category == "service", diagnostic)
+
+    def _replacement_guard(self,method,path,payload):
+        if not self.sandbox or self.sandbox.get('target')!='replacement':return
+        from people_workspaces import source_only
+        if not source_only() or sandbox_settings()!=self.sandbox:
+            raise ValueError('Replacement authorization changed during GitHub operation')
+        parsed=urlsplit(path);parts=parsed.path.split('/');repo='/'.join(parts[2:4])
+        if repo not in self.repositories.values():raise ValueError('Replacement destination mismatch')
+        branch=self.sandbox['branch'];route='/'.join(parts[4:])
+        if route.startswith(('git/ref/','git/refs/')) and route not in {'git/ref/heads/'+branch,'git/refs/heads/'+branch}:
+            raise ValueError('Replacement branch mismatch')
+        if 'branch' in parse_qs(parsed.query) and parse_qs(parsed.query)['branch']!=[branch]:
+            raise ValueError('Replacement branch mismatch')
+        if method!='GET':
+            if type(payload) is not dict:raise ValueError('Replacement write requires its existing publication payload')
+            allowed=(method=='POST' and route in {'git/blobs','git/trees','git/commits'}
+                or method=='PATCH' and route=='git/refs/heads/'+branch and payload.get('force') is False
+                or method=='POST' and route=='actions/workflows/readme.yml/dispatches' and payload.get('ref')==branch
+                or method=='POST' and re.fullmatch(r'actions/runs/[0-9]+/(rerun|rerun-failed-jobs)',route))
+            if not allowed:raise ValueError('Replacement write is outside the existing publication/README path')
+        style=next(style for style,name in self.repositories.items() if name==repo)
+        response=self.session.request('GET','https://api.github.com/repositories/'+str(self.sandbox['repository_ids'][style]),
+            timeout=(10,90),allow_redirects=False)
+        if response.status_code!=200:raise GitHubError('Cannot authenticate replacement repository identity',response.status_code)
+        value=response.json()
+        if (value.get('id')!=self.sandbox['repository_ids'][style] or value.get('full_name')!=repo
+                or value.get('default_branch')!=branch or value.get('archived') or value.get('disabled')):
+            raise ValueError('Replacement repository identity, name or branch changed')
+        if method=='POST' and route.startswith('actions/runs/'):
+            response=self.session.request('GET','https://api.github.com/repositories/'+str(self.sandbox['repository_ids'][style])+'/'+route.rsplit('/',1)[0],
+                timeout=(10,90),allow_redirects=False)
+            if response.status_code!=200 or response.json().get('head_branch')!=branch:
+                raise ValueError('Replacement README retry branch mismatch')
+        if sandbox_settings()!=self.sandbox:raise ValueError('Replacement authorization changed during identity verification')
+        return 'https://api.github.com/repositories/'+str(self.sandbox['repository_ids'][style])+('/'+route if route else '')+('?' + parsed.query if parsed.query else '')
 
     def head(self, repo, branch):
         ref = self.request("GET", f"/repos/{repo}/git/ref/heads/{quote(branch, safe='/')}")
